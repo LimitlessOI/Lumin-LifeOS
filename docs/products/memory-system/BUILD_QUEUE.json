@@ -239,7 +239,7 @@
     },
     {
       "id": "memory-system-1",
-      "status": "done",
+      "status": "pending",
       "target_file": "db/migrations/202311_vector_embedding_update.sql",
       "task": "define vector embedding column",
       "spec": "Add vector embedding column to DB schema as per documented requirements.",
@@ -251,7 +251,7 @@
         "ADD COLUMN vector_embedding"
       ],
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "artifact_proof_failed: ADD COLUMN vector_embedding",
       "commit_sha": "b6f7a08afd0e0f7073a7ad1249e991f7de1972af",
       "built_sha": null,
       "proof": null,
@@ -272,7 +272,8 @@
       "shipped_at": "2026-07-16T05:50:05.496Z",
       "blueprint_id": "PRODUCT-MEMORY-SYSTEM-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "memory-system-1",
-      "mission_id": "PRODUCT-memory-system"
+      "mission_id": "PRODUCT-memory-system",
+      "heal_unblocked": true
     },
     {
       "id": "memory-system-2",
@@ -313,7 +314,7 @@
     },
     {
       "id": "memory-system-3",
-      "status": "done",
+      "status": "pending",
       "target_file": "db/migrations/202311_memory_category_taxonomy_update.sql",
       "task": "update schema for category taxonomy",
       "spec": "Implement memory category taxonomy in the schema.",
@@ -327,7 +328,7 @@
         "ADD COLUMN memory_category"
       ],
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "artifact_proof_failed: ADD COLUMN memory_category",
       "commit_sha": "13c22a5cc266d41e6349d2b1414008b3fa8e3d67",
       "built_sha": null,
       "proof": null,
@@ -348,7 +349,8 @@
       "shipped_at": "2026-07-16T06:13:47.544Z",
       "blueprint_id": "PRODUCT-MEMORY-SYSTEM-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "memory-system-3",
-      "mission_id": "PRODUCT-memory-system"
+      "mission_id": "PRODUCT-memory-system",
+      "heal_unblocked": true
     },
     {
       "id": "memory-system-4",
@@ -461,7 +463,7 @@
     },
     {
       "id": "memory-system-8",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/final_pr_review.js",
       "task": "create PR review route",
       "spec": "Add route for branch phase7-railway-probe final PR review and merge.",
@@ -494,7 +496,10 @@
       "commit_sha": "5ffba05566c59202806795eaaf5c1b496edd22ab",
       "blueprint_id": "PRODUCT-MEMORY-SYSTEM-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "memory-system-8",
-      "mission_id": "PRODUCT-memory-system"
+      "mission_id": "PRODUCT-memory-system",
+      "last_error": "artifact_proof_failed: pull request; final review",
+      "demoted": false,
+      "heal_unblocked": true
     },
     {
       "id": "memory-system-9",
@@ -537,7 +542,7 @@
     },
     {
       "id": "memory-system-s1",
-      "status": "done",
+      "status": "pending",
       "target_file": "db/migrations/202311_vector_embedding_update.sql",
       "task": "add vector embedding column",
       "spec": "Add a 'vector_embedding' column to existing tables for memory data storage.",
@@ -549,7 +554,7 @@
         "ADD COLUMN vector_embedding"
       ],
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "artifact_proof_failed: ADD COLUMN vector_embedding",
       "commit_sha": "cc705c58105d893a24471b1d4ebc7621342c86a6",
       "built_sha": null,
       "proof": null,
@@ -570,7 +575,8 @@
       "shipped_at": "2026-07-16T06:25:56.757Z",
       "blueprint_id": "PRODUCT-MEMORY-SYSTEM-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "memory-system-s1",
-      "mission_id": "PRODUCT-memory-system"
+      "mission_id": "PRODUCT-memory-system",
+      "heal_unblocked": true
     },
     {
       "id": "memory-system-s2",
@@ -665,7 +671,7 @@
     },
     {
       "id": "memory-system-s6",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/final_pr_review.js",
       "task": "conduct final PR review before merge",
       "spec": "Perform a formal review and add a PR note before merging to main branch.",
@@ -694,7 +700,7 @@
         }
       ],
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "artifact_proof_failed: final PR review; ready for merge",
       "commit_sha": "558f4cd3f2ce39a118bbb5eefe4abb4cf983ff85",
       "built_sha": null,
       "proof": null,
@@ -715,7 +721,8 @@
       "shipped_at": "2026-07-17T17:45:18.394Z",
       "blueprint_id": "PRODUCT-MEMORY-SYSTEM-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "memory-system-s6",
-      "mission_id": "PRODUCT-memory-system"
+      "mission_id": "PRODUCT-memory-system",
+      "heal_unblocked": true
     },
     {
       "id": "memory-system-s7",
@@ -1153,6 +1160,6 @@
   "blueprint_id": "PRODUCT-MEMORY-SYSTEM-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-memory-system",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T06:22:02.580Z",
+  "updated_at": "2026-08-01T06:30:42.443Z",
   "backlog_signature_at": "2026-08-01T03:49:41.584Z"
 }
