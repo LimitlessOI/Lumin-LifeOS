@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T11:16:11.044Z",
+  "generated_at": "2026-08-01T11:18:34.675Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -87641,10 +87641,13 @@
     },
     {
       "path": "services/analyticsMemory.js",
-      "synopsis": "Existing code and imports are preserved",
-      "bytes": 567,
-      "mtime": "2026-07-15T09:09:16.806Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "synopsis": "Publish analytics memory loop to creator_analytics table.",
+      "bytes": 2544,
+      "mtime": "2026-08-01T11:18:34.675Z",
+      "indexed_at": "2026-08-01T11:18:34.675Z",
+      "ssot": [
+        "docs/products/creator-media-os/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/apiSpec.js",
