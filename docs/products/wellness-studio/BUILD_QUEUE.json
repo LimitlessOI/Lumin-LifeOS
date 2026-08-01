@@ -4,7 +4,7 @@
   "verify_script": null,
   "planned_at": "2026-07-12T03:40:00.000Z",
   "notes": "Module 4 Therapist Integration beachhead — Clinical Partnership. Consent-gated briefs; therapist account lists linked clients who granted therapist_share. LifeOS consent foundation is a dependency.",
-  "updated_at": "2026-08-01T04:55:14.175Z",
+  "updated_at": "2026-08-01T04:55:27.744Z",
   "steps": [
     {
       "id": "ws-therapist-schema",
@@ -1146,13 +1146,13 @@
     },
     {
       "id": "wellness-studio-1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/extended-tables.js",
       "task": "extendTables",
       "spec": "Extend existing tables to avoid schema conflicts while respecting module requirements.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "extendTables"
       ],
@@ -1174,9 +1174,9 @@
           "assertion_id": "expected_exports:services/extended-tables.js"
         }
       ],
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-08-01T04:55:27.668Z",
       "last_error": null,
-      "commit_sha": null,
+      "commit_sha": "08d51608754a35b8f6fa3b9ac7a09adb38e43f74",
       "built_sha": null,
       "proof": null,
       "revive_count": 7,
@@ -1224,7 +1224,8 @@
       "escalation_required": true,
       "escalation_note": "M2PT-005B retroactive re-triage: stuck in revive-thrash before same_signature_count tracking was fixed (b3d9c838e). revive_count was already >=3 under the old broken tracking -- escalating directly rather than letting it silently re-thrash for several more cycles once never-stop resumes.",
       "escalated_by": "path-to-ten-retriage-stuck-steps.mjs",
-      "escalated_at": "2026-07-31T18:40:13.632Z"
+      "escalated_at": "2026-07-31T18:40:13.632Z",
+      "completed_at": "2026-08-01T04:55:27.744Z"
     },
     {
       "id": "wellness-studio-2",
