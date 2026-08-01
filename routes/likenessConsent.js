@@ -1,42 +1,42 @@
 /**
- * SYNOPSIS: HTTP route module — LikenessConsent.
+ * SYNOPSIS: HTTP route module — Likeness Consent.
+ * @ssot docs/products/creator-media-os/PRODUCT_HOME.md
  */
 import express from 'express';
 
-const likenessConsents = new Map();
+const router = express.Router();
+const consents = new Map();
 
 function captureLikenessConsent(userId) {
-  likenessConsents.set(userId, true);
-  return { userId, consentGiven: true };
+  consents.set(userId, true);
+  return { userId, consentGiven: true, message: 'Explicit likeness consent recorded' };
 }
 
 function revokeLikenessConsent(userId) {
-  likenessConsents.delete(userId);
+  consents.delete(userId);
   return { userId, consentGiven: false };
 }
 
-function registerLikenessConsentRoutes(app) {
-  const router = express.Router();
+// POST /api/v1/likeness/consent
+router.post('/', (req, res) => {
+  const { userId } = req.body;
+  if (!userId) {
+    return res.status(400).json({ error: 'User ID is required' });
+  }
+  const result = captureLikenessConsent(userId);
+  res.json(result);
+});
 
-  router.post('/consent/capture', (req, res) => {
-    const { userId } = req.body;
-    if (!userId) {
-      return res.status(400).json({ error: 'User ID is required' });
-    }
-    const result = captureLikenessConsent(userId);
-    res.json(result);
-  });
+// POST /api/v1/likeness/consent/revoke
+router.post('/revoke', (req, res) => {
+  const { userId } = req.body;
+  if (!userId) {
+    return res.status(400).json({ error: 'User ID is required' });
+  }
+  const result = revokeLikenessConsent(userId);
+  res.json(result);
+});
 
-  router.post('/consent/revoke', (req, res) => {
-    const { userId } = req.body;
-    if (!userId) {
-      return res.status(400).json({ error: 'User ID is required' });
-    }
-    const result = revokeLikenessConsent(userId);
-    res.json(result);
-  });
-
-  app.use('/likeness', router);
+export function registerLikenessConsentRoutes(app) {
+  app.use('/api/v1/likeness/consent', router);
 }
-
-export { registerLikenessConsentRoutes };

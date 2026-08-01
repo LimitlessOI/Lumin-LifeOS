@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T11:05:26.156Z",
+  "generated_at": "2026-08-01T11:07:56.870Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -21678,9 +21678,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3839545,
-      "mtime": "2026-08-01T10:49:05.476Z",
-      "indexed_at": "2026-08-01T10:49:39.055Z"
+      "bytes": 3840216,
+      "mtime": "2026-08-01T11:07:49.016Z",
+      "indexed_at": "2026-08-01T11:07:56.870Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1706,
-      "mtime": "2026-08-01T11:00:08.932Z",
-      "indexed_at": "2026-08-01T11:01:10.886Z",
+      "bytes": 1788,
+      "mtime": "2026-08-01T11:06:04.524Z",
+      "indexed_at": "2026-08-01T11:07:48.951Z",
       "synopsis_index_only": true
     },
     {
@@ -41634,9 +41634,9 @@
     {
       "path": "docs/products/creator-media-os/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Creator Media OS",
-      "bytes": 23649,
-      "mtime": "2026-08-01T08:48:17.387Z",
-      "indexed_at": "2026-08-01T08:48:17.387Z"
+      "bytes": 24799,
+      "mtime": "2026-08-01T11:07:36.520Z",
+      "indexed_at": "2026-08-01T11:07:48.951Z"
     },
     {
       "path": "docs/products/CREATORMEDIAOS.md",
@@ -70639,10 +70639,13 @@
     },
     {
       "path": "routes/likenessConsent.js",
-      "synopsis": "HTTP route module — LikenessConsent.",
-      "bytes": 1045,
-      "mtime": "2026-07-15T08:53:26.097Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "synopsis": "HTTP route module — Likeness Consent.",
+      "bytes": 1119,
+      "mtime": "2026-08-01T11:06:52.424Z",
+      "indexed_at": "2026-08-01T11:07:48.951Z",
+      "ssot": [
+        "docs/products/creator-media-os/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/limitlessos-ui-routes.js",

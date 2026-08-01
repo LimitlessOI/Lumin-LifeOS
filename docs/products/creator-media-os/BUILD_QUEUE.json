@@ -51,7 +51,7 @@
       "spec": "Capture and revocation of likeness consent.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerLikenessConsentRoutes"
       ],
@@ -72,9 +72,9 @@
           "assertion_id": "expected_exports:routes/likenessConsent.js"
         }
       ],
-      "last_attempt_at": null,
-      "last_error": "artifact_proof_failed: Explicit likeness consent recorded",
-      "commit_sha": "4c7c860fa3d7d7fb8bb5c9eea91dcbb6ed177fec",
+      "last_attempt_at": "2026-08-01T11:05:51.141Z",
+      "last_error": "artifact_proof_failed: missing_exports:registerLikenessConsentRoutes; registerLikenessConsentRoutes",
+      "commit_sha": "046aed7d14f6bddf1b4be0d6bf94b5e52d62e389",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
@@ -86,7 +86,7 @@
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
-      "blocker_class": null,
+      "blocker_class": "BLOCKED_TOOLING",
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
@@ -95,8 +95,9 @@
       "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "2",
       "mission_id": "PRODUCT-creator-media-os",
-      "same_signature_count": 0,
-      "heal_unblocked": true
+      "same_signature_count": 1,
+      "heal_unblocked": true,
+      "failure_signature": "artifact_proof|BLOCKED_TOOLING|artifact_proof_failed: missing_exports:registerLikenessConsentRoutes; registerLikenessConsentRoutes"
     },
     {
       "id": "3",
@@ -1401,6 +1402,5 @@
   "corpus_sources": [
     "docs/products/creator-media-os/PRODUCT_HOME.md"
   ],
-  "updated_at": "2026-08-01T11:05:31.985Z",
-  "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/creator-media-os/BUILD_QUEUE.json"
+  "updated_at": "2026-08-01T11:06:03.406Z"
 }
