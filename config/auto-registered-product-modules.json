@@ -39,6 +39,12 @@
       "note": "Lumin University accreditation consultation routes. Built by governed factory; auto-registered so module-health can prove it mounts LIVE."
     },
     {
+      "path": "routes/studentInterviewAnalyticsRoutes.js",
+      "register": "registerStudentInterviewAnalyticsRoutes",
+      "enabled": true,
+      "note": "Lumin University student interview analytics routes. Built by governed factory; auto-registered so module-health can prove it mounts LIVE."
+    },
+    {
       "path": "routes/lifeos-food-logger-routes.js",
       "register": "registerLifeosFoodLoggerRoutes",
       "mount_path": "/api/v1/lifeos/food",
