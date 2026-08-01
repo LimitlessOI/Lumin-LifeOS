@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T15:07:48.449Z",
+  "generated_at": "2026-08-01T15:31:28.881Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12730,
+  "file_count": 12737,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -30844,9 +30844,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 50892,
-      "mtime": "2026-08-01T15:00:30.081Z",
-      "indexed_at": "2026-08-01T15:07:45.577Z",
+      "bytes": 51410,
+      "mtime": "2026-08-01T15:29:26.257Z",
+      "indexed_at": "2026-08-01T15:31:28.881Z",
       "synopsis_index_only": true
     },
     {
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1908,
-      "mtime": "2026-08-01T14:57:44.877Z",
-      "indexed_at": "2026-08-01T15:07:45.577Z",
+      "bytes": 617,
+      "mtime": "2026-08-01T15:25:40.509Z",
+      "indexed_at": "2026-08-01T15:31:28.881Z",
       "synopsis_index_only": true
     },
     {
@@ -37070,11 +37070,25 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "db/migrations/20260715_marketing_performance_analytics.sql",
+      "synopsis": "Database migration — 20260715_marketing_performance_analytics.sql.",
+      "bytes": 1022,
+      "mtime": "2026-08-01T15:29:17.613Z",
+      "indexed_at": "2026-08-01T15:31:28.881Z"
+    },
+    {
       "path": "db/migrations/20260716_lifeos_core_phase_2.sql",
       "synopsis": "Database migration — 20260716_lifeos_core_phase_2.sql.",
       "bytes": 400,
       "mtime": "2026-07-30T20:18:50.645Z",
       "indexed_at": "2026-07-30T20:18:50.645Z"
+    },
+    {
+      "path": "db/migrations/20260716_marketing_campaign_assets.sql",
+      "synopsis": "Database migration — 20260716_marketing_campaign_assets.sql.",
+      "bytes": 665,
+      "mtime": "2026-08-01T15:29:17.621Z",
+      "indexed_at": "2026-08-01T15:31:28.881Z"
     },
     {
       "path": "db/migrations/20260717_lifeos_core_phase_3.sql",
@@ -42216,9 +42230,9 @@
     {
       "path": "docs/products/marketingos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — MarketingOS",
-      "bytes": 135260,
-      "mtime": "2026-08-01T15:04:54.909Z",
-      "indexed_at": "2026-08-01T15:07:45.577Z"
+      "bytes": 136935,
+      "mtime": "2026-08-01T15:31:05.217Z",
+      "indexed_at": "2026-08-01T15:31:28.881Z"
     },
     {
       "path": "docs/products/marketingos/socialmediaos/conversations/2026-06-29-producer-director-model.md",
@@ -70709,6 +70723,16 @@
       ]
     },
     {
+      "path": "routes/marketing-campaign-routes.js",
+      "synopsis": "API routes for generating and retrieving marketing campaign assets.",
+      "bytes": 1231,
+      "mtime": "2026-08-01T15:30:06.905Z",
+      "indexed_at": "2026-08-01T15:31:28.881Z",
+      "ssot": [
+        "docs/products/marketingos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "routes/marketing-community-value-routes.js",
       "synopsis": "Value-first community draft API for MarketingOS outreach.",
       "bytes": 2532,
@@ -70724,6 +70748,16 @@
       "bytes": 4590,
       "mtime": "2026-07-14T09:09:21.199Z",
       "indexed_at": "2026-07-28T22:54:46.666Z",
+      "ssot": [
+        "docs/products/marketingos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "routes/marketing-performance-intel-routes.js",
+      "synopsis": "Exposes API routes for marketing performance learning insights.",
+      "bytes": 1179,
+      "mtime": "2026-08-01T15:30:08.429Z",
+      "indexed_at": "2026-08-01T15:31:28.881Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
@@ -93145,11 +93179,31 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "services/marketing-analytics-ingest.js",
+      "synopsis": "Ingests social post performance data into the marketing_performance_analytics table.",
+      "bytes": 1414,
+      "mtime": "2026-08-01T15:29:17.617Z",
+      "indexed_at": "2026-08-01T15:31:28.881Z",
+      "ssot": [
+        "docs/products/marketingos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "services/marketing-brand-voice.js",
       "synopsis": "// @ssot docs/products/marketingos/PRODUCT_HOME.md",
       "bytes": 11092,
       "mtime": "2026-07-13T03:41:54.529Z",
       "indexed_at": "2026-07-28T22:54:46.666Z",
+      "ssot": [
+        "docs/products/marketingos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/marketing-campaign-generator.js",
+      "synopsis": "Generates and retrieves marketing campaign assets.",
+      "bytes": 3163,
+      "mtime": "2026-08-01T15:30:16.101Z",
+      "indexed_at": "2026-08-01T15:31:28.881Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
@@ -93180,6 +93234,16 @@
       "bytes": 3087,
       "mtime": "2026-07-13T20:29:53.086Z",
       "indexed_at": "2026-07-28T22:54:46.666Z",
+      "ssot": [
+        "docs/products/marketingos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/marketing-message-learning.js",
+      "synopsis": "Analyzes performance data from marketing_performance_analytics and extracts content learnings.",
+      "bytes": 5143,
+      "mtime": "2026-08-01T15:29:17.617Z",
+      "indexed_at": "2026-08-01T15:31:28.881Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]

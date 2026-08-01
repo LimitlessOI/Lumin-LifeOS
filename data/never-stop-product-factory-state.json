@@ -1,67 +1,18 @@
 {
-  "status": "idle",
-  "last_task": {
-    "id": "product_build_marketingos_3",
-    "kind": "product_build_step",
-    "priority": 2.0003,
-    "product": "marketingos",
-    "product_id": "marketingos",
-    "step_id": "3",
-    "target_file": "routes/marketing-social-schedule-routes.js",
-    "detail": "next buildable step: 3"
+  "status": "running",
+  "current_task": {
+    "id": "extend_build_queue_memory-system",
+    "kind": "plan_build_queue",
+    "priority": 6.0009,
+    "product": "memory-system",
+    "product_id": "memory-system",
+    "home_path": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/memory-system/PRODUCT_HOME.md",
+    "extend": true,
+    "corpus_sources": [
+      "docs/products/memory-system/PRODUCT_HOME.md",
+      "docs/products/memory-system/CREATIVE_BRIEF.md"
+    ],
+    "detail": "queue stuck (39 steps, none pending) + 1 documented item(s) — re-plan next phase"
   },
-  "last_result": {
-    "ok": false,
-    "task_id": "product_build_marketingos_3",
-    "detail": "product_build_step",
-    "outcome": {
-      "ok": false,
-      "step_id": "3",
-      "stage": "functional_proof",
-      "reason": "route module not auto-registered — add {\"path\":\"routes/marketing-social-schedule-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
-      "attempts": 1,
-      "blocked": false,
-      "blocker_class": "BLOCKED_TOOLING",
-      "claim_level": null,
-      "parked": false,
-      "summary": {
-        "product_id": "marketingos",
-        "total": 41,
-        "pending": 0,
-        "building": 0,
-        "done": 40,
-        "blocked": 0,
-        "founder_gated": 0,
-        "design_review_flagged": 1,
-        "human_hold": 0,
-        "complete": false
-      }
-    },
-    "claim": {
-      "id": "marketingos:3",
-      "kind": "execution",
-      "text": "product step 3 built + verified + served live",
-      "grade": "GUESS",
-      "proof": null,
-      "original_grade": "KNOW",
-      "enforced": true,
-      "flags": [
-        "claimed_KNOW_or_LAW_without_proof"
-      ]
-    },
-    "summary": {
-      "product_id": "marketingos",
-      "total": 41,
-      "pending": 0,
-      "building": 0,
-      "done": 40,
-      "blocked": 0,
-      "founder_gated": 0,
-      "design_review_flagged": 1,
-      "human_hold": 0,
-      "complete": false
-    }
-  },
-  "cycles": 1,
-  "updated_at": "2026-08-01T14:57:44.879Z"
+  "updated_at": "2026-08-01T15:25:40.511Z"
 }

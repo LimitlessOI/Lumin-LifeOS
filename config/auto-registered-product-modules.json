@@ -1136,6 +1136,20 @@
       "mount_path": "/api/v1/marketingos/social",
       "enabled": true,
       "note": "MarketingOS social post scheduling routes (GET /marketingos/social/schedule/new, POST/GET/DELETE /api/v1/marketingos/social/schedule*)."
+    },
+    {
+      "path": "routes/marketing-performance-intel-routes.js",
+      "register": "registerMarketingPerformanceIntelRoutes",
+      "mount_path": "/api/v1/marketingos/performance",
+      "enabled": true,
+      "note": "MarketingOS performance analytics routes."
+    },
+    {
+      "path": "routes/marketing-campaign-routes.js",
+      "register": "registerMarketingCampaignRoutes",
+      "mount_path": "/api/v1/marketingos/campaigns",
+      "enabled": true,
+      "note": "MarketingOS campaign asset routes."
     }
   ]
 }
