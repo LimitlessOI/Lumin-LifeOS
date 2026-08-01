@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T07:23:35.067Z",
+  "generated_at": "2026-08-01T07:29:00.887Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12677,
   "files": [
@@ -33104,9 +33104,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1722,
-      "mtime": "2026-08-01T07:15:49.503Z",
-      "indexed_at": "2026-08-01T07:19:12.495Z",
+      "bytes": 1721,
+      "mtime": "2026-08-01T07:25:52.991Z",
+      "indexed_at": "2026-08-01T07:29:00.887Z",
       "synopsis_index_only": true
     },
     {
@@ -41888,9 +41888,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 656073,
-      "mtime": "2026-08-01T07:23:01.987Z",
-      "indexed_at": "2026-08-01T07:23:35.067Z"
+      "bytes": 657015,
+      "mtime": "2026-08-01T07:28:52.439Z",
+      "indexed_at": "2026-08-01T07:29:00.887Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -66087,9 +66087,9 @@
     {
       "path": "products/receipts/REAL_APP_E2E.json",
       "synopsis": "Product receipt — REAL APP E2E.",
-      "bytes": 2560,
-      "mtime": "2026-08-01T07:21:54.847Z",
-      "indexed_at": "2026-08-01T07:23:35.067Z",
+      "bytes": 2553,
+      "mtime": "2026-08-01T07:26:09.679Z",
+      "indexed_at": "2026-08-01T07:29:00.887Z",
       "synopsis_index_only": true
     },
     {
@@ -66119,9 +66119,9 @@
     {
       "path": "products/receipts/SENTRY_FINDINGS_FEED.lifeos-founder-ui.json",
       "synopsis": "Product receipt — SENTRY FINDINGS FEED.Lifeos Founder Ui.",
-      "bytes": 2485,
-      "mtime": "2026-08-01T07:22:01.651Z",
-      "indexed_at": "2026-08-01T07:23:35.067Z",
+      "bytes": 1790,
+      "mtime": "2026-08-01T07:26:16.475Z",
+      "indexed_at": "2026-08-01T07:29:00.887Z",
       "synopsis_index_only": true
     },
     {

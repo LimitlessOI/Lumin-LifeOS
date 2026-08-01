@@ -3588,13 +3588,13 @@
     },
     {
       "id": "lifeos-step8",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "public/overlay/lifeos-voice-note-journal.html",
       "task": "implement voice journaling feature",
       "spec": "UI for voice journaling with a record button using Web Speech API. Transcribed text posted to /api/v1/lifeos/journal/voice and processed for AI extraction.",
       "depends_on": [],
       "founder_gated": true,
-      "attempts": 2,
+      "attempts": 3,
       "file_contains": [
         "Web Speech API",
         "/api/v1/lifeos/journal/voice"
@@ -3605,15 +3605,19 @@
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-step8",
       "mission_id": "PRODUCT-lifeos",
-      "same_signature_count": 2,
+      "same_signature_count": 3,
       "demoted": false,
-      "last_error": "verify_exit_1",
+      "last_error": "verify_exit_1: drawer_direct_build FILE_PLACEMENT_VIOLATION on scripts/lifeos-direct-build-smoke-test.mjs",
       "heal_unblocked": true,
-      "last_attempt_at": "2026-08-01T07:21:13.257Z",
+      "last_attempt_at": "2026-08-01T07:25:29.547Z",
       "artifact_proven": true,
       "grounding_status": "PASS",
-      "blocker_class": "BLOCKED_TOOLING",
-      "failure_signature": "verify|BLOCKED_TOOLING|verify_exit_1"
+      "blocker_class": "BLOCKED_MODEL_CAPABILITY",
+      "failure_signature": "verify|BLOCKED_TOOLING|verify_exit_1",
+      "escalation_required": true,
+      "escalation_note": "HARD GATE: 3+ identical failures (verify|BLOCKED_TOOLING|verify_exit_1). Automatic revival is disabled for this step until escalation_required is explicitly cleared by a real escalation action.",
+      "park_until": "2030-01-01T00:00:00.000Z",
+      "park_reason": "SENTRY drawer_direct_build requires protected builder-route/intent service fix and strong-model codegen; current cheap-tier /build edit-patches lose @ssot on scripts/lifeos-direct-build-smoke-test.mjs, causing FILE_PLACEMENT_VIOLATION. Park until provider quota returns or the builder route is fixed via factory."
     },
     {
       "id": "lifeos-step9",
@@ -6044,5 +6048,6 @@
   "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-lifeos",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T07:21:35.949Z"
+  "updated_at": "2026-08-01T07:28:47.476Z",
+  "_sourcePath": "docs/products/lifeos/BUILD_QUEUE.json"
 }

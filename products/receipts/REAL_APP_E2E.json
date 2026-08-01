@@ -1,10 +1,11 @@
 {
   "schema": "real_app_e2e_v1",
-  "at": "2026-08-01T07:21:39.581Z",
+  "at": "2026-08-01T07:25:54.707Z",
   "base": "https://lumin-web-production-e3a9.up.railway.app",
   "ok": false,
   "passed": [
     "app_loads",
+    "no_js_errors",
     "lumin_fab_visible",
     "lumin_drawer_opens",
     "chat_response",
@@ -20,7 +21,6 @@
     "logged_out_overlay_redirect_shape"
   ],
   "failed": [
-    "no_js_errors",
     "drawer_direct_build"
   ],
   "results": {
@@ -29,8 +29,8 @@
       "detail": "HTTP 200, title=\"LifeOS\""
     },
     "no_js_errors": {
-      "ok": false,
-      "detail": "window.LifeOSAmbientListener.getMode is not a function"
+      "ok": true,
+      "detail": "no unallowlisted pageerror/console.error signals"
     },
     "lumin_fab_visible": {
       "ok": true,
@@ -42,7 +42,7 @@
     },
     "chat_response": {
       "ok": true,
-      "detail": "74 chars: \"Point B: LifeOS Consumer Alpha (PRODUCT-LIFEOS-USER-AUTH-V1-0001)\n07:21 AM…\""
+      "detail": "74 chars: \"Point B: LifeOS Consumer Alpha (PRODUCT-LIFEOS-USER-AUTH-V1-0001)\n07:25 AM…\""
     },
     "smos_question": {
       "ok": true,
@@ -70,7 +70,7 @@
     },
     "dashboard_loads": {
       "ok": true,
-      "detail": "2704 chars visible"
+      "detail": "2699 chars visible"
     },
     "page_nav": {
       "ok": true,

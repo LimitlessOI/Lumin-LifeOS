@@ -19,18 +19,18 @@
       "step_id": "lifeos-step8",
       "stage": "verify",
       "reason": "verify_exit_1",
-      "attempts": 2,
-      "blocked": false,
+      "attempts": 3,
+      "blocked": true,
       "blocker_class": "BLOCKED_TOOLING",
       "claim_level": null,
       "parked": false,
       "summary": {
         "product_id": "lifeos",
         "total": 176,
-        "pending": 12,
+        "pending": 11,
         "building": 0,
         "done": 163,
-        "blocked": 0,
+        "blocked": 1,
         "founder_gated": 0,
         "design_review_flagged": 0,
         "human_hold": 0,
@@ -53,10 +53,10 @@
     "summary": {
       "product_id": "lifeos",
       "total": 176,
-      "pending": 12,
+      "pending": 11,
       "building": 0,
       "done": 163,
-      "blocked": 0,
+      "blocked": 1,
       "founder_gated": 0,
       "design_review_flagged": 0,
       "human_hold": 0,
@@ -65,5 +65,5 @@
     }
   },
   "cycles": 1,
-  "updated_at": "2026-08-01T07:21:37.386Z"
+  "updated_at": "2026-08-01T07:25:52.996Z"
 }
