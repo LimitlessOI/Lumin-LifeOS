@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T02:08:43.352Z",
+  "generated_at": "2026-08-01T02:09:17.043Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12655,
   "files": [
@@ -61651,9 +61651,9 @@
     {
       "path": "docs/projects/oil/security/AUDIT_QUEUE.json",
       "synopsis": "Documentation — AUDIT QUEUE.",
-      "bytes": 248,
-      "mtime": "2026-08-01T02:06:02.833Z",
-      "indexed_at": "2026-08-01T02:06:02.833Z",
+      "bytes": 169,
+      "mtime": "2026-08-01T02:09:17.043Z",
+      "indexed_at": "2026-08-01T02:09:17.043Z",
       "synopsis_index_only": true
     },
     {

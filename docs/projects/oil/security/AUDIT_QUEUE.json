@@ -1,1 +1,1 @@
-{"security_alpha_scope":{"description":"Security Alpha Scope","scope":"Alpha","risk":"High","assumptions":"Assumes Alpha scope is for high-risk activities","metadata":{"generated_by":"LifeOS Founder Runtime","generated_at":"2023-02-20T14:30:00Z"}}}
+{"security_alpha_scope":{"description":"Security alpha scope","audit_queue":[{"path":"docs/projects/oil/security/AUDIT_QUEUE.json","timestamp":"2023-07-31T14:30:00Z"}]}}
