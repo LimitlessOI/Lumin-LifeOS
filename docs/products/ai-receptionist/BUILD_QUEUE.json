@@ -352,13 +352,13 @@
     },
     {
       "id": "2",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/stripePriceService.js",
       "task": "generate Stripe price IDs",
       "spec": "Create and manage price IDs for all three tiers using Stripe API.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "createPriceIds"
       ],
@@ -385,7 +385,7 @@
       "blueprint_step_id": "2",
       "mission_id": "PRODUCT-ai-receptionist",
       "pre_existing": null,
-      "last_error": "artifact_missing_after_ship: artifact_proof_failed: createStripePrice",
+      "last_error": null,
       "reaudit_reset_at": "2026-07-30T18:55:06.298Z",
       "action_type": "write_file_exact",
       "exact_inputs": {
@@ -412,10 +412,10 @@
       },
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-07-31T00:04:12.211Z",
+      "last_attempt_at": null,
       "last_attempt": null,
-      "revive_count": 6,
-      "revived_at": "2026-07-31T00:01:25.738Z",
+      "revive_count": 7,
+      "revived_at": "2026-08-01T04:34:43.890Z",
       "no_op": null,
       "demoted": false,
       "demote_reason": null,
