@@ -1,27 +1,36 @@
 /**
- * SYNOPSIS: Service module — SecurityReceiptService.
+ * SYNOPSIS: Extend the security receipt service to process new receipt types using either tables or JSONL as backend.
+ * @ssot docs/products/oil-security-divisions/PRODUCT_HOME.md
  */
-export const createReceipt = async (receiptData) => {
-  // Placeholder for creating a security receipt
-  console.log('Creating security receipt:', receiptData);
-  // In a real application, this would interact with a database
-  // and return a persistent receipt object.
-  return { id: `receipt-${Date.now()}`, ...receiptData };
-};
-
-export const getReceipt = async (receiptId) => {
-  // Placeholder for retrieving a security receipt
-  console.log('Retrieving security receipt with ID:', receiptId);
-  // In a real application, this would fetch data from a database.
-  // For now, it returns a mock object.
-  if (receiptId === 'mock-receipt-123') {
-    return {
-      id: 'mock-receipt-123',
-      transactionId: 'txn-abc-123',
-      status: 'completed',
-      timestamp: new Date().toISOString(),
-      details: 'Mock security transaction details',
-    };
+export async function securityReceiptSpine(deps, payload) {
+  const { pool, logger } = deps;
+  const { id } = payload || {};
+  try {
+    const { rows } = await pool.query('SELECT * FROM security_receipt_spine WHERE id = $1', [id]);
+    return rows[0] || null;
+  } catch (error) {
+    logger.error({ error }, 'Error in securityReceiptSpine');
+    throw new Error('Failed in securityReceiptSpine');
   }
-  return null;
-};
+}
+
+export async function processNewReceiptType(deps, payload) {
+  const { pool, logger } = deps;
+  const { receiptType, receiptData } = payload || {};
+  try {
+    if (receiptType.startsWith('table_')) {
+      const table = receiptType.substring(6);
+      const { rows } = await pool.query(`INSERT INTO ${table} (${Object.keys(receiptData).join(', ')}) VALUES (${Object.values(receiptData).map(v => `'${v}'`).join(', ')}) RETURNING *`);
+      return rows[0];
+    } else if (receiptType.startsWith('jsonl_')) {
+      const jsonl = receiptType.substring(6);
+      const { rows } = await pool.query(`INSERT INTO jsonl_receipts (receipt_json) VALUES ('${JSON.stringify(receiptData)}') RETURNING *`);
+      return rows[0];
+    } else {
+      throw new Error('Unsupported receipt type');
+    }
+  } catch (error) {
+    logger.error({ error }, 'Error in processNewReceiptType');
+    throw new Error('Failed in processNewReceiptType');
+  }
+}

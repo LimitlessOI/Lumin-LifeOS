@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T02:11:45.906Z",
+  "generated_at": "2026-08-01T02:12:11.410Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12657,
   "files": [
@@ -94093,10 +94093,13 @@
     },
     {
       "path": "services/securityReceiptService.js",
-      "synopsis": "Service module — SecurityReceiptService.",
-      "bytes": 940,
-      "mtime": "2026-07-31T04:37:32.211Z",
-      "indexed_at": "2026-07-31T04:37:34.626Z"
+      "synopsis": "Extend the security receipt service to process new receipt types using either tables or JSONL as backend.",
+      "bytes": 1521,
+      "mtime": "2026-08-01T02:12:11.410Z",
+      "indexed_at": "2026-08-01T02:12:11.410Z",
+      "ssot": [
+        "docs/products/oil-security-divisions/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/self-improvement-loop.js",
