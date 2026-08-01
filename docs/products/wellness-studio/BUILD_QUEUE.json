@@ -4,7 +4,7 @@
   "verify_script": null,
   "planned_at": "2026-07-12T03:40:00.000Z",
   "notes": "Module 4 Therapist Integration beachhead — Clinical Partnership. Consent-gated briefs; therapist account lists linked clients who granted therapist_share. LifeOS consent foundation is a dependency.",
-  "updated_at": "2026-08-01T10:13:05.537Z",
+  "updated_at": "2026-08-01T10:13:33.811Z",
   "steps": [
     {
       "id": "ws-therapist-schema",
@@ -1369,7 +1369,7 @@
         "wellness-studio-3"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerTherapistRoutes"
       ],
@@ -1391,9 +1391,9 @@
           "assertion_id": "expected_exports:routes/therapist-integration-routes.js"
         }
       ],
-      "last_attempt_at": null,
-      "last_error": "artifact_proof_failed: POST /api/therapist/integration; setupIntegration",
-      "commit_sha": "632dc2648a7d16a46fe594cd3cc235788f06743c",
+      "last_attempt_at": "2026-08-01T10:13:22.052Z",
+      "last_error": "artifact_proof_failed: missing_exports:registerTherapistRoutes; registerTherapistRoutes; POST /api/therapist/integration",
+      "commit_sha": "9e13878a6f6685a2fd3a68fdad8383c51d16118d",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
@@ -1405,7 +1405,7 @@
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
-      "blocker_class": null,
+      "blocker_class": "BLOCKED_TOOLING",
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
