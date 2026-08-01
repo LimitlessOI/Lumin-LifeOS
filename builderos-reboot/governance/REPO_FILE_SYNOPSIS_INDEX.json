@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T08:22:37.661Z",
+  "generated_at": "2026-08-01T08:24:43.648Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12677,
   "files": [
@@ -69091,10 +69091,13 @@
     },
     {
       "path": "routes/commitment-routing.js",
-      "synopsis": "EXISTING FILE CONTENT",
-      "bytes": 716,
-      "mtime": "2026-07-17T19:19:29.718Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "synopsis": "Registers commitment-related API routes for the LifeOS platform.",
+      "bytes": 828,
+      "mtime": "2026-08-01T08:24:43.648Z",
+      "indexed_at": "2026-08-01T08:24:43.648Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/commitmentTracker.js",
