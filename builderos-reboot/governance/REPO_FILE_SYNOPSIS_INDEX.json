@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T02:24:09.972Z",
+  "generated_at": "2026-08-01T02:26:36.495Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12657,
   "files": [
@@ -38895,9 +38895,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 84675,
-      "mtime": "2026-08-01T02:23:43.048Z",
-      "indexed_at": "2026-08-01T02:23:43.048Z"
+      "bytes": 85175,
+      "mtime": "2026-08-01T02:26:36.495Z",
+      "indexed_at": "2026-08-01T02:26:36.495Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -42246,9 +42246,9 @@
     {
       "path": "docs/products/productized-sprint/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Productized Sprint",
-      "bytes": 10608,
-      "mtime": "2026-08-01T02:23:43.048Z",
-      "indexed_at": "2026-08-01T02:23:43.048Z"
+      "bytes": 11261,
+      "mtime": "2026-08-01T02:26:36.495Z",
+      "indexed_at": "2026-08-01T02:26:36.495Z"
     },
     {
       "path": "docs/products/PRODUCTIZEDSPRINT.md",
@@ -71078,10 +71078,10 @@
     },
     {
       "path": "routes/sprintQueuePanelRoute.js",
-      "synopsis": "Route for displaying the Sprint Queue panel.",
-      "bytes": 659,
-      "mtime": "2026-08-01T02:22:39.441Z",
-      "indexed_at": "2026-08-01T02:22:39.441Z",
+      "synopsis": "Route for displaying the Sprint Queue panel or temporary Notion board.",
+      "bytes": 605,
+      "mtime": "2026-08-01T02:26:36.495Z",
+      "indexed_at": "2026-08-01T02:26:36.495Z",
       "ssot": [
         "docs/products/productized-sprint/PRODUCT_HOME.md"
       ]

@@ -12,7 +12,7 @@
 | **Machine manifest** | `docs/products/productized-sprint/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
 | **Launch kit** | `docs/products/productized-sprint/launch-kit/` — Founder Voice Content Pack (MarketingOS-powered, service-first) |
-| **Last Updated** | 2026-08-02 — `create-sprint-queue-panel` BUILD_QUEUE expected_exports aligned to `registerSprintQueuePanelRoute`; `config/auto-registered-product-modules.json` entry added; stale `step5` duplicate skipped. |
+| **Last Updated** | 2026-08-02 — `create-sprint-queue-panel` and `step8` BUILD_QUEUE expected_exports aligned; `step5` duplicate skipped; `routes/sprintQueuePanelRoute.js` restored to importable `38207af26` version after broken `8250239fc` factory rebuild. |
 
 ---
 | Field | Value |
@@ -231,3 +231,5 @@ Adam receives: the brief + the draft + a complexity flag. His job is judgment an
 | 2026-07-10 | Added `launch-kit/` service-first kit for the Founder Voice Content Pack (Build My Thing → social content system), powered by the live MarketingOS engine. Includes Stripe payment-link runbook, intake (form + `intake-form.html`), delivery SOP, outreach templates, and `scripts/deliver-content-pack.mjs` (verified generate→approve→export on prod). Recorded live findings (`launch-kit/FINDINGS.md`): F1 generate emits 1 piece/extraction with no dedupe (~3 unique/session) → offer yield corrected + delivery script dedupes; fixes queued to factory, not hand-patched. KNOW/THINK labeled. | Devin |
 | 2026-08-02 | `create-sprint-queue-panel` step: builder shipped `routes/sprintQueuePanelRoute.js` exporting `registerSprintQueuePanelRoute`; aligned BUILD_QUEUE expected_exports and added `config/auto-registered-product-modules.json` entry so the route mounts live. | Devin |
 | 2026-08-02 | `step5` (duplicate sprint queue panel route) skipped; superseded by `create-sprint-queue-panel` which is done. Canonical path is `/sprint-queue-panel` and export is `registerSprintQueuePanelRoute` (commit `38207af26`). | Devin |
+| 2026-08-02 | `step8` (`scripts/identifyTargetCustomers.mjs`) expected `getInitialTargetCustomers` but the canonical file exports `getTargetCustomers` and `identifyTargetCustomers`. Aligned `expected_exports` to `getTargetCustomers` and `file_contains` to `export const getTargetCustomers`. | Devin |
+| 2026-08-02 | `routes/sprintQueuePanelRoute.js` repair: factory-generated `8250239fc` version imported a non-existent `sprintQueueService.js` and broke imports for `create-sprint-queue-panel` and `productized-sprint-9` in `audit-false-done-steps`. Restored the importable `38207af26` Notion-redirect version. | Devin |

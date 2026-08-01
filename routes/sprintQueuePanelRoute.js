@@ -1,14 +1,13 @@
 /**
- * SYNOPSIS: Route for displaying the Sprint Queue panel.
+ * SYNOPSIS: Route for displaying the Sprint Queue panel or temporary Notion board.
  * @ssot docs/products/productized-sprint/PRODUCT_HOME.md
  */
-import { getSprintQueueState } from '../services/sprintQueueService.js'; // Assuming this service exists based on the schema
 export function registerSprintQueuePanelRoute(app, deps) {
-  app.get('/sprint/queue/panel', deps.requireKey, async (req, res, next) => {
+  app.get('/sprint-queue-panel', deps.requireKey, async (req, res, next) => {
     try {
-      // Fetch data from the builder_queue_state table
-      const result = await getSprintQueueState(deps);
-      res.json(result);
+      // For now, redirecting to an interim Notion board URL
+      const notionBoardURL = 'https://www.notion.so/interim-sprint-queue-panel';
+      res.redirect(notionBoardURL);
     } catch (error) {
       deps.logger.error({ error }, 'Error in sprintQueuePanelRoute route');
       next(error);
