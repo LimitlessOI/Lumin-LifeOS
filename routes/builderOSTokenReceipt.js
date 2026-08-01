@@ -1,17 +1,21 @@
 /**
- * SYNOPSIS: Implements the builderOS token receipt route for recording build completion.
+ * SYNOPSIS: HTTP route module — BuilderOS Token Receipt.
  * @ssot docs/products/token-accounting-os/PRODUCT_HOME.md
  */
-import { recordBuilderOSTokenReceipt } from '../services/builderOSTokenReceipt.js';
+import express from 'express';
+import { generateTokenReceipt } from '../services/builderOSTokenReceipt.js';
 
-export function registerBuilderOSTokenReceipt(app, deps) {
-  app.post('/api/v1/builderOS/token-receipt', deps.requireKey, async (req, res, next) => {
+const router = express.Router();
+
+export function registerBuilderOSTokenReceiptRoutes(app, deps) {
+  app.use('/api/v1/builderOS/token-receipt', deps.requireKey, router);
+
+  router.post('/', async (req, res, next) => {
     try {
-      const payload = req.body;
-      const result = await recordBuilderOSTokenReceipt(deps, payload);
-      res.json(result);
+      const result = await generateTokenReceipt(deps, req.body);
+      res.json({ ok: true, receipt: result });
     } catch (error) {
-      deps.logger.error({ error }, 'Error in builderOSTokenReceipt route');
+      deps.logger.error({ error }, 'Error in builderOS token receipt route');
       next(error);
     }
   });

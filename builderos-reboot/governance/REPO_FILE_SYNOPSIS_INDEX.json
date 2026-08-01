@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T05:29:50.478Z",
+  "generated_at": "2026-08-01T05:32:37.769Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12672,
   "files": [
@@ -30844,9 +30844,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 30546,
-      "mtime": "2026-08-01T04:48:19.468Z",
-      "indexed_at": "2026-08-01T04:48:36.773Z",
+      "bytes": 29750,
+      "mtime": "2026-08-01T05:32:37.769Z",
+      "indexed_at": "2026-08-01T05:32:37.769Z",
       "synopsis_index_only": true
     },
     {
@@ -42462,9 +42462,9 @@
     {
       "path": "docs/products/token-accounting-os/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Token Accounting OS",
-      "bytes": 7699,
-      "mtime": "2026-07-30T03:57:08.483Z",
-      "indexed_at": "2026-07-30T22:32:11.913Z"
+      "bytes": 8447,
+      "mtime": "2026-08-01T05:32:37.769Z",
+      "indexed_at": "2026-08-01T05:32:37.769Z"
     },
     {
       "path": "docs/products/TOKENACCOUNTINGOS.md",
@@ -68887,10 +68887,10 @@
     },
     {
       "path": "routes/builderOSTokenReceipt.js",
-      "synopsis": "Implements the builderOS token receipt route for recording build completion.",
-      "bytes": 659,
-      "mtime": "2026-08-01T05:29:50.478Z",
-      "indexed_at": "2026-08-01T05:29:50.478Z",
+      "synopsis": "HTTP route module — BuilderOS Token Receipt.",
+      "bytes": 709,
+      "mtime": "2026-08-01T05:32:37.769Z",
+      "indexed_at": "2026-08-01T05:32:37.769Z",
       "ssot": [
         "docs/products/token-accounting-os/PRODUCT_HOME.md"
       ]
@@ -88101,8 +88101,8 @@
       "path": "services/builderOSTokenReceipt.js",
       "synopsis": "Service to store token receipt information upon build completion.",
       "bytes": 1427,
-      "mtime": "2026-08-01T05:29:01.443Z",
-      "indexed_at": "2026-08-01T05:29:01.443Z",
+      "mtime": "2026-08-01T05:32:37.769Z",
+      "indexed_at": "2026-08-01T05:32:37.769Z",
       "ssot": [
         "docs/products/token-accounting-os/PRODUCT_HOME.md"
       ]
