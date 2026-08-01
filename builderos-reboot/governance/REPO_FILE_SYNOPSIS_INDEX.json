@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T10:45:00.003Z",
+  "generated_at": "2026-08-01T10:47:06.078Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -42535,9 +42535,9 @@
     {
       "path": "docs/products/project-governance/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Project Governance",
-      "bytes": 67658,
-      "mtime": "2026-08-01T10:44:36.480Z",
-      "indexed_at": "2026-08-01T10:45:00.003Z"
+      "bytes": 68767,
+      "mtime": "2026-08-01T10:46:53.365Z",
+      "indexed_at": "2026-08-01T10:47:06.078Z"
     },
     {
       "path": "docs/products/project-governance/READINESS_CHECKLIST.md",
@@ -89851,10 +89851,10 @@
     },
     {
       "path": "services/decisionDebt.js",
-      "synopsis": "Exports getDecisionDebt — services/decisionDebt.js.",
-      "bytes": 183,
-      "mtime": "2026-08-01T10:44:00.980Z",
-      "indexed_at": "2026-08-01T10:45:00.003Z",
+      "synopsis": "Provides decision debt details for projects.",
+      "bytes": 2418,
+      "mtime": "2026-08-01T10:46:24.447Z",
+      "indexed_at": "2026-08-01T10:47:06.078Z",
       "ssot": [
         "docs/products/project-governance/PRODUCT_HOME.md"
       ]

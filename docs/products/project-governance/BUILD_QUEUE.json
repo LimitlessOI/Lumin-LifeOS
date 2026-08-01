@@ -22,8 +22,9 @@
         "getDecisionDebt"
       ],
       "file_contains": [
-        "function getDecisionDebt(){",
-        "return {}"
+        "export async function getDecisionDebt",
+        "cognitive_debt_items",
+        "founder_decision_ledger"
       ],
       "behavior_assertions": [
         {
@@ -43,7 +44,6 @@
       "mission_id": "PRODUCT-project-governance",
       "same_signature_count": 1,
       "demoted": false,
-      "last_error": "artifact_proof_failed: function getDecisionDebt(){; return {}",
       "heal_unblocked": true,
       "last_attempt_at": "2026-08-01T10:47:12.314Z",
       "blocker_class": "BLOCKED_TOOLING",
