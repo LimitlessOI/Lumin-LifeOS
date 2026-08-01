@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T09:08:59.555Z",
+  "generated_at": "2026-08-01T09:13:46.760Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -34860,9 +34860,9 @@
     {
       "path": "db/migrations/20241030_create_additional_templates.sql",
       "synopsis": "Database migration — 20241030_create_additional_templates.sql.",
-      "bytes": 466,
-      "mtime": "2026-07-28T23:27:45.152Z",
-      "indexed_at": "2026-07-28T23:28:39.318Z"
+      "bytes": 765,
+      "mtime": "2026-08-01T09:13:46.760Z",
+      "indexed_at": "2026-08-01T09:13:46.760Z"
     },
     {
       "path": "db/migrations/20260313_core_schema.sql",
