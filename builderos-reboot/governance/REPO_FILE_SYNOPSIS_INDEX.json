@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T00:47:46.687Z",
+  "generated_at": "2026-08-01T00:48:42.683Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12643,
+  "file_count": 12644,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -68526,6 +68526,16 @@
       "bytes": 800,
       "mtime": "2026-07-18T18:46:59.242Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "routes/accreditationRoutes.js",
+      "synopsis": "Exports registerAccreditationRoutes — routes/accreditationRoutes.js.",
+      "bytes": 2520,
+      "mtime": "2026-08-01T00:48:42.683Z",
+      "indexed_at": "2026-08-01T00:48:42.683Z",
+      "ssot": [
+        "docs/products/lumin-university/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/action-inbox-routes.js",
