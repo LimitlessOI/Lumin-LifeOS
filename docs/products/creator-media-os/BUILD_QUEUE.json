@@ -517,7 +517,7 @@
     },
     {
       "id": "12",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/sceneRoutes.js",
       "task": "Add scene routes",
       "spec": "Expose scene assembly operations via HTTP API.",
@@ -549,7 +549,10 @@
       "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "12",
       "mission_id": "PRODUCT-creator-media-os",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "completed_at": "2026-08-01T18:54:49.172Z",
+      "heal_claimed": true,
+      "heal_reason": "artifact_proof_pass"
     },
     {
       "id": "back-catalog-ingestion-ingest-a-creator-s-existi",
@@ -1425,5 +1428,5 @@
   "corpus_sources": [
     "docs/products/creator-media-os/PRODUCT_HOME.md"
   ],
-  "updated_at": "2026-08-01T18:49:23.897Z"
+  "updated_at": "2026-08-01T18:54:49.223Z"
 }
