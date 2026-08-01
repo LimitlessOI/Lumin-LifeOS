@@ -31,32 +31,71 @@
     const status = document.getElementById('status');
     let recognition;
     let isRecording = false;
+    // Use window.SpeechRecognition for standard browsers, window.webkitSpeechRecognition for Chrome/Safari
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
     if (SpeechRecognition) {
       recognition = new SpeechRecognition();
-      recognition.continuous = false;
-      recognition.interimResults = true;
-      recognition.lang = 'en-US';
-      recognition.onstart = () => { isRecording = true; recordButton.textContent = 'Stop'; status.textContent = 'Listening…'; };
-      recognition.onend = () => { isRecording = false; recordButton.textContent = 'Record'; status.textContent = 'Ready.'; };
+      recognition.continuous = false; // Set to false for single utterance recognition
+      recognition.interimResults = true; // Show interim results
+      recognition.lang = 'en-US'; // Set language
+
+      recognition.onstart = () => {
+        isRecording = true;
+        recordButton.textContent = 'Stop';
+        status.textContent = 'Listening…';
+      };
+
+      recognition.onend = () => {
+        isRecording = false;
+        recordButton.textContent = 'Record';
+        status.textContent = 'Ready.';
+      };
+
       recognition.onresult = (event) => {
         let text = '';
-        for (let i = 0; i < event.results.length; i++) text += event.results[i][0].transcript + ' ';
+        // Iterate through all results to get the current transcription
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          text += event.results[i][0].transcript;
+        }
         transcriptDiv.textContent = text.trim();
+
+        // If it's a final result, send to the backend
         if (event.results[event.results.length - 1].isFinal) {
+          const finalTranscript = text.trim();
           fetch('/api/v1/lifeos/journal/voice', {
             method: 'POST',
-            credentials: 'include',
+            credentials: 'include', // Ensures cookies (like session tokens) are sent
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ text: text.trim() }),
-          }).then((r) => { status.textContent = r.ok ? 'Saved.' : 'Saved locally only (HTTP ' + r.status + ').'; })
-            .catch(() => { status.textContent = 'Kept in browser — save endpoint unavailable.'; });
+            body: JSON.stringify({ text: finalTranscript }),
+          })
+            .then((r) => {
+              status.textContent = r.ok ? 'Saved.' : 'Saved locally only (HTTP ' + r.status + ').';
+            })
+            .catch(() => {
+              status.textContent = 'Kept in browser — save endpoint unavailable.';
+            });
         }
       };
-      recordButton.onclick = () => { if (isRecording) recognition.stop(); else recognition.start(); };
+
+      recognition.onerror = (event) => {
+        console.error('Speech recognition error:', event.error);
+        status.textContent = 'Error: ' + event.error;
+        isRecording = false;
+        recordButton.textContent = 'Record';
+      };
+
+      recordButton.onclick = () => {
+        if (isRecording) {
+          recognition.stop();
+        } else {
+          transcriptDiv.textContent = ''; // Clear previous transcript
+          recognition.start();
+        }
+      };
     } else {
       status.textContent = 'Speech recognition not supported here — type below instead.';
-      transcriptDiv.contentEditable = 'true';
+      transcriptDiv.contentEditable = 'true'; // Allow manual input if API is not supported
     }
   </script>
 </body>
