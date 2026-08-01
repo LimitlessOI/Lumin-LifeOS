@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T10:10:38.031Z",
+  "generated_at": "2026-08-01T10:10:46.087Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -96242,9 +96242,9 @@
     {
       "path": "services/therapist-integration.js",
       "synopsis": "Therapist integration setup wiring communication-profile and truth-delivery.",
-      "bytes": 609,
-      "mtime": "2026-08-01T10:10:13.012Z",
-      "indexed_at": "2026-08-01T10:10:38.031Z",
+      "bytes": 795,
+      "mtime": "2026-08-01T10:10:43.828Z",
+      "indexed_at": "2026-08-01T10:10:46.087Z",
       "ssot": [
         "docs/products/wellness-studio/PRODUCT_HOME.md"
       ]
