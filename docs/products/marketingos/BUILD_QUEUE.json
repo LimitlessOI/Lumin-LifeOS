@@ -1174,7 +1174,7 @@
     },
     {
       "id": "7",
-      "status": "pending",
+      "status": "skipped",
       "target_file": "public/overlay/marketing-campaign-package.html",
       "task": "Create UI to display generated campaign packages",
       "spec": "HTML overlay to present the complete campaign package. This includes displaying generated copy for landing pages, email sequences, ad creatives (e.g., Facebook ads), and outlines for lead magnets, sourced from the existing '/api/v1/marketingos/campaign' API endpoint.",
@@ -1189,7 +1189,9 @@
         "<h5>Lead Magnet Outline</h5>",
         "<script>fetch('/api/v1/marketingos/campaign')"
       ],
-      "design_review_flagged": true
+      "design_review_flagged": true,
+      "last_error": null,
+      "blocker_class": null
     },
     {
       "id": "8",
