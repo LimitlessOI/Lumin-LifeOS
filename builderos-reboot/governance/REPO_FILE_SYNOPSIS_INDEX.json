@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T13:52:20.896Z",
+  "generated_at": "2026-08-01T13:55:24.934Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12726,
   "files": [
@@ -91425,10 +91425,10 @@
     },
     {
       "path": "services/intakeFormService.js",
-      "synopsis": "Registers IntakeFormService routes/handlers (services/intakeFormService.js).",
-      "bytes": 1179,
-      "mtime": "2026-07-16T19:42:53.611Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "synopsis": "Handles the creation and processing of intake forms, including database interactions.",
+      "bytes": 2108,
+      "mtime": "2026-08-01T13:55:24.934Z",
+      "indexed_at": "2026-08-01T13:55:24.934Z",
       "ssot": [
         "docs/products/productized-sprint/PRODUCT_HOME.md"
       ]
