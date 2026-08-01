@@ -86,7 +86,7 @@ export function authorAssertionsFromSpec(step) {
     }
   }
 
-  if (spec.route && typeof spec.route.path === 'string' && spec.route.path.trim()) {
+  if (spec.route && typeof spec.route.path === 'string' && spec.route.path.trim() && isServerCodeTarget(target) && /^routes\//.test(String(target || '').replace(/\\/g, '/'))) {
     const expect_status = Array.isArray(spec.route.expect_status) ? spec.route.expect_status : undefined;
     assertions.push({
       type: expect_status ? 'http_status' : 'module_mounts',

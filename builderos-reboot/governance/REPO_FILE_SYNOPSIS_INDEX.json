@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T05:52:47.557Z",
+  "generated_at": "2026-08-01T06:03:16.312Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12675,
+  "file_count": 12676,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -41129,9 +41129,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 372903,
-      "mtime": "2026-08-01T03:07:57.310Z",
-      "indexed_at": "2026-08-01T03:07:57.310Z"
+      "bytes": 374241,
+      "mtime": "2026-08-01T06:03:16.312Z",
+      "indexed_at": "2026-08-01T06:03:16.312Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -62684,9 +62684,9 @@
     {
       "path": "factory-staging/factory-core/bpb/author-assertions.js",
       "synopsis": "STEP 5b — BPB authors behavior_assertions from the BLUEPRINT SPEC at",
-      "bytes": 18995,
-      "mtime": "2026-07-28T17:47:22.515Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 19087,
+      "mtime": "2026-08-01T06:03:16.312Z",
+      "indexed_at": "2026-08-01T06:03:16.312Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -75050,6 +75050,16 @@
       "indexed_at": "2026-07-28T22:54:46.666Z",
       "ssot": [
         "docs/products/project-governance/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/self-heal-build-queue.mjs",
+      "synopsis": "Deterministic BUILD_QUEUE self-healer. Re-evaluates every non-done step",
+      "bytes": 4572,
+      "mtime": "2026-08-01T06:03:16.312Z",
+      "indexed_at": "2026-08-01T06:03:16.312Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
       ]
     },
     {
