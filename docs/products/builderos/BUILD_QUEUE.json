@@ -879,7 +879,7 @@
         "builderos-step2"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "expected_exports": [
         "registerCommitmentRoutes"
       ],
@@ -903,15 +903,15 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T19:15:25.545Z",
-      "commit_sha": "347cd50814567c52ef6ec99fb82c67e1ba44fda6",
+      "commit_sha": "d05e84de025e4a764d595f11f53214173b7a909b",
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "builderos-step7",
       "mission_id": "PRODUCT-builderos",
       "same_signature_count": 1,
       "demoted": false,
-      "last_error": "artifact_proof_failed: missing_exports:registerCommitmentRoutes; registerCommitmentRoutes",
+      "last_error": "route module not auto-registered — add {\"path\":\"routes/commitment-routing.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
       "heal_unblocked": true,
-      "last_attempt_at": "2026-08-01T08:24:38.473Z",
+      "last_attempt_at": "2026-08-01T08:27:53.529Z",
       "blocker_class": "BLOCKED_TOOLING",
       "failure_signature": "artifact_proof|BLOCKED_TOOLING|artifact_proof_failed: missing_exports:registerCommitmentRoutes; registerCommitmentRoutes"
     },
@@ -3335,5 +3335,5 @@
   "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-builderos",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T08:24:49.777Z"
+  "updated_at": "2026-08-01T08:27:54.011Z"
 }
