@@ -1600,7 +1600,7 @@
       "spec": "Implement Sprint Queue panel viewing by users; start with interim Notion board if necessary.",
       "depends_on": [],
       "founder_gated": true,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerSprintQueuePanelRoutes"
       ],
@@ -1626,10 +1626,12 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-17T22:42:33.444Z",
-      "commit_sha": "40970cd94e194a996eefae5c0e2de5e6276d2b1b",
+      "commit_sha": "8250239fc927cc2ccd4b675f0ce20642b809706f",
       "pre_existing": false,
-      "last_error": "false_done_reaudit: artifact_proof_failed: missing_exports:registerSprintQueuePanelRoutes; app.get('/sprint/queue/panel'",
-      "reaudit_reset_at": "2026-07-30T18:55:06.702Z"
+      "last_error": "artifact_proof_failed: missing_exports:registerSprintQueuePanelRoutes; registerSprintQueuePanelRoutes",
+      "reaudit_reset_at": "2026-07-30T18:55:06.702Z",
+      "last_attempt_at": "2026-08-01T02:22:32.223Z",
+      "blocker_class": "BLOCKED_TOOLING"
     },
     {
       "id": "step6",
@@ -2120,5 +2122,5 @@
   "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-productized-sprint",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T02:22:15.349Z"
+  "updated_at": "2026-08-01T02:22:45.288Z"
 }
