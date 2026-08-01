@@ -335,6 +335,14 @@
       "added_real_lines": 25,
       "justification": "restoring an already-designed, already-\nreal implementation confirmed present minutes earlier in the same\nsession -- not new business logic authorship.",
       "commit_message_excerpt": "GAP-FILL: restore AI content-moderator call + full regex patterns in safeOutputService.js"
+    },
+    {
+      "at": "2026-08-01T11:44:00.154Z",
+      "file": "routes/server.approvals.js",
+      "is_new_file": false,
+      "added_real_lines": 16,
+      "justification": "deterministic merge-conflict gap-fill on an existing builder-generated route; factory /build attempts failed with BLOCKED_TOOLING due to exhausted AI provider quota, and only the function signature and fallback wiring were adjusted.\n\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
+      "commit_message_excerpt": "GAP-FILL: reconcile routes/server.approvals.js after origin/main merge for business-tools step 6. An origin/main merge introduced deps.requireKey and deps.logger usage inside the route but left the si"
     }
   ]
 }

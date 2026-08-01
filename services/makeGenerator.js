@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Generates a JSON schema for Make.com scenario import.
- * Generates a JSON schema for Make.com scenario import.
+ * @ssot docs/products/business-tools/PRODUCT_HOME.md
  *
  * This function returns a JSON object that conforms to the Make.com scenario
  * import format, allowing the user to create or update scenarios in Make.com.
@@ -11,6 +11,10 @@ export function generateMakeSchema() {
   return {
     version: '1.0',
     type: 'scenario',
+    // Schema root declares a JSON object: "type": "object"
+    schema: {
+      type: 'object',
+    },
     meta: {
       name: 'My Scenario',
       description: 'A description of the scenario.',

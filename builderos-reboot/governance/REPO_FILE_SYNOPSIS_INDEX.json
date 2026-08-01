@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T11:43:59.851Z",
+  "generated_at": "2026-08-01T11:48:04.919Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1760,
-      "mtime": "2026-08-01T11:42:37.528Z",
-      "indexed_at": "2026-08-01T11:43:12.654Z",
+      "bytes": 1745,
+      "mtime": "2026-08-01T11:47:28.980Z",
+      "indexed_at": "2026-08-01T11:48:04.919Z",
       "synopsis_index_only": true
     },
     {
@@ -41164,9 +41164,9 @@
     {
       "path": "docs/products/builderos/GAP_FILL_LEDGER.json",
       "synopsis": "Documentation — GAP FILL LEDGER.",
-      "bytes": 47290,
-      "mtime": "2026-08-01T11:31:35.691Z",
-      "indexed_at": "2026-08-01T11:31:55.059Z",
+      "bytes": 48030,
+      "mtime": "2026-08-01T11:44:00.152Z",
+      "indexed_at": "2026-08-01T11:48:04.919Z",
       "synopsis_index_only": true
     },
     {
@@ -41236,9 +41236,9 @@
     {
       "path": "docs/products/business-tools/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Business Tools",
-      "bytes": 11264,
-      "mtime": "2026-08-01T11:43:47.052Z",
-      "indexed_at": "2026-08-01T11:43:59.851Z"
+      "bytes": 11298,
+      "mtime": "2026-08-01T11:47:53.796Z",
+      "indexed_at": "2026-08-01T11:48:04.919Z"
     },
     {
       "path": "docs/products/BUSINESSTOOLS.md",
@@ -65772,9 +65772,9 @@
     {
       "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
       "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
-      "bytes": 3646,
-      "mtime": "2026-08-01T11:40:54.288Z",
-      "indexed_at": "2026-08-01T11:43:12.654Z",
+      "bytes": 5258,
+      "mtime": "2026-08-01T11:46:29.460Z",
+      "indexed_at": "2026-08-01T11:48:04.919Z",
       "synopsis_index_only": true
     },
     {
@@ -93033,9 +93033,12 @@
     {
       "path": "services/makeGenerator.js",
       "synopsis": "Generates a JSON schema for Make.com scenario import.",
-      "bytes": 813,
-      "mtime": "2026-07-15T09:37:08.940Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 913,
+      "mtime": "2026-08-01T11:47:38.584Z",
+      "indexed_at": "2026-08-01T11:48:04.919Z",
+      "ssot": [
+        "docs/products/business-tools/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/malware-scanning-implementation.js",
