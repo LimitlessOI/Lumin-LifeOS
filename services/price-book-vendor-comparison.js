@@ -11,7 +11,7 @@ export async function compareVendors(deps, payload) {
     throw new Error('Invalid input: vendorIds must be a non-empty array.');
   }
 
-  const { maxPrice, includeKeywords = [], excludeKeywords = [] } = criteria;
+  const { maxPrice, minReviewScore, includeKeywords = [], excludeKeywords = [] } = criteria;
 
   try {
     const { rows: priceBookItems } = await pool.query(
@@ -74,7 +74,13 @@ export async function compareVendors(deps, payload) {
 
       // Logic to compare based on pricing
       if (maxPrice !== undefined && vendor.totalPrice > maxPrice) {
-        explanation.push(`Excluded: total price (${vendor.totalPrice}) is expensive and exceeds maximum allowed (${maxPrice}).`);
+        explanation.push(`Excluded: total price (${vendor.totalPrice}) exceeds maximum allowed (${maxPrice}).`);
+        isIncluded = false;
+      }
+
+      // Logic to compare based on minimum review score
+      if (minReviewScore !== undefined && vendor.averageReviewScore < minReviewScore) {
+        explanation.push(`Excluded: average review score (${vendor.averageReviewScore.toFixed(2)}) is below minimum required (${minReviewScore}).`);
         isIncluded = false;
       }
 

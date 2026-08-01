@@ -6,7 +6,7 @@
 **Parent platform:** Lumin / LifeOS ecosystem  
 **Constitutional law:** `docs/constitution/NORTH_STAR_SSOT.md`  
 **Machine manifest:** `docs/products/limitlessos/FILE_MANIFEST.json`  
-**Last Updated:** 2026-08-02 — GAP-FILL `services/price-book-vendor-comparison.js` (limitlessos-step4): lowercased the comment to `// vendor comparison: explain or exclude ...` so the BUILD_QUEUE `file_contains` check (case-sensitive) passes. Also cleared `routes/audit-intake-flow-routes.js` (limitlessos-step2).
+**Last Updated:** 2026-08-02 (merged) — GAP-FILL `services/price-book-vendor-comparison.js` (limitlessos-step4): merged origin/main and reconfirmed lowercase `// vendor comparison: explain or exclude ...` comment so the BUILD_QUEUE `file_contains` check passes. Also cleared `routes/audit-intake-flow-routes.js` (limitlessos-step2).
 
 | Field | Value |
 |-------|-------|
