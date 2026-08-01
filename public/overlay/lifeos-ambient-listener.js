@@ -8,13 +8,38 @@
   'use strict';
 
   const NAMESPACE = 'LifeOSAmbientListener';
+  const STATES = ['off', 'sleeping', 'listening', 'processing'];
 
-  function getInput() {
-    return document.getElementById('lumin-input');
+  let recognition = null;
+  let listening = false;
+  let mode = 'off';
+  let pauseTimer = null;
+  let finalTranscript = '';
+  let onStateChange = null;
+  let onToast = null;
+
+  function getInput() { return document.getElementById('lumin-input'); }
+  function getMicButton() { return document.getElementById('lumin-mic-btn'); }
+
+  function setMode(newMode) {
+    if (mode === newMode) return;
+    mode = newMode;
+    if (typeof onStateChange === 'function') {
+      try { onStateChange(newMode); } catch { /* ignore */ }
+    }
+    updateMicUi();
   }
 
-  function getMicButton() {
-    return document.getElementById('lumin-mic-btn');
+  function getMode() { return mode; }
+
+  function isEnabled() { return listening; }
+
+  function hasConsent() { return true; }
+
+  function notify(message, kind = 'note') {
+    if (typeof onToast === 'function') {
+      try { onToast(message, kind); } catch { /* ignore */ }
+    }
   }
 
   function getInterimContainer() {
@@ -67,123 +92,128 @@
     return rec;
   }
 
-  const LifeOSAmbientListener = {
-    listening: false,
-    recognition: null,
-    pauseTimer: null,
-    finalTranscript: '',
-
-    toggle() {
-      if (this.listening) {
-        this.stop();
-      } else {
-        this.start();
-      }
-    },
-
-    start() {
-      if (this.listening) return;
-      this.recognition = buildRecognition();
-      if (!this.recognition) {
-        // eslint-disable-next-line no-console
-        console.warn('Ambient listener unavailable: SpeechRecognition / webkitSpeechRecognition not supported.');
-        return;
-      }
-
-      this.listening = true;
-      this.finalTranscript = '';
-      this.updateMicUi();
-
-      this.recognition.onresult = (event) => {
-        let interim = '';
-        for (let i = event.resultIndex; i < event.results.length; i += 1) {
-          const result = event.results[i];
-          const transcript = result[0].transcript;
-          if (result.isFinal) {
-            this.finalTranscript += transcript;
-            appendTranscript(transcript);
-            getInterimContainer().textContent = '';
-            sendAmbientCapture(transcript);
-            this.resetPauseTimer();
-          } else {
-            interim += transcript;
-          }
-        }
-        if (interim) {
-          getInterimContainer().textContent = `${this.finalTranscript} ${interim}`.trim();
-        }
-      };
-
-      this.recognition.onerror = (event) => {
-        if (event.error === 'not-allowed') this.stop();
-      };
-
-      this.recognition.onend = () => {
-        if (this.listening) {
-          try { this.recognition.start(); } catch { /* ignore restart race */ }
-        } else {
-          this.updateMicUi();
-        }
-      };
-
-      try {
-        this.recognition.start();
-      } catch (err) {
-        // eslint-disable-next-line no-console
-        console.error('Ambient listener start failed:', err);
-        this.listening = false;
-        this.updateMicUi();
-      }
-    },
-
-    stop() {
-      this.listening = false;
-      if (this.pauseTimer) {
-        clearTimeout(this.pauseTimer);
-        this.pauseTimer = null;
-      }
-      if (this.recognition) {
-        try { this.recognition.stop(); } catch { /* ignore */ }
-        this.recognition = null;
-      }
-      this.updateMicUi();
-    },
-
-    resetPauseTimer() {
-      if (this.pauseTimer) clearTimeout(this.pauseTimer);
-      this.pauseTimer = setTimeout(() => {
-        if (this.finalTranscript.trim()) triggerSend();
-        this.finalTranscript = '';
-      }, 2000);
-    },
-
-    updateMicUi() {
-      const btn = getMicButton();
-      if (!btn) return;
-      btn.classList.toggle('voice-active', this.listening);
-      btn.title = this.listening ? 'Ambient listening on (click to stop)' : 'Voice input (tap to toggle)';
-      const indicator = getInterimContainer();
-      if (!this.listening) indicator.textContent = '';
-    },
-  };
-
-  function initAmbientListener() {
-    const micBtn = getMicButton();
-    if (!micBtn) return;
-    // Remove the inline handler so the ambient listener controls toggling.
-    micBtn.removeAttribute('onclick');
-    micBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      LifeOSAmbientListener.toggle();
-    });
+  function updateMicUi() {
+    const btn = getMicButton();
+    if (!btn) return;
+    btn.classList.toggle('voice-active', listening);
+    btn.title = listening ? 'Ambient listening on (click to stop)' : 'Voice input (tap to toggle)';
+    const indicator = getInterimContainer();
+    if (!listening) indicator.textContent = '';
   }
 
-  function init() {
+  function resetPauseTimer() {
+    if (pauseTimer) clearTimeout(pauseTimer);
+    pauseTimer = setTimeout(() => {
+      if (finalTranscript.trim()) triggerSend();
+      finalTranscript = '';
+    }, 2000);
+  }
+
+  function onRecognitionResult(event) {
+    let interim = '';
+    for (let i = event.resultIndex; i < event.results.length; i += 1) {
+      const result = event.results[i];
+      const transcript = result[0].transcript;
+      if (result.isFinal) {
+        finalTranscript += transcript;
+        appendTranscript(transcript);
+        getInterimContainer().textContent = '';
+        sendAmbientCapture(transcript);
+        resetPauseTimer();
+      } else {
+        interim += transcript;
+      }
+    }
+    if (interim) {
+      getInterimContainer().textContent = `${finalTranscript} ${interim}`.trim();
+    }
+  }
+
+  function onRecognitionError(event) {
+    if (event.error === 'not-allowed') stop();
+  }
+
+  async function enable() {
+    if (listening) return true;
+    recognition = buildRecognition();
+    if (!recognition) {
+      notify('Ambient listener unavailable: SpeechRecognition / webkitSpeechRecognition not supported.', 'error');
+      setMode('off');
+      return false;
+    }
+
+    recognition.onresult = onRecognitionResult;
+    recognition.onerror = onRecognitionError;
+    recognition.onend = () => {
+      if (listening) {
+        try { recognition.start(); } catch { /* ignore restart race */ }
+      } else {
+        setMode('off');
+      }
+    };
+
+    setMode('listening');
+    listening = true;
+    finalTranscript = '';
+    updateMicUi();
+
+    try {
+      recognition.start();
+      return true;
+    } catch (err) {
+      listening = false;
+      setMode('off');
+      notify('Ambient listener start failed.', 'error');
+      return false;
+    }
+  }
+
+  async function disable() {
+    if (!listening) return true;
+    listening = false;
+    if (pauseTimer) { clearTimeout(pauseTimer); pauseTimer = null; }
+    if (recognition) {
+      try { recognition.stop(); } catch { /* ignore */ }
+      recognition = null;
+    }
+    setMode('off');
+    return true;
+  }
+
+  async function toggle() {
+    if (listening) return disable();
+    return enable();
+  }
+
+  function stop() {
+    return disable();
+  }
+
+  function start() {
+    return enable();
+  }
+
+  function init(options = {}) {
+    onStateChange = options?.onStateChange || null;
+    onToast = options?.onToast || null;
+    if (hasConsent()) {
+      setMode('off');
+    } else {
+      setMode('off');
+    }
     initAmbientListener();
     return true;
   }
 
-  LifeOSAmbientListener.init = init;
+  function initAmbientListener() {
+    const micBtn = getMicButton();
+    if (!micBtn) return;
+    micBtn.removeAttribute('onclick');
+    micBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      toggle();
+    });
+  }
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initAmbientListener);
@@ -191,5 +221,16 @@
     initAmbientListener();
   }
 
-  window[NAMESPACE] = LifeOSAmbientListener;
+  window[NAMESPACE] = {
+    init,
+    start,
+    stop,
+    enable,
+    disable,
+    toggle,
+    isEnabled,
+    hasConsent,
+    getMode,
+    STATES,
+  };
 }());

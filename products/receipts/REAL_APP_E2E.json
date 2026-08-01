@@ -1,6 +1,6 @@
 {
   "schema": "real_app_e2e_v1",
-  "at": "2026-08-01T07:16:41.910Z",
+  "at": "2026-08-01T07:21:39.581Z",
   "base": "https://lumin-web-production-e3a9.up.railway.app",
   "ok": false,
   "passed": [
@@ -30,7 +30,7 @@
     },
     "no_js_errors": {
       "ok": false,
-      "detail": "window.LifeOSAmbientListener.init is not a function"
+      "detail": "window.LifeOSAmbientListener.getMode is not a function"
     },
     "lumin_fab_visible": {
       "ok": true,
@@ -42,7 +42,7 @@
     },
     "chat_response": {
       "ok": true,
-      "detail": "74 chars: \"Point B: LifeOS Consumer Alpha (PRODUCT-LIFEOS-USER-AUTH-V1-0001)\n07:16 AM…\""
+      "detail": "74 chars: \"Point B: LifeOS Consumer Alpha (PRODUCT-LIFEOS-USER-AUTH-V1-0001)\n07:21 AM…\""
     },
     "smos_question": {
       "ok": true,

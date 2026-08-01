@@ -1,15 +1,15 @@
 {
   "schema": "sentry_findings_feed_v1",
   "product": "lifeos-founder-ui",
-  "generated_at": "2026-08-01T07:17:05.328Z",
+  "generated_at": "2026-08-01T07:22:01.653Z",
   "findings_count": 2,
   "without_solution": 0,
   "unclassified_error_findings": 0,
   "findings": [
     {
       "code": "no_js_errors",
-      "detail": "window.LifeOSAmbientListener.init is not a function",
-      "proposed_solution": "Reproduce \"no_js_errors\" in the layer-b-command-key walkthrough, read the failing assertion's output, and fix the first failing behavior in the module that produces it: window.LifeOSAmbientListener.init is not a function",
+      "detail": "window.LifeOSAmbientListener.getMode is not a function",
+      "proposed_solution": "Reproduce \"no_js_errors\" in the layer-b-command-key walkthrough, read the failing assertion's output, and fix the first failing behavior in the module that produces it: window.LifeOSAmbientListener.getMode is not a function",
       "proposed_solution_source": "synthesized",
       "severity": "error",
       "source": "layer-b-command-key",
@@ -29,7 +29,7 @@
     "blockers": [
       {
         "code": "no_js_errors",
-        "detail": "window.LifeOSAmbientListener.init is not a function",
+        "detail": "window.LifeOSAmbientListener.getMode is not a function",
         "root_cause_class": "code_defect"
       },
       {
