@@ -1,20 +1,22 @@
 /**
- * SYNOPSIS: HTTP route module — Final Pr Review.
+ * SYNOPSIS: Exposes a POST endpoint for final pull request review and merge.
  * @ssot docs/products/memory-system/PRODUCT_HOME.md
  */
-import express from 'express';
+import { reviewBranch } from '../services/final_pr_review.js';
 
-const router = express.Router();
-
-function finalPrReviewHandler(req, res) {
-  // Placeholder logic for PR review and merge
-  res.send('Final PR review and merge for branch phase7-railway-probe');
+export function registerFinalPrReview(app, deps) {
+  app.post('/api/v1/pr/review', deps.requireKey, async (req, res, next) => {
+    try {
+      const { branchName } = req.body; // Assuming branchName is sent in the request body
+      // Validate branchName if necessary
+      if (!branchName) {
+        return res.status(400).json({ error: 'branchName is required for final review' });
+      }
+      const result = await reviewBranch(branchName);
+      res.json({ message: `Final review and merge initiated for pull request branch: ${branchName}`, details: result });
+    } catch (error) {
+      deps.logger.error({ error }, 'Error in final_pr_review route for pull request');
+      next(error);
+    }
+  });
 }
-
-function registerFinalPrReviewRoutes(app) {
-  app.use('/final-pr-review', router);
-}
-
-router.post('/phase7-railway-probe', finalPrReviewHandler);
-
-export { registerFinalPrReviewRoutes, registerFinalPrReviewRoutes as registerFinalPRRoutes };
