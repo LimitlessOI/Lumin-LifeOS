@@ -503,6 +503,46 @@
       "added_real_lines": 39,
       "justification": "merge resolution and deterministic route/schema gap-fill; factory /build returned BLOCKED_TOOLING.\n\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
       "commit_message_excerpt": "GAP-FILL: merge origin/main and unify routes/white-label-routes.js for white-label-1. Merged builder refactor (createWhiteLabelService import, POST/GET /api/v1/white-label/config routes) with local de"
+    },
+    {
+      "at": "2026-08-01T15:31:29.214Z",
+      "file": "routes/marketing-campaign-routes.js",
+      "is_new_file": true,
+      "added_real_lines": 27,
+      "justification": "all AI providers are rate-limit/credit exhausted (BLOCKED_TOOLING / HTTP 502) and false-done audit showed these done steps were missing from main or failed spine import resolution. Deterministic repairs only: filename/imports and a DB query helper.\n\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
+      "commit_message_excerpt": "GAP-FILL: restore marketingos phase 5-7 analytics/campaign intelligence artifacts. Recovered db/migrations/20260715_marketing_performance_analytics.sql, services/marketing-analytics-ingest.js, service"
+    },
+    {
+      "at": "2026-08-01T15:31:29.214Z",
+      "file": "routes/marketing-performance-intel-routes.js",
+      "is_new_file": true,
+      "added_real_lines": 12,
+      "justification": "all AI providers are rate-limit/credit exhausted (BLOCKED_TOOLING / HTTP 502) and false-done audit showed these done steps were missing from main or failed spine import resolution. Deterministic repairs only: filename/imports and a DB query helper.\n\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
+      "commit_message_excerpt": "GAP-FILL: restore marketingos phase 5-7 analytics/campaign intelligence artifacts. Recovered db/migrations/20260715_marketing_performance_analytics.sql, services/marketing-analytics-ingest.js, service"
+    },
+    {
+      "at": "2026-08-01T15:31:29.214Z",
+      "file": "services/marketing-analytics-ingest.js",
+      "is_new_file": true,
+      "added_real_lines": 53,
+      "justification": "all AI providers are rate-limit/credit exhausted (BLOCKED_TOOLING / HTTP 502) and false-done audit showed these done steps were missing from main or failed spine import resolution. Deterministic repairs only: filename/imports and a DB query helper.\n\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
+      "commit_message_excerpt": "GAP-FILL: restore marketingos phase 5-7 analytics/campaign intelligence artifacts. Recovered db/migrations/20260715_marketing_performance_analytics.sql, services/marketing-analytics-ingest.js, service"
+    },
+    {
+      "at": "2026-08-01T15:31:29.214Z",
+      "file": "services/marketing-campaign-generator.js",
+      "is_new_file": true,
+      "added_real_lines": 68,
+      "justification": "all AI providers are rate-limit/credit exhausted (BLOCKED_TOOLING / HTTP 502) and false-done audit showed these done steps were missing from main or failed spine import resolution. Deterministic repairs only: filename/imports and a DB query helper.\n\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
+      "commit_message_excerpt": "GAP-FILL: restore marketingos phase 5-7 analytics/campaign intelligence artifacts. Recovered db/migrations/20260715_marketing_performance_analytics.sql, services/marketing-analytics-ingest.js, service"
+    },
+    {
+      "at": "2026-08-01T15:31:29.214Z",
+      "file": "services/marketing-message-learning.js",
+      "is_new_file": true,
+      "added_real_lines": 65,
+      "justification": "all AI providers are rate-limit/credit exhausted (BLOCKED_TOOLING / HTTP 502) and false-done audit showed these done steps were missing from main or failed spine import resolution. Deterministic repairs only: filename/imports and a DB query helper.\n\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
+      "commit_message_excerpt": "GAP-FILL: restore marketingos phase 5-7 analytics/campaign intelligence artifacts. Recovered db/migrations/20260715_marketing_performance_analytics.sql, services/marketing-analytics-ingest.js, service"
     }
   ]
 }
