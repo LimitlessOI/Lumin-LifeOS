@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T04:43:08.313Z",
+  "generated_at": "2026-08-01T04:45:49.110Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12670,
   "files": [
@@ -68897,10 +68897,10 @@
     },
     {
       "path": "routes/bundle_social_automation_routes.js",
-      "synopsis": "Registers BundleSocialAutomationRoutes routes/handlers (routes/bundle_social_automation_routes.js).",
-      "bytes": 1317,
-      "mtime": "2026-07-16T19:42:53.595Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "synopsis": "Exposes API routes to manage bundles of website, social, and automation tiers.",
+      "bytes": 7725,
+      "mtime": "2026-08-01T04:45:49.110Z",
+      "indexed_at": "2026-08-01T04:45:49.110Z",
       "ssot": [
         "docs/products/limitlessos/PRODUCT_HOME.md"
       ]
