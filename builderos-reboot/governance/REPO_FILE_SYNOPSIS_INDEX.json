@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T01:14:09.675Z",
+  "generated_at": "2026-08-01T01:14:48.370Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12647,
+  "file_count": 12648,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -69259,6 +69259,16 @@
       "indexed_at": "2026-07-28T22:54:46.666Z",
       "ssot": [
         "docs/products/ai-receptionist/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "routes/evaluatorMentorRoutes.js",
+      "synopsis": "Registers EvaluatorMentorRoutes routes/handlers (routes/evaluatorMentorRoutes.js).",
+      "bytes": 3072,
+      "mtime": "2026-08-01T01:14:48.370Z",
+      "indexed_at": "2026-08-01T01:14:48.370Z",
+      "ssot": [
+        "docs/products/lumin-university/PRODUCT_HOME.md"
       ]
     },
     {
