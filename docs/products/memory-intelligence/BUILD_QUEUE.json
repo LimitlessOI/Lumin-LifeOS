@@ -610,7 +610,7 @@
       "attempts": 2,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS",
-        "CREATE VIEW IF NOT EXISTS"
+        "CREATE OR REPLACE VIEW"
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:17:10.298Z",
@@ -618,14 +618,12 @@
       "blueprint_id": "PRODUCT-MEMORY-INTELLIGENCE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "memory-intelligence-1",
       "mission_id": "PRODUCT-memory-intelligence",
-      "same_signature_count": 1,
+      "same_signature_count": 0,
       "demoted": false,
       "last_error": "grounding_failed: missing_sql_table: memory_system, pg_trigger",
       "heal_unblocked": true,
       "last_attempt_at": "2026-08-01T13:05:02.576Z",
-      "blocker_class": "BLOCKED_TOOLING",
-      "artifact_proven": true,
-      "failure_signature": "grounding|BLOCKED_TOOLING|grounding_failed: missing_sql_table: memory_system, pg_trigger"
+      "blocker_class": "BLOCKED_TOOLING"
     },
     {
       "id": "memory-intelligence-2",
@@ -1320,5 +1318,6 @@
   "blueprint_id": "PRODUCT-MEMORY-INTELLIGENCE-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-memory-intelligence",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T13:05:02.603Z"
+  "updated_at": "2026-08-01T13:05:02.603Z",
+  "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/memory-intelligence/BUILD_QUEUE.json"
 }
