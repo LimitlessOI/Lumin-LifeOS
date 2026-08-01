@@ -180,7 +180,7 @@
         "step1"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "expected_exports": [
         "registerVideoRoutes"
       ],
@@ -201,10 +201,11 @@
       "blueprint_step_id": "step2",
       "mission_id": "PRODUCT-video-pipeline",
       "same_signature_count": 1,
-      "last_attempt_at": "2026-08-01T11:32:06.779Z",
-      "last_error": "HTTP 502",
-      "blocker_class": "BLOCKED_EXTERNAL",
-      "failure_signature": "build|BLOCKED_EXTERNAL|HTTP 502"
+      "last_attempt_at": "2026-08-01T11:37:07.328Z",
+      "last_error": "grounding_failed: import_source_missing: ./core/video-generator.js; import_source_missing: ./core/video-editing-council.js; import_source_missing: ./core/video-editing-council.js",
+      "blocker_class": "BLOCKED_TOOLING",
+      "failure_signature": "build|BLOCKED_EXTERNAL|HTTP 502",
+      "commit_sha": "07f2d0326ac3e625446acee9605bc393e3e6aaab"
     },
     {
       "id": "step3",
@@ -316,5 +317,5 @@
   "blueprint_id": "PRODUCT-VIDEO-PIPELINE-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-video-pipeline",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T11:33:34.890Z"
+  "updated_at": "2026-08-01T11:37:07.386Z"
 }
