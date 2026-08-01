@@ -41,7 +41,8 @@
       "blocker_resolution": null,
       "blueprint_id": "PRODUCT-VIDEO-PIPELINE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "1",
-      "mission_id": "PRODUCT-video-pipeline"
+      "mission_id": "PRODUCT-video-pipeline",
+      "same_signature_count": 0
     },
     {
       "id": "2",
@@ -73,7 +74,8 @@
       ],
       "blueprint_id": "PRODUCT-VIDEO-PIPELINE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "2",
-      "mission_id": "PRODUCT-video-pipeline"
+      "mission_id": "PRODUCT-video-pipeline",
+      "same_signature_count": 0
     },
     {
       "id": "3",
@@ -107,7 +109,8 @@
       ],
       "blueprint_id": "PRODUCT-VIDEO-PIPELINE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "3",
-      "mission_id": "PRODUCT-video-pipeline"
+      "mission_id": "PRODUCT-video-pipeline",
+      "same_signature_count": 0
     },
     {
       "id": "4",
@@ -128,7 +131,8 @@
       "mission_id": "PRODUCT-video-pipeline",
       "park_until": "2099-12-31T23:59:59.000Z",
       "last_error": "Parked: depends on video-pipeline step3 (routes/video-routes.js) which requires AI provider codegen and is currently stalled.",
-      "completed_at": "2026-08-01T06:00:09.175Z"
+      "completed_at": "2026-08-01T06:00:09.175Z",
+      "same_signature_count": 0
     },
     {
       "id": "step1",
@@ -163,7 +167,8 @@
       "blueprint_id": "PRODUCT-VIDEO-PIPELINE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step1",
       "mission_id": "PRODUCT-video-pipeline",
-      "completed_at": "2026-08-01T06:00:09.175Z"
+      "completed_at": "2026-08-01T06:00:09.175Z",
+      "same_signature_count": 0
     },
     {
       "id": "step2",
@@ -175,7 +180,7 @@
         "step1"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerVideoRoutes"
       ],
@@ -194,7 +199,12 @@
       ],
       "blueprint_id": "PRODUCT-VIDEO-PIPELINE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step2",
-      "mission_id": "PRODUCT-video-pipeline"
+      "mission_id": "PRODUCT-video-pipeline",
+      "same_signature_count": 1,
+      "last_attempt_at": "2026-08-01T11:32:06.779Z",
+      "last_error": "HTTP 502",
+      "blocker_class": "BLOCKED_EXTERNAL",
+      "failure_signature": "build|BLOCKED_EXTERNAL|HTTP 502"
     },
     {
       "id": "step3",
@@ -239,7 +249,8 @@
           "content_source_path": "docs/products/video-pipeline/twins/steps/step3.exact",
           "content_sha256": "80087fd067153867e48509ccc549bf15aea64fd264ffbdf9da677c4ea926eca2"
         }
-      }
+      },
+      "same_signature_count": 0
     },
     {
       "id": "step4",
@@ -268,7 +279,8 @@
       "commit_sha": "fe0bd67fa87366175190290149c90785252576af",
       "blueprint_id": "PRODUCT-VIDEO-PIPELINE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step4",
-      "mission_id": "PRODUCT-video-pipeline"
+      "mission_id": "PRODUCT-video-pipeline",
+      "same_signature_count": 0
     },
     {
       "id": "step5",
@@ -297,11 +309,12 @@
       "commit_sha": "ac4b232ae13d085aac2ed6c46db3ba8987382c20",
       "blueprint_id": "PRODUCT-VIDEO-PIPELINE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step5",
-      "mission_id": "PRODUCT-video-pipeline"
+      "mission_id": "PRODUCT-video-pipeline",
+      "same_signature_count": 0
     }
   ],
   "blueprint_id": "PRODUCT-VIDEO-PIPELINE-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-video-pipeline",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T06:00:09.225Z"
+  "updated_at": "2026-08-01T11:33:34.890Z"
 }

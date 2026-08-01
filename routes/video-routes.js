@@ -1,7 +1,6 @@
 /**
  * SYNOPSIS: Video Pipeline Routes
- * Video Pipeline Routes
- * Extracted from server.js
+ * @ssot docs/products/video-pipeline/PRODUCT_HOME.md
  */
 import logger from '../services/logger.js';
 
@@ -848,4 +847,8 @@ app.post("/api/v1/creator/auto-post", requireKey, async (req, res) => {
 });
 
 
+}
+
+export function registerVideoRoutes(app, ctx) {
+  return createVideoRoutes(app, ctx);
 }

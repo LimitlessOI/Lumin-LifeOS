@@ -1,47 +1,47 @@
 {
   "status": "idle",
   "last_task": {
-    "id": "product_build_faith-studio_faith-studio-4",
+    "id": "product_build_video-pipeline_step2",
     "kind": "product_build_step",
-    "priority": 2.0018,
-    "product": "faith-studio",
-    "product_id": "faith-studio",
-    "step_id": "faith-studio-4",
-    "target_file": "services/safeOutputService.js",
-    "detail": "next buildable step: faith-studio-4"
+    "priority": 2.0019,
+    "product": "video-pipeline",
+    "product_id": "video-pipeline",
+    "step_id": "step2",
+    "target_file": "routes/video-routes.js",
+    "detail": "next buildable step: step2"
   },
   "last_result": {
     "ok": false,
-    "task_id": "product_build_faith-studio_faith-studio-4",
+    "task_id": "product_build_video-pipeline_step2",
     "detail": "product_build_step",
     "outcome": {
       "ok": false,
-      "step_id": "faith-studio-4",
-      "stage": "artifact_proof",
-      "reason": "artifact_proof_failed: safeOutput",
+      "step_id": "step2",
+      "stage": "build",
+      "reason": "HTTP 502",
       "attempts": 1,
       "blocked": false,
-      "blocker_class": "BLOCKED_TOOLING",
+      "blocker_class": "BLOCKED_EXTERNAL",
       "claim_level": null,
       "parked": false,
       "summary": {
-        "product_id": "faith-studio",
-        "total": 37,
+        "product_id": "video-pipeline",
+        "total": 9,
         "pending": 3,
         "building": 0,
-        "done": 27,
-        "blocked": 2,
+        "done": 5,
+        "blocked": 0,
         "founder_gated": 0,
         "design_review_flagged": 0,
         "human_hold": 0,
-        "skipped": 5,
+        "skipped": 1,
         "complete": false
       }
     },
     "claim": {
-      "id": "faith-studio:faith-studio-4",
+      "id": "video-pipeline:step2",
       "kind": "execution",
-      "text": "product step faith-studio-4 built + verified + served live",
+      "text": "product step step2 built + verified + served live",
       "grade": "GUESS",
       "proof": null,
       "original_grade": "KNOW",
@@ -51,19 +51,19 @@
       ]
     },
     "summary": {
-      "product_id": "faith-studio",
-      "total": 37,
+      "product_id": "video-pipeline",
+      "total": 9,
       "pending": 3,
       "building": 0,
-      "done": 27,
-      "blocked": 2,
+      "done": 5,
+      "blocked": 0,
       "founder_gated": 0,
       "design_review_flagged": 0,
       "human_hold": 0,
-      "skipped": 5,
+      "skipped": 1,
       "complete": false
     }
   },
   "cycles": 1,
-  "updated_at": "2026-08-01T11:29:00.910Z"
+  "updated_at": "2026-08-01T11:33:35.945Z"
 }

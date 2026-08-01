@@ -794,6 +794,13 @@
       "mount_path": "/api/v1/script",
       "enabled": true,
       "note": "Creator Media OS script routes auto-registered for module-health proof."
+    },
+    {
+      "path": "routes/video-routes.js",
+      "register": "registerVideoRoutes",
+      "mount_path": "/api/v1/video",
+      "enabled": true,
+      "note": "Video Pipeline routes auto-registered for module-health proof."
     }
   ]
 }

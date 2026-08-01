@@ -92,3 +92,4 @@
 {"id":"creator-media-os:10","text":"product step 10 built + verified + served live","grade":"GUESS","kind":"execution","needs":"confirm against real-world outcome/evidence","urgent":false,"added_at":"2026-08-01T11:22:26.766Z"}
 {"id":"faith-studio:04","text":"product step 04 built + verified + served live","grade":"GUESS","kind":"execution","needs":"confirm against real-world outcome/evidence","urgent":false,"added_at":"2026-08-01T11:25:34.410Z"}
 {"id":"faith-studio:faith-studio-4","text":"product step faith-studio-4 built + verified + served live","grade":"GUESS","kind":"execution","needs":"confirm against real-world outcome/evidence","urgent":false,"added_at":"2026-08-01T11:29:00.910Z"}
+{"id":"video-pipeline:step2","text":"product step step2 built + verified + served live","grade":"GUESS","kind":"execution","needs":"confirm against real-world outcome/evidence","urgent":false,"added_at":"2026-08-01T11:33:35.945Z"}

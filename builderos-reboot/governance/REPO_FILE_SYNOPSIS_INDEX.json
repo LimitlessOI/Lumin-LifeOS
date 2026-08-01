@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T11:29:28.842Z",
+  "generated_at": "2026-08-01T11:34:33.135Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -30844,9 +30844,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 37586,
-      "mtime": "2026-08-01T11:22:36.740Z",
-      "indexed_at": "2026-08-01T11:22:54.579Z",
+      "bytes": 37819,
+      "mtime": "2026-08-01T11:34:13.372Z",
+      "indexed_at": "2026-08-01T11:34:33.135Z",
       "synopsis_index_only": true
     },
     {
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1789,
-      "mtime": "2026-08-01T11:29:00.908Z",
-      "indexed_at": "2026-08-01T11:29:28.842Z",
+      "bytes": 1696,
+      "mtime": "2026-08-01T11:33:35.944Z",
+      "indexed_at": "2026-08-01T11:34:33.135Z",
       "synopsis_index_only": true
     },
     {
@@ -42794,9 +42794,9 @@
     {
       "path": "docs/products/video-pipeline/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Video Pipeline",
-      "bytes": 8085,
-      "mtime": "2026-06-29T17:35:43.045Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 8553,
+      "mtime": "2026-08-01T11:34:19.228Z",
+      "indexed_at": "2026-08-01T11:34:33.135Z"
     },
     {
       "path": "docs/products/VIDEOPIPELINE.md",
@@ -65772,9 +65772,9 @@
     {
       "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
       "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
-      "bytes": 5230,
-      "mtime": "2026-08-01T11:17:56.032Z",
-      "indexed_at": "2026-08-01T11:22:54.579Z",
+      "bytes": 3632,
+      "mtime": "2026-08-01T11:31:38.264Z",
+      "indexed_at": "2026-08-01T11:34:33.135Z",
       "synopsis_index_only": true
     },
     {
@@ -71825,9 +71825,12 @@
     {
       "path": "routes/video-routes.js",
       "synopsis": "Video Pipeline Routes",
-      "bytes": 26730,
-      "mtime": "2026-06-21T21:39:05.164Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 26820,
+      "mtime": "2026-08-01T11:34:11.240Z",
+      "indexed_at": "2026-08-01T11:34:33.135Z",
+      "ssot": [
+        "docs/products/video-pipeline/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/voiceDictation.js",
