@@ -62,13 +62,12 @@
       "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "2",
       "mission_id": "PRODUCT-kids-os",
-      "same_signature_count": 1,
+      "same_signature_count": 0,
       "demoted": false,
       "last_error": "no_proof_required_non_server_code",
       "heal_unblocked": true,
       "last_attempt_at": "2026-08-01T13:14:05.172Z",
-      "blocker_class": "BLOCKED_TOOLING",
-      "failure_signature": "artifact_proof|BLOCKED_TOOLING|no_proof_required_non_server_code"
+      "blocker_class": "BLOCKED_TOOLING"
     },
     {
       "id": "3",
@@ -1030,5 +1029,6 @@
   "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-kids-os",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T13:14:33.979Z"
+  "updated_at": "2026-08-01T13:14:33.979Z",
+  "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/kids-os/BUILD_QUEUE.json"
 }
