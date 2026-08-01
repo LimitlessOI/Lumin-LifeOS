@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T04:16:48.131Z",
+  "generated_at": "2026-08-01T04:19:11.616Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12670,
   "files": [
@@ -21678,9 +21678,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3818953,
-      "mtime": "2026-08-01T02:50:08.379Z",
-      "indexed_at": "2026-08-01T02:50:40.598Z"
+      "bytes": 3822553,
+      "mtime": "2026-08-01T04:18:40.361Z",
+      "indexed_at": "2026-08-01T04:19:11.616Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -41881,9 +41881,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 647999,
-      "mtime": "2026-08-01T02:03:42.742Z",
-      "indexed_at": "2026-08-01T02:03:42.742Z"
+      "bytes": 650362,
+      "mtime": "2026-08-01T04:18:32.408Z",
+      "indexed_at": "2026-08-01T04:18:40.273Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -70153,9 +70153,9 @@
     {
       "path": "routes/lifeos-psychometric-battery-routes.js",
       "synopsis": "Psychometric battery HTTP routes for purpose-discovery priors.",
-      "bytes": 1832,
-      "mtime": "2026-08-01T04:16:48.131Z",
-      "indexed_at": "2026-08-01T04:16:48.131Z",
+      "bytes": 1433,
+      "mtime": "2026-08-01T04:16:12.991Z",
+      "indexed_at": "2026-08-01T04:16:12.991Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -91294,9 +91294,12 @@
     {
       "path": "services/lifeos-chat-intent-router.js",
       "synopsis": "Exports classifyFounderIntent — services/lifeos-chat-intent-router.js.",
-      "bytes": 5489,
-      "mtime": "2026-07-30T19:49:19.177Z",
-      "indexed_at": "2026-07-30T19:49:19.177Z"
+      "bytes": 7769,
+      "mtime": "2026-08-01T04:17:26.396Z",
+      "indexed_at": "2026-08-01T04:18:40.273Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/lifeos-commitment-route.js",
