@@ -2253,13 +2253,13 @@
     },
     {
       "id": "faith-studio-step-1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/traditionProfileService.js",
       "task": "Add source labeling",
       "spec": "Integrate source labeling engine into the tradition profile model service.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "enhanceWithSourceLabels"
       ],
@@ -2275,7 +2275,7 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-16T04:22:12.252Z",
-      "commit_sha": null,
+      "commit_sha": "e46c01a05fe486d371ce9a888548d709ca980418",
       "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "faith-studio-step-1",
       "mission_id": "PRODUCT-faith-studio",
@@ -2284,7 +2284,7 @@
       "reaudit_reset_at": "2026-07-30T18:55:06.428Z",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-08-01T05:18:58.514Z",
       "last_attempt": null,
       "revive_count": 2,
       "revived_at": "2026-08-01T04:34:49.348Z",
@@ -2296,7 +2296,8 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "completed_at": "2026-08-01T05:19:10.873Z"
     },
     {
       "id": "faith-studio-step-2",
@@ -2656,5 +2657,5 @@
   "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-faith-studio",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T05:18:31.477Z"
+  "updated_at": "2026-08-01T05:19:10.873Z"
 }
