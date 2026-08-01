@@ -174,7 +174,7 @@
     },
     {
       "id": "4",
-      "status": "skipped",
+      "status": "done",
       "target_file": "db/migrations/0010-addPrivacyRightsControl.sql",
       "task": "Create table for rights/privacy/collaboration",
       "spec": "Add table for storing and querying project rights and privacy settings",
@@ -207,7 +207,10 @@
       "blueprint_id": "PRODUCT-STORY-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "4",
       "mission_id": "PRODUCT-story-studio",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "completed_at": "2026-08-01T18:50:55.376Z",
+      "heal_claimed": true,
+      "heal_reason": "artifact_proof_pass"
     },
     {
       "id": "5",
@@ -496,6 +499,6 @@
   "blueprint_id": "PRODUCT-STORY-STUDIO-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-story-studio",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T11:05:01.714Z",
+  "updated_at": "2026-08-01T18:50:55.379Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/story-studio/BUILD_QUEUE.json"
 }
