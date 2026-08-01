@@ -7,6 +7,7 @@
  * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { authorAssertionsFromSpec } from '../factory-staging/factory-core/bpb/author-assertions.js';
@@ -228,8 +229,29 @@ export async function evaluateStepExpectations(step, {
   const defaultImportModule = async (rel) => {
     const relPath = String(rel || target).replace(/\\/g, '/');
     const abs = path.join(root, relPath);
-    if (!fs.existsSync(abs)) return undefined;
-    return import(pathToFileURL(abs).href);
+    // If the commit is on disk, import directly. Otherwise read the file content
+    // from the proven commit (or GitHub Contents fallback) into a temp file and
+    // import from there — without this, artifact proof fails for freshly-built
+    // commits that have not yet been checked out/merged into the local workspace.
+    if (fs.existsSync(abs)) {
+      try {
+        return await import(pathToFileURL(abs).href);
+      } catch { /* fall through to temp-file import */ }
+    }
+    try {
+      const content = await defaultRead(relPath);
+      if (typeof content !== 'string') return undefined;
+      const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'lumin-import-'));
+      const tmpFile = path.join(tmpDir, path.basename(relPath));
+      fs.writeFileSync(tmpFile, content, 'utf8');
+      try {
+        return await import(pathToFileURL(tmpFile).href);
+      } finally {
+        try { fs.rmSync(tmpDir, { recursive: true, force: true }); } catch { /* ignore */ }
+      }
+    } catch {
+      return undefined;
+    }
   };
 
   const runner = {
