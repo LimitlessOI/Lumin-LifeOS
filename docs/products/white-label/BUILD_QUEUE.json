@@ -375,13 +375,13 @@
     },
     {
       "id": "step4",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/partner-key-scheme.js",
       "task": "design partner API key generation schema",
       "spec": "Define schema for partner keys versus platform keys.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "generatePartnerKeys",
         "generatePlatformKeys"
@@ -399,7 +399,7 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-16T02:10:50.589Z",
-      "commit_sha": null,
+      "commit_sha": "a76bfc20d1fa820b4defabd8ca71cb974ea3d8aa",
       "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step4",
       "mission_id": "PRODUCT-white-label",
@@ -408,7 +408,7 @@
       "reaudit_reset_at": "2026-07-30T18:55:06.853Z",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-08-01T05:52:06.087Z",
       "last_attempt": null,
       "revive_count": 3,
       "revived_at": "2026-08-01T04:35:06.687Z",
@@ -420,17 +420,18 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "completed_at": "2026-08-01T05:52:19.465Z"
     },
     {
       "id": "step5",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/stripe-billing-separation.js",
       "task": "separate Stripe billing flow",
       "spec": "Create separate billing flow for partners and direct clients using Stripe.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "setupPartnerBillingFlow",
         "setupClientBillingFlow"
@@ -457,10 +458,10 @@
       "reaudit_reset_at": "2026-07-30T18:55:06.853Z",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-07-31T10:49:26.113Z",
+      "last_attempt_at": null,
       "last_attempt": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-31T10:49:18.403Z",
+      "revive_count": 3,
+      "revived_at": "2026-08-01T05:52:06.087Z",
       "no_op": null,
       "demoted": false,
       "demote_reason": null,
@@ -974,5 +975,6 @@
   ],
   "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-white-label",
-  "twin_kind": "product_build_queue_registered"
+  "twin_kind": "product_build_queue_registered",
+  "updated_at": "2026-08-01T05:52:19.465Z"
 }
