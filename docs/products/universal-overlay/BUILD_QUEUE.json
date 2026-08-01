@@ -373,13 +373,13 @@
       "spec": "Add column for adaptive layout preferences in `flourishing_prefs`.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS flourishing_prefs"
       ],
-      "last_attempt_at": null,
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS flourishing_prefs; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": "2026-08-01T02:32:39.321Z",
+      "last_error": "artifact_proof_failed: CREATE TABLE IF NOT EXISTS flourishing_prefs",
+      "commit_sha": "e93aeb53af422b961becfe23a138f740d0451722",
       "built_sha": null,
       "proof": null,
       "revive_count": 2,
@@ -391,7 +391,7 @@
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
-      "blocker_class": null,
+      "blocker_class": "BLOCKED_TOOLING",
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
@@ -2327,5 +2327,5 @@
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-universal-overlay",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T02:32:22.937Z"
+  "updated_at": "2026-08-01T02:32:51.996Z"
 }
