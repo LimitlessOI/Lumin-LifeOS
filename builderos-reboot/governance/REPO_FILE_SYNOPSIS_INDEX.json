@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T12:02:50.401Z",
+  "generated_at": "2026-08-01T12:05:40.639Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -90267,10 +90267,13 @@
     },
     {
       "path": "services/entitlements.js",
-      "synopsis": "Service module — Entitlements.",
-      "bytes": 384,
-      "mtime": "2026-07-15T09:37:08.940Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "synopsis": "Implements the gating strategy for project entitlements using the database.",
+      "bytes": 968,
+      "mtime": "2026-08-01T12:05:40.639Z",
+      "indexed_at": "2026-08-01T12:05:40.639Z",
+      "ssot": [
+        "docs/products/business-tools/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/entitlementsFeatureGating.js",
