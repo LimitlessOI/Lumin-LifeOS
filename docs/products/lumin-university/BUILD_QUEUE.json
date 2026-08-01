@@ -434,13 +434,13 @@
     },
     {
       "id": "10",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/employerInterviews.js",
       "task": "implement employer interview recording",
       "spec": "Service records interviews with employers regarding credentials.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "recordEmployerInterview"
       ],
@@ -461,7 +461,7 @@
       "blueprint_step_id": "10",
       "mission_id": "PRODUCT-lumin-university",
       "last_error": null,
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-08-01T01:12:45.538Z",
       "blocker_class": null,
       "claim_level": null,
       "park_until": null,
@@ -473,7 +473,8 @@
         "claimed_shipped_at": "2026-07-15T19:46:11.867Z",
         "reason": "commit_sha exists in repo but is not an ancestor of origin/main -- ship landed on origin/builderos-autonomous or origin/builderos-shadow instead of main (GITHUB_DEPLOY_BRANCH mismatch), and the content itself was placeholder/stub code (verified by direct inspection), not a real implementation. Confirmed via: git merge-base --is-ancestor <sha> origin/main."
       },
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "completed_at": "2026-08-01T01:12:45.565Z"
     },
     {
       "id": "11",
