@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T12:30:21.142Z",
+  "generated_at": "2026-08-01T12:31:43.348Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -21678,9 +21678,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3840989,
-      "mtime": "2026-08-01T11:48:57.888Z",
-      "indexed_at": "2026-08-01T11:49:03.914Z"
+      "bytes": 3841181,
+      "mtime": "2026-08-01T12:30:26.096Z",
+      "indexed_at": "2026-08-01T12:31:43.348Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -41121,9 +41121,9 @@
     {
       "path": "docs/products/boldtrail/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BoldTrail",
-      "bytes": 15064,
-      "mtime": "2026-08-01T12:30:08.836Z",
-      "indexed_at": "2026-08-01T12:30:21.142Z"
+      "bytes": 16285,
+      "mtime": "2026-08-01T12:30:26.096Z",
+      "indexed_at": "2026-08-01T12:31:43.348Z"
     },
     {
       "path": "docs/products/BUILDEROS.md",
@@ -69967,9 +69967,9 @@
     {
       "path": "routes/leadScoring.js",
       "synopsis": "HTTP route module — LeadScoring.",
-      "bytes": 1018,
-      "mtime": "2026-08-01T12:29:56.012Z",
-      "indexed_at": "2026-08-01T12:30:21.142Z",
+      "bytes": 3398,
+      "mtime": "2026-08-01T12:31:31.480Z",
+      "indexed_at": "2026-08-01T12:31:43.348Z",
       "ssot": [
         "docs/products/boldtrail/PRODUCT_HOME.md"
       ]
@@ -91516,13 +91516,10 @@
     },
     {
       "path": "services/leadScoring.js",
-      "synopsis": "Provides a detailed scoring rubric for lead scoring.",
-      "bytes": 5937,
-      "mtime": "2026-08-01T12:29:06.528Z",
-      "indexed_at": "2026-08-01T12:29:06.528Z",
-      "ssot": [
-        "docs/products/boldtrail/PRODUCT_HOME.md"
-      ]
+      "synopsis": "Service module — LeadScoring.",
+      "bytes": 3660,
+      "mtime": "2026-07-15T08:53:26.098Z",
+      "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
       "path": "services/leadScoringAlgorithm.js",
