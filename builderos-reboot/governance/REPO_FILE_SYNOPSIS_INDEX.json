@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T14:53:55.780Z",
+  "generated_at": "2026-08-01T14:54:27.771Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12728,
+  "file_count": 12729,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -93258,6 +93258,16 @@
       "bytes": 1671,
       "mtime": "2026-07-11T00:28:47.498Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "services/marketing-social-scheduler.js",
+      "synopsis": "Service to manage and execute scheduled social posts.",
+      "bytes": 6990,
+      "mtime": "2026-08-01T14:54:27.771Z",
+      "indexed_at": "2026-08-01T14:54:27.771Z",
+      "ssot": [
+        "docs/products/marketingos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/marketing-title-universe.js",
