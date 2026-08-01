@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T05:20:27.597Z",
+  "generated_at": "2026-08-01T05:21:07.629Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12671,
   "files": [
@@ -91114,10 +91114,13 @@
     },
     {
       "path": "services/leadScoringSegment.js",
-      "synopsis": "Attaches a scoring rubric to a lead segment description.",
-      "bytes": 2477,
-      "mtime": "2026-07-31T06:39:21.463Z",
-      "indexed_at": "2026-07-31T06:39:21.463Z"
+      "synopsis": "Attaches a scoring rubric to a lead segment description, persisting it to the database.",
+      "bytes": 5338,
+      "mtime": "2026-08-01T05:21:07.629Z",
+      "indexed_at": "2026-08-01T05:21:07.629Z",
+      "ssot": [
+        "docs/products/boldtrail/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/learning-analytics/ml-models/learningStyleDetector.js",
