@@ -943,12 +943,43 @@ function extractCssFromOutput(rawText) {
   return s.trim();
 }
 
+function extractFirstBalancedJson(s) {
+  const start = s.search(/[\{\[]/);
+  if (start === -1) return s;
+  const stack = [s[start]];
+  let inString = false;
+  let escape = false;
+  let j = start + 1;
+  for (; j < s.length; j += 1) {
+    const c = s[j];
+    if (escape) { escape = false; continue; }
+    if (c === '\\') { escape = true; continue; }
+    if (inString) {
+      if (c === '"') inString = false;
+      continue;
+    }
+    if (c === '"') { inString = true; continue; }
+    if (c === '{' || c === '[') { stack.push(c); continue; }
+    if (c === '}' || c === ']') {
+      const open = stack.pop();
+      if (!open) break;
+      if ((open === '{' && c !== '}') || (open === '[' && c !== ']')) break;
+      if (stack.length === 0) { j += 1; break; }
+    }
+  }
+  return s.slice(start, j);
+}
+
 function extractJsonFromOutput(rawText) {
   let s = String(rawText || '').trim();
   // Strip whole ```json ... ``` fence
   const wholeFence = /^```(?:json)?\s*\r?\n([\s\S]*?)\r?\n```\s*$/im;
   const wf = s.match(wholeFence);
-  if (wf && wf[1].trim().length > 2) return wf[1].trim();
+  if (wf && wf[1].trim().length > 2) {
+    const inner = wf[1].trim();
+    try { return JSON.stringify(JSON.parse(extractFirstBalancedJson(inner))); } catch { /* fall through */ }
+    return extractFirstBalancedJson(inner);
+  }
   // Strip opening fence if no closing fence (truncated)
   if (s.startsWith('```')) {
     const firstNl = s.indexOf('\n');
@@ -957,13 +988,20 @@ function extractJsonFromOutput(rawText) {
       const closeIdx = inner.lastIndexOf('\n```');
       if (closeIdx !== -1) inner = inner.slice(0, closeIdx);
       inner = inner.trim();
-      if (inner.length > 2) return inner;
+      if (inner.length > 2) {
+        try { return JSON.stringify(JSON.parse(extractFirstBalancedJson(inner))); } catch { /* fall through */ }
+        return extractFirstBalancedJson(inner);
+      }
     }
   }
   // Strip prose preamble lines before the first JSON start token
   const lines = s.split(/\r?\n/);
   const jsonStart = lines.findIndex((l) => /^\s*[\{\[]/.test(l.trim()));
-  if (jsonStart > 0) return lines.slice(jsonStart).join('\n').trim();
+  if (jsonStart >= 0) {
+    const candidate = lines.slice(jsonStart).join('\n').trim();
+    try { return JSON.stringify(JSON.parse(extractFirstBalancedJson(candidate))); } catch { /* fall through */ }
+    return extractFirstBalancedJson(candidate);
+  }
   return s;
 }
 
