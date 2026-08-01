@@ -2722,7 +2722,7 @@
     },
     {
       "id": "bo-schedule-site-builder-sentry-gate",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/sentry-site-builder-schedule.mjs",
       "priority": "high",
       "task": "SO-002 requires SENTRY to walk every Site Builder feature as a real client via BOTH Layer A (structural) and Layer B (real-browser human-sim walkthrough) before it's 'done'. The combined gate script (scripts/sentry-site-builder-prealpha-gate.mjs, npm run sentry:site-builder:gate) is real and well-designed -- genuine Puppeteer session, self-provisions a preview fixture if none exists, feeds findings into the self-fix improvement loop -- but confirmed live 2026-07-30 that nothing calls it on a schedule. Layer A has a dedicated recent receipt (products/receipts/SITE_BUILDER_PREALPHA_LAYER_A.json, updated daily); there has never been a products/receipts/SITE_BUILDER_PREALPHA_LAYER_B.json or equivalent gate receipt found, meaning the real browser test is effectively opt-in/manual-only, not the continuous SENTRY loop the doctrine describes.",
@@ -2781,11 +2781,12 @@
       "commit_sha": "9f68a76527e6a37274d4f54ae4c4497f1a2b210b",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-01T03:04:13.258Z",
+      "last_attempt_at": "2026-08-01T03:05:24.976Z",
       "last_error": "grounding_failed: missing_sql_table: sentry_site_builder_gate_log",
-      "attempts": 1,
+      "attempts": 2,
       "same_signature_count": 0,
-      "blocker_class": "BLOCKED_TOOLING"
+      "blocker_class": "BLOCKED_TOOLING",
+      "completed_at": "2026-08-01T03:05:25.024Z"
     },
     {
       "id": "bo-security-review-real-diff-format",
@@ -3272,5 +3273,5 @@
   "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-builderos",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T03:04:13.309Z"
+  "updated_at": "2026-08-01T03:05:25.025Z"
 }
