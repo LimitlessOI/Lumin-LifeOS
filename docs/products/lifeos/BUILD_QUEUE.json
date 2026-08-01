@@ -3031,13 +3031,13 @@
     },
     {
       "id": "lifeos-6",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/lifeos-commitment-service.js",
       "task": "Extend parseNaturalLanguage",
       "spec": "Recognize phrases for query mode, call getCommitments and format results into a reply card.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "parseNaturalLanguage",
         "getCommitments"
@@ -3057,9 +3057,9 @@
           "assertion_id": "expected_exports:services/lifeos-commitment-service.js"
         }
       ],
-      "last_attempt_at": "2026-08-01T07:00:00.344Z",
+      "last_attempt_at": "2026-08-01T16:01:10.618Z",
       "last_error": null,
-      "commit_sha": "c4079b0d4ce59fac0a6026c34ee275dac9da0e7c",
+      "commit_sha": "fe0f6836263975d7e85f4096e6c40881db164dff",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
@@ -3083,7 +3083,8 @@
       "same_signature_count": 0,
       "heal_unblocked": true,
       "failure_signature": null,
-      "park_reason": null
+      "park_reason": null,
+      "completed_at": "2026-08-01T16:01:10.677Z"
     },
     {
       "id": "lifeos-7",
@@ -6103,6 +6104,6 @@
   "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-lifeos",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T08:00:12.175Z",
+  "updated_at": "2026-08-01T16:01:10.678Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/lifeos/BUILD_QUEUE.json"
 }
