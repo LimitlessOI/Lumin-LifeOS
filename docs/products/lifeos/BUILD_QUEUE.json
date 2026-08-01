@@ -3168,19 +3168,19 @@
     },
     {
       "id": "lifeos-9",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/lifeos-psychometric-battery.js",
       "task": "Add distortion spotting in journaling",
       "spec": "Spot cognitive distortions in journal entries or messages when opted-in, using AI for analysis.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "cognitive_distortion_mode"
       ],
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-08-01T07:07:19.329Z",
       "last_error": "artifact_proof_failed: cognitive_distortion_mode",
-      "commit_sha": "8fb0fe336bfbf49c9592710d4c99e08e6ab96cdc",
+      "commit_sha": "26de0a6fbed9e6315382fc421583db6349c13e12",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
@@ -3202,7 +3202,8 @@
       "blueprint_step_id": "lifeos-9",
       "mission_id": "PRODUCT-lifeos",
       "same_signature_count": 0,
-      "heal_unblocked": true
+      "heal_unblocked": true,
+      "completed_at": "2026-08-01T07:07:36.527Z"
     },
     {
       "id": "lifeos-10",
@@ -6033,6 +6034,6 @@
   "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-lifeos",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T07:04:38.900Z",
+  "updated_at": "2026-08-01T07:07:36.527Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/lifeos/BUILD_QUEUE.json"
 }
