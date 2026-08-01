@@ -1158,7 +1158,7 @@
     },
     {
       "id": "lumin-university-1",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/competencyStandards.js",
       "task": "implement competency standards service",
       "spec": "Implement service logic to handle detailed competency standards per domain.",
@@ -1190,7 +1190,10 @@
       "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lumin-university-1",
       "mission_id": "PRODUCT-lumin-university",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "last_error": "artifact_proof_failed: function getCompetencyStandards()",
+      "demoted": false,
+      "heal_unblocked": true
     },
     {
       "id": "lumin-university-2",
@@ -1340,7 +1343,7 @@
     },
     {
       "id": "lumin-university-6",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/employerInterviewProcess.js",
       "task": "conduct employer interviews",
       "spec": "Conduct interviews with 5 employers to understand recognized competency credentials.",
@@ -1373,11 +1376,14 @@
       "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lumin-university-6",
       "mission_id": "PRODUCT-lumin-university",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "last_error": "artifact_proof_failed: 5 employers; competency credentials",
+      "demoted": false,
+      "heal_unblocked": true
     },
     {
       "id": "lumin-university-7",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/pricingValidationProcess.js",
       "task": "validate pricing",
       "spec": "Validate pricing model with the target users.",
@@ -1409,7 +1415,10 @@
       "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lumin-university-7",
       "mission_id": "PRODUCT-lumin-university",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "last_error": "artifact_proof_failed: pricing validation",
+      "demoted": false,
+      "heal_unblocked": true
     },
     {
       "id": "lumin-university-8",
@@ -1587,5 +1596,5 @@
   "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-lumin-university",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T06:21:59.724Z"
+  "updated_at": "2026-08-01T06:30:39.318Z"
 }
