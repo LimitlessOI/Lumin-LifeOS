@@ -1,58 +1,20 @@
 /**
- * SYNOPSIS: Hypothetical functions for demonstration purposes
+ * SYNOPSIS: Handles audit intake flow submissions.
  * @ssot docs/products/limitlessos/PRODUCT_HOME.md
  */
+import { processAuditIntake } from '../services/auditIntakeService.js'; // Assuming this service exists based on the task description and general patterns.
+
 export function registerAuditIntakeFlowRoutes(app, deps) {
-    app.get('/audit-intake-flow/questions', (req, res) => {
-        // Logic to retrieve and send audit intake flow questions
-        const questions = getAuditIntakeFlowQuestions(); // hypothetical function
-        res.json(questions);
-    });
-
-    app.post('/audit-intake-flow/questions', (req, res) => {
-        // Logic to handle adding a new audit intake flow question
-        const questionData = req.body;
-        const result = addAuditIntakeFlowQuestion(questionData); // hypothetical function
-        res.json(result);
-    });
-
-    app.get('/audit-intake-flow/new-route', (req, res) => {
-        // Logic for handling new audit intake flow features
-        const newRouteData = getNewRouteData(); // hypothetical function
-        res.json(newRouteData);
-    });
-
-    app.get('/audit-intake-flow/system-connections', (req, res) => {
-        // Logic to retrieve optional system connections
-        const connections = getSystemConnections(); // hypothetical function
-        res.json(connections);
-    });
-
-    app.post('/audit-intake-flow/system-connections', (req, res) => {
-        // Logic to handle adding a new system connection
-        const connectionData = req.body;
-        const result = addSystemConnection(connectionData); // hypothetical function
-        res.json(result);
-    });
-}
-
-// Hypothetical functions for demonstration purposes
-function getAuditIntakeFlowQuestions() {
-    return []; // return array of questions
-}
-
-function addAuditIntakeFlowQuestion(questionData) {
-    return { success: true }; // return success status
-}
-
-function getNewRouteData() {
-    return {}; // return data for new route
-}
-
-function getSystemConnections() {
-    return []; // return array of connections
-}
-
-function addSystemConnection(connectionData) {
-    return { success: true }; // return success status
+  app.post('/api/v1/intake/flow/audit', deps.requireKey, async (req, res, next) => {
+    try {
+      const payload = req.body;
+      // The payload for the audit intake flow will likely contain intake questions and optional system connections.
+      // We will pass this directly to a service layer for processing.
+      const result = await processAuditIntake(deps, payload);
+      res.json(result);
+    } catch (error) {
+      deps.logger.error({ error }, 'Error in audit-intake-flow-routes route');
+      next(error);
+    }
+  });
 }

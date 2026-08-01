@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T09:49:30.126Z",
+  "generated_at": "2026-08-01T09:51:52.606Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -69047,10 +69047,10 @@
     },
     {
       "path": "routes/audit-intake-flow-routes.js",
-      "synopsis": "Hypothetical functions for demonstration purposes",
-      "bytes": 2002,
-      "mtime": "2026-07-16T19:42:53.595Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "synopsis": "Handles audit intake flow submissions.",
+      "bytes": 861,
+      "mtime": "2026-08-01T09:51:52.606Z",
+      "indexed_at": "2026-08-01T09:51:52.606Z",
       "ssot": [
         "docs/products/limitlessos/PRODUCT_HOME.md"
       ]
