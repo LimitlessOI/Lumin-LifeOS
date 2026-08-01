@@ -3831,7 +3831,7 @@
         "lifeos-practice.html",
         "lifeos-failure-museum.html"
       ],
-      "status": "pending",
+      "status": "done",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
@@ -3839,9 +3839,9 @@
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-practice-nav",
       "mission_id": "PRODUCT-lifeos",
-      "last_attempt_at": "2026-07-18T01:36:40.881Z",
-      "last_error": "artifact_proof_failed: lifeos-practice.html; lifeos-failure-museum.html",
-      "commit_sha": null,
+      "last_attempt_at": "2026-08-01T07:35:12.530Z",
+      "last_error": null,
+      "commit_sha": "0e8be0fe0d356b77ddaafdefd5db3d7ed7099384",
       "built_sha": null,
       "proof": null,
       "revive_count": 2,
@@ -3859,8 +3859,13 @@
       "blocker_resolution": null,
       "shipped_via": "pre_existing_artifact_proof",
       "shipped_at": "2026-07-18T01:47:20.914Z",
-      "same_signature_count": 0,
-      "heal_unblocked": true
+      "same_signature_count": 1,
+      "heal_unblocked": true,
+      "artifact_proven": true,
+      "failure_signature": "grounding|BLOCKED_TOOLING|grounding_failed: missing_sql_table: system., iframe.",
+      "completed_at": "2026-08-01T07:38:50.516Z",
+      "heal_claimed": true,
+      "heal_reason": "artifact_proof_pass"
     },
     {
       "id": "lifeos-p1-assessment-battery-service",
@@ -6054,6 +6059,6 @@
   "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-lifeos",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T07:32:43.636Z",
+  "updated_at": "2026-08-01T07:38:50.516Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/lifeos/BUILD_QUEUE.json"
 }

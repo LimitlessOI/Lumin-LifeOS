@@ -1,24 +1,24 @@
 {
   "status": "idle",
   "last_task": {
-    "id": "product_build_lifeos_lifeos-step12",
+    "id": "product_build_lifeos_lifeos-p1-practice-nav",
     "kind": "product_build_step",
     "priority": 2,
     "product": "lifeos",
     "product_id": "lifeos",
-    "step_id": "lifeos-step12",
-    "target_file": "services/lifeos-sleep.js",
-    "detail": "next buildable step: lifeos-step12"
+    "step_id": "lifeos-p1-practice-nav",
+    "target_file": "public/overlay/lifeos-app.html",
+    "detail": "next buildable step: lifeos-p1-practice-nav"
   },
   "last_result": {
     "ok": false,
-    "task_id": "product_build_lifeos_lifeos-step12",
+    "task_id": "product_build_lifeos_lifeos-p1-practice-nav",
     "detail": "product_build_step",
     "outcome": {
       "ok": false,
-      "step_id": "lifeos-step12",
-      "stage": "build",
-      "reason": "Pre-commit syntax check failed — commit blocked",
+      "step_id": "lifeos-p1-practice-nav",
+      "stage": "grounding",
+      "reason": "grounding_failed: missing_sql_table: system., iframe.",
       "attempts": 1,
       "blocked": false,
       "blocker_class": "BLOCKED_TOOLING",
@@ -27,9 +27,9 @@
       "summary": {
         "product_id": "lifeos",
         "total": 176,
-        "pending": 11,
+        "pending": 10,
         "building": 0,
-        "done": 163,
+        "done": 164,
         "blocked": 1,
         "founder_gated": 0,
         "design_review_flagged": 0,
@@ -39,9 +39,9 @@
       }
     },
     "claim": {
-      "id": "lifeos:lifeos-step12",
+      "id": "lifeos:lifeos-p1-practice-nav",
       "kind": "execution",
-      "text": "product step lifeos-step12 built + verified + served live",
+      "text": "product step lifeos-p1-practice-nav built + verified + served live",
       "grade": "GUESS",
       "proof": null,
       "original_grade": "KNOW",
@@ -53,9 +53,9 @@
     "summary": {
       "product_id": "lifeos",
       "total": 176,
-      "pending": 11,
+      "pending": 10,
       "building": 0,
-      "done": 163,
+      "done": 164,
       "blocked": 1,
       "founder_gated": 0,
       "design_review_flagged": 0,
@@ -65,5 +65,5 @@
     }
   },
   "cycles": 1,
-  "updated_at": "2026-08-01T07:31:18.396Z"
+  "updated_at": "2026-08-01T07:38:07.321Z"
 }
