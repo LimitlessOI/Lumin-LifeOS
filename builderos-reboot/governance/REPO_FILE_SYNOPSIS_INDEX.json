@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T05:29:01.443Z",
+  "generated_at": "2026-08-01T05:29:50.478Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12672,
   "files": [
@@ -68887,10 +68887,10 @@
     },
     {
       "path": "routes/builderOSTokenReceipt.js",
-      "synopsis": "Registers BuilderOSTokenReceiptRoutes routes/handlers (routes/builderOSTokenReceipt.js).",
-      "bytes": 1003,
-      "mtime": "2026-07-16T19:42:53.595Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z",
+      "synopsis": "Implements the builderOS token receipt route for recording build completion.",
+      "bytes": 659,
+      "mtime": "2026-08-01T05:29:50.478Z",
+      "indexed_at": "2026-08-01T05:29:50.478Z",
       "ssot": [
         "docs/products/token-accounting-os/PRODUCT_HOME.md"
       ]
