@@ -12,7 +12,7 @@
 | **Machine manifest** | `docs/products/productized-sprint/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
 | **Launch kit** | `docs/products/productized-sprint/launch-kit/` — Founder Voice Content Pack (MarketingOS-powered, service-first) |
-| **Last Updated** | 2026-07-10 — Service-first launch kit added: Founder Voice Content Pack delivered via the LIVE MarketingOS loop. Gate 2/3 assets authored (Stripe-link runbook, intake, delivery SOP, outreach). Delivery helper `scripts/deliver-content-pack.mjs` verified end-to-end on prod. |
+| **Last Updated** | 2026-08-02 — `create-sprint-queue-panel` BUILD_QUEUE expected_exports aligned to `registerSprintQueuePanelRoute`; `config/auto-registered-product-modules.json` entry added. |
 
 ---
 | Field | Value |
@@ -229,3 +229,4 @@ Adam receives: the brief + the draft + a complexity flag. His job is judgment an
 |---|---|---|
 | 2026-04-04 | Initial draft — three offers defined, delivery workflows, revenue model, readiness gates | Claude |
 | 2026-07-10 | Added `launch-kit/` service-first kit for the Founder Voice Content Pack (Build My Thing → social content system), powered by the live MarketingOS engine. Includes Stripe payment-link runbook, intake (form + `intake-form.html`), delivery SOP, outreach templates, and `scripts/deliver-content-pack.mjs` (verified generate→approve→export on prod). Recorded live findings (`launch-kit/FINDINGS.md`): F1 generate emits 1 piece/extraction with no dedupe (~3 unique/session) → offer yield corrected + delivery script dedupes; fixes queued to factory, not hand-patched. KNOW/THINK labeled. | Devin |
+| 2026-08-02 | `create-sprint-queue-panel` step: builder shipped `routes/sprintQueuePanelRoute.js` exporting `registerSprintQueuePanelRoute`; aligned BUILD_QUEUE expected_exports and added `config/auto-registered-product-modules.json` entry so the route mounts live. | Devin |
