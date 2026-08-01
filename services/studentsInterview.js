@@ -1,14 +1,30 @@
 /**
- * SYNOPSIS: Exports getStudentFeedback — services/studentsInterview.js.
+ * SYNOPSIS: Provides services for managing student interview records.
+ * @ssot docs/products/music-talent-studio/PRODUCT_HOME.md
  */
-export function getStudentFeedback() {
-  const feedback = [];
-  // Simulate interviewing 5 students or parents and storing feedback.
-  for (let i = 0; i < 5; i++) {
-    // In a real application, this would involve user interaction (e.g., a form, a prompt)
-    // For this demonstration, we'll simulate unique feedback for each interview.
-    const intervieweeType = Math.random() < 0.5 ? 'student' : 'parent';
-    feedback.push(`Feedback from ${intervieweeType} ${i + 1}: This is simulated feedback.`);
+export async function addStudentInterview(deps, payload) {
+  const { pool, logger } = deps;
+  const { student_id, interview_date, notes } = payload || {};
+  try {
+    const { rows } = await pool.query(
+      'INSERT INTO students (owner_id, interview_date, notes) VALUES ($1, $2, $3) RETURNING id, created_at, updated_at',
+      [student_id, interview_date, notes]
+    );
+    return rows[0] || null;
+  } catch (error) {
+    logger.error({ error }, 'Error in addStudentInterview');
+    throw new Error('Failed to add student interview');
   }
-  return feedback;
+}
+
+export async function getStudentInterview(deps, payload) {
+  const { pool, logger } = deps;
+  const { id } = payload || {};
+  try {
+    const { rows } = await pool.query('SELECT id, owner_id, interview_date, notes, created_at, updated_at FROM students WHERE id = $1', [id]);
+    return rows[0] || null;
+  } catch (error) {
+    logger.error({ error }, 'Error in getStudentInterview');
+    throw new Error('Failed to retrieve student interview');
+  }
 }

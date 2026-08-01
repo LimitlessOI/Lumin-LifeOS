@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T05:39:35.577Z",
+  "generated_at": "2026-08-01T05:40:14.865Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12672,
   "files": [
@@ -95294,10 +95294,13 @@
     },
     {
       "path": "services/studentsInterview.js",
-      "synopsis": "Exports getStudentFeedback — services/studentsInterview.js.",
-      "bytes": 610,
-      "mtime": "2026-07-31T09:39:48.559Z",
-      "indexed_at": "2026-07-31T09:39:48.559Z"
+      "synopsis": "Provides services for managing student interview records.",
+      "bytes": 1132,
+      "mtime": "2026-08-01T05:40:14.865Z",
+      "indexed_at": "2026-08-01T05:40:14.865Z",
+      "ssot": [
+        "docs/products/music-talent-studio/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/supervised-autonomy-readiness.js",
