@@ -171,18 +171,36 @@ export function buildIntegrationContext({
     lines.push(`- Export a register function: \`export function ${fnName}(app, deps) { /* app.get/post(...); */ }\` (a default export also works).`);
     lines.push(`- Add this module to config/auto-registered-product-modules.json so the boot auto-mounts it: \`{ "path": "${targetFile}", "register": "${fnName}", "enabled": true }\`.`);
     lines.push('- The boot module-health gate verifies the module actually imports + mounts LIVE; a broken import or missing registration will fail the step (not a false done).');
+    const ssotHome = productId ? `docs/products/${productId}/PRODUCT_HOME.md` : 'docs/products/<product>/PRODUCT_HOME.md';
+    lines.push('- ROUTE FILE RULES: The file MUST start with exactly this JSDoc block (no other comment or text before it):');
+    lines.push(`\`\`\`js`);
+    lines.push(`/**`);
+    lines.push(` * SYNOPSIS: <one-line description>`);
+    lines.push(` * @ssot ${ssotHome}`);
+    lines.push(` */`);
+    lines.push(`\`\`\``);
     if (route && route.method && route.path) {
       lines.push(`- REQUIRED ROUTE: mount ${route.method.toUpperCase()} \`${route.path}\` inside the register function. Use the exact method and path.`);
-      lines.push('- Use the exact pattern below (method and path from REQUIRED ROUTE). Replace `verifyCredential` with the actual service function if different, and use the real column names from LIVE DB SCHEMA:');
+      lines.push('- Use the exact pattern below. Replace `<serviceFunction>` with the actual sibling service export you confirmed exists (check SERVICE-SPECIFIC FILE RULES if the matching service step is already done), and replace `<payload>`/`<param>` with the real keys from the request and LIVE DB SCHEMA:');
       lines.push(`\`\`\`js`);
+      lines.push(`/**`);
+      lines.push(` * SYNOPSIS: One-line description of the route.`);
+      lines.push(` * @ssot ${ssotHome}`);
+      lines.push(` */`);
+      lines.push(`import { <serviceFunction> } from '../services/<serviceFile>.js';`);
       lines.push(`export function ${fnName}(app, deps) {`);
       lines.push(`  app.${route.method.toLowerCase()}('${route.path}', deps.requireKey, async (req, res, next) => {`);
       lines.push(`    try {`);
-      lines.push(`      const { credentialId } = req.body;`);
-      lines.push(`      const result = await verifyCredential(deps, { credentialId });`);
+      if (route.method.toLowerCase() === 'get') {
+        lines.push(`      const { id } = req.params;`);
+        lines.push(`      const result = await <serviceFunction>(deps, { id });`);
+      } else {
+        lines.push(`      const payload = req.body;`);
+        lines.push(`      const result = await <serviceFunction>(deps, payload);`);
+      }
       lines.push(`      res.json(result);`);
       lines.push(`    } catch (error) {`);
-      lines.push(`      deps.logger.error({ error }, 'Error in credential verification route');`);
+      lines.push(`      deps.logger.error({ error }, 'Error in ${base} route');`);
       lines.push(`      next(error);`);
       lines.push(`    }`);
       lines.push(`  });`);

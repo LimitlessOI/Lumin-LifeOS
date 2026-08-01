@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T01:29:15.761Z",
+  "generated_at": "2026-08-01T01:31:25.671Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12651,
   "files": [
@@ -38895,9 +38895,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 82628,
-      "mtime": "2026-08-01T01:26:57.665Z",
-      "indexed_at": "2026-08-01T01:26:57.665Z"
+      "bytes": 82943,
+      "mtime": "2026-08-01T01:31:25.671Z",
+      "indexed_at": "2026-08-01T01:31:25.671Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -41955,9 +41955,9 @@
     {
       "path": "docs/products/lumin-university/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Lumin University",
-      "bytes": 21636,
-      "mtime": "2026-08-01T01:26:57.665Z",
-      "indexed_at": "2026-08-01T01:26:57.665Z"
+      "bytes": 21856,
+      "mtime": "2026-08-01T01:31:25.671Z",
+      "indexed_at": "2026-08-01T01:31:25.671Z"
     },
     {
       "path": "docs/products/LUMINUNIVERSITY.md",
@@ -87441,9 +87441,9 @@
     {
       "path": "services/build-integration-context.js",
       "synopsis": "Real integration context for the autonomous /build call — live DB",
-      "bytes": 14829,
-      "mtime": "2026-08-01T00:58:42.285Z",
-      "indexed_at": "2026-08-01T00:58:42.285Z",
+      "bytes": 15802,
+      "mtime": "2026-08-01T01:31:25.671Z",
+      "indexed_at": "2026-08-01T01:31:25.671Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
