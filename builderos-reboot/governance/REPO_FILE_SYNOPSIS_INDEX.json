@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T11:11:22.906Z",
+  "generated_at": "2026-08-01T11:11:29.457Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -30844,9 +30844,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 37342,
-      "mtime": "2026-08-01T11:11:06.272Z",
-      "indexed_at": "2026-08-01T11:11:22.906Z",
+      "bytes": 37067,
+      "mtime": "2026-08-01T10:56:20.772Z",
+      "indexed_at": "2026-08-01T10:56:40.338Z",
       "synopsis_index_only": true
     },
     {
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1951,
-      "mtime": "2026-08-01T11:10:49.368Z",
-      "indexed_at": "2026-08-01T11:11:22.906Z",
+      "bytes": 1788,
+      "mtime": "2026-08-01T11:06:04.524Z",
+      "indexed_at": "2026-08-01T11:07:48.951Z",
       "synopsis_index_only": true
     },
     {
@@ -41634,9 +41634,9 @@
     {
       "path": "docs/products/creator-media-os/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Creator Media OS",
-      "bytes": 24933,
-      "mtime": "2026-08-01T11:11:12.440Z",
-      "indexed_at": "2026-08-01T11:11:22.906Z"
+      "bytes": 26414,
+      "mtime": "2026-08-01T11:11:09.096Z",
+      "indexed_at": "2026-08-01T11:11:29.457Z"
     },
     {
       "path": "docs/products/CREATORMEDIAOS.md",
@@ -65772,9 +65772,9 @@
     {
       "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
       "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
-      "bytes": 3836,
-      "mtime": "2026-08-01T11:10:35.420Z",
-      "indexed_at": "2026-08-01T11:11:22.906Z",
+      "bytes": 3638,
+      "mtime": "2026-08-01T10:58:50.052Z",
+      "indexed_at": "2026-08-01T11:01:10.886Z",
       "synopsis_index_only": true
     },
     {
@@ -70639,10 +70639,10 @@
     },
     {
       "path": "routes/likenessConsent.js",
-      "synopsis": "HTTP route module — Likeness Consent.",
-      "bytes": 1119,
-      "mtime": "2026-08-01T11:06:52.424Z",
-      "indexed_at": "2026-08-01T11:07:48.951Z",
+      "synopsis": "Manages explicit likeness consent for users.",
+      "bytes": 1171,
+      "mtime": "2026-08-01T11:10:42.284Z",
+      "indexed_at": "2026-08-01T11:11:29.457Z",
       "ssot": [
         "docs/products/creator-media-os/PRODUCT_HOME.md"
       ]
