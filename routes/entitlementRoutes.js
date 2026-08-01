@@ -1,22 +1,21 @@
 /**
+ * SYNOPSIS: Exposes entitlement endpoints for validating user feature access.
  * @ssot docs/products/business-tools/PRODUCT_HOME.md
  */
-/**
- * SYNOPSIS: Registers EntitlementRoutes routes/handlers (routes/entitlementRoutes.js).
- */
-import express from 'express';
+import { checkEntitlements } from '../services/entitlements.js';
 
-function validateFeatureAccess(req, res) {
-  // Logic to validate feature access
-  res.send('Feature access validated');
+export function registerEntitlementRoutes(app, deps) {
+  app.get('/api/v1/user/entitlements', deps.requireKey, async (req, res, next) => {
+    try {
+      const { projectId, entitlement } = req.query; // Assuming projectId and entitlement come from query parameters for a GET request
+      if (!projectId || !entitlement) {
+        return res.status(400).json({ message: 'Missing projectId or entitlement query parameters.' });
+      }
+      const result = await checkEntitlements(deps, { projectId, entitlement });
+      res.json({ hasEntitlement: result });
+    } catch (error) {
+      deps.logger.error({ error }, 'Error in entitlementRoutes route');
+      next(error);
+    }
+  });
 }
-
-export function registerEntitlementRoutes(app) {
-  const router = express.Router();
-
-  router.get('/validate-feature-access', validateFeatureAccess);
-
-  app.use('/entitlements', router);
-}
-
-export { validateFeatureAccess };
