@@ -1,28 +1,64 @@
 /**
- * SYNOPSIS: Mock data for illustration purposes
+ * SYNOPSIS: Provides services that compare vendor offerings based on price book data, explaining/including only those with strong reviews.
+ * @ssot docs/products/limitlessos/PRODUCT_HOME.md
  */
-// Mock data for illustration purposes
-const vendors = [
-  { id: 1, name: 'Vendor A', price: 100, reviews: 4.5 },
-  { id: 2, name: 'Vendor B', price: 150, reviews: 4.0 },
-  { id: 3, name: 'Vendor C', price: 90, reviews: 3.5 },
-  { id: 4, name: 'Vendor D', price: 110, reviews: 4.7 },
-];
-
-// Helper function to filter vendors by strong reviews
-function filterStrongReviews(vendor) {
-  return vendor.reviews >= 4.0;
+export async function compareVendors(deps, payload) {
+  const { pool, logger } = deps;
+  try {
+    const { rows } = await pool.query(
+      `SELECT
+        vpb.vendor_id,
+        pb.partner_name AS vendor_name,
+        vpb.price,
+        vpb.review_score,
+        vpb.review_count,
+        pbi.item_name,
+        pbi.item_description,
+        pbi.unit_price,
+        pbi.setup_fee,
+        pbi.min_quantity,
+        pbi.max_quantity,
+        pbi.lead_time_days
+      FROM vendor_price_book vpb
+      JOIN price_book_partners pb ON vpb.vendor_id = pb.id
+      JOIN price_book_items pbi ON vpb.product_id = pbi.id
+      WHERE vpb.review_score >= 4.0
+      ORDER BY vpb.price ASC;`
+    );
+    return rows;
+  } catch (error) {
+    logger.error({ error }, 'Error in compareVendors');
+    throw new Error('Failed to compare vendors');
+  }
 }
 
-// Compare vendors based on price and strong reviews
-function compareVendors() {
-  const filteredVendors = vendors.filter(filterStrongReviews);
-  return filteredVendors.sort((a, b) => a.price - b.price);
+export async function getVendorInfo(deps, payload) {
+  const { pool, logger } = deps;
+  const { vendorId } = payload || {};
+  try {
+    const { rows } = await pool.query(
+      `SELECT
+        vpb.vendor_id,
+        pb.partner_name AS vendor_name,
+        vpb.price,
+        vpb.review_score,
+        vpb.review_count,
+        pbi.item_name,
+        pbi.item_description,
+        pbi.unit_price,
+        pbi.setup_fee,
+        pbi.min_quantity,
+        pbi.max_quantity,
+        pbi.lead_time_days
+      FROM vendor_price_book vpb
+      JOIN price_book_partners pb ON vpb.vendor_id = pb.id
+      JOIN price_book_items pbi ON vpb.product_id = pbi.id
+      WHERE vpb.vendor_id = $1 AND vpb.review_score >= 4.0;`,
+      [vendorId]
+    );
+    return rows[0] || null;
+  } catch (error) {
+    logger.error({ error, vendorId }, 'Error in getVendorInfo');
+    throw new Error('Failed to retrieve vendor information');
+  }
 }
-
-// Get vendor information by ID
-function getVendorInfo(vendorId) {
-  return vendors.find(vendor => vendor.id === vendorId && filterStrongReviews(vendor)) || null;
-}
-
-export { compareVendors, getVendorInfo };
