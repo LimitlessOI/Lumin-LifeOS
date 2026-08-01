@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T10:38:37.854Z",
+  "generated_at": "2026-08-01T10:40:30.035Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -21678,9 +21678,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3839303,
-      "mtime": "2026-08-01T10:38:12.268Z",
-      "indexed_at": "2026-08-01T10:38:22.779Z"
+      "bytes": 3839304,
+      "mtime": "2026-08-01T10:38:46.244Z",
+      "indexed_at": "2026-08-01T10:40:30.035Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -42268,9 +42268,9 @@
     {
       "path": "docs/products/memory-system/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Memory System",
-      "bytes": 24071,
-      "mtime": "2026-08-01T10:38:05.452Z",
-      "indexed_at": "2026-08-01T10:38:12.201Z"
+      "bytes": 24386,
+      "mtime": "2026-08-01T10:40:16.036Z",
+      "indexed_at": "2026-08-01T10:40:30.035Z"
     },
     {
       "path": "docs/products/MEMORYINTELLIGENCE.md",
@@ -69696,9 +69696,9 @@
     {
       "path": "routes/final_pr_review.js",
       "synopsis": "HTTP route module — Final PR Review.",
-      "bytes": 777,
-      "mtime": "2026-08-01T10:37:58.176Z",
-      "indexed_at": "2026-08-01T10:38:12.201Z",
+      "bytes": 803,
+      "mtime": "2026-08-01T10:40:05.520Z",
+      "indexed_at": "2026-08-01T10:40:30.035Z",
       "ssot": [
         "docs/products/memory-system/PRODUCT_HOME.md"
       ]
@@ -90426,9 +90426,12 @@
     {
       "path": "services/final_pr_review.js",
       "synopsis": "Exports reviewBranch — services/final_pr_review.js.",
-      "bytes": 1510,
-      "mtime": "2026-07-18T18:46:59.257Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 1739,
+      "mtime": "2026-08-01T10:39:59.776Z",
+      "indexed_at": "2026-08-01T10:40:30.035Z",
+      "ssot": [
+        "docs/products/memory-system/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/findingLifecycleService.js",
