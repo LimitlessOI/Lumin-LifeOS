@@ -180,13 +180,13 @@
     },
     {
       "id": "builderos-3",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/timezone-utils.js",
       "task": "adjust commitment timezone checks",
       "spec": "Add function to check commitment due dates against Adam's timezone instead of UTC.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "adjustCommitmentDueDates"
       ],
@@ -205,14 +205,16 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:26:12.285Z",
-      "commit_sha": "c4a3ec2e3195c69f190417889facb2db7531f65c",
+      "commit_sha": "dea1a1ab1de126945d3b7f25efa8bbec4b5cd418",
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "builderos-3",
       "mission_id": "PRODUCT-builderos",
       "same_signature_count": 0,
       "demoted": false,
       "last_error": "artifact_proof_failed: Intl.DateTimeFormat",
-      "heal_unblocked": true
+      "heal_unblocked": true,
+      "last_attempt_at": "2026-08-01T08:02:50.861Z",
+      "completed_at": "2026-08-01T08:03:04.196Z"
     },
     {
       "id": "builderos-4",
@@ -3304,6 +3306,6 @@
   "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-builderos",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T06:30:24.349Z",
+  "updated_at": "2026-08-01T08:03:04.196Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/builderos/BUILD_QUEUE.json"
 }
