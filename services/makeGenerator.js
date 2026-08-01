@@ -12,42 +12,63 @@ export async function generateMakeSchema(deps, payload) {
     // This correction adds a root type of "object" as is common for JSON schemas.
     return {
       type: "object", // Added to satisfy the pre-commit gate and common schema patterns
-      version: '1.0',
-      scenario: {
-        meta: {
-          name: {
-            type: "string",
-            description: "The name of the Make.com scenario.",
-          },
-          description: {
-            type: "string",
-            description: "A description of the Make.com scenario.",
-          },
+      properties: {
+        version: {
+          type: "string",
+          description: "Version of the Make.com scenario schema.",
+          enum: ["1.0"] // Assuming a fixed version for now
         },
-        modules: {
-          type: "array",
-          items: {
-            type: "object",
-            properties: {
-              id: { type: "integer" },
-              type: { type: "string" },
-              parameters: { type: "object" },
+        scenario: {
+          type: "object",
+          properties: {
+            meta: {
+              type: "object",
+              properties: {
+                name: {
+                  type: "string",
+                  description: "The name of the Make.com scenario.",
+                },
+                description: {
+                  type: "string",
+                  description: "A description of the Make.com scenario.",
+                },
+              },
+              required: ["name"] // Name is typically required for a scenario
             },
-            required: ["id", "type"],
-          },
-        },
-        connections: {
-          type: "array",
-          items: {
-            type: "object",
-            properties: {
-              source_module_id: { type: "integer" },
-              target_module_id: { type: "integer" },
+            modules: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  id: { type: "integer", description: "Unique ID of the module." },
+                  type: { type: "string", description: "Type of the module (e.g., 'webhooks', 'google-sheets')." },
+                  parameters: {
+                    type: "object",
+                    description: "Module-specific configuration parameters.",
+                    additionalProperties: true // Allow arbitrary parameters
+                  },
+                },
+                required: ["id", "type"],
+              },
+              description: "Array of modules within the scenario."
             },
-            required: ["source_module_id", "target_module_id"],
+            connections: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  source_module_id: { type: "integer", description: "ID of the source module for the connection." },
+                  target_module_id: { type: "integer", description: "ID of the target module for the connection." },
+                },
+                required: ["source_module_id", "target_module_id"],
+              },
+              description: "Array of connections between modules."
+            },
           },
+          required: ["meta", "modules", "connections"] // These are fundamental parts of a scenario
         },
       },
+      required: ["version", "scenario"] // Root level requirements
     };
   } catch (error) {
     logger.error({ error }, 'Error in generateMakeSchema');

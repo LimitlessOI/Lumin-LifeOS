@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T11:49:04.688Z",
+  "generated_at": "2026-08-01T11:50:57.949Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -93033,9 +93033,9 @@
     {
       "path": "services/makeGenerator.js",
       "synopsis": "Generates a JSON schema for Make.com scenario import.",
-      "bytes": 1877,
-      "mtime": "2026-08-01T11:48:27.332Z",
-      "indexed_at": "2026-08-01T11:48:57.821Z",
+      "bytes": 3163,
+      "mtime": "2026-08-01T11:50:57.949Z",
+      "indexed_at": "2026-08-01T11:50:57.949Z",
       "ssot": [
         "docs/products/business-tools/PRODUCT_HOME.md"
       ]
