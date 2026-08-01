@@ -1728,13 +1728,13 @@
     },
     {
       "id": "04",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/theologicalAdvisoryModel.js",
       "task": "design theological advisory model",
       "spec": "Develop an advisory model to account for theological and denominational concerns in content adaptation.",
       "depends_on": [],
       "founder_gated": true,
-      "attempts": 1,
+      "attempts": 2,
       "expected_exports": [
         "adviseTheologicalContent"
       ],
@@ -1759,15 +1759,16 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T22:09:19.320Z",
-      "commit_sha": "7090296ca7f7600c5545ddfbb96af733c450ca8e",
+      "commit_sha": "437103525c1d97ff1ea35400cb86e00d7b148bd3",
       "same_signature_count": 1,
       "demoted": false,
       "last_error": "grounding_failed: import_source_missing: ./utils",
       "heal_unblocked": true,
-      "last_attempt_at": "2026-08-01T11:25:19.864Z",
+      "last_attempt_at": "2026-08-01T11:28:29.770Z",
       "artifact_proven": true,
       "blocker_class": "BLOCKED_TOOLING",
-      "failure_signature": "grounding|BLOCKED_TOOLING|grounding_failed: import_source_missing: ./utils"
+      "failure_signature": "grounding|BLOCKED_TOOLING|grounding_failed: import_source_missing: ./utils",
+      "completed_at": "2026-08-01T11:28:29.809Z"
     },
     {
       "id": "05",
@@ -2705,5 +2706,5 @@
   "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-faith-studio",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T11:25:32.940Z"
+  "updated_at": "2026-08-01T11:28:29.809Z"
 }
