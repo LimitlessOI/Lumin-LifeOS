@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T03:15:28.141Z",
+  "generated_at": "2026-08-01T03:24:46.597Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12661,
+  "file_count": 12663,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -38909,9 +38909,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 90477,
-      "mtime": "2026-08-01T03:15:28.141Z",
-      "indexed_at": "2026-08-01T03:15:28.141Z"
+      "bytes": 91548,
+      "mtime": "2026-08-01T03:24:46.597Z",
+      "indexed_at": "2026-08-01T03:24:46.597Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40970,9 +40970,9 @@
     {
       "path": "docs/products/ai-council/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — AI Council",
-      "bytes": 74907,
-      "mtime": "2026-08-01T00:11:50.262Z",
-      "indexed_at": "2026-08-01T00:11:50.262Z"
+      "bytes": 74387,
+      "mtime": "2026-08-01T03:24:46.597Z",
+      "indexed_at": "2026-08-01T03:24:46.597Z"
     },
     {
       "path": "docs/products/ai-receptionist/FILE_MANIFEST.json",
@@ -42521,9 +42521,9 @@
     {
       "path": "docs/products/wellness-studio/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Wellness Studio",
-      "bytes": 16637,
-      "mtime": "2026-08-01T03:15:28.141Z",
-      "indexed_at": "2026-08-01T03:15:28.141Z"
+      "bytes": 16670,
+      "mtime": "2026-08-01T03:24:46.597Z",
+      "indexed_at": "2026-08-01T03:24:46.597Z"
     },
     {
       "path": "docs/products/WELLNESSSTUDIO.md",
@@ -61829,6 +61829,13 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "docs/reports/BUILD_STATUS_2026-08-02.md",
+      "synopsis": "Build Queue Status Report — 2026-08-02",
+      "bytes": 3385,
+      "mtime": "2026-08-01T03:24:46.597Z",
+      "indexed_at": "2026-08-01T03:24:46.597Z"
+    },
+    {
       "path": "docs/reports/landing-page-status.md",
       "synopsis": "Landing Page Verification Report",
       "bytes": 569,
@@ -66059,8 +66066,8 @@
       "path": "products/receipts/POINT_B_DNA_VERIFY.json",
       "synopsis": "Product receipt — POINT B DNA VERIFY.",
       "bytes": 280,
-      "mtime": "2026-08-01T03:15:28.141Z",
-      "indexed_at": "2026-08-01T03:15:28.141Z",
+      "mtime": "2026-08-01T03:24:46.597Z",
+      "indexed_at": "2026-08-01T03:24:46.597Z",
       "synopsis_index_only": true
     },
     {
@@ -66075,8 +66082,8 @@
       "path": "products/receipts/RECEIPT_TRUTH_VALIDATION.json",
       "synopsis": "Product receipt — RECEIPT TRUTH VALIDATION.",
       "bytes": 18509,
-      "mtime": "2026-08-01T03:15:28.141Z",
-      "indexed_at": "2026-08-01T03:15:28.141Z",
+      "mtime": "2026-08-01T03:24:46.597Z",
+      "indexed_at": "2026-08-01T03:24:46.597Z",
       "synopsis_index_only": true
     },
     {
@@ -66267,16 +66274,16 @@
       "path": "products/receipts/TRUTH_ENFORCEMENT_AUDIT.json",
       "synopsis": "Product receipt — TRUTH ENFORCEMENT AUDIT.",
       "bytes": 701,
-      "mtime": "2026-08-01T03:15:28.141Z",
-      "indexed_at": "2026-08-01T03:15:28.141Z",
+      "mtime": "2026-08-01T03:24:46.597Z",
+      "indexed_at": "2026-08-01T03:24:46.597Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/TRUTH_LOCKDOWN_VERIFY.json",
       "synopsis": "Product receipt — TRUTH LOCKDOWN VERIFY.",
       "bytes": 1141,
-      "mtime": "2026-08-01T03:15:28.141Z",
-      "indexed_at": "2026-08-01T03:15:28.141Z",
+      "mtime": "2026-08-01T03:24:46.597Z",
+      "indexed_at": "2026-08-01T03:24:46.597Z",
       "synopsis_index_only": true
     },
     {
@@ -66307,8 +66314,8 @@
       "path": "products/receipts/WISDOM_TRUTH_AUDIT.json",
       "synopsis": "Product receipt — WISDOM TRUTH AUDIT.",
       "bytes": 735,
-      "mtime": "2026-08-01T03:15:28.141Z",
-      "indexed_at": "2026-08-01T03:15:28.141Z",
+      "mtime": "2026-08-01T03:24:46.597Z",
+      "indexed_at": "2026-08-01T03:24:46.597Z",
       "synopsis_index_only": true
     },
     {
@@ -72861,6 +72868,16 @@
       "indexed_at": "2026-07-28T22:54:46.666Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/habLimiter.mjs",
+      "synopsis": "HAB (Human/AI Budget) limiter — enforce a daily call cap per key.",
+      "bytes": 985,
+      "mtime": "2026-08-01T03:24:46.597Z",
+      "indexed_at": "2026-08-01T03:24:46.597Z",
+      "ssot": [
+        "docs/products/ai-council/PRODUCT_HOME.md"
       ]
     },
     {

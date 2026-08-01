@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/wellness-studio/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-08-02 — `wellness-studio-step10` reset from `blocked` to `pending`; deterministic migration `db/migrations/20260725_extend_wellness_tables.sql` provided with idempotent `ALTER TABLE ... ADD COLUMN IF NOT EXISTS` for `joy_checkins`, `integrity_score_log`, `wearable_data`, and `emotional_patterns`. Cleared `escalation_required` so the never-stop factory can claim the step. |
+| **Last Updated** | 2026-08-02 — `wellness-studio-step10` reset from `blocked` to `pending` and migration shipped. `wellness-studio-step11` (`services/extended-tables.js`) and `wellness-studio-step12` (`routes/wellness-table-extensions-routes.js`) parked until AI provider quota/credentials return; both require codegen for service/route modules and cannot be completed while all model providers are rate-limit or credit exhausted. |
 
 ---
 | Field | Value |

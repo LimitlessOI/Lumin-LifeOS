@@ -1,5 +1,11 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-08-02 — Parked wellness service/route steps; reset `ai-council` step 8 (`scripts/habLimiter.mjs`)
+
+Parked `wellness-studio-step11` (`services/extended-tables.js`) and `wellness-studio-step12` (`routes/wellness-table-extensions-routes.js`) with `park_until` far-future because both require codegen for service/route modules and all model providers are currently rate-limit or credit exhausted. The pre-existing `services/extended-tables.js` artifact exports `extendTables` but the step expects `extendWellnessTables`, and a `/build` repair returns `HTTP 404` (no available codegen path). Parking prevents revive-thrash while preserving the real work for when providers return.
+
+Reset `ai-council` step `8` (`scripts/habLimiter.mjs`) from `blocked`/`demoted` to `pending`. The step had an impossible `route: {"path":"/"}` assertion on a script target, causing 6 revive cycles of `reload_failed`. Removed the route assertion and provided a deterministic `scripts/habLimiter.mjs` exporting `enforceHABLimit(key)` with a 100-call daily cap and usage observability.
+
 ## 2026-08-02 — Queue hygiene: `site-builder` s8 skipped; `wellness-studio-step10` reset to pending with migration
 
 Cleared two blocked non-service product steps so the never-stop factory has real build targets again:
