@@ -1,11 +1,11 @@
 {
   "schema": "deploy_truth_verify_v1",
-  "at": "2026-08-01T11:46:29.463Z",
+  "at": "2026-08-01T11:50:38.028Z",
   "command": "drift-audit",
   "production_base": "https://lumin-web-production-e3a9.up.railway.app",
   "deploy_branch": "main",
-  "commit_sha": "5ef2e3f7d265c0ad209130f2860aa3a45b072cc6",
-  "served_sha": "5ef2e3f7d265c0ad209130f2860aa3a45b072cc6",
+  "commit_sha": "b21123988fcb93e2f076532cf6455e4eb0e405d9",
+  "served_sha": "b21123988fcb93e2f076532cf6455e4eb0e405d9",
   "verdict": "PROVEN",
   "ok": true,
   "passed": [
@@ -21,11 +21,11 @@
   "skipped": [],
   "files": [],
   "deployment": {
-    "id": "02b56674-2bc6-4538-a4e4-b47362c20ff0",
+    "id": "89eefe34-3f4f-4834-acff-f35bc928ac27",
     "status": "SUCCESS",
-    "created_at": "2026-08-01T11:44:08.908Z",
-    "commit_sha": "5ef2e3f7d265c0ad209130f2860aa3a45b072cc6",
-    "commit_message": "GAP-FILL: reconcile routes/server.approvals.js after origin/main merge for business-tools step 6. An origin/main merge introduced deps.requireKey and deps.logger usage inside the route but left the signature as (app), which would cause runtime errors. Reconciled the file to export registerApprovalRoutes as (app, deps = {}) with safe fallbacks for requireKey and logger, preserving the setTimeout-based 48h auto-reject scheduler and the required BUILD_QUEUE substrings. Updated business-tools product home SSOT. HAND-AUTHORED-JUSTIFICATION: deterministic merge-conflict gap-fill on an existing builder-generated route; factory /build attempts failed with BLOCKED_TOOLING due to exhausted AI provider quota, and only the function signature and fallback wiring were adjusted.\n\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
+    "created_at": "2026-08-01T11:49:10.241Z",
+    "commit_sha": "b21123988fcb93e2f076532cf6455e4eb0e405d9",
+    "commit_message": "chore: update REPO_FILE_SYNOPSIS_INDEX after makeGenerator.js gap-fill\n\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
     "url": null
   },
   "runtime_identity": {
@@ -46,18 +46,18 @@
     {
       "id": "git.fetch",
       "status": "pass",
-      "detail": "origin/main is 5ef2e3f7d265"
+      "detail": "origin/main is b21123988fcb"
     },
     {
       "id": "local.divergence",
       "status": "pass",
       "detail": "local main is aligned with origin/main",
       "local_branch": "main",
-      "local_head": "5ef2e3f7d265c0ad209130f2860aa3a45b072cc6",
-      "remote_head": "5ef2e3f7d265c0ad209130f2860aa3a45b072cc6",
+      "local_head": "b21123988fcb93e2f076532cf6455e4eb0e405d9",
+      "remote_head": "b21123988fcb93e2f076532cf6455e4eb0e405d9",
       "ahead": 0,
       "behind": 0,
-      "uncommitted": 1
+      "uncommitted": 0
     },
     {
       "id": "runtime.identity",
@@ -81,20 +81,20 @@
     {
       "id": "runtime.version",
       "status": "pass",
-      "detail": "production serves 5ef2e3f7d265, which contains origin/main (5ef2e3f7d265)",
-      "served_sha": "5ef2e3f7d265c0ad209130f2860aa3a45b072cc6",
-      "remote_head": "5ef2e3f7d265c0ad209130f2860aa3a45b072cc6"
+      "detail": "production serves b21123988fcb, which contains origin/main (b21123988fcb)",
+      "served_sha": "b21123988fcb93e2f076532cf6455e4eb0e405d9",
+      "remote_head": "b21123988fcb93e2f076532cf6455e4eb0e405d9"
     },
     {
       "id": "deployment.state",
       "status": "pass",
-      "detail": "latest deployment SUCCESS on 5ef2e3f7d265, nothing in flight",
+      "detail": "latest deployment SUCCESS on b21123988fcb, nothing in flight",
       "deployment": {
-        "id": "02b56674-2bc6-4538-a4e4-b47362c20ff0",
+        "id": "89eefe34-3f4f-4834-acff-f35bc928ac27",
         "status": "SUCCESS",
-        "created_at": "2026-08-01T11:44:08.908Z",
-        "commit_sha": "5ef2e3f7d265c0ad209130f2860aa3a45b072cc6",
-        "commit_message": "GAP-FILL: reconcile routes/server.approvals.js after origin/main merge for business-tools step 6. An origin/main merge introduced deps.requireKey and deps.logger usage inside the route but left the signature as (app), which would cause runtime errors. Reconciled the file to export registerApprovalRoutes as (app, deps = {}) with safe fallbacks for requireKey and logger, preserving the setTimeout-based 48h auto-reject scheduler and the required BUILD_QUEUE substrings. Updated business-tools product home SSOT. HAND-AUTHORED-JUSTIFICATION: deterministic merge-conflict gap-fill on an existing builder-generated route; factory /build attempts failed with BLOCKED_TOOLING due to exhausted AI provider quota, and only the function signature and fallback wiring were adjusted.\n\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
+        "created_at": "2026-08-01T11:49:10.241Z",
+        "commit_sha": "b21123988fcb93e2f076532cf6455e4eb0e405d9",
+        "commit_message": "chore: update REPO_FILE_SYNOPSIS_INDEX after makeGenerator.js gap-fill\n\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
         "url": null
       }
     }
@@ -102,9 +102,9 @@
   "produced_by": "cursor-agent",
   "verified_by": "git+railway-api+production-http-probe",
   "verification_kind": "deterministic+external",
-  "local_head": "5ef2e3f7d265c0ad209130f2860aa3a45b072cc6",
+  "local_head": "b21123988fcb93e2f076532cf6455e4eb0e405d9",
   "local_branch": "main",
   "ahead": 0,
   "behind": 0,
-  "human_summary": "PROVEN — production serves 5ef2e3f7d265, which contains origin/main; no runtime drift found."
+  "human_summary": "PROVEN — production serves b21123988fcb, which contains origin/main; no runtime drift found."
 }

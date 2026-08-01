@@ -19,7 +19,7 @@
       "step_id": "step1",
       "stage": "artifact_proof",
       "reason": "artifact_proof_failed: \"type\": \"object\"",
-      "attempts": 1,
+      "attempts": 2,
       "blocked": false,
       "blocker_class": "BLOCKED_TOOLING",
       "claim_level": null,
@@ -65,5 +65,5 @@
     }
   },
   "cycles": 1,
-  "updated_at": "2026-08-01T11:47:28.984Z"
+  "updated_at": "2026-08-01T11:51:05.718Z"
 }

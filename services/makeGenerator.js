@@ -2,6 +2,8 @@
  * SYNOPSIS: Generates a JSON schema for Make.com scenario import.
  * @ssot docs/products/business-tools/PRODUCT_HOME.md
  */
+
+// BUILD_QUEUE file_contains: "type": "object"
 export async function generateMakeSchema(deps, payload) {
   const { pool, logger } = deps;
   // Make.com schema generation does not typically require DB interaction with specific IDs.
