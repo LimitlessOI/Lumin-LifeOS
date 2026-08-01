@@ -351,7 +351,7 @@
     },
     {
       "id": "6",
-      "status": "done",
+      "status": "pending",
       "target_file": ".github/workflows/smoke-test.yml",
       "task": "integrate CI evidence recording",
       "spec": "Wires memory:ci-evidence into CI workflow to auto-record CI results as evidence.",
@@ -359,12 +359,12 @@
         "5"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "memory:ci-evidence"
       ],
       "last_attempt_at": "2026-07-15T21:10:48.696Z",
-      "last_error": null,
+      "last_error": "artifact_proof_failed: memory:ci-evidence",
       "commit_sha": "7be4a9ef9e9c33e1f8f0e8b0c8b0e0e0e0e0e0e0",
       "built_sha": "7be4a9ef9e9c33e1f8f0e8b0c8b0e0e0e0e0e0e0",
       "proof": "operator_gap_fill: .github/workflows/smoke-test.yml already contains a 'Record CI evidence (memory system)' step running 'node scripts/record-ci-evidence.mjs --all-js memory:ci-evidence'; builder safe-scope blocks autonomous writes to .github/workflows, so operator verified and marked done.",
@@ -385,7 +385,8 @@
       "shipped_at": "2026-07-15T21:15:00.000Z",
       "blueprint_id": "PRODUCT-MEMORY-INTELLIGENCE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "6",
-      "mission_id": "PRODUCT-memory-intelligence"
+      "mission_id": "PRODUCT-memory-intelligence",
+      "heal_unblocked": true
     },
     {
       "id": "7",
@@ -587,7 +588,7 @@
     },
     {
       "id": "memory-intelligence-1",
-      "status": "done",
+      "status": "pending",
       "target_file": "db/memory-auto-apply.sql",
       "task": "auto-apply tables and views on deploy",
       "spec": "Ensure that all tables and views are applied automatically during deployment.",
@@ -603,7 +604,10 @@
       "commit_sha": "a74883418feccb48127466c7951d4e385801b74f",
       "blueprint_id": "PRODUCT-MEMORY-INTELLIGENCE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "memory-intelligence-1",
-      "mission_id": "PRODUCT-memory-intelligence"
+      "mission_id": "PRODUCT-memory-intelligence",
+      "last_error": "artifact_proof_failed: CREATE VIEW IF NOT EXISTS",
+      "demoted": false,
+      "heal_unblocked": true
     },
     {
       "id": "memory-intelligence-2",
@@ -1276,5 +1280,5 @@
   "blueprint_id": "PRODUCT-MEMORY-INTELLIGENCE-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-memory-intelligence",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T06:22:01.286Z"
+  "updated_at": "2026-08-01T06:30:41.002Z"
 }
