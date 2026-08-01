@@ -1085,12 +1085,7 @@
       "last_error": "artifact_proof_failed: joy score; wearable data correlation",
       "heal_unblocked": true,
       "last_attempt_at": "2026-08-01T12:54:09.341Z",
-      "artifact_proven": true,
-      "grounding_status": "PASS",
-      "completed_at": "2026-08-01T12:54:36.975Z",
-      "deploy_proven": true,
-      "failure_signature": null,
-      "functional_proven": true
+      "completed_at": "2026-08-01T12:54:36.975Z"
     },
     {
       "id": "personal-finance-os-8",

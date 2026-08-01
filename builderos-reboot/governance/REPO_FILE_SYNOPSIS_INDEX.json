@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T12:56:07.986Z",
+  "generated_at": "2026-08-01T12:56:19.172Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1852,
-      "mtime": "2026-08-01T12:54:38.188Z",
-      "indexed_at": "2026-08-01T12:56:07.986Z",
+      "bytes": 1941,
+      "mtime": "2026-08-01T12:48:48.400Z",
+      "indexed_at": "2026-08-01T12:51:41.009Z",
       "synopsis_index_only": true
     },
     {
@@ -42391,9 +42391,9 @@
     {
       "path": "docs/products/personal-finance-os/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Personal Finance OS",
-      "bytes": 19168,
-      "mtime": "2026-08-01T12:55:52.928Z",
-      "indexed_at": "2026-08-01T12:56:07.986Z"
+      "bytes": 18361,
+      "mtime": "2026-08-01T12:51:19.360Z",
+      "indexed_at": "2026-08-01T12:51:24.985Z"
     },
     {
       "path": "docs/products/PERSONALFINANCEOS.md",
@@ -90167,10 +90167,10 @@
     },
     {
       "path": "services/emotionalIntelligence.js",
-      "synopsis": "Provides services for integrating emotional intelligence signals, joy score, and wearable data correlation.",
-      "bytes": 3044,
-      "mtime": "2026-08-01T12:54:51.560Z",
-      "indexed_at": "2026-08-01T12:56:07.986Z",
+      "synopsis": "Provides services for integrating emotional intelligence signals and correlating wearable data.",
+      "bytes": 2995,
+      "mtime": "2026-08-01T12:54:31.099Z",
+      "indexed_at": "2026-08-01T12:54:31.099Z",
       "ssot": [
         "docs/products/personal-finance-os/PRODUCT_HOME.md"
       ]
@@ -91422,10 +91422,10 @@
     },
     {
       "path": "services/ipsReview.js",
-      "synopsis": "IPS review service — attorney review RIA trigger risk assessment (reviewIPSRisk / reviewIpsRisk).",
-      "bytes": 3845,
-      "mtime": "2026-08-01T12:55:46.472Z",
-      "indexed_at": "2026-08-01T12:56:07.986Z",
+      "synopsis": "IPS review service — attorney review RIA trigger risk assessment.",
+      "bytes": 3813,
+      "mtime": "2026-08-01T12:47:09.462Z",
+      "indexed_at": "2026-08-01T12:48:18.361Z",
       "ssot": [
         "docs/products/personal-finance-os/PRODUCT_HOME.md"
       ]
