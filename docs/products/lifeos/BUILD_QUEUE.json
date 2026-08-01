@@ -1503,10 +1503,10 @@
         "lifeos-chat-v2-01"
       ],
       "founder_gated": false,
-      "attempts": 0,
-      "last_attempt_at": null,
-      "last_error": "artifact_proof_failed: SpeechRecognition; webkitSpeechRecognition; lumin-mic-btn; LifeOSAmbientListener",
-      "commit_sha": "3d2df8dc204baaf158d44fc433ed0ed51113deb1",
+      "attempts": 1,
+      "last_attempt_at": "2026-08-01T06:51:32.952Z",
+      "last_error": "verify_exit_1",
+      "commit_sha": "d69409dc1851f9ef8333a043a7f84c7a49634481",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
@@ -1518,7 +1518,7 @@
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
-      "blocker_class": null,
+      "blocker_class": "BLOCKED_TOOLING",
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
@@ -6017,6 +6017,6 @@
   "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-lifeos",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T06:49:13.852Z",
+  "updated_at": "2026-08-01T06:52:16.979Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/lifeos/BUILD_QUEUE.json"
 }
