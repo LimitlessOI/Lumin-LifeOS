@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/builderos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-|| **Last Updated** | 2026-08-02 — Created `FACTORY-REPAIR-AND-AUTONOMY-0001` mission pack covering deterministic repair, overnight autonomy, runtime constitutional protocols, and competitive benchmarking. |
+|| **Last Updated** | 2026-08-02 — 9.5 push: branch-divergence guard, blueprint authority validator, Chair consensus gate, prediction→reality→calibration loop, and NORTH_STAR_SSOT.md §2.0K/§2.0L ratified. |
 ### Related docs (this product)
 
 | Doc | Path |

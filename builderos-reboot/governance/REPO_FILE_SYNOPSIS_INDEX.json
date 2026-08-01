@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T19:42:40.032Z",
+  "generated_at": "2026-08-01T19:45:29.765Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12795,
   "files": [
@@ -21307,9 +21307,9 @@
     {
       "path": "builderos-reboot/BP_PRIORITY.json",
       "synopsis": "BuilderOS artifact — BP PRIORITY.",
-      "bytes": 25471,
-      "mtime": "2026-08-01T19:42:40.032Z",
-      "indexed_at": "2026-08-01T19:42:40.032Z",
+      "bytes": 29282,
+      "mtime": "2026-08-01T19:44:27.170Z",
+      "indexed_at": "2026-08-01T19:44:48.462Z",
       "synopsis_index_only": true
     },
     {
@@ -21678,9 +21678,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3847978,
-      "mtime": "2026-08-01T17:24:12.521Z",
-      "indexed_at": "2026-08-01T17:27:37.565Z"
+      "bytes": 3866680,
+      "mtime": "2026-08-01T19:45:24.518Z",
+      "indexed_at": "2026-08-01T19:45:29.765Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -26355,8 +26355,8 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-REPAIR-AND-AUTONOMY-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
       "bytes": 11855,
-      "mtime": "2026-08-01T19:42:40.032Z",
-      "indexed_at": "2026-08-01T19:42:40.032Z",
+      "mtime": "2026-08-01T19:45:04.714Z",
+      "indexed_at": "2026-08-01T19:45:24.177Z",
       "synopsis_index_only": true
     },
     {
@@ -38933,9 +38933,9 @@
     {
       "path": "docs/constitution/NORTH_STAR_SSOT.md",
       "synopsis": "North Star Constitution SSOT — Force of Truth — supreme constitutional law (ONE file)",
-      "bytes": 70290,
-      "mtime": "2026-08-01T03:28:51.559Z",
-      "indexed_at": "2026-08-01T03:30:03.869Z"
+      "bytes": 72461,
+      "mtime": "2026-08-01T19:41:37.554Z",
+      "indexed_at": "2026-08-01T19:42:58.977Z"
     },
     {
       "path": "docs/constitution/NORTH_STAR.md",
@@ -39046,8 +39046,8 @@
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
       "bytes": 102885,
-      "mtime": "2026-08-01T19:42:40.032Z",
-      "indexed_at": "2026-08-01T19:42:40.032Z"
+      "mtime": "2026-08-01T19:45:04.722Z",
+      "indexed_at": "2026-08-01T19:45:24.177Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -41300,9 +41300,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 391480,
-      "mtime": "2026-08-01T19:42:40.032Z",
-      "indexed_at": "2026-08-01T19:42:40.032Z"
+      "bytes": 391485,
+      "mtime": "2026-08-01T19:45:04.866Z",
+      "indexed_at": "2026-08-01T19:45:24.177Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -63217,8 +63217,8 @@
       "path": "factory-staging/factory-core/builder/chair-consensus-gate.mjs",
       "synopsis": "Chair / council consensus runtime entry gate.",
       "bytes": 4577,
-      "mtime": "2026-08-01T19:42:40.032Z",
-      "indexed_at": "2026-08-01T19:42:40.032Z",
+      "mtime": "2026-08-01T19:41:37.538Z",
+      "indexed_at": "2026-08-01T19:44:34.593Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -63274,8 +63274,8 @@
       "path": "factory-staging/factory-core/builder/run-step.js",
       "synopsis": "Exports resolveRepoPath — factory-staging/factory-core/builder/run-step.js.",
       "bytes": 15487,
-      "mtime": "2026-08-01T19:42:40.032Z",
-      "indexed_at": "2026-08-01T19:42:40.032Z",
+      "mtime": "2026-08-01T19:45:04.726Z",
+      "indexed_at": "2026-08-01T19:45:24.177Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -65528,8 +65528,8 @@
       "path": "package.json",
       "synopsis": "enforce\":\"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",\"lifeos:file-synopsis:backfill\":\"node scripts/file-synopsis-enforce.mjs --all --auto-fix && node scripts/generate-file-synopsis-index.mjs\",\"lifeos:file-synopsis:index\":\"n",
       "bytes": 33847,
-      "mtime": "2026-08-01T19:42:40.032Z",
-      "indexed_at": "2026-08-01T19:42:40.032Z",
+      "mtime": "2026-08-01T19:45:04.726Z",
+      "indexed_at": "2026-08-01T19:45:24.177Z",
       "synopsis_index_only": true
     },
     {
@@ -76153,8 +76153,8 @@
       "path": "scripts/system-commit-files.mjs",
       "synopsis": "Commit local files to GitHub main via tip BuilderOS execute-batch (no human PR).",
       "bytes": 6689,
-      "mtime": "2026-08-01T19:42:40.032Z",
-      "indexed_at": "2026-08-01T19:42:40.032Z",
+      "mtime": "2026-08-01T19:45:04.726Z",
+      "indexed_at": "2026-08-01T19:45:24.177Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -76173,8 +76173,8 @@
       "path": "scripts/system-railway-redeploy.mjs",
       "synopsis": "Triggers Railway redeploy via the RUNNING app.",
       "bytes": 14269,
-      "mtime": "2026-08-01T19:42:40.032Z",
-      "indexed_at": "2026-08-01T19:42:40.032Z",
+      "mtime": "2026-08-01T19:45:04.726Z",
+      "indexed_at": "2026-08-01T19:45:24.177Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -76537,8 +76537,8 @@
       "path": "scripts/verify-blueprint-authority.mjs",
       "synopsis": "Blueprint authority and completeness validator.",
       "bytes": 5474,
-      "mtime": "2026-08-01T19:42:40.032Z",
-      "indexed_at": "2026-08-01T19:42:40.032Z",
+      "mtime": "2026-08-01T19:41:37.526Z",
+      "indexed_at": "2026-08-01T19:44:34.593Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -76567,8 +76567,8 @@
       "path": "scripts/verify-branch-divergence.mjs",
       "synopsis": "Branch-divergence guard. Fails if the working tree is not on the",
       "bytes": 4490,
-      "mtime": "2026-08-01T19:42:40.032Z",
-      "indexed_at": "2026-08-01T19:42:40.032Z",
+      "mtime": "2026-08-01T19:41:37.522Z",
+      "indexed_at": "2026-08-01T19:44:34.593Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -77602,8 +77602,8 @@
       "path": "scripts/verify-prediction-reality-loop.mjs",
       "synopsis": "Verify the prediction → reality → calibration loop is wired.",
       "bytes": 1699,
-      "mtime": "2026-08-01T19:42:40.032Z",
-      "indexed_at": "2026-08-01T19:42:40.032Z",
+      "mtime": "2026-08-01T19:41:37.518Z",
+      "indexed_at": "2026-08-01T19:44:34.593Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -77670,8 +77670,8 @@
       "path": "scripts/verify-repair-and-autonomy-acceptance.mjs",
       "synopsis": "Acceptance script for FACTORY-REPAIR-AND-AUTONOMY-0001.",
       "bytes": 8861,
-      "mtime": "2026-08-01T19:42:40.032Z",
-      "indexed_at": "2026-08-01T19:42:40.032Z",
+      "mtime": "2026-08-01T19:45:04.726Z",
+      "indexed_at": "2026-08-01T19:45:24.177Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -91235,8 +91235,8 @@
       "path": "services/founder-intent-model.js",
       "synopsis": "services/founder-intent-model.js",
       "bytes": 8772,
-      "mtime": "2026-08-01T19:42:40.032Z",
-      "indexed_at": "2026-08-01T19:42:40.032Z",
+      "mtime": "2026-08-01T19:45:04.726Z",
+      "indexed_at": "2026-08-01T19:45:24.177Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
