@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T08:00:27.137Z",
+  "generated_at": "2026-08-01T08:02:58.178Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12677,
   "files": [
@@ -95936,9 +95936,9 @@
     {
       "path": "services/timezone-utils.js",
       "synopsis": "New function to check commitment due dates against Adam's timezone",
-      "bytes": 1123,
-      "mtime": "2026-07-16T19:42:53.617Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 1585,
+      "mtime": "2026-08-01T08:02:58.178Z",
+      "indexed_at": "2026-08-01T08:02:58.178Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
