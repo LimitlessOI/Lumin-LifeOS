@@ -9,7 +9,7 @@
   "steps": [
     {
       "id": "1",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/storyProject.js",
       "task": "Implement story project and canon data model",
       "spec": "Create a service that handles story project creation and canon data model persistence",
@@ -42,7 +42,10 @@
       "commit_sha": "cf5e9120d33a6f92942aeb7370a86596e04ac11a",
       "blueprint_id": "PRODUCT-STORY-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "1",
-      "mission_id": "PRODUCT-story-studio"
+      "mission_id": "PRODUCT-story-studio",
+      "last_error": "artifact_proof_failed: A story project can be created and re-opened with persistent canon data",
+      "demoted": false,
+      "heal_unblocked": true
     },
     {
       "id": "2",
@@ -120,7 +123,7 @@
     },
     {
       "id": "3",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/multiFormatExporter.js",
       "task": "Add multi-format ladder for export",
       "spec": "Enable project export to storybook, comic, motion comic formats",
@@ -157,7 +160,10 @@
       "commit_sha": "daa5f701b0cf35ccaa3c21af223548f0af07741a",
       "blueprint_id": "PRODUCT-STORY-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "3",
-      "mission_id": "PRODUCT-story-studio"
+      "mission_id": "PRODUCT-story-studio",
+      "last_error": "artifact_proof_failed: One project can export at least storybook + comic from the same story bible",
+      "demoted": false,
+      "heal_unblocked": true
     },
     {
       "id": "4",
@@ -474,5 +480,5 @@
   "blueprint_id": "PRODUCT-STORY-STUDIO-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-story-studio",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T06:22:12.364Z"
+  "updated_at": "2026-08-01T06:30:52.651Z"
 }
