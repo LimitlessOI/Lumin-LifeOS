@@ -13,8 +13,23 @@
     h1 { font-size: 1.6rem; margin: 0 0 8px; }
     .sub { color: #9a90a8; margin-bottom: 18px; }
     button { background: #6b4f9a; color: #fff; border: 0; border-radius: 10px; padding: 12px 18px; font: inherit; cursor: pointer; }
+    button:disabled { background: #4a3a6b; cursor: not-allowed; }
     #transcript { margin-top: 16px; min-height: 80px; padding: 12px; border: 1px solid #2a2433; border-radius: 10px; background: #1a1622; }
     #status { margin-top: 10px; color: #9a90a8; font-size: 0.9rem; }
+    .transcript-container { position: relative; }
+    .transcript-container textarea {
+      width: 100%;
+      min-height: 80px;
+      padding: 12px;
+      border: 1px solid #2a2433;
+      border-radius: 10px;
+      background: #1a1622;
+      color: #efeaf5;
+      font-family: inherit;
+      font-size: inherit;
+      box-sizing: border-box; /* Include padding in width/height */
+      resize: vertical; /* Allow vertical resizing */
+    }
   </style>
 </head>
 <body>
@@ -22,42 +37,129 @@
     <h1>Voice Note Journal</h1>
     <p class="sub">Mobile-first emotional capture. Transcription stays in the browser when possible.</p>
     <button id="recordButton" type="button">Record</button>
-    <div id="transcript" aria-live="polite"></div>
+    <button id="saveButton" type="button" disabled style="margin-left: 10px;">Save Manually</button>
+    <div class="transcript-container">
+      <textarea id="transcript" aria-live="polite" placeholder="Your transcribed notes will appear here, or type directly if speech recognition is unavailable."></textarea>
+    </div>
     <div id="status">Ready.</div>
   </div>
   <script>
     const recordButton = document.getElementById('recordButton');
-    const transcriptDiv = document.getElementById('transcript');
-    const status = document.getElementById('status');
+    const saveButton = document.getElementById('saveButton');
+    const transcriptTextarea = document.getElementById('transcript');
+    const statusDiv = document.getElementById('status');
     let recognition;
     let isRecording = false;
+    let currentTranscript = '';
+
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    const saveNote = async (text) => {
+      if (!text.trim()) {
+        statusDiv.textContent = 'Note is empty, not saving.';
+        return;
+      }
+      try {
+        const response = await fetch('/api/v1/lifeos/journal/voice', {
+          method: 'POST',
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text: text.trim() }),
+        });
+        if (response.ok) {
+          statusDiv.textContent = 'Saved.';
+          transcriptTextarea.value = ''; // Clear after successful save
+          saveButton.disabled = true;
+        } else {
+          statusDiv.textContent = `Saved locally only (HTTP ${response.status}).`;
+        }
+      } catch (error) {
+        statusDiv.textContent = 'Kept in browser — save endpoint unavailable.';
+        console.error('Save error:', error);
+      }
+    };
+
     if (SpeechRecognition) {
       recognition = new SpeechRecognition();
-      recognition.continuous = false;
+      recognition.continuous = false; // We want a single utterance per record button press
       recognition.interimResults = true;
       recognition.lang = 'en-US';
-      recognition.onstart = () => { isRecording = true; recordButton.textContent = 'Stop'; status.textContent = 'Listening…'; };
-      recognition.onend = () => { isRecording = false; recordButton.textContent = 'Record'; status.textContent = 'Ready.'; };
-      recognition.onresult = (event) => {
-        let text = '';
-        for (let i = 0; i < event.results.length; i++) text += event.results[i][0].transcript + ' ';
-        transcriptDiv.textContent = text.trim();
-        if (event.results[event.results.length - 1].isFinal) {
-          fetch('/api/v1/lifeos/journal/voice', {
-            method: 'POST',
-            credentials: 'include',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ text: text.trim() }),
-          }).then((r) => { status.textContent = r.ok ? 'Saved.' : 'Saved locally only (HTTP ' + r.status + ').'; })
-            .catch(() => { status.textContent = 'Kept in browser — save endpoint unavailable.'; });
+
+      recognition.onstart = () => {
+        isRecording = true;
+        recordButton.textContent = 'Stop';
+        recordButton.disabled = false;
+        saveButton.disabled = true;
+        statusDiv.textContent = 'Listening…';
+        currentTranscript = ''; // Clear for new recording
+        transcriptTextarea.value = '';
+      };
+
+      recognition.onend = () => {
+        isRecording = false;
+        recordButton.textContent = 'Record';
+        recordButton.disabled = false;
+        statusDiv.textContent = 'Ready.';
+        if (currentTranscript.trim()) {
+          transcriptTextarea.value = currentTranscript.trim();
+          saveButton.disabled = false;
+          // Auto-save final transcript
+          saveNote(currentTranscript.trim());
+        } else {
+          saveButton.disabled = true;
         }
       };
-      recordButton.onclick = () => { if (isRecording) recognition.stop(); else recognition.start(); };
+
+      recognition.onresult = (event) => {
+        let interimText = '';
+        let finalText = '';
+        for (let i = 0; i < event.results.length; i++) {
+          if (event.results[i].isFinal) {
+            finalText += event.results[i][0].transcript;
+          } else {
+            interimText += event.results[i][0].transcript;
+          }
+        }
+        currentTranscript = finalText + interimText; // Combine final and interim for display
+        transcriptTextarea.value = currentTranscript.trim();
+        saveButton.disabled = !currentTranscript.trim();
+      };
+
+      recognition.onerror = (event) => {
+        console.error('Speech recognition error:', event.error);
+        statusDiv.textContent = `Error: ${event.error}`;
+        isRecording = false;
+        recordButton.textContent = 'Record';
+        recordButton.disabled = false;
+        saveButton.disabled = !transcriptTextarea.value.trim();
+      };
+
+      recordButton.onclick = () => {
+        if (isRecording) {
+          recognition.stop();
+        } else {
+          recognition.start();
+        }
+      };
     } else {
-      status.textContent = 'Speech recognition not supported here — type below instead.';
-      transcriptDiv.contentEditable = 'true';
+      statusDiv.textContent = 'Speech recognition not supported here — type below instead.';
+      transcriptTextarea.readOnly = false; // Make it editable for manual input
+      recordButton.disabled = true; // Disable record button if no recognition
+      saveButton.disabled = false; // Enable manual save if typing is possible
     }
+
+    // Enable/disable save button based on manual text input
+    transcriptTextarea.addEventListener('input', () => {
+      saveButton.disabled = !transcriptTextarea.value.trim();
+    });
+
+    // Manual save button handler
+    saveButton.onclick = () => {
+      saveNote(transcriptTextarea.value);
+    };
+
+    // Initial state for save button
+    saveButton.disabled = !transcriptTextarea.value.trim();
   </script>
 </body>
 </html>
