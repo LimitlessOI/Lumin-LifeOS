@@ -1,10 +1,1 @@
-{
-  "status": "idle",
-  "last_lanes": [
-    "p_ok",
-    "p_bad"
-  ],
-  "lanes_built": 1,
-  "lanes_live": 1,
-  "updated_at": "2026-07-08T20:48:56.144Z"
-}
+{"status":"idle","last_task":{"id":"extend_build_queue_lifere","kind":"plan_build_queue","priority":6.0007,"product":"lifere","product_id":"lifere","home_path":"/home/ubuntu/repos/Lumin-LifeOS/docs/products/lifere/PRODUCT_HOME.md","extend":true,"corpus_sources":["docs/products/lifere/PRODUCT_HOME.md","docs/products/lifere/AGENTS.md","docs/products/lifere/FOUNDER_USABILITY_CONTRACT.md"],"detail":"queue stuck (23 steps, none pending) + 1 documented item(s) — re-plan next phase"},"last_result":{"ok":false,"task_id":"extend_build_queue_lifere","detail":"plan_produced_no_queue","reason":{"level":"warn","msg":"[BUILD-QUEUE-PLANNER] planned queue invalid — fail closed","productId":"lifere","errors":["step s2-create-founder-session-flow-routes depends on unknown step s1_create_founder_session_flow_service"]}},"cycles":1,"updated_at":"2026-08-01T02:44:00.163Z"}
