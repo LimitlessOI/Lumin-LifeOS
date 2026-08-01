@@ -1613,7 +1613,7 @@
       "spec": "Include a function that uses the AI to perform pre-analysis with a provided prompt.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "aiPreAnalysisPrompt"
       ],
@@ -1632,14 +1632,16 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:18:05.169Z",
-      "commit_sha": "3c1a070ddeaae6a4d6bd10ba95337fdab5011219",
+      "commit_sha": "47865a22f6371792c328a7d7d29083e1d8e50e25",
       "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step4",
       "mission_id": "PRODUCT-productized-sprint",
       "same_signature_count": 0,
       "demoted": false,
       "last_error": "artifact_proof_failed: const aiPreAnalysisPrompt =",
-      "heal_unblocked": true
+      "heal_unblocked": true,
+      "last_attempt_at": "2026-08-01T14:09:37.478Z",
+      "blocker_class": "BLOCKED_TOOLING"
     },
     {
       "id": "step5",
@@ -2192,6 +2194,6 @@
   "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-productized-sprint",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T14:09:20.127Z",
+  "updated_at": "2026-08-01T14:09:52.427Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/productized-sprint/BUILD_QUEUE.json"
 }
