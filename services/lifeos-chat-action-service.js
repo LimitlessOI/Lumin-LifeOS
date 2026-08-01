@@ -1,8 +1,8 @@
 /**
- * SYNOPSIS: Executes chat actions based on intent-router lanes.
+ * SYNOPSIS: LifeOS chat action executor — turns intent-router lanes into real execution.
  * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
-import { captureCommitment, getCommitments } from './lifeos-commitment-service.js';
+import { captureCommitment } from './lifeos-commitment-service.js';
 import { captureNote } from './lifeos-note-capture-service.js';
 import { addCheckinEntry, getTodaySummary } from './lifeos-daily-checkin-service.js';
 
@@ -31,12 +31,12 @@ export async function executeNote(deps, payload) {
 }
 
 export async function executeCheckin(deps, payload) {
-  const { pool, logger } = deps;
+  const { logger } = deps;
   const { userId, text, minutesAgo } = payload || {};
   try {
-    await addCheckinEntry(pool, userId, text, { minutesAgo });
-    const summary = await getTodaySummary(pool, userId);
-    const summaryList = summary.map(entry => `- ${entry.text}`).join('\n');
+    await addCheckinEntry(deps, userId, text, { minutesAgo });
+    const { entries } = await getTodaySummary(deps, userId);
+    const summaryList = entries.map((entry) => `- ${entry}`).join('\n');
     return `Check-in recorded. Today's entries:\n${summaryList}`;
   } catch (error) {
     logger.error({ error, payload }, 'Error in executeCheckin');
@@ -45,46 +45,32 @@ export async function executeCheckin(deps, payload) {
 }
 
 export async function executeBuild(deps, payload) {
-  const { callCouncilMember, logger } = deps;
-  const { task, routeToBuilder, operatorKey } = payload || {}; // routeToBuilder is expected to be a function passed in payload
+  const { logger } = deps;
+  const { task, routeToBuilder, operatorKey } = payload || {};
   try {
-    // Assuming routeToBuilder is a function that takes task, operatorKey, and options
-    // and that callCouncilMember can be used if routeToBuilder is not directly available
     let receipt;
     if (typeof routeToBuilder === 'function') {
       receipt = await routeToBuilder(task, operatorKey, { confirmIntent: true });
     } else {
-      // Fallback if routeToBuilder is not a direct function in payload,
-      // assuming a council member can orchestrate the build.
-      // This is an assumption based on common patterns where a 'routeToBuilder'
-      // might be an internal system call or a delegated AI task.
-      logger.warn({ task, operatorKey }, 'routeToBuilder not a function, delegating to AI Council for build execution.');
-      const prompt = `Execute a build task. Task details: ${JSON.stringify(task)}. Operator key provided. Confirm intent.`;
-      receipt = JSON.parse(await callCouncilMember('build_orchestrator', prompt, { operatorKey }));
+      return 'Build failed: routeToBuilder function not provided.';
     }
 
     if (receipt.ok) {
       return `Build successful! Committed with SHA: ${receipt.sha}`;
-    } else if (receipt.committed) {
-      return `Build committed but with warnings/issues. SHA: ${receipt.sha}`;
-    } else if (receipt.error) {
-      return `Build failed: ${receipt.error}`;
-    } else {
-      return `Build status unclear: ${JSON.stringify(receipt)}`;
     }
+    if (receipt.committed) {
+      return `Build committed but with warnings/issues. SHA: ${receipt.sha}`;
+    }
+    if (receipt.error) {
+      return `Build failed: ${receipt.error}`;
+    }
+    return `Build status unclear: ${JSON.stringify(receipt)}`;
   } catch (error) {
     logger.error({ error, payload }, 'Error in executeBuild');
     return 'Failed to execute build task.';
   }
 }
 
-export async function executeAmbient(deps, payload) {
-  const { logger } = deps;
-  const { text } = payload || {};
-  try {
-    return 'Tap the mic icon to speak your next command.';
-  } catch (error) {
-    logger.error({ error, payload }, 'Error in executeAmbient');
-    return 'An error occurred while trying to provide ambient feedback.';
-  }
+export async function executeAmbient() {
+  return 'Tap the mic icon to speak your next command.';
 }

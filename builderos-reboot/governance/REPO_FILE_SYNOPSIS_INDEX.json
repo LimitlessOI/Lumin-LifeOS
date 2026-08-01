@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T04:11:00.026Z",
+  "generated_at": "2026-08-01T04:13:17.616Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12670,
   "files": [
@@ -91273,10 +91273,10 @@
     },
     {
       "path": "services/lifeos-chat-action-service.js",
-      "synopsis": "Executes chat actions based on intent-router lanes.",
-      "bytes": 3830,
-      "mtime": "2026-08-01T04:11:00.026Z",
-      "indexed_at": "2026-08-01T04:11:00.026Z",
+      "synopsis": "LifeOS chat action executor — turns intent-router lanes into real execution.",
+      "bytes": 2752,
+      "mtime": "2026-08-01T04:13:17.616Z",
+      "indexed_at": "2026-08-01T04:13:17.616Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
