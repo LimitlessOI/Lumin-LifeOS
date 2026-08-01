@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T17:27:38.373Z",
+  "generated_at": "2026-08-01T18:43:00.323Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12740,
+  "file_count": 12745,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -26344,6 +26344,43 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "builderos-reboot/MISSIONS/FACTORY-REPAIR-AND-AUTONOMY-0001/ACCEPTANCE_TESTS.json",
+      "synopsis": "BuilderOS artifact — ACCEPTANCE TESTS.",
+      "bytes": 3652,
+      "mtime": "2026-08-01T18:42:25.349Z",
+      "indexed_at": "2026-08-01T18:43:00.323Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-REPAIR-AND-AUTONOMY-0001/BLUEPRINT.json",
+      "synopsis": "BuilderOS artifact — BLUEPRINT.",
+      "bytes": 9376,
+      "mtime": "2026-08-01T18:42:13.961Z",
+      "indexed_at": "2026-08-01T18:43:00.323Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-REPAIR-AND-AUTONOMY-0001/CURRENT_STATE_AUDIT.md",
+      "synopsis": "Current-state audit for FACTORY-REPAIR-AND-AUTONOMY-0001.",
+      "bytes": 3548,
+      "mtime": "2026-08-01T18:41:53.669Z",
+      "indexed_at": "2026-08-01T18:43:00.323Z"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-REPAIR-AND-AUTONOMY-0001/FOUNDER_PACKET.md",
+      "synopsis": "Founder packet for FACTORY-REPAIR-AND-AUTONOMY-0001 — make BuilderOS fix itself and learn from every failure.",
+      "bytes": 3024,
+      "mtime": "2026-08-01T18:41:44.149Z",
+      "indexed_at": "2026-08-01T18:43:00.323Z"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-REPAIR-AND-AUTONOMY-0001/TASK_LIST.md",
+      "synopsis": "Task list for FACTORY-REPAIR-AND-AUTONOMY-0001.",
+      "bytes": 2800,
+      "mtime": "2026-08-01T18:42:32.541Z",
+      "indexed_at": "2026-08-01T18:43:00.323Z"
+    },
+    {
       "path": "builderos-reboot/MISSIONS/liferepair-FVTGDL/receipts/BLOCKED_RETURN_TO_IDC.json",
       "synopsis": "BuilderOS artifact — BLOCKED RETURN TO IDC.",
       "bytes": 443,
@@ -41207,9 +41244,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 388640,
-      "mtime": "2026-08-01T17:13:22.193Z",
-      "indexed_at": "2026-08-01T17:13:32.903Z"
+      "bytes": 389215,
+      "mtime": "2026-08-01T18:42:49.989Z",
+      "indexed_at": "2026-08-01T18:43:00.323Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",

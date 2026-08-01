@@ -1,0 +1,87 @@
+{
+  "mission_id": "FACTORY-REPAIR-AND-AUTONOMY-0001",
+  "acceptance_tests": [
+    {
+      "id": "AT-FRA-000-1",
+      "title": "Mission pack files exist and are valid",
+      "criteria": [
+        "FOUNDER_PACKET.md, CURRENT_STATE_AUDIT.md, BLUEPRINT.json, ACCEPTANCE_TESTS.json, and TASK_LIST.md exist",
+        "BLUEPRINT.json parses and references valid target files where they already exist",
+        "Pre-commit checks pass"
+      ]
+    },
+    {
+      "id": "AT-FRA-001-1",
+      "title": "Drift repair executor fixes known patterns",
+      "criteria": [
+        "scripts/build-queue-drift-repair.mjs runs with --dry-run and lists actionable repairs for the 11 pending steps",
+        "With --apply, it repairs missing file_contains, export aliases, route aliases, and auto-register entries deterministically",
+        "npm run builder:preflight passes after repairs"
+      ]
+    },
+    {
+      "id": "AT-FRA-001-2",
+      "title": "Drift repair executor refuses unsafe repairs",
+      "criteria": [
+        "Executor refuses to modify auth/money/data modules without explicit safe-class flag",
+        "Executor refuses repairs not derivable from BUILD_QUEUE contract",
+        "Repairs that touch protected files are logged as BLOCKED, not silently applied"
+      ]
+    },
+    {
+      "id": "AT-FRA-002-1",
+      "title": "Never-stop factory calls repair executor",
+      "criteria": [
+        "services/never-stop-product-factory.js attempts deterministic repair before marking a step BLOCKED",
+        "Artifact proof is re-evaluated after repair",
+        "A repaired step can be claimed in the next bp-priority:once run"
+      ]
+    },
+    {
+      "id": "AT-FRA-003-1",
+      "title": "Lessons log is written and consumed",
+      "criteria": [
+        "data/build-queue-drift-lessons.jsonl has at least one entry per repair attempt",
+        "scripts/build-queue-lessons-report.mjs can aggregate by failure family",
+        "services/builderos-improvement-loop.js reads recurring failure families and proposes improvements"
+      ]
+    },
+    {
+      "id": "AT-FRA-004-1",
+      "title": "Overnight daemon keeps the queue moving",
+      "criteria": [
+        "scripts/builderos-overnight-daemon.mjs runs for 1 hour without human input",
+        "It invokes self-heal, drift repair, and bp-priority:once",
+        "It stops cleanly when no actionable work exists",
+        "Logs show progress or a clear halt reason"
+      ]
+    },
+    {
+      "id": "AT-FRA-005-1",
+      "title": "Runtime constitutional protocols are wired",
+      "criteria": [
+        "services/knowledge-judgment-split.js, services/goal-decomposition.js, services/cognitive-spine-health.js, services/asset-evolution-governance.js, services/reality-hierarchy-reconciler.js, and services/founder-cognitive-load-optimizer.js export functions and have tests",
+        "chair-lumin-unified.js consumes them",
+        "npm run builder:preflight passes"
+      ]
+    },
+    {
+      "id": "AT-FRA-006-1",
+      "title": "Remaining BUILD_QUEUE backlog is cleared or parked with reason",
+      "criteria": [
+        "Pending queue is 0 or every pending step has a documented blocker_class and park_until",
+        "No false-done drift remains",
+        "Product homes updated with Change Receipts"
+      ]
+    },
+    {
+      "id": "AT-FRA-007-1",
+      "title": "Competitive benchmark harness and IDE bridge exist",
+      "criteria": [
+        "scripts/benchmark-vs-baseline.mjs runs and emits a receipt JSON",
+        "scripts/ide-bridge.mjs exposes builder commands over HTTP or WebSocket",
+        "docs/reports/BUILDEROS_COMPETITIVE_BENCHMARK.md is created"
+      ]
+    }
+  ]
+}
