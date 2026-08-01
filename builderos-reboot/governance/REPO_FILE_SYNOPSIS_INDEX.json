@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T11:43:59.851Z",
+  "generated_at": "2026-08-01T11:47:21.955Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -93033,9 +93033,12 @@
     {
       "path": "services/makeGenerator.js",
       "synopsis": "Generates a JSON schema for Make.com scenario import.",
-      "bytes": 813,
-      "mtime": "2026-07-15T09:37:08.940Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 1877,
+      "mtime": "2026-08-01T11:47:21.955Z",
+      "indexed_at": "2026-08-01T11:47:21.955Z",
+      "ssot": [
+        "docs/products/business-tools/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/malware-scanning-implementation.js",
