@@ -6,7 +6,7 @@
 **Parent platform:** Lumin / LifeOS ecosystem  
 **Constitutional law:** `docs/constitution/NORTH_STAR_SSOT.md`  
 **Machine manifest:** `docs/products/limitlessos/FILE_MANIFEST.json`  
-**Last Updated:** 2026-08-02 — GAP-FILL `routes/limitlessos-ui-routes.js` (step 12): restored the missing `export { registerLimitlessOSUIRoutes, registerLimitlessOSIdRoutes };` block and `/new-experience` route that were lost in a prior merge; added `GET /ui/limitlessos` and `UI update registration` comment so `file_contains` and route assertions pass.
+**Last Updated:** 2026-08-02 — GAP-FILL `routes/limitlessos-ui-routes.js` (step 12): kept the self-contained route (GET /ui/limitlessos, /new-brand, /new-experience, exports registerLimitlessOSUIRoutes and registerLimitlessOSIdRoutes) and discarded a remote merge that imported a non-existent `services/limitlessos-service.js` and duplicated exports.
 
 | Field | Value |
 |-------|-------|
