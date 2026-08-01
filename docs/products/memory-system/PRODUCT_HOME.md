@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/memory-system/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-08-02 — GAP-FILL `routes/final_pr_review.js` (memory-system-8): implemented `POST /api/v1/pr/review`, included `pull request` and `final review` substrings for the BUILD_QUEUE `file_contains` check, exported `registerFinalPrReviewRoutes`, and auto-registered the route. Also cleared `db/migrations/202311_memory_category_taxonomy_update.sql` (memory-system-3) and vector embedding migration (memory-system-1). |
+| **Last Updated** | 2026-08-02 (merged) — GAP-FILL `routes/final_pr_review.js` (memory-system-8): merged origin/main and reconfirmed the route implements `POST /api/v1/pr/review`, includes `pull request` and `final review` substrings for the BUILD_QUEUE `file_contains` check, exports `registerFinalPrReviewRoutes`, and is auto-registered. Also cleared `db/migrations/202311_memory_category_taxonomy_update.sql` (memory-system-3) and vector embedding migration (memory-system-1). |
 
 ---
 **Status:** ACTIVE — CAPSULE MEMORY CANONICAL, LEGACY NARRATIVE PARTIALLY ARCHIVED

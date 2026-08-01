@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T10:33:59.853Z",
+  "generated_at": "2026-08-01T10:34:28.256Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -42268,9 +42268,9 @@
     {
       "path": "docs/products/memory-system/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Memory System",
-      "bytes": 23726,
-      "mtime": "2026-08-01T10:33:46.644Z",
-      "indexed_at": "2026-08-01T10:33:59.853Z"
+      "bytes": 23771,
+      "mtime": "2026-08-01T10:34:21.704Z",
+      "indexed_at": "2026-08-01T10:34:28.256Z"
     },
     {
       "path": "docs/products/MEMORYINTELLIGENCE.md",
@@ -69696,9 +69696,9 @@
     {
       "path": "routes/final_pr_review.js",
       "synopsis": "HTTP route module — Final PR Review.",
-      "bytes": 569,
-      "mtime": "2026-08-01T10:33:37.644Z",
-      "indexed_at": "2026-08-01T10:33:59.853Z",
+      "bytes": 601,
+      "mtime": "2026-08-01T10:34:06.256Z",
+      "indexed_at": "2026-08-01T10:34:28.256Z",
       "ssot": [
         "docs/products/memory-system/PRODUCT_HOME.md"
       ]
