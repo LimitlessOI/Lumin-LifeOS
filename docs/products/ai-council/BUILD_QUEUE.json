@@ -1006,13 +1006,13 @@
     },
     {
       "id": "ai-council-2",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/ollamaInvestigation.js",
       "task": "investigate system prompt bloat",
       "spec": "Investigate and document the cause of the high average token usage in Ollama due to potential bloated system prompts.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "investigateOllamaPrompts"
       ],
@@ -1031,7 +1031,7 @@
       ],
       "shipped_via": null,
       "shipped_at": "2026-07-16T04:34:44.533Z",
-      "commit_sha": null,
+      "commit_sha": "876a2ebc73bcf58633e000369e18d6a435048164",
       "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "ai-council-2",
       "mission_id": "PRODUCT-ai-council",
@@ -1040,7 +1040,7 @@
       "reaudit_reset_at": "2026-07-30T18:55:06.242Z",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-08-01T04:57:09.915Z",
       "last_attempt": null,
       "revive_count": 7,
       "revived_at": "2026-08-01T04:34:42.644Z",
@@ -1056,7 +1056,8 @@
       "escalation_required": true,
       "escalation_note": "M2PT-005B retroactive re-triage: stuck in revive-thrash before same_signature_count tracking was fixed (b3d9c838e). revive_count was already >=3 under the old broken tracking -- escalating directly rather than letting it silently re-thrash for several more cycles once never-stop resumes.",
       "escalated_by": "path-to-ten-retriage-stuck-steps.mjs",
-      "escalated_at": "2026-07-31T18:40:13.612Z"
+      "escalated_at": "2026-07-31T18:40:13.612Z",
+      "completed_at": "2026-08-01T04:57:24.242Z"
     },
     {
       "id": "ai-council-5",
@@ -1279,5 +1280,5 @@
   "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-ai-council",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T04:56:55.580Z"
+  "updated_at": "2026-08-01T04:57:24.242Z"
 }
