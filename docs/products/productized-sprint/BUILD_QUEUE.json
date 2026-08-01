@@ -1559,13 +1559,12 @@
       "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step1",
       "mission_id": "PRODUCT-productized-sprint",
-      "same_signature_count": 1,
+      "same_signature_count": 0,
       "demoted": false,
       "last_error": "HTTP 502",
       "heal_unblocked": true,
       "last_attempt_at": "2026-08-01T14:01:34.502Z",
-      "blocker_class": "BLOCKED_EXTERNAL",
-      "failure_signature": "build|BLOCKED_EXTERNAL|HTTP 502"
+      "blocker_class": "BLOCKED_EXTERNAL"
     },
     {
       "id": "step3",
@@ -2192,5 +2191,6 @@
   "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-productized-sprint",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T14:02:00.371Z"
+  "updated_at": "2026-08-01T14:02:00.371Z",
+  "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/productized-sprint/BUILD_QUEUE.json"
 }

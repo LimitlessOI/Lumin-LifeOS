@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T14:03:14.482Z",
+  "generated_at": "2026-08-01T14:06:55.608Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12726,
   "files": [
@@ -21678,9 +21678,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3843065,
-      "mtime": "2026-08-01T13:57:13.253Z",
-      "indexed_at": "2026-08-01T13:57:57.051Z"
+      "bytes": 3843149,
+      "mtime": "2026-08-01T14:03:35.801Z",
+      "indexed_at": "2026-08-01T14:06:55.608Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1732,
-      "mtime": "2026-08-01T14:02:01.665Z",
-      "indexed_at": "2026-08-01T14:03:14.482Z",
+      "bytes": 1751,
+      "mtime": "2026-08-01T13:56:03.305Z",
+      "indexed_at": "2026-08-01T13:58:01.639Z",
       "synopsis_index_only": true
     },
     {
@@ -42499,9 +42499,9 @@
     {
       "path": "docs/products/productized-sprint/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Productized Sprint",
-      "bytes": 12741,
-      "mtime": "2026-08-01T14:03:10.517Z",
-      "indexed_at": "2026-08-01T14:03:14.482Z"
+      "bytes": 13687,
+      "mtime": "2026-08-01T14:06:42.869Z",
+      "indexed_at": "2026-08-01T14:06:55.608Z"
     },
     {
       "path": "docs/products/PRODUCTIZEDSPRINT.md",
@@ -65772,9 +65772,9 @@
     {
       "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
       "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
-      "bytes": 3862,
-      "mtime": "2026-08-01T14:00:40.541Z",
-      "indexed_at": "2026-08-01T14:03:14.482Z",
+      "bytes": 7362,
+      "mtime": "2026-08-01T13:54:42.697Z",
+      "indexed_at": "2026-08-01T13:58:01.639Z",
       "synopsis_index_only": true
     },
     {
@@ -73783,9 +73783,12 @@
     {
       "path": "scripts/linkedinProfileUpdater.mjs",
       "synopsis": "Updates a user's LinkedIn profile summary to include sprint offers.",
-      "bytes": 2902,
-      "mtime": "2026-07-18T00:18:17.683Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 2691,
+      "mtime": "2026-08-01T14:01:15.162Z",
+      "indexed_at": "2026-08-01T14:01:15.162Z",
+      "ssot": [
+        "docs/products/productized-sprint/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "scripts/lip/backtest-limitless.mjs",
@@ -91427,9 +91430,9 @@
     {
       "path": "services/intakeFormService.js",
       "synopsis": "Handles the creation and processing of intake forms, including database interactions.",
-      "bytes": 2329,
-      "mtime": "2026-08-01T14:02:39.169Z",
-      "indexed_at": "2026-08-01T14:03:14.482Z",
+      "bytes": 2287,
+      "mtime": "2026-08-01T13:57:29.441Z",
+      "indexed_at": "2026-08-01T13:57:57.051Z",
       "ssot": [
         "docs/products/productized-sprint/PRODUCT_HOME.md"
       ]
