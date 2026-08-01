@@ -46,8 +46,8 @@ BEGIN
     END IF;
 END $$;
 
--- Create a summary view if it does not exist
-CREATE VIEW IF NOT EXISTS memory_system_summary AS
+-- Create or replace a summary view
+CREATE OR REPLACE VIEW memory_system_summary AS
 SELECT id, name, description, created_at, last_updated
 FROM memory_system;
 

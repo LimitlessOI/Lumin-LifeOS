@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T13:09:40.552Z",
+  "generated_at": "2026-08-01T13:12:12.250Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1906,
-      "mtime": "2026-08-01T13:05:03.856Z",
-      "indexed_at": "2026-08-01T13:09:39.778Z",
+      "bytes": 1891,
+      "mtime": "2026-08-01T13:11:41.452Z",
+      "indexed_at": "2026-08-01T13:12:12.250Z",
       "synopsis_index_only": true
     },
     {
@@ -34328,9 +34328,9 @@
     {
       "path": "db/memory-auto-apply.sql",
       "synopsis": "SQL — memory-auto-apply.sql.",
-      "bytes": 1565,
-      "mtime": "2026-08-01T13:09:33.232Z",
-      "indexed_at": "2026-08-01T13:09:39.778Z"
+      "bytes": 1552,
+      "mtime": "2026-08-01T13:11:51.868Z",
+      "indexed_at": "2026-08-01T13:12:12.250Z"
     },
     {
       "path": "db/memory-contract-closure.sql",
@@ -42246,9 +42246,9 @@
     {
       "path": "docs/products/memory-intelligence/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Memory Intelligence",
-      "bytes": 50555,
-      "mtime": "2026-08-01T13:09:31.124Z",
-      "indexed_at": "2026-08-01T13:09:33.670Z"
+      "bytes": 50618,
+      "mtime": "2026-08-01T13:12:04.312Z",
+      "indexed_at": "2026-08-01T13:12:12.250Z"
     },
     {
       "path": "docs/products/memory-system/CREATIVE_BRIEF.md",
