@@ -1018,13 +1018,13 @@
     },
     {
       "id": "business-tools-6",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/implementApprovalTimeout.js",
       "task": "implement approval timeout",
       "spec": "Add functionality for 48h auto-reject in the approval system.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "setApprovalTimeout"
       ],
@@ -1044,14 +1044,16 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T05:43:46.176Z",
-      "commit_sha": "e067d20134b534581588c4df49b7aa2afaa17230",
+      "commit_sha": "08f5afecf240fbffd483120d414d604ae6a5e9df",
       "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "business-tools-6",
       "mission_id": "PRODUCT-business-tools",
       "same_signature_count": 0,
       "demoted": false,
       "last_error": "artifact_proof_failed: 48h",
-      "heal_unblocked": true
+      "heal_unblocked": true,
+      "last_attempt_at": "2026-08-01T12:21:49.243Z",
+      "completed_at": "2026-08-01T12:22:02.088Z"
     },
     {
       "id": "business-tools-7",
@@ -1271,5 +1273,5 @@
   "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-business-tools",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T12:20:39.629Z"
+  "updated_at": "2026-08-01T12:22:02.088Z"
 }
