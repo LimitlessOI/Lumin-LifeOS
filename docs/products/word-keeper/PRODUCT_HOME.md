@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/word-keeper/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-18 — repeat-regression hotfix applied directly to `main` (see Build History) |
+| **Last Updated** | 2026-08-02 — Co-commit alignment for `services/googleCalendarService.js` build artifact; function surface expanded to `integrateCalendar(deps, payload)` and `syncEvents(deps, payload)` and now queries `lifeos_calendars` / `lifeos_calendar_events`. |
 
 ---
 **Status:** IN_BUILD
