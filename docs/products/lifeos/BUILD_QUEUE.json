@@ -3095,7 +3095,7 @@
       "spec": "Add logic for calculating and storing net worth snapshots from total assets and liabilities.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "calculateNetWorth"
       ],
@@ -3115,8 +3115,8 @@
           "assertion_id": "expected_exports:services/lifeos-finance.js"
         }
       ],
-      "last_attempt_at": null,
-      "last_error": null,
+      "last_attempt_at": "2026-08-01T04:24:53.021Z",
+      "last_error": "Zone 3 edit-patch failed — edit old_string is ambiguous (matches more than once) — add surrounding context to make it unique: \"    return rows[0];\\n  }\"",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
@@ -3129,7 +3129,7 @@
       "park_until": null,
       "no_op": null,
       "pre_existing": false,
-      "blocker_class": null,
+      "blocker_class": "BLOCKED_TOOLING",
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
@@ -5801,5 +5801,5 @@
   "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-lifeos",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T04:21:15.534Z"
+  "updated_at": "2026-08-01T04:25:09.832Z"
 }
