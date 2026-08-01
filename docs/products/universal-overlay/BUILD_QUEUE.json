@@ -1286,7 +1286,7 @@
       "spec": "Register a route for handling Firefox MV2 extension variants.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerFirefoxRoutes"
       ],
@@ -1309,14 +1309,16 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T06:47:20.012Z",
-      "commit_sha": "4e881e1e69e069fb7440c87b82691be3a00904f7",
+      "commit_sha": "f86da07b1eeba6c8cb4bdca182564e99700cab07",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "universal-overlay-step10",
       "mission_id": "PRODUCT-universal-overlay",
       "same_signature_count": 0,
       "demoted": false,
-      "last_error": "artifact_proof_failed: firefox MV2",
-      "heal_unblocked": true
+      "last_error": "route module not auto-registered — add {\"path\":\"routes/firefoxExtension.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
+      "heal_unblocked": true,
+      "last_attempt_at": "2026-08-01T14:19:47.749Z",
+      "blocker_class": "BLOCKED_TOOLING"
     },
     {
       "id": "universal-overlay-step11",
@@ -2407,6 +2409,6 @@
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-universal-overlay",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T14:19:33.643Z",
+  "updated_at": "2026-08-01T14:21:57.365Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/universal-overlay/BUILD_QUEUE.json"
 }
