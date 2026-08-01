@@ -1,69 +1,94 @@
 /**
- * SYNOPSIS: Service module — SceneEngine.
+ * SYNOPSIS: Scene assembly workflow.
+ * @ssot docs/products/creator-media-os/PRODUCT_HOME.md
  */
-function assembleScenes() {
-  // Scene assembly logic will go here.
-  // This is a placeholder function.
-  console.log("Assembling scenes...");
-  // Further scene assembly workflow steps would be integrated here.
-  // This could involve fetching scene data, applying edits, and composing the final scene.
+export async function assembleScenes(deps, payload) {
+  const { pool, logger } = deps;
+  const { contentId } = payload || {}; // Assuming payload might contain a contentId to fetch related data
 
-  // Placeholder for scene assembly workflow steps
-  console.log("Fetching scene data...");
-  console.log("Applying scene edits...");
-  console.log("Composing final scene...");
+  try {
+    // Scene assembly workflow steps
+    logger.info({ contentId }, "Scene assembly workflow initiated for contentId.");
 
-  // Simulate a more complete scene assembly workflow
-  const sceneData = {
-    id: "scene-001",
-    elements: [],
-    edits: [],
-  };
+    // Step 1: Fetch raw scene data from creator_content and creator_enhancements
+    // We'll fetch content details and any applied enhancements that might define scene elements or edits
+    const contentQuery = await pool.query(
+      'SELECT id, title, description, content_type, post, reel, story FROM creator_content WHERE id = $1',
+      [contentId]
+    );
+    const content = contentQuery.rows[0];
 
-  // Step 1: Fetch raw scene data
-  const fetchedSceneData = { ...sceneData,
-    elements: [{
-      type: "background",
-      color: "blue"
-    }, {
-      type: "character",
-      name: "Alice"
-    }]
-  };
-  console.log("Scene data fetched:", fetchedSceneData.id);
+    if (!content) {
+      logger.warn({ contentId }, 'No content found for the given ID.');
+      return null;
+    }
 
-  // Step 2: Apply edits to the scene data
-  const editsToApply = [{
-    target: "character",
-    name: "Alice",
-    property: "position",
-    value: "center"
-  }];
-  const sceneWithEdits = { ...fetchedSceneData,
-    edits: editsToApply
-  };
-  console.log("Edits applied to scene:", sceneWithEdits.edits.length, "edits");
+    const enhancementsQuery = await pool.query(
+      'SELECT enhancement_type, audio_enhancement, b_roll, transitions, after_data FROM creator_enhancements WHERE content_id = $1',
+      [contentId]
+    );
+    const enhancements = enhancementsQuery.rows;
 
-  // Step 3: Compose the final scene based on data and edits
-  const finalScene = {
-    id: sceneWithEdits.id,
-    composedElements: sceneWithEdits.elements.map(element => {
-      let updatedElement = { ...element
-      };
-      sceneWithEdits.edits.forEach(edit => {
-        if (edit.target === element.type && (edit.name === undefined || edit.name === element.name)) {
-          updatedElement[edit.property] = edit.value;
+    logger.info({ contentId, contentTitle: content.title, enhancementCount: enhancements.length }, "Content data and enhancements fetched.");
+
+    // Step 2: Assemble scene elements and edits based on fetched data
+    let sceneElements = [];
+    let sceneEdits = [];
+
+    // Basic elements from content itself
+    if (content.content_type === 'video' || content.reel || content.story) {
+      sceneElements.push({ type: 'video_track', source: content.enhanced_url || content.post || content.reel || content.story });
+    }
+    if (content.description) {
+      sceneElements.push({ type: 'text_overlay', content: content.description });
+    }
+    if (content.title) {
+        sceneElements.push({ type: 'title_card', title: content.title });
+    }
+
+    // Apply enhancements as elements or edits
+    enhancements.forEach(enhancement => {
+      if (enhancement.enhancement_type === 'audio') {
+        sceneElements.push({ type: 'audio_track', source: enhancement.audio_enhancement });
+      } else if (enhancement.enhancement_type === 'b-roll') {
+        sceneElements.push({ type: 'b_roll_segment', source: enhancement.b_roll });
+      } else if (enhancement.enhancement_type === 'transitions') {
+        sceneEdits.push({ target: 'video_track', property: 'transition_style', value: enhancement.transitions });
+      }
+      // Assuming after_data might contain more generic edits or elements in JSON format
+      if (enhancement.after_data) {
+        try {
+          const afterData = JSON.parse(enhancement.after_data);
+          if (Array.isArray(afterData.elements)) {
+            sceneElements = sceneElements.concat(afterData.elements);
+          }
+          if (Array.isArray(afterData.edits)) {
+            sceneEdits = sceneEdits.concat(afterData.edits);
+          }
+        } catch (parseError) {
+          logger.warn({ enhancementId: enhancement.id, parseError }, "Failed to parse after_data for enhancement.");
         }
-      });
-      return updatedElement;
-    }),
-    status: "assembled"
-  };
-  console.log("Final scene composed:", finalScene.id, "with status:", finalScene.status);
+      }
+    });
 
-  return finalScene;
+    logger.info({ contentId, elementCount: sceneElements.length, editCount: sceneEdits.length }, "Scene elements and edits assembled.");
+
+    // Step 3: Compose the final scene object
+    const finalScene = {
+      id: `scene-${content.id}`,
+      contentId: content.id,
+      title: content.title,
+      composedElements: sceneElements,
+      appliedEdits: sceneEdits,
+      status: 'assembled',
+      assembledAt: new Date().toISOString(),
+    };
+
+    logger.info({ sceneId: finalScene.id }, "Final scene composed successfully.");
+
+    return finalScene;
+  } catch (error) {
+    logger.error({ error, contentId }, 'Error in assembleScenes during scene assembly workflow.');
+    throw new Error('Failed to assemble scenes.');
+  }
 }
-
-export {
-  assembleScenes
-};
