@@ -3460,19 +3460,19 @@
     },
     {
       "id": "lifeos-step4",
-      "status": "pending",
+      "status": "done",
       "target_file": "public/overlay/lifeos-app.html",
       "task": "replace legacy ambient listener script",
       "spec": "Replace /shared/lifeos-ambient-listener.js with /overlay/lifeos-ambient-listener.js and ensure thought-stream container creation and renderThoughtStream is called when necessary.",
       "depends_on": [],
       "founder_gated": true,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "lifeos-ambient-listener.js",
         "thought-stream"
       ],
       "last_attempt_at": "2026-08-01T07:07:54.314Z",
-      "last_error": "grounding_failed: missing_sql_table: system., iframe.",
+      "last_error": null,
       "commit_sha": "7132e555a69de3b02effd744aa9add2d6a2f2c9a",
       "built_sha": null,
       "proof": null,
@@ -3485,7 +3485,7 @@
       "park_until": null,
       "no_op": null,
       "pre_existing": true,
-      "blocker_class": "BLOCKED_TOOLING",
+      "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
@@ -3495,7 +3495,10 @@
       "shipped_via": "pre_existing_ambient_thought_stream",
       "shipped_at": "2026-07-18T01:07:59.873Z",
       "same_signature_count": 0,
-      "heal_unblocked": true
+      "heal_unblocked": true,
+      "completed_at": "2026-08-01T07:12:48.897Z",
+      "heal_claimed": true,
+      "heal_reason": "artifact_proof_pass"
     },
     {
       "id": "lifeos-step5",
@@ -6034,6 +6037,6 @@
   "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-lifeos",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T07:12:04.347Z",
+  "updated_at": "2026-08-01T07:12:48.897Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/lifeos/BUILD_QUEUE.json"
 }
