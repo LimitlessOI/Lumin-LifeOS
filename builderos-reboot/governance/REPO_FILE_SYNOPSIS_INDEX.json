@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T05:45:30.918Z",
+  "generated_at": "2026-08-01T05:46:54.296Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12674,
   "files": [
@@ -30844,9 +30844,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 30100,
-      "mtime": "2026-08-01T05:42:00.244Z",
-      "indexed_at": "2026-08-01T05:42:00.244Z",
+      "bytes": 30397,
+      "mtime": "2026-08-01T05:46:54.296Z",
+      "indexed_at": "2026-08-01T05:46:54.296Z",
       "synopsis_index_only": true
     },
     {
@@ -42485,8 +42485,8 @@
       "path": "docs/products/universal-overlay/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Universal Overlay",
       "bytes": 19792,
-      "mtime": "2026-08-01T02:46:58.108Z",
-      "indexed_at": "2026-08-01T02:46:58.108Z"
+      "mtime": "2026-08-01T05:46:54.296Z",
+      "indexed_at": "2026-08-01T05:46:54.296Z"
     },
     {
       "path": "docs/products/UNIVERSALOVERLAY.md",
@@ -71173,10 +71173,10 @@
     },
     {
       "path": "routes/struggleDetectionFormFillData.js",
-      "synopsis": "Exposes an HTTP route to store and analyze struggle detection form fill data.",
-      "bytes": 687,
-      "mtime": "2026-08-01T05:45:30.918Z",
-      "indexed_at": "2026-08-01T05:45:30.918Z",
+      "synopsis": "HTTP route module — StruggleDetectionFormFillData.",
+      "bytes": 768,
+      "mtime": "2026-08-01T05:46:54.296Z",
+      "indexed_at": "2026-08-01T05:46:54.296Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]

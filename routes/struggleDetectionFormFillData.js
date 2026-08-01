@@ -1,18 +1,21 @@
 /**
- * SYNOPSIS: Exposes an HTTP route to store and analyze struggle detection form fill data.
+ * SYNOPSIS: HTTP route module — StruggleDetectionFormFillData.
  * @ssot docs/products/universal-overlay/PRODUCT_HOME.md
  */
-import { logStruggleDetectionFormFillData } from '../services/struggleDetectionService.js';
+import express from 'express';
+import { executeStruggleFormFill } from '../services/struggleFormFill.js';
 
-export function registerStruggleDetectionFormFillData(app, deps) {
-  app.post('/api/v1/struggle/form-fill-data', deps.requireKey, async (req, res, next) => {
-    try {
-      const payload = req.body;
-      const result = await logStruggleDetectionFormFillData(deps, payload);
-      res.json(result);
-    } catch (error) {
-      deps.logger.error({ error }, 'Error in struggleDetectionFormFillData route');
-      next(error);
+const router = express.Router();
+
+export function registerStruggleDetectionFormFillDataRoutes(app, deps = {}) {
+  app.use('/api/v1/struggle/form-fill-data', router);
+
+  router.post('/', (req, res) => {
+    const { userMetrics, formData } = req.body || {};
+    if (!userMetrics || !Array.isArray(formData)) {
+      return res.status(400).json({ ok: false, error: 'userMetrics and formData are required' });
     }
+    const result = executeStruggleFormFill(userMetrics, formData);
+    return res.json({ ok: true, result });
   });
 }
