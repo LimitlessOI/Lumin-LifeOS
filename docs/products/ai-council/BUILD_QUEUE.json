@@ -79,7 +79,7 @@
     },
     {
       "id": "3",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/persist_provider_cooldowns.sql",
       "task": "Persist provider cooldowns",
       "spec": "Persist provider cooldowns to the database to survive restarts.",
@@ -115,7 +115,8 @@
       "mission_id": "PRODUCT-ai-council",
       "resolution_note": "2026-07-20: marked done manually, not by codegen. Same planner defect class as wellness-studio-step6/7/8 (see docs/products/wellness-studio/PRODUCT_HOME.md 2026-07-20 entry): a module_mounts behavior assertion checking route '/' against a .sql migration target file, which can never pass (route '/' proves nothing about a migration; reload_failed every attempt trying to import() SQL as an Express module). This entry is also a duplicate of already-done queue entry 'ai-council-3' (target db/migrations/20231005_add_provider_cooldowns.sql, shipped_via governed_ship_queue, real commit_sha 68e35db6d0). The file_contains check itself was also mismatched (checked for 'free_tier_usage', an unrelated table, not provider_cooldowns -- further evidence this entry was never a coherently-specified task). Independently verified the real underlying feature IS live: queried production, confirmed the provider_cooldowns table exists. No real missing work -- marking done rather than leaving a satisfied, duplicate condition to churn forever on an unpassable assertion.",
       "shipped_via": null,
-      "reaudit_reset_at": "2026-07-30T18:55:06.242Z"
+      "reaudit_reset_at": "2026-07-30T18:55:06.242Z",
+      "completed_at": "2026-08-01T06:12:03.478Z"
     },
     {
       "id": "4",
@@ -1280,5 +1281,5 @@
   "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-ai-council",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T06:06:30.442Z"
+  "updated_at": "2026-08-01T06:12:03.536Z"
 }
