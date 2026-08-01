@@ -60,8 +60,7 @@ export async function compareVendors(deps, payload) {
       return acc;
     }, {});
 
-    for (const vendorId of Object.keys(vendorsData)) {
-      const vendor = vendorsData[vendorId];
+    const handleVendorComparison = (vendor) => {
       let explanation = [];
       let isIncluded = true;
 
@@ -112,7 +111,7 @@ export async function compareVendors(deps, payload) {
         }
       }
 
-      vendorComparisonResult.push({
+      return {
         vendor_id: vendor.id,
         partner_name: vendor.partner_name,
         total_price: vendor.totalPrice,
@@ -127,7 +126,12 @@ export async function compareVendors(deps, payload) {
           review_score: item.review_score,
           review_count: item.review_count,
         })),
-      });
+      };
+    };
+
+    for (const vendorId of Object.keys(vendorsData)) {
+      const vendor = vendorsData[vendorId];
+      vendorComparisonResult.push(handleVendorComparison(vendor));
     }
 
     return vendorComparisonResult;
