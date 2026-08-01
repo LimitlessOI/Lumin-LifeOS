@@ -278,7 +278,7 @@
     },
     {
       "id": "step3",
-      "status": "done",
+      "status": "pending",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register pass quote routes",
       "spec": "Add the pass quote route module to auto-registered product modules for seamless integration.",
@@ -298,7 +298,10 @@
       "commit_sha": "b35c6386d4867172f804c9337cde97c3f95d6eb8",
       "blueprint_id": "PRODUCT-LIFERE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step3",
-      "mission_id": "PRODUCT-lifere"
+      "mission_id": "PRODUCT-lifere",
+      "last_error": "artifact_proof_failed: passQuoteRoutes",
+      "demoted": false,
+      "heal_unblocked": true
     },
     {
       "id": "step4",
@@ -427,7 +430,7 @@
     },
     {
       "id": "step6",
-      "status": "done",
+      "status": "pending",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register optional boldtrail contact cleanup routes",
       "spec": "Add the optional BoldTrail contact cleanup route module to auto-registered product modules for seamless integration.",
@@ -443,7 +446,7 @@
         "optionalBoldTrailContactCleanupRoutes"
       ],
       "last_attempt_at": "2026-07-17T17:59:18.897Z",
-      "last_error": null,
+      "last_error": "artifact_proof_failed: optionalBoldTrailContactCleanupRoutes",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
@@ -464,7 +467,8 @@
       "blueprint_step_id": "step6",
       "mission_id": "PRODUCT-lifere",
       "shipped_via": "pre_existing_artifact_proof",
-      "shipped_at": "2026-07-18T01:14:09.183Z"
+      "shipped_at": "2026-07-18T01:14:09.183Z",
+      "heal_unblocked": true
     },
     {
       "id": "lifere-1",
@@ -891,5 +895,5 @@
   "blueprint_id": "PRODUCT-LIFERE-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-lifere",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T15:53:41.610Z"
+  "updated_at": "2026-08-01T18:54:56.119Z"
 }
