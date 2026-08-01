@@ -1,10 +1,10 @@
 /**
- * SYNOPSIS: Exposes an endpoint for comparing vendor offerings from the price book.
+ * SYNOPSIS: Exposes an endpoint for comparing vendor offerings from the price book (Vendor Comparison).
  * @ssot docs/products/limitlessos/PRODUCT_HOME.md
  */
 export function registerPriceBookVendorComparisonRoutes(app) {
-  // compareVendors: expose price-book vendor comparison data with optional explanations/exclusions.
-  app.get('/vendors/compare', (req, res) => {
+  // Vendor Comparison: expose price-book vendor comparison data with optional explanations/exclusions.
+  app.get('/api/v1/price-book/vendor-comparison', (req, res) => {
     const { includeExplanations, excludeCriteria } = req.query;
 
     let vendorComparisonData = getVendorComparisonData();

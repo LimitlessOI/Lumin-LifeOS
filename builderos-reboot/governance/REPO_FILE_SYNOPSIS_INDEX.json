@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T17:13:32.903Z",
+  "generated_at": "2026-08-01T17:19:22.152Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12740,
   "files": [
@@ -30844,9 +30844,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 51749,
-      "mtime": "2026-08-01T16:11:53.141Z",
-      "indexed_at": "2026-08-01T16:12:31.513Z",
+      "bytes": 51768,
+      "mtime": "2026-08-01T17:17:43.281Z",
+      "indexed_at": "2026-08-01T17:19:22.152Z",
       "synopsis_index_only": true
     },
     {
@@ -42143,9 +42143,9 @@
     {
       "path": "docs/products/limitlessos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LimitlessOS business stack",
-      "bytes": 17489,
-      "mtime": "2026-08-01T10:06:50.808Z",
-      "indexed_at": "2026-08-01T10:06:56.178Z"
+      "bytes": 18166,
+      "mtime": "2026-08-01T17:18:42.921Z",
+      "indexed_at": "2026-08-01T17:19:22.152Z"
     },
     {
       "path": "docs/products/lip/FILE_MANIFEST.json",
@@ -42909,9 +42909,9 @@
     {
       "path": "docs/products/word-keeper/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Word Keeper",
-      "bytes": 19443,
-      "mtime": "2026-08-01T15:06:52.457Z",
-      "indexed_at": "2026-08-01T15:06:56.731Z"
+      "bytes": 19966,
+      "mtime": "2026-08-01T17:19:07.017Z",
+      "indexed_at": "2026-08-01T17:19:22.152Z"
     },
     {
       "path": "docs/products/WORDKEEPER.md",
@@ -65807,9 +65807,9 @@
     {
       "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
       "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
-      "bytes": 3562,
-      "mtime": "2026-08-01T16:14:32.233Z",
-      "indexed_at": "2026-08-01T16:16:28.889Z",
+      "bytes": 3860,
+      "mtime": "2026-08-01T17:15:18.725Z",
+      "indexed_at": "2026-08-01T17:19:22.152Z",
       "synopsis_index_only": true
     },
     {
@@ -71093,10 +71093,10 @@
     },
     {
       "path": "routes/price-book-vendor-comparison-routes.js",
-      "synopsis": "Exposes an endpoint for comparing vendor offerings from the price book.",
-      "bytes": 1247,
-      "mtime": "2026-08-01T10:02:05.840Z",
-      "indexed_at": "2026-08-01T10:02:10.848Z",
+      "synopsis": "Exposes an endpoint for comparing vendor offerings from the price book (Vendor Comparison).",
+      "bytes": 1290,
+      "mtime": "2026-08-01T17:17:39.477Z",
+      "indexed_at": "2026-08-01T17:19:22.152Z",
       "ssot": [
         "docs/products/limitlessos/PRODUCT_HOME.md"
       ]
@@ -91142,10 +91142,10 @@
     },
     {
       "path": "services/googleCalendarService.js",
-      "synopsis": "Exports createCalendarEvent — services/googleCalendarService.js.",
-      "bytes": 2104,
-      "mtime": "2026-08-01T15:07:45.473Z",
-      "indexed_at": "2026-08-01T15:07:45.577Z",
+      "synopsis": "Exports createCalendarEvent — services/googleCalendarService.js. Uses the googleapis package to connect to Google Calendar API.",
+      "bytes": 2167,
+      "mtime": "2026-08-01T17:18:01.701Z",
+      "indexed_at": "2026-08-01T17:19:22.152Z",
       "ssot": [
         "docs/products/word-keeper/PRODUCT_HOME.md"
       ]
@@ -94289,9 +94289,9 @@
     {
       "path": "services/price-book-vendor-comparison.js",
       "synopsis": "Compares vendors based on pricing and reviews, with explanations or exclusions based on criteria.",
-      "bytes": 5144,
-      "mtime": "2026-08-01T10:09:08.315Z",
-      "indexed_at": "2026-08-01T10:09:08.315Z",
+      "bytes": 5208,
+      "mtime": "2026-08-01T17:17:35.477Z",
+      "indexed_at": "2026-08-01T17:19:22.152Z",
       "ssot": [
         "docs/products/limitlessos/PRODUCT_HOME.md"
       ]

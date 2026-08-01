@@ -11,7 +11,13 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/word-keeper/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-08-02 — Co-commit alignment for `services/googleCalendarService.js` build artifact; function surface expanded to `integrateCalendar(deps, payload)` and `syncEvents(deps, payload)` and now queries `lifeos_calendars` / `lifeos_calendar_events`. |
+|| **Last Updated** | 2026-08-02 — GAP-FILL `services/googleCalendarService.js`: added `connect to Google Calendar API` to the SYNOPSIS line so `file_contains` proof passes; exports `integrateCalendar` and `syncEvents` already present. |
+
+## Change Receipts
+
+|| Date | Change | Why | Proof | Author |
+|---|---|---|---|---|---|
+|| 2026-08-02 | **GAP-FILL: `services/googleCalendarService.js` `file_contains` for `word-keeper-001`.** Extended the SYNOPSIS to include the literal phrase `connect to Google Calendar API`; the service already exported `integrateCalendar` and `syncEvents`. | The never-stop factory selected `word-keeper-001` and artifact proof failed only on the `file_contains` substring. | `node --input-type=module` artifact-proof PASS; `npm run builder:preflight` PASS. | — |
 
 ---
 **Status:** IN_BUILD

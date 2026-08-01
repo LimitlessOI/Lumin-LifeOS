@@ -688,7 +688,7 @@
     {
       "path": "routes/price-book-vendor-comparison-routes.js",
       "register": "registerPriceBookVendorComparisonRoutes",
-      "mount_path": "/api/v1/pricebook",
+      "mount_path": "/api/v1/price-book/vendor-comparison",
       "enabled": true,
       "note": "LimitlessOS price book vendor comparison routes."
     },

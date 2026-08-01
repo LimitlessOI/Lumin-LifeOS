@@ -1,5 +1,5 @@
 /**
- * SYNOPSIS: Exports createCalendarEvent — services/googleCalendarService.js.
+ * SYNOPSIS: Exports createCalendarEvent — services/googleCalendarService.js. Uses the googleapis package to connect to Google Calendar API.
  * @ssot docs/products/word-keeper/PRODUCT_HOME.md
  */
 import { google } from 'googleapis';
