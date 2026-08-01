@@ -4,7 +4,7 @@
   "verify_script": null,
   "planned_at": "2026-07-12T03:40:00.000Z",
   "notes": "Module 4 Therapist Integration beachhead — Clinical Partnership. Consent-gated briefs; therapist account lists linked clients who granted therapist_share. LifeOS consent foundation is a dependency.",
-  "updated_at": "2026-08-01T03:19:18.687Z",
+  "updated_at": "2026-08-01T04:52:59.651Z",
   "steps": [
     {
       "id": "ws-therapist-schema",
@@ -1048,7 +1048,7 @@
         "step8"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "extendJoyCheckins",
         "extendIntegrityScoreLog",
@@ -1068,8 +1068,8 @@
           "assertion_id": "expected_exports:services/extended-tables.js"
         }
       ],
-      "last_attempt_at": null,
-      "last_error": null,
+      "last_attempt_at": "2026-08-01T04:52:10.269Z",
+      "last_error": "Zone 3 edit-patch failed — edit old_string not found in file — the model must copy it verbatim: \"/**\\n * SYNOPSIS: Exports extendTables — services/extended-tables.js.\\n */\\nexport \"",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
@@ -1082,7 +1082,7 @@
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
-      "blocker_class": null,
+      "blocker_class": "BLOCKED_TOOLING",
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
