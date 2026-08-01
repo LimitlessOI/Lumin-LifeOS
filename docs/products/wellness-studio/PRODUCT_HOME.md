@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/wellness-studio/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-08-02 — GAP-FILL `routes/therapist-integration-routes.js` (wellness-studio-4): implemented `POST /api/therapist/integration`, added an explicit uppercase `POST /api/therapist/integration` comment for the case-sensitive `file_contains` check, added `setupIntegration` comment, and exported both `registerTherapistRoutes` and `registerTherapistIntegrationRoutes` so auto-register and BUILD_QUEUE expected_exports agree. Also cleared `services/therapist-integration.js` (wellness-studio-3). Skipped wellness-studio-step6/7/8 (fake sequential deploy Phase N steps with unpassable route assertions on SQL migration targets); video-pipeline step 4 parked pending route codegen. |
+| **Last Updated** | 2026-08-02 (merged) — GAP-FILL `routes/therapist-integration-routes.js` (wellness-studio-4): merged origin/main and reconfirmed the route implements `POST /api/therapist/integration`, includes an explicit uppercase `POST /api/therapist/integration` comment for case-sensitive `file_contains`, a `setupIntegration` comment, and exports both `registerTherapistRoutes` and `registerTherapistIntegrationRoutes`. Also cleared `services/therapist-integration.js` (wellness-studio-3). Skipped wellness-studio-step6/7/8 (fake sequential deploy Phase N steps with unpassable route assertions on SQL migration targets); video-pipeline step 4 parked pending route codegen. |
 
 ---
 | Field | Value |

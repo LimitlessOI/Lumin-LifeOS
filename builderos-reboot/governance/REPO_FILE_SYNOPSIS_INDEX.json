@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T10:17:06.025Z",
+  "generated_at": "2026-08-01T10:17:20.063Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -42823,9 +42823,9 @@
     {
       "path": "docs/products/wellness-studio/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Wellness Studio",
-      "bytes": 18200,
-      "mtime": "2026-08-01T10:16:59.956Z",
-      "indexed_at": "2026-08-01T10:17:06.025Z"
+      "bytes": 18185,
+      "mtime": "2026-08-01T10:17:15.096Z",
+      "indexed_at": "2026-08-01T10:17:20.063Z"
     },
     {
       "path": "docs/products/WELLNESSSTUDIO.md",
@@ -71663,9 +71663,9 @@
     {
       "path": "routes/therapist-integration-routes.js",
       "synopsis": "HTTP route module — Therapist Integration Routes.",
-      "bytes": 507,
-      "mtime": "2026-08-01T10:16:46.656Z",
-      "indexed_at": "2026-08-01T10:17:06.025Z",
+      "bytes": 430,
+      "mtime": "2026-08-01T10:17:10.724Z",
+      "indexed_at": "2026-08-01T10:17:20.063Z",
       "ssot": [
         "docs/products/wellness-studio/PRODUCT_HOME.md"
       ]

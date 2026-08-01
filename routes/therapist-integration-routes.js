@@ -10,5 +10,3 @@ export function registerTherapistRoutes(app) {
     res.status(201).json({ ok: true, setup: payload });
   });
 }
-
-export const registerTherapistIntegrationRoutes = registerTherapistRoutes;
