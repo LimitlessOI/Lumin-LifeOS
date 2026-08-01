@@ -316,13 +316,13 @@
     },
     {
       "id": "8",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/riskAssessment.js",
       "task": "implement risk assessment",
       "spec": "This module assesses and categorizes risks related to project-governance.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "assessRisk"
       ],
@@ -349,11 +349,13 @@
       "same_signature_count": 0,
       "demoted": false,
       "last_error": "artifact_proof_failed: function assessRisk(){; return 'monitor'",
-      "heal_unblocked": true
+      "heal_unblocked": true,
+      "last_attempt_at": "2026-08-01T10:59:32.342Z",
+      "completed_at": "2026-08-01T10:59:32.515Z"
     }
   ],
   "blueprint_id": "PRODUCT-PROJECT-GOVERNANCE-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-project-governance",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T10:59:17.409Z"
+  "updated_at": "2026-08-01T10:59:32.515Z"
 }
