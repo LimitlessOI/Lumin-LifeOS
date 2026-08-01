@@ -1,35 +1,35 @@
 {
   "status": "idle",
   "last_task": {
-    "id": "product_build_marketingos_s4",
+    "id": "product_build_marketingos_s11",
     "kind": "product_build_step",
     "priority": 2.0003,
     "product": "marketingos",
     "product_id": "marketingos",
-    "step_id": "s4",
-    "target_file": "routes/marketing-performance-intel-routes.js",
-    "detail": "next buildable step: s4"
+    "step_id": "s11",
+    "target_file": "routes/marketing-director-routes.js",
+    "detail": "next buildable step: s11"
   },
   "last_result": {
     "ok": false,
-    "task_id": "product_build_marketingos_s4",
+    "task_id": "product_build_marketingos_s11",
     "detail": "product_build_step",
     "outcome": {
       "ok": false,
-      "step_id": "s4",
+      "step_id": "s11",
       "stage": "artifact_proof",
-      "reason": "artifact_proof_failed: missing_exports:registerPerformanceIntelRoutes; registerPerformanceIntelRoutes; deps.marketingMessageLearning.learnFromPerformance",
+      "reason": "artifact_proof_failed: missing_exports:registerIntelligenceRoutes; registerIntelligenceRoutes; deps.marketingIntelligenceDirector.getStrategicRecommendations",
       "attempts": 1,
       "blocked": false,
-      "blocker_class": "BLOCKED_TOOLING",
+      "blocker_class": "BLOCKED_STRATEGIC",
       "claim_level": null,
       "parked": false,
       "summary": {
         "product_id": "marketingos",
         "total": 53,
-        "pending": 4,
+        "pending": 1,
         "building": 0,
-        "done": 46,
+        "done": 49,
         "blocked": 0,
         "founder_gated": 0,
         "design_review_flagged": 3,
@@ -38,9 +38,9 @@
       }
     },
     "claim": {
-      "id": "marketingos:s4",
+      "id": "marketingos:s11",
       "kind": "execution",
-      "text": "product step s4 built + verified + served live",
+      "text": "product step s11 built + verified + served live",
       "grade": "GUESS",
       "proof": null,
       "original_grade": "KNOW",
@@ -52,9 +52,9 @@
     "summary": {
       "product_id": "marketingos",
       "total": 53,
-      "pending": 4,
+      "pending": 1,
       "building": 0,
-      "done": 46,
+      "done": 49,
       "blocked": 0,
       "founder_gated": 0,
       "design_review_flagged": 3,
@@ -63,5 +63,5 @@
     }
   },
   "cycles": 1,
-  "updated_at": "2026-08-01T15:36:49.277Z"
+  "updated_at": "2026-08-01T15:41:45.173Z"
 }

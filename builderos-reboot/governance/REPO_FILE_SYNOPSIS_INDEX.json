@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T15:38:26.975Z",
+  "generated_at": "2026-08-01T15:42:56.077Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12738,
+  "file_count": 12739,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -30844,9 +30844,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 51410,
-      "mtime": "2026-08-01T15:29:26.257Z",
-      "indexed_at": "2026-08-01T15:33:45.656Z",
+      "bytes": 51695,
+      "mtime": "2026-08-01T15:42:17.773Z",
+      "indexed_at": "2026-08-01T15:42:56.077Z",
       "synopsis_index_only": true
     },
     {
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1791,
-      "mtime": "2026-08-01T15:36:49.273Z",
-      "indexed_at": "2026-08-01T15:38:06.897Z",
+      "bytes": 1795,
+      "mtime": "2026-08-01T15:41:45.169Z",
+      "indexed_at": "2026-08-01T15:42:56.077Z",
       "synopsis_index_only": true
     },
     {
@@ -42230,9 +42230,9 @@
     {
       "path": "docs/products/marketingos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — MarketingOS",
-      "bytes": 138202,
-      "mtime": "2026-08-01T15:37:57.777Z",
-      "indexed_at": "2026-08-01T15:38:06.897Z"
+      "bytes": 139125,
+      "mtime": "2026-08-01T15:42:44.253Z",
+      "indexed_at": "2026-08-01T15:42:56.077Z"
     },
     {
       "path": "docs/products/marketingos/socialmediaos/conversations/2026-06-29-producer-director-model.md",
@@ -70738,6 +70738,16 @@
       "bytes": 2532,
       "mtime": "2026-07-14T09:09:21.255Z",
       "indexed_at": "2026-07-28T22:54:46.666Z",
+      "ssot": [
+        "docs/products/marketingos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "routes/marketing-director-routes.js",
+      "synopsis": "Marketing intelligence director API routes.",
+      "bytes": 1318,
+      "mtime": "2026-08-01T15:42:01.101Z",
+      "indexed_at": "2026-08-01T15:42:56.077Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]

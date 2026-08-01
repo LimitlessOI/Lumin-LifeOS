@@ -1150,6 +1150,13 @@
       "mount_path": "/api/v1/marketingos/campaigns",
       "enabled": true,
       "note": "MarketingOS campaign asset routes."
+    },
+    {
+      "path": "routes/marketing-director-routes.js",
+      "register": "registerIntelligenceRoutes",
+      "mount_path": "/api/v1/marketingos/director",
+      "enabled": true,
+      "note": "MarketingOS intelligence director routes (recommendations + budget allocation)."
     }
   ]
 }
