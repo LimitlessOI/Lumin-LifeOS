@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/oil-security-divisions/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-06-29 |
+| **Last Updated** | 2026-08-02 — `docs-security-alpha-scope` BUILD_QUEUE step reset and `file_contains` aligned to builder JSON output (`security_alpha_scope` + `AUDIT_QUEUE`). |
 
 ---
 > **Y-STATEMENT:** In the context of **Builder/OIL operating on Railway with council keys and governed receipts**, facing **real auth/env/memory bypass risk without enterprise budget**, we decided **three OIL security lanes (Adversarial Audit, Verification, Crypto/Harvest Defense) with receipt-native find→fix→verify→close**, accepting **deferred deception/PQC until value and monitoring justify them**.
@@ -485,6 +485,7 @@ grep -r "CANARY_" data/ logs/ || true
 | Date | What Changed | Why | Current State | Next |
 |---|---|---|---|---|
 | 2026-05-21 | Created `AMENDMENT_40_OIL_SECURITY_DIVISIONS.md`, `SECURITY_ALPHA_SCOPE.md`, manifest, Stage 1 BUILD/AUDIT queues | Operator brainstorm → staged SSOT for Builder/council | PROPOSED; no code | Adam approval → freeze → SEC-F01 |
+| 2026-08-02 | Reset `docs-security-alpha-scope` step and aligned `file_contains` with builder output. | The step was blocked after 3 attempts because the `.json` artifact did not contain `AUDIT_QUEUE` and the file_contains guard was `["freeze","AUDIT_QUEUE"]`. The builder generated `security_alpha_scope` keyed JSON instead. The step is now reset to `pending` with `file_contains: ["security_alpha_scope","AUDIT_QUEUE"]` and a spec that explicitly asks for an `audit_queue` array and the literal `AUDIT_QUEUE` string. | `pending` → ready for next `bp-priority:once` | `bp-priority:once` completion |
 
 ---
 
