@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T14:35:15.003Z",
+  "generated_at": "2026-08-01T14:35:30.902Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12726,
   "files": [
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 2118,
-      "mtime": "2026-08-01T14:21:58.685Z",
-      "indexed_at": "2026-08-01T14:24:48.683Z",
+      "bytes": 1785,
+      "mtime": "2026-08-01T14:33:36.629Z",
+      "indexed_at": "2026-08-01T14:35:30.115Z",
       "synopsis_index_only": true
     },
     {
@@ -41164,9 +41164,9 @@
     {
       "path": "docs/products/builderos/GAP_FILL_LEDGER.json",
       "synopsis": "Documentation — GAP FILL LEDGER.",
-      "bytes": 58535,
-      "mtime": "2026-08-01T14:24:44.577Z",
-      "indexed_at": "2026-08-01T14:24:48.683Z",
+      "bytes": 59758,
+      "mtime": "2026-08-01T14:35:15.309Z",
+      "indexed_at": "2026-08-01T14:35:30.115Z",
       "synopsis_index_only": true
     },
     {
@@ -65772,9 +65772,9 @@
     {
       "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
       "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
-      "bytes": 3862,
-      "mtime": "2026-08-01T14:00:40.541Z",
-      "indexed_at": "2026-08-01T14:07:12.378Z",
+      "bytes": 4858,
+      "mtime": "2026-08-01T14:32:42.001Z",
+      "indexed_at": "2026-08-01T14:35:30.115Z",
       "synopsis_index_only": true
     },
     {
