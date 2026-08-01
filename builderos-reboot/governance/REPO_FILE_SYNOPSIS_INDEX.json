@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T14:54:27.771Z",
+  "generated_at": "2026-08-01T14:55:17.610Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12729,
+  "file_count": 12730,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -70774,6 +70774,16 @@
       "bytes": 141194,
       "mtime": "2026-07-30T22:22:39.697Z",
       "indexed_at": "2026-07-30T22:31:11.508Z",
+      "ssot": [
+        "docs/products/marketingos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "routes/marketing-social-schedule-routes.js",
+      "synopsis": "API endpoints for social post scheduling and serving the scheduling UI.",
+      "bytes": 9355,
+      "mtime": "2026-08-01T14:55:17.610Z",
+      "indexed_at": "2026-08-01T14:55:17.610Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
