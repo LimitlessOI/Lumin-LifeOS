@@ -2,37 +2,12 @@
  * SYNOPSIS: Attaches a scoring rubric to a lead segment description.
  * @ssot docs/products/boldtrail/PRODUCT_HOME.md
  */
-export async function applyScoringRubric(deps, payload) {
-  const { pool, logger } = deps;
-  const { segmentDescription, rubricDefinition } = payload || {};
-
-  if (!segmentDescription || !rubricDefinition) {
-    logger.warn({ payload }, 'Missing segmentDescription or rubricDefinition in applyScoringRubric payload');
-    throw new Error('Missing required payload parameters: segmentDescription and rubricDefinition');
-  }
-
-  // There is no existing table in the LIVE DB SCHEMA to store scoring rubrics or attach them directly to segments.
-  // The task is to "attach an explicit scoring rubric to each lead segment description".
-  // Given the existing file structure and the task, the most direct interpretation without inventing new DB tables
-  // is to return the segment description with the rubric attached as a service function.
-  // If this service were to persist, a new table like `boldtrail_lead_segment_rubrics` would be required,
-  // or the `boldtrail_leads` table `data` column would need to be extended to store this.
-  // Since we cannot invent DB tables, we return the structured data.
-  try {
-    // No DB interaction required based on current schema and task interpretation
-    // as there's no defined persistence for "scoring rubrics" or "lead segments"
-    // that this function should directly modify in the DB.
-    // The previous implementation was a pure function, this maintains that until
-    // a DB schema extension is provided.
-    return {
-      segmentDescription,
-      scoringRubric: rubricDefinition,
-      appliedAt: new Date().toISOString(),
-    };
-  } catch (error) {
-    logger.error({ error, segmentDescription }, 'Error in applyScoringRubric');
-    throw new Error('Failed to apply scoring rubric');
-  }
+export function applyScoringRubric(segmentDescription) {
+  const rubric = arguments[1] || {};
+  return {
+    segmentDescription,
+    rubric,
+  };
 }
 
 /**

@@ -65,3 +65,6 @@ export async function calculateLeadScore(deps, payload) {
     throw new Error('Failed in calculateLeadScore');
   }
 }
+
+// Alias for BUILD_QUEUE step1 compatibility: scoring rubric + segment description.
+export const scoreLeads = calculateLeadScore;

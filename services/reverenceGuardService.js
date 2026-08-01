@@ -18,3 +18,6 @@ export async function applyLabelGuard(deps, payload) {
     throw new Error('Failed to apply label guard');
   }
 }
+
+export const checkReverence = applyLabelGuard;
+export const applyLabels = applyLabelGuard;
