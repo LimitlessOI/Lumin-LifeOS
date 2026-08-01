@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T14:07:13.158Z",
+  "generated_at": "2026-08-01T14:11:19.905Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12726,
   "files": [
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1732,
-      "mtime": "2026-08-01T14:02:01.665Z",
-      "indexed_at": "2026-08-01T14:07:12.378Z",
+      "bytes": 1785,
+      "mtime": "2026-08-01T14:09:53.621Z",
+      "indexed_at": "2026-08-01T14:11:19.905Z",
       "synopsis_index_only": true
     },
     {
@@ -42499,9 +42499,9 @@
     {
       "path": "docs/products/productized-sprint/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Productized Sprint",
-      "bytes": 13687,
-      "mtime": "2026-08-01T14:06:42.869Z",
-      "indexed_at": "2026-08-01T14:06:55.608Z"
+      "bytes": 14956,
+      "mtime": "2026-08-01T14:10:52.789Z",
+      "indexed_at": "2026-08-01T14:11:19.905Z"
     },
     {
       "path": "docs/products/PRODUCTIZEDSPRINT.md",
@@ -87671,9 +87671,9 @@
     {
       "path": "services/aiPreAnalysisService.js",
       "synopsis": "Provides AI pre-analysis prompt writing and execution services.",
-      "bytes": 3747,
-      "mtime": "2026-08-01T13:57:07.737Z",
-      "indexed_at": "2026-08-01T13:57:57.051Z",
+      "bytes": 3751,
+      "mtime": "2026-08-01T14:10:26.769Z",
+      "indexed_at": "2026-08-01T14:11:19.905Z",
       "ssot": [
         "docs/products/productized-sprint/PRODUCT_HOME.md",
         "docs/products/productized-sprint/PRODUCT_HOME.md"

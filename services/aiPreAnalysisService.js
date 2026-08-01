@@ -77,12 +77,12 @@ export function testAIPreAnalysisPrompt() {
  * SYNOPSIS: Performs AI pre-analysis with a provided prompt.
  * @ssot docs/products/productized-sprint/PRODUCT_HOME.md
  */
-export function aiPreAnalysisPrompt(data) {
+export const aiPreAnalysisPrompt = (data) => {
   // Function to perform AI pre-analysis with a provided prompt
   const prompt = writeAIPreAnalysisPrompt(data);
   // Assume there's a function to send the prompt to an AI service
   return `AI pre-analysis result for: ${prompt}`;
-}
+};
 
 export function runPreAnalysis(taskType, inputData) {
   // runPreAnalysis exposes the pre-analysis prompt generator for callers
