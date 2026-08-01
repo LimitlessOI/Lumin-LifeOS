@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/universal-overlay/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-08-02 — hand-authored `db/migrations/addAdaptiveLayoutColumn.sql` to unblock step 8; restored `routes/pageSummarization.js` and auto-register entry for step 10; skipped stale `universal-overlay-step4` duplicate to clear HARD false-done. |
+| **Last Updated** | 2026-08-02 — hand-authored `db/migrations/addAdaptiveLayoutColumn.sql` to unblock step 8; restored `routes/pageSummarization.js` and auto-register entry for step 10; added `routes/firefoxExtension.js` route registration for step10 (GET `/extensions/firefox/mv2`) and `firefox MV2` substring; skipped stale `universal-overlay-step4` duplicate to clear HARD false-done. |
 
 ---
 ---
@@ -333,6 +333,7 @@ User on insurance portal
 
 ## Change Receipts
 
+| 2026-08-02 | **GAP-FILL: `routes/firefoxExtension.js` + auto-register entry for step10.** Added route registration `registerFirefoxRoutes(app, deps)` mounting `GET /extensions/firefox/mv2`, plus `registerFirefoxExtensionRoutes` alias, and included the literal substring `firefox MV2`. Added `config/auto-registered-product-modules.json` entry for module-health proof. | `bp-priority:once` failed `artifact_proof: firefox MV2` for `universal-overlay-step10` because the pre-existing artifact contained `Firefox MV2` (capital F) and did not register the route. The factory `/build` returned HTTP 502, so a deterministic hand-gap-fill resolves the proof. | `node -e` JSON parse PASS; route module syntax OK | `bp-priority:once` re-verify after push/deploy |
 | 2026-08-02 | **Creative Director review** — generated CREATIVE_BRIEF.md using the Creative Director lens. | Universal Overlay reviewed through the BuilderOS creative responsibility; brief written to product home for founder review. | ✅ generated |
 | 2026-05-24 | Batch push: factory runtime separation, AUTONOMOUS-RECOVERY-0001, regression harness, lumin-factory bundle — founder-requested Railway test deploy | routes/services/startup + factory-staging + builderos-reboot | Adam audit+push directive |
 

@@ -455,6 +455,14 @@
       "added_real_lines": 16,
       "justification": "deterministic export aliases; no new product logic.\n\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
       "commit_message_excerpt": "GAP-FILL: merge origin/main and align productized-sprint step 1 and step 4 artifact proofs. Kept factory-generated async DB implementations for services/aiPreAnalysisService.js (registerAIPreAnalysisS"
+    },
+    {
+      "at": "2026-08-01T14:13:46.848Z",
+      "file": "services/aiPreAnalysisService.js",
+      "is_new_file": false,
+      "added_real_lines": 27,
+      "justification": "merge resolution and deterministic export form alignment; no new product logic.\n\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
+      "commit_message_excerpt": "GAP-FILL: merge origin/main and unify services/aiPreAnalysisService.js for productized-sprint steps 04 and step4. Kept factory-generated DB-backed aiPreAnalysisPrompt(deps, payload) and registerAIPreA"
     }
   ]
 }

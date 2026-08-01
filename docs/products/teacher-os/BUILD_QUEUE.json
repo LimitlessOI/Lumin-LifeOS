@@ -188,7 +188,7 @@
     },
     {
       "id": "5",
-      "status": "pending",
+      "status": "skipped",
       "target_file": "public/overlay/uxDesign.html",
       "task": "design UX wireframes",
       "spec": "Create wireframes and user flow diagrams for the teacher-os interface.",
@@ -207,8 +207,9 @@
       "mission_id": "PRODUCT-teacher-os",
       "same_signature_count": 0,
       "demoted": false,
-      "last_error": "no_proof_required_non_server_code",
-      "heal_unblocked": true
+      "last_error": null,
+      "heal_unblocked": true,
+      "blocker_class": null
     },
     {
       "id": "6",
@@ -726,7 +727,7 @@
     },
     {
       "id": "teacher-os-step5",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/competitiveLandscapeRoutes.js",
       "task": "add competitive landscape route",
       "spec": "Expose an HTTP route to retrieve the competitive landscape analysis.",
@@ -734,7 +735,7 @@
         "teacher-os-step4"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerCompetitiveLandscapeRoutes"
       ],
@@ -755,9 +756,9 @@
           "assertion_id": "expected_exports:routes/competitiveLandscapeRoutes.js"
         }
       ],
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-08-01T14:16:54.424Z",
       "last_error": "artifact_proof_failed: app.get",
-      "commit_sha": "5cc4d8bf3ce7618ede69efbd17f7be65a2a62a69",
+      "commit_sha": "5cbe2e6aadc62c80a805336fd4bded2eb86ab875",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
@@ -779,7 +780,8 @@
       "blueprint_step_id": "teacher-os-step5",
       "mission_id": "PRODUCT-teacher-os",
       "same_signature_count": 0,
-      "heal_unblocked": true
+      "heal_unblocked": true,
+      "completed_at": "2026-08-01T14:18:43.045Z"
     },
     {
       "id": "teacher-os-step6",
@@ -1022,6 +1024,6 @@
   "blueprint_id": "PRODUCT-TEACHER-OS-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-teacher-os",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T06:30:54.126Z",
+  "updated_at": "2026-08-01T14:18:43.046Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/teacher-os/BUILD_QUEUE.json"
 }

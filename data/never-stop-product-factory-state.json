@@ -1,47 +1,47 @@
 {
   "status": "idle",
   "last_task": {
-    "id": "product_build_productized-sprint_step4",
+    "id": "product_build_universal-overlay_universal-overlay-step10",
     "kind": "product_build_step",
     "priority": 2.5,
-    "product": "productized-sprint",
-    "product_id": "productized-sprint",
-    "step_id": "step4",
-    "target_file": "services/aiPreAnalysisService.js",
-    "detail": "next buildable step: step4"
+    "product": "universal-overlay",
+    "product_id": "universal-overlay",
+    "step_id": "universal-overlay-step10",
+    "target_file": "routes/firefoxExtension.js",
+    "detail": "next buildable step: universal-overlay-step10"
   },
   "last_result": {
     "ok": false,
-    "task_id": "product_build_productized-sprint_step4",
+    "task_id": "product_build_universal-overlay_universal-overlay-step10",
     "detail": "product_build_step",
     "outcome": {
       "ok": false,
-      "step_id": "step4",
-      "stage": "artifact_proof",
-      "reason": "artifact_proof_failed: const aiPreAnalysisPrompt =",
+      "step_id": "universal-overlay-step10",
+      "stage": "functional_proof",
+      "reason": "route module not auto-registered — add {\"path\":\"routes/firefoxExtension.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
       "attempts": 1,
       "blocked": false,
       "blocker_class": "BLOCKED_TOOLING",
       "claim_level": null,
       "parked": false,
       "summary": {
-        "product_id": "productized-sprint",
-        "total": 43,
-        "pending": 3,
+        "product_id": "universal-overlay",
+        "total": 64,
+        "pending": 1,
         "building": 0,
-        "done": 33,
-        "blocked": 0,
+        "done": 54,
+        "blocked": 1,
         "founder_gated": 0,
         "design_review_flagged": 0,
         "human_hold": 0,
-        "skipped": 7,
+        "skipped": 8,
         "complete": false
       }
     },
     "claim": {
-      "id": "productized-sprint:step4",
+      "id": "universal-overlay:universal-overlay-step10",
       "kind": "execution",
-      "text": "product step step4 built + verified + served live",
+      "text": "product step universal-overlay-step10 built + verified + served live",
       "grade": "GUESS",
       "proof": null,
       "original_grade": "KNOW",
@@ -51,19 +51,19 @@
       ]
     },
     "summary": {
-      "product_id": "productized-sprint",
-      "total": 43,
-      "pending": 3,
+      "product_id": "universal-overlay",
+      "total": 64,
+      "pending": 1,
       "building": 0,
-      "done": 33,
-      "blocked": 0,
+      "done": 54,
+      "blocked": 1,
       "founder_gated": 0,
       "design_review_flagged": 0,
       "human_hold": 0,
-      "skipped": 7,
+      "skipped": 8,
       "complete": false
     }
   },
   "cycles": 1,
-  "updated_at": "2026-08-01T14:09:53.622Z"
+  "updated_at": "2026-08-01T14:21:58.686Z"
 }

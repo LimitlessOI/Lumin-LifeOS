@@ -1115,6 +1115,13 @@
       "register": "registerMusicTeachersInterviewRoutes",
       "enabled": false,
       "note": "Auto-registered for music-talent-studio step11 (disabled until route module exists)"
+    },
+    {
+      "path": "routes/firefoxExtension.js",
+      "register": "registerFirefoxRoutes",
+      "mount_path": "/extensions/firefox/mv2",
+      "enabled": true,
+      "note": "Universal Overlay Firefox MV2 extension variant route (GET /extensions/firefox/mv2)"
     }
   ]
 }
