@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T11:11:40.991Z",
+  "generated_at": "2026-08-01T11:12:43.604Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12722,
   "files": [
@@ -21678,9 +21678,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3840216,
-      "mtime": "2026-08-01T11:07:49.016Z",
-      "indexed_at": "2026-08-01T11:07:56.870Z"
+      "bytes": 3840221,
+      "mtime": "2026-08-01T11:12:13.682Z",
+      "indexed_at": "2026-08-01T11:12:36.856Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -30844,9 +30844,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 37067,
-      "mtime": "2026-08-01T10:56:20.772Z",
-      "indexed_at": "2026-08-01T10:56:40.338Z",
+      "bytes": 37342,
+      "mtime": "2026-08-01T11:11:54.838Z",
+      "indexed_at": "2026-08-01T11:12:36.856Z",
       "synopsis_index_only": true
     },
     {
@@ -33112,9 +33112,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 1788,
-      "mtime": "2026-08-01T11:06:04.524Z",
-      "indexed_at": "2026-08-01T11:07:48.951Z",
+      "bytes": 1951,
+      "mtime": "2026-08-01T11:11:54.848Z",
+      "indexed_at": "2026-08-01T11:12:36.856Z",
       "synopsis_index_only": true
     },
     {
@@ -41634,9 +41634,9 @@
     {
       "path": "docs/products/creator-media-os/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Creator Media OS",
-      "bytes": 26414,
-      "mtime": "2026-08-01T11:11:09.096Z",
-      "indexed_at": "2026-08-01T11:11:29.457Z"
+      "bytes": 26548,
+      "mtime": "2026-08-01T11:11:55.006Z",
+      "indexed_at": "2026-08-01T11:12:36.856Z"
     },
     {
       "path": "docs/products/CREATORMEDIAOS.md",
@@ -65772,9 +65772,9 @@
     {
       "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
       "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
-      "bytes": 3638,
-      "mtime": "2026-08-01T10:58:50.052Z",
-      "indexed_at": "2026-08-01T11:01:10.886Z",
+      "bytes": 3836,
+      "mtime": "2026-08-01T11:11:54.851Z",
+      "indexed_at": "2026-08-01T11:12:36.856Z",
       "synopsis_index_only": true
     },
     {
