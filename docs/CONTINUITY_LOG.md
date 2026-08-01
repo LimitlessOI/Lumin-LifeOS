@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-08-01 — Critical tip auth/money/memory holes re-fixed (daily bug sweep)
+
+Daily critical-bug automation rediscovered tip still vulnerable because prior draft PRs (#367/#370/#371/#372/#373/#374 + memory #332) never merged. Re-applied: `requireKey` operator JWT role gate; `set-password` / tip_reset_token / billing `/verify` hardening; `requireKey` on auto-registered memory list GETs; auth gate on student-interview analytics IDOR. Focused security tests 13/13 PASS. Branch `cursor/critical-bug-investigation-ca94` — merge+redeploy required to protect production tip.
+
 ## 2026-08-02 — Creative Director lens and project review runner: 43 CREATIVE_BRIEF.md files generated
 
 Adam: "our projects need to run through the creative engine. I don't think it was ever properly designed." Responded by establishing the Creative Director as a first-class cognitive responsibility.
