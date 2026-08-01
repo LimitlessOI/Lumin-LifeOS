@@ -840,7 +840,7 @@
         "step7"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerStudentInterviewAnalyticsRoutes"
       ],
@@ -863,9 +863,9 @@
       "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step8",
       "mission_id": "PRODUCT-lumin-university",
-      "last_error": null,
-      "last_attempt_at": null,
-      "blocker_class": null,
+      "last_error": "Commit failed: FILE_PLACEMENT_VIOLATION — commit refused.\n- [ERROR][missing_ssot] routes/studentInterviewAnalyticsRoutes.js: New protected source file has no @ssot JSDoc tag pointing to its product home",
+      "last_attempt_at": "2026-08-01T01:29:35.820Z",
+      "blocker_class": "BLOCKED_TOOLING",
       "claim_level": null,
       "park_until": null,
       "revive_count": 0,
@@ -1583,5 +1583,5 @@
   "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-lumin-university",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-01T01:29:22.752Z"
+  "updated_at": "2026-08-01T01:29:54.029Z"
 }
