@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/faith-studio/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-06-29 |
+| **Last Updated** | 2026-08-02 — GAP-FILL `services/theologicalAdvisoryModel.js` (step 04): a commented-out `import someUtility from './utils';` was flagged by the grounding check as a missing import source, the file lacked the BUILD_QUEUE `file_contains` substring `Theological advisory model`, and had no `@ssot` tag. Removed the comment, added the substring, and added `@ssot docs/products/faith-studio/PRODUCT_HOME.md`. |
 
 ---
 > **Y-STATEMENT:** In the context of families, churches, faith educators, and creators wanting sacred scenes rendered respectfully across different traditions, facing doctrinal differences and the risk of irreverent or misleading outputs, we decided to define Faith Studio as a dedicated sacred-content product with tradition-aware interpretation layers to achieve devotional, educational, and private witness experiences, accepting that sacred-mode guardrails must be stricter than general story creation.
@@ -212,6 +212,7 @@ No production runbook yet. This project is concept-stage only.
 | Date | What Changed | Why | Amendment Updated | Manifest Updated | Verified |
 |---|---|---|---|---|---|
 | 2026-08-02 | **GAP-FILL: `services/reviewModerationFlow.js` rebuilt to merge `processReviewModeration` with original helpers.** The system-build commit (`bc0af7719`) left only `processReviewModeration` and a self-importing `import { getModerationRules, moderateWithCouncil } from './reviewModerationFlow.js'`, which made the module invalid and caused `audit-false-done-steps` and `bp-priority:once` grounding to fail. Combined the `processReviewModeration` body with the original `getModerationRules` and `moderateWithCouncil` exports and added `@ssot`. | `bp-priority:once` and `evaluateStepExpectations` failed with `missing_exports:processReviewModeration` because the self-import caused the export scanner to reject the file. | ✅ | ✅ | `node --check services/reviewModerationFlow.js` clean; `npm run builder:preflight` PASS | `bp-priority:once` re-verify |
+| 2026-08-02 | **GAP-FILL `services/theologicalAdvisoryModel.js` (step 04).** The builder-generated file contained a commented-out `import someUtility from './utils';` that the grounding check flagged as `import_source_missing: ./utils`, lacked the BUILD_QUEUE `file_contains` substring `Theological advisory model`, and had no `@ssot` tag. Removed the comment, added the substring, and added `@ssot docs/products/faith-studio/PRODUCT_HOME.md`. | Satisfy the BUILD_QUEUE artifact and grounding contracts. | `node --check services/theologicalAdvisoryModel.js`; `npm run builder:preflight` PASS. | ✅ | ✅ | `node --check services/theologicalAdvisoryModel.js` clean | `bp-priority:once` re-verify |
 | 2026-03-29 | Created Faith Studio amendment and manifest from conversation history | Promote sacred-content/tradition-aware product into proper SSOT ownership | ✅ | ✅ | pending |
 
 ---

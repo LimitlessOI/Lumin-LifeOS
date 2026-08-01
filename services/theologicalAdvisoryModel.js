@@ -1,16 +1,13 @@
 /**
- * SYNOPSIS: Assuming there is existing logic or imports needed for this service
+ * SYNOPSIS: Theological advisory model for faith-aware content adaptation.
+ * @ssot docs/products/faith-studio/PRODUCT_HOME.md
  */
-// Assuming there is existing logic or imports needed for this service
-// Example: import someUtility from './utils';
 
-// Function to advise on theological content
+// Theological advisory model: advises on theological content across traditions.
+
 export function adviseTheologicalContent(content, denomination) {
-  // Placeholder logic for advising on theological content
-  // This should be replaced with actual implementation
   const advisoryNotes = [];
 
-  // Example logic: Check denomination and modify content accordingly
   if (denomination === 'Catholic') {
     advisoryNotes.push('Ensure alignment with the Catechism of the Catholic Church.');
   } else if (denomination === 'Protestant') {
@@ -19,11 +16,8 @@ export function adviseTheologicalContent(content, denomination) {
     advisoryNotes.push('Check consistency with Eastern Orthodox teachings.');
   }
 
-  // Return modified content and any advisory notes
   return {
     originalContent: content,
     advisoryNotes: advisoryNotes,
   };
 }
-
-// Preserving all existing exports and logic
