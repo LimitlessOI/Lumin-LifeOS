@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-02T11:23:36.048Z",
+  "generated_at": "2026-08-02T11:24:05.569Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12908,
+  "file_count": 12909,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -91226,6 +91226,16 @@
       "bytes": 1440,
       "mtime": "2026-07-30T19:31:51.976Z",
       "indexed_at": "2026-07-30T19:31:51.976Z"
+    },
+    {
+      "path": "services/discovery-classification-engine.js",
+      "synopsis": "Service module — Discovery Classification Engine.",
+      "bytes": 6204,
+      "mtime": "2026-08-02T11:24:05.569Z",
+      "indexed_at": "2026-08-02T11:24:05.569Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/docker-automation/docker-compose.base.yml",
