@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-02T16:36:24.774Z",
+  "generated_at": "2026-08-02T16:38:26.634Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12930,
   "files": [
@@ -21307,9 +21307,9 @@
     {
       "path": "builderos-reboot/BP_PRIORITY.json",
       "synopsis": "BuilderOS artifact — BP PRIORITY.",
-      "bytes": 28363,
-      "mtime": "2026-08-02T16:35:14.218Z",
-      "indexed_at": "2026-08-02T16:35:14.218Z",
+      "bytes": 28355,
+      "mtime": "2026-08-02T16:38:26.634Z",
+      "indexed_at": "2026-08-02T16:38:26.634Z",
       "synopsis_index_only": true
     },
     {
@@ -28039,9 +28039,9 @@
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/OBJECTIVE_VERDICT.json",
       "synopsis": "BuilderOS artifact — OBJECTIVE VERDICT.",
-      "bytes": 845,
-      "mtime": "2026-08-02T16:35:14.218Z",
-      "indexed_at": "2026-08-02T16:35:14.218Z",
+      "bytes": 837,
+      "mtime": "2026-08-02T16:38:26.634Z",
+      "indexed_at": "2026-08-02T16:38:26.634Z",
       "synopsis_index_only": true
     },
     {
