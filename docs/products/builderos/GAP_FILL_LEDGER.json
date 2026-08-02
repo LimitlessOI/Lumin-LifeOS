@@ -551,6 +551,14 @@
       "added_real_lines": 25,
       "justification": "bp-priority:once selected s11 (routes/marketing-director-routes.js) but the file did not exist on main; all AI providers are rate-limit/credit exhausted, so deterministic route wiring was hand-authored from the BUILD_QUEUE spec.\n\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
       "commit_message_excerpt": "GAP-FILL: add routes/marketing-director-routes.js (s11) and auto-register for marketingos director routes. HAND-AUTHORED-JUSTIFICATION: bp-priority:once selected s11 (routes/marketing-director-routes."
+    },
+    {
+      "at": "2026-08-02T11:10:22.928Z",
+      "file": "services/solomon-withheld-recommendation.js",
+      "is_new_file": false,
+      "added_real_lines": 17,
+      "justification": "narrow correctness fix to an existing generated\nfile (return-value/leak bug in one function), not new service logic — same\nclass of fix as the FCLA-001 driftReport GAP-FILL earlier this mission.",
+      "commit_message_excerpt": "GAP-FILL: solomon-withheld-recommendation.js leaked the withheld recommendation body"
     }
   ]
 }
