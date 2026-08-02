@@ -58,3 +58,16 @@ These questions are deliberately left open in the proposed framework. They must 
 ### UD-10: First Public Constitution content
 
 **Question:** Which items from `NORTH_STAR_SSOT.md` and this framework are included in the first Public Constitution, and which remain in the internal framework?
+
+---
+
+## Phase 0 Ratification Blocker Resolutions
+
+| ID | Status | Resolution | Reference |
+|---|---|---|---|
+| UD-1 | **Closed with defaults** | Default amendment thresholds proposed for ordinary, protected-clause, and meta-amendments. Subject to ratification and council composition. | `CONSTITUTIONAL_FRAMEWORK_v1.md` §24.1 |
+| UD-2 | **Closed with default charter** | Office of Independent Review charter defined; temporary appointment process specified until council composition is ratified. | `CONSTITUTIONAL_FRAMEWORK_v1.md` §24.2 |
+| UD-4 | **Closed with numeric limits** | Founder emergency powers bounded to 72 hours, protected-clause override prohibited, mandatory review, 14-day cumulative cap per 90 days. | `CONSTITUTIONAL_FRAMEWORK_v1.md` §24.3 |
+| UD-5 | **Deferred with trigger** | Formal succession plan required before first equity, first non-founder FTE, first regulated licensed deployment, $1M revenue, or 30-day founder incapacity. | `CONSTITUTIONAL_FRAMEWORK_v1.md` §24.4 |
+| UD-8 | **Closed** | `scripts/verify-constitutional-parity.mjs` implemented and wired into `npm run builder:preflight`. | `CONSTITUTIONAL_FRAMEWORK_v1.md` §24.5 |
+| UD-9 | **Closed** | `scripts/adversarial-ratification-suite.mjs` executed and passing; report generated. | `CONSTITUTIONAL_FRAMEWORK_v1.md` §24.6 |

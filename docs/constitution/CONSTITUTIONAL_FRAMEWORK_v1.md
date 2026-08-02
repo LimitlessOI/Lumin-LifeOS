@@ -761,3 +761,76 @@ The Adaptive Human Model, LifeOS, MarriageOS, KidsOS, BusinessOS, HealthOS, and 
 ### 23.12 Quality of Questions
 
 Taloa improves the quality of questions. The coaching protocol, earned guidance, perspective expansion, readiness, avoidance detection, and the Human Constellation are not primarily about generating answers. They are about helping someone ask a better question than they were capable of asking five minutes ago. That is empowerment.
+
+### 23.13 The Entity Twin Framework
+
+A **Twin** is a calibrated model of any meaningful entity's relationship with reality. The same Human Constellation graph, confidence vectors, causality engine, Reality Alignment Engine, and calibration ledger are instantiated for any entity that Taloa must understand, measure, challenge, and improve:
+
+- **Twin<Person>** — the Adaptive Human Model.
+- **Twin<Relationship>** — marriages, families, partnerships.
+- **Twin<Organization>** — businesses, teams, communities.
+- **Twin<Project>** — BuilderOS missions and work packages.
+- **Twin<Product>** — LifeOS, BuilderOS, KidsOS, MarriageOS, CareerOS, HealthOS.
+- **Twin<Office>** — Chair, Solomon, Sentry, Builder, Independent Review.
+- **Twin<Institution>** — Taloa itself, through the Institutional Constellation.
+
+The only thing that changes between instances is the entity being modeled. The Digital Twin is not a product; it is a universal architectural pattern. Taloa shall not build separate "person twin," "Builder twin," "organization twin," or "system twin" engines when the same `Twin<T>` machinery can be reused.
+
+Every Twin, including Taloa's model of itself, is subject to calibration by reality. No model, including the institution's own model of itself, is exempt.
+
+---
+
+## 24. Phase 0 Ratification Blockers — Proposed Defaults
+
+The six ratification blockers from `docs/constitution/CONSTITUTIONAL_FRAMEWORK_v1_UNRESOLVED.md` are addressed below with explicit defaults or deferral triggers. These remain PROPOSED until ratification.
+
+### 24.1 Amendment thresholds (UD-1)
+
+Pending council composition, the default thresholds are:
+
+- **Ordinary amendment:** two-thirds supermajority of qualified, unconflicted reviewers plus documented founder approval where retained authority applies.
+- **Protected-clause amendment:** unanimity of qualified independent reviewers, founder approval, affected-party analysis, and two-stage review separated by at least one review cycle (minimum 7 days).
+- **Meta-amendment:** same burden as a protected-clause amendment, and cannot be used to weaken substantive protections in the same ratification sequence.
+
+These defaults apply until a council composition and office-holder selection rules are ratified.
+
+### 24.2 Independent review office (UD-2)
+
+The **Office of Independent Review** exists as a constitutional function. Its charter:
+
+- Purpose: conduct impartial constitutional review for disputes, major decisions, and promotion/demotion proceedings.
+- Insulation: the office-holder is selected by the Chair from a slate proposed by Solomon, subject to founder consent; may not be the Chair, a direct subordinate of the Chair, or a party to the dispute under review.
+- Scope: may pause implementation, require additional evidence, recommend amendment/demotion, or refer to the founder on retained-authority questions.
+
+Until a permanent office-holder selection process is ratified, the Chair may appoint a temporary Independent Reviewer from unconflicted advisors for each case, with the appointment recorded and subject to later council confirmation.
+
+### 24.3 Founder emergency powers (UD-4)
+
+Founder emergency authority is narrowly bounded:
+
+- **Duration:** no longer than 72 hours from the documented emergency declaration.
+- **Scope:** may bypass ordinary process only to prevent imminent, serious, and irreversible harm to the mission, users, or the institution; may not amend the Constitution, override protected clauses, or remove office-holders.
+- **Review:** mandatory review by Independent Review and the Chair within 72 hours; the emergency expires unless extended by a two-thirds supermajority for another 72 hours, up to a cumulative maximum of 14 days in any rolling 90-day window.
+- **Record:** every emergency action is recorded with reasoning, evidence, scope, duration, and dissent; it is automatically void if not reviewed before expiration.
+
+### 24.4 Succession mechanism (UD-5)
+
+Succession is deferred to the legal embodiment stage (§18) and corporate governance design, with the following trigger:
+
+- A formal succession plan must be adopted before the first of: (a) outside equity financing, (b) the first full-time employee who is not the founder, (c) the first licensed deployment to a regulated entity, (d) annual gross revenue exceeding $1,000,000, or (e) a founder incapacity event exceeding 30 days.
+
+Until then, the framework preserves the requirement that a successor founder or controller is selected under constitutional constraints and bound by the same public Constitution from day one.
+
+### 24.5 Runtime parity test (UD-8)
+
+The parity test is implemented as `scripts/verify-constitutional-parity.mjs` and wired into `npm run builder:preflight`. It verifies that:
+
+- `data/constitutional-framework/REGISTRY.json` is internally consistent and every item has required fields.
+- Every registry item has a corresponding entry in `data/constitutional-framework/ENFORCEMENT_MATRIX.json`.
+- The canonical North Star, framework, and registry do not materially disagree on authority levels or enforcement status.
+
+A divergence among human-readable text, registry, and runtime behavior must fail visibly.
+
+### 24.6 Adversarial ratification suite (UD-9)
+
+The adversarial ratification suite is implemented as `scripts/adversarial-ratification-suite.mjs`. It runs red-team probes against the canonical framework, North Star, and Enforcement Matrix, and exits non-zero on material defect. Results are written to `data/constitutional-framework/reports/ADVERSARIAL_RATIFICATION_REPORT.json`.

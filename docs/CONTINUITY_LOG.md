@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-08-02 — Phase 0 ratification blockers closed and parity gate installed
+
+Adam provided the Phase 0 blueprint and instructed Builder to keep going. `docs/constitution/CONSTITUTIONAL_FRAMEWORK_v1.md` was extended with `## 23.13 The Entity Twin Framework` and `## 24 Phase 0 Ratification Blockers — Proposed Defaults`, giving explicit default thresholds for amendments, a charter for the Office of Independent Review, numeric limits on founder emergency powers, a deferral trigger for succession, the `scripts/verify-constitutional-parity.mjs` gate, and the adversarial ratification suite. `docs/constitution/CONSTITUTIONAL_FRAMEWORK_v1_UNRESOLVED.md` was updated to mark UD-1, UD-2, UD-4, UD-5, UD-8, and UD-9 as closed/deferred with references. The parity gate was wired into `npm run builder:preflight`. `docs/products/builderos/PRODUCT_HOME.md` updated.
+
 ## 2026-08-02 — Entity Twin Framework folded into constitutional architecture
 
 Adam and ChatGPT converged on the deeper abstraction: the Digital Twin is not a product but a universal pattern. A Twin is a calibrated model of any meaningful entity's relationship with reality. The same `Twin<T>` pattern applies to a person (Adaptive Human Model), a relationship, an organization, a project, a product, an office, or the institution itself (Institutional Constellation). `docs/constitution/proposals/2026-08-02-ARCHITECTURE-CLASSIFICATION.md` and `docs/constitution/proposals/2026-08-02-MASTER-BUILD-BLUEPRINT.md` were updated to make this explicit: one Human Constellation graph, one set of confidence vectors, one Causality Engine, and one Calibration Ledger are reused for every Twin. `docs/products/builderos/PRODUCT_HOME.md` updated with a change receipt and `Last Updated`.

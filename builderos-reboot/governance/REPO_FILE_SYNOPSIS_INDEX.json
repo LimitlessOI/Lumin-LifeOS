@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-02T12:18:10.494Z",
+  "generated_at": "2026-08-02T13:40:38.884Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12920,
+  "file_count": 12921,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -33068,17 +33068,17 @@
     {
       "path": "data/constitutional-framework/reports/ADVERSARIAL_RATIFICATION_REPORT.json",
       "synopsis": "JSON data/config — data/constitutional-framework/reports/ADVERSARIAL_RATIFICATION_REPORT.json.",
-      "bytes": 3297,
-      "mtime": "2026-08-02T12:10:36.308Z",
-      "indexed_at": "2026-08-02T12:15:14.377Z",
+      "bytes": 2389,
+      "mtime": "2026-08-02T13:40:38.884Z",
+      "indexed_at": "2026-08-02T13:40:38.884Z",
       "synopsis_index_only": true
     },
     {
       "path": "data/constitutional-framework/reports/ENFORCEMENT_MATRIX_REPORT.json",
       "synopsis": "JSON data/config — data/constitutional-framework/reports/ENFORCEMENT_MATRIX_REPORT.json.",
-      "bytes": 286817,
-      "mtime": "2026-08-02T12:10:36.300Z",
-      "indexed_at": "2026-08-02T12:15:14.377Z",
+      "bytes": 279101,
+      "mtime": "2026-08-02T13:40:38.884Z",
+      "indexed_at": "2026-08-02T13:40:38.884Z",
       "synopsis_index_only": true
     },
     {
@@ -39252,16 +39252,16 @@
     {
       "path": "docs/constitution/CONSTITUTIONAL_FRAMEWORK_v1_UNRESOLVED.md",
       "synopsis": "Unresolved decisions for CONSTITUTIONAL_FRAMEWORK_v1.md. Not ratified.",
-      "bytes": 5048,
-      "mtime": "2026-08-02T01:49:57.846Z",
-      "indexed_at": "2026-08-02T09:36:38.323Z"
+      "bytes": 6366,
+      "mtime": "2026-08-02T13:40:38.884Z",
+      "indexed_at": "2026-08-02T13:40:38.884Z"
     },
     {
       "path": "docs/constitution/CONSTITUTIONAL_FRAMEWORK_v1.md",
       "synopsis": "BuilderOS Constitutional Framework v1.0 (PROPOSED) — the manufacturing process for constitutional law. Not ratified. Subordinate to NORTH_STAR_SSOT.md.",
-      "bytes": 38127,
-      "mtime": "2026-08-02T09:26:14.200Z",
-      "indexed_at": "2026-08-02T09:36:38.323Z"
+      "bytes": 43700,
+      "mtime": "2026-08-02T13:40:38.884Z",
+      "indexed_at": "2026-08-02T13:40:38.884Z"
     },
     {
       "path": "docs/constitution/CONSTITUTIONAL_FRAMEWORK.md",
@@ -39462,9 +39462,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 121534,
-      "mtime": "2026-08-02T12:15:01.520Z",
-      "indexed_at": "2026-08-02T12:15:14.377Z"
+      "bytes": 122401,
+      "mtime": "2026-08-02T13:40:38.884Z",
+      "indexed_at": "2026-08-02T13:40:38.884Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -41717,9 +41717,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 413631,
-      "mtime": "2026-08-02T12:14:55.324Z",
-      "indexed_at": "2026-08-02T12:15:14.377Z"
+      "bytes": 414648,
+      "mtime": "2026-08-02T13:40:38.884Z",
+      "indexed_at": "2026-08-02T13:40:38.884Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -65994,9 +65994,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\":\"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",\"lifeos:file-synopsis:backfill\":\"node scripts/file-synopsis-enforce.mjs --all --auto-fix && node scripts/generate-file-synopsis-index.mjs\",\"lifeos:file-synopsis:index\":\"n",
-      "bytes": 34271,
-      "mtime": "2026-08-02T10:28:21.912Z",
-      "indexed_at": "2026-08-02T10:29:51.799Z",
+      "bytes": 34320,
+      "mtime": "2026-08-02T13:40:38.884Z",
+      "indexed_at": "2026-08-02T13:40:38.884Z",
       "synopsis_index_only": true
     },
     {
@@ -77411,6 +77411,16 @@
       "bytes": 2710,
       "mtime": "2026-08-02T09:55:50.096Z",
       "indexed_at": "2026-08-02T09:58:06.058Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/verify-constitutional-parity.mjs",
+      "synopsis": "Runtime parity gate — verify registry, enforcement matrix, and canonical constitutional text are aligned.",
+      "bytes": 4865,
+      "mtime": "2026-08-02T13:40:38.884Z",
+      "indexed_at": "2026-08-02T13:40:38.884Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
