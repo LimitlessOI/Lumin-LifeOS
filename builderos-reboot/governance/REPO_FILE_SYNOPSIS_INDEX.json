@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-02T10:08:54.322Z",
+  "generated_at": "2026-08-02T10:09:05.384Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12890,
   "files": [
@@ -95430,9 +95430,9 @@
     {
       "path": "services/perspective-expansion.js",
       "synopsis": "Exports generatePerspectiveSummary — services/perspective-expansion.js.",
-      "bytes": 9940,
-      "mtime": "2026-08-02T10:07:31.215Z",
-      "indexed_at": "2026-08-02T10:07:31.215Z",
+      "bytes": 9941,
+      "mtime": "2026-08-02T10:09:05.384Z",
+      "indexed_at": "2026-08-02T10:09:05.384Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
