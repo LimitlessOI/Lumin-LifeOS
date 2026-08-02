@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-02T11:24:05.569Z",
+  "generated_at": "2026-08-02T11:24:20.470Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12909,
+  "file_count": 12910,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -92709,6 +92709,16 @@
       "indexed_at": "2026-08-01T19:07:38.787Z",
       "ssot": [
         "docs/products/financial-revenue/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/independent-laboratory-architecture.js",
+      "synopsis": "Exports compareFindings — services/independent-laboratory-architecture.js.",
+      "bytes": 5021,
+      "mtime": "2026-08-02T11:24:20.470Z",
+      "indexed_at": "2026-08-02T11:24:20.470Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
       ]
     },
     {
