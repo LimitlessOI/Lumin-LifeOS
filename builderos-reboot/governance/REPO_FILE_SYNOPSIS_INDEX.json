@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-02T10:06:01.278Z",
+  "generated_at": "2026-08-02T10:07:31.215Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12888,
+  "file_count": 12889,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -95415,6 +95415,16 @@
       "indexed_at": "2026-08-01T05:37:29.899Z",
       "ssot": [
         "docs/products/personal-finance-os/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/perspective-expansion.js",
+      "synopsis": "Exports generatePerspectiveSummary — services/perspective-expansion.js.",
+      "bytes": 9940,
+      "mtime": "2026-08-02T10:07:31.215Z",
+      "indexed_at": "2026-08-02T10:07:31.215Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
       ]
     },
     {
