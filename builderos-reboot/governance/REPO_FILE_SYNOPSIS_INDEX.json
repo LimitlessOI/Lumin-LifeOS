@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-02T15:54:33.322Z",
+  "generated_at": "2026-08-02T15:57:25.714Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12928,
+  "file_count": 12929,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -89856,6 +89856,17 @@
       "indexed_at": "2026-07-28T22:54:46.666Z",
       "ssot": [
         "docs/products/capability-map/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/cartoonGeneration.js",
+      "synopsis": "Service to generate short animations with high-risk tasks managed",
+      "bytes": 7480,
+      "mtime": "2026-08-02T15:57:25.714Z",
+      "indexed_at": "2026-08-02T15:57:25.714Z",
+      "ssot": [
+        "docs/products/story-studio/PRODUCT_HOME.md",
+        "docs/products/story-studio/PRODUCT_HOME.md"
       ]
     },
     {
