@@ -1,11 +1,11 @@
 {
   "schema": "deploy_truth_verify_v1",
-  "at": "2026-08-02T10:49:50.898Z",
+  "at": "2026-08-02T10:54:54.286Z",
   "command": "drift-audit",
   "production_base": "https://lumin-web-production-e3a9.up.railway.app",
   "deploy_branch": "main",
-  "commit_sha": "a20068ebd0b1dbe8ecde48f7c2492436b1511332",
-  "served_sha": "a20068ebd0b1dbe8ecde48f7c2492436b1511332",
+  "commit_sha": "e0e1b5d441a0afbcd8d2eeda2dc724ce3c300eb1",
+  "served_sha": "e0e1b5d441a0afbcd8d2eeda2dc724ce3c300eb1",
   "verdict": "PROVEN",
   "ok": true,
   "passed": [
@@ -21,11 +21,11 @@
   "skipped": [],
   "files": [],
   "deployment": {
-    "id": "774def4c-62db-4648-a955-884b2802df8d",
+    "id": "655bc904-02dc-4a68-899d-78830ee4c5e3",
     "status": "SUCCESS",
-    "created_at": "2026-08-02T10:46:45.791Z",
-    "commit_sha": "a20068ebd0b1dbe8ecde48f7c2492436b1511332",
-    "commit_message": "Regenerate REPO_FILE_SYNOPSIS_INDEX.json after constitutional architecture acceptance",
+    "created_at": "2026-08-02T10:52:12.321Z",
+    "commit_sha": "e0e1b5d441a0afbcd8d2eeda2dc724ce3c300eb1",
+    "commit_message": "Regenerate REPO_FILE_SYNOPSIS_INDEX.json after receipt commit",
     "url": null
   },
   "runtime_identity": {
@@ -46,18 +46,18 @@
     {
       "id": "git.fetch",
       "status": "pass",
-      "detail": "origin/main is a20068ebd0b1"
+      "detail": "origin/main is e0e1b5d441a0"
     },
     {
       "id": "local.divergence",
       "status": "pass",
       "detail": "local main is aligned with origin/main",
       "local_branch": "main",
-      "local_head": "a20068ebd0b1dbe8ecde48f7c2492436b1511332",
-      "remote_head": "a20068ebd0b1dbe8ecde48f7c2492436b1511332",
+      "local_head": "e0e1b5d441a0afbcd8d2eeda2dc724ce3c300eb1",
+      "remote_head": "e0e1b5d441a0afbcd8d2eeda2dc724ce3c300eb1",
       "ahead": 0,
       "behind": 0,
-      "uncommitted": 5
+      "uncommitted": 0
     },
     {
       "id": "runtime.identity",
@@ -81,20 +81,20 @@
     {
       "id": "runtime.version",
       "status": "pass",
-      "detail": "production serves a20068ebd0b1, which contains origin/main (a20068ebd0b1)",
-      "served_sha": "a20068ebd0b1dbe8ecde48f7c2492436b1511332",
-      "remote_head": "a20068ebd0b1dbe8ecde48f7c2492436b1511332"
+      "detail": "production serves e0e1b5d441a0, which contains origin/main (e0e1b5d441a0)",
+      "served_sha": "e0e1b5d441a0afbcd8d2eeda2dc724ce3c300eb1",
+      "remote_head": "e0e1b5d441a0afbcd8d2eeda2dc724ce3c300eb1"
     },
     {
       "id": "deployment.state",
       "status": "pass",
-      "detail": "latest deployment SUCCESS on a20068ebd0b1, nothing in flight",
+      "detail": "latest deployment SUCCESS on e0e1b5d441a0, nothing in flight",
       "deployment": {
-        "id": "774def4c-62db-4648-a955-884b2802df8d",
+        "id": "655bc904-02dc-4a68-899d-78830ee4c5e3",
         "status": "SUCCESS",
-        "created_at": "2026-08-02T10:46:45.791Z",
-        "commit_sha": "a20068ebd0b1dbe8ecde48f7c2492436b1511332",
-        "commit_message": "Regenerate REPO_FILE_SYNOPSIS_INDEX.json after constitutional architecture acceptance",
+        "created_at": "2026-08-02T10:52:12.321Z",
+        "commit_sha": "e0e1b5d441a0afbcd8d2eeda2dc724ce3c300eb1",
+        "commit_message": "Regenerate REPO_FILE_SYNOPSIS_INDEX.json after receipt commit",
         "url": null
       }
     }
@@ -102,9 +102,9 @@
   "produced_by": "cursor-agent",
   "verified_by": "git+railway-api+production-http-probe",
   "verification_kind": "deterministic+external",
-  "local_head": "a20068ebd0b1dbe8ecde48f7c2492436b1511332",
+  "local_head": "e0e1b5d441a0afbcd8d2eeda2dc724ce3c300eb1",
   "local_branch": "main",
   "ahead": 0,
   "behind": 0,
-  "human_summary": "PROVEN — production serves a20068ebd0b1, which contains origin/main; no runtime drift found."
+  "human_summary": "PROVEN — production serves e0e1b5d441a0, which contains origin/main; no runtime drift found."
 }

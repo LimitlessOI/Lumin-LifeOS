@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-02T10:51:39.612Z",
+  "generated_at": "2026-08-02T10:55:07.333Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12892,
   "files": [
@@ -21678,9 +21678,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3899576,
-      "mtime": "2026-08-02T10:51:07.264Z",
-      "indexed_at": "2026-08-02T10:51:39.612Z"
+      "bytes": 3899593,
+      "mtime": "2026-08-02T10:51:54.876Z",
+      "indexed_at": "2026-08-02T10:55:07.333Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -66386,9 +66386,9 @@
     {
       "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
       "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
-      "bytes": 3698,
-      "mtime": "2026-08-02T10:51:07.264Z",
-      "indexed_at": "2026-08-02T10:51:39.612Z",
+      "bytes": 3650,
+      "mtime": "2026-08-02T10:54:54.284Z",
+      "indexed_at": "2026-08-02T10:55:07.333Z",
       "synopsis_index_only": true
     },
     {
