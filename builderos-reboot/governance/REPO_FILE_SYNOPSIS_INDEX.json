@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-02T11:25:01.429Z",
+  "generated_at": "2026-08-02T11:30:33.212Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12912,
+  "file_count": 12915,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -39462,9 +39462,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 117550,
-      "mtime": "2026-08-02T11:11:48.724Z",
-      "indexed_at": "2026-08-02T11:13:48.922Z"
+      "bytes": 119148,
+      "mtime": "2026-08-02T11:30:33.212Z",
+      "indexed_at": "2026-08-02T11:30:33.212Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -41717,9 +41717,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 409923,
-      "mtime": "2026-08-02T11:15:39.035Z",
-      "indexed_at": "2026-08-02T11:15:49.340Z"
+      "bytes": 411636,
+      "mtime": "2026-08-02T11:30:33.212Z",
+      "indexed_at": "2026-08-02T11:30:33.212Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -41734,6 +41734,13 @@
       "bytes": 23871,
       "mtime": "2026-07-30T18:25:48.697Z",
       "indexed_at": "2026-07-30T22:32:11.913Z"
+    },
+    {
+      "path": "docs/products/builderos/specs/BUILDEROS_SELF_IMPROVEMENT.md",
+      "synopsis": "BuilderOS Self-Improvement — Phase 3 Spec",
+      "bytes": 5342,
+      "mtime": "2026-08-02T11:30:33.212Z",
+      "indexed_at": "2026-08-02T11:30:33.212Z"
     },
     {
       "path": "docs/products/builderos/specs/COGNITIVE_ASSET_ARCHITECTURE.md",
@@ -73123,6 +73130,17 @@
       ]
     },
     {
+      "path": "scripts/build-phase3-builder-os-self-improvement.mjs",
+      "synopsis": "Orchestrates POST /api/v1/lifeos/builder/build for Phase 3 BuilderOS Self-Improvement engines.",
+      "bytes": 15934,
+      "mtime": "2026-08-02T11:30:33.212Z",
+      "indexed_at": "2026-08-02T11:30:33.212Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md",
+        "{{SSOT}}',"
+      ]
+    },
+    {
       "path": "scripts/build-queue-drift-repair.mjs",
       "synopsis": "Deterministic BUILD_QUEUE drift repair executor. Scans product queues,",
       "bytes": 25477,
@@ -89598,9 +89616,9 @@
     {
       "path": "services/builderos-self-improvement-loop.js",
       "synopsis": "Exports runImprovementLoop — services/builderos-self-improvement-loop.js.",
-      "bytes": 5551,
-      "mtime": "2026-08-02T11:25:01.429Z",
-      "indexed_at": "2026-08-02T11:25:01.429Z",
+      "bytes": 7841,
+      "mtime": "2026-08-02T11:30:33.212Z",
+      "indexed_at": "2026-08-02T11:30:33.212Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -98311,9 +98329,9 @@
     {
       "path": "services/variance-attribution-engine.js",
       "synopsis": "Service module — Variance Attribution Engine.",
-      "bytes": 3799,
-      "mtime": "2026-08-02T11:22:57.889Z",
-      "indexed_at": "2026-08-02T11:22:57.889Z",
+      "bytes": 3949,
+      "mtime": "2026-08-02T11:30:33.212Z",
+      "indexed_at": "2026-08-02T11:30:33.212Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -100888,6 +100906,16 @@
       "bytes": 4533,
       "mtime": "2026-08-02T11:09:45.528Z",
       "indexed_at": "2026-08-02T11:13:48.922Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "tests/phase3-builder-os-self-improvement-smoke.test.mjs",
+      "synopsis": "Phase 3 BuilderOS self-improvement smoke test.",
+      "bytes": 4431,
+      "mtime": "2026-08-02T11:30:33.212Z",
+      "indexed_at": "2026-08-02T11:30:33.212Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

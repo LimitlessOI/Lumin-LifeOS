@@ -35,15 +35,16 @@ function attributeVariance(prediction, outcome, execution_log = []) {
       varianceScore += 1; // Simple score for each mismatch
       let attributed = false;
       for (const causeKeyword of VARIANCE_TYPES) {
-        const matchingLogEntries = execution_log.filter((entry) =>
-          entry.includes(causeKeyword)
-        );
+        const matchingLogEntries = execution_log.filter((entry) => {
+          const text = typeof entry === 'string' ? entry : JSON.stringify(entry);
+          return text.includes(causeKeyword);
+        });
         if (matchingLogEntries.length > 0) {
           attributions.push({
             cause: causeKeyword,
             contribution: 1 / allKeys.size, // Evenly distribute contribution for now
             confidence: 0.8, // High confidence if keyword found
-            evidence: `Mismatch on key '${key}'. Log entries: ${matchingLogEntries.join("; ")}`,
+            evidence: `Mismatch on key '${key}'. Log entries: ${matchingLogEntries.map((e) => typeof e === 'string' ? e : JSON.stringify(e)).join("; ")}`,
           });
           attributed = true;
           break;

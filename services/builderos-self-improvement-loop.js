@@ -3,15 +3,29 @@
  * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
-import { scoreBlueprint } from './blueprint-quality-index.js';
-import { attributeVariance } from './variance-attribution-engine.js';
+import { scoreBlueprint, compareBlueprints } from './blueprint-quality-index.js';
+import { attributeVariance, rankCauses } from './variance-attribution-engine.js';
 import { measureGovernanceCost } from './governance-cost-index.js';
 import { calibrateOffice } from './organizational-calibration-engine.js';
 import { classifyIdea } from './discovery-classification-engine.js';
-import { runIndependentAnalysis } from './independent-laboratory-architecture.js';
-import { rankApproaches } from './meta-learning-system.js';
+import { runIndependentAnalysis, recommendConvergence } from './independent-laboratory-architecture.js';
+import { recordExperiment, rankApproaches } from './meta-learning-system.js';
 
 export const version = "2026-08-02";
+
+function toLogEntries(logs) {
+  return (logs || []).filter((l) => typeof l === 'object' && l !== null && !Array.isArray(l));
+}
+
+function defaultPrediction(actual) {
+  if (!actual || typeof actual !== 'object') return {};
+  const copy = {};
+  for (const key of Object.keys(actual)) {
+    const v = actual[key];
+    copy[key] = typeof v === 'number' ? Math.min(1, Math.max(0, v + 0.1)) : v;
+  }
+  return copy;
+}
 
 /**
  * Runs the BuilderOS improvement loop to refine blueprints, measure performance,
@@ -21,54 +35,78 @@ export const version = "2026-08-02";
  * @param {array} runtime_logs - Additional runtime logs from the mission execution.
  * @returns {object} An object containing the improved blueprint, an improvement report, and next actions.
  */
-export async function runImprovementLoop(mission_outcome, blueprint, runtime_logs = []) {
-  const allLogs = [...mission_outcome.logs, ...runtime_logs];
+export function runImprovementLoop(mission_outcome, blueprint, runtime_logs = []) {
+  const outcome = mission_outcome || {};
+  const prediction = outcome.prediction || defaultPrediction(outcome.actual);
+  const actual = outcome.actual || {};
+  const allLogs = toLogEntries([...(outcome.logs || []), ...runtime_logs]);
 
-  // Phase 1: Measure and Attribute
-  const blueprintQuality = await scoreBlueprint(blueprint);
-  const varianceReport = await attributeVariance(mission_outcome.prediction, mission_outcome.actual, allLogs);
-  const governanceCost = await measureGovernanceCost(blueprint, allLogs);
+  const beforeScore = scoreBlueprint(blueprint);
+  const qualityComparison = compareBlueprints({ ...blueprint, initial_quality_index: beforeScore.quality_score }, blueprint);
+  const qualityDelta = qualityComparison.quality_delta;
 
-  // Phase 2: Learn and Calibrate
-  const calibrationResults = await calibrateOffice(blueprint, mission_outcome.actual);
-  const ideaClassification = await classifyIdea(mission_outcome.actual);
-  const independentAnalysis = await runIndependentAnalysis(mission_outcome.actual, allLogs);
+  const varianceReport = attributeVariance(prediction, actual, allLogs);
+  const rankedCauses = rankCauses(varianceReport.attributions || []);
+  const varianceLessons = rankedCauses.map((c) => `${c.cause} (${(c.contribution * 100).toFixed(0)}%)`);
+  if (varianceReport.learned_lesson) varianceLessons.push(varianceReport.learned_lesson);
 
-  // Phase 3: Meta-Learning and Action
-  const metaLearnings = [
-    `Blueprint quality index: ${blueprintQuality.index}`,
-    `Variance attribution: ${varianceReport.summary}`,
-    `Governance cost: ${governanceCost.total_cost_usd}`,
-    `Organizational calibration insights: ${calibrationResults.calibration_summary}`,
-    `Discovery classification: ${ideaClassification.category}`,
-    `Independent analysis findings: ${independentAnalysis.summary_findings}`,
+  const decision = { id: blueprint.id || 'mission', title: blueprint.title || 'Blueprint', urgency: blueprint.urgency || 'normal' };
+  const governanceCost = measureGovernanceCost(decision, allLogs);
+
+  const predictionQuality = typeof prediction.quality_score === 'number' ? prediction.quality_score : beforeScore.quality_score;
+  const actualQuality = typeof actual.quality_score === 'number' ? actual.quality_score : beforeScore.quality_score;
+  const builderPrediction = { prediction: predictionQuality, outcome: actualQuality, confidence: 0.8 };
+  const calibrationResults = calibrateOffice('Builder', [builderPrediction]);
+
+  const ideaEvidence = [{ type: 'outcome', source: 'runtime', weight: varianceReport.variance_score || 0.5 }];
+  const idea = { statement: 'Mission outcome variance', evidence: ideaEvidence, current_tier: 'observation' };
+  const ideaClassification = classifyIdea(idea, ideaEvidence);
+
+  const independentAnalysis = runIndependentAnalysis(actual, ['Chair', 'Solomon', 'Sentry']);
+  const convergenceRecommendation = recommendConvergence(independentAnalysis.independent_findings || []);
+
+  const experiment = recordExperiment({
+    model: 'builderos-self-improvement-loop',
+    prompt_id: blueprint.id || 'default',
+    workflow: 'improvement-loop',
+    outcome: { reality_alignment: 1 - (varianceReport.variance_score || 0), cost: governanceCost.cost_score || 0 },
+  });
+  const rankedApproachesResult = rankApproaches([experiment]);
+  const metaInsights = [
+    `Blueprint quality score: ${beforeScore.quality_score.toFixed(3)}`,
+    `Variance score: ${varianceReport.variance_score.toFixed(3)}`,
+    `Governance cost score: ${governanceCost.cost_score.toFixed(3)}`,
+    `Builder calibration: ${calibrationResults.calibration_score.toFixed(3)} — ${calibrationResults.recommendation}`,
+    `Idea classified as: ${ideaClassification.classification}`,
+    `Independent lab: ${convergenceRecommendation}`,
   ];
-  const rankedApproaches = await rankApproaches(metaLearnings);
 
-  const qualityDelta = blueprintQuality.index - (blueprint.initial_quality_index || blueprintQuality.index); // Assuming initial_quality_index might exist or default
-  
+  const nextActions = [
+    ...varianceLessons.slice(0, 3),
+    ...(governanceCost.bottlenecks || []),
+    ...(calibrationResults.recommendation ? [calibrationResults.recommendation] : []),
+    ...(rankedApproachesResult.rankings[0] ? [`Adopt top-ranked approach: ${rankedApproachesResult.rankings[0].workflow}`] : []),
+  ];
+
   const improvement_notes = [
-    `Quality index: ${blueprintQuality.index}`,
-    `Variance lessons: ${varianceReport.lessons.join('; ')}`,
-    `Governance cost impact: ${governanceCost.impact_summary}`,
-    `Calibration adjustments: ${calibrationResults.adjustments_proposed.join('; ')}`,
-    `New idea category: ${ideaClassification.category}`,
-    `Independent lab recommendations: ${independentAnalysis.recommendations.join('; ')}`,
-    `Top ranked approaches: ${rankedApproaches.join('; ')}`
+    `Quality delta: ${qualityDelta.toFixed(3)}`,
+    `Variance lessons: ${varianceLessons.join('; ')}`,
+    `Governance cost breakdown: ${JSON.stringify(governanceCost.breakdown)}`,
+    `Builder calibration: ${calibrationResults.calibration_score.toFixed(3)}`,
+    `Discovery classification: ${ideaClassification.classification}`,
+    `Convergence recommendation: ${convergenceRecommendation}`,
   ];
 
-  const improved_blueprint = { ...blueprint, improvement_notes: improvement_notes };
+  const improved_blueprint = { ...blueprint, improvement_notes };
 
   const improvement_report = {
     quality_delta: qualityDelta,
-    variance_lessons: varianceReport.lessons,
+    variance_lessons: varianceLessons,
     governance_cost: governanceCost,
-    meta_insights: metaLearnings,
+    meta_insights: metaInsights,
   };
 
-  const next_actions = rankedApproaches; // Using ranked approaches as next actions
-
-  return { improved_blueprint, improvement_report, next_actions };
+  return { improved_blueprint, improvement_report, next_actions: nextActions };
 }
 
 /**
@@ -79,16 +117,18 @@ export async function runImprovementLoop(mission_outcome, blueprint, runtime_log
  * @returns {object} A new blueprint skeleton.
  */
 export function generateNextBlueprint(product_id, previous_blueprint, feedback = []) {
-  const newBlueprint = {
-    product_id: product_id,
+  return {
+    id: `${product_id}-v${(previous_blueprint.version || 0) + 1}`,
+    product_id,
     version: (previous_blueprint.version || 0) + 1,
     created_at: new Date().toISOString(),
-    base_on_blueprint_id: previous_blueprint.id || null, // Assuming previous_blueprint has an 'id'
+    based_on_blueprint_id: previous_blueprint.id || null,
     feedback_incorporated: feedback,
-    design_elements: previous_blueprint.design_elements || {},
-    // Additional structure can be added here as needed for a skeleton
+    steps: previous_blueprint.steps || [],
+    acceptance: previous_blueprint.acceptance || {},
+    dependencies: previous_blueprint.dependencies || [],
+    risk_notes: previous_blueprint.risk_notes || [],
   };
-  return newBlueprint;
 }
 
 /**
@@ -98,9 +138,10 @@ export function generateNextBlueprint(product_id, previous_blueprint, feedback =
  */
 export function summarizeImprovementReport(report) {
   const { quality_delta, variance_lessons, governance_cost, meta_insights } = report;
-  const qualitySummary = quality_delta >= 0 ? `Blueprint quality improved by ${quality_delta.toFixed(2)}.` : `Blueprint quality decreased by ${Math.abs(quality_delta).toFixed(2)}.`;
+  const qualitySummary = typeof quality_delta === 'number' ? (quality_delta >= 0 ? `Blueprint quality improved by ${quality_delta.toFixed(2)}.` : `Blueprint quality decreased by ${Math.abs(quality_delta).toFixed(2)}.`) : 'Blueprint quality delta unavailable.';
   const varianceSummary = variance_lessons.length > 0 ? `Key variance lessons: ${variance_lessons.slice(0, 2).join(', ')}${variance_lessons.length > 2 ? '...' : ''}.` : 'No specific variance lessons.';
-  const costSummary = `Governance cost: $${governance_cost.total_cost_usd ? governance_cost.total_cost_usd.toFixed(2) : 'N/A'}.`;
+  const costScore = governance_cost && typeof governance_cost.cost_score === 'number' ? governance_cost.cost_score : null;
+  const costSummary = costScore !== null ? `Governance cost score: ${costScore.toFixed(2)}.` : 'Governance cost unavailable.';
   const insightsSummary = meta_insights.length > 0 ? `Key insights: ${meta_insights.slice(0, 2).join(', ')}${meta_insights.length > 2 ? '...' : ''}.` : 'No new meta insights.';
 
   return `${qualitySummary} ${varianceSummary} ${costSummary} ${insightsSummary}`;
