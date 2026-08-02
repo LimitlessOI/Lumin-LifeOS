@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-02T11:42:03.964Z",
+  "generated_at": "2026-08-02T11:45:05.769Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12913,
   "files": [
@@ -43144,9 +43144,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 216468,
-      "mtime": "2026-08-01T09:15:41.968Z",
-      "indexed_at": "2026-08-01T09:17:36.218Z"
+      "bytes": 218316,
+      "mtime": "2026-08-02T11:44:50.522Z",
+      "indexed_at": "2026-08-02T11:45:05.769Z"
     },
     {
       "path": "docs/products/site-builder/SITE_TEMPLATE_CATALOG.md",
@@ -72061,9 +72061,9 @@
     {
       "path": "routes/site-builder-customization-ui-routes.js",
       "synopsis": "Registers UI and API routes for site builder customization.",
-      "bytes": 8470,
-      "mtime": "2026-08-02T11:42:03.964Z",
-      "indexed_at": "2026-08-02T11:42:03.964Z",
+      "bytes": 8926,
+      "mtime": "2026-08-02T11:43:37.069Z",
+      "indexed_at": "2026-08-02T11:45:05.769Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]

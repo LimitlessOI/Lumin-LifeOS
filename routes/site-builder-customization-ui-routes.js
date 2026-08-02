@@ -145,6 +145,10 @@ export function registerSiteBuilderCustomizationUiRoutes(app, deps) {
 
   app.get('/api/site-builder/customization', deps.requireKey, async (req, res, next) => {
     try {
+      if (!deps.isFounder) {
+        return res.status(403).send('Forbidden: Founder access required.');
+      }
+
       const result = await getCustomizationOptions(deps); // No params needed for fetching general options
       res.json(result);
     } catch (error) {
@@ -155,6 +159,10 @@ export function registerSiteBuilderCustomizationUiRoutes(app, deps) {
 
   app.post('/api/site-builder/customization', deps.requireKey, async (req, res, next) => {
     try {
+      if (!deps.isFounder) {
+        return res.status(403).send('Forbidden: Founder access required.');
+      }
+
       const { templateId, paletteId } = req.body;
       // Assuming saveCustomizationOptions expects these as a payload object
       await saveCustomizationOptions(deps, { templateId, paletteId });
@@ -167,6 +175,10 @@ export function registerSiteBuilderCustomizationUiRoutes(app, deps) {
 
   app.get('/api/site-builder/colour-palettes', deps.requireKey, async (req, res, next) => {
     try {
+      if (!deps.isFounder) {
+        return res.status(403).send('Forbidden: Founder access required.');
+      }
+
       const palettes = await getColourPalettes(deps);
       res.json(palettes);
     } catch (error) {
@@ -177,6 +189,10 @@ export function registerSiteBuilderCustomizationUiRoutes(app, deps) {
 
   app.get('/api/site-builder/templates', deps.requireKey, async (req, res, next) => {
     try {
+      if (!deps.isFounder) {
+        return res.status(403).send('Forbidden: Founder access required.');
+      }
+
       const templates = await getTemplates(deps);
       res.json(templates);
     } catch (error) {
