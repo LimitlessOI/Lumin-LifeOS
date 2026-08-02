@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-02T10:44:06.157Z",
+  "generated_at": "2026-08-02T10:45:59.546Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12892,
   "files": [
@@ -21307,9 +21307,9 @@
     {
       "path": "builderos-reboot/BP_PRIORITY.json",
       "synopsis": "BuilderOS artifact — BP PRIORITY.",
-      "bytes": 27710,
-      "mtime": "2026-08-02T10:29:02.636Z",
-      "indexed_at": "2026-08-02T10:29:02.636Z",
+      "bytes": 32461,
+      "mtime": "2026-08-02T10:45:07.956Z",
+      "indexed_at": "2026-08-02T10:45:59.546Z",
       "synopsis_index_only": true
     },
     {
@@ -21678,9 +21678,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3166560,
-      "mtime": "2026-08-02T10:33:48.852Z",
-      "indexed_at": "2026-08-02T10:44:06.157Z"
+      "bytes": 3899592,
+      "mtime": "2026-08-02T10:45:07.972Z",
+      "indexed_at": "2026-08-02T10:45:59.546Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -22425,9 +22425,9 @@
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-CONSTITUTIONAL-ARCHITECTURE-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
-      "bytes": 5903,
-      "mtime": "2026-08-02T01:11:55.446Z",
-      "indexed_at": "2026-08-02T09:36:38.323Z",
+      "bytes": 6844,
+      "mtime": "2026-08-02T10:45:07.956Z",
+      "indexed_at": "2026-08-02T10:45:59.546Z",
       "synopsis_index_only": true
     },
     {
@@ -22440,9 +22440,9 @@
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-CONSTITUTIONAL-ARCHITECTURE-0001/OBJECTIVE_VERDICT.json",
       "synopsis": "BuilderOS artifact — OBJECTIVE VERDICT.",
-      "bytes": 973,
-      "mtime": "2026-08-02T01:12:17.190Z",
-      "indexed_at": "2026-08-02T09:36:38.323Z",
+      "bytes": 953,
+      "mtime": "2026-08-02T10:45:07.956Z",
+      "indexed_at": "2026-08-02T10:45:59.546Z",
       "synopsis_index_only": true
     },
     {
@@ -30099,9 +30099,9 @@
     {
       "path": "builderos-reboot/PRODUCT_READINESS_REPORT.json",
       "synopsis": "BuilderOS artifact — PRODUCT READINESS REPORT.",
-      "bytes": 35645,
-      "mtime": "2026-08-02T10:29:02.636Z",
-      "indexed_at": "2026-08-02T10:29:02.636Z",
+      "bytes": 47229,
+      "mtime": "2026-08-02T10:45:07.956Z",
+      "indexed_at": "2026-08-02T10:45:59.546Z",
       "synopsis_index_only": true
     },
     {
@@ -66258,9 +66258,9 @@
     {
       "path": "products/receipts/CONSTITUTIONAL_ARCHITECTURE_V1_ACCEPTANCE.json",
       "synopsis": "Product receipt — CONSTITUTIONAL ARCHITECTURE V1 ACCEPTANCE.",
-      "bytes": 1084,
-      "mtime": "2026-08-02T01:12:17.190Z",
-      "indexed_at": "2026-08-02T09:36:38.323Z",
+      "bytes": 1426,
+      "mtime": "2026-08-02T10:45:07.972Z",
+      "indexed_at": "2026-08-02T10:45:59.546Z",
       "synopsis_index_only": true
     },
     {
@@ -66386,9 +66386,9 @@
     {
       "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
       "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
-      "bytes": 3341,
-      "mtime": "2026-08-01T20:04:05.828Z",
-      "indexed_at": "2026-08-01T20:04:05.828Z",
+      "bytes": 3636,
+      "mtime": "2026-08-02T10:45:07.972Z",
+      "indexed_at": "2026-08-02T10:45:59.546Z",
       "synopsis_index_only": true
     },
     {
@@ -67002,9 +67002,9 @@
     {
       "path": "products/receipts/POINT_B_DNA_VERIFY.json",
       "synopsis": "Product receipt — POINT B DNA VERIFY.",
-      "bytes": 280,
-      "mtime": "2026-08-02T10:28:21.996Z",
-      "indexed_at": "2026-08-02T10:29:51.799Z",
+      "bytes": 318,
+      "mtime": "2026-08-02T10:45:07.972Z",
+      "indexed_at": "2026-08-02T10:45:59.546Z",
       "synopsis_index_only": true
     },
     {
@@ -67018,9 +67018,9 @@
     {
       "path": "products/receipts/RECEIPT_TRUTH_VALIDATION.json",
       "synopsis": "Product receipt — RECEIPT TRUTH VALIDATION.",
-      "bytes": 18893,
-      "mtime": "2026-08-02T10:28:22.068Z",
-      "indexed_at": "2026-08-02T10:29:51.799Z",
+      "bytes": 26220,
+      "mtime": "2026-08-02T10:45:07.972Z",
+      "indexed_at": "2026-08-02T10:45:59.546Z",
       "synopsis_index_only": true
     },
     {
@@ -67218,17 +67218,17 @@
     {
       "path": "products/receipts/TRUTH_ENFORCEMENT_AUDIT.json",
       "synopsis": "Product receipt — TRUTH ENFORCEMENT AUDIT.",
-      "bytes": 701,
-      "mtime": "2026-08-02T10:28:22.132Z",
-      "indexed_at": "2026-08-02T10:29:51.799Z",
+      "bytes": 833,
+      "mtime": "2026-08-02T10:45:07.972Z",
+      "indexed_at": "2026-08-02T10:45:59.546Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/TRUTH_LOCKDOWN_VERIFY.json",
       "synopsis": "Product receipt — TRUTH LOCKDOWN VERIFY.",
-      "bytes": 1141,
-      "mtime": "2026-08-02T10:28:22.200Z",
-      "indexed_at": "2026-08-02T10:29:51.799Z",
+      "bytes": 1318,
+      "mtime": "2026-08-02T10:45:07.972Z",
+      "indexed_at": "2026-08-02T10:45:59.546Z",
       "synopsis_index_only": true
     },
     {
@@ -67258,9 +67258,9 @@
     {
       "path": "products/receipts/WISDOM_TRUTH_AUDIT.json",
       "synopsis": "Product receipt — WISDOM TRUTH AUDIT.",
-      "bytes": 735,
-      "mtime": "2026-08-02T10:28:22.252Z",
-      "indexed_at": "2026-08-02T10:29:51.799Z",
+      "bytes": 1001,
+      "mtime": "2026-08-02T10:45:07.972Z",
+      "indexed_at": "2026-08-02T10:45:59.546Z",
       "synopsis_index_only": true
     },
     {
