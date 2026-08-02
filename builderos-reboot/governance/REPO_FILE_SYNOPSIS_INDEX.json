@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-02T10:05:07.587Z",
+  "generated_at": "2026-08-02T10:05:33.212Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12885,
+  "file_count": 12886,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -89677,6 +89677,16 @@
       "indexed_at": "2026-07-28T22:54:46.666Z",
       "ssot": [
         "docs/products/limitlessos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/calibration-ledger.js",
+      "synopsis": "In-memory store for predictions and outcomes.",
+      "bytes": 3234,
+      "mtime": "2026-08-02T10:05:33.212Z",
+      "indexed_at": "2026-08-02T10:05:33.212Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
       ]
     },
     {
