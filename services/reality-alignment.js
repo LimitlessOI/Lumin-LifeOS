@@ -82,7 +82,7 @@ export function computeRealityAlignment(realityPackage, claim) {
   }
 
 
-  return { alignment_score, drift_report, reconciliation };
+  return { alignment_score, drift_report: driftReport, reconciliation };
 }
 
 /**
