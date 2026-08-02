@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-02T11:23:22.712Z",
+  "generated_at": "2026-08-02T11:23:36.048Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12907,
+  "file_count": 12908,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -95408,6 +95408,16 @@
       "bytes": 463,
       "mtime": "2026-06-21T21:39:16.933Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "services/organizational-calibration-engine.js",
+      "synopsis": "Exports calibrateOffice — services/organizational-calibration-engine.js.",
+      "bytes": 4571,
+      "mtime": "2026-08-02T11:23:36.048Z",
+      "indexed_at": "2026-08-02T11:23:36.048Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/outcome-tracker.js",
