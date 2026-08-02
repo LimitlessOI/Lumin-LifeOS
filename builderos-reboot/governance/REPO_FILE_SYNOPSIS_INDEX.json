@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-02T10:57:28.496Z",
+  "generated_at": "2026-08-02T11:02:52.791Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12892,
+  "file_count": 12893,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -91383,6 +91383,16 @@
       "bytes": 9354,
       "mtime": "2026-06-29T17:21:08.868Z",
       "indexed_at": "2026-07-28T22:54:46.666Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/emotional-modeling.js",
+      "synopsis": "Exports scoreEmotionalWeight — services/emotional-modeling.js.",
+      "bytes": 8948,
+      "mtime": "2026-08-02T11:02:52.791Z",
+      "indexed_at": "2026-08-02T11:02:52.791Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
