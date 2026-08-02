@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-02T14:38:33.795Z",
+  "generated_at": "2026-08-02T14:39:18.789Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12925,
   "files": [
@@ -33068,17 +33068,17 @@
     {
       "path": "data/constitutional-framework/reports/ADVERSARIAL_RATIFICATION_REPORT.json",
       "synopsis": "JSON data/config — data/constitutional-framework/reports/ADVERSARIAL_RATIFICATION_REPORT.json.",
-      "bytes": 2389,
-      "mtime": "2026-08-02T13:40:38.884Z",
-      "indexed_at": "2026-08-02T13:40:38.884Z",
+      "bytes": 3297,
+      "mtime": "2026-08-02T14:39:05.072Z",
+      "indexed_at": "2026-08-02T14:39:18.789Z",
       "synopsis_index_only": true
     },
     {
       "path": "data/constitutional-framework/reports/ENFORCEMENT_MATRIX_REPORT.json",
       "synopsis": "JSON data/config — data/constitutional-framework/reports/ENFORCEMENT_MATRIX_REPORT.json.",
-      "bytes": 279101,
-      "mtime": "2026-08-02T13:40:38.884Z",
-      "indexed_at": "2026-08-02T13:40:38.884Z",
+      "bytes": 286817,
+      "mtime": "2026-08-02T14:39:05.064Z",
+      "indexed_at": "2026-08-02T14:39:18.789Z",
       "synopsis_index_only": true
     },
     {
