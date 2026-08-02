@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-02T10:05:33.212Z",
+  "generated_at": "2026-08-02T10:05:46.671Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12886,
+  "file_count": 12887,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -95148,6 +95148,16 @@
       "bytes": 1840,
       "mtime": "2026-06-29T17:21:08.949Z",
       "indexed_at": "2026-07-28T22:54:46.666Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/office-trust-ledger.js",
+      "synopsis": "Exports updateTrust — services/office-trust-ledger.js.",
+      "bytes": 2293,
+      "mtime": "2026-08-02T10:05:46.671Z",
+      "indexed_at": "2026-08-02T10:05:46.671Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
