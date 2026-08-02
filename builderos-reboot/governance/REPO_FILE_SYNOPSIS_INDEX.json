@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-02T15:57:52.258Z",
+  "generated_at": "2026-08-02T16:02:45.148Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12930,
   "files": [
@@ -71952,9 +71952,9 @@
     {
       "path": "routes/rightsRoutes.js",
       "synopsis": "Routes for managing story studio rights and privacy.",
-      "bytes": 1398,
-      "mtime": "2026-08-02T15:57:52.258Z",
-      "indexed_at": "2026-08-02T15:57:52.258Z",
+      "bytes": 1605,
+      "mtime": "2026-08-02T16:02:45.148Z",
+      "indexed_at": "2026-08-02T16:02:45.148Z",
       "ssot": [
         "docs/products/story-studio/PRODUCT_HOME.md"
       ]

@@ -12,6 +12,7 @@ export function registerRightsRoutes(app, deps) {
         deps.logger.warn({ body: req.body }, 'Missing payload for set rights');
         return res.status(400).json({ ok: false, error: 'Missing payload' });
       }
+      // Assuming setRights will handle the DB interaction for story_studio_rights_control or story_rights
       const result = await setRights(deps, payload);
       res.json(result);
     } catch (error) {
@@ -27,6 +28,7 @@ export function registerRightsRoutes(app, deps) {
         deps.logger.warn({ body: req.body }, 'Missing payload for enforce privacy mode');
         return res.status(400).json({ ok: false, error: 'Missing payload' });
       }
+      // Assuming enforcePrivacyMode will handle the DB interaction for story_projects privacy_mode
       const result = await enforcePrivacyMode(deps, payload);
       res.json(result);
     } catch (error) {
