@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-02T09:58:41.526Z",
+  "generated_at": "2026-08-02T10:04:00.184Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12882,
+  "file_count": 12883,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -92496,6 +92496,16 @@
       "indexed_at": "2026-07-28T22:54:46.666Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/human-constellation.js",
+      "synopsis": "Exports createConstellation — services/human-constellation.js.",
+      "bytes": 8181,
+      "mtime": "2026-08-02T10:04:00.184Z",
+      "indexed_at": "2026-08-02T10:04:00.184Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
       ]
     },
     {
