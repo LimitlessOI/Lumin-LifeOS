@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-02T11:22:44.564Z",
+  "generated_at": "2026-08-02T11:22:57.889Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12905,
+  "file_count": 12906,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -98246,6 +98246,16 @@
       "indexed_at": "2026-07-28T22:54:46.666Z",
       "ssot": [
         "docs/products/ai-receptionist/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/variance-attribution-engine.js",
+      "synopsis": "Service module — Variance Attribution Engine.",
+      "bytes": 3799,
+      "mtime": "2026-08-02T11:22:57.889Z",
+      "indexed_at": "2026-08-02T11:22:57.889Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
       ]
     },
     {
