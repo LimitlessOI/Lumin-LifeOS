@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-02T11:03:15.211Z",
+  "generated_at": "2026-08-02T11:03:41.126Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12894,
+  "file_count": 12895,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -93085,6 +93085,16 @@
       "bytes": 7769,
       "mtime": "2026-08-01T04:17:26.396Z",
       "indexed_at": "2026-08-01T04:18:40.273Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/lifeos-coaching-protocol.js",
+      "synopsis": "Exports observe — services/lifeos-coaching-protocol.js.",
+      "bytes": 13741,
+      "mtime": "2026-08-02T11:03:41.126Z",
+      "indexed_at": "2026-08-02T11:03:41.126Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
