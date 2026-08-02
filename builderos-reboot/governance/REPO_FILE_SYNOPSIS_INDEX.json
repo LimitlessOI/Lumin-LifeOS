@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-02T11:24:20.470Z",
+  "generated_at": "2026-08-02T11:24:33.555Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12910,
+  "file_count": 12911,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -95042,6 +95042,16 @@
       "ssot": [
         "docs/products/lumin-university/PRODUCT_HOME.md",
         "docs/products/lumin-university/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/meta-learning-system.js",
+      "synopsis": "Exports getMetaScore — services/meta-learning-system.js.",
+      "bytes": 4516,
+      "mtime": "2026-08-02T11:24:33.555Z",
+      "indexed_at": "2026-08-02T11:24:33.555Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
       ]
     },
     {
