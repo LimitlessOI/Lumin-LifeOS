@@ -21,7 +21,7 @@ const RECEIPT_REL = `products/receipts/LIFEOS_USER_AUTH_V1_ACCEPTANCE.json`;
 const RECEIPT     = path.join(ROOT, RECEIPT_REL);
 const VERDICT     = path.join(ROOT, 'builderos-reboot/MISSIONS', MISSION, 'OBJECTIVE_VERDICT.json');
 
-const BASE  = (process.env.PUBLIC_BASE_URL || '').replace(/\/$/, '');
+const BASE  = (process.env.PUBLIC_BASE_URL || 'https://lumin-web-production-e3a9.up.railway.app').replace(/\/$/, '');
 const KEY   = process.env.COMMAND_CENTER_KEY || '';
 const PREFIX = '/api/v1/lifeos/auth';
 

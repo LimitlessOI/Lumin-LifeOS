@@ -26,6 +26,7 @@ const BASE = (
     process.env.PUBLIC_BASE_URL,
     process.env.LIFEOS_BASE_URL,
     process.env.BASE_URL,
+    'https://lumin-web-production-e3a9.up.railway.app',
   )
 );
 const KEY = process.env.COMMAND_CENTER_KEY || process.env.COMMAND_KEY || '';
