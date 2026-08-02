@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-02T15:28:16.163Z",
+  "generated_at": "2026-08-02T15:39:47.568Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12928,
   "files": [
@@ -21307,9 +21307,9 @@
     {
       "path": "builderos-reboot/BP_PRIORITY.json",
       "synopsis": "BuilderOS artifact — BP PRIORITY.",
-      "bytes": 28170,
-      "mtime": "2026-08-02T15:26:11.792Z",
-      "indexed_at": "2026-08-02T15:26:11.792Z",
+      "bytes": 28207,
+      "mtime": "2026-08-02T15:39:47.568Z",
+      "indexed_at": "2026-08-02T15:39:47.568Z",
       "synopsis_index_only": true
     },
     {
@@ -28039,9 +28039,9 @@
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/OBJECTIVE_VERDICT.json",
       "synopsis": "BuilderOS artifact — OBJECTIVE VERDICT.",
-      "bytes": 737,
-      "mtime": "2026-08-02T15:26:11.792Z",
-      "indexed_at": "2026-08-02T15:26:11.792Z",
+      "bytes": 1175,
+      "mtime": "2026-08-02T15:39:47.568Z",
+      "indexed_at": "2026-08-02T15:39:47.568Z",
       "synopsis_index_only": true
     },
     {
@@ -32989,8 +32989,8 @@
       "path": "data/builderos-intake-regression-last-run.json",
       "synopsis": "JSON data/config — data/builderos-intake-regression-last-run.json.",
       "bytes": 920,
-      "mtime": "2026-08-02T15:26:11.792Z",
-      "indexed_at": "2026-08-02T15:26:11.792Z",
+      "mtime": "2026-08-02T15:39:47.568Z",
+      "indexed_at": "2026-08-02T15:39:47.568Z",
       "synopsis_index_only": true
     },
     {
@@ -33491,9 +33491,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 3326,
-      "mtime": "2026-08-01T16:07:52.589Z",
-      "indexed_at": "2026-08-01T16:09:16.342Z",
+      "bytes": 1227,
+      "mtime": "2026-08-02T15:39:47.568Z",
+      "indexed_at": "2026-08-02T15:39:47.568Z",
       "synopsis_index_only": true
     },
     {
