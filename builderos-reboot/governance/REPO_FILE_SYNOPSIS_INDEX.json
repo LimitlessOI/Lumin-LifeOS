@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-02T12:03:47.805Z",
+  "generated_at": "2026-08-02T12:06:05.333Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12920,
   "files": [
@@ -21678,9 +21678,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3908182,
-      "mtime": "2026-08-02T12:03:03.548Z",
-      "indexed_at": "2026-08-02T12:03:47.805Z"
+      "bytes": 3909234,
+      "mtime": "2026-08-02T12:05:42.548Z",
+      "indexed_at": "2026-08-02T12:06:05.333Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -66400,9 +66400,9 @@
     {
       "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
       "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
-      "bytes": 3650,
-      "mtime": "2026-08-02T10:54:54.284Z",
-      "indexed_at": "2026-08-02T10:55:07.333Z",
+      "bytes": 6478,
+      "mtime": "2026-08-02T12:05:38.424Z",
+      "indexed_at": "2026-08-02T12:06:05.333Z",
       "synopsis_index_only": true
     },
     {
@@ -67016,9 +67016,9 @@
     {
       "path": "products/receipts/POINT_B_DNA_VERIFY.json",
       "synopsis": "Product receipt — POINT B DNA VERIFY.",
-      "bytes": 280,
-      "mtime": "2026-08-02T11:18:06.680Z",
-      "indexed_at": "2026-08-02T11:18:24.885Z",
+      "bytes": 318,
+      "mtime": "2026-08-02T12:05:47.760Z",
+      "indexed_at": "2026-08-02T12:06:05.333Z",
       "synopsis_index_only": true
     },
     {
@@ -67032,9 +67032,9 @@
     {
       "path": "products/receipts/RECEIPT_TRUTH_VALIDATION.json",
       "synopsis": "Product receipt — RECEIPT TRUTH VALIDATION.",
-      "bytes": 18891,
-      "mtime": "2026-08-02T11:18:05.944Z",
-      "indexed_at": "2026-08-02T11:18:24.885Z",
+      "bytes": 26219,
+      "mtime": "2026-08-02T12:05:47.028Z",
+      "indexed_at": "2026-08-02T12:06:05.333Z",
       "synopsis_index_only": true
     },
     {
@@ -67232,17 +67232,17 @@
     {
       "path": "products/receipts/TRUTH_ENFORCEMENT_AUDIT.json",
       "synopsis": "Product receipt — TRUTH ENFORCEMENT AUDIT.",
-      "bytes": 701,
-      "mtime": "2026-08-02T11:18:06.920Z",
-      "indexed_at": "2026-08-02T11:18:24.885Z",
+      "bytes": 833,
+      "mtime": "2026-08-02T12:05:48.012Z",
+      "indexed_at": "2026-08-02T12:06:05.333Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/TRUTH_LOCKDOWN_VERIFY.json",
       "synopsis": "Product receipt — TRUTH LOCKDOWN VERIFY.",
-      "bytes": 1141,
-      "mtime": "2026-08-02T11:18:06.524Z",
-      "indexed_at": "2026-08-02T11:18:24.885Z",
+      "bytes": 1318,
+      "mtime": "2026-08-02T12:05:47.592Z",
+      "indexed_at": "2026-08-02T12:06:05.333Z",
       "synopsis_index_only": true
     },
     {
@@ -67272,9 +67272,9 @@
     {
       "path": "products/receipts/WISDOM_TRUTH_AUDIT.json",
       "synopsis": "Product receipt — WISDOM TRUTH AUDIT.",
-      "bytes": 735,
-      "mtime": "2026-08-02T11:18:07.152Z",
-      "indexed_at": "2026-08-02T11:18:24.885Z",
+      "bytes": 1001,
+      "mtime": "2026-08-02T12:05:48.188Z",
+      "indexed_at": "2026-08-02T12:06:05.333Z",
       "synopsis_index_only": true
     },
     {
