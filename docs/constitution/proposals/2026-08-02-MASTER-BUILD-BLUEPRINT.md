@@ -247,6 +247,25 @@ These are not engine features. They are design constraints for every file, funct
 - The Meta-Learning System improves the Learning Architecture itself.
 - `npm run builder:preflight` passes.
 
+### Phase 3.5 — Institutional Constellation
+
+**Goal:** make Taloa capable of modeling itself with the same epistemological machinery it applies to people and organizations.
+
+1. **Institutional Constellation Spec**
+   - `docs/products/builderos/specs/INSTITUTIONAL_CONSTELLATION.md`
+2. **Institutional Constellation Service**
+   - `services/institutional-constellation.js`
+   - Node types: `belief`, `office`, `product`, `governance_mechanism`, `constitutional_principle`, `hypothesis`, `model`, `prediction`, `outcome`, `drift_signal`, `blind_spot`.
+   - Weighted edges record agreement, calibration, and causal confidence between offices, beliefs, predictions, and outcomes.
+   - Exports: `createInstitutionalConstellation`, `addBelief`, `addOffice`, `addProduct`, `weightAgreement`, `recordPrediction`, `recordOutcome`, `getCalibrationReport`, `getDriftSignals`, `getBlindSpots`, `getConstellationSummary`.
+3. **Smoke test** (`tests/institutional-constellation-smoke.test.mjs`) proves cross-office agreement, calibration, and drift detection.
+
+**Acceptance criteria for Phase 3.5:**
+- The institution can record its own beliefs, offices, products, and predictions as a constellation.
+- The constellation detects disagreement, drift, and blind spots.
+- It uses the same weighted-edge, confidence-vector, and calibration patterns as `services/human-constellation.js`.
+- `npm run builder:preflight` passes.
+
 ---
 
 ## 5. Governance and decision flow to install
@@ -312,6 +331,7 @@ Install order:
 | **Variance Attribution Engine** | Explain builder variance | Phase 3 | BuilderOS |
 | **Governance Cost Index** | Anti-bureaucracy metric | Phase 3 | BuilderOS |
 | **Meta-Learning System** | Learn how the system learns | Phase 3 | BuilderOS |
+| **Institutional Constellation** | Taloa models itself with the same graph, confidence, causality, and calibration machinery | Phase 3.5 | BuilderOS / Governance |
 
 ---
 
