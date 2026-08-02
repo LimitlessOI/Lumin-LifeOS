@@ -59,11 +59,15 @@ export function revealRecommendation(pkg, chairPreliminaryPkg) {
 }
 
 /**
- * Returns a string summary of findings and recommendation (even if withheld).
+ * Returns a string summary of findings and recommendation. The recommendation body is
+ * withheld unless the Chair's preliminary decision has been recorded, mirroring the same
+ * reveal condition enforced by revealRecommendation() — a summary must not leak what the
+ * reveal gate is withholding.
  * @param {object} pkg - The Solomon package.
+ * @param {object | null} [chairPreliminaryPkg] - The Chair's preliminary decision package, if any.
  * @returns {string} A string summary.
  */
-export function getSolomonSummary(pkg) {
+export function getSolomonSummary(pkg, chairPreliminaryPkg = null) {
   let summary = 'Solomon Analysis Summary:\n';
 
   if (pkg.findings.length > 0) {
@@ -76,20 +80,22 @@ export function getSolomonSummary(pkg) {
   }
 
   if (pkg.solomonRecommendation) {
-    summary += 'Recommendation:\n';
-    summary += `  Course of Action: ${pkg.solomonRecommendation.courseOfAction}\n`;
-    summary += `  Confidence: ${pkg.solomonRecommendation.confidence}\n`;
-    if (pkg.solomonRecommendation.assumptions && pkg.solomonRecommendation.assumptions.length > 0) {
-      summary += `  Assumptions: ${pkg.solomonRecommendation.assumptions.join(', ')}\n`;
-    }
-    if (pkg.solomonRecommendation.uncertainties && pkg.solomonRecommendation.uncertainties.length > 0) {
-      summary += `  Uncertainties: ${pkg.solomonRecommendation.uncertainties.join(', ')}\n`;
-    }
-    if (pkg.solomonRecommendation.constitutionalTensions && pkg.solomonRecommendation.constitutionalTensions.length > 0) {
-      summary += `  Constitutional Tensions: ${pkg.solomonRecommendation.constitutionalTensions.join(', ')}\n`;
-    }
-    if (pkg.withheld) {
-      summary += '  (Recommendation is currently withheld until Chair preliminary decision is recorded.)\n';
+    const revealed = !pkg.withheld || !!(chairPreliminaryPkg && chairPreliminaryPkg.proposedDecision);
+    if (!revealed) {
+      summary += 'Recommendation: withheld until Chair preliminary decision is recorded.\n';
+    } else {
+      summary += 'Recommendation:\n';
+      summary += `  Course of Action: ${pkg.solomonRecommendation.courseOfAction}\n`;
+      summary += `  Confidence: ${pkg.solomonRecommendation.confidence}\n`;
+      if (pkg.solomonRecommendation.assumptions && pkg.solomonRecommendation.assumptions.length > 0) {
+        summary += `  Assumptions: ${pkg.solomonRecommendation.assumptions.join(', ')}\n`;
+      }
+      if (pkg.solomonRecommendation.uncertainties && pkg.solomonRecommendation.uncertainties.length > 0) {
+        summary += `  Uncertainties: ${pkg.solomonRecommendation.uncertainties.join(', ')}\n`;
+      }
+      if (pkg.solomonRecommendation.constitutionalTensions && pkg.solomonRecommendation.constitutionalTensions.length > 0) {
+        summary += `  Constitutional Tensions: ${pkg.solomonRecommendation.constitutionalTensions.join(', ')}\n`;
+      }
     }
   } else {
     summary += 'No recommendation recorded yet.\n';

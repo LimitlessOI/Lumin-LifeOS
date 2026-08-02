@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-02T11:09:19.301Z",
+  "generated_at": "2026-08-02T11:10:22.257Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12902,
+  "file_count": 12901,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -41717,9 +41717,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 407619,
-      "mtime": "2026-08-02T10:57:28.496Z",
-      "indexed_at": "2026-08-02T10:57:28.496Z"
+      "bytes": 408723,
+      "mtime": "2026-08-02T11:10:08.390Z",
+      "indexed_at": "2026-08-02T11:10:22.257Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -91859,16 +91859,6 @@
       ]
     },
     {
-      "path": "services/founder-communication-calibration.js",
-      "synopsis": "Exports getDefaultProfile — services/founder-communication-calibration.js.",
-      "bytes": 12766,
-      "mtime": "2026-08-02T11:09:19.301Z",
-      "indexed_at": "2026-08-02T11:09:19.301Z",
-      "ssot": [
-        "docs/products/builderos/PRODUCT_HOME.md"
-      ]
-    },
-    {
       "path": "services/founder-communication-format.js",
       "synopsis": "Founder reply cards — DONE synopsis + bullets, NEXT + why (Chair format).",
       "bytes": 6744,
@@ -97018,9 +97008,9 @@
     {
       "path": "services/solomon-withheld-recommendation.js",
       "synopsis": "Exports createWithheldPackage — services/solomon-withheld-recommendation.js.",
-      "bytes": 3841,
-      "mtime": "2026-08-02T11:07:58.708Z",
-      "indexed_at": "2026-08-02T11:07:58.708Z",
+      "bytes": 4311,
+      "mtime": "2026-08-02T11:09:24.047Z",
+      "indexed_at": "2026-08-02T11:10:22.257Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
