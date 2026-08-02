@@ -1,12 +1,17 @@
 {
   "mission_id": "FACTORY-CONSTITUTIONAL-ARCHITECTURE-0001",
   "blueprint_id": "FACTORY-CONSTITUTIONAL-ARCHITECTURE-0001-v1",
-  "blueprint_status": "in_progress",
+  "blueprint_status": "complete",
   "scope": "constitutional_architecture_and_registry",
   "summary": "Build the Constitutional Framework as the manufacturing process for constitutional law: authority hierarchy, Knowledge Ladder, two-score confidence model, authority registry, research registry, processes, and CLI.",
   "authority": "builderos-reboot/MISSIONS/FACTORY-CONSTITUTIONAL-ARCHITECTURE-0001/FOUNDER_PACKET.md",
   "acceptance_command": "npm run builderos:constitutional-architecture:acceptance",
-  "allowed_action_types": ["create_file", "edit_file", "run_acceptance", "update_receipt"],
+  "allowed_action_types": [
+    "create_file",
+    "edit_file",
+    "run_acceptance",
+    "update_receipt"
+  ],
   "execution_gate": {
     "status": "OPEN",
     "blueprint_may_execute_now": true,
@@ -14,91 +19,185 @@
     "blocking_reasons": []
   },
   "phases": [
-    {"phase_id": "P0", "title": "Canonical architecture document"},
-    {"phase_id": "P1", "title": "Constitutional processes document"},
-    {"phase_id": "P2", "title": "Machine-readable authority registry and CLI"},
-    {"phase_id": "P3", "title": "NORTH_STAR_SSOT.md ratification"},
-    {"phase_id": "P4", "title": "Mission pack and acceptance script"},
-    {"phase_id": "P5", "title": "BP_PRIORITY and PRODUCT_REGISTRY integration"}
+    {
+      "phase_id": "P0",
+      "title": "Canonical architecture document"
+    },
+    {
+      "phase_id": "P1",
+      "title": "Constitutional processes document"
+    },
+    {
+      "phase_id": "P2",
+      "title": "Machine-readable authority registry and CLI"
+    },
+    {
+      "phase_id": "P3",
+      "title": "NORTH_STAR_SSOT.md ratification"
+    },
+    {
+      "phase_id": "P4",
+      "title": "Mission pack and acceptance script"
+    },
+    {
+      "phase_id": "P5",
+      "title": "BP_PRIORITY and PRODUCT_REGISTRY integration"
+    }
   ],
   "steps": [
     {
       "step_id": "FCA-000",
       "phase_id": "P0",
       "title": "Write CONSTITUTIONAL_FRAMEWORK.md",
-      "target_files": ["docs/constitution/CONSTITUTIONAL_FRAMEWORK.md"],
+      "target_files": [
+        "docs/constitution/CONSTITUTIONAL_FRAMEWORK.md"
+      ],
       "action_type": "create_file",
-      "required_edits": ["Define authority hierarchy Levels 0-7.", "Separate authority hierarchy from Knowledge Ladder.", "Define two-score confidence model (epistemic confidence + constitutional commitment).", "Define Constitutional Registry and Constitutional Research Registry.", "Define Constitutional Manufacturing Pipeline as operating doctrine.", "Clarify Chair as office, not role or fixed model.", "Rename Product Constitutions to Product Governance."],
+      "required_edits": [
+        "Define authority hierarchy Levels 0-7.",
+        "Separate authority hierarchy from Knowledge Ladder.",
+        "Define two-score confidence model (epistemic confidence + constitutional commitment).",
+        "Define Constitutional Registry and Constitutional Research Registry.",
+        "Define Constitutional Manufacturing Pipeline as operating doctrine.",
+        "Clarify Chair as office, not role or fixed model.",
+        "Rename Product Constitutions to Product Governance."
+      ],
       "dependencies": [],
       "status": "complete",
-      "acceptance_test_ids": ["AT-FCA-000-1"],
-      "completed_at": "2026-08-02T01:05:45.707Z",
-      "git_sha": "4dfa92fcf8d72f5e2742a58917ed0ac42f4a4c39"
+      "acceptance_test_ids": [
+        "AT-FCA-000-1"
+      ],
+      "completed_at": "2026-08-02T10:43:26.854Z",
+      "git_sha": "17afbb0331a543fd46f34c0bffc99ad0d442e37c"
     },
     {
       "step_id": "FCA-001",
       "phase_id": "P1",
       "title": "Write CONSTITUTIONAL_PROCESSES.md",
-      "target_files": ["docs/constitution/CONSTITUTIONAL_PROCESSES.md"],
+      "target_files": [
+        "docs/constitution/CONSTITUTIONAL_PROCESSES.md"
+      ],
       "action_type": "create_file",
-      "required_edits": ["Document amendment, promotion, demotion, challenge, review, retirement, emergency change, dispute resolution, and enforcement processes."],
-      "dependencies": ["FCA-000"],
+      "required_edits": [
+        "Document amendment, promotion, demotion, challenge, review, retirement, emergency change, dispute resolution, and enforcement processes."
+      ],
+      "dependencies": [
+        "FCA-000"
+      ],
       "status": "complete",
-      "acceptance_test_ids": ["AT-FCA-001-1"],
-      "completed_at": "2026-08-02T01:05:45.707Z",
-      "git_sha": "4dfa92fcf8d72f5e2742a58917ed0ac42f4a4c39"
+      "acceptance_test_ids": [
+        "AT-FCA-001-1"
+      ],
+      "completed_at": "2026-08-02T10:43:26.854Z",
+      "git_sha": "17afbb0331a543fd46f34c0bffc99ad0d442e37c"
     },
     {
       "step_id": "FCA-002",
       "phase_id": "P2",
       "title": "Build registry and CLI",
-      "target_files": ["data/constitutional-framework/REGISTRY.json", "data/constitutional-framework/RESEARCH_REGISTRY.json", "scripts/constitutional-framework.mjs"],
+      "target_files": [
+        "data/constitutional-framework/REGISTRY.json",
+        "data/constitutional-framework/RESEARCH_REGISTRY.json",
+        "scripts/constitutional-framework.mjs"
+      ],
       "action_type": "create_file",
-      "required_edits": ["CLI supports seed, verify, add, promote, demote, challenge, review, render, research-add, research-list.", "Registry tracks two scores and source anchors.", "Verifier wired into builder:preflight."],
-      "dependencies": ["FCA-000", "FCA-001"],
+      "required_edits": [
+        "CLI supports seed, verify, add, promote, demote, challenge, review, render, research-add, research-list.",
+        "Registry tracks two scores and source anchors.",
+        "Verifier wired into builder:preflight."
+      ],
+      "dependencies": [
+        "FCA-000",
+        "FCA-001"
+      ],
       "status": "complete",
-      "acceptance_test_ids": ["AT-FCA-002-1", "AT-FCA-002-2", "AT-FCA-002-3"],
-      "completed_at": "2026-08-02T01:05:45.707Z",
-      "git_sha": "4dfa92fcf8d72f5e2742a58917ed0ac42f4a4c39"
+      "acceptance_test_ids": [
+        "AT-FCA-002-1",
+        "AT-FCA-002-2",
+        "AT-FCA-002-3"
+      ],
+      "completed_at": "2026-08-02T10:43:26.854Z",
+      "git_sha": "17afbb0331a543fd46f34c0bffc99ad0d442e37c"
     },
     {
       "step_id": "FCA-003",
       "phase_id": "P3",
       "title": "Ratify in NORTH_STAR_SSOT.md §2.0M",
-      "target_files": ["docs/constitution/NORTH_STAR_SSOT.md"],
+      "target_files": [
+        "docs/constitution/NORTH_STAR_SSOT.md"
+      ],
       "action_type": "edit_file",
-      "required_edits": ["Add or update §2.0M requiring registry entries, two scores, Knowledge Ladder promotion, Level 7 implementation has no authority, Chair as office."],
-      "dependencies": ["FCA-000"],
+      "required_edits": [
+        "Add or update §2.0M requiring registry entries, two scores, Knowledge Ladder promotion, Level 7 implementation has no authority, Chair as office."
+      ],
+      "dependencies": [
+        "FCA-000"
+      ],
       "status": "complete",
-      "acceptance_test_ids": ["AT-FCA-003-1"],
-      "completed_at": "2026-08-02T01:05:45.707Z",
-      "git_sha": "4dfa92fcf8d72f5e2742a58917ed0ac42f4a4c39"
+      "acceptance_test_ids": [
+        "AT-FCA-003-1"
+      ],
+      "completed_at": "2026-08-02T10:43:26.854Z",
+      "git_sha": "17afbb0331a543fd46f34c0bffc99ad0d442e37c"
     },
     {
       "step_id": "FCA-004",
       "phase_id": "P4",
       "title": "Create mission pack and acceptance script",
-      "target_files": ["builderos-reboot/MISSIONS/FACTORY-CONSTITUTIONAL-ARCHITECTURE-0001/FOUNDER_PACKET.md", "builderos-reboot/MISSIONS/FACTORY-CONSTITUTIONAL-ARCHITECTURE-0001/BLUEPRINT.json", "builderos-reboot/MISSIONS/FACTORY-CONSTITUTIONAL-ARCHITECTURE-0001/ACCEPTANCE_TESTS.json", "scripts/verify-constitutional-architecture-acceptance.mjs"],
+      "target_files": [
+        "builderos-reboot/MISSIONS/FACTORY-CONSTITUTIONAL-ARCHITECTURE-0001/FOUNDER_PACKET.md",
+        "builderos-reboot/MISSIONS/FACTORY-CONSTITUTIONAL-ARCHITECTURE-0001/BLUEPRINT.json",
+        "builderos-reboot/MISSIONS/FACTORY-CONSTITUTIONAL-ARCHITECTURE-0001/ACCEPTANCE_TESTS.json",
+        "scripts/verify-constitutional-architecture-acceptance.mjs"
+      ],
       "action_type": "create_file",
-      "required_edits": ["Founder packet captures intent.", "Blueprint lists phases and steps.", "Acceptance tests verify files, seed/verify, registry, preflight wiring, and BP integration.", "Acceptance script calls finishBpAcceptance."],
-      "dependencies": ["FCA-000", "FCA-001", "FCA-002", "FCA-003"],
+      "required_edits": [
+        "Founder packet captures intent.",
+        "Blueprint lists phases and steps.",
+        "Acceptance tests verify files, seed/verify, registry, preflight wiring, and BP integration.",
+        "Acceptance script calls finishBpAcceptance."
+      ],
+      "dependencies": [
+        "FCA-000",
+        "FCA-001",
+        "FCA-002",
+        "FCA-003"
+      ],
       "status": "complete",
-      "acceptance_test_ids": ["AT-FCA-004-1", "AT-FCA-004-2"],
-      "completed_at": "2026-08-02T01:05:45.707Z",
-      "git_sha": "4dfa92fcf8d72f5e2742a58917ed0ac42f4a4c39"
+      "acceptance_test_ids": [
+        "AT-FCA-004-1",
+        "AT-FCA-004-2"
+      ],
+      "completed_at": "2026-08-02T10:43:26.854Z",
+      "git_sha": "17afbb0331a543fd46f34c0bffc99ad0d442e37c"
     },
     {
       "step_id": "FCA-005",
       "phase_id": "P5",
       "title": "Register in BP_PRIORITY and PRODUCT_REGISTRY",
-      "target_files": ["builderos-reboot/BP_PRIORITY.json", "docs/products/PRODUCT_REGISTRY.json"],
+      "target_files": [
+        "builderos-reboot/BP_PRIORITY.json",
+        "docs/products/PRODUCT_REGISTRY.json"
+      ],
       "action_type": "edit_file",
-      "required_edits": ["Add mission to BP_PRIORITY queue as rank 18.", "Add mission id to builderos product bp_priority_mission_ids."],
-      "dependencies": ["FCA-004"],
+      "required_edits": [
+        "Add mission to BP_PRIORITY queue as rank 18.",
+        "Add mission id to builderos product bp_priority_mission_ids."
+      ],
+      "dependencies": [
+        "FCA-004"
+      ],
       "status": "complete",
-      "acceptance_test_ids": ["AT-FCA-005-1"],
-      "completed_at": "2026-08-02T01:05:45.707Z",
-      "git_sha": "4dfa92fcf8d72f5e2742a58917ed0ac42f4a4c39"
+      "acceptance_test_ids": [
+        "AT-FCA-005-1"
+      ],
+      "completed_at": "2026-08-02T10:43:26.854Z",
+      "git_sha": "17afbb0331a543fd46f34c0bffc99ad0d442e37c"
     }
-  ]
+  ],
+  "completed_at": "2026-08-02T10:43:26.854Z",
+  "git_sha": "17afbb0331a543fd46f34c0bffc99ad0d442e37c",
+  "receipt_path": "products/receipts/CONSTITUTIONAL_ARCHITECTURE_V1_ACCEPTANCE.json",
+  "receipt_verdict": "PASS",
+  "build_method": "GAP-FILL"
 }

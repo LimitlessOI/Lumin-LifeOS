@@ -66,12 +66,12 @@
     },
     {
       "id": "nssot-1-0",
-      "title": "Lumin Core Purpose (Current Canonical Direction)",
+      "title": "Taloa Core Purpose (Current Canonical Direction)",
       "anchor": "§1.0",
       "level": "NorthStar",
       "source_file": "docs/constitution/NORTH_STAR_SSOT.md",
       "source_anchor": "§1.0",
-      "purpose": "Lumin Core Purpose (Current Canonical Direction)",
+      "purpose": "Taloa Core Purpose (Current Canonical Direction)",
       "evidence_level": "FoundationalPrinciple",
       "enforcement_status": "enforced",
       "enforcement_method": "preflight",
@@ -2308,5 +2308,5 @@
     }
   ],
   "seeded_at": "2026-08-02T01:05:08.478Z",
-  "updated_at": "2026-08-02T01:12:17.104Z"
+  "updated_at": "2026-08-02T10:43:26.763Z"
 }
