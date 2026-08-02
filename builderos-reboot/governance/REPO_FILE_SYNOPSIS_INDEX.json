@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-02T10:04:24.492Z",
+  "generated_at": "2026-08-02T10:05:07.587Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12884,
+  "file_count": 12885,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -95707,6 +95707,16 @@
       "mtime": "2025-12-22T18:15:07.184Z",
       "indexed_at": "2026-07-28T22:54:46.666Z",
       "synopsis_index_only": true
+    },
+    {
+      "path": "services/readiness-engine.js",
+      "synopsis": "Exports assessReadiness — services/readiness-engine.js.",
+      "bytes": 5244,
+      "mtime": "2026-08-02T10:05:07.587Z",
+      "indexed_at": "2026-08-02T10:05:07.587Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/realEstateCurriculum.js",
