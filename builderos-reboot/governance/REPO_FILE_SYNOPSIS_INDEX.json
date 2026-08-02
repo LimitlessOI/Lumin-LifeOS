@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-02T10:09:05.384Z",
+  "generated_at": "2026-08-02T10:09:57.236Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12890,
+  "file_count": 12891,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -95784,6 +95784,16 @@
       "bytes": 1124,
       "mtime": "2026-08-01T20:04:05.828Z",
       "indexed_at": "2026-08-01T20:04:05.828Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/reality-alignment.js",
+      "synopsis": "Exports computeRealityAlignment — services/reality-alignment.js.",
+      "bytes": 8780,
+      "mtime": "2026-08-02T10:09:57.236Z",
+      "indexed_at": "2026-08-02T10:09:57.236Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
