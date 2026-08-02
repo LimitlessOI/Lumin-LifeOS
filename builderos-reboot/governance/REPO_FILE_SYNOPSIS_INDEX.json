@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-02T11:08:37.542Z",
+  "generated_at": "2026-08-02T11:09:19.301Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12901,
+  "file_count": 12902,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -91854,6 +91854,16 @@
       "bytes": 920,
       "mtime": "2026-08-01T20:04:05.828Z",
       "indexed_at": "2026-08-01T20:04:05.828Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/founder-communication-calibration.js",
+      "synopsis": "Exports getDefaultProfile — services/founder-communication-calibration.js.",
+      "bytes": 12766,
+      "mtime": "2026-08-02T11:09:19.301Z",
+      "indexed_at": "2026-08-02T11:09:19.301Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
