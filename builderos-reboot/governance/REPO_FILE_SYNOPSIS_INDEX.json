@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-02T11:06:30.195Z",
+  "generated_at": "2026-08-02T11:06:47.499Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12897,
+  "file_count": 12898,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -93011,6 +93011,16 @@
       "bytes": 17759,
       "mtime": "2026-07-24T18:36:41.697Z",
       "indexed_at": "2026-07-28T22:54:46.666Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/lifeos-avoidance-pattern.js",
+      "synopsis": "Exports detectAvoidancePattern — services/lifeos-avoidance-pattern.js.",
+      "bytes": 6547,
+      "mtime": "2026-08-02T11:06:47.499Z",
+      "indexed_at": "2026-08-02T11:06:47.499Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
