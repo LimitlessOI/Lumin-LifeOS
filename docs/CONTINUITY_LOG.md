@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-08-02 — Constitutional Observability layer installed
+
+Adam clarified that the architecture has converged: the remaining work is installation, enforcement, calibration, and measurement, not more abstraction. `data/constitutional-framework/PRINCIPLE_RUNTIME_MAP.json` maps 14 constitutional principles to runtime artifacts and measurements. `scripts/verify-constitutional-observability.mjs` proves each principle is backed by executable behavior (services/gates/tests) rather than prose, and is wired into `npm run builder:preflight`. All 14 verifiers pass. `docs/products/builderos/PRODUCT_HOME.md` updated.
+
 ## 2026-08-02 — Phase 1/2 constitutional learning engines installed and smoke-tested
 
 Adam pressed for continuous building. `services/confidence-vectors.js` was generated through `POST /api/v1/lifeos/builder/build` per the new spec `docs/products/builderos/specs/CONFIDENCE_VECTOR_MODEL.md`, closing the last missing Phase 1 service. `tests/phase1-phase2-engines-smoke.test.mjs` was written to exercise all Phase 1 (Reality Alignment, Confidence Vectors, Human Constellation, Causality, Perspective Expansion, Readiness, Founder Communication Calibration, Calibration Ledger, Office Trust Ledger) and Phase 2 (State Modeling, Coaching Protocol, Early Risk Detection, Crisis Protocols, Avoidance Pattern Recognition, Solomon Wisdom Lab) engines. The test was wired into `npm run builder:preflight`. All 17 subtests pass. `docs/products/builderos/PRODUCT_HOME.md` and this log updated.

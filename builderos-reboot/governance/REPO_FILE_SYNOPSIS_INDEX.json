@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-02T14:39:18.789Z",
+  "generated_at": "2026-08-02T14:53:22.262Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12925,
+  "file_count": 12928,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -33050,6 +33050,14 @@
       "synopsis_index_only": true
     },
     {
+      "path": "data/constitutional-framework/PRINCIPLE_RUNTIME_MAP.json",
+      "synopsis": "JSON data/config — data/constitutional-framework/PRINCIPLE_RUNTIME_MAP.json.",
+      "bytes": 7621,
+      "mtime": "2026-08-02T14:53:22.262Z",
+      "indexed_at": "2026-08-02T14:53:22.262Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "data/constitutional-framework/proposals/ENFORCEMENT_MATRIX_PROPOSED.json",
       "synopsis": "JSON data/config — data/constitutional-framework/proposals/ENFORCEMENT_MATRIX_PROPOSED.json.",
       "bytes": 70598,
@@ -33071,6 +33079,14 @@
       "bytes": 3297,
       "mtime": "2026-08-02T14:39:05.072Z",
       "indexed_at": "2026-08-02T14:39:18.789Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "data/constitutional-framework/reports/CONSTITUTIONAL_OBSERVABILITY_REPORT.json",
+      "synopsis": "JSON data/config — data/constitutional-framework/reports/CONSTITUTIONAL_OBSERVABILITY_REPORT.json.",
+      "bytes": 7707,
+      "mtime": "2026-08-02T14:53:22.262Z",
+      "indexed_at": "2026-08-02T14:53:22.262Z",
       "synopsis_index_only": true
     },
     {
@@ -39462,9 +39478,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 123288,
-      "mtime": "2026-08-02T14:35:22.823Z",
-      "indexed_at": "2026-08-02T14:35:22.823Z"
+      "bytes": 123906,
+      "mtime": "2026-08-02T14:53:22.262Z",
+      "indexed_at": "2026-08-02T14:53:22.262Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -41717,9 +41733,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 415746,
-      "mtime": "2026-08-02T14:35:22.823Z",
-      "indexed_at": "2026-08-02T14:35:22.823Z"
+      "bytes": 416729,
+      "mtime": "2026-08-02T14:53:22.262Z",
+      "indexed_at": "2026-08-02T14:53:22.262Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -66001,9 +66017,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\":\"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",\"lifeos:file-synopsis:backfill\":\"node scripts/file-synopsis-enforce.mjs --all --auto-fix && node scripts/generate-file-synopsis-index.mjs\",\"lifeos:file-synopsis:index\":\"n",
-      "bytes": 34363,
-      "mtime": "2026-08-02T14:35:22.823Z",
-      "indexed_at": "2026-08-02T14:35:22.823Z",
+      "bytes": 34419,
+      "mtime": "2026-08-02T14:53:22.262Z",
+      "indexed_at": "2026-08-02T14:53:22.262Z",
       "synopsis_index_only": true
     },
     {
@@ -77429,6 +77445,16 @@
       "bytes": 2710,
       "mtime": "2026-08-02T09:55:50.096Z",
       "indexed_at": "2026-08-02T09:58:06.058Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/verify-constitutional-observability.mjs",
+      "synopsis": "Runtime observability gate — prove each constitutional principle is backed by an executable behavior and a measurement.",
+      "bytes": 11486,
+      "mtime": "2026-08-02T14:53:22.262Z",
+      "indexed_at": "2026-08-02T14:53:22.262Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
