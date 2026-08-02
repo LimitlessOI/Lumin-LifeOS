@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-02T12:00:48.026Z",
+  "generated_at": "2026-08-02T12:03:47.805Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12917,
+  "file_count": 12920,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21678,9 +21678,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3907168,
-      "mtime": "2026-08-02T11:53:52.908Z",
-      "indexed_at": "2026-08-02T11:57:30.946Z"
+      "bytes": 3908182,
+      "mtime": "2026-08-02T12:03:03.548Z",
+      "indexed_at": "2026-08-02T12:03:47.805Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -33076,9 +33076,9 @@
     {
       "path": "data/constitutional-framework/reports/ENFORCEMENT_MATRIX_REPORT.json",
       "synopsis": "JSON data/config — data/constitutional-framework/reports/ENFORCEMENT_MATRIX_REPORT.json.",
-      "bytes": 278998,
-      "mtime": "2026-08-02T10:28:21.780Z",
-      "indexed_at": "2026-08-02T10:29:51.799Z",
+      "bytes": 279101,
+      "mtime": "2026-08-02T11:59:35.296Z",
+      "indexed_at": "2026-08-02T12:03:47.805Z",
       "synopsis_index_only": true
     },
     {
@@ -39462,9 +39462,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 119148,
-      "mtime": "2026-08-02T11:57:07.124Z",
-      "indexed_at": "2026-08-02T11:57:30.946Z"
+      "bytes": 120653,
+      "mtime": "2026-08-02T11:59:13.344Z",
+      "indexed_at": "2026-08-02T12:03:47.805Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -41717,9 +41717,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 411636,
-      "mtime": "2026-08-02T11:56:57.624Z",
-      "indexed_at": "2026-08-02T11:57:30.946Z"
+      "bytes": 412745,
+      "mtime": "2026-08-02T11:59:13.348Z",
+      "indexed_at": "2026-08-02T12:03:47.805Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -41762,6 +41762,13 @@
       "bytes": 15292,
       "mtime": "2026-08-02T02:20:16.850Z",
       "indexed_at": "2026-08-02T09:36:38.323Z"
+    },
+    {
+      "path": "docs/products/builderos/specs/INSTITUTIONAL_CONSTELLATION.md",
+      "synopsis": "Institutional Constellation — Taloa's self-model using the same graph machinery as Human Constellation.",
+      "bytes": 3588,
+      "mtime": "2026-08-02T11:59:13.348Z",
+      "indexed_at": "2026-08-02T12:03:47.805Z"
     },
     {
       "path": "docs/products/builderos/TWIN.md",
@@ -73109,6 +73116,17 @@
       ]
     },
     {
+      "path": "scripts/build-institutional-constellation.mjs",
+      "synopsis": "Orchestrates POST /api/v1/lifeos/builder/build for the Institutional Constellation service.",
+      "bytes": 7059,
+      "mtime": "2026-08-02T11:59:13.348Z",
+      "indexed_at": "2026-08-02T12:03:47.805Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md",
+        "{{SSOT}}',"
+      ]
+    },
+    {
       "path": "scripts/build-lifeos-android-apk.mjs",
       "synopsis": "Build LifeOS Android APK (debug, sideload-ready) and copy to public/downloads/.",
       "bytes": 2386,
@@ -100522,6 +100540,16 @@
       "bytes": 17766,
       "mtime": "2026-07-28T17:56:00.335Z",
       "indexed_at": "2026-07-28T22:54:46.666Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "tests/institutional-constellation-smoke.test.mjs",
+      "synopsis": "Institutional Constellation smoke test.",
+      "bytes": 2814,
+      "mtime": "2026-08-02T11:59:13.348Z",
+      "indexed_at": "2026-08-02T12:03:47.805Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

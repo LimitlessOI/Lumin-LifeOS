@@ -1,11 +1,11 @@
 {
   "schema": "deploy_truth_verify_v1",
-  "at": "2026-08-02T10:54:54.286Z",
+  "at": "2026-08-02T12:03:00.383Z",
   "command": "drift-audit",
   "production_base": "https://lumin-web-production-e3a9.up.railway.app",
   "deploy_branch": "main",
-  "commit_sha": "e0e1b5d441a0afbcd8d2eeda2dc724ce3c300eb1",
-  "served_sha": "e0e1b5d441a0afbcd8d2eeda2dc724ce3c300eb1",
+  "commit_sha": "cee7eddf8ea3d783839220d07a655d0592e128ac",
+  "served_sha": "cee7eddf8ea3d783839220d07a655d0592e128ac",
   "verdict": "PROVEN",
   "ok": true,
   "passed": [
@@ -21,11 +21,11 @@
   "skipped": [],
   "files": [],
   "deployment": {
-    "id": "655bc904-02dc-4a68-899d-78830ee4c5e3",
+    "id": "12128210-c2a4-49d5-8dcb-55679c5eb144",
     "status": "SUCCESS",
-    "created_at": "2026-08-02T10:52:12.321Z",
-    "commit_sha": "e0e1b5d441a0afbcd8d2eeda2dc724ce3c300eb1",
-    "commit_message": "Regenerate REPO_FILE_SYNOPSIS_INDEX.json after receipt commit",
+    "created_at": "2026-08-02T12:01:20.799Z",
+    "commit_sha": "cee7eddf8ea3d783839220d07a655d0592e128ac",
+    "commit_message": "GAP-FILL: fix fail-open regression in site-builder-customization-ui-routes.js founder gate\n\nA parallel commit (154d03e18) fixed the missing-service-imports crash in this\nfile (inlined in-memory stubs) but in the same edit rewrote all 5 isFounder\nchecks from `!deps.isFounder` (fail-closed) to `deps.isFounder === false`\n(fail-open on undefined).\n\ndeps.isFounder is never set anywhere else in the codebase (confirmed via\nfull-repo grep) — no auth middleware or deps-construction code populates it.\nIn the real request path it is always undefined, and `undefined === false`\nis false, so the 403 branch never executes. The gate looks present in the\ncode but is silently always-bypassed — worse than the original bug (missing\ncheck entirely) because it no longer looks broken on inspection.\n\nFix: rewrote the condition to `!(deps && deps.isFounder === true)` across all\n5 routes — fail-closed by default, only opens when a caller explicitly sets\nisFounder: true. Verified live: undefined isFounder -> 403 on all 5 routes;\nisFounder: true -> 200 on all 5.\n\nNot a live risk today (file still unregistered in\nconfig/auto-registered-product-modules.json), but must not ship live in the\nfail-open state.\n\nHAND-AUTHORED-JUSTIFICATION: narrow security correctness fix restoring the\nfail-closed default that was already correct in my own prior commit\n(0aa0ccaeb) before an unrelated parallel edit weakened it — not new logic.",
     "url": null
   },
   "runtime_identity": {
@@ -46,18 +46,18 @@
     {
       "id": "git.fetch",
       "status": "pass",
-      "detail": "origin/main is e0e1b5d441a0"
+      "detail": "origin/main is cee7eddf8ea3"
     },
     {
       "id": "local.divergence",
       "status": "pass",
-      "detail": "local main is aligned with origin/main",
+      "detail": "local main is 0 ahead / 1 behind origin/main — local state is not what production deploys from",
       "local_branch": "main",
-      "local_head": "e0e1b5d441a0afbcd8d2eeda2dc724ce3c300eb1",
-      "remote_head": "e0e1b5d441a0afbcd8d2eeda2dc724ce3c300eb1",
+      "local_head": "13fd7960e97cda1c88aa472444c57cf027456254",
+      "remote_head": "cee7eddf8ea3d783839220d07a655d0592e128ac",
       "ahead": 0,
-      "behind": 0,
-      "uncommitted": 0
+      "behind": 1,
+      "uncommitted": 5
     },
     {
       "id": "runtime.identity",
@@ -81,20 +81,20 @@
     {
       "id": "runtime.version",
       "status": "pass",
-      "detail": "production serves e0e1b5d441a0, which contains origin/main (e0e1b5d441a0)",
-      "served_sha": "e0e1b5d441a0afbcd8d2eeda2dc724ce3c300eb1",
-      "remote_head": "e0e1b5d441a0afbcd8d2eeda2dc724ce3c300eb1"
+      "detail": "production serves cee7eddf8ea3, which contains origin/main (cee7eddf8ea3)",
+      "served_sha": "cee7eddf8ea3d783839220d07a655d0592e128ac",
+      "remote_head": "cee7eddf8ea3d783839220d07a655d0592e128ac"
     },
     {
       "id": "deployment.state",
       "status": "pass",
-      "detail": "latest deployment SUCCESS on e0e1b5d441a0, nothing in flight",
+      "detail": "latest deployment SUCCESS on cee7eddf8ea3, nothing in flight",
       "deployment": {
-        "id": "655bc904-02dc-4a68-899d-78830ee4c5e3",
+        "id": "12128210-c2a4-49d5-8dcb-55679c5eb144",
         "status": "SUCCESS",
-        "created_at": "2026-08-02T10:52:12.321Z",
-        "commit_sha": "e0e1b5d441a0afbcd8d2eeda2dc724ce3c300eb1",
-        "commit_message": "Regenerate REPO_FILE_SYNOPSIS_INDEX.json after receipt commit",
+        "created_at": "2026-08-02T12:01:20.799Z",
+        "commit_sha": "cee7eddf8ea3d783839220d07a655d0592e128ac",
+        "commit_message": "GAP-FILL: fix fail-open regression in site-builder-customization-ui-routes.js founder gate\n\nA parallel commit (154d03e18) fixed the missing-service-imports crash in this\nfile (inlined in-memory stubs) but in the same edit rewrote all 5 isFounder\nchecks from `!deps.isFounder` (fail-closed) to `deps.isFounder === false`\n(fail-open on undefined).\n\ndeps.isFounder is never set anywhere else in the codebase (confirmed via\nfull-repo grep) — no auth middleware or deps-construction code populates it.\nIn the real request path it is always undefined, and `undefined === false`\nis false, so the 403 branch never executes. The gate looks present in the\ncode but is silently always-bypassed — worse than the original bug (missing\ncheck entirely) because it no longer looks broken on inspection.\n\nFix: rewrote the condition to `!(deps && deps.isFounder === true)` across all\n5 routes — fail-closed by default, only opens when a caller explicitly sets\nisFounder: true. Verified live: undefined isFounder -> 403 on all 5 routes;\nisFounder: true -> 200 on all 5.\n\nNot a live risk today (file still unregistered in\nconfig/auto-registered-product-modules.json), but must not ship live in the\nfail-open state.\n\nHAND-AUTHORED-JUSTIFICATION: narrow security correctness fix restoring the\nfail-closed default that was already correct in my own prior commit\n(0aa0ccaeb) before an unrelated parallel edit weakened it — not new logic.",
         "url": null
       }
     }
@@ -102,9 +102,9 @@
   "produced_by": "cursor-agent",
   "verified_by": "git+railway-api+production-http-probe",
   "verification_kind": "deterministic+external",
-  "local_head": "e0e1b5d441a0afbcd8d2eeda2dc724ce3c300eb1",
+  "local_head": "13fd7960e97cda1c88aa472444c57cf027456254",
   "local_branch": "main",
   "ahead": 0,
-  "behind": 0,
-  "human_summary": "PROVEN — production serves e0e1b5d441a0, which contains origin/main; no runtime drift found."
+  "behind": 1,
+  "human_summary": "PROVEN — production serves cee7eddf8ea3, which contains origin/main; no runtime drift found."
 }
