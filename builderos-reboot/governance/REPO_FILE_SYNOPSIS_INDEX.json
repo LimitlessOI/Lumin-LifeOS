@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-02T15:45:40.839Z",
+  "generated_at": "2026-08-02T15:51:22.139Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12928,
   "files": [
@@ -31135,9 +31135,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 45534,
-      "mtime": "2026-08-01T20:04:05.828Z",
-      "indexed_at": "2026-08-01T20:04:05.828Z",
+      "bytes": 45873,
+      "mtime": "2026-08-02T15:51:22.139Z",
+      "indexed_at": "2026-08-02T15:51:22.139Z",
       "synopsis_index_only": true
     },
     {
@@ -39478,9 +39478,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 124886,
-      "mtime": "2026-08-02T15:26:11.792Z",
-      "indexed_at": "2026-08-02T15:26:11.792Z"
+      "bytes": 126089,
+      "mtime": "2026-08-02T15:51:22.139Z",
+      "indexed_at": "2026-08-02T15:51:22.139Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -43181,9 +43181,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 220124,
-      "mtime": "2026-08-02T12:00:32.688Z",
-      "indexed_at": "2026-08-02T12:00:48.026Z"
+      "bytes": 220956,
+      "mtime": "2026-08-02T15:51:22.139Z",
+      "indexed_at": "2026-08-02T15:51:22.139Z"
     },
     {
       "path": "docs/products/site-builder/SITE_TEMPLATE_CATALOG.md",
