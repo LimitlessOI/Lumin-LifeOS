@@ -3,7 +3,7 @@
   "product_id": "site-builder",
   "verify_script": "scripts/sentry-site-builder-prealpha-gate.mjs",
   "notes": "Structured, ordered build steps the autonomous product-build orchestrator executes one at a time via the /build primitive. Each step is a single-file, well-specified task with a concrete acceptance. Free-form prose build plans live in PRODUCT_HOME; THIS file is the machine-executable queue. COMPLETION GATE (SO-002): verify_script runs the SENTRY two-layer pre-alpha gate — Layer A (structural HTTP) always, Layer B (human-sim real browser + UX critique) whenever prod creds are present — and fails closed. No step is 'done' until SENTRY passes as a real client. Prior lane check (scripts/verify-site-builder-lane.mjs) still runnable via `npm run verify:site-builder`.",
-  "updated_at": "2026-08-02T15:49:42.369Z",
+  "updated_at": "2026-08-02T15:55:33.780Z",
   "steps": [
     {
       "id": "sb-deliverability-gate",
@@ -695,7 +695,7 @@
     },
     {
       "id": "step-09",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/site-builder-customization-ui-routes.js",
       "task": "Register customization UI API and HTML routes",
       "spec": "Exports registerCustomizationUiRoutes(app, deps). Mounts GET /site-builder/customization (returns HTML page embedding template/palette pickers populated from getCustomizationOptions); POST /api/site-builder/customization (calls saveCustomizationOptions, returns 200 JSON). HTML is an inline string with client JS that fetches /api/site-builder/colour-palettes and /api/site-builder/templates to populate selectors dynamically. No top-level browser globals. Founder-gated route must check deps.isFounder or equivalent flag before serving. Addresses ux_friction_1 and ux_friction_2.",
@@ -703,7 +703,7 @@
         "step-08"
       ],
       "founder_gated": true,
-      "attempts": 2,
+      "attempts": 3,
       "expected_exports": [
         "registerCustomizationUiRoutes",
         "UiRoutes"
@@ -727,7 +727,7 @@
       "blueprint_step_id": "step-09",
       "mission_id": "PRODUCT-site-builder",
       "same_signature_count": 1,
-      "last_attempt_at": "2026-08-02T15:46:43.645Z",
+      "last_attempt_at": "2026-08-02T15:53:47.866Z",
       "commit_sha": "cee7eddf8ea3d783839220d07a655d0592e128ac",
       "artifact_proven": true,
       "grounding_status": "PASS",
@@ -736,7 +736,8 @@
       "claim_level": "BUILT_NOT_LIVE",
       "failure_signature": "deploy|BLOCKED_EXTERNAL|ready_http_404",
       "human_hold": true,
-      "human_hold_reason": "This route already regressed twice tonight: (1) missing founder-check on 4/5 API endpoints, fixed as GAP-FILL; (2) the fix itself was weakened to a fail-open check (isFounder === false instead of !isFounder) by a subsequent regeneration, fixed again as GAP-FILL. founder_gated:true alone does not block selectNextStep() (services/product-build-orchestrator.js isHumanHold() only checks human_hold/pause_for_founder/gate, not founder_gated -- confirmed via tests/product-build-orchestrator.test.js line 31, which documents founder_gated as legacy/non-blocking by design). Setting human_hold:true to actually stop further automatic rebuild attempts on this security-sensitive file until a human confirms deps.isFounder has a real determination mechanism wired in (nothing sets it anywhere in the codebase today, so the route is currently locked to everyone, which is safe but not yet a real feature)."
+      "human_hold_reason": "This route already regressed twice tonight: (1) missing founder-check on 4/5 API endpoints, fixed as GAP-FILL; (2) the fix itself was weakened to a fail-open check (isFounder === false instead of !isFounder) by a subsequent regeneration, fixed again as GAP-FILL. founder_gated:true alone does not block selectNextStep() (services/product-build-orchestrator.js isHumanHold() only checks human_hold/pause_for_founder/gate, not founder_gated -- confirmed via tests/product-build-orchestrator.test.js line 31, which documents founder_gated as legacy/non-blocking by design). Setting human_hold:true to actually stop further automatic rebuild attempts on this security-sensitive file until a human confirms deps.isFounder has a real determination mechanism wired in (nothing sets it anywhere in the codebase today, so the route is currently locked to everyone, which is safe but not yet a real feature).",
+      "park_until": "2026-08-02T16:25:33.780Z"
     },
     {
       "id": "step-04",
