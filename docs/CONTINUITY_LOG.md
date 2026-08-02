@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-08-02 — LifeOS Consumer Alpha (user auth) acceptance restored and machine alpha walkthrough passed
+
+Adam ordered the full A-to-Z blueprint executed without stopping. The Point B target `PRODUCT-LIFEOS-USER-AUTH-V1-0001` was technically PASS but blocked on env drift and a malformed JSDoc header in the machine-alpha build probe. Fixed Railway env vars (`PUBLIC_BASE_URL` pointed to a dead deployment; `DATABASE_URL` and `JWT_SECRET`/`LIFEOS_JWT_SECRET` were missing/stale) via Railway GraphQL. Re-ran `npm run lifeos:user-auth:v1-acceptance` (11/11 PASS) and `npm run lifeos:machine-alpha-walkthrough` (12/12 PASS). Corrected `scripts/lifeos-direct-build-smoke-test.mjs` to use proper `/**` JSDoc with `@ssot docs/products/builderos/PRODUCT_HOME.md` so the founder-chat build probe can commit without `FILE_PLACEMENT_VIOLATION`. BP_PRIORITY receipt and objective verdict updated to current commit and production base. `docs/products/builderos/PRODUCT_HOME.md` updated.
+
 ## 2026-08-02 — Constitutional Observability layer installed
 
 Adam clarified that the architecture has converged: the remaining work is installation, enforcement, calibration, and measurement, not more abstraction. `data/constitutional-framework/PRINCIPLE_RUNTIME_MAP.json` maps 14 constitutional principles to runtime artifacts and measurements. `scripts/verify-constitutional-observability.mjs` proves each principle is backed by executable behavior (services/gates/tests) rather than prose, and is wired into `npm run builder:preflight`. All 14 verifiers pass. `docs/products/builderos/PRODUCT_HOME.md` updated.

@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-02T15:09:25.383Z",
+  "generated_at": "2026-08-02T15:14:14.023Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12928,
   "files": [
@@ -39478,9 +39478,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 123906,
-      "mtime": "2026-08-02T14:53:22.262Z",
-      "indexed_at": "2026-08-02T14:53:22.262Z"
+      "bytes": 124886,
+      "mtime": "2026-08-02T15:14:14.023Z",
+      "indexed_at": "2026-08-02T15:14:14.023Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -41733,9 +41733,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 416729,
-      "mtime": "2026-08-02T14:53:22.262Z",
-      "indexed_at": "2026-08-02T14:53:22.262Z"
+      "bytes": 417575,
+      "mtime": "2026-08-02T15:14:14.023Z",
+      "indexed_at": "2026-08-02T15:14:14.023Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -74749,10 +74749,10 @@
     },
     {
       "path": "scripts/lifeos-direct-build-smoke-test.mjs",
-      "synopsis": "This script provides a direct build smoke test for the LifeOS platform.",
-      "bytes": 6338,
-      "mtime": "2026-07-28T17:47:22.544Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "synopsis": "Direct build smoke test for the LifeOS platform.",
+      "bytes": 3459,
+      "mtime": "2026-08-02T15:14:14.023Z",
+      "indexed_at": "2026-08-02T15:14:14.023Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
