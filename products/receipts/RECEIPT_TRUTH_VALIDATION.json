@@ -1,6 +1,6 @@
 {
   "schema": "receipt_truth_validation_v1",
-  "at": "2026-08-02T10:33:58.884Z",
+  "at": "2026-08-02T10:46:29.416Z",
   "ok": true,
   "checked": 140,
   "failures": [],
@@ -139,7 +139,7 @@
       "file": "CONSTITUTIONAL_ARCHITECTURE_V1_ACCEPTANCE.json",
       "ok": true,
       "violations": [],
-      "claims_pass": false,
+      "claims_pass": true,
       "proposed_solutions": []
     },
     {
