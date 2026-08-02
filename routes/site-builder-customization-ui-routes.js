@@ -31,7 +31,7 @@ export function registerSiteBuilderCustomizationUiRoutes(app, deps) {
 
   app.get('/site-builder/customization', requireKey, async (req, res, next) => {
     try {
-      if (deps && deps.isFounder === false) {
+      if (!(deps && deps.isFounder === true)) {
         return res.status(403).send('Forbidden: Founder access required.');
       }
 
@@ -154,7 +154,7 @@ export function registerSiteBuilderCustomizationUiRoutes(app, deps) {
 
   app.get('/api/site-builder/customization', requireKey, async (req, res, next) => {
     try {
-      if (deps && deps.isFounder === false) {
+      if (!(deps && deps.isFounder === true)) {
         return res.status(403).send('Forbidden: Founder access required.');
       }
       res.json(getCustomizationOptions());
@@ -166,7 +166,7 @@ export function registerSiteBuilderCustomizationUiRoutes(app, deps) {
 
   app.post('/api/site-builder/customization', requireKey, async (req, res, next) => {
     try {
-      if (deps && deps.isFounder === false) {
+      if (!(deps && deps.isFounder === true)) {
         return res.status(403).send('Forbidden: Founder access required.');
       }
       const { templateId, paletteId } = req.body || {};
@@ -180,7 +180,7 @@ export function registerSiteBuilderCustomizationUiRoutes(app, deps) {
 
   app.get('/api/site-builder/colour-palettes', requireKey, async (req, res, next) => {
     try {
-      if (deps && deps.isFounder === false) {
+      if (!(deps && deps.isFounder === true)) {
         return res.status(403).send('Forbidden: Founder access required.');
       }
       res.json(getColourPalettes());
@@ -192,7 +192,7 @@ export function registerSiteBuilderCustomizationUiRoutes(app, deps) {
 
   app.get('/api/site-builder/templates', requireKey, async (req, res, next) => {
     try {
-      if (deps && deps.isFounder === false) {
+      if (!(deps && deps.isFounder === true)) {
         return res.status(403).send('Forbidden: Founder access required.');
       }
       res.json(getTemplates());
