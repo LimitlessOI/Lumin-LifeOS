@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-02T14:29:59.064Z",
+  "generated_at": "2026-08-02T14:35:22.823Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12922,
+  "file_count": 12925,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -39462,9 +39462,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 122401,
-      "mtime": "2026-08-02T13:40:38.884Z",
-      "indexed_at": "2026-08-02T13:40:38.884Z"
+      "bytes": 123288,
+      "mtime": "2026-08-02T14:35:22.823Z",
+      "indexed_at": "2026-08-02T14:35:22.823Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -41717,9 +41717,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 414648,
-      "mtime": "2026-08-02T13:40:38.884Z",
-      "indexed_at": "2026-08-02T13:40:38.884Z"
+      "bytes": 415746,
+      "mtime": "2026-08-02T14:35:22.823Z",
+      "indexed_at": "2026-08-02T14:35:22.823Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -41748,6 +41748,13 @@
       "bytes": 5335,
       "mtime": "2026-07-31T09:43:21.308Z",
       "indexed_at": "2026-07-31T09:51:46.501Z"
+    },
+    {
+      "path": "docs/products/builderos/specs/CONFIDENCE_VECTOR_MODEL.md",
+      "synopsis": "Confidence Vector Model — multi-dimensional confidence for any Twin.",
+      "bytes": 1877,
+      "mtime": "2026-08-02T14:35:22.823Z",
+      "indexed_at": "2026-08-02T14:35:22.823Z"
     },
     {
       "path": "docs/products/builderos/specs/CONSTITUTIONAL_LEARNING_ARCHITECTURE.md",
@@ -65994,9 +66001,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\":\"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",\"lifeos:file-synopsis:backfill\":\"node scripts/file-synopsis-enforce.mjs --all --auto-fix && node scripts/generate-file-synopsis-index.mjs\",\"lifeos:file-synopsis:index\":\"n",
-      "bytes": 34320,
-      "mtime": "2026-08-02T13:40:38.884Z",
-      "indexed_at": "2026-08-02T13:40:38.884Z",
+      "bytes": 34363,
+      "mtime": "2026-08-02T14:35:22.823Z",
+      "indexed_at": "2026-08-02T14:35:22.823Z",
       "synopsis_index_only": true
     },
     {
@@ -73103,6 +73110,17 @@
       "bytes": 2198,
       "mtime": "2026-06-21T21:39:05.645Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "scripts/build-confidence-vectors.mjs",
+      "synopsis": "Orchestrates POST /api/v1/lifeos/builder/build for the Confidence Vector Model service.",
+      "bytes": 6550,
+      "mtime": "2026-08-02T14:35:22.823Z",
+      "indexed_at": "2026-08-02T14:35:22.823Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md",
+        "{{SSOT}}',"
+      ]
     },
     {
       "path": "scripts/build-constitutional-learning-architecture.mjs",
@@ -100967,6 +100985,16 @@
       "bytes": 355,
       "mtime": "2026-06-21T21:40:27.792Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "tests/phase1-phase2-engines-smoke.test.mjs",
+      "synopsis": "Smoke tests for the Phase 1 and Phase 2 constitutional learning engines.",
+      "bytes": 12089,
+      "mtime": "2026-08-02T14:35:22.823Z",
+      "indexed_at": "2026-08-02T14:35:22.823Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "tests/phase2-safety-wisdom-smoke.test.mjs",

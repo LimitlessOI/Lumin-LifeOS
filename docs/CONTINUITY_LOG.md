@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-08-02 — Phase 1/2 constitutional learning engines installed and smoke-tested
+
+Adam pressed for continuous building. `services/confidence-vectors.js` was generated through `POST /api/v1/lifeos/builder/build` per the new spec `docs/products/builderos/specs/CONFIDENCE_VECTOR_MODEL.md`, closing the last missing Phase 1 service. `tests/phase1-phase2-engines-smoke.test.mjs` was written to exercise all Phase 1 (Reality Alignment, Confidence Vectors, Human Constellation, Causality, Perspective Expansion, Readiness, Founder Communication Calibration, Calibration Ledger, Office Trust Ledger) and Phase 2 (State Modeling, Coaching Protocol, Early Risk Detection, Crisis Protocols, Avoidance Pattern Recognition, Solomon Wisdom Lab) engines. The test was wired into `npm run builder:preflight`. All 17 subtests pass. `docs/products/builderos/PRODUCT_HOME.md` and this log updated.
+
 ## 2026-08-02 — Phase 0 ratification blockers closed and parity gate installed
 
 Adam provided the Phase 0 blueprint and instructed Builder to keep going. `docs/constitution/CONSTITUTIONAL_FRAMEWORK_v1.md` was extended with `## 23.13 The Entity Twin Framework` and `## 24 Phase 0 Ratification Blockers — Proposed Defaults`, giving explicit default thresholds for amendments, a charter for the Office of Independent Review, numeric limits on founder emergency powers, a deferral trigger for succession, the `scripts/verify-constitutional-parity.mjs` gate, and the adversarial ratification suite. `docs/constitution/CONSTITUTIONAL_FRAMEWORK_v1_UNRESOLVED.md` was updated to mark UD-1, UD-2, UD-4, UD-5, UD-8, and UD-9 as closed/deferred with references. The parity gate was wired into `npm run builder:preflight`. `docs/products/builderos/PRODUCT_HOME.md` updated.
