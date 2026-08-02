@@ -373,7 +373,7 @@
         "7"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerRightsRoutes"
       ],
@@ -394,15 +394,15 @@
       "blueprint_step_id": "8",
       "mission_id": "PRODUCT-story-studio",
       "same_signature_count": 0,
-      "blocker_class": null,
+      "blocker_class": "BLOCKED_TOOLING",
       "blocker_type": null,
       "blocker_resolution": null,
       "park_until": null,
-      "last_error": "dependency step 7 is founder_gated (cartoonGeneration service requires model codegen or founder directive)",
-      "commit_sha": null,
+      "last_error": "route module not auto-registered — add {\"path\":\"routes/rightsRoutes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
+      "commit_sha": "18c04c33fe093cbfb728ecb5775b327d013dc524",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-08-02T15:57:44.579Z",
       "last_attempt": null,
       "revive_count": 1,
       "revived_at": "2026-08-02T15:56:53.399Z",
@@ -523,6 +523,6 @@
   "blueprint_id": "PRODUCT-STORY-STUDIO-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-story-studio",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-02T15:57:30.772Z",
+  "updated_at": "2026-08-02T16:00:37.760Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/story-studio/BUILD_QUEUE.json"
 }
