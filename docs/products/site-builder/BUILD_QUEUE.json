@@ -734,7 +734,9 @@
       "last_error": "ready_http_404",
       "blocker_class": "BLOCKED_EXTERNAL",
       "claim_level": "BUILT_NOT_LIVE",
-      "failure_signature": "deploy|BLOCKED_EXTERNAL|ready_http_404"
+      "failure_signature": "deploy|BLOCKED_EXTERNAL|ready_http_404",
+      "human_hold": true,
+      "human_hold_reason": "This route already regressed twice tonight: (1) missing founder-check on 4/5 API endpoints, fixed as GAP-FILL; (2) the fix itself was weakened to a fail-open check (isFounder === false instead of !isFounder) by a subsequent regeneration, fixed again as GAP-FILL. founder_gated:true alone does not block selectNextStep() (services/product-build-orchestrator.js isHumanHold() only checks human_hold/pause_for_founder/gate, not founder_gated -- confirmed via tests/product-build-orchestrator.test.js line 31, which documents founder_gated as legacy/non-blocking by design). Setting human_hold:true to actually stop further automatic rebuild attempts on this security-sensitive file until a human confirms deps.isFounder has a real determination mechanism wired in (nothing sets it anywhere in the codebase today, so the route is currently locked to everyone, which is safe but not yet a real feature)."
     },
     {
       "id": "step-04",
