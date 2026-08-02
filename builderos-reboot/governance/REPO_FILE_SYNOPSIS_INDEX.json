@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-02T15:57:25.714Z",
+  "generated_at": "2026-08-02T15:57:52.258Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12929,
+  "file_count": 12930,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -71947,6 +71947,16 @@
       "indexed_at": "2026-08-01T19:07:38.787Z",
       "ssot": [
         "docs/products/financial-revenue/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "routes/rightsRoutes.js",
+      "synopsis": "Routes for managing story studio rights and privacy.",
+      "bytes": 1398,
+      "mtime": "2026-08-02T15:57:52.258Z",
+      "indexed_at": "2026-08-02T15:57:52.258Z",
+      "ssot": [
+        "docs/products/story-studio/PRODUCT_HOME.md"
       ]
     },
     {
