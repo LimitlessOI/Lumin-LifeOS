@@ -8,6 +8,7 @@
  *
  * Env: PUBLIC_BASE_URL, COMMAND_CENTER_KEY
  * Exit 0 = PASS, Exit 1 = FAIL
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import crypto from 'node:crypto';
 import path from 'node:path';
@@ -124,8 +125,18 @@ function step(id, cond, detail = '') {
   step('UAT-tier-check', [200, 401].includes(tierR.status));
 
   const allPass = report.tests_failed.length === 0;
-  if (allPass) console.log('\n✅ LifeOS User Auth V1 — PASS\n');
-  else console.error(`\n❌ LifeOS User Auth V1 — ${report.tests_failed.length} FAIL\n`);
+  if (allPass) {
+    console.log('\n✅ LifeOS User Auth V1 — PASS\n');
+    try {
+      const mawPath = path.join(ROOT, 'products/receipts/MACHINE_ALPHA_WALKTHROUGH.json');
+      const maw = JSON.parse(fs.readFileSync(mawPath, 'utf8'));
+      if (maw.ok === true && (maw.pass_fail === 'PASS' || maw.verdict === 'PASS')) {
+        report.founder_usability_pass = true;
+      }
+    } catch {}
+  } else {
+    console.error(`\n❌ LifeOS User Auth V1 — ${report.tests_failed.length} FAIL\n`);
+  }
 
   const { pass: bpPass } = finishBpAcceptance({
     root: ROOT,

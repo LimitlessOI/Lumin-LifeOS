@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-02T15:20:26.659Z",
+  "generated_at": "2026-08-02T15:26:11.792Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12928,
   "files": [
@@ -21307,9 +21307,9 @@
     {
       "path": "builderos-reboot/BP_PRIORITY.json",
       "synopsis": "BuilderOS artifact — BP PRIORITY.",
-      "bytes": 28221,
-      "mtime": "2026-08-02T15:17:28.618Z",
-      "indexed_at": "2026-08-02T15:17:28.618Z",
+      "bytes": 28170,
+      "mtime": "2026-08-02T15:26:11.792Z",
+      "indexed_at": "2026-08-02T15:26:11.792Z",
       "synopsis_index_only": true
     },
     {
@@ -27876,8 +27876,8 @@
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
       "bytes": 7802,
-      "mtime": "2026-08-02T15:17:28.618Z",
-      "indexed_at": "2026-08-02T15:17:28.618Z",
+      "mtime": "2026-08-02T15:26:11.792Z",
+      "indexed_at": "2026-08-02T15:26:11.792Z",
       "synopsis_index_only": true
     },
     {
@@ -28039,9 +28039,9 @@
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/OBJECTIVE_VERDICT.json",
       "synopsis": "BuilderOS artifact — OBJECTIVE VERDICT.",
-      "bytes": 1175,
-      "mtime": "2026-08-02T15:17:28.618Z",
-      "indexed_at": "2026-08-02T15:17:28.618Z",
+      "bytes": 737,
+      "mtime": "2026-08-02T15:26:11.792Z",
+      "indexed_at": "2026-08-02T15:26:11.792Z",
       "synopsis_index_only": true
     },
     {
@@ -30100,8 +30100,8 @@
       "path": "builderos-reboot/PRODUCT_READINESS_REPORT.json",
       "synopsis": "BuilderOS artifact — PRODUCT READINESS REPORT.",
       "bytes": 35732,
-      "mtime": "2026-08-02T15:17:28.618Z",
-      "indexed_at": "2026-08-02T15:17:28.618Z",
+      "mtime": "2026-08-02T15:26:11.792Z",
+      "indexed_at": "2026-08-02T15:26:11.792Z",
       "synopsis_index_only": true
     },
     {
@@ -32989,8 +32989,8 @@
       "path": "data/builderos-intake-regression-last-run.json",
       "synopsis": "JSON data/config — data/builderos-intake-regression-last-run.json.",
       "bytes": 920,
-      "mtime": "2026-08-02T15:17:28.618Z",
-      "indexed_at": "2026-08-02T15:17:28.618Z",
+      "mtime": "2026-08-02T15:26:11.792Z",
+      "indexed_at": "2026-08-02T15:26:11.792Z",
       "synopsis_index_only": true
     },
     {
@@ -33085,8 +33085,8 @@
       "path": "data/constitutional-framework/reports/CONSTITUTIONAL_OBSERVABILITY_REPORT.json",
       "synopsis": "JSON data/config — data/constitutional-framework/reports/CONSTITUTIONAL_OBSERVABILITY_REPORT.json.",
       "bytes": 7707,
-      "mtime": "2026-08-02T15:17:28.618Z",
-      "indexed_at": "2026-08-02T15:17:28.618Z",
+      "mtime": "2026-08-02T15:26:11.792Z",
+      "indexed_at": "2026-08-02T15:26:11.792Z",
       "synopsis_index_only": true
     },
     {
@@ -39479,8 +39479,8 @@
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
       "bytes": 124886,
-      "mtime": "2026-08-02T15:17:28.618Z",
-      "indexed_at": "2026-08-02T15:17:28.618Z"
+      "mtime": "2026-08-02T15:26:11.792Z",
+      "indexed_at": "2026-08-02T15:26:11.792Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -41734,8 +41734,8 @@
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
       "bytes": 417575,
-      "mtime": "2026-08-02T15:17:28.618Z",
-      "indexed_at": "2026-08-02T15:17:28.618Z"
+      "mtime": "2026-08-02T15:26:11.792Z",
+      "indexed_at": "2026-08-02T15:26:11.792Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -42618,9 +42618,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 665629,
-      "mtime": "2026-08-02T11:11:39.720Z",
-      "indexed_at": "2026-08-02T11:13:48.922Z"
+      "bytes": 666630,
+      "mtime": "2026-08-02T15:26:11.792Z",
+      "indexed_at": "2026-08-02T15:26:11.792Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -66424,8 +66424,8 @@
       "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
       "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
       "bytes": 3146,
-      "mtime": "2026-08-02T15:20:26.659Z",
-      "indexed_at": "2026-08-02T15:20:26.659Z",
+      "mtime": "2026-08-02T15:26:11.792Z",
+      "indexed_at": "2026-08-02T15:26:11.792Z",
       "synopsis_index_only": true
     },
     {
@@ -66568,8 +66568,8 @@
       "path": "products/receipts/LIFEOS_USER_AUTH_V1_ACCEPTANCE.json",
       "synopsis": "Product receipt — LIFEOS USER AUTH V1 ACCEPTANCE.",
       "bytes": 841,
-      "mtime": "2026-08-02T15:17:28.618Z",
-      "indexed_at": "2026-08-02T15:17:28.618Z",
+      "mtime": "2026-08-02T15:26:11.792Z",
+      "indexed_at": "2026-08-02T15:26:11.792Z",
       "synopsis_index_only": true
     },
     {
@@ -66967,9 +66967,9 @@
     {
       "path": "products/receipts/MACHINE_ALPHA_WALKTHROUGH.json",
       "synopsis": "Product receipt — MACHINE ALPHA WALKTHROUGH.",
-      "bytes": 6986,
-      "mtime": "2026-08-02T15:17:28.618Z",
-      "indexed_at": "2026-08-02T15:17:28.618Z",
+      "bytes": 7000,
+      "mtime": "2026-08-02T15:26:11.792Z",
+      "indexed_at": "2026-08-02T15:26:11.792Z",
       "synopsis_index_only": true
     },
     {
@@ -67040,8 +67040,8 @@
       "path": "products/receipts/POINT_B_DNA_VERIFY.json",
       "synopsis": "Product receipt — POINT B DNA VERIFY.",
       "bytes": 280,
-      "mtime": "2026-08-02T15:17:28.618Z",
-      "indexed_at": "2026-08-02T15:17:28.618Z",
+      "mtime": "2026-08-02T15:26:11.792Z",
+      "indexed_at": "2026-08-02T15:26:11.792Z",
       "synopsis_index_only": true
     },
     {
@@ -67056,8 +67056,8 @@
       "path": "products/receipts/RECEIPT_TRUTH_VALIDATION.json",
       "synopsis": "Product receipt — RECEIPT TRUTH VALIDATION.",
       "bytes": 18451,
-      "mtime": "2026-08-02T15:17:28.618Z",
-      "indexed_at": "2026-08-02T15:17:28.618Z",
+      "mtime": "2026-08-02T15:26:11.792Z",
+      "indexed_at": "2026-08-02T15:26:11.792Z",
       "synopsis_index_only": true
     },
     {
@@ -67256,16 +67256,16 @@
       "path": "products/receipts/TRUTH_ENFORCEMENT_AUDIT.json",
       "synopsis": "Product receipt — TRUTH ENFORCEMENT AUDIT.",
       "bytes": 701,
-      "mtime": "2026-08-02T15:17:28.618Z",
-      "indexed_at": "2026-08-02T15:17:28.618Z",
+      "mtime": "2026-08-02T15:26:11.792Z",
+      "indexed_at": "2026-08-02T15:26:11.792Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/TRUTH_LOCKDOWN_VERIFY.json",
       "synopsis": "Product receipt — TRUTH LOCKDOWN VERIFY.",
       "bytes": 1141,
-      "mtime": "2026-08-02T15:17:28.618Z",
-      "indexed_at": "2026-08-02T15:17:28.618Z",
+      "mtime": "2026-08-02T15:26:11.792Z",
+      "indexed_at": "2026-08-02T15:26:11.792Z",
       "synopsis_index_only": true
     },
     {
@@ -67296,8 +67296,8 @@
       "path": "products/receipts/WISDOM_TRUTH_AUDIT.json",
       "synopsis": "Product receipt — WISDOM TRUTH AUDIT.",
       "bytes": 735,
-      "mtime": "2026-08-02T15:17:28.618Z",
-      "indexed_at": "2026-08-02T15:17:28.618Z",
+      "mtime": "2026-08-02T15:26:11.792Z",
+      "indexed_at": "2026-08-02T15:26:11.792Z",
       "synopsis_index_only": true
     },
     {
@@ -74751,8 +74751,8 @@
       "path": "scripts/lifeos-direct-build-smoke-test.mjs",
       "synopsis": "Direct build smoke test for the LifeOS platform.",
       "bytes": 3459,
-      "mtime": "2026-08-02T15:17:28.618Z",
-      "indexed_at": "2026-08-02T15:17:28.618Z",
+      "mtime": "2026-08-02T15:26:11.792Z",
+      "indexed_at": "2026-08-02T15:26:11.792Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -76042,9 +76042,12 @@
     {
       "path": "scripts/run-lifeos-user-auth-v1-acceptance.mjs",
       "synopsis": "LifeOS User Auth V1 acceptance test — register, login, refresh, me, logout, tier gate.",
-      "bytes": 6151,
-      "mtime": "2026-07-10T00:19:23.652Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 6534,
+      "mtime": "2026-08-02T15:26:11.792Z",
+      "indexed_at": "2026-08-02T15:26:11.792Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "scripts/run-lifere-acceptance.mjs",
@@ -76223,9 +76226,9 @@
     {
       "path": "scripts/run-machine-alpha-walkthrough.mjs",
       "synopsis": "Machine Alpha Walkthrough — simulates founder UI session before Point B handoff.",
-      "bytes": 10061,
-      "mtime": "2026-07-03T19:01:46.966Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 10075,
+      "mtime": "2026-08-02T15:26:11.792Z",
+      "indexed_at": "2026-08-02T15:26:11.792Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

@@ -210,7 +210,7 @@ async function main() {
     at: new Date().toISOString(),
     base: BASE,
     ok: allPass,
-    verdict: allPass ? 'PASS' : 'FAIL',
+    verdict: allPass ? 'MACHINE_ALPHA_PASS' : 'FAIL',
     pass_fail: allPass ? 'PASS' : 'FAIL',
     canonical_surface: '/lifeos?layout=desktop&direct_system=1&page=lifeos-lifere.html',
     checked_routes: ['COUNSEL', 'BUILD', 'STATUS'],
