@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-02T10:04:00.184Z",
+  "generated_at": "2026-08-02T10:04:24.492Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12883,
+  "file_count": 12884,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -90458,6 +90458,16 @@
       "bytes": 4980,
       "mtime": "2026-07-05T19:10:02.199Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "services/confidence-vector.js",
+      "synopsis": "Exports scoreConfidence — services/confidence-vector.js.",
+      "bytes": 4255,
+      "mtime": "2026-08-02T10:04:24.492Z",
+      "indexed_at": "2026-08-02T10:04:24.492Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/confirmClientCareApiAccess.js",
