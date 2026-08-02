@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-02T11:24:33.555Z",
+  "generated_at": "2026-08-02T11:25:01.429Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12911,
+  "file_count": 12912,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -89591,6 +89591,16 @@
       "bytes": 7175,
       "mtime": "2026-07-14T09:22:00.753Z",
       "indexed_at": "2026-07-28T22:54:46.666Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/builderos-self-improvement-loop.js",
+      "synopsis": "Exports runImprovementLoop — services/builderos-self-improvement-loop.js.",
+      "bytes": 5551,
+      "mtime": "2026-08-02T11:25:01.429Z",
+      "indexed_at": "2026-08-02T11:25:01.429Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
