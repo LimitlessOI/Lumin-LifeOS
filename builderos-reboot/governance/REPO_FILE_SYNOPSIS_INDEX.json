@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-02T13:44:08.045Z",
+  "generated_at": "2026-08-02T14:29:59.064Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12921,
+  "file_count": 12922,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -90593,6 +90593,16 @@
       "bytes": 4255,
       "mtime": "2026-08-02T10:04:24.492Z",
       "indexed_at": "2026-08-02T10:04:24.492Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/confidence-vectors.js",
+      "synopsis": "Exports computeConfidenceVector — services/confidence-vectors.js.",
+      "bytes": 4158,
+      "mtime": "2026-08-02T14:29:59.064Z",
+      "indexed_at": "2026-08-02T14:29:59.064Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
