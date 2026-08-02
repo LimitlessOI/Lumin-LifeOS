@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-02T15:43:41.050Z",
+  "generated_at": "2026-08-02T15:45:40.839Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12928,
   "files": [
@@ -21307,9 +21307,9 @@
     {
       "path": "builderos-reboot/BP_PRIORITY.json",
       "synopsis": "BuilderOS artifact — BP PRIORITY.",
-      "bytes": 28207,
-      "mtime": "2026-08-02T15:39:47.568Z",
-      "indexed_at": "2026-08-02T15:39:47.568Z",
+      "bytes": 28789,
+      "mtime": "2026-08-02T15:44:36.094Z",
+      "indexed_at": "2026-08-02T15:45:40.839Z",
       "synopsis_index_only": true
     },
     {
@@ -42618,9 +42618,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 669076,
-      "mtime": "2026-08-02T15:27:51.222Z",
-      "indexed_at": "2026-08-02T15:28:16.163Z"
+      "bytes": 670419,
+      "mtime": "2026-08-02T15:45:23.572Z",
+      "indexed_at": "2026-08-02T15:45:40.839Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -66967,9 +66967,9 @@
     {
       "path": "products/receipts/MACHINE_ALPHA_WALKTHROUGH.json",
       "synopsis": "Product receipt — MACHINE ALPHA WALKTHROUGH.",
-      "bytes": 7000,
-      "mtime": "2026-08-02T15:26:11.792Z",
-      "indexed_at": "2026-08-02T15:26:11.792Z",
+      "bytes": 10107,
+      "mtime": "2026-08-02T15:43:47.808Z",
+      "indexed_at": "2026-08-02T15:45:40.839Z",
       "synopsis_index_only": true
     },
     {
@@ -74751,8 +74751,8 @@
       "path": "scripts/lifeos-direct-build-smoke-test.mjs",
       "synopsis": "Direct build smoke test for the LifeOS platform.",
       "bytes": 3458,
-      "mtime": "2026-08-02T15:43:41.050Z",
-      "indexed_at": "2026-08-02T15:43:41.050Z",
+      "mtime": "2026-08-02T15:42:45.574Z",
+      "indexed_at": "2026-08-02T15:42:45.574Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
