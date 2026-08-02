@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-02T14:59:20.967Z",
+  "generated_at": "2026-08-02T15:09:25.383Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12928,
   "files": [
@@ -21307,9 +21307,9 @@
     {
       "path": "builderos-reboot/BP_PRIORITY.json",
       "synopsis": "BuilderOS artifact — BP PRIORITY.",
-      "bytes": 32461,
-      "mtime": "2026-08-02T10:45:07.956Z",
-      "indexed_at": "2026-08-02T10:45:59.546Z",
+      "bytes": 28170,
+      "mtime": "2026-08-02T15:09:25.383Z",
+      "indexed_at": "2026-08-02T15:09:25.383Z",
       "synopsis_index_only": true
     },
     {
@@ -27875,9 +27875,9 @@
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
-      "bytes": 9821,
-      "mtime": "2026-07-10T11:01:40.292Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 7802,
+      "mtime": "2026-08-02T15:09:25.383Z",
+      "indexed_at": "2026-08-02T15:09:25.383Z",
       "synopsis_index_only": true
     },
     {
@@ -28039,9 +28039,9 @@
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/OBJECTIVE_VERDICT.json",
       "synopsis": "BuilderOS artifact — OBJECTIVE VERDICT.",
-      "bytes": 828,
-      "mtime": "2026-07-10T11:01:40.293Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 737,
+      "mtime": "2026-08-02T15:09:25.383Z",
+      "indexed_at": "2026-08-02T15:09:25.383Z",
       "synopsis_index_only": true
     },
     {
@@ -30099,9 +30099,9 @@
     {
       "path": "builderos-reboot/PRODUCT_READINESS_REPORT.json",
       "synopsis": "BuilderOS artifact — PRODUCT READINESS REPORT.",
-      "bytes": 47229,
-      "mtime": "2026-08-02T10:45:07.956Z",
-      "indexed_at": "2026-08-02T10:45:59.546Z",
+      "bytes": 35732,
+      "mtime": "2026-08-02T15:09:25.383Z",
+      "indexed_at": "2026-08-02T15:09:25.383Z",
       "synopsis_index_only": true
     },
     {
@@ -66423,9 +66423,9 @@
     {
       "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
       "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
-      "bytes": 3786,
-      "mtime": "2026-08-02T14:59:02.636Z",
-      "indexed_at": "2026-08-02T14:59:20.967Z",
+      "bytes": 3091,
+      "mtime": "2026-08-02T15:09:25.383Z",
+      "indexed_at": "2026-08-02T15:09:25.383Z",
       "synopsis_index_only": true
     },
     {
@@ -66567,9 +66567,9 @@
     {
       "path": "products/receipts/LIFEOS_USER_AUTH_V1_ACCEPTANCE.json",
       "synopsis": "Product receipt — LIFEOS USER AUTH V1 ACCEPTANCE.",
-      "bytes": 1334,
-      "mtime": "2026-07-10T11:01:40.294Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 841,
+      "mtime": "2026-08-02T15:09:25.383Z",
+      "indexed_at": "2026-08-02T15:09:25.383Z",
       "synopsis_index_only": true
     },
     {
