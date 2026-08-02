@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-02T11:06:47.499Z",
+  "generated_at": "2026-08-02T11:07:00.625Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12898,
+  "file_count": 12899,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -89872,6 +89872,16 @@
       "indexed_at": "2026-07-28T22:54:46.666Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/chair-preliminary-decision.js",
+      "synopsis": "Exports createEvidencePackage — services/chair-preliminary-decision.js.",
+      "bytes": 3639,
+      "mtime": "2026-08-02T11:07:00.625Z",
+      "indexed_at": "2026-08-02T11:07:00.625Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
       ]
     },
     {
