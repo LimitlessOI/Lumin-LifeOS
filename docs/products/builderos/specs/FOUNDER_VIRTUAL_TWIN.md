@@ -273,6 +273,46 @@ Cold agent picking this up:
 
 ---
 
+## Communication Calibration Profile
+
+The Founder Virtual Twin must also capture **how** Adam communicates, not merely **what** he decided. This is distinct from personality labels (Big Five, DISC, Enneagram, etc.). It is a **calibration** model: the system learns Adam's coordinate system so it can understand intended meaning rather than forcing a literal interpretation.
+
+Communication calibration is a LifeOS/BuilderOS subsystem, not a constitutional law. It produces a profile that feeds Chair context assembly and the person twin at `data/twins/default/adam/`.
+
+### Dimensions to calibrate
+
+| Dimension | What to learn | Example |
+|---|---|---|
+| **Literalness** | How literally should statements be interpreted? | highly literal / moderately literal / expressive / hyperbolic / metaphorical |
+| **Precision preference** | Does Adam communicate in exact numbers, approximate numbers, ranges, stories, or analogies? | ranges and analogies |
+| **Confidence expression** | What do phrases like "absolutely certain" or "maybe" actually map to in probability? | "I'm certain" → ~70% historically; "maybe" → ~90% historically |
+| **Abstraction level** | Does Adam think in concrete tasks, systems, principles, or philosophy? | systems and principles, with excursions into philosophy |
+| **Narrative density** | Does Adam transmit through stories or data? | high narrative / associative |
+| **Goal orientation** | What is Adam trying to do in this conversation: inform, persuade, entertain, think out loud, process emotions, brainstorm, or decide? | often "decide" or "think out loud" |
+| **Preferred learning style** | How does Adam learn best: explanation, experimentation, observation, repetition, analogy, debate? | iterative discovery through debate and synthesis |
+| **Known calibration biases** | Recurring mismatches between statement and measured reality. | engineering timeline estimates typically 15–30% optimistic |
+
+### Correction strategy examples
+
+- When Adam says "we'll know exactly," the Twin should read this as "Adam is expressing high confidence in convergence through hyperbolic emphasis," not as a literal guarantee.
+- When Adam gives a timeline, the Twin should apply the learned optimism correction and ask for concrete milestones before estimating delivery.
+- When Adam moves between abstraction levels rapidly, the Twin should track the current level and flag when a concrete implementation question is being answered with a principle.
+
+### Target implementation files
+
+- Spec / data model: this file (design) + `data/twins/default/adam/communication_profile.json`
+- Runtime service: `services/founder-communication-calibration.js` (proposed)
+- Chair context integration: `services/chair-lumin-unified.js`
+- Person twin template: `docs/products/life-coaching/twins/DIGITAL_TWIN_TEMPLATE.md`
+
+### Non-goals
+
+- The calibration profile must **not** be used to manipulate, misrepresent, or secretly override Adam's instructions.
+- It must **not** be treated as a static stereotype; it is continuously re-evaluated against reality.
+- It must preserve Adam's **original meaning**, not rewrite it.
+
+---
+
 ## Open questions (founder gate only)
 
 | ID | Question | Default if silent |

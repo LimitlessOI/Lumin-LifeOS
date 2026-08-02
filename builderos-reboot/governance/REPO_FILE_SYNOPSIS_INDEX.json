@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-01T20:09:43.922Z",
+  "generated_at": "2026-08-02T09:36:38.323Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12815,
+  "file_count": 12853,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21307,9 +21307,9 @@
     {
       "path": "builderos-reboot/BP_PRIORITY.json",
       "synopsis": "BuilderOS artifact — BP PRIORITY.",
-      "bytes": 25464,
-      "mtime": "2026-08-01T20:09:43.922Z",
-      "indexed_at": "2026-08-01T20:09:43.922Z",
+      "bytes": 26398,
+      "mtime": "2026-08-02T01:11:40.598Z",
+      "indexed_at": "2026-08-02T09:36:38.323Z",
       "synopsis_index_only": true
     },
     {
@@ -22413,6 +22413,52 @@
       "mtime": "2026-07-31T09:49:31.984Z",
       "indexed_at": "2026-07-31T09:51:46.501Z",
       "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-CONSTITUTIONAL-ARCHITECTURE-0001/ACCEPTANCE_TESTS.json",
+      "synopsis": "BuilderOS artifact — ACCEPTANCE TESTS.",
+      "bytes": 1689,
+      "mtime": "2026-08-02T01:11:58.874Z",
+      "indexed_at": "2026-08-02T09:36:38.323Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-CONSTITUTIONAL-ARCHITECTURE-0001/BLUEPRINT.json",
+      "synopsis": "BuilderOS artifact — BLUEPRINT.",
+      "bytes": 5903,
+      "mtime": "2026-08-02T01:11:55.446Z",
+      "indexed_at": "2026-08-02T09:36:38.323Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-CONSTITUTIONAL-ARCHITECTURE-0001/FOUNDER_PACKET.md",
+      "synopsis": "Founder packet — Constitutional Architecture mission. Verbal digital twin: what we are building and why.",
+      "bytes": 2181,
+      "mtime": "2026-08-02T01:11:45.958Z",
+      "indexed_at": "2026-08-02T09:36:38.323Z"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-CONSTITUTIONAL-ARCHITECTURE-0001/OBJECTIVE_VERDICT.json",
+      "synopsis": "BuilderOS artifact — OBJECTIVE VERDICT.",
+      "bytes": 973,
+      "mtime": "2026-08-02T01:12:17.190Z",
+      "indexed_at": "2026-08-02T09:36:38.323Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-CONSTITUTIONAL-LEARNING-ARCHITECTURE-0001/BLUEPRINT.json",
+      "synopsis": "BuilderOS artifact — BLUEPRINT.",
+      "bytes": 7719,
+      "mtime": "2026-08-02T09:33:49.476Z",
+      "indexed_at": "2026-08-02T09:36:38.323Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-CONSTITUTIONAL-LEARNING-ARCHITECTURE-0001/FOUNDER_PACKET.md",
+      "synopsis": "Founder Packet — Constitutional Learning Architecture",
+      "bytes": 1481,
+      "mtime": "2026-08-02T09:36:35.864Z",
+      "indexed_at": "2026-08-02T09:36:38.323Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-DELIBERATION-SENTRY-REGRESSION-0001/ACCEPTANCE_TESTS.json",
@@ -32780,6 +32826,70 @@
       "synopsis_index_only": true
     },
     {
+      "path": "data/constitutional-framework/CALIBRATION_LEDGER_SCHEMA.json",
+      "synopsis": "JSON data/config — data/constitutional-framework/CALIBRATION_LEDGER_SCHEMA.json.",
+      "bytes": 883,
+      "mtime": "2026-08-02T09:32:24.028Z",
+      "indexed_at": "2026-08-02T09:36:38.323Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "data/constitutional-framework/ENFORCEMENT_MATRIX.json",
+      "synopsis": "JSON data/config — data/constitutional-framework/ENFORCEMENT_MATRIX.json.",
+      "bytes": 70657,
+      "mtime": "2026-08-02T09:26:48.704Z",
+      "indexed_at": "2026-08-02T09:36:38.323Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "data/constitutional-framework/OFFICE_TRUST_LEDGER_SCHEMA.json",
+      "synopsis": "JSON data/config — data/constitutional-framework/OFFICE_TRUST_LEDGER_SCHEMA.json.",
+      "bytes": 778,
+      "mtime": "2026-08-02T09:32:32.672Z",
+      "indexed_at": "2026-08-02T09:36:38.323Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "data/constitutional-framework/proposals/ENFORCEMENT_MATRIX_PROPOSED.json",
+      "synopsis": "JSON data/config — data/constitutional-framework/proposals/ENFORCEMENT_MATRIX_PROPOSED.json.",
+      "bytes": 70598,
+      "mtime": "2026-08-02T08:31:38.341Z",
+      "indexed_at": "2026-08-02T09:36:38.323Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "data/constitutional-framework/REGISTRY.json",
+      "synopsis": "JSON data/config — data/constitutional-framework/REGISTRY.json.",
+      "bytes": 81476,
+      "mtime": "2026-08-02T01:12:17.106Z",
+      "indexed_at": "2026-08-02T09:36:38.323Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "data/constitutional-framework/reports/ADVERSARIAL_RATIFICATION_REPORT.json",
+      "synopsis": "JSON data/config — data/constitutional-framework/reports/ADVERSARIAL_RATIFICATION_REPORT.json.",
+      "bytes": 3297,
+      "mtime": "2026-08-02T09:27:23.820Z",
+      "indexed_at": "2026-08-02T09:36:38.323Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "data/constitutional-framework/reports/ENFORCEMENT_MATRIX_REPORT.json",
+      "synopsis": "JSON data/config — data/constitutional-framework/reports/ENFORCEMENT_MATRIX_REPORT.json.",
+      "bytes": 286817,
+      "mtime": "2026-08-02T09:27:23.816Z",
+      "indexed_at": "2026-08-02T09:36:38.323Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "data/constitutional-framework/RESEARCH_REGISTRY.json",
+      "synopsis": "JSON data/config — data/constitutional-framework/RESEARCH_REGISTRY.json.",
+      "bytes": 600,
+      "mtime": "2026-08-02T01:12:17.106Z",
+      "indexed_at": "2026-08-02T09:36:38.323Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "data/false-done-baseline.json",
       "synopsis": "JSON data/config — data/false-done-baseline.json.",
       "bytes": 14426,
@@ -32824,6 +32934,14 @@
       "bytes": 3754,
       "mtime": "2026-05-26T00:55:17.704Z",
       "indexed_at": "2026-07-28T22:54:46.666Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "data/human-constellation/SCHEMA.json",
+      "synopsis": "JSON data/config — data/human-constellation/SCHEMA.json.",
+      "bytes": 1962,
+      "mtime": "2026-08-02T09:31:56.332Z",
+      "indexed_at": "2026-08-02T09:36:38.323Z",
       "synopsis_index_only": true
     },
     {
@@ -38911,6 +39029,55 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "docs/constitution/CONSTITUTIONAL_FRAMEWORK_v1_RECOMMENDATIONS.md",
+      "synopsis": "Final recommended changes before ratification of CONSTITUTIONAL_FRAMEWORK_v1.md.",
+      "bytes": 6411,
+      "mtime": "2026-08-02T01:50:31.646Z",
+      "indexed_at": "2026-08-02T09:36:38.323Z"
+    },
+    {
+      "path": "docs/constitution/CONSTITUTIONAL_FRAMEWORK_v1_REDTEAM.md",
+      "synopsis": "Red-team analysis of CONSTITUTIONAL_FRAMEWORK_v1.md — ways it can be captured, gamed, bypassed, or made self-contradictory.",
+      "bytes": 13788,
+      "mtime": "2026-08-02T01:50:20.626Z",
+      "indexed_at": "2026-08-02T09:36:38.323Z"
+    },
+    {
+      "path": "docs/constitution/CONSTITUTIONAL_FRAMEWORK_v1_TRACEABILITY.md",
+      "synopsis": "Traceability matrix for CONSTITUTIONAL_FRAMEWORK_v1.md — maps settled requirements to sections.",
+      "bytes": 5483,
+      "mtime": "2026-08-02T01:50:40.618Z",
+      "indexed_at": "2026-08-02T09:36:38.323Z"
+    },
+    {
+      "path": "docs/constitution/CONSTITUTIONAL_FRAMEWORK_v1_UNRESOLVED.md",
+      "synopsis": "Unresolved decisions for CONSTITUTIONAL_FRAMEWORK_v1.md. Not ratified.",
+      "bytes": 5048,
+      "mtime": "2026-08-02T01:49:57.846Z",
+      "indexed_at": "2026-08-02T09:36:38.323Z"
+    },
+    {
+      "path": "docs/constitution/CONSTITUTIONAL_FRAMEWORK_v1.md",
+      "synopsis": "BuilderOS Constitutional Framework v1.0 (PROPOSED) — the manufacturing process for constitutional law. Not ratified. Subordinate to NORTH_STAR_SSOT.md.",
+      "bytes": 38127,
+      "mtime": "2026-08-02T09:26:14.200Z",
+      "indexed_at": "2026-08-02T09:36:38.323Z"
+    },
+    {
+      "path": "docs/constitution/CONSTITUTIONAL_FRAMEWORK.md",
+      "synopsis": "Constitutional Framework — the manufacturing process for law. Authority hierarchy, Knowledge Ladder, two-score Confidence Model, Constitutional Research Registry, and Processes.",
+      "bytes": 13746,
+      "mtime": "2026-08-02T01:12:19.374Z",
+      "indexed_at": "2026-08-02T09:36:38.323Z"
+    },
+    {
+      "path": "docs/constitution/CONSTITUTIONAL_PROCESSES.md",
+      "synopsis": "Constitutional processes — amendment, promotion, demotion, challenge, review, retirement.",
+      "bytes": 6382,
+      "mtime": "2026-08-02T01:10:26.850Z",
+      "indexed_at": "2026-08-02T09:36:38.323Z"
+    },
+    {
       "path": "docs/constitution/FOUNDER_PACKET_V2_BUILDEROS_MASTER_ARCHITECTURE.md",
       "synopsis": "FOUNDER_PACKET_V2 — BuilderOS / Lumin Company Foundation",
       "bytes": 39509,
@@ -38941,9 +39108,9 @@
     {
       "path": "docs/constitution/NORTH_STAR_SSOT.md",
       "synopsis": "North Star Constitution SSOT — Force of Truth — supreme constitutional law (ONE file)",
-      "bytes": 72461,
-      "mtime": "2026-08-01T19:41:37.554Z",
-      "indexed_at": "2026-08-01T19:42:58.977Z"
+      "bytes": 75896,
+      "mtime": "2026-08-02T09:26:32.972Z",
+      "indexed_at": "2026-08-02T09:36:38.323Z"
     },
     {
       "path": "docs/constitution/NORTH_STAR.md",
@@ -38995,11 +39162,53 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "docs/constitution/proposals/2026-08-02-ARCHITECTURE-CLASSIFICATION.md",
+      "synopsis": "Classification of the latest ChatGPT/Adam synthesis — and the emerging meta-architecture of Taloa.",
+      "bytes": 36965,
+      "mtime": "2026-08-02T08:30:11.117Z",
+      "indexed_at": "2026-08-02T09:36:38.323Z"
+    },
+    {
+      "path": "docs/constitution/proposals/2026-08-02-CONSTITUTION-DIGITAL-TWIN-PLAN.md",
+      "synopsis": "Complete picture — constitutional arrangement, enforcement, digital twin, and phased implementation plan (PROPOSAL).",
+      "bytes": 21405,
+      "mtime": "2026-08-02T07:16:22.405Z",
+      "indexed_at": "2026-08-02T09:36:38.323Z"
+    },
+    {
+      "path": "docs/constitution/proposals/2026-08-02-CONSTITUTIONAL-CANDIDATES-v1.1.md",
+      "synopsis": "Proposed v1.1 additions to the Constitutional Framework, drafted from the meta-architecture.",
+      "bytes": 12493,
+      "mtime": "2026-08-02T08:34:37.537Z",
+      "indexed_at": "2026-08-02T09:36:38.323Z"
+    },
+    {
+      "path": "docs/constitution/proposals/2026-08-02-MASTER-BUILD-BLUEPRINT.md",
+      "synopsis": "A-to-Z master build blueprint — the complete install order for the Taloa constitutional learning institution.",
+      "bytes": 24470,
+      "mtime": "2026-08-02T08:53:15.401Z",
+      "indexed_at": "2026-08-02T09:36:38.323Z"
+    },
+    {
+      "path": "docs/constitution/proposals/2026-08-02-NORTH_STAR_AMENDMENT.md",
+      "synopsis": "Proposed amendment to NORTH_STAR_SSOT.md — mission re-articulation and design equation.",
+      "bytes": 2651,
+      "mtime": "2026-08-02T08:34:44.385Z",
+      "indexed_at": "2026-08-02T09:36:38.323Z"
+    },
+    {
+      "path": "docs/constitution/proposals/2026-08-02-PHASE0-INTRO-BLUEPRINT.md",
+      "synopsis": "Phase 0 intro blueprint — the first buildable slice of the meta-architecture.",
+      "bytes": 6173,
+      "mtime": "2026-08-02T08:31:51.645Z",
+      "indexed_at": "2026-08-02T09:36:38.323Z"
+    },
+    {
       "path": "docs/constitution/README.md",
-      "synopsis": "Constitution folder index — one live law file",
-      "bytes": 954,
-      "mtime": "2026-07-09T20:09:56.149Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "synopsis": "Constitution folder index — framework, law, authority registry, research registry, and processes",
+      "bytes": 2727,
+      "mtime": "2026-08-02T01:37:46.426Z",
+      "indexed_at": "2026-08-02T09:36:38.323Z"
     },
     {
       "path": "docs/constitution/UNIFIED_DOCTRINE_MAP.md",
@@ -39053,9 +39262,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 104978,
-      "mtime": "2026-08-01T20:04:05.828Z",
-      "indexed_at": "2026-08-01T20:04:05.828Z"
+      "bytes": 114413,
+      "mtime": "2026-08-02T09:34:39.240Z",
+      "indexed_at": "2026-08-02T09:36:38.323Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -41308,9 +41517,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 394965,
-      "mtime": "2026-08-01T20:07:38.581Z",
-      "indexed_at": "2026-08-01T20:07:54.119Z"
+      "bytes": 403950,
+      "mtime": "2026-08-02T09:34:25.280Z",
+      "indexed_at": "2026-08-02T09:36:38.323Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -41334,11 +41543,18 @@
       "indexed_at": "2026-07-31T09:51:46.501Z"
     },
     {
+      "path": "docs/products/builderos/specs/CONSTITUTIONAL_LEARNING_ARCHITECTURE.md",
+      "synopsis": "Constitutional Learning Architecture — Phase 1-3 Spec",
+      "bytes": 6822,
+      "mtime": "2026-08-02T09:36:35.912Z",
+      "indexed_at": "2026-08-02T09:36:38.323Z"
+    },
+    {
       "path": "docs/products/builderos/specs/FOUNDER_VIRTUAL_TWIN.md",
       "synopsis": "Founder Virtual Twin — what to capture, how to compile it, and the build order",
-      "bytes": 12163,
-      "mtime": "2026-07-29T13:14:11.927Z",
-      "indexed_at": "2026-07-30T01:21:52.231Z"
+      "bytes": 15292,
+      "mtime": "2026-08-02T02:20:16.850Z",
+      "indexed_at": "2026-08-02T09:36:38.323Z"
     },
     {
       "path": "docs/products/builderos/TWIN.md",
@@ -42165,9 +42381,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 663469,
-      "mtime": "2026-08-01T15:59:09.617Z",
-      "indexed_at": "2026-08-01T15:59:15.107Z"
+      "bytes": 664414,
+      "mtime": "2026-08-02T02:21:06.670Z",
+      "indexed_at": "2026-08-02T09:36:38.323Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -42542,9 +42758,9 @@
     {
       "path": "docs/products/PRODUCT_REGISTRY.json",
       "synopsis": "Documentation — PRODUCT REGISTRY.",
-      "bytes": 24796,
-      "mtime": "2026-08-01T19:07:38.787Z",
-      "indexed_at": "2026-08-01T19:07:38.787Z",
+      "bytes": 24839,
+      "mtime": "2026-08-02T01:11:29.930Z",
+      "indexed_at": "2026-08-02T09:36:38.323Z",
       "synopsis_index_only": true
     },
     {
@@ -62281,6 +62497,13 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "docs/reports/AUDIT_CHATGPT_CONVERSATION_2026_08_02.md",
+      "synopsis": "Audit of ChatGPT constitutional/discovery conversation — maps every idea to the file it belongs in.",
+      "bytes": 11110,
+      "mtime": "2026-08-02T02:20:36.878Z",
+      "indexed_at": "2026-08-02T09:36:38.323Z"
+    },
+    {
       "path": "docs/reports/AUDIT_CHATGPT_CONVERSATION.md",
       "synopsis": "ChatGPT Conversation Audit — BuilderOS 5/10 Review",
       "bytes": 9639,
@@ -62315,6 +62538,13 @@
       "bytes": 1082,
       "mtime": "2026-08-01T20:04:05.828Z",
       "indexed_at": "2026-08-01T20:04:05.828Z"
+    },
+    {
+      "path": "docs/reports/CONSTITUTION_PRODUCT_GOVERNANCE_AUDIT.md",
+      "synopsis": "Governance audit — constitution, SSOT, and product-home architecture — THINK-grade recommendation",
+      "bytes": 19155,
+      "mtime": "2026-08-01T22:55:56.850Z",
+      "indexed_at": "2026-08-02T09:36:38.323Z"
     },
     {
       "path": "docs/reports/landing-page-status.md",
@@ -65549,10 +65779,10 @@
     },
     {
       "path": "package.json",
-      "synopsis": "enforce\":\"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",\"lifeos:file-synopsis:backfill\":\"node scripts/file-synopsis-enforce.mjs --all --auto-fix && node scripts/generate-file-synopsis-index.mjs\",\"lifeos:file-synopsis:index\":\"n",
-      "bytes": 33935,
-      "mtime": "2026-08-01T20:04:05.828Z",
-      "indexed_at": "2026-08-01T20:04:05.828Z",
+      "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
+      "bytes": 36526,
+      "mtime": "2026-08-02T01:05:54.306Z",
+      "indexed_at": "2026-08-02T09:36:38.323Z",
       "synopsis_index_only": true
     },
     {
@@ -65823,6 +66053,14 @@
       "bytes": 807,
       "mtime": "2026-06-18T03:39:45.274Z",
       "indexed_at": "2026-07-28T22:54:46.666Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/CONSTITUTIONAL_ARCHITECTURE_V1_ACCEPTANCE.json",
+      "synopsis": "Product receipt — CONSTITUTIONAL ARCHITECTURE V1 ACCEPTANCE.",
+      "bytes": 1084,
+      "mtime": "2026-08-02T01:12:17.190Z",
+      "indexed_at": "2026-08-02T09:36:38.323Z",
       "synopsis_index_only": true
     },
     {
@@ -66556,9 +66794,9 @@
     {
       "path": "products/receipts/POINT_B_DNA_VERIFY.json",
       "synopsis": "Product receipt — POINT B DNA VERIFY.",
-      "bytes": 280,
-      "mtime": "2026-08-01T20:09:43.922Z",
-      "indexed_at": "2026-08-01T20:09:43.922Z",
+      "bytes": 318,
+      "mtime": "2026-08-02T09:34:50.116Z",
+      "indexed_at": "2026-08-02T09:36:38.323Z",
       "synopsis_index_only": true
     },
     {
@@ -66572,9 +66810,9 @@
     {
       "path": "products/receipts/RECEIPT_TRUTH_VALIDATION.json",
       "synopsis": "Product receipt — RECEIPT TRUTH VALIDATION.",
-      "bytes": 18628,
-      "mtime": "2026-08-01T20:09:43.922Z",
-      "indexed_at": "2026-08-01T20:09:43.922Z",
+      "bytes": 26034,
+      "mtime": "2026-08-02T09:34:49.428Z",
+      "indexed_at": "2026-08-02T09:36:38.323Z",
       "synopsis_index_only": true
     },
     {
@@ -66772,17 +67010,17 @@
     {
       "path": "products/receipts/TRUTH_ENFORCEMENT_AUDIT.json",
       "synopsis": "Product receipt — TRUTH ENFORCEMENT AUDIT.",
-      "bytes": 701,
-      "mtime": "2026-08-01T20:09:43.922Z",
-      "indexed_at": "2026-08-01T20:09:43.922Z",
+      "bytes": 833,
+      "mtime": "2026-08-02T09:34:50.360Z",
+      "indexed_at": "2026-08-02T09:36:38.323Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/TRUTH_LOCKDOWN_VERIFY.json",
       "synopsis": "Product receipt — TRUTH LOCKDOWN VERIFY.",
-      "bytes": 1141,
-      "mtime": "2026-08-01T20:09:43.922Z",
-      "indexed_at": "2026-08-01T20:09:43.922Z",
+      "bytes": 1318,
+      "mtime": "2026-08-02T09:34:49.968Z",
+      "indexed_at": "2026-08-02T09:36:38.323Z",
       "synopsis_index_only": true
     },
     {
@@ -66812,9 +67050,9 @@
     {
       "path": "products/receipts/WISDOM_TRUTH_AUDIT.json",
       "synopsis": "Product receipt — WISDOM TRUTH AUDIT.",
-      "bytes": 735,
-      "mtime": "2026-08-01T20:09:43.922Z",
-      "indexed_at": "2026-08-01T20:09:43.922Z",
+      "bytes": 1001,
+      "mtime": "2026-08-02T09:34:50.528Z",
+      "indexed_at": "2026-08-02T09:36:38.323Z",
       "synopsis_index_only": true
     },
     {
@@ -72354,6 +72592,16 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "scripts/adversarial-ratification-suite.mjs",
+      "synopsis": "Adversarial ratification suite for the 2026-08-02 constitutional convergence.",
+      "bytes": 6769,
+      "mtime": "2026-08-02T09:36:35.952Z",
+      "indexed_at": "2026-08-02T09:36:38.323Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "scripts/ai-security-review.mjs",
       "synopsis": "AI-powered adversarial security review of a diff — the real",
       "bytes": 9321,
@@ -72613,6 +72861,16 @@
       "bytes": 2198,
       "mtime": "2026-06-21T21:39:05.645Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "scripts/build-constitutional-learning-architecture.mjs",
+      "synopsis": "Orchestrates POST /api/v1/lifeos/builder/build for the constitutional learning architecture mission.",
+      "bytes": 3389,
+      "mtime": "2026-08-02T09:36:35.984Z",
+      "indexed_at": "2026-08-02T09:36:38.323Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "scripts/build-lifeos-android-apk.mjs",
@@ -73131,6 +73389,16 @@
       ]
     },
     {
+      "path": "scripts/constitutional-framework.mjs",
+      "synopsis": "Constitutional Framework CLI — seed, verify, add, promote, demote, challenge, review, render.",
+      "bytes": 22898,
+      "mtime": "2026-08-02T01:10:40.262Z",
+      "indexed_at": "2026-08-02T09:36:38.323Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "scripts/coppa-compliance-review.mjs",
       "synopsis": "Conducts and documents COPPA compliance reviews for KidsOS children.",
       "bytes": 5258,
@@ -73591,6 +73859,16 @@
       "indexed_at": "2026-07-28T22:54:46.666Z",
       "ssot": [
         "docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/generate-constitutional-enforcement-matrix.mjs",
+      "synopsis": "Generates a proposed Constitutional Enforcement Matrix from the canonical registry.",
+      "bytes": 4047,
+      "mtime": "2026-08-02T09:36:36.016Z",
+      "indexed_at": "2026-08-02T09:36:38.323Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
       ]
     },
     {
@@ -76819,6 +77097,26 @@
       "indexed_at": "2026-07-28T22:54:46.666Z",
       "ssot": [
         "docs/products/unknown/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/verify-constitutional-architecture-acceptance.mjs",
+      "synopsis": "Acceptance script for FACTORY-CONSTITUTIONAL-ARCHITECTURE-0001.",
+      "bytes": 7262,
+      "mtime": "2026-08-02T01:12:06.818Z",
+      "indexed_at": "2026-08-02T09:36:38.323Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/verify-constitutional-enforcement-matrix.mjs",
+      "synopsis": "Verifies every entry in the Constitutional Enforcement Matrix.",
+      "bytes": 5405,
+      "mtime": "2026-08-02T09:36:36.060Z",
+      "indexed_at": "2026-08-02T09:36:38.323Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
       ]
     },
     {

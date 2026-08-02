@@ -1,0 +1,20 @@
+{
+  "schema": "office_trust_ledger_v0",
+  "description": "Tracks trust scores for each office based on calibration history, not authority.",
+  "version": "2026-08-02",
+  "ssot": "docs/products/builderos/specs/CONSTITUTIONAL_LEARNING_ARCHITECTURE.md",
+  "dimensions": {
+    "track_record": { "weight": 0.4, "source": "calibration_ledger" },
+    "constitutional_alignment": { "weight": 0.3, "source": "enforcement_matrix" },
+    "transparency": { "weight": 0.2, "source": "evidence disclosure" },
+    "independence": { "weight": 0.1, "source": "blind-reasoning protocol compliance" }
+  },
+  "office_record": {
+    "office_id": "string",
+    "name": "string",
+    "trust_score": 0.0,
+    "confidence": 0.0,
+    "last_calibrated_at": "ISO timestamp",
+    "distrust_flags": []
+  }
+}

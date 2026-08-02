@@ -1,0 +1,25 @@
+{
+  "schema": "constitutional_research_registry_v1",
+  "authority": {
+    "domain": "Research",
+    "status": "CANONICAL",
+    "note": "Candidates and provisional theories — not governing authority until promoted through the amendment process."
+  },
+  "maturity_states": [
+    "idea",
+    "observation",
+    "hypothesis",
+    "emerging_pattern",
+    "supported_principle",
+    "candidate_law"
+  ],
+  "triage_states": [
+    "active",
+    "stalled",
+    "abandoned",
+    "ready_for_proposal"
+  ],
+  "items": [],
+  "seeded_at": "2026-08-02T01:10:00.240Z",
+  "updated_at": "2026-08-02T01:12:17.108Z"
+}

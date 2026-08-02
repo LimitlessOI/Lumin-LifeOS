@@ -1,0 +1,28 @@
+{
+  "schema": "constitutional_architecture_v1_acceptance",
+  "mission_id": "FACTORY-CONSTITUTIONAL-ARCHITECTURE-0001",
+  "at": "2026-08-02T01:12:17.187Z",
+  "mode": "phase_gate",
+  "ok": false,
+  "tests_passed": [
+    "P1_processes_document",
+    "P2_registry_and_cli",
+    "P2_seed_and_verify",
+    "P2_preflight_wiring",
+    "P3_north_star_ratification",
+    "P4_mission_pack",
+    "P5_bp_and_registry"
+  ],
+  "tests_failed": [
+    "P0_framework_document: framework missing: Implementation (Level 7)"
+  ],
+  "completed_at": "2026-08-02T01:12:17.193Z",
+  "production_base": "https://lumin-web-production-e3a9.up.railway.app",
+  "founder_usability_pass": false,
+  "build_method": "GAP-FILL",
+  "produced_by": "Devin builder (FACTORY-CONSTITUTIONAL-ARCHITECTURE-0001)",
+  "separation_collapsed": true,
+  "separation_note": "Acceptance produced by the same session building the mission; framework and registry are deterministic governance artifacts, not independently SENTRY-verified end-to-end features.",
+  "git_sha": "4dfa92fcf8d72f5e2742a58917ed0ac42f4a4c39",
+  "verdict": "FAIL"
+}

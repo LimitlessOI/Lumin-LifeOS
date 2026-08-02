@@ -1,0 +1,51 @@
+{
+  "schema": "acceptance_tests_v1",
+  "mission_id": "FACTORY-CONSTITUTIONAL-ARCHITECTURE-0001",
+  "tests": [
+    {
+      "id": "AT-FCA-000-1",
+      "phase": "P0",
+      "description": "CONSTITUTIONAL_FRAMEWORK.md exists and defines Levels 0-7, two-score confidence model, research registry, and product governance."
+    },
+    {
+      "id": "AT-FCA-001-1",
+      "phase": "P1",
+      "description": "CONSTITUTIONAL_PROCESSES.md defines amendment, promotion, demotion, challenge, review, retirement, emergency change, dispute resolution, and enforcement."
+    },
+    {
+      "id": "AT-FCA-002-1",
+      "phase": "P2",
+      "description": "Registry JSON is machine-readable and seeded with at least 100 authority items."
+    },
+    {
+      "id": "AT-FCA-002-2",
+      "phase": "P2",
+      "description": "CLI seed and verify exit 0 and report 0 failures."
+    },
+    {
+      "id": "AT-FCA-002-3",
+      "phase": "P2",
+      "description": "builder:preflight includes the registry verifier."
+    },
+    {
+      "id": "AT-FCA-003-1",
+      "phase": "P3",
+      "description": "NORTH_STAR_SSOT.md §2.0M ratifies the framework, two-score model, research registry, and office-not-role Chair."
+    },
+    {
+      "id": "AT-FCA-004-1",
+      "phase": "P4",
+      "description": "Mission pack files and acceptance script exist and pass node --check."
+    },
+    {
+      "id": "AT-FCA-004-2",
+      "phase": "P4",
+      "description": "Acceptance script calls finishBpAcceptance and exits 0."
+    },
+    {
+      "id": "AT-FCA-005-1",
+      "phase": "P5",
+      "description": "Mission is registered in BP_PRIORITY.json rank 18 and builderos PRODUCT_REGISTRY bp_priority_mission_ids."
+    }
+  ]
+}

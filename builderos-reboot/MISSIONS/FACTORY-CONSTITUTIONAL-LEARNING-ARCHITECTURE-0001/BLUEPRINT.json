@@ -1,0 +1,120 @@
+{
+  "mission_id": "FACTORY-CONSTITUTIONAL-LEARNING-ARCHITECTURE-0001",
+  "product_id": "builderos",
+  "version": "2026-08-02-0001",
+  "blueprint_status": "in_progress",
+  "execution_gate": "READY",
+  "scope": "constitutional_learning_architecture_phase_1",
+  "summary": "Build the engines and data schemas that make Taloa a constitutional learning institution.",
+  "authority": "builderos-reboot/MISSIONS/FACTORY-CONSTITUTIONAL-LEARNING-ARCHITECTURE-0001/FOUNDER_PACKET.md",
+  "spec": "docs/products/builderos/specs/CONSTITUTIONAL_LEARNING_ARCHITECTURE.md",
+  "phases": [
+    { "phase_id": "P1", "title": "Data schemas and canonical person model" },
+    { "phase_id": "P2", "title": "Core learning engines" },
+    { "phase_id": "P3", "title": "Calibration and trust infrastructure" },
+    { "phase_id": "P4", "title": "Solomon Wisdom Lab" },
+    { "phase_id": "P5", "title": "Integration, tests, and product-home receipts" }
+  ],
+  "steps": [
+    {
+      "step_id": "FCLA-000",
+      "phase_id": "P1",
+      "title": "Create canonical Human Constellation service",
+      "target_file": "services/human-constellation.js",
+      "task": "Implement the canonical person model graph service. It must support nodes (value, goal, need, belief, pattern, state, trigger, resource, risk, avoidance) and weighted edges with strength, stability, recency, frequency, causal_confidence, and source. Exports: createConstellation(personId), addObservation(constellation, nodeType, payload), weightEdge(constellation, fromId, toId, update), projectForProduct(constellation, productId).",
+      "acceptance": "Module loads, exports all functions, and a smoke test creates a constellation, adds observations, and projects a LifeOS view.",
+      "dependencies": [],
+      "status": "pending"
+    },
+    {
+      "step_id": "FCLA-001",
+      "phase_id": "P2",
+      "title": "Create Reality Alignment Engine",
+      "target_file": "services/reality-alignment.js",
+      "task": "Implement the Reality Alignment Engine. Inputs: RealityPackage with observed, experienced, remembered, predicted, shared fields and a Claim. Outputs: alignment score (0-1), drift report, and reconciliation. Exports: computeRealityAlignment(package, claim), explainDrift(package), promoteConfidence(package, claim, outcome).",
+      "acceptance": "Smoke test returns alignment score, drift report, and confidence promotion for a sample package.",
+      "dependencies": ["FCLA-000"],
+      "status": "pending"
+    },
+    {
+      "step_id": "FCLA-002",
+      "phase_id": "P2",
+      "title": "Create Confidence Vector Model",
+      "target_file": "services/confidence-vector.js",
+      "task": "Implement the Confidence Vector Model with two dimensions: epistemic confidence and constitutional commitment. Exports: scoreConfidence(evidence), promoteEvidenceTier(evidence, currentTier), and TIER_PROMOTION_CRITERIA.",
+      "acceptance": "Smoke test promotes an observation to inference and a principle to law based on evidence.",
+      "dependencies": ["FCLA-001"],
+      "status": "pending"
+    },
+    {
+      "step_id": "FCLA-003",
+      "phase_id": "P2",
+      "title": "Create Causality Engine",
+      "target_file": "services/causality-engine.js",
+      "task": "Implement the Causality Engine. Inputs: event stream and Human Constellation subgraph. Outputs: causal graph with confidence and ranked least-invasive interventions. Exports: estimateCauses(eventStream, constellation), proposeInterventions(targetState, constraints), scoreCausalModel(model, outcomes).",
+      "acceptance": "Smoke test identifies a likely cause and proposes an intervention from a small event stream.",
+      "dependencies": ["FCLA-000", "FCLA-001"],
+      "status": "pending"
+    },
+    {
+      "step_id": "FCLA-004",
+      "phase_id": "P2",
+      "title": "Create Readiness Engine",
+      "target_file": "services/readiness-engine.js",
+      "task": "Implement the Readiness Engine. Inputs: target insight and recipient profile. Outputs: readiness score, recommended form (micro-insight, dialogue, exercise, wait), and risk if forced. Exports: assessReadiness(recipient, insight), selectForm(recipient, insight), detectAvoidancePattern(constellation, topic).",
+      "acceptance": "Smoke test returns a readiness score < 0.5 for an overwhelmed recipient and a safe form.",
+      "dependencies": ["FCLA-000", "FCLA-001"],
+      "status": "pending"
+    },
+    {
+      "step_id": "FCLA-005",
+      "phase_id": "P2",
+      "title": "Create Perspective Expansion Engine",
+      "target_file": "services/perspective-expansion.js",
+      "task": "Implement the Perspective Expansion Engine. Given a Human Constellation and user input, output a summary that captures the user's view in their own frame, identify unstated needs, and ask a better question. Exports: generatePerspectiveSummary(constellation, userInput), identifyUnstatedNeeds(constellation), askBetterQuestion(constellation).",
+      "acceptance": "Smoke test returns a perspective summary and a question before any recommendation.",
+      "dependencies": ["FCLA-000"],
+      "status": "pending"
+    },
+    {
+      "step_id": "FCLA-006",
+      "phase_id": "P3",
+      "title": "Create Calibration Ledger service",
+      "target_file": "services/calibration-ledger.js",
+      "task": "Implement the Calibration Ledger. Stores predictions, outcomes, and calibration scores for offices and models. Exports: recordPrediction(entry), recordOutcome(entryId, outcome), getCalibrationScore(officeId), and getTrustScore(officeId).",
+      "acceptance": "Smoke test records a prediction, records an outcome, and returns a non-zero calibration score.",
+      "dependencies": ["FCLA-001"],
+      "status": "pending"
+    },
+    {
+      "step_id": "FCLA-007",
+      "phase_id": "P3",
+      "title": "Create Office Trust Ledger service",
+      "target_file": "services/office-trust-ledger.js",
+      "task": "Implement the Office Trust Ledger. Dimensions: track_record, constitutional_alignment, transparency, independence. Exports: updateTrust(officeId, dimension, delta), getTrustScore(officeId), and TRUST_DIMENSIONS.",
+      "acceptance": "Smoke test updates a trust score across dimensions and returns an aggregated score.",
+      "dependencies": ["FCLA-006"],
+      "status": "pending"
+    },
+    {
+      "step_id": "FCLA-008",
+      "phase_id": "P4",
+      "title": "Create Solomon Wisdom Lab service",
+      "target_file": "services/solomon-wisdom-lab.js",
+      "task": "Implement the Solomon Wisdom Lab. It gathers evidence, expands perspectives, compares models, identifies constitutional tensions, and records a recommendation withheld until the Chair independently records a preliminary decision. Exports: createEvidencePackage(topic), addFinding(pkg, finding), addRecommendation(pkg, recommendation, revealAfterChairCommit), getRevelation(pkg, chairPreliminaryDecision).",
+      "acceptance": "Smoke test withholds recommendation until a chair preliminary decision is recorded, then reveals it.",
+      "dependencies": ["FCLA-001", "FCLA-004", "FCLA-005"],
+      "status": "pending"
+    },
+    {
+      "step_id": "FCLA-009",
+      "phase_id": "P5",
+      "title": "Wire engines and update product home",
+      "target_file": "docs/products/builderos/PRODUCT_HOME.md",
+      "task": "Update the BuilderOS product home with change receipts for each new service and mark the mission steps complete. Ensure npm run builder:preflight passes.",
+      "acceptance": "PRODUCT_HOME.md contains receipt rows for FCLA-000 through FCLA-008 and preflight passes.",
+      "dependencies": ["FCLA-000", "FCLA-001", "FCLA-002", "FCLA-003", "FCLA-004", "FCLA-005", "FCLA-006", "FCLA-007", "FCLA-008"],
+      "status": "pending"
+    }
+  ]
+}

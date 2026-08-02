@@ -1,0 +1,23 @@
+{
+  "schema": "calibration_ledger_v0",
+  "description": "Records predictions, outcomes, and calibration scores for every office, model, and product claim.",
+  "version": "2026-08-02",
+  "ssot": "docs/products/builderos/specs/CONSTITUTIONAL_LEARNING_ARCHITECTURE.md",
+  "entries": [
+    {
+      "entry_id": "uuid",
+      "created_at": "ISO timestamp",
+      "office": "chair | solomon | sentry | builder | product",
+      "claim_type": "prediction | recommendation | classification | risk_assessment",
+      "claim": "string",
+      "evidence_package_id": "uuid",
+      "predicted_outcome": "any",
+      "confidence": { "score": 0.0, "basis": "string" },
+      "observed_outcome": "any",
+      "outcome_recorded_at": "ISO timestamp",
+      "calibration_score": { "brier": 0.0, "direction": 0.0 },
+      "lessons": "string",
+      "constitutional_tension": "string | null"
+    }
+  ]
+}

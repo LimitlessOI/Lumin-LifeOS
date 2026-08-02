@@ -1,0 +1,32 @@
+{
+  "schema": "human_constellation_v0",
+  "description": "Canonical person model. All OS products are projections of this graph.",
+  "version": "2026-08-02",
+  "ssot": "docs/products/builderos/specs/HUMAN_CONSTELLATION.md",
+  "node_types": [
+    { "type": "value", "description": "Enduring principles the person aspires to" },
+    { "type": "goal", "description": "Point B states (desired future)" },
+    { "type": "need", "description": "Fundamental human needs (security, connection, autonomy, meaning, etc.)" },
+    { "type": "belief", "description": "Models the person holds about themselves, others, or the world" },
+    { "type": "pattern", "description": "Recurring behavior or cognitive loops" },
+    { "type": "state", "description": "Current emotional/cognitive mode (calm, overwhelmed, grieving, hopeful, etc.)" },
+    { "type": "trigger", "description": "Observed event associated with state change" },
+    { "type": "resource", "description": "Strengths, relationships, tools, and supports" },
+    { "type": "risk", "description": "Known or inferred vulnerabilities" },
+    { "type": "avoidance", "description": "Topics, tasks, or feelings the person tends to evade" }
+  ],
+  "edge_properties": {
+    "strength": { "type": "number", "min": -1, "max": 1, "description": "Causal or associative strength" },
+    "stability": { "type": "number", "min": 0, "max": 1, "description": "How consistently the edge has been observed" },
+    "recency": { "type": "timestamp", "description": "Last observation ISO" },
+    "frequency": { "type": "integer", "description": "Observation count" },
+    "causal_confidence": { "type": "number", "min": 0, "max": 1, "description": "Estimated likelihood this edge is causal" },
+    "source": { "type": "enum", "values": ["observed", "inferred", "hypothesized", "shared", "remembered"] }
+  },
+  "meta": {
+    "owner": "person_id",
+    "last_updated": null,
+    "model_confidence": 0,
+    "constellation_id": "uuid"
+  }
+}
