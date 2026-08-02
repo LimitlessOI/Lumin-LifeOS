@@ -119,9 +119,18 @@ async function main() {
 
   // ── Step 3: Production server health ──
   const health = await req('GET', '/healthz');
+  const healthDegraded = health.json?.degraded === true
+    || health.json?.status?.toLowerCase() === 'degraded'
+    || health.json?.startup_report?.degraded === true
+    || health.json?.startup?.startup_report?.degraded === true;
+  const modulesErrored = health.json?.startup_report?.modules_errored
+    || health.json?.startup?.startup_report?.modules_errored
+    || [];
   step('MAW-T07_server_health',
-    health.status === 200 && (health.json?.ok !== false || health.json?.status?.toLowerCase()?.includes('ok')),
-    `HTTP ${health.status}`,
+    health.status === 200 && (health.json?.ok !== false || health.json?.status?.toLowerCase()?.includes('ok')) && !healthDegraded,
+    healthDegraded
+      ? `HTTP ${health.status}; DEGRADED — ${modulesErrored.length} module(s) errored: ${modulesErrored.slice(0, 5).join(', ')}${modulesErrored.length > 5 ? '...' : ''}`
+      : `HTTP ${health.status}`,
     { response: health.json }
   );
 

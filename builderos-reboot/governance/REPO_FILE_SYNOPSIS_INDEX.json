@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-02T15:26:11.792Z",
+  "generated_at": "2026-08-02T15:28:16.163Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12928,
   "files": [
@@ -42618,9 +42618,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 666630,
-      "mtime": "2026-08-02T15:26:11.792Z",
-      "indexed_at": "2026-08-02T15:26:11.792Z"
+      "bytes": 669076,
+      "mtime": "2026-08-02T15:27:51.222Z",
+      "indexed_at": "2026-08-02T15:28:16.163Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -76226,9 +76226,9 @@
     {
       "path": "scripts/run-machine-alpha-walkthrough.mjs",
       "synopsis": "Machine Alpha Walkthrough — simulates founder UI session before Point B handoff.",
-      "bytes": 10075,
-      "mtime": "2026-08-02T15:26:11.792Z",
-      "indexed_at": "2026-08-02T15:26:11.792Z",
+      "bytes": 10662,
+      "mtime": "2026-08-02T15:26:58.148Z",
+      "indexed_at": "2026-08-02T15:28:16.163Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
