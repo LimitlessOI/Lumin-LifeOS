@@ -1,1 +1,139 @@
-{"schema":"adversarial_ratification_report_v0","generated_at":"2026-08-02T11:57:56.134Z","generated_by":"scripts/adversarial-ratification-suite.mjs","summary":{"total":25,"pass":25,"fail":0},"probes":[{"name":"Taloa identity declared in framework","severity":"bug","status":"pass"},{"name":"Mission includes aligned AI","severity":"bug","status":"pass"},{"name":"Mission includes flourishing","severity":"bug","status":"pass"},{"name":"Revenue subordinated to mission","severity":"bug","status":"pass"},{"name":"Design equation present","severity":"bug","status":"pass"},{"name":"Design equation present","severity":"bug","status":"pass"},{"name":"Solomon does not govern","severity":"bug","status":"pass"},{"name":"No office is source of truth","severity":"bug","status":"pass"},{"name":"Chair asks for understanding not obedience","severity":"bug","status":"pass"},{"name":"Independent judgment precedes shared judgment","severity":"bug","status":"pass"},{"name":"Solomon withholds recommendation","severity":"bug","status":"pass"},{"name":"Confidence not certainty","severity":"bug","status":"pass"},{"name":"Reality alignment distinguishes five realities","severity":"bug","status":"pass"},{"name":"Promotion ladder present","severity":"bug","status":"pass"},{"name":"Understanding precedes influence","severity":"bug","status":"pass"},{"name":"Earned guidance present","severity":"bug","status":"pass"},{"name":"Empowerment over dependence","severity":"bug","status":"pass"},{"name":"Mission alignment filter","severity":"bug","status":"pass"},{"name":"Least invasive intervention","severity":"bug","status":"pass"},{"name":"Builder simplicity and anti-expansion","severity":"bug","status":"pass"},{"name":"Human Constellation canonical clause","severity":"bug","status":"pass"},{"name":"Quality of questions clause","severity":"bug","status":"pass"},{"name":"No stray product inventions in framework","severity":"bug","status":"pass"},{"name":"Canonical enforcement matrix exists","severity":"bug","status":"pass"},{"name":"Enforcement matrix verifier exits 0","severity":"bug","status":"pass","verifier_output":"VERIFY 103 law(s) → npm run builder:preflight\n\nENFORCEMENT_MATRIX_VERIFY: PASS\n  total: 103\n  pass:  103\n  fail:  0\n  manual: 0\n  report: /home/ubuntu/repos/Lumin-LifeOS/data/constitutional-framework/reports/ENFORCEMENT_MATRIX_REPORT.json\n"}],"verdict":"PASS"}
+{
+  "schema": "adversarial_ratification_report_v0",
+  "generated_at": "2026-08-02T12:10:36.310Z",
+  "generated_by": "scripts/adversarial-ratification-suite.mjs",
+  "summary": {
+    "total": 25,
+    "pass": 25,
+    "fail": 0
+  },
+  "probes": [
+    {
+      "name": "Taloa identity declared in framework",
+      "severity": "bug",
+      "status": "pass"
+    },
+    {
+      "name": "Mission includes aligned AI",
+      "severity": "bug",
+      "status": "pass"
+    },
+    {
+      "name": "Mission includes flourishing",
+      "severity": "bug",
+      "status": "pass"
+    },
+    {
+      "name": "Revenue subordinated to mission",
+      "severity": "bug",
+      "status": "pass"
+    },
+    {
+      "name": "Design equation present",
+      "severity": "bug",
+      "status": "pass"
+    },
+    {
+      "name": "Design equation present",
+      "severity": "bug",
+      "status": "pass"
+    },
+    {
+      "name": "Solomon does not govern",
+      "severity": "bug",
+      "status": "pass"
+    },
+    {
+      "name": "No office is source of truth",
+      "severity": "bug",
+      "status": "pass"
+    },
+    {
+      "name": "Chair asks for understanding not obedience",
+      "severity": "bug",
+      "status": "pass"
+    },
+    {
+      "name": "Independent judgment precedes shared judgment",
+      "severity": "bug",
+      "status": "pass"
+    },
+    {
+      "name": "Solomon withholds recommendation",
+      "severity": "bug",
+      "status": "pass"
+    },
+    {
+      "name": "Confidence not certainty",
+      "severity": "bug",
+      "status": "pass"
+    },
+    {
+      "name": "Reality alignment distinguishes five realities",
+      "severity": "bug",
+      "status": "pass"
+    },
+    {
+      "name": "Promotion ladder present",
+      "severity": "bug",
+      "status": "pass"
+    },
+    {
+      "name": "Understanding precedes influence",
+      "severity": "bug",
+      "status": "pass"
+    },
+    {
+      "name": "Earned guidance present",
+      "severity": "bug",
+      "status": "pass"
+    },
+    {
+      "name": "Empowerment over dependence",
+      "severity": "bug",
+      "status": "pass"
+    },
+    {
+      "name": "Mission alignment filter",
+      "severity": "bug",
+      "status": "pass"
+    },
+    {
+      "name": "Least invasive intervention",
+      "severity": "bug",
+      "status": "pass"
+    },
+    {
+      "name": "Builder simplicity and anti-expansion",
+      "severity": "bug",
+      "status": "pass"
+    },
+    {
+      "name": "Human Constellation canonical clause",
+      "severity": "bug",
+      "status": "pass"
+    },
+    {
+      "name": "Quality of questions clause",
+      "severity": "bug",
+      "status": "pass"
+    },
+    {
+      "name": "No stray product inventions in framework",
+      "severity": "bug",
+      "status": "pass"
+    },
+    {
+      "name": "Canonical enforcement matrix exists",
+      "severity": "bug",
+      "status": "pass"
+    },
+    {
+      "name": "Enforcement matrix verifier exits 0",
+      "severity": "bug",
+      "status": "pass",
+      "verifier_output": "VERIFY 103 law(s) → npm run builder:preflight\n\nENFORCEMENT_MATRIX_VERIFY: PASS\n  total: 103\n  pass:  103\n  fail:  0\n  manual: 0\n  report: /home/ubuntu/repos/Lumin-LifeOS/data/constitutional-framework/reports/ENFORCEMENT_MATRIX_REPORT.json\n"
+    }
+  ],
+  "verdict": "PASS"
+}

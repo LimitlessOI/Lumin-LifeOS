@@ -121,6 +121,7 @@ These belong in the Constitution because they constrain every future product, en
 | **Least invasive intervention** — early risk detection and all safety systems should optimize for the least invasive intervention capable of reducing risk, preserving agency | `CONSTITUTIONAL_FRAMEWORK_v1.md` §2 / §13 | Keeps agency intact while protecting life. |
 | **Builder Simplicity Principle** — the Builder shall faithfully implement the Constitution and governance while minimizing unnecessary complexity; when multiple implementations satisfy the same constitutional intent, prefer the simplest one that preserves future adaptability | `CONSTITUTIONAL_FRAMEWORK_v1.md` §2 / §13 | Complexity is civilization debt; Builder is constitutionally biased toward elegance. |
 | **Institutional Self-Modeling Principle** — Taloa shall understand itself using the same epistemological standards it applies to understanding people, relationships, and organizations; every model of the institution, including the Constitution's own interpretations, is subject to calibration by reality | `CONSTITUTIONAL_FRAMEWORK_v1.md` §2 / §5 / §7 | Prevents hypocrisy; the institution lives under its own Constitution. |
+|| **Entity Twin Framework** — every significant entity (person, relationship, organization, project, product, office, or institution) is modeled as one calibrated Twin: a graph of that entity's beliefs, predictions, relationships, and outcomes, subject to the same Human Constellation machinery, confidence vectors, causality engine, and calibration ledger | `CONSTITUTIONAL_FRAMEWORK_v1.md` §2 / §5 / §7 | The Digital Twin is not a product; it is a universal pattern. Reusing one architecture prevents duplication and keeps every model accountable to reality. |
 
 ### 3.2 Governance framework layer — how decisions are made
 
@@ -193,6 +194,7 @@ These are engines and data models, not constitutional law. They implement the ep
 | **Readiness Engine** | Learning Architecture + all products + governance | Applies to humans, BuilderOS, governance, and constitutional amendments. |
 | **Blind independent-reasoning protocol** | Governance + Learning Architecture | Required for major decisions, promotion evaluations, and constitutional amendments. |
 | **Institutional Constellation** | Learning Architecture + Governance + all products | The same graph, confidence, causality, and calibration machinery applied to Taloa itself. |
+|| **Entity Twin Framework** | Learning Architecture + all products + governance | A single Twin<T> pattern instantiated for person, relationship, organization, project, product, office, and institution; prevents duplicate person-understanding systems. |
 
 ---
 

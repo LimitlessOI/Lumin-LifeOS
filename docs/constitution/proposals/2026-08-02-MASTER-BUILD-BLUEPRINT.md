@@ -69,6 +69,7 @@ These are not engine features. They are design constraints for every file, funct
 - **Incentive Recalibration:** any governance system optimizes for its incentives; incentives must be recalibrated against the mission.
 - **Least invasive intervention:** early risk and safety systems use the minimum intervention capable of reducing risk.
 - **Builder Simplicity:** prefer the simplest implementation that preserves future adaptability; complexity is civilization debt.
+- **Entity Twin Framework:** every significant entity (person, relationship, organization, project, product, office, institution) is one Twin instance modeled with the same Human Constellation graph, confidence vectors, causality engine, and calibration ledger; the Adaptive Human Model and the Institutional Constellation are simply the first two instances.
 
 ---
 
@@ -264,6 +265,7 @@ These are not engine features. They are design constraints for every file, funct
 - The institution can record its own beliefs, offices, products, and predictions as a constellation.
 - The constellation detects disagreement, drift, and blind spots.
 - It uses the same weighted-edge, confidence-vector, and calibration patterns as `services/human-constellation.js`.
+- It is the second concrete instance of the **Entity Twin Framework**; the same `Twin<T>` pattern is reused rather than duplicated.
 - `npm run builder:preflight` passes.
 
 ---
@@ -332,6 +334,7 @@ Install order:
 | **Governance Cost Index** | Anti-bureaucracy metric | Phase 3 | BuilderOS |
 | **Meta-Learning System** | Learn how the system learns | Phase 3 | BuilderOS |
 | **Institutional Constellation** | Taloa models itself with the same graph, confidence, causality, and calibration machinery | Phase 3.5 | BuilderOS / Governance |
+|| **Entity Twin Framework** | One Twin<T> pattern for person, relationship, organization, project, product, office, and institution | Phase 3.5 (concept) / all phases | BuilderOS / LifeOS / Governance |
 
 ---
 

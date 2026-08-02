@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-02T12:10:09.733Z",
+  "generated_at": "2026-08-02T12:15:14.377Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12920,
   "files": [
@@ -33068,17 +33068,17 @@
     {
       "path": "data/constitutional-framework/reports/ADVERSARIAL_RATIFICATION_REPORT.json",
       "synopsis": "JSON data/config — data/constitutional-framework/reports/ADVERSARIAL_RATIFICATION_REPORT.json.",
-      "bytes": 2389,
-      "mtime": "2026-08-02T10:28:21.696Z",
-      "indexed_at": "2026-08-02T10:29:51.799Z",
+      "bytes": 3297,
+      "mtime": "2026-08-02T12:10:36.308Z",
+      "indexed_at": "2026-08-02T12:15:14.377Z",
       "synopsis_index_only": true
     },
     {
       "path": "data/constitutional-framework/reports/ENFORCEMENT_MATRIX_REPORT.json",
       "synopsis": "JSON data/config — data/constitutional-framework/reports/ENFORCEMENT_MATRIX_REPORT.json.",
-      "bytes": 279101,
-      "mtime": "2026-08-02T11:59:35.296Z",
-      "indexed_at": "2026-08-02T12:03:47.805Z",
+      "bytes": 286817,
+      "mtime": "2026-08-02T12:10:36.300Z",
+      "indexed_at": "2026-08-02T12:15:14.377Z",
       "synopsis_index_only": true
     },
     {
@@ -39364,9 +39364,9 @@
     {
       "path": "docs/constitution/proposals/2026-08-02-ARCHITECTURE-CLASSIFICATION.md",
       "synopsis": "Classification of the latest ChatGPT/Adam synthesis — and the emerging meta-architecture of Taloa.",
-      "bytes": 38120,
-      "mtime": "2026-08-02T11:53:53.052Z",
-      "indexed_at": "2026-08-02T11:57:30.946Z"
+      "bytes": 38944,
+      "mtime": "2026-08-02T12:13:31.352Z",
+      "indexed_at": "2026-08-02T12:15:14.377Z"
     },
     {
       "path": "docs/constitution/proposals/2026-08-02-CONSTITUTION-DIGITAL-TWIN-PLAN.md",
@@ -39385,9 +39385,9 @@
     {
       "path": "docs/constitution/proposals/2026-08-02-MASTER-BUILD-BLUEPRINT.md",
       "synopsis": "A-to-Z master build blueprint — the complete install order for the Taloa constitutional learning institution.",
-      "bytes": 26044,
-      "mtime": "2026-08-02T11:53:53.052Z",
-      "indexed_at": "2026-08-02T11:57:30.946Z"
+      "bytes": 26739,
+      "mtime": "2026-08-02T12:14:09.652Z",
+      "indexed_at": "2026-08-02T12:15:14.377Z"
     },
     {
       "path": "docs/constitution/proposals/2026-08-02-NORTH_STAR_AMENDMENT.md",
@@ -39462,9 +39462,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 120653,
-      "mtime": "2026-08-02T11:59:13.344Z",
-      "indexed_at": "2026-08-02T12:03:47.805Z"
+      "bytes": 121534,
+      "mtime": "2026-08-02T12:15:01.520Z",
+      "indexed_at": "2026-08-02T12:15:14.377Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -41717,9 +41717,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 412745,
-      "mtime": "2026-08-02T11:59:13.348Z",
-      "indexed_at": "2026-08-02T12:03:47.805Z"
+      "bytes": 413631,
+      "mtime": "2026-08-02T12:14:55.324Z",
+      "indexed_at": "2026-08-02T12:15:14.377Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
