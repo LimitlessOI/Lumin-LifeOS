@@ -358,7 +358,8 @@
     "db:studio": "drizzle-kit studio",
     "lifeos:deliberation:regression": "node scripts/deliberation-sentry-regression-harness.mjs",
     "lifeos:real-app:e2e": "node scripts/run-real-app-e2e.mjs",
-    "builderos:constitutional-architecture:acceptance": "node scripts/verify-constitutional-architecture-acceptance.mjs"
+    "builderos:constitutional-architecture:acceptance": "node scripts/verify-constitutional-architecture-acceptance.mjs",
+    "builderos:constitutional-learning-architecture:acceptance": "node scripts/verify-constitutional-learning-architecture-acceptance.mjs"
   },
   "dependencies": {
     "@anthropic-ai/claude-code": "^2.1.86",

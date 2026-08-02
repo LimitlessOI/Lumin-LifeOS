@@ -1,0 +1,3 @@
+Implement the Calibration Ledger. Stores predictions, outcomes, and calibration scores for offices and models. Exports: recordPrediction(entry), recordOutcome(entryId, outcome), getCalibrationScore(officeId), and getTrustScore(officeId).
+
+Smoke test records a prediction, records an outcome, and returns a non-zero calibration score.

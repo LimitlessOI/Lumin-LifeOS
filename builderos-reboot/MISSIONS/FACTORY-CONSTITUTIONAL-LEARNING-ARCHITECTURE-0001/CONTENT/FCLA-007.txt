@@ -1,0 +1,3 @@
+Implement the Office Trust Ledger. Dimensions: track_record, constitutional_alignment, transparency, independence. Exports: updateTrust(officeId, dimension, delta), getTrustScore(officeId), and TRUST_DIMENSIONS.
+
+Smoke test updates a trust score across dimensions and returns an aggregated score.

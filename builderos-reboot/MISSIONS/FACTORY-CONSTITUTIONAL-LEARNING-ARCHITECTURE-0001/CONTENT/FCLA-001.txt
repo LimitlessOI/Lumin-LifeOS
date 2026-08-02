@@ -1,0 +1,3 @@
+Implement the Reality Alignment Engine. Inputs: RealityPackage with observed, experienced, remembered, predicted, shared fields and a Claim. Outputs: alignment score (0-1), drift report, and reconciliation. Exports: computeRealityAlignment(package, claim), explainDrift(package), promoteConfidence(package, claim, outcome).
+
+Smoke test returns alignment score, drift report, and confidence promotion for a sample package.

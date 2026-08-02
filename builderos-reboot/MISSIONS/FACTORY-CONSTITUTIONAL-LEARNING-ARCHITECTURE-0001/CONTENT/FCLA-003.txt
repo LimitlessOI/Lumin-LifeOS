@@ -1,0 +1,3 @@
+Implement the Causality Engine. Inputs: event stream and Human Constellation subgraph. Outputs: causal graph with confidence and ranked least-invasive interventions. Exports: estimateCauses(eventStream, constellation), proposeInterventions(targetState, constraints), scoreCausalModel(model, outcomes).
+
+Smoke test identifies a likely cause and proposes an intervention from a small event stream.

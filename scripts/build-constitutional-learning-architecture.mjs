@@ -13,7 +13,11 @@ import { fileURLToPath } from 'node:url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(__dirname, '..');
 const BLUEPRINT = path.join(REPO_ROOT, 'builderos-reboot', 'MISSIONS', 'FACTORY-CONSTITUTIONAL-LEARNING-ARCHITECTURE-0001', 'BLUEPRINT.json');
-const BASE = (process.env.BUILDER_BASE_URL || process.env.PUBLIC_BASE_URL || 'https://lumin-web-production-e3a9.up.railway.app').replace(/\/$/, '');
+const BASE = (
+  process.env.LUMIN_BUILDER_BASE_URL ||
+  process.env.BUILDER_BASE_URL ||
+  'https://lumin-web-production-e3a9.up.railway.app'
+).replace(/\/$/, '');
 const KEY = process.env.COMMAND_CENTER_KEY || process.env.COMMAND_KEY || process.env.LIFEOS_KEY || process.env.API_KEY || '';
 
 function readJson(file) {
@@ -29,6 +33,8 @@ async function buildStep(step) {
     spec: `${step.acceptance} \nDependencies: ${(step.dependencies || []).join(', ') || 'none'}. Mission spec: docs/products/builderos/specs/CONSTITUTIONAL_LEARNING_ARCHITECTURE.md`,
     mode: 'code',
     confirm_intent: true,
+    platform_gap_fill: true,
+    platform_gap_fill_reason: `GAP-FILL: operator-authorized constitutional learning architecture build for ${step.step_id}. ARC receipts are not yet generated for this new mission and the operator has explicitly confirmed intent to proceed.`,
     domain: 'builderos',
     commit_message: `FCLA step ${step.step_id}: ${step.title}`,
   };

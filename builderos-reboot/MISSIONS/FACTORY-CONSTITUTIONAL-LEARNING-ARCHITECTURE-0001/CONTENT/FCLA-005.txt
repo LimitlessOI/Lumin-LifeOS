@@ -1,0 +1,3 @@
+Implement the Perspective Expansion Engine. Given a Human Constellation and user input, output a summary that captures the user's view in their own frame, identify unstated needs, and ask a better question. Exports: generatePerspectiveSummary(constellation, userInput), identifyUnstatedNeeds(constellation), askBetterQuestion(constellation).
+
+Smoke test returns a perspective summary and a question before any recommendation.

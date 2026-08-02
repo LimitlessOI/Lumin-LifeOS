@@ -1,8 +1,8 @@
 {
   "schema": "receipt_truth_validation_v1",
-  "at": "2026-08-02T09:34:49.430Z",
+  "at": "2026-08-02T09:58:26.224Z",
   "ok": true,
-  "checked": 139,
+  "checked": 140,
   "failures": [],
   "known_debt": [
     "MACHINE_ALPHA_WALKTHROUGH.json:ACCEPTANCE_PASS_WITHOUT_SHA_OR_BASE",
@@ -137,6 +137,13 @@
     },
     {
       "file": "CONSTITUTIONAL_ARCHITECTURE_V1_ACCEPTANCE.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "CONSTITUTIONAL_LEARNING_ARCHITECTURE_V1_ACCEPTANCE.json",
       "ok": true,
       "violations": [],
       "claims_pass": false,

@@ -1,0 +1,3 @@
+Implement the canonical person model graph service. It must support nodes (value, goal, need, belief, pattern, state, trigger, resource, risk, avoidance) and weighted edges with strength, stability, recency, frequency, causal_confidence, and source. Exports: createConstellation(personId), addObservation(constellation, nodeType, payload), weightEdge(constellation, fromId, toId, update), projectForProduct(constellation, productId).
+
+Module loads, exports all functions, and a smoke test creates a constellation, adds observations, and projects a LifeOS view.

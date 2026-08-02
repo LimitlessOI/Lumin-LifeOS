@@ -1,0 +1,3 @@
+Implement the Confidence Vector Model with two dimensions: epistemic confidence and constitutional commitment. Exports: scoreConfidence(evidence), promoteEvidenceTier(evidence, currentTier), and TIER_PROMOTION_CRITERIA.
+
+Smoke test promotes an observation to inference and a principle to law based on evidence.

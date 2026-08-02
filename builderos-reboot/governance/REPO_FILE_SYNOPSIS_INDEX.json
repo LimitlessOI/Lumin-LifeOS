@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-02T09:36:38.323Z",
+  "generated_at": "2026-08-02T09:58:41.526Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12853,
+  "file_count": 12882,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21307,9 +21307,9 @@
     {
       "path": "builderos-reboot/BP_PRIORITY.json",
       "synopsis": "BuilderOS artifact — BP PRIORITY.",
-      "bytes": 26398,
-      "mtime": "2026-08-02T01:11:40.598Z",
-      "indexed_at": "2026-08-02T09:36:38.323Z",
+      "bytes": 27423,
+      "mtime": "2026-08-02T09:55:59.540Z",
+      "indexed_at": "2026-08-02T09:58:06.058Z",
       "synopsis_index_only": true
     },
     {
@@ -21678,9 +21678,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3866680,
-      "mtime": "2026-08-01T19:45:24.518Z",
-      "indexed_at": "2026-08-01T19:45:29.765Z"
+      "bytes": 3895412,
+      "mtime": "2026-08-02T09:58:25.096Z",
+      "indexed_at": "2026-08-02T09:58:41.526Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -22446,19 +22446,219 @@
       "synopsis_index_only": true
     },
     {
+      "path": "builderos-reboot/MISSIONS/FACTORY-CONSTITUTIONAL-LEARNING-ARCHITECTURE-0001/ASSET_REUSE_DECISION.json",
+      "synopsis": "BuilderOS artifact — ASSET REUSE DECISION.",
+      "bytes": 2479,
+      "mtime": "2026-08-02T09:56:26.264Z",
+      "indexed_at": "2026-08-02T09:58:06.058Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-CONSTITUTIONAL-LEARNING-ARCHITECTURE-0001/BLUEPRINT_ROADMAP.json",
+      "synopsis": "BuilderOS artifact — BLUEPRINT ROADMAP.",
+      "bytes": 1740,
+      "mtime": "2026-08-02T09:56:26.264Z",
+      "indexed_at": "2026-08-02T09:58:06.058Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "builderos-reboot/MISSIONS/FACTORY-CONSTITUTIONAL-LEARNING-ARCHITECTURE-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
-      "bytes": 7719,
-      "mtime": "2026-08-02T09:33:49.476Z",
-      "indexed_at": "2026-08-02T09:36:38.323Z",
+      "bytes": 12614,
+      "mtime": "2026-08-02T09:56:26.284Z",
+      "indexed_at": "2026-08-02T09:58:06.058Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-CONSTITUTIONAL-LEARNING-ARCHITECTURE-0001/CHAIR_HANDOFF_RECEIPT.json",
+      "synopsis": "BuilderOS artifact — CHAIR HANDOFF RECEIPT.",
+      "bytes": 585,
+      "mtime": "2026-08-02T09:56:26.280Z",
+      "indexed_at": "2026-08-02T09:58:06.058Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-CONSTITUTIONAL-LEARNING-ARCHITECTURE-0001/DO_NOT_INVENT.json",
+      "synopsis": "BuilderOS artifact — DO NOT INVENT.",
+      "bytes": 317,
+      "mtime": "2026-08-02T09:56:26.276Z",
+      "indexed_at": "2026-08-02T09:58:06.058Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-CONSTITUTIONAL-LEARNING-ARCHITECTURE-0001/FOUNDER_PACKET.md",
       "synopsis": "Founder Packet — Constitutional Learning Architecture",
-      "bytes": 1481,
-      "mtime": "2026-08-02T09:36:35.864Z",
-      "indexed_at": "2026-08-02T09:36:38.323Z"
+      "bytes": 2371,
+      "mtime": "2026-08-02T09:49:07.532Z",
+      "indexed_at": "2026-08-02T09:58:06.058Z"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-CONSTITUTIONAL-LEARNING-ARCHITECTURE-0001/IDC_CONSENSUS_RECEIPT.json",
+      "synopsis": "BuilderOS artifact — IDC CONSENSUS RECEIPT.",
+      "bytes": 732,
+      "mtime": "2026-08-02T09:56:26.276Z",
+      "indexed_at": "2026-08-02T09:58:06.058Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-CONSTITUTIONAL-LEARNING-ARCHITECTURE-0001/INTENT_BASELINE.json",
+      "synopsis": "BuilderOS artifact — INTENT BASELINE.",
+      "bytes": 3046,
+      "mtime": "2026-08-02T09:56:26.264Z",
+      "indexed_at": "2026-08-02T09:58:06.058Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-CONSTITUTIONAL-LEARNING-ARCHITECTURE-0001/INTENT_COVERAGE_MAP.json",
+      "synopsis": "BuilderOS artifact — INTENT COVERAGE MAP.",
+      "bytes": 5834,
+      "mtime": "2026-08-02T09:56:26.272Z",
+      "indexed_at": "2026-08-02T09:58:06.058Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-CONSTITUTIONAL-LEARNING-ARCHITECTURE-0001/KNOWN_ASSUMPTIONS.json",
+      "synopsis": "BuilderOS artifact — KNOWN ASSUMPTIONS.",
+      "bytes": 924,
+      "mtime": "2026-08-02T09:56:26.276Z",
+      "indexed_at": "2026-08-02T09:58:06.058Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-CONSTITUTIONAL-LEARNING-ARCHITECTURE-0001/KNOWN_CONTRADICTIONS.json",
+      "synopsis": "BuilderOS artifact — KNOWN CONTRADICTIONS.",
+      "bytes": 173,
+      "mtime": "2026-08-02T09:56:26.276Z",
+      "indexed_at": "2026-08-02T09:58:06.058Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-CONSTITUTIONAL-LEARNING-ARCHITECTURE-0001/KNOWN_RISKS.json",
+      "synopsis": "BuilderOS artifact — KNOWN RISKS.",
+      "bytes": 161,
+      "mtime": "2026-08-02T09:56:26.276Z",
+      "indexed_at": "2026-08-02T09:58:06.058Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-CONSTITUTIONAL-LEARNING-ARCHITECTURE-0001/MODE_A_TO_B_TRANSITION_RECEIPT.json",
+      "synopsis": "BuilderOS artifact — MODE A TO B TRANSITION RECEIPT.",
+      "bytes": 356,
+      "mtime": "2026-08-02T09:56:26.272Z",
+      "indexed_at": "2026-08-02T09:58:06.058Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-CONSTITUTIONAL-LEARNING-ARCHITECTURE-0001/OBJECTIVE_VERDICT.json",
+      "synopsis": "BuilderOS artifact — OBJECTIVE VERDICT.",
+      "bytes": 1343,
+      "mtime": "2026-08-02T09:57:44.080Z",
+      "indexed_at": "2026-08-02T09:58:41.526Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-CONSTITUTIONAL-LEARNING-ARCHITECTURE-0001/PRE_ARC_INPUT_PACKET.json",
+      "synopsis": "BuilderOS artifact — PRE ARC INPUT PACKET.",
+      "bytes": 3074,
+      "mtime": "2026-08-02T09:56:26.280Z",
+      "indexed_at": "2026-08-02T09:58:06.058Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-CONSTITUTIONAL-LEARNING-ARCHITECTURE-0001/PRE_BUILD_VALIDATION_PACKET.json",
+      "synopsis": "BuilderOS artifact — PRE BUILD VALIDATION PACKET.",
+      "bytes": 701,
+      "mtime": "2026-08-02T09:56:26.344Z",
+      "indexed_at": "2026-08-02T09:58:06.058Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-CONSTITUTIONAL-LEARNING-ARCHITECTURE-0001/PREDICTION_RECEIPT.json",
+      "synopsis": "BuilderOS artifact — PREDICTION RECEIPT.",
+      "bytes": 1188,
+      "mtime": "2026-08-02T09:56:26.276Z",
+      "indexed_at": "2026-08-02T09:58:06.058Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-CONSTITUTIONAL-LEARNING-ARCHITECTURE-0001/receipts/ARC_TWIN_SIMULATION_RECEIPT.json",
+      "synopsis": "BuilderOS artifact — ARC TWIN SIMULATION RECEIPT.",
+      "bytes": 500,
+      "mtime": "2026-08-02T09:56:26.288Z",
+      "indexed_at": "2026-08-02T09:58:06.058Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-CONSTITUTIONAL-LEARNING-ARCHITECTURE-0001/receipts/BUILDER_COLD_SIMULATION_REPORT.json",
+      "synopsis": "BuilderOS artifact — BUILDER COLD SIMULATION REPORT.",
+      "bytes": 1340,
+      "mtime": "2026-08-02T09:56:26.288Z",
+      "indexed_at": "2026-08-02T09:58:06.058Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-CONSTITUTIONAL-LEARNING-ARCHITECTURE-0001/receipts/BUILDER_SIMULATION_REPORT.json",
+      "synopsis": "BuilderOS artifact — BUILDER SIMULATION REPORT.",
+      "bytes": 2579,
+      "mtime": "2026-08-02T09:56:26.288Z",
+      "indexed_at": "2026-08-02T09:58:06.058Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-CONSTITUTIONAL-LEARNING-ARCHITECTURE-0001/receipts/CFO_RESOURCE_SIMULATION_RECEIPT.json",
+      "synopsis": "BuilderOS artifact — CFO RESOURCE SIMULATION RECEIPT.",
+      "bytes": 1287,
+      "mtime": "2026-08-02T09:56:26.276Z",
+      "indexed_at": "2026-08-02T09:58:06.058Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-CONSTITUTIONAL-LEARNING-ARCHITECTURE-0001/receipts/CHAIR_FORECAST_SIMULATION_RECEIPT.json",
+      "synopsis": "BuilderOS artifact — CHAIR FORECAST SIMULATION RECEIPT.",
+      "bytes": 3456,
+      "mtime": "2026-08-02T09:56:26.276Z",
+      "indexed_at": "2026-08-02T09:58:06.058Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-CONSTITUTIONAL-LEARNING-ARCHITECTURE-0001/receipts/IDC_EXIT_GATE_REPORT.json",
+      "synopsis": "BuilderOS artifact — IDC EXIT GATE REPORT.",
+      "bytes": 1729,
+      "mtime": "2026-08-02T09:56:26.280Z",
+      "indexed_at": "2026-08-02T09:58:06.058Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-CONSTITUTIONAL-LEARNING-ARCHITECTURE-0001/receipts/PRE_HANDOFF_INTENT_GATE_REPORT.json",
+      "synopsis": "BuilderOS artifact — PRE HANDOFF INTENT GATE REPORT.",
+      "bytes": 2085,
+      "mtime": "2026-08-02T09:56:26.280Z",
+      "indexed_at": "2026-08-02T09:58:06.058Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-CONSTITUTIONAL-LEARNING-ARCHITECTURE-0001/receipts/SNT_INTENT_ATTACK_RECEIPT.json",
+      "synopsis": "BuilderOS artifact — SNT INTENT ATTACK RECEIPT.",
+      "bytes": 2645,
+      "mtime": "2026-08-02T09:56:26.276Z",
+      "indexed_at": "2026-08-02T09:58:06.058Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-CONSTITUTIONAL-LEARNING-ARCHITECTURE-0001/receipts/SNT_TRANSLATION_ATTACK_REPORT.json",
+      "synopsis": "BuilderOS artifact — SNT TRANSLATION ATTACK REPORT.",
+      "bytes": 1795,
+      "mtime": "2026-08-02T09:56:26.288Z",
+      "indexed_at": "2026-08-02T09:58:06.058Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-CONSTITUTIONAL-LEARNING-ARCHITECTURE-0001/receipts/WISDOM_REVIEW_RECEIPT.json",
+      "synopsis": "BuilderOS artifact — WISDOM REVIEW RECEIPT.",
+      "bytes": 1174,
+      "mtime": "2026-08-02T09:56:26.276Z",
+      "indexed_at": "2026-08-02T09:58:06.058Z",
+      "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-DELIBERATION-SENTRY-REGRESSION-0001/ACCEPTANCE_TESTS.json",
@@ -41517,9 +41717,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 403950,
-      "mtime": "2026-08-02T09:34:25.280Z",
-      "indexed_at": "2026-08-02T09:36:38.323Z"
+      "bytes": 404825,
+      "mtime": "2026-08-02T09:58:19.588Z",
+      "indexed_at": "2026-08-02T09:58:41.526Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -42758,9 +42958,9 @@
     {
       "path": "docs/products/PRODUCT_REGISTRY.json",
       "synopsis": "Documentation — PRODUCT REGISTRY.",
-      "bytes": 24839,
-      "mtime": "2026-08-02T01:11:29.930Z",
-      "indexed_at": "2026-08-02T09:36:38.323Z",
+      "bytes": 30752,
+      "mtime": "2026-08-02T09:51:44.872Z",
+      "indexed_at": "2026-08-02T09:58:06.058Z",
       "synopsis_index_only": true
     },
     {
@@ -65780,9 +65980,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 36526,
-      "mtime": "2026-08-02T01:05:54.306Z",
-      "indexed_at": "2026-08-02T09:36:38.323Z",
+      "bytes": 36666,
+      "mtime": "2026-08-02T09:55:56.764Z",
+      "indexed_at": "2026-08-02T09:58:06.058Z",
       "synopsis_index_only": true
     },
     {
@@ -66061,6 +66261,14 @@
       "bytes": 1084,
       "mtime": "2026-08-02T01:12:17.190Z",
       "indexed_at": "2026-08-02T09:36:38.323Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/CONSTITUTIONAL_LEARNING_ARCHITECTURE_V1_ACCEPTANCE.json",
+      "synopsis": "Product receipt — CONSTITUTIONAL LEARNING ARCHITECTURE V1 ACCEPTANCE.",
+      "bytes": 1516,
+      "mtime": "2026-08-02T09:57:44.080Z",
+      "indexed_at": "2026-08-02T09:58:41.526Z",
       "synopsis_index_only": true
     },
     {
@@ -66810,9 +67018,9 @@
     {
       "path": "products/receipts/RECEIPT_TRUTH_VALIDATION.json",
       "synopsis": "Product receipt — RECEIPT TRUTH VALIDATION.",
-      "bytes": 26034,
-      "mtime": "2026-08-02T09:34:49.428Z",
-      "indexed_at": "2026-08-02T09:36:38.323Z",
+      "bytes": 26221,
+      "mtime": "2026-08-02T09:58:26.220Z",
+      "indexed_at": "2026-08-02T09:58:41.526Z",
       "synopsis_index_only": true
     },
     {
@@ -72845,6 +73053,16 @@
       ]
     },
     {
+      "path": "scripts/bootstrap-fcla-arc.mjs",
+      "synopsis": "Generate the ARC receipt pack for FACTORY-CONSTITUTIONAL-LEARNING-ARCHITECTURE-0001.",
+      "bytes": 4439,
+      "mtime": "2026-08-02T09:49:19.604Z",
+      "indexed_at": "2026-08-02T09:58:06.058Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "scripts/bp-priority-never-stop.mjs",
       "synopsis": "Never-stop BP_PRIORITY runner — retries FAIL until TECHNICAL_PASS or founder_stop.",
       "bytes": 12791,
@@ -72865,9 +73083,9 @@
     {
       "path": "scripts/build-constitutional-learning-architecture.mjs",
       "synopsis": "Orchestrates POST /api/v1/lifeos/builder/build for the constitutional learning architecture mission.",
-      "bytes": 3389,
-      "mtime": "2026-08-02T09:36:35.984Z",
-      "indexed_at": "2026-08-02T09:36:38.323Z",
+      "bytes": 3677,
+      "mtime": "2026-08-02T09:41:18.712Z",
+      "indexed_at": "2026-08-02T09:58:06.058Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -73777,6 +73995,16 @@
       "bytes": 1471,
       "mtime": "2026-07-16T19:42:53.603Z",
       "indexed_at": "2026-07-28T22:54:46.666Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/fcla-arc-pack.mjs",
+      "synopsis": "Produce an honest post-ARC receipt pack for FACTORY-CONSTITUTIONAL-LEARNING-ARCHITECTURE-0001.",
+      "bytes": 6518,
+      "mtime": "2026-08-02T09:56:23.892Z",
+      "indexed_at": "2026-08-02T09:58:06.058Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -77115,6 +77343,16 @@
       "bytes": 5405,
       "mtime": "2026-08-02T09:36:36.060Z",
       "indexed_at": "2026-08-02T09:36:38.323Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/verify-constitutional-learning-architecture-acceptance.mjs",
+      "synopsis": "Acceptance runner for FACTORY-CONSTITUTIONAL-LEARNING-ARCHITECTURE-0001.",
+      "bytes": 2710,
+      "mtime": "2026-08-02T09:55:50.096Z",
+      "indexed_at": "2026-08-02T09:58:06.058Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

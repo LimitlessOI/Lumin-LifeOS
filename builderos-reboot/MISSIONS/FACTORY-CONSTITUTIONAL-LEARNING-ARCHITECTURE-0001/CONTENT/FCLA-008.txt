@@ -1,0 +1,3 @@
+Implement the Solomon Wisdom Lab. It gathers evidence, expands perspectives, compares models, identifies constitutional tensions, and records a recommendation withheld until the Chair independently records a preliminary decision. Exports: createEvidencePackage(topic), addFinding(pkg, finding), addRecommendation(pkg, recommendation, revealAfterChairCommit), getRevelation(pkg, chairPreliminaryDecision).
+
+Smoke test withholds recommendation until a chair preliminary decision is recorded, then reveals it.

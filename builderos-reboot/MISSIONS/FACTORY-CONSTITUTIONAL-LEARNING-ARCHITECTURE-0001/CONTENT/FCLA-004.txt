@@ -1,0 +1,3 @@
+Implement the Readiness Engine. Inputs: target insight and recipient profile. Outputs: readiness score, recommended form (micro-insight, dialogue, exercise, wait), and risk if forced. Exports: assessReadiness(recipient, insight), selectForm(recipient, insight), detectAvoidancePattern(constellation, topic).
+
+Smoke test returns a readiness score < 0.5 for an overwhelmed recipient and a safe form.

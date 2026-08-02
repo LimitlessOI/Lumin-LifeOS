@@ -1,0 +1,69 @@
+{
+  "schema": "asset_reuse_decision_v1",
+  "mission_id": "FACTORY-CONSTITUTIONAL-LEARNING-ARCHITECTURE-0001",
+  "arc_decision_status": "CONFIRMED",
+  "surveyed_at": "2026-08-02",
+  "wisdom_lessons": [
+    "Reuse production spine files already built — ARC hosts byte contracts"
+  ],
+  "cfo_recommendation": "EXTEND existing repo assets; no greenfield parallel stack",
+  "assets_reviewed": [
+    "services/human-constellation.js",
+    "services/reality-alignment.js",
+    "services/confidence-vector.js",
+    "services/causality-engine.js",
+    "services/readiness-engine.js",
+    "services/perspective-expansion.js",
+    "services/calibration-ledger.js",
+    "services/office-trust-ledger.js",
+    "services/solomon-wisdom-lab.js"
+  ],
+  "decisions": [
+    {
+      "asset": "services/human-constellation.js",
+      "decision": "REUSE",
+      "reason": "Existing implementation snapshotted into CONTENT for system Builder path"
+    },
+    {
+      "asset": "services/reality-alignment.js",
+      "decision": "REUSE",
+      "reason": "Existing implementation snapshotted into CONTENT for system Builder path"
+    },
+    {
+      "asset": "services/confidence-vector.js",
+      "decision": "REUSE",
+      "reason": "Existing implementation snapshotted into CONTENT for system Builder path"
+    },
+    {
+      "asset": "services/causality-engine.js",
+      "decision": "REUSE",
+      "reason": "Existing implementation snapshotted into CONTENT for system Builder path"
+    },
+    {
+      "asset": "services/readiness-engine.js",
+      "decision": "REUSE",
+      "reason": "Existing implementation snapshotted into CONTENT for system Builder path"
+    },
+    {
+      "asset": "services/perspective-expansion.js",
+      "decision": "REUSE",
+      "reason": "Existing implementation snapshotted into CONTENT for system Builder path"
+    },
+    {
+      "asset": "services/calibration-ledger.js",
+      "decision": "REUSE",
+      "reason": "Existing implementation snapshotted into CONTENT for system Builder path"
+    },
+    {
+      "asset": "services/office-trust-ledger.js",
+      "decision": "REUSE",
+      "reason": "Existing implementation snapshotted into CONTENT for system Builder path"
+    },
+    {
+      "asset": "services/solomon-wisdom-lab.js",
+      "decision": "REUSE",
+      "reason": "Existing implementation snapshotted into CONTENT for system Builder path"
+    }
+  ],
+  "arc_decision": "REUSE repo truth; mechanical ARC host compiler emits write_file_exact blueprint"
+}
