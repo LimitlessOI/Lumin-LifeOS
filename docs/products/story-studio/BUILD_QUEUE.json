@@ -373,7 +373,7 @@
         "7"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "expected_exports": [
         "registerRightsRoutes"
       ],
@@ -399,10 +399,10 @@
       "blocker_resolution": null,
       "park_until": null,
       "last_error": "route module not auto-registered — add {\"path\":\"routes/rightsRoutes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
-      "commit_sha": "18c04c33fe093cbfb728ecb5775b327d013dc524",
+      "commit_sha": "cd460a29707edc25b99d97387929551dd35f9ec2",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-02T15:57:44.579Z",
+      "last_attempt_at": "2026-08-02T16:02:38.324Z",
       "last_attempt": null,
       "revive_count": 1,
       "revived_at": "2026-08-02T15:56:53.399Z",
@@ -523,6 +523,6 @@
   "blueprint_id": "PRODUCT-STORY-STUDIO-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-story-studio",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-02T16:00:37.760Z",
+  "updated_at": "2026-08-02T16:04:17.379Z",
   "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/story-studio/BUILD_QUEUE.json"
 }
