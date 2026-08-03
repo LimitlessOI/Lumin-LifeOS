@@ -103,6 +103,9 @@ async function proveViaLocalPlaywright(creds) {
     report.steps.session_held = { ok: stillOnApp, url: page.url() };
     if (stillOnApp) {
       report.steps.dashboard = await verifyDashboard(page);
+      if (process.env.RUN_NAV_SWEEP !== '0') {
+        report.steps.nav_sweep = await navSweep(page);
+      }
     }
     report.ok = Boolean(report.steps.form_login?.ok || report.steps.app_nav?.ok) && stillOnApp && !!report.steps.dashboard?.ok;
   } catch (err) {
@@ -175,6 +178,61 @@ async function verifyDashboard(page) {
     result.scores = { ok: scoresOk, api: apiScores, dom: domScores };
 
     result.ok = result.point_b.ok && scoresOk;
+  } catch (err) {
+    result.error = err.message;
+  }
+  return result;
+}
+
+async function navSweep(page) {
+  const result = { ok: false, items: [], error: null };
+  try {
+    const navs = await page.evaluate(() =>
+      Array.from(document.querySelectorAll('.nav-item[data-page]'))
+        .map((a) => ({ id: a.id, page: a.dataset.page, label: a.dataset.label }))
+        .filter((n) => n.page && n.page.endsWith('.html'))
+    );
+
+    for (const nav of navs) {
+      try {
+        await page.locator(`#${nav.id}`).first().click();
+        // Give loadPage() a beat to start swapping the iframe src.
+        await page.waitForTimeout(300);
+        await page
+          .waitForFunction(
+            (pageName) => {
+              const f = document.getElementById('content-frame');
+              return f && String(f.src).includes(pageName);
+            },
+            nav.page,
+            { timeout: 5000 }
+          )
+          .catch(() => {});
+
+        const src = await page.evaluate(() => {
+          const f = document.getElementById('content-frame');
+          return f ? f.src : '';
+        });
+        const reached = src && src.includes(nav.page);
+        let httpStatus = null;
+        if (reached) {
+          const fullUrl = new URL(src, BASE).href;
+          httpStatus = await page.evaluate(async (url) => {
+            try {
+              const res = await fetch(url, { method: 'HEAD', credentials: 'same-origin' });
+              return res.status;
+            } catch {
+              return 0;
+            }
+          }, fullUrl);
+        }
+        result.items.push({ ...nav, reached: !!reached, src, http_status: httpStatus });
+      } catch (e) {
+        result.items.push({ ...nav, reached: false, error: e.message });
+      }
+    }
+
+    result.ok = result.items.length > 0 && result.items.every((i) => i.reached && (i.http_status === 200 || i.http_status === null));
   } catch (err) {
     result.error = err.message;
   }

@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-03T09:41:38.588Z",
+  "generated_at": "2026-08-03T09:49:03.227Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12934,
   "files": [
@@ -41754,9 +41754,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 439436,
-      "mtime": "2026-08-03T09:40:50.392Z",
-      "indexed_at": "2026-08-03T09:41:38.588Z"
+      "bytes": 440790,
+      "mtime": "2026-08-03T09:48:53.732Z",
+      "indexed_at": "2026-08-03T09:49:03.227Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -42639,9 +42639,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 672834,
-      "mtime": "2026-08-03T09:34:13.248Z",
-      "indexed_at": "2026-08-03T09:37:43.214Z"
+      "bytes": 674620,
+      "mtime": "2026-08-03T09:48:40.248Z",
+      "indexed_at": "2026-08-03T09:49:03.227Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -66444,9 +66444,9 @@
     {
       "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
       "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
-      "bytes": 5752,
-      "mtime": "2026-08-03T09:39:39.120Z",
-      "indexed_at": "2026-08-03T09:41:38.588Z",
+      "bytes": 5708,
+      "mtime": "2026-08-03T09:43:25.816Z",
+      "indexed_at": "2026-08-03T09:49:03.227Z",
       "synopsis_index_only": true
     },
     {
@@ -66508,9 +66508,9 @@
     {
       "path": "products/receipts/FOUNDER_UI_LOGIN_E2E.json",
       "synopsis": "Product receipt — FOUNDER UI LOGIN E2E.",
-      "bytes": 1711,
-      "mtime": "2026-08-03T09:33:17.084Z",
-      "indexed_at": "2026-08-03T09:37:43.214Z",
+      "bytes": 14713,
+      "mtime": "2026-08-03T09:48:06.848Z",
+      "indexed_at": "2026-08-03T09:49:03.227Z",
       "synopsis_index_only": true
     },
     {
@@ -76043,9 +76043,9 @@
     {
       "path": "scripts/run-founder-ui-login-e2e.mjs",
       "synopsis": "Credentialed founder UI login E2E — prefers local LIFEOS_FOUNDER_LOGIN_*;",
-      "bytes": 9834,
-      "mtime": "2026-08-03T09:33:10.692Z",
-      "indexed_at": "2026-08-03T09:37:43.214Z",
+      "bytes": 11833,
+      "mtime": "2026-08-03T09:46:59.576Z",
+      "indexed_at": "2026-08-03T09:49:03.227Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
