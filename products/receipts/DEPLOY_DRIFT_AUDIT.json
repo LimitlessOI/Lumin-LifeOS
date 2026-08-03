@@ -1,1 +1,110 @@
-{"schema":"deploy_truth_verify_v1","at":"2026-08-02T15:20:13.392Z","command":"drift-audit","production_base":"https://lumin-web-production-e3a9.up.railway.app","deploy_branch":"main","commit_sha":"8877dcdc5e67e96bcf1282663ac2c9ccaa406565","served_sha":"8877dcdc5e67e96bcf1282663ac2c9ccaa406565","verdict":"PROVEN","ok":true,"passed":["git.fetch","local.divergence","runtime.identity","runtime.ready","runtime.version","deployment.state"],"failed":[],"unproven":[],"skipped":[],"files":[],"deployment":{"id":"6df37e8d-0cdf-485b-9dd0-35c1aa3b703d","status":"SUCCESS","created_at":"2026-08-02T15:17:48.356Z","commit_sha":"8877dcdc5e67e96bcf1282663ac2c9ccaa406565","commit_message":"feat(lifeos): complete LifeOS Consumer Alpha user auth Point B; machine alpha 12/12; update BP and objective verdict","url":null},"runtime_identity":{"status":200,"ok":true,"project_id":"d3a8029f-0c6a-422f-9546-c0fa90df5531","service_id":"c3b803d7-9ee7-436e-833c-7b986ab545b7","environment_id":"a2cdebc3-d417-480b-a1d6-23fc07c47c3c","hosts":["lumin-web-production-e3a9.up.railway.app","lumin-web-production-4631.up.railway.app","www.wellroundedmomma.com","wellroundedmomma.com"],"error":null},"checks":[{"id":"git.fetch","status":"pass","detail":"origin/main is 8877dcdc5e67"},{"id":"local.divergence","status":"pass","detail":"local main is 0 ahead / 4 behind origin/main — local state is not what production deploys from","local_branch":"main","local_head":"aa29ebea18cb8747eb115327000c31a8283b901c","remote_head":"8877dcdc5e67e96bcf1282663ac2c9ccaa406565","ahead":0,"behind":4,"uncommitted":18},{"id":"runtime.identity","status":"pass","detail":"lumin-web-production-e3a9.up.railway.app belongs to Railway service c3b803d7 / env a2cdebc3","project_id":"d3a8029f-0c6a-422f-9546-c0fa90df5531","service_id":"c3b803d7-9ee7-436e-833c-7b986ab545b7","environment_id":"a2cdebc3-d417-480b-a1d6-23fc07c47c3c","hosts":["lumin-web-production-e3a9.up.railway.app","lumin-web-production-4631.up.railway.app","www.wellroundedmomma.com","wellroundedmomma.com"]},{"id":"runtime.ready","status":"pass","detail":"production alive, profile full, policy 2026-05-01a"},{"id":"runtime.version","status":"pass","detail":"production serves 8877dcdc5e67, which contains origin/main (8877dcdc5e67)","served_sha":"8877dcdc5e67e96bcf1282663ac2c9ccaa406565","remote_head":"8877dcdc5e67e96bcf1282663ac2c9ccaa406565"},{"id":"deployment.state","status":"pass","detail":"latest deployment SUCCESS on 8877dcdc5e67, nothing in flight","deployment":{"id":"6df37e8d-0cdf-485b-9dd0-35c1aa3b703d","status":"SUCCESS","created_at":"2026-08-02T15:17:48.356Z","commit_sha":"8877dcdc5e67e96bcf1282663ac2c9ccaa406565","commit_message":"feat(lifeos): complete LifeOS Consumer Alpha user auth Point B; machine alpha 12/12; update BP and objective verdict","url":null}}],"produced_by":"cursor-agent","verified_by":"git+railway-api+production-http-probe","verification_kind":"deterministic+external","local_head":"aa29ebea18cb8747eb115327000c31a8283b901c","local_branch":"main","ahead":0,"behind":4,"human_summary":"PROVEN — production serves 8877dcdc5e67, which contains origin/main; no runtime drift found."}
+{
+  "schema": "deploy_truth_verify_v1",
+  "at": "2026-08-03T09:39:39.122Z",
+  "command": "drift-audit",
+  "production_base": "https://lumin-web-production-e3a9.up.railway.app",
+  "deploy_branch": "main",
+  "commit_sha": "5eb0612c48acce1560c9e438989f725c324aa7ca",
+  "served_sha": "5eb0612c48acce1560c9e438989f725c324aa7ca",
+  "verdict": "PROVEN",
+  "ok": true,
+  "passed": [
+    "git.fetch",
+    "local.divergence",
+    "runtime.identity",
+    "runtime.ready",
+    "runtime.version",
+    "deployment.state"
+  ],
+  "failed": [],
+  "unproven": [],
+  "skipped": [],
+  "files": [],
+  "deployment": {
+    "id": "2e0f9391-22a6-4298-8347-4c4a2c3a17ad",
+    "status": "SUCCESS",
+    "created_at": "2026-08-03T09:38:00.262Z",
+    "commit_sha": "5eb0612c48acce1560c9e438989f725c324aa7ca",
+    "commit_message": "GAP-FILL: dashboard visual verification and orphaned-duplicates denylist refinement\n\n- scripts/run-founder-ui-login-e2e.mjs: extends the credentialed founder UI E2E to cross-check the live dashboard DOM against the same APIs the page calls (Point B strip + scoreboard tiles inside the lifeos-dashboard.html iframe).\n- scripts/check-orphaned-duplicates.mjs: refined NAME_DENYLIST to exclude internal markers and shared constants that collide legitimately (__private__, DEFAULT_LEDGER_PATH, DASHBOARD_HTML_TARGET), reducing advisory noise from 47 to 44 findings.\n- docs/products/lifeos/PRODUCT_HOME.md: top-inserted change receipt and updated Last Updated.\n- products/receipts/FOUNDER_UI_LOGIN_E2E.json: fresh production run with dashboard.ok: true.\n\nHAND-AUTHORED-JUSTIFICATION: Both .mjs files are orchestration/verification scripts, not new business logic under SO-001; they were edited in place with behavioral proof (node --check and a live production E2E pass) rather than generated through the governed factory.\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
+    "url": null
+  },
+  "runtime_identity": {
+    "status": 200,
+    "ok": true,
+    "project_id": "d3a8029f-0c6a-422f-9546-c0fa90df5531",
+    "service_id": "c3b803d7-9ee7-436e-833c-7b986ab545b7",
+    "environment_id": "a2cdebc3-d417-480b-a1d6-23fc07c47c3c",
+    "hosts": [
+      "lumin-web-production-e3a9.up.railway.app",
+      "lumin-web-production-4631.up.railway.app",
+      "www.wellroundedmomma.com",
+      "wellroundedmomma.com"
+    ],
+    "error": null
+  },
+  "checks": [
+    {
+      "id": "git.fetch",
+      "status": "pass",
+      "detail": "origin/main is 5eb0612c48ac"
+    },
+    {
+      "id": "local.divergence",
+      "status": "pass",
+      "detail": "local HEAD is aligned with origin/main",
+      "local_branch": "HEAD",
+      "local_head": "5eb0612c48acce1560c9e438989f725c324aa7ca",
+      "remote_head": "5eb0612c48acce1560c9e438989f725c324aa7ca",
+      "ahead": 0,
+      "behind": 0,
+      "uncommitted": 0
+    },
+    {
+      "id": "runtime.identity",
+      "status": "pass",
+      "detail": "lumin-web-production-e3a9.up.railway.app belongs to Railway service c3b803d7 / env a2cdebc3",
+      "project_id": "d3a8029f-0c6a-422f-9546-c0fa90df5531",
+      "service_id": "c3b803d7-9ee7-436e-833c-7b986ab545b7",
+      "environment_id": "a2cdebc3-d417-480b-a1d6-23fc07c47c3c",
+      "hosts": [
+        "lumin-web-production-e3a9.up.railway.app",
+        "lumin-web-production-4631.up.railway.app",
+        "www.wellroundedmomma.com",
+        "wellroundedmomma.com"
+      ]
+    },
+    {
+      "id": "runtime.ready",
+      "status": "pass",
+      "detail": "production alive, profile full, policy 2026-05-01a"
+    },
+    {
+      "id": "runtime.version",
+      "status": "pass",
+      "detail": "production serves 5eb0612c48ac, which contains origin/main (5eb0612c48ac)",
+      "served_sha": "5eb0612c48acce1560c9e438989f725c324aa7ca",
+      "remote_head": "5eb0612c48acce1560c9e438989f725c324aa7ca"
+    },
+    {
+      "id": "deployment.state",
+      "status": "pass",
+      "detail": "latest deployment SUCCESS on 5eb0612c48ac, nothing in flight",
+      "deployment": {
+        "id": "2e0f9391-22a6-4298-8347-4c4a2c3a17ad",
+        "status": "SUCCESS",
+        "created_at": "2026-08-03T09:38:00.262Z",
+        "commit_sha": "5eb0612c48acce1560c9e438989f725c324aa7ca",
+        "commit_message": "GAP-FILL: dashboard visual verification and orphaned-duplicates denylist refinement\n\n- scripts/run-founder-ui-login-e2e.mjs: extends the credentialed founder UI E2E to cross-check the live dashboard DOM against the same APIs the page calls (Point B strip + scoreboard tiles inside the lifeos-dashboard.html iframe).\n- scripts/check-orphaned-duplicates.mjs: refined NAME_DENYLIST to exclude internal markers and shared constants that collide legitimately (__private__, DEFAULT_LEDGER_PATH, DASHBOARD_HTML_TARGET), reducing advisory noise from 47 to 44 findings.\n- docs/products/lifeos/PRODUCT_HOME.md: top-inserted change receipt and updated Last Updated.\n- products/receipts/FOUNDER_UI_LOGIN_E2E.json: fresh production run with dashboard.ok: true.\n\nHAND-AUTHORED-JUSTIFICATION: Both .mjs files are orchestration/verification scripts, not new business logic under SO-001; they were edited in place with behavioral proof (node --check and a live production E2E pass) rather than generated through the governed factory.\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
+        "url": null
+      }
+    }
+  ],
+  "produced_by": "cursor-agent",
+  "verified_by": "git+railway-api+production-http-probe",
+  "verification_kind": "deterministic+external",
+  "local_head": "5eb0612c48acce1560c9e438989f725c324aa7ca",
+  "local_branch": "HEAD",
+  "ahead": 0,
+  "behind": 0,
+  "human_summary": "PROVEN — production serves 5eb0612c48ac, which contains origin/main; no runtime drift found."
+}

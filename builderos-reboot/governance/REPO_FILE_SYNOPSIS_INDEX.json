@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-03T09:37:43.214Z",
+  "generated_at": "2026-08-03T09:41:38.588Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12933,
+  "file_count": 12934,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -41722,6 +41722,13 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "docs/products/builderos/FACT_FINDING_5_1B_FOUNDER_GATED_STEPS.md",
+      "synopsis": "Phase 5.1b fact-finding — what the 84 shipped founder_gated steps actually did",
+      "bytes": 14221,
+      "mtime": "2026-08-03T09:41:12.172Z",
+      "indexed_at": "2026-08-03T09:41:38.588Z"
+    },
+    {
       "path": "docs/products/builderos/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
       "bytes": 3119,
@@ -41747,9 +41754,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 437699,
-      "mtime": "2026-08-03T06:36:58.260Z",
-      "indexed_at": "2026-08-03T06:37:25.958Z"
+      "bytes": 439436,
+      "mtime": "2026-08-03T09:40:50.392Z",
+      "indexed_at": "2026-08-03T09:41:38.588Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -66437,9 +66444,9 @@
     {
       "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
       "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
-      "bytes": 3146,
-      "mtime": "2026-08-02T15:26:11.792Z",
-      "indexed_at": "2026-08-02T15:26:11.792Z",
+      "bytes": 5752,
+      "mtime": "2026-08-03T09:39:39.120Z",
+      "indexed_at": "2026-08-03T09:41:38.588Z",
       "synopsis_index_only": true
     },
     {
