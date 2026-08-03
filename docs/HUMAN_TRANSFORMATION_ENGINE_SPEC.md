@@ -1,23 +1,23 @@
-<!-- SYNOPSIS: Human Transformation Engine — product-composition SPEC CANDIDATE. Maps 7 HTE subsystems onto existing constitutional learning engines (no new services proposed); adds evidence-vs-proof discipline, two split permanent prohibitions, per-component measurement, and activation gates for identity inference. Writing only — authorizes no build. -->
+<!-- SYNOPSIS: Human Transformation Engine — product-composition SPEC CANDIDATE. Maps 7 HTE subsystems plus a cross-cutting Why Layer / Epistemic Ledger onto existing constitutional learning engines (no new services proposed); adds evidence-vs-proof discipline, two split permanent prohibitions, per-component measurement, and activation gates for identity inference. Writing only — authorizes no build. -->
 
 # The Human Transformation Engine — A Product-Composition Spec
 
 **Status:** SPEC CANDIDATE — written, not built, not ratified. Authorizes nothing. Phases 1–6 of `BLUEPRINT_COMMUNICATION_FIRST_2026-08-02.md` (verification, gating, enforcement) remain the active priority underneath this. This is Phase 7 of that blueprint: capture the vision precisely enough that it survives being re-explained from memory, without triggering a second platform.
 **Authority:** Subordinate to `docs/constitution/NORTH_STAR_SSOT.md` (supreme). Companion document to `docs/CREATIVE_ENGINE_AND_PROGRESS_DOCTRINE.md` — that doctrine covers the Six Laws of voluntary progress and the Experiment Ledger; this spec is the product-composition layer that sits on top of BuilderOS's existing constitutional learning engines specifically.
-**Origin:** Founder's own Chair-voice framing of the mission (2026-08-02), independently converged on by a second AI pass responding to a sequencing pushback, drafted by Claude Code as Phase 7 of the communication-first blueprint, then revised after a third independent critique added per-component measurement and split the single-observation prohibition into two.
-**Touches products:** LifeOS, LifeRE (Twin/mission-ledger), the Cognitive Core substrate (Confidence Vectors, Causality Engine, Human Constellation, Reality Alignment, Readiness Engine).
-**Promotion to law:** none of this document's content requires ratification to exist as a spec — it only maps existing, already-shipped engines. One recommendation inside it (elevating "reality outranks belief" to constitutional status) is explicitly flagged for Council, not enacted here.
+**Origin:** Founder's own Chair-voice framing of the mission (2026-08-02), independently converged on by a second AI pass responding to a sequencing pushback, drafted by Claude Code as Phase 7 of the communication-first blueprint. Revised twice: once after an independent critique added per-component measurement and split the single-observation prohibition into two; again after a second independent critique proposed a cross-cutting "Why Layer" and "Epistemic Ledger," mapped here onto `self-repair-root-cause-chains.js` and `self-repair-decision-log.js` rather than built as new engines.
+**Touches products:** LifeOS, LifeRE (Twin/mission-ledger), the Cognitive Core substrate (Confidence Vectors, Causality Engine, Human Constellation, Reality Alignment, Readiness Engine), and the Self-Repair Doctrine substrate (root-cause chains, decision log).
+**Promotion to law:** none of this document's content requires ratification to exist as a spec — it only maps existing, already-shipped engines. Two recommendations inside it (elevating "reality outranks belief" and a "Law of Causal Understanding" to constitutional status) are explicitly flagged for Council, not enacted here.
 **Last Updated:** 2026-08-02.
 
 ---
 
 ## The core idea, stated once, precisely
 
-Almost every app records what a person **did**. Almost none preserve what that person **became** because they did it.
+Almost every app records what a person **did**. Almost none preserve what that person **became** because they did it, or why.
 
-> BuilderOS preserves evidence of human transformation, **and learns from it.**
+> Almost every app records what a person did. BuilderOS seeks to understand what they became because of it, why they changed, and how those lessons can help them — and others — grow.
 
-Preservation alone is a photo album, not an institution. The second half of the sentence is what turns this into something that gets better because of what it records, rather than just accumulating a record. Everything below exists to make that claim testable rather than aspirational.
+Preservation alone is a photo album, not an institution. "Why they changed" is what turns this into something that gets better because of what it records, rather than just accumulating a record. Everything below exists to make that claim testable rather than aspirational.
 
 ---
 
@@ -51,6 +51,29 @@ The founder's original framing named seven subsystems. None of them are green-fi
 
 ---
 
+## The Why Layer — a cross-cutting capability, not an eighth subsystem
+
+Underneath all seven components sits one more question, asked continually rather than as its own product: not just *what happened*, but *why*. This applies everywhere the seven components apply — a deployment failing, a person finally exercising, a blueprint drifting, a feature succeeding — the same five-step pattern in every case: what happened, why did it happen, how confident are we, can we reproduce it, should we change because of it.
+
+This is **not a new engine**. `services/causality-engine.js` already exists (it backs Compound Effect, #4, above) — the Why Layer is that engine applied continuously across all seven components rather than only for forecasting. More specifically, the "keep asking why until you reach a root cause, not a symptom" mechanism already has a real, shipped implementation: `services/self-repair-root-cause-chains.js` records exactly this chain today — `symptom → investigation[] → cause → fix → verification` — scoped to code bugs. The Why Layer is that same table's shape, generalized beyond code to product and human-transformation events. Extend the existing schema; do not build a second one.
+
+**The gate that keeps this from becoming analysis paralysis:** not every "why" is worth pursuing. Investigating a cause has a real cost (tokens, time, sometimes a person's attention), and that cost must be weighed against the value of understanding — exactly the same discipline `CLAUDE.md`'s existing Zero Waste AI Call Rule already enforces for scheduled AI calls (`createUsefulWorkGuard` — skip entirely if prerequisites fail or there's no real work to do). When this is built, the Why Layer's decision to investigate is not a vibe, it's the same kind of guarded check: a `workCheck` that asks whether this specific surprise is high-value enough to spend investigation on, reusing the existing pattern rather than inventing a new judgment call. Most events deserve zero levels of "why." A few deserve five.
+
+## The Epistemic Ledger — recording belief revision, not just outcomes
+
+The Experiment Ledger (already named in `docs/CREATIVE_ENGINE_AND_PROGRESS_DOCTRINE.md`: hypothesis → prediction → action → outcome → comparison → learning → Twin-update) answers "did this work." A different question needs its own record: when reality *surprises* the system — an outcome nobody predicted — what does that say about the model that failed to predict it?
+
+Again, not a new mechanism from scratch: `services/self-repair-decision-log.js` already records `predicted_outcome`, `success_criteria`, `failure_criteria`, and `reality_check_at` per decision — most of an Epistemic Ledger's shape already exists, scoped to factory/build decisions today. Generalizing it to human-transformation and product surprises means the same record, triggered whenever a prediction and reality diverge by enough to be worth the Why Layer's attention, capturing:
+
+- **What we believed**, and what evidence we thought supported it.
+- **What evidence existed *before* the surprise** — could this have been predicted, and if so, why wasn't it? (That answer implicates the reasoning engine, not reality.)
+- **Which assumption failed** — stored as a reusable artifact in its own right, not just folded into prose. ("We assumed motivation was the limiting factor; reality showed it was sleep deprivation" is worth more as a standalone, searchable lesson than as a sentence buried in a report.)
+- **What new principle was earned** — the goal isn't correcting one miss, it's producing a model that prevents a whole class of future misses.
+
+**One constraint, applied for internal consistency with the evidence-vs-proof rule below:** a claim of the strongest kind — "the mental model itself was wrong, not just the evidence" — is exactly the kind of strong claim the next section's evidence-vs-proof rule already governs. It does not get asserted from a single surprising miss. It requires multiple corroborating misses that share the same root cause before the Epistemic Ledger is allowed to record a paradigm-level entry rather than an isolated one. One surprise is a data point. A paradigm-blindness claim is a trait claim about the *system's own reasoning*, and it earns the same discipline a trait claim about a person does.
+
+---
+
 ## The hard constraint: evidence, not proof
 
 This is the single sharpest addition from the three-way convergence, and it is a **design rule, not a caution**. It applies specifically to the Victory System (#5) but governs the whole Identity Layer (#3):
@@ -61,6 +84,7 @@ This is the single sharpest addition from the three-way convergence, and it is a
 - A single artifact (a finished project, a hit goal, a completed course) may only ever be recorded as "evidence consistent with `<trait>`," never as "proves `<trait>`."
 - A trait may only be surfaced to the person as a stated identity claim ("you are becoming someone who...") once the Confidence Vector Model's own existing confidence threshold is crossed by repeated, independent evidence — not by one strong instance.
 - Victory Capsules celebrate the *event*. They do not, by themselves, assert an identity. The identity claim is a separate, later, evidence-gated statement.
+- A Victory Capsule captures three things, not one: **the event** ("I ran five miles"), **the transformation** ("I became someone who believes I can run five miles" — still evidence, not proof, per the rule above), and **the why** — asked directly, in the person's own words: why did you succeed today, what was different, what almost stopped you, what helped most, what surprised you. The "why" answers are the highest-value raw material the Why Layer (above) has to work with — they're a person's own causal hypothesis about their own change, not the system's guess.
 
 This is the same discipline as the Confidence Ledger fix shipped earlier tonight (Phase 4.1): a claim is only as strong as the evidence actually backing it, and the system must say so honestly rather than rounding up.
 
@@ -93,10 +117,12 @@ Until then, this document's Sections 1, 2, 4, 6, and 7 (Inputs, Reality Layer, C
 Not proposed here as authorization — this is the "if we ever pick this up" sequencing, preserved so it doesn't need re-deriving:
 
 1. **Reality Layer + Compound Effect first** (#2, #4) — pure fact/prediction, no identity claims, extends already-shipped engines.
-2. **Intervention Engine second** (#6) — already has State Modeling and Avoidance Pattern Recognition; extending "what's worked for this person before" doesn't require the identity gate.
-3. **Victory System's event-celebration half** (#5, non-identity part) — Victory Capsules as an event record, without the identity-claim layer, can ship before the gate clears.
-4. **Identity Layer + Victory's identity-claim half** (#3, #5-identity) — only after the three gating conditions above are met.
-5. **Purpose Engine** (#7) — lowest priority; no dedicated engine exists yet, and it's the least differentiated from what stated-values-in-the-Twin already does today.
+2. **The Why Layer, generalized from `self-repair-root-cause-chains.js`** — cheap to extend once Reality Layer and Compound Effect exist to feed it, and every later component benefits from it being in place early.
+3. **Intervention Engine second** (#6) — already has State Modeling and Avoidance Pattern Recognition; extending "what's worked for this person before" doesn't require the identity gate.
+4. **Victory System's event-celebration half** (#5, non-identity part) — Victory Capsules as an event record plus the "why" reflection questions, without the identity-claim layer, can ship before the gate clears.
+5. **The Epistemic Ledger, generalized from `self-repair-decision-log.js`** — most valuable once there's a real backlog of predictions from the components above to compare against reality.
+6. **Identity Layer + Victory's identity-claim half** (#3, #5-identity) — only after the three gating conditions above are met.
+7. **Purpose Engine** (#7) — lowest priority; no dedicated engine exists yet, and it's the least differentiated from what stated-values-in-the-Twin already does today.
 
 ---
 
@@ -119,14 +145,20 @@ A component that can't state what would prove it wrong isn't yet scientific, it'
 | **Victory** | Measured against an explicit control (a matched cohort or period without the celebration), does the Victory System measurably change persistence — never assumed, always A/B'd through the Experiment Ledger, per the founder's own framing above. |
 | **Identity** | When a trait claim eventually surfaces, how well does it calibrate against what the person later confirms about themselves — the same calibration-sampling pattern already used elsewhere in this repo, not a new mechanism. |
 | **Purpose** | Over time, does the gap between a person's stated values and their actual choices narrow or widen? This is the least measurable of the seven and stays the lowest engineering priority for exactly that reason. |
+| **Why Layer / Epistemic Ledger** | Of the high-value surprises worth investigating (per the cost/value gate), what fraction get a recorded root-cause chain — and when an "assumption failed" entry exists, how often does it actually prevent the same class of miss from recurring? |
 
 None of these get instrumented until the component itself activates (see the gating conditions above for Identity specifically) — this table exists so that when it does activate, "is it working" has a predefined, falsifiable answer instead of a vibe.
 
 ---
 
-## Recommendation flagged for Council, not enacted here
+## Recommendations flagged for Council, not enacted here
 
-One more thing worth naming explicitly rather than quietly acting on: nearly every rule in this document — the Truth Ladder, evidence-vs-proof, the activation gates, the Experiment Ledger — is a direct consequence of one principle: **reality outranks belief.** That principle plausibly deserves constitutional status rather than remaining an implied pattern across many documents. This document does **not** make that change. Promoting a principle into `docs/constitution/NORTH_STAR_SSOT.md` is a Council/ratification decision (`gate-change/*` or `lifeos:gate-change-run` per CLAUDE.md's own hierarchy — "no chat-council"), and requires a full read-before-write pass on that file that has not been done in this session. Recorded here as a named recommendation for Adam to route to Council if he agrees, not as something this document has authority to do itself.
+Two things worth naming explicitly rather than quietly acting on. Neither is enacted by this document — both are Council/ratification decisions (`gate-change/*` or `lifeos:gate-change-run` per CLAUDE.md's own hierarchy — "no chat-council"), and both require a full read-before-write pass on `docs/constitution/NORTH_STAR_SSOT.md` that has not been done in this session:
+
+1. **Reality outranks belief.** Nearly every rule in this document — the Truth Ladder, evidence-vs-proof, the activation gates, the Experiment Ledger — is a direct consequence of this one principle. It plausibly deserves constitutional status rather than remaining an implied pattern across many documents.
+2. **A Law of Causal Understanding.** BuilderOS seeks root causes rather than surface observations; every meaningful event should, when the value exceeds the cost of investigation, generate causal hypotheses that are scored by evidence, updated by reality, and discarded when contradicted. This is the principle behind the Why Layer and Epistemic Ledger above, and — like #1 — it's currently only implied by how those two capabilities are described, not stated as governing law.
+
+Both are recorded here as named recommendations for Adam to route to Council if he agrees, not as something this document has authority to do itself.
 
 ---
 
