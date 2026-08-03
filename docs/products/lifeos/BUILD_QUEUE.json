@@ -6196,20 +6196,25 @@
     },
     {
       "id": "update-founder-chair-intent-service",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/founder-chair-intent.js",
       "task": "Refine founder chat intent classification for 'drawer_direct_build'",
       "spec": "Modify the 'classifyFounderIntent' function to accurately classify the 'drawer_direct_build' prompt into the 'workflow-content' lane, preventing misclassification as 'counsel/essay' text.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "classifyFounderIntent"
       ],
       "file_contains": [
         "workflow-content",
         "drawer_direct_build"
-      ]
+      ],
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-08-03T17:00:19.102Z",
+      "last_error": "NOT_ON_BLUEPRINT"
     },
     {
       "id": "update-founder-intent-clarify-service",
