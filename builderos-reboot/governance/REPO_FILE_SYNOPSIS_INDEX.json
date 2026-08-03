@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-03T03:37:23.711Z",
+  "generated_at": "2026-08-03T03:41:11.879Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12930,
   "files": [
@@ -43224,9 +43224,9 @@
     {
       "path": "docs/products/story-studio/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Story Studio",
-      "bytes": 15220,
-      "mtime": "2026-08-02T16:06:07.497Z",
-      "indexed_at": "2026-08-02T16:06:20.596Z"
+      "bytes": 16966,
+      "mtime": "2026-08-03T03:40:52.715Z",
+      "indexed_at": "2026-08-03T03:41:11.879Z"
     },
     {
       "path": "docs/products/STORYSTUDIO.md",

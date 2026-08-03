@@ -250,7 +250,8 @@
       "same_signature_count": 0,
       "completed_at": "2026-08-01T18:51:26.496Z",
       "heal_claimed": true,
-      "heal_reason": "artifact_proof_pass"
+      "heal_reason": "artifact_proof_pass",
+      "false_done_note": "2026-08-02: status:done and heal_reason:artifact_proof_pass are accurate only in the narrow sense that services/rightsControl.js exports setRights and enforcePrivacyMode and passes exports_smoke -- the exports_smoke assertion checks presence, not behavior. Both functions are bare TODO stubs that unconditionally return {ok:true, result:null} regardless of input, directly contradicting the file's own comment: 'Licensed adaptation projects cannot move forward without an explicit rights record.' Not resetting this step to pending: claimPreExistingSatisfiedSteps' pre_existing_artifact_proof shortcut (services/product-build-orchestrator.js) can silently re-claim an already-present file as satisfied without ever invoking real codegen, which would re-mark this exact stub 'done' again without fixing it -- a known, separate, unfixed governance gap. Live risk is already contained: step 8 (routes/rightsRoutes.js, which would expose this stub via a real API route) is human_hold:true for exactly this reason, so the fake-success stub is not reachable through any live endpoint. Real fix, when picked up: implement setRights/enforcePrivacyMode against story_studio_rights_control / story_projects.privacy_mode through the governed factory (SO-001), then un-hold step 8."
     },
     {
       "id": "6",
@@ -398,7 +399,7 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "park_until": null,
-      "last_error": "route module not auto-registered — add {\"path\":\"routes/rightsRoutes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
+      "last_error": "route module not auto-registered \u2014 add {\"path\":\"routes/rightsRoutes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
       "commit_sha": "6d53a5cb2829b7581515cc2da3e8d07e445078c9",
       "built_sha": null,
       "proof": null,
@@ -417,7 +418,7 @@
       "grounding_details": {
         "filePath": "routes/rightsRoutes.js"
       },
-      "failure_signature": "functional_proof|BLOCKED_TOOLING|route module not auto-registered — add {\"path\":\"routes/rightsRoutes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (b",
+      "failure_signature": "functional_proof|BLOCKED_TOOLING|route module not auto-registered \u2014 add {\"path\":\"routes/rightsRoutes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (b",
       "human_hold": true,
       "human_hold_reason": "Backing service services/rightsControl.js is a bare TODO stub -- setRights() and enforcePrivacyMode() unconditionally return {ok:true, result:null} regardless of input, despite the file own comment: Licensed adaptation projects cannot move forward without an explicit rights record. A prior commit (6d53a5cb2, story-studio: hold rights-routes step 8 (stub/removed dependency)) declared this held but did not actually set human_hold or any other blocking field -- the step remained status:pending, fully eligible for another automatic attempt, and its own last_error field literally suggests auto-registering the route (which would put the fake-success consent/privacy stub live). Completing the hold that was declared but never applied. Real fix (governed factory, not a hand-authored GAP-FILL): implement real setRights/enforcePrivacyMode logic against story_studio_rights_control / story_projects.privacy_mode before this step is un-held."
     },
