@@ -10,7 +10,29 @@
 
 import { parseCouncilVerdict } from './lifeos-gate-change-proposals.js';
 
-const DEFAULT_CONSENSUS_MODELS = ['gemini_flash', 'groq_llama', 'deepseek'];
+// GAP-FILL, 2026-08-03: was ['gemini_flash', 'groq_llama', 'deepseek'] --
+// `deepseek` is not actually free (config/council-members.js: isFree:false,
+// costPer1M:0.1), and two genuinely free, real members (`mistral_free`,
+// `cerebras_llama`) were left out entirely, plus `github_llama` (GitHub
+// Models DeepSeek V3 -- described in its own config as "High-Quality Free
+// Cloud Coding & Reasoning", likely the strongest option here) was never
+// used at all. Founder directive: when we can't afford stronger models,
+// compensate with more free models in real consensus, not fewer. All five
+// below are isFree:true, costPer1M:0.
+const DEFAULT_CONSENSUS_MODELS = ['gemini_flash', 'groq_llama', 'mistral_free', 'cerebras_llama', 'github_llama'];
+
+// GAP-FILL, 2026-08-03: the actual root cause of every debate response
+// getting cut off mid-sentence, confirmed by reading services/council-
+// service.js directly -- callCouncilMember's output budget is scoped by
+// taskType, and this call passed none, so it silently fell through to the
+// generic default: Math.min(config.maxTokens || 800, 800) -- an 800-token
+// hard cap. The 7-section protocol (steel-man, equivalence, blind spots,
+// 4-horizon future-back, competitive scan, Position E/K synthesis,
+// recommendation) plus a verdict line cannot fit in 800 tokens; no model,
+// free or paid, could have completed it. 3200 leaves real headroom under
+// even the tightest free member's own maxTokens cap (groq_llama: 4096) once
+// the prompt/completion split is accounted for.
+const DEBATE_MAX_OUTPUT_TOKENS = 3200;
 
 function normalizeVerdict(v) {
   const n = String(v || '').toUpperCase();
@@ -69,7 +91,7 @@ export function resolveMemberKeys(explicitModels, getModelForTask) {
  */
 export async function runGateChangeCouncilDebate({ callCouncilMember, rubricText, row, memberKeys }) {
   async function runSingleCouncilPrompt(memberKey, fullPrompt) {
-    const result = await callCouncilMember(memberKey, fullPrompt, { useCache: false });
+    const result = await callCouncilMember(memberKey, fullPrompt, { useCache: false, maxOutputTokens: DEBATE_MAX_OUTPUT_TOKENS });
     const raw = typeof result === 'string' ? result : result?.content || result?.text || '';
     const verdict = normalizeVerdict(parseCouncilVerdict(raw) || 'UNKNOWN');
     return { member: memberKey, raw, verdict };

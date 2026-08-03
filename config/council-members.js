@@ -191,19 +191,16 @@ export function createCouncilMembers({ DEEPSEEK_BRIDGE_ENABLED }) {
       isFree: true,
       isLocal: false,
     },
-    mistral_free: {
-      name: "Mistral Free",
-      model: process.env.MISTRAL_MODEL || "open-mistral-7b",
-      provider: "mistral",
-      role: "Lightweight Cloud Assistant",
-      focus: "concise generation, chat, lightweight planning",
-      maxTokens: 4096,
-      tier: "tier0",
-      costPer1M: 0,
-      specialties: ["chat", "planning", "lightweight"],
-      isFree: true,
-      isLocal: false,
-    },
+    // GAP-FILL, 2026-08-03: this key was duplicated -- a second `mistral_free`
+    // entry ("Mistral Free" / open-mistral-7b / 4096 tokens, no comment)
+    // previously existed right after github_llama below and silently won in
+    // the object literal, discarding this better-configured entry (larger
+    // model, 8192-token budget, and the founder-context comment above)
+    // without anyone noticing. Consolidated to this one entry. Found while
+    // investigating why gate-change council debate responses were getting
+    // truncated -- a 4096-token free member masquerading under the same key
+    // as an 8192-token one is exactly the kind of silent downgrade that
+    // caused it.
     github_llama: {
       name: "GitHub Models DeepSeek V3 (Free)",
       model: process.env.GITHUB_MODELS_MODEL || "DeepSeek-V3-0324",

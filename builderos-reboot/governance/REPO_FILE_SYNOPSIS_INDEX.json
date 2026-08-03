@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-03T17:51:02.016Z",
+  "generated_at": "2026-08-03T17:58:13.452Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12942,
   "files": [
@@ -31301,9 +31301,9 @@
     {
       "path": "config/council-members.js",
       "synopsis": "Exports createCouncilMembers — config/council-members.js.",
-      "bytes": 8812,
-      "mtime": "2026-07-28T17:47:22.470Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 9098,
+      "mtime": "2026-08-03T17:55:58.334Z",
+      "indexed_at": "2026-08-03T17:58:13.452Z",
       "ssot": [
         "docs/products/ai-council/PRODUCT_HOME.md"
       ]
@@ -33121,9 +33121,9 @@
     {
       "path": "data/constitutional-framework/reports/CONSTITUTIONAL_OBSERVABILITY_REPORT.json",
       "synopsis": "JSON data/config — data/constitutional-framework/reports/CONSTITUTIONAL_OBSERVABILITY_REPORT.json.",
-      "bytes": 9350,
-      "mtime": "2026-08-03T17:37:20.105Z",
-      "indexed_at": "2026-08-03T17:39:10.676Z",
+      "bytes": 9457,
+      "mtime": "2026-08-03T17:57:07.296Z",
+      "indexed_at": "2026-08-03T17:58:13.452Z",
       "synopsis_index_only": true
     },
     {
@@ -41798,9 +41798,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 451989,
-      "mtime": "2026-08-03T17:36:53.937Z",
-      "indexed_at": "2026-08-03T17:39:10.676Z"
+      "bytes": 455027,
+      "mtime": "2026-08-03T17:57:39.517Z",
+      "indexed_at": "2026-08-03T17:58:13.452Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -93700,9 +93700,9 @@
     {
       "path": "services/lifeos-gate-change-council-run.js",
       "synopsis": "Shared multi-model gate-change debate (round 1 + opposite-argument round 2 +",
-      "bytes": 7712,
-      "mtime": "2026-06-29T17:21:08.910Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 9251,
+      "mtime": "2026-08-03T17:56:43.832Z",
+      "indexed_at": "2026-08-03T17:58:13.452Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
