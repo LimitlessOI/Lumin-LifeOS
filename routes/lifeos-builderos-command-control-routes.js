@@ -58,6 +58,7 @@ import { needsSystemKnowledge } from '../services/chair-system-knowledge.js';
 import { parseLuminChairSystemAction, shouldSkipInputNormalize, tryLuminChairSystemAction } from '../services/lumin-chair-system-actions.js';
 import { parseLifeOSDirectAction } from '../services/lifeos-direct-action.js';
 import { stripChairDoPrefix } from '../services/chair-intent-signals.js';
+import { createTwilioService } from '../services/twilio-service.js';
 import { createCognitiveCoreCapture } from '../services/cognitive-core-capture.js';
 import { isFounderPersonalLifeIntent } from '../services/founder-life-admin-intent.js';
 import { isExplicitDisplayOnlyRequest } from '../services/lumin-conversation-routing.js';
@@ -202,8 +203,10 @@ export function createLifeOSBuilderOSCommandControlRoutes({ pool, requireKey, ca
     : null;
   const luminContext = pool ? createLuminContextLoader({ pool, callAI: callCouncilMember }) : null;
   const luminLearner = pool ? createLuminConversationLearner({ pool, callAI: callCouncilMember }) : null;
+  const { sendSMS } = createTwilioService({ callCouncilMember });
 
   const EXECUTE_ALLOWED_ROLES = new Set(['founder_admin', 'operator', 'admin']);
+  const SECOND_FACTOR_CODE_TTL_MS = 5 * 60 * 1000;
 
   async function persistFounderTurn(req, userMessage, replyText, opts = {}) {
     const reply = String(replyText || '').trim();
@@ -785,6 +788,107 @@ HOW TO RESPOND:
     next();
   }
 
+  function resolveFounderAlertPhone() {
+    return process.env.ALERT_PHONE || process.env.ADMIN_PHONE || process.env.ADAM_SMS_NUMBER || null;
+  }
+
+  async function ensureSecondFactorTable() {
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS founder_second_factor_codes (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        code TEXT NOT NULL,
+        purpose TEXT,
+        created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+        expires_at TIMESTAMPTZ NOT NULL,
+        used_at TIMESTAMPTZ
+      )
+    `);
+  }
+
+  async function issueSecondFactorCode(purpose) {
+    await ensureSecondFactorTable();
+    const code = String(Math.floor(100000 + Math.random() * 900000));
+    const expiresAt = new Date(Date.now() + SECOND_FACTOR_CODE_TTL_MS);
+    await pool.query(
+      `INSERT INTO founder_second_factor_codes (code, purpose, expires_at) VALUES ($1, $2, $3)`,
+      [code, purpose || null, expiresAt]
+    );
+    const phone = resolveFounderAlertPhone();
+    let smsSent = false;
+    if (phone) {
+      try {
+        const result = await sendSMS(phone, `LifeOS confirmation code: ${code} (expires in 5 min). Purpose: ${purpose || 'execute action'}`);
+        smsSent = Boolean(result?.success);
+      } catch (err) {
+        console.warn('[second-factor] SMS send failed (code still valid server-side, check Twilio config):', err.message);
+      }
+    }
+    return { expiresAt, phone_configured: Boolean(phone), sms_sent: smsSent };
+  }
+
+  async function verifyAndConsumeSecondFactorCode(submittedCode) {
+    await ensureSecondFactorTable();
+    const { rows } = await pool.query(
+      `SELECT id FROM founder_second_factor_codes
+       WHERE code = $1 AND used_at IS NULL AND expires_at > now()
+       ORDER BY created_at DESC LIMIT 1`,
+      [String(submittedCode)]
+    );
+    if (!rows.length) return false;
+    await pool.query(`UPDATE founder_second_factor_codes SET used_at = now() WHERE id = $1`, [rows[0].id]);
+    return true;
+  }
+
+  // GAP-FILL, 2026-08-03 (Phase 1.1 item "b" -- the second-factor confirmation
+  // step item "a" left explicitly unbuilt): execute-type actions authenticated
+  // via the shared COMMAND_CENTER_KEY fallback (not a real account JWT) now
+  // require a real second factor -- an SMS code sent to Adam's actual phone --
+  // not just possession of the shared key. Real account_jwt-authenticated
+  // requests are unaffected (auth_mode check below short-circuits for them).
+  // Fails closed on every branch: no pool, no phone configured, DB error, or a
+  // missing/wrong/expired/already-used code all result in NOT proceeding --
+  // never treated as approved. Phone resolved from ALERT_PHONE (current name)
+  // falling back to ADMIN_PHONE then ADAM_SMS_NUMBER (deprecated alias,
+  // confirmed present in production) -- no new env var required.
+  async function requireSecondFactorForFallback(req, res, next) {
+    if (req.auth_mode !== 'command_key_fallback') return next();
+    try {
+      const submitted = req.body?.confirmation_code || req.headers['x-confirmation-code'];
+      if (submitted) {
+        const valid = await verifyAndConsumeSecondFactorCode(submitted);
+        if (valid) return next();
+        return res.status(401).json({
+          ok: false,
+          pass_fail: 'FAIL',
+          command_truth: 'NO_COMMAND_RAN',
+          reason: 'SECOND_FACTOR_INVALID',
+          error: 'Confirmation code is missing, wrong, expired, or already used.',
+        });
+      }
+      const issued = await issueSecondFactorCode(`${req.method} ${req.originalUrl || req.path}`);
+      return res.status(401).json({
+        ok: false,
+        pass_fail: 'FAIL',
+        command_truth: 'NO_COMMAND_RAN',
+        reason: 'SECOND_FACTOR_REQUIRED',
+        error: issued.phone_configured
+          ? (issued.sms_sent
+            ? 'A confirmation code was just sent by SMS. Resubmit this exact request with confirmation_code in the body.'
+            : 'A confirmation code was generated but the SMS send failed -- check Twilio configuration. The code exists server-side but cannot be delivered.')
+          : 'A second factor is required for this fallback-authenticated execute action, but no alert phone is configured (ALERT_PHONE/ADMIN_PHONE/ADAM_SMS_NUMBER all unset) -- request cannot proceed.',
+        expires_in_seconds: Math.round(SECOND_FACTOR_CODE_TTL_MS / 1000),
+      });
+    } catch (err) {
+      return res.status(500).json({
+        ok: false,
+        pass_fail: 'FAIL',
+        command_truth: 'NO_COMMAND_RAN',
+        reason: 'SECOND_FACTOR_ERROR',
+        error: `Second-factor check failed closed: ${err.message}`,
+      });
+    }
+  }
+
   function buildFounderIntakeCommand({ text, textFile, stage, missionId, force }) {
     const script = path.join(REPO_ROOT, 'scripts', 'run-founder-intake-direct.mjs');
     const args = [script];
@@ -1132,7 +1236,7 @@ HOW TO RESPOND:
     }
   });
 
-  router.post('/terminal-bridge/intake', requireFounderInterfaceAuth, requireExecuteRole, async (req, res, next) => {
+  router.post('/terminal-bridge/intake', requireFounderInterfaceAuth, requireExecuteRole, requireSecondFactorForFallback, async (req, res, next) => {
     try {
       const text = typeof req.body?.text === 'string' ? req.body.text.trim() : '';
       const textFile = typeof req.body?.text_file === 'string' ? req.body.text_file.trim() : '';

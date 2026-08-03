@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-03T10:16:42.635Z",
+  "generated_at": "2026-08-03T17:10:10.468Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12935,
+  "file_count": 12936,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -33084,9 +33084,9 @@
     {
       "path": "data/constitutional-framework/reports/CONSTITUTIONAL_OBSERVABILITY_REPORT.json",
       "synopsis": "JSON data/config — data/constitutional-framework/reports/CONSTITUTIONAL_OBSERVABILITY_REPORT.json.",
-      "bytes": 9459,
-      "mtime": "2026-08-03T10:01:45.285Z",
-      "indexed_at": "2026-08-03T10:03:17.165Z",
+      "bytes": 9448,
+      "mtime": "2026-08-03T17:07:25.204Z",
+      "indexed_at": "2026-08-03T17:10:10.468Z",
       "synopsis_index_only": true
     },
     {
@@ -39015,10 +39015,10 @@
     },
     {
       "path": "docs/BLUEPRINT_COMMUNICATION_FIRST_2026-08-02.md",
-      "synopsis": "Communication-first execution blueprint — 8 phases sequenced from the 2026-08-02 independent audit. Phases 2, 4, 6, 7 complete and verified live; Phase 1 is fully installed except 1.4 (crisis-intervention, deliberately held) and half of 1.1",
-      "bytes": 23069,
-      "mtime": "2026-08-03T10:15:50.465Z",
-      "indexed_at": "2026-08-03T10:16:42.635Z"
+      "synopsis": "Communication-first execution blueprint — 8 phases sequenced from the 2026-08-02 independent audit. Phases 1, 2, 4, 6, 7 complete and verified live except 1.4 (crisis-intervention, deliberately held); Phase 5 split into 5.1a (closed) and 5.",
+      "bytes": 22405,
+      "mtime": "2026-08-03T17:09:00.561Z",
+      "indexed_at": "2026-08-03T17:10:10.468Z"
     },
     {
       "path": "docs/BRAINSTORM_SESSIONS_IDEAS_CATALOG.md",
@@ -41754,9 +41754,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 447019,
-      "mtime": "2026-08-03T10:16:23.820Z",
-      "indexed_at": "2026-08-03T10:16:42.635Z"
+      "bytes": 449413,
+      "mtime": "2026-08-03T17:07:53.344Z",
+      "indexed_at": "2026-08-03T17:10:10.468Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -70785,9 +70785,9 @@
     {
       "path": "routes/lifeos-builderos-command-control-routes.js",
       "synopsis": "Founder-facing LifeOS BuilderOS command-control routes for direct chat, build orchestration, and governed execution receipts.",
-      "bytes": 81897,
-      "mtime": "2026-08-03T06:35:47.989Z",
-      "indexed_at": "2026-08-03T06:37:25.958Z",
+      "bytes": 86726,
+      "mtime": "2026-08-03T17:03:47.091Z",
+      "indexed_at": "2026-08-03T17:10:10.468Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -100529,6 +100529,13 @@
       "bytes": 4412,
       "mtime": "2026-06-26T19:38:04.286Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "tests/founder-interface-second-factor.test.js",
+      "synopsis": "Regression guard for the SMS second-factor gate on shared-key",
+      "bytes": 5710,
+      "mtime": "2026-08-03T17:07:03.775Z",
+      "indexed_at": "2026-08-03T17:10:10.468Z"
     },
     {
       "path": "tests/founder-life-admin-intent.test.js",
