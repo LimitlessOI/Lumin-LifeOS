@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-03T04:49:36.819Z",
+  "generated_at": "2026-08-03T04:52:58.725Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12933,
   "files": [
@@ -39016,9 +39016,9 @@
     {
       "path": "docs/BLUEPRINT_COMMUNICATION_FIRST_2026-08-02.md",
       "synopsis": "Communication-first execution blueprint — 8 phases sequenced from the 2026-08-02 independent audit. Phases 2, 4, 6, 7 complete and verified live; Phase 1 and 5 partially unblocked with narrowed, concrete asks; Phase 8 (Institutionalization)",
-      "bytes": 19326,
-      "mtime": "2026-08-03T04:48:54.112Z",
-      "indexed_at": "2026-08-03T04:49:36.819Z"
+      "bytes": 22249,
+      "mtime": "2026-08-03T04:52:00.335Z",
+      "indexed_at": "2026-08-03T04:52:58.725Z"
     },
     {
       "path": "docs/BRAINSTORM_SESSIONS_IDEAS_CATALOG.md",
@@ -41747,9 +41747,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 431951,
-      "mtime": "2026-08-03T04:49:18.457Z",
-      "indexed_at": "2026-08-03T04:49:36.819Z"
+      "bytes": 434267,
+      "mtime": "2026-08-03T04:52:39.102Z",
+      "indexed_at": "2026-08-03T04:52:58.725Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
