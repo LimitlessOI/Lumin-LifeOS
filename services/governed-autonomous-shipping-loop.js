@@ -42,6 +42,10 @@ import {
 } from './product-build-orchestrator.js';
 import { createDeploymentService } from './deployment-service.js';
 import { recordModelOutcome } from './model-capability-ledger.js';
+import { evaluateInvariants, formatFindings } from '../scripts/lib/security-invariants.mjs';
+import { evaluateFilePlacement, formatFilePlacementFindings } from '../scripts/lib/file-placement-gate.mjs';
+import { evaluateDocHygiene, formatDocHygieneFindings } from '../scripts/lib/doc-hygiene-gate.mjs';
+import { evaluateBlueprintAuthority, formatBlueprintFindings } from '../scripts/lib/blueprint-authority-gate.mjs';
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const PRODUCTS_DIR = path.join(REPO_ROOT, 'docs/products');
@@ -798,6 +802,46 @@ async function commitShippedFiles(product_id, shippedStepIds, ship_steps, logger
   if (fileEntries.length === 0) return null;
   const message = `GOVERNED-AUTONOMOUS-SHIP: ${product_id} ${shippedStepIds.join(', ')}`;
   const branch = process.env.GITHUB_DEPLOY_BRANCH || 'main';
+
+  // GAP-FILL: the same four gates routes/lifeos-council-builder-routes.js's
+  // commitOrMirrorFiles applies before every manual/API commit were never
+  // applied here -- this loop called commitManyToGitHub directly, so the
+  // autonomous ship path (where nearly all unattended work actually lands)
+  // ran with zero file-placement or security-invariant coverage. Mirrors the
+  // exact same gate calls, same hard/soft posture, so a future caller cannot
+  // route around either gate by shipping through this loop instead.
+  const invariantVerdict = evaluateInvariants(fileEntries);
+  if (invariantVerdict.routed.length) {
+    logger?.warn?.({ findings: invariantVerdict.routed }, '[GOVERNED-AUTONOMOUS-SHIP] security invariant detect-and-route finding (not blocking)');
+  }
+  if (!invariantVerdict.ok) {
+    state.lastCommitError = `SECURITY_INVARIANT_VIOLATION: ${formatFindings(invariantVerdict.blocking)}`;
+    await persistState();
+    logger?.error?.({ findings: invariantVerdict.blocking }, '[GOVERNED-AUTONOMOUS-SHIP] SECURITY INVARIANT VIOLATION — commit refused');
+    return null;
+  }
+
+  const placementVerdict = evaluateFilePlacement(fileEntries, REPO_ROOT, { commitMessage: message });
+  if (placementVerdict.findings.length) {
+    logger?.warn?.({ findings: placementVerdict.findings }, '[GOVERNED-AUTONOMOUS-SHIP] file-placement authority findings');
+  }
+  if (!placementVerdict.ok) {
+    state.lastCommitError = `FILE_PLACEMENT_VIOLATION: ${formatFilePlacementFindings(placementVerdict.findings)}`;
+    await persistState();
+    logger?.error?.({ findings: placementVerdict.findings }, '[GOVERNED-AUTONOMOUS-SHIP] FILE PLACEMENT VIOLATION — commit refused');
+    return null;
+  }
+
+  const hygieneVerdict = evaluateDocHygiene(fileEntries);
+  if (hygieneVerdict.routed.length) {
+    logger?.warn?.({ findings: hygieneVerdict.routed, summary: formatDocHygieneFindings(hygieneVerdict.routed) }, '[GOVERNED-AUTONOMOUS-SHIP] doc-hygiene detect-and-route (not blocking)');
+  }
+
+  const blueprintAuthorityVerdict = evaluateBlueprintAuthority(fileEntries);
+  if (blueprintAuthorityVerdict.findings.length) {
+    logger?.warn?.({ findings: blueprintAuthorityVerdict.findings, summary: formatBlueprintFindings(blueprintAuthorityVerdict.findings) }, '[GOVERNED-AUTONOMOUS-SHIP] blueprint-authority detect-and-route (not blocking)');
+  }
+
   try {
     const result = await commitManyToGitHub(fileEntries, message, branch);
     if (result?.ok && result.sha) {
