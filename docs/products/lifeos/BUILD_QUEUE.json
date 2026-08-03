@@ -6178,16 +6178,21 @@
     },
     {
       "id": "fix-smoke-test-ssot-tag",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/lifeos-direct-build-smoke-test.mjs",
       "task": "Add missing @ssot JSDoc tag to direct build smoke test script",
       "spec": "Ensure the 'scripts/lifeos-direct-build-smoke-test.mjs' file includes the '/** @ssot */' JSDoc tag as required for protected source files.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "/** @ssot */"
-      ]
+      ],
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-08-03T17:00:16.688Z",
+      "last_error": "NOT_ON_BLUEPRINT"
     },
     {
       "id": "update-founder-chair-intent-service",
