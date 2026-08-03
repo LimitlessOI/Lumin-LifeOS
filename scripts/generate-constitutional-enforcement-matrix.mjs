@@ -54,9 +54,34 @@ function main() {
   const registry = JSON.parse(fs.readFileSync(REGISTRY_PATH, 'utf8'));
   const items = Array.isArray(registry.items) ? registry.items : [];
 
+  // GAP-FILL, 2026-08-02: REGISTRY.json's enforcement_method is 'preflight' for
+  // all 103 items -- a bulk default, not real per-item differentiation. Running
+  // the general 487-test builder:preflight suite is real evidence for whichever
+  // specific items it actually checks (SSOT wiring, receipt truth, etc.), but it
+  // is not evidence that a philosophical article like "If Sentience Comes"
+  // (Article IX §9.3) is individually enforced -- the prior generator trusted
+  // REGISTRY.json's (equally bulk-set) enforcement_status verbatim, so every
+  // entry claimed "enforced" regardless of whether a real, item-specific
+  // verifier exists. This does not attempt to judge which of the 16 named
+  // verifiers actually applies to each of the 103 principles -- that is real
+  // constitutional-design work belonging to whoever owns REGISTRY.json's
+  // content, not something to decide unilaterally here. It only refuses to let
+  // the absence of that judgment masquerade as verification.
+  const GENERIC_FALLBACK_METHOD = 'preflight';
+
   const entries = items.map((item) => {
     const method = item.enforcement_method || 'unknown';
     const verifier = verifierFor(method);
+    const hasSpecificVerifier = method !== GENERIC_FALLBACK_METHOD && method !== 'unknown';
+
+    const enforcementStatus = hasSpecificVerifier
+      ? (item.enforcement_status || 'unknown')
+      : 'unverified';
+
+    const notes = hasSpecificVerifier
+      ? 'Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification.'
+      : `Generated from canonical registry. enforcement_method is the generic '${GENERIC_FALLBACK_METHOD}' fallback, not an item-specific verifier -- ${verifier} runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method.`;
+
     return {
       law_id: item.id,
       title: item.title || item.id,
@@ -64,14 +89,14 @@ function main() {
       source_file: item.source_file || null,
       source_anchor: item.source_anchor || null,
       authority_level: item.level ? registry.levels?.[item.level]?.order ?? null : null,
-      enforcement_status: item.enforcement_status || 'unknown',
+      enforcement_status: enforcementStatus,
       evidence_level: item.evidence_level || null,
       epistemic_confidence_score: item.epistemic_confidence_score ?? null,
       constitutional_commitment_score: item.constitutional_commitment_score ?? null,
       evidence_score: item.evidence_score ?? null,
       verifier_script: verifier,
-      verification_kind: verificationKind(verifier),
-      notes: 'Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification.',
+      verification_kind: hasSpecificVerifier ? verificationKind(verifier) : 'unverified',
+      notes,
     };
   });
 

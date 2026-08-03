@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-03T03:27:04.922Z",
+  "generated_at": "2026-08-03T03:37:23.711Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12930,
   "files": [
@@ -33036,9 +33036,9 @@
     {
       "path": "data/constitutional-framework/ENFORCEMENT_MATRIX.json",
       "synopsis": "JSON data/config — data/constitutional-framework/ENFORCEMENT_MATRIX.json.",
-      "bytes": 70657,
-      "mtime": "2026-08-02T09:26:48.704Z",
-      "indexed_at": "2026-08-02T09:36:38.323Z",
+      "bytes": 97694,
+      "mtime": "2026-08-03T03:30:41.092Z",
+      "indexed_at": "2026-08-03T03:37:23.711Z",
       "synopsis_index_only": true
     },
     {
@@ -33060,9 +33060,9 @@
     {
       "path": "data/constitutional-framework/proposals/ENFORCEMENT_MATRIX_PROPOSED.json",
       "synopsis": "JSON data/config — data/constitutional-framework/proposals/ENFORCEMENT_MATRIX_PROPOSED.json.",
-      "bytes": 70598,
-      "mtime": "2026-08-02T08:31:38.341Z",
-      "indexed_at": "2026-08-02T09:36:38.323Z",
+      "bytes": 96863,
+      "mtime": "2026-08-03T03:29:58.601Z",
+      "indexed_at": "2026-08-03T03:37:23.711Z",
       "synopsis_index_only": true
     },
     {
@@ -33084,17 +33084,17 @@
     {
       "path": "data/constitutional-framework/reports/CONSTITUTIONAL_OBSERVABILITY_REPORT.json",
       "synopsis": "JSON data/config — data/constitutional-framework/reports/CONSTITUTIONAL_OBSERVABILITY_REPORT.json.",
-      "bytes": 7707,
-      "mtime": "2026-08-02T15:26:11.792Z",
-      "indexed_at": "2026-08-02T15:26:11.792Z",
+      "bytes": 9453,
+      "mtime": "2026-08-03T03:31:45.373Z",
+      "indexed_at": "2026-08-03T03:37:23.711Z",
       "synopsis_index_only": true
     },
     {
       "path": "data/constitutional-framework/reports/ENFORCEMENT_MATRIX_REPORT.json",
       "synopsis": "JSON data/config — data/constitutional-framework/reports/ENFORCEMENT_MATRIX_REPORT.json.",
-      "bytes": 286817,
-      "mtime": "2026-08-02T14:39:05.064Z",
-      "indexed_at": "2026-08-02T14:39:18.789Z",
+      "bytes": 248811,
+      "mtime": "2026-08-03T03:31:45.382Z",
+      "indexed_at": "2026-08-03T03:37:23.711Z",
       "synopsis_index_only": true
     },
     {
@@ -41733,9 +41733,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 419498,
-      "mtime": "2026-08-03T03:26:49.584Z",
-      "indexed_at": "2026-08-03T03:27:04.922Z"
+      "bytes": 422074,
+      "mtime": "2026-08-03T03:32:30.124Z",
+      "indexed_at": "2026-08-03T03:37:23.711Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -67039,9 +67039,9 @@
     {
       "path": "products/receipts/POINT_B_DNA_VERIFY.json",
       "synopsis": "Product receipt — POINT B DNA VERIFY.",
-      "bytes": 280,
-      "mtime": "2026-08-02T15:26:11.792Z",
-      "indexed_at": "2026-08-02T15:26:11.792Z",
+      "bytes": 318,
+      "mtime": "2026-08-03T03:31:40.467Z",
+      "indexed_at": "2026-08-03T03:37:23.711Z",
       "synopsis_index_only": true
     },
     {
@@ -67055,9 +67055,9 @@
     {
       "path": "products/receipts/RECEIPT_TRUTH_VALIDATION.json",
       "synopsis": "Product receipt — RECEIPT TRUTH VALIDATION.",
-      "bytes": 18451,
-      "mtime": "2026-08-02T15:26:11.792Z",
-      "indexed_at": "2026-08-02T15:26:11.792Z",
+      "bytes": 25712,
+      "mtime": "2026-08-03T03:31:39.786Z",
+      "indexed_at": "2026-08-03T03:37:23.711Z",
       "synopsis_index_only": true
     },
     {
@@ -67255,17 +67255,17 @@
     {
       "path": "products/receipts/TRUTH_ENFORCEMENT_AUDIT.json",
       "synopsis": "Product receipt — TRUTH ENFORCEMENT AUDIT.",
-      "bytes": 701,
-      "mtime": "2026-08-02T15:26:11.792Z",
-      "indexed_at": "2026-08-02T15:26:11.792Z",
+      "bytes": 833,
+      "mtime": "2026-08-03T03:31:40.815Z",
+      "indexed_at": "2026-08-03T03:37:23.711Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/TRUTH_LOCKDOWN_VERIFY.json",
       "synopsis": "Product receipt — TRUTH LOCKDOWN VERIFY.",
-      "bytes": 1141,
-      "mtime": "2026-08-02T15:26:11.792Z",
-      "indexed_at": "2026-08-02T15:26:11.792Z",
+      "bytes": 1318,
+      "mtime": "2026-08-03T03:31:40.266Z",
+      "indexed_at": "2026-08-03T03:37:23.711Z",
       "synopsis_index_only": true
     },
     {
@@ -67295,9 +67295,9 @@
     {
       "path": "products/receipts/WISDOM_TRUTH_AUDIT.json",
       "synopsis": "Product receipt — WISDOM TRUTH AUDIT.",
-      "bytes": 735,
-      "mtime": "2026-08-02T15:26:11.792Z",
-      "indexed_at": "2026-08-02T15:26:11.792Z",
+      "bytes": 1001,
+      "mtime": "2026-08-03T03:31:40.970Z",
+      "indexed_at": "2026-08-03T03:37:23.711Z",
       "synopsis_index_only": true
     },
     {
@@ -74194,9 +74194,9 @@
     {
       "path": "scripts/generate-constitutional-enforcement-matrix.mjs",
       "synopsis": "Generates a proposed Constitutional Enforcement Matrix from the canonical registry.",
-      "bytes": 4047,
-      "mtime": "2026-08-02T09:36:36.016Z",
-      "indexed_at": "2026-08-02T09:36:38.323Z",
+      "bytes": 5750,
+      "mtime": "2026-08-03T03:29:48.356Z",
+      "indexed_at": "2026-08-03T03:37:23.711Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

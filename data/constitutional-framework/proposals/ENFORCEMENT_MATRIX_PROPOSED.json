@@ -2,7 +2,7 @@
   "schema": "enforcement_matrix_v0",
   "version": "2026-08-02-proposed",
   "status": "PROPOSED",
-  "generated_at": "2026-08-02T08:31:38.342Z",
+  "generated_at": "2026-08-03T03:29:58.599Z",
   "source_registry": "data/constitutional-framework/REGISTRY.json",
   "generated_by": "scripts/generate-constitutional-enforcement-matrix.mjs",
   "entries": [
@@ -13,30 +13,30 @@
       "source_file": "docs/constitution/NORTH_STAR_SSOT.md",
       "source_anchor": "## ARTICLE I",
       "authority_level": 0,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "FoundationalPrinciple",
       "epistemic_confidence_score": 95,
       "constitutional_commitment_score": 100,
       "evidence_score": 90,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "nssot-1-0",
-      "title": "Lumin Core Purpose (Current Canonical Direction)",
+      "title": "Taloa Core Purpose (Current Canonical Direction)",
       "level": "NorthStar",
       "source_file": "docs/constitution/NORTH_STAR_SSOT.md",
       "source_anchor": "§1.0",
       "authority_level": 0,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "FoundationalPrinciple",
       "epistemic_confidence_score": 95,
       "constitutional_commitment_score": 100,
       "evidence_score": 90,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "nssot-1-1",
@@ -45,14 +45,14 @@
       "source_file": "docs/constitution/NORTH_STAR_SSOT.md",
       "source_anchor": "§1.1",
       "authority_level": 0,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "FoundationalPrinciple",
       "epistemic_confidence_score": 95,
       "constitutional_commitment_score": 100,
       "evidence_score": 90,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "nssot-1-2",
@@ -61,14 +61,14 @@
       "source_file": "docs/constitution/NORTH_STAR_SSOT.md",
       "source_anchor": "§1.2",
       "authority_level": 0,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "FoundationalPrinciple",
       "epistemic_confidence_score": 95,
       "constitutional_commitment_score": 100,
       "evidence_score": 90,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "nssot-article-ii",
@@ -77,14 +77,14 @@
       "source_file": "docs/constitution/NORTH_STAR_SSOT.md",
       "source_anchor": "## ARTICLE II",
       "authority_level": 2,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 85,
       "constitutional_commitment_score": 90,
       "evidence_score": 80,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "nssot-2-0",
@@ -93,14 +93,14 @@
       "source_file": "docs/constitution/NORTH_STAR_SSOT.md",
       "source_anchor": "§2.0",
       "authority_level": 2,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 85,
       "constitutional_commitment_score": 90,
       "evidence_score": 80,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "nssot-2-0a",
@@ -109,14 +109,14 @@
       "source_file": "docs/constitution/NORTH_STAR_SSOT.md",
       "source_anchor": "§2.0A",
       "authority_level": 2,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 85,
       "constitutional_commitment_score": 90,
       "evidence_score": 80,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "nssot-2-0b",
@@ -125,14 +125,14 @@
       "source_file": "docs/constitution/NORTH_STAR_SSOT.md",
       "source_anchor": "§2.0B",
       "authority_level": 2,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 85,
       "constitutional_commitment_score": 90,
       "evidence_score": 80,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "nssot-2-0c",
@@ -141,14 +141,14 @@
       "source_file": "docs/constitution/NORTH_STAR_SSOT.md",
       "source_anchor": "§2.0C",
       "authority_level": 2,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 85,
       "constitutional_commitment_score": 90,
       "evidence_score": 80,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "nssot-2-0d",
@@ -157,14 +157,14 @@
       "source_file": "docs/constitution/NORTH_STAR_SSOT.md",
       "source_anchor": "§2.0D",
       "authority_level": 0,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "FoundationalPrinciple",
       "epistemic_confidence_score": 95,
       "constitutional_commitment_score": 100,
       "evidence_score": 90,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "nssot-2-0e",
@@ -173,14 +173,14 @@
       "source_file": "docs/constitution/NORTH_STAR_SSOT.md",
       "source_anchor": "§2.0E",
       "authority_level": 2,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 85,
       "constitutional_commitment_score": 90,
       "evidence_score": 80,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "nssot-2-0f",
@@ -189,14 +189,14 @@
       "source_file": "docs/constitution/NORTH_STAR_SSOT.md",
       "source_anchor": "§2.0F",
       "authority_level": 2,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 85,
       "constitutional_commitment_score": 90,
       "evidence_score": 80,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "nssot-2-0g",
@@ -205,14 +205,14 @@
       "source_file": "docs/constitution/NORTH_STAR_SSOT.md",
       "source_anchor": "§2.0G",
       "authority_level": 2,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 85,
       "constitutional_commitment_score": 90,
       "evidence_score": 80,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "nssot-2-0h",
@@ -221,14 +221,14 @@
       "source_file": "docs/constitution/NORTH_STAR_SSOT.md",
       "source_anchor": "§2.0H",
       "authority_level": 2,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 85,
       "constitutional_commitment_score": 90,
       "evidence_score": 80,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "nssot-2-0i",
@@ -237,14 +237,14 @@
       "source_file": "docs/constitution/NORTH_STAR_SSOT.md",
       "source_anchor": "§2.0I",
       "authority_level": 2,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 85,
       "constitutional_commitment_score": 90,
       "evidence_score": 80,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "nssot-2-0j",
@@ -253,14 +253,14 @@
       "source_file": "docs/constitution/NORTH_STAR_SSOT.md",
       "source_anchor": "§2.0J",
       "authority_level": 2,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 85,
       "constitutional_commitment_score": 90,
       "evidence_score": 80,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "nssot-2-0k",
@@ -269,14 +269,14 @@
       "source_file": "docs/constitution/NORTH_STAR_SSOT.md",
       "source_anchor": "§2.0K",
       "authority_level": 2,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 85,
       "constitutional_commitment_score": 90,
       "evidence_score": 80,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "nssot-2-0l",
@@ -285,14 +285,14 @@
       "source_file": "docs/constitution/NORTH_STAR_SSOT.md",
       "source_anchor": "§2.0L",
       "authority_level": 2,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 85,
       "constitutional_commitment_score": 90,
       "evidence_score": 80,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "nssot-2-0m",
@@ -301,14 +301,14 @@
       "source_file": "docs/constitution/NORTH_STAR_SSOT.md",
       "source_anchor": "§2.0M",
       "authority_level": 2,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 85,
       "constitutional_commitment_score": 90,
       "evidence_score": 80,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "nssot-2-1",
@@ -317,14 +317,14 @@
       "source_file": "docs/constitution/NORTH_STAR_SSOT.md",
       "source_anchor": "§2.1",
       "authority_level": 2,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 85,
       "constitutional_commitment_score": 90,
       "evidence_score": 80,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "nssot-2-2",
@@ -333,14 +333,14 @@
       "source_file": "docs/constitution/NORTH_STAR_SSOT.md",
       "source_anchor": "§2.2",
       "authority_level": 2,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 85,
       "constitutional_commitment_score": 90,
       "evidence_score": 80,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "nssot-2-3",
@@ -349,14 +349,14 @@
       "source_file": "docs/constitution/NORTH_STAR_SSOT.md",
       "source_anchor": "§2.3",
       "authority_level": 2,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 85,
       "constitutional_commitment_score": 90,
       "evidence_score": 80,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "nssot-2-4",
@@ -365,14 +365,14 @@
       "source_file": "docs/constitution/NORTH_STAR_SSOT.md",
       "source_anchor": "§2.4",
       "authority_level": 2,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 85,
       "constitutional_commitment_score": 90,
       "evidence_score": 80,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "nssot-2-5",
@@ -381,14 +381,14 @@
       "source_file": "docs/constitution/NORTH_STAR_SSOT.md",
       "source_anchor": "§2.5",
       "authority_level": 2,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 85,
       "constitutional_commitment_score": 90,
       "evidence_score": 80,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "nssot-2-6",
@@ -397,14 +397,14 @@
       "source_file": "docs/constitution/NORTH_STAR_SSOT.md",
       "source_anchor": "§2.6",
       "authority_level": 2,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 85,
       "constitutional_commitment_score": 90,
       "evidence_score": 80,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "nssot-2-10",
@@ -413,14 +413,14 @@
       "source_file": "docs/constitution/NORTH_STAR_SSOT.md",
       "source_anchor": "§2.10",
       "authority_level": 2,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 85,
       "constitutional_commitment_score": 90,
       "evidence_score": 80,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "nssot-2-11",
@@ -429,14 +429,14 @@
       "source_file": "docs/constitution/NORTH_STAR_SSOT.md",
       "source_anchor": "§2.11",
       "authority_level": 2,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 85,
       "constitutional_commitment_score": 90,
       "evidence_score": 80,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "nssot-2-12",
@@ -445,14 +445,14 @@
       "source_file": "docs/constitution/NORTH_STAR_SSOT.md",
       "source_anchor": "§2.12",
       "authority_level": 2,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 85,
       "constitutional_commitment_score": 90,
       "evidence_score": 80,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "nssot-2-13",
@@ -461,14 +461,14 @@
       "source_file": "docs/constitution/NORTH_STAR_SSOT.md",
       "source_anchor": "§2.13",
       "authority_level": 2,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 85,
       "constitutional_commitment_score": 90,
       "evidence_score": 80,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "nssot-2-14",
@@ -477,14 +477,14 @@
       "source_file": "docs/constitution/NORTH_STAR_SSOT.md",
       "source_anchor": "§2.14",
       "authority_level": 2,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 85,
       "constitutional_commitment_score": 90,
       "evidence_score": 80,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "nssot-2-15",
@@ -493,14 +493,14 @@
       "source_file": "docs/constitution/NORTH_STAR_SSOT.md",
       "source_anchor": "§2.15",
       "authority_level": 2,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 85,
       "constitutional_commitment_score": 90,
       "evidence_score": 80,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "nssot-2-16",
@@ -509,14 +509,14 @@
       "source_file": "docs/constitution/NORTH_STAR_SSOT.md",
       "source_anchor": "§2.16",
       "authority_level": 2,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 85,
       "constitutional_commitment_score": 90,
       "evidence_score": 80,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "nssot-2-17",
@@ -525,14 +525,14 @@
       "source_file": "docs/constitution/NORTH_STAR_SSOT.md",
       "source_anchor": "§2.17",
       "authority_level": 2,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 85,
       "constitutional_commitment_score": 90,
       "evidence_score": 80,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "nssot-2-18",
@@ -541,14 +541,14 @@
       "source_file": "docs/constitution/NORTH_STAR_SSOT.md",
       "source_anchor": "§2.18",
       "authority_level": 2,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 85,
       "constitutional_commitment_score": 90,
       "evidence_score": 80,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "nssot-article-iii",
@@ -557,14 +557,14 @@
       "source_file": "docs/constitution/NORTH_STAR_SSOT.md",
       "source_anchor": "## ARTICLE III",
       "authority_level": 2,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 85,
       "constitutional_commitment_score": 90,
       "evidence_score": 80,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "nssot-3-1",
@@ -573,14 +573,14 @@
       "source_file": "docs/constitution/NORTH_STAR_SSOT.md",
       "source_anchor": "§3.1",
       "authority_level": 2,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 85,
       "constitutional_commitment_score": 90,
       "evidence_score": 80,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "nssot-3-2",
@@ -589,14 +589,14 @@
       "source_file": "docs/constitution/NORTH_STAR_SSOT.md",
       "source_anchor": "§3.2",
       "authority_level": 2,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 85,
       "constitutional_commitment_score": 90,
       "evidence_score": 80,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "nssot-article-iv",
@@ -605,14 +605,14 @@
       "source_file": "docs/constitution/NORTH_STAR_SSOT.md",
       "source_anchor": "## ARTICLE IV",
       "authority_level": 2,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 85,
       "constitutional_commitment_score": 90,
       "evidence_score": 80,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "nssot-4-1",
@@ -621,14 +621,14 @@
       "source_file": "docs/constitution/NORTH_STAR_SSOT.md",
       "source_anchor": "§4.1",
       "authority_level": 2,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 85,
       "constitutional_commitment_score": 90,
       "evidence_score": 80,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "nssot-4-2",
@@ -637,14 +637,14 @@
       "source_file": "docs/constitution/NORTH_STAR_SSOT.md",
       "source_anchor": "§4.2",
       "authority_level": 2,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 85,
       "constitutional_commitment_score": 90,
       "evidence_score": 80,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "nssot-4-3",
@@ -653,14 +653,14 @@
       "source_file": "docs/constitution/NORTH_STAR_SSOT.md",
       "source_anchor": "§4.3",
       "authority_level": 2,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 85,
       "constitutional_commitment_score": 90,
       "evidence_score": 80,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "nssot-article-v",
@@ -669,14 +669,14 @@
       "source_file": "docs/constitution/NORTH_STAR_SSOT.md",
       "source_anchor": "## ARTICLE V",
       "authority_level": 2,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 85,
       "constitutional_commitment_score": 90,
       "evidence_score": 80,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "nssot-5-1",
@@ -685,14 +685,14 @@
       "source_file": "docs/constitution/NORTH_STAR_SSOT.md",
       "source_anchor": "§5.1",
       "authority_level": 2,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 85,
       "constitutional_commitment_score": 90,
       "evidence_score": 80,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "nssot-5-2",
@@ -701,14 +701,14 @@
       "source_file": "docs/constitution/NORTH_STAR_SSOT.md",
       "source_anchor": "§5.2",
       "authority_level": 2,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 85,
       "constitutional_commitment_score": 90,
       "evidence_score": 80,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "nssot-5-3",
@@ -717,14 +717,14 @@
       "source_file": "docs/constitution/NORTH_STAR_SSOT.md",
       "source_anchor": "§5.3",
       "authority_level": 2,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 85,
       "constitutional_commitment_score": 90,
       "evidence_score": 80,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "nssot-article-viii",
@@ -733,14 +733,14 @@
       "source_file": "docs/constitution/NORTH_STAR_SSOT.md",
       "source_anchor": "## ARTICLE VIII",
       "authority_level": 2,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 85,
       "constitutional_commitment_score": 90,
       "evidence_score": 80,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "nssot-8-1",
@@ -749,14 +749,14 @@
       "source_file": "docs/constitution/NORTH_STAR_SSOT.md",
       "source_anchor": "§8.1",
       "authority_level": 2,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 85,
       "constitutional_commitment_score": 90,
       "evidence_score": 80,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "nssot-8-2",
@@ -765,14 +765,14 @@
       "source_file": "docs/constitution/NORTH_STAR_SSOT.md",
       "source_anchor": "§8.2",
       "authority_level": 2,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 85,
       "constitutional_commitment_score": 90,
       "evidence_score": 80,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "nssot-8-3",
@@ -781,14 +781,14 @@
       "source_file": "docs/constitution/NORTH_STAR_SSOT.md",
       "source_anchor": "§8.3",
       "authority_level": 2,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 85,
       "constitutional_commitment_score": 90,
       "evidence_score": 80,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "nssot-8-4",
@@ -797,14 +797,14 @@
       "source_file": "docs/constitution/NORTH_STAR_SSOT.md",
       "source_anchor": "§8.4",
       "authority_level": 2,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 85,
       "constitutional_commitment_score": 90,
       "evidence_score": 80,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "nssot-article-ix",
@@ -813,14 +813,14 @@
       "source_file": "docs/constitution/NORTH_STAR_SSOT.md",
       "source_anchor": "## ARTICLE IX",
       "authority_level": 2,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 85,
       "constitutional_commitment_score": 90,
       "evidence_score": 80,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "nssot-9-1",
@@ -829,14 +829,14 @@
       "source_file": "docs/constitution/NORTH_STAR_SSOT.md",
       "source_anchor": "§9.1",
       "authority_level": 2,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 85,
       "constitutional_commitment_score": 90,
       "evidence_score": 80,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "nssot-9-2",
@@ -845,14 +845,14 @@
       "source_file": "docs/constitution/NORTH_STAR_SSOT.md",
       "source_anchor": "§9.2",
       "authority_level": 2,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 85,
       "constitutional_commitment_score": 90,
       "evidence_score": 80,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "nssot-9-3",
@@ -861,14 +861,14 @@
       "source_file": "docs/constitution/NORTH_STAR_SSOT.md",
       "source_anchor": "§9.3",
       "authority_level": 2,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 85,
       "constitutional_commitment_score": 90,
       "evidence_score": 80,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "nssot-article-vi",
@@ -877,14 +877,14 @@
       "source_file": "docs/constitution/NORTH_STAR_SSOT.md",
       "source_anchor": "## ARTICLE VI",
       "authority_level": 2,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 85,
       "constitutional_commitment_score": 90,
       "evidence_score": 80,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "nssot-article-vii",
@@ -893,14 +893,14 @@
       "source_file": "docs/constitution/NORTH_STAR_SSOT.md",
       "source_anchor": "## ARTICLE VII",
       "authority_level": 2,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 85,
       "constitutional_commitment_score": 90,
       "evidence_score": 80,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "product-governance-ai-council",
@@ -909,14 +909,14 @@
       "source_file": "docs/products/ai-council/PRODUCT_HOME.md",
       "source_anchor": "header",
       "authority_level": 6,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 75,
       "constitutional_commitment_score": 80,
       "evidence_score": 70,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "product-governance-ai-receptionist",
@@ -925,14 +925,14 @@
       "source_file": "docs/products/ai-receptionist/PRODUCT_HOME.md",
       "source_anchor": "header",
       "authority_level": 6,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 75,
       "constitutional_commitment_score": 80,
       "evidence_score": 70,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "product-governance-api-cost-savings",
@@ -941,14 +941,14 @@
       "source_file": "docs/products/api-cost-savings/PRODUCT_HOME.md",
       "source_anchor": "header",
       "authority_level": 6,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 75,
       "constitutional_commitment_score": 80,
       "evidence_score": 70,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "product-governance-boldtrail",
@@ -957,14 +957,14 @@
       "source_file": "docs/products/boldtrail/PRODUCT_HOME.md",
       "source_anchor": "header",
       "authority_level": 6,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 75,
       "constitutional_commitment_score": 80,
       "evidence_score": 70,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "product-governance-builderos",
@@ -973,14 +973,14 @@
       "source_file": "docs/products/builderos/PRODUCT_HOME.md",
       "source_anchor": "header",
       "authority_level": 6,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 75,
       "constitutional_commitment_score": 80,
       "evidence_score": 70,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "product-governance-business-tools",
@@ -989,14 +989,14 @@
       "source_file": "docs/products/business-tools/PRODUCT_HOME.md",
       "source_anchor": "header",
       "authority_level": 6,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 75,
       "constitutional_commitment_score": 80,
       "evidence_score": 70,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "product-governance-capability-map",
@@ -1005,14 +1005,14 @@
       "source_file": "docs/products/capability-map/PRODUCT_HOME.md",
       "source_anchor": "header",
       "authority_level": 6,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 75,
       "constitutional_commitment_score": 80,
       "evidence_score": 70,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "product-governance-clientcare-billing-recovery",
@@ -1021,14 +1021,14 @@
       "source_file": "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md",
       "source_anchor": "header",
       "authority_level": 6,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 75,
       "constitutional_commitment_score": 80,
       "evidence_score": 70,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "product-governance-command-center",
@@ -1037,14 +1037,14 @@
       "source_file": "docs/products/command-center/PRODUCT_HOME.md",
       "source_anchor": "header",
       "authority_level": 6,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 75,
       "constitutional_commitment_score": 80,
       "evidence_score": 70,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "product-governance-conflict-arbitrator",
@@ -1053,14 +1053,14 @@
       "source_file": "docs/products/conflict-arbitrator/PRODUCT_HOME.md",
       "source_anchor": "header",
       "authority_level": 6,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 75,
       "constitutional_commitment_score": 80,
       "evidence_score": 70,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "product-governance-creator-media-os",
@@ -1069,14 +1069,14 @@
       "source_file": "docs/products/creator-media-os/PRODUCT_HOME.md",
       "source_anchor": "header",
       "authority_level": 6,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 75,
       "constitutional_commitment_score": 80,
       "evidence_score": 70,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "product-governance-creative-engine",
@@ -1085,14 +1085,14 @@
       "source_file": "docs/products/creative-engine/PRODUCT_HOME.md",
       "source_anchor": "header",
       "authority_level": 6,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 75,
       "constitutional_commitment_score": 80,
       "evidence_score": 70,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "product-governance-enterprise-ai-governance",
@@ -1101,14 +1101,14 @@
       "source_file": "docs/products/enterprise-ai-governance/PRODUCT_HOME.md",
       "source_anchor": "header",
       "authority_level": 6,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 75,
       "constitutional_commitment_score": 80,
       "evidence_score": 70,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "product-governance-faith-studio",
@@ -1117,14 +1117,14 @@
       "source_file": "docs/products/faith-studio/PRODUCT_HOME.md",
       "source_anchor": "header",
       "authority_level": 6,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 75,
       "constitutional_commitment_score": 80,
       "evidence_score": 70,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "product-governance-financial-revenue",
@@ -1133,14 +1133,14 @@
       "source_file": "docs/products/financial-revenue/PRODUCT_HOME.md",
       "source_anchor": "header",
       "authority_level": 6,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 75,
       "constitutional_commitment_score": 80,
       "evidence_score": 70,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "product-governance-game-publisher",
@@ -1149,14 +1149,14 @@
       "source_file": "docs/products/game-publisher/PRODUCT_HOME.md",
       "source_anchor": "header",
       "authority_level": 6,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 75,
       "constitutional_commitment_score": 80,
       "evidence_score": 70,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "product-governance-ideavault",
@@ -1165,14 +1165,14 @@
       "source_file": "docs/products/ideavault/PRODUCT_HOME.md",
       "source_anchor": "header",
       "authority_level": 6,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 75,
       "constitutional_commitment_score": 80,
       "evidence_score": 70,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "product-governance-kids-os",
@@ -1181,14 +1181,14 @@
       "source_file": "docs/products/kids-os/PRODUCT_HOME.md",
       "source_anchor": "header",
       "authority_level": 6,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 75,
       "constitutional_commitment_score": 80,
       "evidence_score": 70,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "product-governance-kingsman-protocol",
@@ -1197,14 +1197,14 @@
       "source_file": "docs/products/kingsman-protocol/PRODUCT_HOME.md",
       "source_anchor": "header",
       "authority_level": 6,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 75,
       "constitutional_commitment_score": 80,
       "evidence_score": 70,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "product-governance-knowledge-base",
@@ -1213,14 +1213,14 @@
       "source_file": "docs/products/knowledge-base/PRODUCT_HOME.md",
       "source_anchor": "header",
       "authority_level": 6,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 75,
       "constitutional_commitment_score": 80,
       "evidence_score": 70,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "product-governance-life-coaching",
@@ -1229,14 +1229,14 @@
       "source_file": "docs/products/life-coaching/PRODUCT_HOME.md",
       "source_anchor": "header",
       "authority_level": 6,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 75,
       "constitutional_commitment_score": 80,
       "evidence_score": 70,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "product-governance-lifeos",
@@ -1245,14 +1245,14 @@
       "source_file": "docs/products/lifeos/PRODUCT_HOME.md",
       "source_anchor": "header",
       "authority_level": 6,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 75,
       "constitutional_commitment_score": 80,
       "evidence_score": 70,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "product-governance-lifere",
@@ -1261,14 +1261,14 @@
       "source_file": "docs/products/lifere/PRODUCT_HOME.md",
       "source_anchor": "header",
       "authority_level": 6,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 75,
       "constitutional_commitment_score": 80,
       "evidence_score": 70,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "product-governance-limitlessos",
@@ -1277,14 +1277,14 @@
       "source_file": "docs/products/limitlessos/PRODUCT_HOME.md",
       "source_anchor": "header",
       "authority_level": 6,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 75,
       "constitutional_commitment_score": 80,
       "evidence_score": 70,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "product-governance-lumin-university",
@@ -1293,14 +1293,14 @@
       "source_file": "docs/products/lumin-university/PRODUCT_HOME.md",
       "source_anchor": "header",
       "authority_level": 6,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 75,
       "constitutional_commitment_score": 80,
       "evidence_score": 70,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "product-governance-marketingos",
@@ -1309,14 +1309,14 @@
       "source_file": "docs/products/marketingos/PRODUCT_HOME.md",
       "source_anchor": "header",
       "authority_level": 6,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 75,
       "constitutional_commitment_score": 80,
       "evidence_score": 70,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "product-governance-memory-intelligence",
@@ -1325,14 +1325,14 @@
       "source_file": "docs/products/memory-intelligence/PRODUCT_HOME.md",
       "source_anchor": "header",
       "authority_level": 6,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 75,
       "constitutional_commitment_score": 80,
       "evidence_score": 70,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "product-governance-memory-system",
@@ -1341,14 +1341,14 @@
       "source_file": "docs/products/memory-system/PRODUCT_HOME.md",
       "source_anchor": "header",
       "authority_level": 6,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 75,
       "constitutional_commitment_score": 80,
       "evidence_score": 70,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "product-governance-music-talent-studio",
@@ -1357,14 +1357,14 @@
       "source_file": "docs/products/music-talent-studio/PRODUCT_HOME.md",
       "source_anchor": "header",
       "authority_level": 6,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 75,
       "constitutional_commitment_score": 80,
       "evidence_score": 70,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "product-governance-oil-security-divisions",
@@ -1373,14 +1373,14 @@
       "source_file": "docs/products/oil-security-divisions/PRODUCT_HOME.md",
       "source_anchor": "header",
       "authority_level": 6,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 75,
       "constitutional_commitment_score": 80,
       "evidence_score": 70,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "product-governance-outreach-crm",
@@ -1389,14 +1389,14 @@
       "source_file": "docs/products/outreach-crm/PRODUCT_HOME.md",
       "source_anchor": "header",
       "authority_level": 6,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 75,
       "constitutional_commitment_score": 80,
       "evidence_score": 70,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "product-governance-personal-finance-os",
@@ -1405,14 +1405,14 @@
       "source_file": "docs/products/personal-finance-os/PRODUCT_HOME.md",
       "source_anchor": "header",
       "authority_level": 6,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 75,
       "constitutional_commitment_score": 80,
       "evidence_score": 70,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "product-governance-productized-sprint",
@@ -1421,14 +1421,14 @@
       "source_file": "docs/products/productized-sprint/PRODUCT_HOME.md",
       "source_anchor": "header",
       "authority_level": 6,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 75,
       "constitutional_commitment_score": 80,
       "evidence_score": 70,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "product-governance-project-governance",
@@ -1437,14 +1437,14 @@
       "source_file": "docs/products/project-governance/PRODUCT_HOME.md",
       "source_anchor": "header",
       "authority_level": 6,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 75,
       "constitutional_commitment_score": 80,
       "evidence_score": 70,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "product-governance-site-builder",
@@ -1453,14 +1453,14 @@
       "source_file": "docs/products/site-builder/PRODUCT_HOME.md",
       "source_anchor": "header",
       "authority_level": 6,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 75,
       "constitutional_commitment_score": 80,
       "evidence_score": 70,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "product-governance-story-studio",
@@ -1469,14 +1469,14 @@
       "source_file": "docs/products/story-studio/PRODUCT_HOME.md",
       "source_anchor": "header",
       "authority_level": 6,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 75,
       "constitutional_commitment_score": 80,
       "evidence_score": 70,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "product-governance-tc-service",
@@ -1485,14 +1485,14 @@
       "source_file": "docs/products/tc-service/PRODUCT_HOME.md",
       "source_anchor": "header",
       "authority_level": 6,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 75,
       "constitutional_commitment_score": 80,
       "evidence_score": 70,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "product-governance-teacher-os",
@@ -1501,14 +1501,14 @@
       "source_file": "docs/products/teacher-os/PRODUCT_HOME.md",
       "source_anchor": "header",
       "authority_level": 6,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 75,
       "constitutional_commitment_score": 80,
       "evidence_score": 70,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "product-governance-token-accounting-os",
@@ -1517,14 +1517,14 @@
       "source_file": "docs/products/token-accounting-os/PRODUCT_HOME.md",
       "source_anchor": "header",
       "authority_level": 6,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 75,
       "constitutional_commitment_score": 80,
       "evidence_score": 70,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "product-governance-universal-overlay",
@@ -1533,14 +1533,14 @@
       "source_file": "docs/products/universal-overlay/PRODUCT_HOME.md",
       "source_anchor": "header",
       "authority_level": 6,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 75,
       "constitutional_commitment_score": 80,
       "evidence_score": 70,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "product-governance-video-pipeline",
@@ -1549,14 +1549,14 @@
       "source_file": "docs/products/video-pipeline/PRODUCT_HOME.md",
       "source_anchor": "header",
       "authority_level": 6,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 75,
       "constitutional_commitment_score": 80,
       "evidence_score": 70,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "product-governance-wellness-studio",
@@ -1565,14 +1565,14 @@
       "source_file": "docs/products/wellness-studio/PRODUCT_HOME.md",
       "source_anchor": "header",
       "authority_level": 6,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 75,
       "constitutional_commitment_score": 80,
       "evidence_score": 70,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "product-governance-white-label",
@@ -1581,14 +1581,14 @@
       "source_file": "docs/products/white-label/PRODUCT_HOME.md",
       "source_anchor": "header",
       "authority_level": 6,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 75,
       "constitutional_commitment_score": 80,
       "evidence_score": 70,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "product-governance-word-keeper",
@@ -1597,14 +1597,14 @@
       "source_file": "docs/products/word-keeper/PRODUCT_HOME.md",
       "source_anchor": "header",
       "authority_level": 6,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 75,
       "constitutional_commitment_score": 80,
       "evidence_score": 70,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "product-governance-zero-drift-handoff-protocol",
@@ -1613,14 +1613,14 @@
       "source_file": "docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md",
       "source_anchor": "header",
       "authority_level": 6,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 75,
       "constitutional_commitment_score": 80,
       "evidence_score": 70,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "constitutional-framework",
@@ -1629,14 +1629,14 @@
       "source_file": "/home/ubuntu/repos/Lumin-LifeOS/docs/constitution/CONSTITUTIONAL_FRAMEWORK.md",
       "source_anchor": "The Missing Piece",
       "authority_level": 3,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 80,
       "constitutional_commitment_score": 85,
       "evidence_score": 85,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     },
     {
       "law_id": "constitutional-processes",
@@ -1645,14 +1645,14 @@
       "source_file": "/home/ubuntu/repos/Lumin-LifeOS/docs/constitution/CONSTITUTIONAL_PROCESSES.md",
       "source_anchor": "Amendment Process",
       "authority_level": 3,
-      "enforcement_status": "enforced",
+      "enforcement_status": "unverified",
       "evidence_level": "ConstitutionalLaw",
       "epistemic_confidence_score": 80,
       "constitutional_commitment_score": 85,
       "evidence_score": 80,
       "verifier_script": "npm run builder:preflight",
-      "verification_kind": "deterministic",
-      "notes": "Generated from canonical registry; verifier mapping is proposed and must be reviewed before ratification."
+      "verification_kind": "unverified",
+      "notes": "Generated from canonical registry. enforcement_method is the generic 'preflight' fallback, not an item-specific verifier -- npm run builder:preflight runs the general test suite, which is not evidence this specific principle is individually checked. enforcement_status forced to 'unverified' until REGISTRY.json assigns a real, item-specific enforcement_method."
     }
   ]
 }
