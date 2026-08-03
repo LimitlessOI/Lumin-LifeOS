@@ -84,6 +84,21 @@ else
   exit 1
 fi
 
+# ── 2c+. Constitutional amendment ratification (HARD — no bypass) ────────────
+# Any commit touching docs/constitution/NORTH_STAR_SSOT.md must co-stage a
+# ratification record under data/constitutional-framework/ratification-records/
+# satisfying Article VII's own four requirements (unanimous AI Council vote,
+# Human Guardian written approval, documented rationale, >=7-day review
+# period). Exists because commit 6a5b608fb rewrote Article I and added §2.0M
+# while declaring itself "RATIFIED" in the commit message with none of the
+# four on record anywhere -- this makes that specific failure mechanically
+# impossible, not just against-the-rules.
+if node "$ROOT/scripts/verify-constitutional-amendment-ratification.mjs" --staged 2>&1; then
+  :
+else
+  exit 1
+fi
+
 # ── 3. SSOT read-before-write gate (HARD for interactive sessions) ─────────────
 # When editing an SSOT amendment, the agent must confirm they read the FULL file
 # in this session — not from memory. Token limits = HALT. Partial = blind patch.

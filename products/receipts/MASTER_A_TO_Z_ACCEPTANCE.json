@@ -43,6 +43,17 @@
   "artifact_sync": {
     "mode": "technical_acceptance",
     "readiness_report": "builderos-reboot/PRODUCT_READINESS_REPORT.json",
-    "freshness_status": "CURRENT"
+    "freshness_status": "STALE"
+  },
+  "reverification_2026_08_03": {
+    "note": "The fields above (verdict, tests_passed, tests_failed) are the genuine result of the verify_command as of git_sha add279931 on 2026-07-31 -- not fabricated, but no longer current. Re-running node scripts/master-a-to-z-acceptance.mjs against current origin/main on 2026-08-03 shows MMAZ-019 now fails. Appended per this repo's receipts-append-only convention rather than overwriting the original result.",
+    "reverified_at": "2026-08-03T09:52:41.720Z",
+    "reverified_against_sha": "5eb0612c48acce1560c9e438989f725c324aa7ca",
+    "tests_failed": ["MMAZ-019"],
+    "failure_reason": "chair_consensus_gate_failure: missing_reasoning_plan (verify_command: node scripts/run-master-a-to-z-demo.mjs, HTTP 422 on demo-write-widget step)",
+    "mission_progress": "in_progress",
+    "steps_done": 20,
+    "steps_total": 21,
+    "verdict": "STALE_DO_NOT_TRUST_WITHOUT_REVERIFICATION"
   }
 }

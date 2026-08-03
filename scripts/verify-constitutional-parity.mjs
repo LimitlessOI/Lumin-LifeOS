@@ -37,6 +37,7 @@ function runCommand(cmd, args, cwd) {
 
 async function main() {
   const failures = [];
+  const warnings = [];
 
   // 1. Canonical source files exist.
   for (const [label, file] of [['North Star', NORTH_STAR], ['Framework', FRAMEWORK]]) {
@@ -66,6 +67,28 @@ async function main() {
     }
   }
 
+  // 2b. Framework-pointer parity: REGISTRY.json's own declared framework should
+  // match the file this script itself treats as canonical. GAP-FILL, 2026-08-03:
+  // an independent audit found REGISTRY.json's authority.framework points to
+  // CONSTITUTIONAL_FRAMEWORK.md (no suffix) while this script has hardcoded
+  // CONSTITUTIONAL_FRAMEWORK_v1.md as canonical since inception -- a silent
+  // disagreement about which document is actually authoritative, with neither
+  // side ever checking the other. This does not resolve which file is correct
+  // (that's a real ratification question, not a technical one) -- it only makes
+  // the disagreement loud instead of silent. Warning, not a hard failure: this
+  // shouldn't block every product's builder:preflight over a governance-paperwork
+  // question that isn't actively dangerous the way a dropped auth check is.
+  if (registry?.authority?.framework) {
+    const declaredFramework = path.join(ROOT, registry.authority.framework);
+    if (path.resolve(declaredFramework) !== path.resolve(FRAMEWORK)) {
+      warnings.push(
+        `Framework pointer mismatch: REGISTRY.json declares authority.framework="${registry.authority.framework}" `
+        + `but this script's canonical FRAMEWORK constant is "${path.relative(ROOT, FRAMEWORK)}" -- `
+        + `these must eventually agree on which file is actually authoritative.`
+      );
+    }
+  }
+
   // 3. Canonical enforcement matrix exists, is canonical, and covers every registry item.
   const matrix = readJson(MATRIX_PATH);
   if (!matrix) {
@@ -92,6 +115,11 @@ async function main() {
     failures.push('scripts/constitutional-framework.mjs verify failed');
     if (verify.stdout) console.log(verify.stdout);
     if (verify.stderr) console.error(verify.stderr);
+  }
+
+  if (warnings.length) {
+    console.warn('CONSTITUTIONAL_PARITY: warnings (non-blocking)');
+    for (const w of warnings) console.warn(`  ! ${w}`);
   }
 
   if (failures.length) {

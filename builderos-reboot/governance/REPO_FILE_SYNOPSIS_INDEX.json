@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-03T09:49:03.227Z",
+  "generated_at": "2026-08-03T10:04:15.777Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12934,
+  "file_count": 12935,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21678,9 +21678,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3912103,
-      "mtime": "2026-08-02T14:56:31.536Z",
-      "indexed_at": "2026-08-02T14:57:23.860Z"
+      "bytes": 3914718,
+      "mtime": "2026-08-03T10:03:17.249Z",
+      "indexed_at": "2026-08-03T10:04:15.777Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -33068,33 +33068,33 @@
     {
       "path": "data/constitutional-framework/REGISTRY.json",
       "synopsis": "JSON data/config — data/constitutional-framework/REGISTRY.json.",
-      "bytes": 81476,
-      "mtime": "2026-08-02T01:12:17.106Z",
-      "indexed_at": "2026-08-02T09:36:38.323Z",
+      "bytes": 81412,
+      "mtime": "2026-08-03T09:59:27.594Z",
+      "indexed_at": "2026-08-03T10:03:17.165Z",
       "synopsis_index_only": true
     },
     {
       "path": "data/constitutional-framework/reports/ADVERSARIAL_RATIFICATION_REPORT.json",
       "synopsis": "JSON data/config — data/constitutional-framework/reports/ADVERSARIAL_RATIFICATION_REPORT.json.",
-      "bytes": 3297,
-      "mtime": "2026-08-02T14:39:05.072Z",
-      "indexed_at": "2026-08-02T14:39:18.789Z",
+      "bytes": 3407,
+      "mtime": "2026-08-03T10:01:13.051Z",
+      "indexed_at": "2026-08-03T10:03:17.165Z",
       "synopsis_index_only": true
     },
     {
       "path": "data/constitutional-framework/reports/CONSTITUTIONAL_OBSERVABILITY_REPORT.json",
       "synopsis": "JSON data/config — data/constitutional-framework/reports/CONSTITUTIONAL_OBSERVABILITY_REPORT.json.",
-      "bytes": 9453,
-      "mtime": "2026-08-03T03:31:45.373Z",
-      "indexed_at": "2026-08-03T03:37:23.711Z",
+      "bytes": 9459,
+      "mtime": "2026-08-03T10:01:45.285Z",
+      "indexed_at": "2026-08-03T10:03:17.165Z",
       "synopsis_index_only": true
     },
     {
       "path": "data/constitutional-framework/reports/ENFORCEMENT_MATRIX_REPORT.json",
       "synopsis": "JSON data/config — data/constitutional-framework/reports/ENFORCEMENT_MATRIX_REPORT.json.",
-      "bytes": 248811,
-      "mtime": "2026-08-03T03:31:45.382Z",
-      "indexed_at": "2026-08-03T03:37:23.711Z",
+      "bytes": 276318,
+      "mtime": "2026-08-03T10:01:13.047Z",
+      "indexed_at": "2026-08-03T10:03:17.165Z",
       "synopsis_index_only": true
     },
     {
@@ -41754,9 +41754,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 440790,
-      "mtime": "2026-08-03T09:48:53.732Z",
-      "indexed_at": "2026-08-03T09:49:03.227Z"
+      "bytes": 444813,
+      "mtime": "2026-08-03T10:02:48.535Z",
+      "indexed_at": "2026-08-03T10:03:17.165Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -67004,9 +67004,9 @@
     {
       "path": "products/receipts/MASTER_A_TO_Z_ACCEPTANCE.json",
       "synopsis": "Product receipt — MASTER A TO Z ACCEPTANCE.",
-      "bytes": 1102,
-      "mtime": "2026-07-31T23:09:09.278Z",
-      "indexed_at": "2026-07-31T23:09:09.278Z",
+      "bytes": 2028,
+      "mtime": "2026-08-03T09:58:30.489Z",
+      "indexed_at": "2026-08-03T10:03:17.165Z",
       "synopsis_index_only": true
     },
     {
@@ -77464,6 +77464,16 @@
       ]
     },
     {
+      "path": "scripts/verify-constitutional-amendment-ratification.mjs",
+      "synopsis": "verify-constitutional-amendment-ratification.mjs",
+      "bytes": 5801,
+      "mtime": "2026-08-03T09:57:08.680Z",
+      "indexed_at": "2026-08-03T10:03:17.165Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "scripts/verify-constitutional-architecture-acceptance.mjs",
       "synopsis": "Acceptance script for FACTORY-CONSTITUTIONAL-ARCHITECTURE-0001.",
       "bytes": 7262,
@@ -77506,9 +77516,9 @@
     {
       "path": "scripts/verify-constitutional-parity.mjs",
       "synopsis": "Runtime parity gate — verify registry, enforcement matrix, and canonical constitutional text are aligned.",
-      "bytes": 4865,
-      "mtime": "2026-08-02T13:40:38.884Z",
-      "indexed_at": "2026-08-02T13:40:38.884Z",
+      "bytes": 6444,
+      "mtime": "2026-08-03T10:00:48.045Z",
+      "indexed_at": "2026-08-03T10:03:17.165Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

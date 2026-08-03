@@ -1,6 +1,6 @@
 {
   "schema": "adversarial_ratification_report_v0",
-  "generated_at": "2026-08-02T14:39:05.074Z",
+  "generated_at": "2026-08-03T10:01:13.050Z",
   "generated_by": "scripts/adversarial-ratification-suite.mjs",
   "summary": {
     "total": 25,
@@ -132,7 +132,7 @@
       "name": "Enforcement matrix verifier exits 0",
       "severity": "bug",
       "status": "pass",
-      "verifier_output": "VERIFY 103 law(s) → npm run builder:preflight\n\nENFORCEMENT_MATRIX_VERIFY: PASS\n  total: 103\n  pass:  103\n  fail:  0\n  manual: 0\n  report: /home/ubuntu/repos/Lumin-LifeOS/data/constitutional-framework/reports/ENFORCEMENT_MATRIX_REPORT.json\n"
+      "verifier_output": "VERIFY 103 law(s) → npm run builder:preflight\n\nENFORCEMENT_MATRIX_VERIFY: PASS\n  total: 103\n  pass:  103\n  fail:  0\n  manual: 0\n  report: /private/tmp/claude-501/-Users-adamhopkins-Projects-Lumin-LifeOS/b98a9c4f-30b0-4efc-94d3-7e9a8ac44905/scratchpad/fix-constitutional-integrity/data/constitutional-framework/reports/ENFORCEMENT_MATRIX_REPORT.json\n"
     }
   ],
   "verdict": "PASS"
