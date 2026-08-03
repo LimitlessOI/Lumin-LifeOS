@@ -101,7 +101,10 @@ async function proveViaLocalPlaywright(creds) {
     await page.waitForTimeout(2500);
     const stillOnApp = /lifeos-app\.html/i.test(page.url());
     report.steps.session_held = { ok: stillOnApp, url: page.url() };
-    report.ok = Boolean(report.steps.form_login?.ok || report.steps.app_nav?.ok) && stillOnApp;
+    if (stillOnApp) {
+      report.steps.dashboard = await verifyDashboard(page);
+    }
+    report.ok = Boolean(report.steps.form_login?.ok || report.steps.app_nav?.ok) && stillOnApp && !!report.steps.dashboard?.ok;
   } catch (err) {
     report.error = err.message;
     report.ok = false;
@@ -109,6 +112,73 @@ async function proveViaLocalPlaywright(creds) {
     await browser.close().catch(() => {});
   }
   return report;
+}
+
+async function verifyDashboard(page) {
+  const result = { ok: false, point_b: null, scores: null, error: null };
+  try {
+    // Point B strip: wait for the live-poll to replace the placeholder, then compare with API.
+    await page.waitForFunction(() => {
+      const el = document.getElementById('point-b-pct');
+      return el && el.textContent.trim() !== '—';
+    }, { timeout: 15000 }).catch(() => {});
+
+    await page.waitForFunction(() => typeof CTX !== 'undefined' && !!CTX.fetchWithAuth, { timeout: 15000 });
+    const pointBApi = await page.evaluate(async (base) => {
+      const r = await CTX.fetchWithAuth(`${base}/api/v1/lifeos/builderos/command-control/point-b/status`);
+      return r.json();
+    }, BASE);
+    const pb = pointBApi.point_b || pointBApi;
+
+    const label = (await page.textContent('#point-b-label').catch(() => '')).trim();
+    const pct = (await page.textContent('#point-b-pct').catch(() => '')).trim();
+    const phase = (await page.textContent('#point-b-phase').catch(() => '')).trim();
+    const blocker = (await page.textContent('#point-b-blocker').catch(() => '')).trim();
+
+    const pctValue = String(pb.progress_pct ?? '');
+    const phaseOk = !pb.phase || phase.includes(pb.phase);
+    const blockerOk = (!pb.blocker && !pb.next_action) || blocker.includes(pb.blocker || '') || blocker.includes(pb.next_action || '');
+    result.point_b = {
+      ok: label.includes(pb.label || 'Point B') && (pctValue === '' || pct.includes(pctValue)) && phaseOk && blockerOk,
+      api: { label: pb.label, progress_pct: pb.progress_pct, phase: pb.phase, blocker: pb.blocker, next_action: pb.next_action },
+      dom: { label, pct, phase, blocker },
+    };
+
+    // Dashboard scoreboard (rendered inside the content-frame iframe) vs API.
+    const iframe = page.frameLocator('#content-frame');
+    await iframe.locator('#scores-grid').waitFor({ timeout: 15000 }).catch(() => null);
+    const tiles = await iframe.locator('#scores-grid .score-tile').all().catch(() => []);
+    const domScores = [];
+    for (const tile of tiles) {
+      const name = (await tile.locator('.score-label').textContent().catch(() => '')).trim();
+      const num = (await tile.locator('.score-num').textContent().catch(() => '')).trim();
+      const tip = (await tile.locator('.score-tile-tip').textContent().catch(() => '')).trim();
+      if (name) domScores.push({ name, num, tip });
+    }
+
+    const scoreboardApi = await page.evaluate(async (base) => {
+      const r = await CTX.fetchWithAuth(`${base}/api/v1/lifeos/dashboard/scoreboard?user=adam`);
+      return r.json();
+    }, BASE);
+    const m = scoreboardApi.metrics || {};
+    const apiScores = [
+      { name: 'Overall', value: scoreboardApi.overall?.score, description: scoreboardApi.overall?.status || '' },
+      { name: 'Integrity', value: m.integrity?.score, description: `Trend: ${m.integrity?.trend || '—'}` },
+      { name: 'Joy', value: m.joy?.score, description: `Trend: ${m.joy?.trend || '—'}` },
+      { name: 'Focus', value: m.focus?.score, description: m.focus?.trend_summary || '' },
+    ].filter((s) => s.value != null && s.value > 0);
+
+    const scoresOk = apiScores.length === domScores.length && apiScores.every((api) => {
+      const dom = domScores.find((d) => d.name === api.name);
+      return dom && dom.num === String(api.value) && (dom.tip.includes(api.description) || api.description === '');
+    });
+    result.scores = { ok: scoresOk, api: apiScores, dom: domScores };
+
+    result.ok = result.point_b.ok && scoresOk;
+  } catch (err) {
+    result.error = err.message;
+  }
+  return result;
 }
 
 async function main() {

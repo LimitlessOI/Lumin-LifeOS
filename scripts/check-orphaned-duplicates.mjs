@@ -39,6 +39,11 @@ const NAME_DENYLIST = new Set([
   // services/governance-cost-index.js both export version = "2026-08-02" as
   // independent, unrelated module stamps, not architectural drift).
   'version',
+  // Internal/private markers and shared constant names that appear in
+  // unrelated files by convention, not by orphaned copy-paste.
+  '__private__',
+  'DEFAULT_LEDGER_PATH',
+  'DASHBOARD_HTML_TARGET',
 ]);
 
 function listJsFiles(dir) {

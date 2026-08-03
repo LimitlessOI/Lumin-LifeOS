@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-03T07:11:09.767Z",
+  "generated_at": "2026-08-03T09:37:43.214Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12933,
   "files": [
@@ -42632,9 +42632,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 671682,
-      "mtime": "2026-08-02T16:35:14.218Z",
-      "indexed_at": "2026-08-02T16:35:14.218Z"
+      "bytes": 672834,
+      "mtime": "2026-08-03T09:34:13.248Z",
+      "indexed_at": "2026-08-03T09:37:43.214Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -66501,9 +66501,9 @@
     {
       "path": "products/receipts/FOUNDER_UI_LOGIN_E2E.json",
       "synopsis": "Product receipt — FOUNDER UI LOGIN E2E.",
-      "bytes": 804,
-      "mtime": "2026-07-30T02:27:48.226Z",
-      "indexed_at": "2026-07-30T22:32:11.913Z",
+      "bytes": 1711,
+      "mtime": "2026-08-03T09:33:17.084Z",
+      "indexed_at": "2026-08-03T09:37:43.214Z",
       "synopsis_index_only": true
     },
     {
@@ -73661,9 +73661,9 @@
     {
       "path": "scripts/check-orphaned-duplicates.mjs",
       "synopsis": "check-orphaned-duplicates.mjs",
-      "bytes": 5310,
-      "mtime": "2026-08-03T03:44:22.457Z",
-      "indexed_at": "2026-08-03T03:45:46.767Z",
+      "bytes": 5514,
+      "mtime": "2026-08-03T09:36:57.500Z",
+      "indexed_at": "2026-08-03T09:37:43.214Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -76036,9 +76036,9 @@
     {
       "path": "scripts/run-founder-ui-login-e2e.mjs",
       "synopsis": "Credentialed founder UI login E2E — prefers local LIFEOS_FOUNDER_LOGIN_*;",
-      "bytes": 6127,
-      "mtime": "2026-07-09T18:21:51.718Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 9834,
+      "mtime": "2026-08-03T09:33:10.692Z",
+      "indexed_at": "2026-08-03T09:37:43.214Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

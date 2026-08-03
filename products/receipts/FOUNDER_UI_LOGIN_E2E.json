@@ -1,6 +1,6 @@
 {
   "schema": "founder_ui_login_e2e_v1",
-  "at": "2026-08-01T07:26:13.035Z",
+  "at": "2026-08-03T09:33:13.112Z",
   "base": "https://lumin-web-production-e3a9.up.railway.app",
   "ok": true,
   "auth_mode": "ui_form_login",
@@ -16,11 +16,48 @@
     },
     "chat_send": {
       "ok": true,
-      "probe": "trust-gate-ui-1785569173923"
+      "probe": "trust-gate-ui-1785749594233"
     },
     "session_held": {
       "ok": true,
       "url": "https://lumin-web-production-e3a9.up.railway.app/overlay/lifeos-app.html"
+    },
+    "dashboard": {
+      "ok": true,
+      "point_b": {
+        "ok": true,
+        "api": {
+          "label": "LifeOS Consumer Alpha",
+          "progress_pct": 55,
+          "phase": "BLOCKED_MACHINE_PATH",
+          "blocker": "machine:blueprint missing phases P4",
+          "next_action": "run_execute_mission"
+        },
+        "dom": {
+          "label": "Point B · LifeOS Consumer Alpha",
+          "pct": "55%",
+          "phase": "· BLOCKED_MACHINE_PATH",
+          "blocker": "machine:blueprint missing phases P4"
+        }
+      },
+      "scores": {
+        "ok": true,
+        "api": [
+          {
+            "name": "Overall",
+            "value": 14,
+            "description": "off_track"
+          }
+        ],
+        "dom": [
+          {
+            "name": "Overall",
+            "num": "14",
+            "tip": "off_track"
+          }
+        ]
+      },
+      "error": null
     }
   },
   "cred_source": "LIFEOS_FOUNDER_LOGIN_EMAIL+LIFEOS_FOUNDER_LOGIN_PASSWORD"
