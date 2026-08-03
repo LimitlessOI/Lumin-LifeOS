@@ -48,6 +48,14 @@ test('buildPromptContext includes twin block for adam', async () => {
   assert.ok(ctx.includes('WHYS') || ctx.includes('WHY'));
 });
 
+test('twin inject surfaces the calibration profile, labeled as an unverified default', async () => {
+  const loader = createLuminContextLoader({});
+  const inject = await loader.getTwinInjectBlock('adam');
+  assert.ok(inject.includes('CALIBRATION'), 'calibration block present');
+  assert.ok(inject.includes('GUESS'), 'unlearned default is honestly labeled, not asserted as fact');
+  assert.ok(inject.includes('literalness='), 'calibration dimensions rendered');
+});
+
 test('founder twin hard gate passes for active Adam twin', async () => {
   const prev = process.env.TWIN_HARD_GATE;
   delete process.env.TWIN_HARD_GATE;

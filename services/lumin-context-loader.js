@@ -7,6 +7,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createCommunicationProfile } from './communication-profile.js';
 import { createLifeRETwinStore } from './lifere-twin-store.js';
+import { getDefaultProfile as getDefaultCalibrationProfile } from './founder-communication-calibration.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -353,6 +354,32 @@ function formatTwinInjectBlock(bundle, { maxChars = 7000 } = {}) {
         : null,
     ].filter(Boolean);
     if (lines.length) parts.push(`COMMUNICATION:\n${lines.join('\n')}`);
+
+    // GAP-FILL, 2026-08-03: `communication.calibration` is the interpretation-
+    // layer facet described in docs/products/builderos/specs/FOUNDER_VIRTUAL_TWIN.md
+    // ("Communication Calibration Profile") -- how to READ Adam's meaning
+    // (literalness, confidence mapping, abstraction level), not how Chair should
+    // sound (that's tone_vector/banned_phrases above, already live). The runtime
+    // service this spec named (services/founder-communication-calibration.js) was
+    // shipped but never imported anywhere -- confirmed via repo-wide grep before
+    // this fix. Falling back to its getDefaultProfile() here is the fix, but that
+    // profile is authored defaults, not anything learned from real Adam interaction
+    // history -- labeled GUESS so Chair never treats it as verified fact.
+    const calibration = communication.calibration || getDefaultCalibrationProfile();
+    const calLines = [
+      `literalness=${calibration.literalness}`,
+      `precision=${calibration.precision}`,
+      `confidence-expression=${calibration.confidenceExpression}`,
+      `abstraction=${calibration.abstraction}`,
+      `narrative-density=${calibration.narrativeDensity}`,
+      `goal-orientation=${calibration.goalOrientation}`,
+      `learning-style=${calibration.learningStyle}`,
+    ];
+    parts.push(
+      `CALIBRATION (${communication.calibration ? 'CLAIM — from twin facet' : 'GUESS — unlearned default, correct as needed'}):\n` +
+      `${calLines.join(', ')}\n` +
+      'Use to interpret Adam\'s intended meaning (e.g. confidence-expression scales how literally to take words like "certain"/"maybe"), not to rewrite what he says.'
+    );
   }
 
   if (personality) {
