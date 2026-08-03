@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-03T19:00:42.284Z",
+  "generated_at": "2026-08-03T19:25:56.181Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12942,
+  "file_count": 12945,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21939,17 +21939,17 @@
     {
       "path": "builderos-reboot/MISSIONS/CONSTITUTIONAL-ACTIVE-REALITY-CONSOLIDATION-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
-      "bytes": 2892,
-      "mtime": "2026-08-03T17:26:45.042Z",
-      "indexed_at": "2026-08-03T17:39:10.676Z",
+      "bytes": 3482,
+      "mtime": "2026-08-03T19:25:56.181Z",
+      "indexed_at": "2026-08-03T19:25:56.181Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/CONSTITUTIONAL-ACTIVE-REALITY-CONSOLIDATION-0001/CLASSIFICATION_REPORT.md",
-      "synopsis": "Non-destructive authority-chain classification for constitutional/active-reality consolidation. No files were moved, renamed, or deleted to produce this report.",
-      "bytes": 20650,
-      "mtime": "2026-08-03T17:34:43.101Z",
-      "indexed_at": "2026-08-03T17:39:10.676Z"
+      "synopsis": "Non-destructive authority-chain classification for constitutional/active-reality consolidation. No files were moved, renamed, archived, or deleted to produce this report.",
+      "bytes": 31845,
+      "mtime": "2026-08-03T19:25:56.181Z",
+      "indexed_at": "2026-08-03T19:25:56.181Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/CONSTITUTIONAL-ACTIVE-REALITY-CONSOLIDATION-0001/CONSTITUTIONAL_CANDIDATE_LEDGER.md",
@@ -21957,6 +21957,21 @@
       "bytes": 12713,
       "mtime": "2026-08-03T17:35:37.173Z",
       "indexed_at": "2026-08-03T17:39:10.676Z"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/CONSTITUTIONAL-ACTIVE-REALITY-CONSOLIDATION-0001/DISPOSITION_LOCK.json",
+      "synopsis": "BuilderOS artifact — DISPOSITION LOCK.",
+      "bytes": 26647,
+      "mtime": "2026-08-03T19:25:56.181Z",
+      "indexed_at": "2026-08-03T19:25:56.181Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/CONSTITUTIONAL-ACTIVE-REALITY-CONSOLIDATION-0001/DISPOSITION_LOCK.md",
+      "synopsis": "Human-readable disposition lock for CARC-002. Review and approve each row before CARC-003 moves.",
+      "bytes": 6151,
+      "mtime": "2026-08-03T19:25:56.181Z",
+      "indexed_at": "2026-08-03T19:25:56.181Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/CONSTITUTIONAL-ACTIVE-REALITY-CONSOLIDATION-0001/FOUNDER_PACKET.md",
@@ -21968,10 +21983,17 @@
     {
       "path": "builderos-reboot/MISSIONS/CONSTITUTIONAL-ACTIVE-REALITY-CONSOLIDATION-0001/OBJECTIVE_VERDICT.json",
       "synopsis": "BuilderOS artifact — OBJECTIVE VERDICT.",
-      "bytes": 1083,
-      "mtime": "2026-08-03T17:35:49.189Z",
-      "indexed_at": "2026-08-03T17:39:10.676Z",
+      "bytes": 2071,
+      "mtime": "2026-08-03T19:25:56.181Z",
+      "indexed_at": "2026-08-03T19:25:56.181Z",
       "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/CONSTITUTIONAL-ACTIVE-REALITY-CONSOLIDATION-0001/SCOPE_DEVIATION.md",
+      "synopsis": "Scope deviation note: what was announced, what was executed, why it changed, and what remains undone.",
+      "bytes": 3344,
+      "mtime": "2026-08-03T19:25:56.181Z",
+      "indexed_at": "2026-08-03T19:25:56.181Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-BLUEPRINT-AUTHORITY-0001/BUILDER_READINESS_AUDIT.md",
@@ -33121,9 +33143,9 @@
     {
       "path": "data/constitutional-framework/reports/CONSTITUTIONAL_OBSERVABILITY_REPORT.json",
       "synopsis": "JSON data/config — data/constitutional-framework/reports/CONSTITUTIONAL_OBSERVABILITY_REPORT.json.",
-      "bytes": 9454,
-      "mtime": "2026-08-03T18:59:39.346Z",
-      "indexed_at": "2026-08-03T19:00:42.284Z",
+      "bytes": 7706,
+      "mtime": "2026-08-03T19:25:56.181Z",
+      "indexed_at": "2026-08-03T19:25:56.181Z",
       "synopsis_index_only": true
     },
     {
@@ -39529,9 +39551,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 131798,
-      "mtime": "2026-08-03T17:50:56.325Z",
-      "indexed_at": "2026-08-03T17:51:02.016Z"
+      "bytes": 133249,
+      "mtime": "2026-08-03T19:25:56.181Z",
+      "indexed_at": "2026-08-03T19:25:56.181Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -41798,9 +41820,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 459386,
-      "mtime": "2026-08-03T19:00:06.978Z",
-      "indexed_at": "2026-08-03T19:00:42.284Z"
+      "bytes": 453321,
+      "mtime": "2026-08-03T19:25:56.181Z",
+      "indexed_at": "2026-08-03T19:25:56.181Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -67104,9 +67126,9 @@
     {
       "path": "products/receipts/POINT_B_DNA_VERIFY.json",
       "synopsis": "Product receipt — POINT B DNA VERIFY.",
-      "bytes": 318,
-      "mtime": "2026-08-03T03:31:40.467Z",
-      "indexed_at": "2026-08-03T03:37:23.711Z",
+      "bytes": 280,
+      "mtime": "2026-08-03T19:25:56.181Z",
+      "indexed_at": "2026-08-03T19:25:56.181Z",
       "synopsis_index_only": true
     },
     {
@@ -67120,9 +67142,9 @@
     {
       "path": "products/receipts/RECEIPT_TRUTH_VALIDATION.json",
       "synopsis": "Product receipt — RECEIPT TRUTH VALIDATION.",
-      "bytes": 25712,
-      "mtime": "2026-08-03T03:31:39.786Z",
-      "indexed_at": "2026-08-03T03:37:23.711Z",
+      "bytes": 18451,
+      "mtime": "2026-08-03T19:25:56.181Z",
+      "indexed_at": "2026-08-03T19:25:56.181Z",
       "synopsis_index_only": true
     },
     {
@@ -67320,17 +67342,17 @@
     {
       "path": "products/receipts/TRUTH_ENFORCEMENT_AUDIT.json",
       "synopsis": "Product receipt — TRUTH ENFORCEMENT AUDIT.",
-      "bytes": 833,
-      "mtime": "2026-08-03T03:31:40.815Z",
-      "indexed_at": "2026-08-03T03:37:23.711Z",
+      "bytes": 701,
+      "mtime": "2026-08-03T19:25:56.181Z",
+      "indexed_at": "2026-08-03T19:25:56.181Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/TRUTH_LOCKDOWN_VERIFY.json",
       "synopsis": "Product receipt — TRUTH LOCKDOWN VERIFY.",
-      "bytes": 1318,
-      "mtime": "2026-08-03T03:31:40.266Z",
-      "indexed_at": "2026-08-03T03:37:23.711Z",
+      "bytes": 1141,
+      "mtime": "2026-08-03T19:25:56.181Z",
+      "indexed_at": "2026-08-03T19:25:56.181Z",
       "synopsis_index_only": true
     },
     {
@@ -67360,9 +67382,9 @@
     {
       "path": "products/receipts/WISDOM_TRUTH_AUDIT.json",
       "synopsis": "Product receipt — WISDOM TRUTH AUDIT.",
-      "bytes": 1001,
-      "mtime": "2026-08-03T03:31:40.970Z",
-      "indexed_at": "2026-08-03T03:37:23.711Z",
+      "bytes": 735,
+      "mtime": "2026-08-03T19:25:56.181Z",
+      "indexed_at": "2026-08-03T19:25:56.181Z",
       "synopsis_index_only": true
     },
     {
