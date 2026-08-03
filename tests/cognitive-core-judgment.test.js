@@ -33,6 +33,25 @@ test('detectJudgmentTurn: worn capsules alone trigger', () => {
   assert.deepEqual(d.default_wear, ['customer', 'competitor']);
 });
 
+test('detectJudgmentTurn: plain "what should I focus on" is reflective, not a Cognitive Core judgment turn', () => {
+  // Confirmed live (products/receipts/COMMUNICATION_UX_WALKTHROUGH.json) that
+  // before this fix, this exact phrasing produced a "Worn founder + customer +
+  // anti_you / Tension .../ Journal .../ Missing .../ Consequences ..." dump
+  // instead of a direct answer to an ordinary personal question.
+  const d = detectJudgmentTurn(
+    'In one or two sentences: based on what you actually know about me, what should I focus on first today?',
+  );
+  assert.equal(d.is_judgment_turn, false);
+  assert.equal(d.decision_intent, false);
+  assert.deepEqual(d.default_wear, []);
+});
+
+test('detectJudgmentTurn: reflective phrasing combined with a real decision word still triggers', () => {
+  const d = detectJudgmentTurn('What should I focus on first — should we launch this Friday or wait?');
+  assert.equal(d.is_judgment_turn, true);
+  assert.equal(d.decision_intent, true);
+});
+
 test('isBuildRequest: should I X or make Y is NOT a build', () => {
   assert.equal(
     isBuildRequest(

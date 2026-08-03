@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-03T20:14:24.222Z",
+  "generated_at": "2026-08-03T23:21:50.277Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12945,
+  "file_count": 12946,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -31518,9 +31518,9 @@
     {
       "path": "config/judgment-capsule-contracts.js",
       "synopsis": "Era-1 perspective capsule contracts — attention lenses with allow/deny.",
-      "bytes": 6011,
-      "mtime": "2026-07-28T17:50:08.153Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 7291,
+      "mtime": "2026-08-03T23:19:35.100Z",
+      "indexed_at": "2026-08-03T23:21:50.277Z",
       "ssot": [
         "docs/products/memory-intelligence/PRODUCT_HOME.md"
       ]
@@ -42915,9 +42915,9 @@
     {
       "path": "docs/products/memory-intelligence/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Memory Intelligence",
-      "bytes": 50618,
-      "mtime": "2026-08-01T13:12:04.312Z",
-      "indexed_at": "2026-08-01T13:12:12.250Z"
+      "bytes": 52487,
+      "mtime": "2026-08-03T23:20:49.794Z",
+      "indexed_at": "2026-08-03T23:21:50.277Z"
     },
     {
       "path": "docs/products/memory-system/CREATIVE_BRIEF.md",
@@ -76137,6 +76137,16 @@
       ]
     },
     {
+      "path": "scripts/run-lifeos-communication-ux-walkthrough.mjs",
+      "synopsis": "Real-browser Lumin chat walkthrough — mints a session from the Railway",
+      "bytes": 9690,
+      "mtime": "2026-08-03T23:14:38.262Z",
+      "indexed_at": "2026-08-03T23:21:50.277Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "scripts/run-lifeos-direct-action-v1-acceptance.mjs",
       "synopsis": "LifeOS direct action v1 acceptance.",
       "bytes": 6300,
@@ -100279,9 +100289,9 @@
     {
       "path": "tests/cognitive-core-judgment.test.js",
       "synopsis": "Cognitive Core Era-1 unit tests — detection, working memory, contracts.",
-      "bytes": 2827,
-      "mtime": "2026-07-28T17:50:09.949Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 3824,
+      "mtime": "2026-08-03T23:19:59.420Z",
+      "indexed_at": "2026-08-03T23:21:50.277Z"
     },
     {
       "path": "tests/cognitive-core-oracle.test.js",

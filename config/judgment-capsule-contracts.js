@@ -79,6 +79,22 @@ export const DEFAULT_DECISION_WEAR = ['founder', 'customer', 'anti_you'];
 export const DECISION_INTENT_RE =
   /\b(should i|should we|decide|decision|choose|choice|hire|buy|invest|ship|launch|pause|or not|trade ?off|which (one|option)|what would you (do|choose))\b/i;
 
+// GAP-FILL, 2026-08-03: bare "should i"/"should we" in DECISION_INTENT_RE also
+// matches ordinary reflective/prioritization questions ("what should I focus on
+// first today?") with no actual choice between options -- confirmed live via a
+// real browser walkthrough (products/receipts/COMMUNICATION_UX_WALKTHROUGH.json):
+// a plain personal question got routed into full Cognitive Core judgment mode
+// and came back as a "Worn founder + customer + anti_you / Tension .../ Journal
+// .../ Missing .../ Consequences ..." structured dump instead of a direct answer.
+// This carves out that one specific, common phrasing without touching the real
+// decision words (hire/buy/invest/ship/launch/pause/trade-off/which option) at
+// all, so genuine A-vs-B decisions (see tests/cognitive-core-judgment.test.js)
+// still trigger judgment mode unchanged.
+const REFLECTIVE_PRIORITY_RE =
+  /\bwhat should (i|we) (focus on|prioriti[sz]e|do (first|today)|work on|start with)\b/i;
+const HARD_DECISION_RE =
+  /\b(decide|decision|choose|choice|hire|buy|invest|ship|launch|pause|or not|trade ?off|which (one|option)|what would you (do|choose))\b/i;
+
 /** All wearable lenses: Era-1 capsules + Era-2 advisor/future-self minds. */
 export const ALL_LENSES = { ...CAPSULE_CONTRACTS, ...ADVISOR_CONTRACTS };
 
@@ -165,7 +181,9 @@ export function extractChosenOption(message) {
 export function detectJudgmentTurn(message, opts = {}) {
   const worn = Array.isArray(opts.worn) ? opts.worn.filter(Boolean) : [];
   const hasWear = worn.length > 0;
-  const decisionIntent = DECISION_INTENT_RE.test(String(message || ''));
+  const text = String(message || '');
+  const isReflectivePriority = REFLECTIVE_PRIORITY_RE.test(text) && !HARD_DECISION_RE.test(text);
+  const decisionIntent = !isReflectivePriority && DECISION_INTENT_RE.test(text);
   const highStakes = String(opts.stakes || '').toLowerCase() === 'high';
   return {
     is_judgment_turn: hasWear || decisionIntent || highStakes,
