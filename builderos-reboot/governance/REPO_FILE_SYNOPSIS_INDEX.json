@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-03T03:45:46.767Z",
+  "generated_at": "2026-08-03T03:56:12.486Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12931,
+  "file_count": 12932,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -41248,6 +41248,13 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "docs/HUMAN_TRANSFORMATION_ENGINE_SPEC.md",
+      "synopsis": "Human Transformation Engine — product-composition SPEC CANDIDATE. Maps 7 HTE subsystems onto existing constitutional learning engines (no new services proposed); adds evidence-vs-proof discipline, two split permanent prohibitions, per-compo",
+      "bytes": 16106,
+      "mtime": "2026-08-03T03:55:26.116Z",
+      "indexed_at": "2026-08-03T03:56:12.486Z"
+    },
+    {
       "path": "docs/IMPLEMENTATION_STATUS.md",
       "synopsis": "Implementation Status - AI Counsel OS Reorganization",
       "bytes": 5499,
@@ -41733,9 +41740,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 424773,
-      "mtime": "2026-08-03T03:45:24.234Z",
-      "indexed_at": "2026-08-03T03:45:46.767Z"
+      "bytes": 426717,
+      "mtime": "2026-08-03T03:55:51.964Z",
+      "indexed_at": "2026-08-03T03:56:12.486Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
