@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-03T17:45:01.981Z",
+  "generated_at": "2026-08-03T17:48:47.835Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12941,
+  "file_count": 12942,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -39336,6 +39336,13 @@
       "bytes": 6382,
       "mtime": "2026-08-02T01:10:26.850Z",
       "indexed_at": "2026-08-02T09:36:38.323Z"
+    },
+    {
+      "path": "docs/constitution/CONSTITUTIONAL_SETUP_AUDIT.md",
+      "synopsis": "Constitutional setup audit — files claiming canonical/SSOT authority that do not fit the constitutional namespace",
+      "bytes": 6323,
+      "mtime": "2026-08-03T10:11:50.724Z",
+      "indexed_at": "2026-08-03T17:48:47.835Z"
     },
     {
       "path": "docs/constitution/FOUNDER_PACKET_V2_BUILDEROS_MASTER_ARCHITECTURE.md",
