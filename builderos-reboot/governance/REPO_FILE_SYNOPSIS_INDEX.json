@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-03T23:21:50.277Z",
+  "generated_at": "2026-08-03T23:26:47.262Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12946,
+  "file_count": 12947,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -39074,10 +39074,10 @@
     },
     {
       "path": "docs/BLUEPRINT_COMMUNICATION_FIRST_2026-08-02.md",
-      "synopsis": "Communication-first execution blueprint — 8 phases sequenced from the 2026-08-02 independent audit. Phases 1, 2, 4, 6, 7 complete and verified live except 1.4 (crisis-intervention, deliberately held); Phase 5 split into 5.1a (closed) and 5.",
-      "bytes": 22421,
-      "mtime": "2026-08-03T17:37:03.917Z",
-      "indexed_at": "2026-08-03T17:39:10.676Z"
+      "synopsis": "Communication-first execution blueprint — 8 phases sequenced from the 2026-08-02 independent audit, extended 2026-08-03 with a real-client UX audit (Calibration Engine wired live, a Cognitive Core false-positive bug found+fixed via real-bro",
+      "bytes": 26498,
+      "mtime": "2026-08-03T23:26:24.904Z",
+      "indexed_at": "2026-08-03T23:26:47.262Z"
     },
     {
       "path": "docs/BRAINSTORM_SESSIONS_IDEAS_CATALOG.md",
@@ -66377,6 +66377,14 @@
       "bytes": 807,
       "mtime": "2026-06-18T03:39:45.274Z",
       "indexed_at": "2026-07-28T22:54:46.666Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/COMMUNICATION_UX_WALKTHROUGH.json",
+      "synopsis": "Product receipt — COMMUNICATION UX WALKTHROUGH.",
+      "bytes": 1349,
+      "mtime": "2026-08-03T23:23:37.377Z",
+      "indexed_at": "2026-08-03T23:26:47.262Z",
       "synopsis_index_only": true
     },
     {
