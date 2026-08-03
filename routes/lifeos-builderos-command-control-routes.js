@@ -789,7 +789,15 @@ HOW TO RESPOND:
   }
 
   function resolveFounderAlertPhone() {
-    return process.env.ALERT_PHONE || process.env.ADMIN_PHONE || process.env.ADAM_SMS_NUMBER || null;
+    // .trim() each candidate -- see the GAP-FILL note in services/twilio-service.js
+    // for why: this repo already hit an untrimmed-env-var bug once during the
+    // robust-magic-production -> lumin-web-production migration (PUBLIC_BASE_URL).
+    const candidates = [process.env.ALERT_PHONE, process.env.ADMIN_PHONE, process.env.ADAM_SMS_NUMBER];
+    for (const c of candidates) {
+      const trimmed = c?.trim();
+      if (trimmed) return trimmed;
+    }
+    return null;
   }
 
   async function ensureSecondFactorTable() {

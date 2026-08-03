@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-03T17:58:13.452Z",
+  "generated_at": "2026-08-03T18:51:37.556Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12942,
   "files": [
@@ -33121,9 +33121,9 @@
     {
       "path": "data/constitutional-framework/reports/CONSTITUTIONAL_OBSERVABILITY_REPORT.json",
       "synopsis": "JSON data/config — data/constitutional-framework/reports/CONSTITUTIONAL_OBSERVABILITY_REPORT.json.",
-      "bytes": 9457,
-      "mtime": "2026-08-03T17:57:07.296Z",
-      "indexed_at": "2026-08-03T17:58:13.452Z",
+      "bytes": 9446,
+      "mtime": "2026-08-03T18:50:26.197Z",
+      "indexed_at": "2026-08-03T18:51:37.556Z",
       "synopsis_index_only": true
     },
     {
@@ -41798,9 +41798,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 455027,
-      "mtime": "2026-08-03T17:57:39.517Z",
-      "indexed_at": "2026-08-03T17:58:13.452Z"
+      "bytes": 457770,
+      "mtime": "2026-08-03T18:51:00.751Z",
+      "indexed_at": "2026-08-03T18:51:37.556Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -70829,9 +70829,9 @@
     {
       "path": "routes/lifeos-builderos-command-control-routes.js",
       "synopsis": "Founder-facing LifeOS BuilderOS command-control routes for direct chat, build orchestration, and governed execution receipts.",
-      "bytes": 87333,
-      "mtime": "2026-08-03T17:14:47.916Z",
-      "indexed_at": "2026-08-03T17:15:50.723Z",
+      "bytes": 87708,
+      "mtime": "2026-08-03T18:49:16.661Z",
+      "indexed_at": "2026-08-03T18:51:37.556Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -98437,9 +98437,12 @@
     {
       "path": "services/twilio-service.js",
       "synopsis": "twilio-service.js — extracted from server.js",
-      "bytes": 5672,
-      "mtime": "2026-06-21T21:39:19.215Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 6729,
+      "mtime": "2026-08-03T18:50:12.822Z",
+      "indexed_at": "2026-08-03T18:51:37.556Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/twilio-webhook-registrar.js",

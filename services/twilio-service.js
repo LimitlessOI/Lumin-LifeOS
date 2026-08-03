@@ -4,6 +4,7 @@
  * Phone call / SMS helpers via Twilio.
  *
  * Use createTwilioService(deps) to get bound functions.
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 /**
@@ -27,7 +28,21 @@ export function createTwilioService(deps) {
   // getTwilioClient
   // --------------------------------------------------------------------------
   async function getTwilioClient() {
-    if (!process.env.TWILIO_ACCOUNT_SID || !process.env.TWILIO_AUTH_TOKEN) {
+    // GAP-FILL, 2026-08-04: neither value was ever .trim()'d here, unlike
+    // e.g. CEREBRAS_API_KEY elsewhere in this codebase. This repo already
+    // hit exactly this bug class once, during the robust-magic-production ->
+    // lumin-web-production Railway migration: PUBLIC_BASE_URL carried a
+    // leading space + a dead robust-magic host into multiple scripts until
+    // someone added .trim() (see docs/CONTINUITY_LOG.md). Confirmed live:
+    // the second-factor SMS gate shipped this session (commit 2176f7d4a)
+    // fails every send with a bare "Authenticate" error from Twilio despite
+    // the founder confirming these exact credentials have worked, unchanged,
+    // since before that migration -- untrimmed whitespace picked up
+    // somewhere in that same event is the leading real hypothesis, not a
+    // revoked/wrong credential.
+    const accountSid = process.env.TWILIO_ACCOUNT_SID?.trim();
+    const authToken = process.env.TWILIO_AUTH_TOKEN?.trim();
+    if (!accountSid || !authToken) {
       return null;
     }
     if (twilioClient) return twilioClient;
@@ -35,10 +50,7 @@ export function createTwilioService(deps) {
       // Lazy load Twilio to avoid breaking if not installed
       const twilioModule = await import('twilio');
       const Twilio = twilioModule.default || twilioModule;
-      twilioClient = new Twilio(
-        process.env.TWILIO_ACCOUNT_SID,
-        process.env.TWILIO_AUTH_TOKEN
-      );
+      twilioClient = new Twilio(accountSid, authToken);
       return twilioClient;
     } catch (err) {
       console.warn(`Twilio not available: ${err.message}`);
@@ -64,8 +76,8 @@ export function createTwilioService(deps) {
 
       // Make the call (Twilio API)
       const call = await client.calls.create({
-        to,
-        from: from || process.env.TWILIO_PHONE_NUMBER,
+        to: String(to || '').trim(),
+        from: String(from || process.env.TWILIO_PHONE_NUMBER || '').trim(),
         url: `${RAILWAY_PUBLIC_DOMAIN || 'http://localhost:8080'}/api/v1/phone/call-handler`,
         method: 'POST',
       });
@@ -93,8 +105,8 @@ export function createTwilioService(deps) {
         : message;
 
       const sms = await client.messages.create({
-        to,
-        from: process.env.TWILIO_PHONE_NUMBER,
+        to: String(to || '').trim(),
+        from: String(process.env.TWILIO_PHONE_NUMBER || '').trim(),
         body: optimizedMessage,
       });
 
@@ -128,8 +140,8 @@ export function createTwilioService(deps) {
       if (!client) return;
       await client.calls.create({
         twiml: `<Response><Say voice="alice">${message}</Say></Response>`,
-        to: ALERT_PHONE,
-        from: process.env.TWILIO_PHONE_NUMBER,
+        to: String(ALERT_PHONE || '').trim(),
+        from: String(process.env.TWILIO_PHONE_NUMBER || '').trim(),
       });
       console.log("📞 [ALERT] Call placed");
     } catch (err) {
