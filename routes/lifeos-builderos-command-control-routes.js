@@ -697,6 +697,37 @@ HOW TO RESPOND:
     return true;
   }
 
+  // GAP-FILL, 2026-08-03 (Phase 1.1, blueprint item "a" only -- logging, not the
+  // second-factor confirmation in item "b", which is still founder-blocked on
+  // which mechanism to build): every request authenticated via the shared-key
+  // fallback used to be silent -- the auth_mode field was visible in the response
+  // payload to whoever made the call, but nothing recorded it anywhere durable or
+  // reviewable. This makes it a real, visible audit trail instead. Fire-and-forget
+  // and never throws into the request path -- a logging failure must never block
+  // or alter the actual auth decision, same posture as every other non-blocking
+  // gate shipped this session.
+  async function logFallbackAuthUsage(req) {
+    if (!pool) return;
+    try {
+      await pool.query(`
+        CREATE TABLE IF NOT EXISTS founder_interface_fallback_auth_log (
+          id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+          method TEXT NOT NULL,
+          path TEXT NOT NULL,
+          ip TEXT,
+          user_agent TEXT,
+          created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+        )
+      `);
+      await pool.query(
+        `INSERT INTO founder_interface_fallback_auth_log (method, path, ip, user_agent) VALUES ($1, $2, $3, $4)`,
+        [req.method, req.originalUrl || req.path, req.ip || null, String(req.headers['user-agent'] || '').slice(0, 300)]
+      );
+    } catch (err) {
+      console.warn('[founder-interface] fallback auth log failed (non-blocking):', err.message);
+    }
+  }
+
   function requireFounderInterfaceAuth(req, res, next) {
     const authHeader = String(req.headers.authorization || '');
     const alt = String(req.headers['x-lifeos-token'] || '').trim();
@@ -725,6 +756,7 @@ HOW TO RESPOND:
           tier: 'core',
         };
         req.auth_mode = 'command_key_fallback';
+        logFallbackAuthUsage(req);
         next();
       });
     }
@@ -1848,6 +1880,29 @@ HOW TO RESPOND:
       disk: diskSnippet,
       parse_probe: parseProbe,
     });
+  });
+
+  // GAP-FILL, 2026-08-03 (Phase 1.1 blueprint item "a"): a log nobody can see is
+  // still effectively silent. This is the visible half of the audit trail --
+  // logFallbackAuthUsage() writes the row, this reads it back.
+  router.get('/founder-interface/fallback-auth-log', requireFounderInterfaceAuth, async (req, res, next) => {
+    if (!pool) return res.status(200).json({ ok: true, entries: [], note: 'no db pool configured' });
+    try {
+      const limit = Math.min(Number(req.query.limit) || 50, 200);
+      const { rows } = await pool.query(
+        `SELECT id, method, path, ip, user_agent, created_at
+         FROM founder_interface_fallback_auth_log
+         ORDER BY created_at DESC
+         LIMIT $1`,
+        [limit]
+      );
+      res.status(200).json({ ok: true, count: rows.length, entries: rows });
+    } catch (error) {
+      if (String(error.message || '').includes('does not exist')) {
+        return res.status(200).json({ ok: true, entries: [], note: 'no fallback-auth usage logged yet' });
+      }
+      next(error);
+    }
   });
 
   return router;

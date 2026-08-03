@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-03T04:52:58.725Z",
+  "generated_at": "2026-08-03T06:37:25.958Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12933,
   "files": [
@@ -41747,9 +41747,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 434267,
-      "mtime": "2026-08-03T04:52:39.102Z",
-      "indexed_at": "2026-08-03T04:52:58.725Z"
+      "bytes": 437699,
+      "mtime": "2026-08-03T06:36:58.260Z",
+      "indexed_at": "2026-08-03T06:37:25.958Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -70778,9 +70778,9 @@
     {
       "path": "routes/lifeos-builderos-command-control-routes.js",
       "synopsis": "Founder-facing LifeOS BuilderOS command-control routes for direct chat, build orchestration, and governed execution receipts.",
-      "bytes": 79307,
-      "mtime": "2026-08-01T04:22:38.615Z",
-      "indexed_at": "2026-08-01T04:22:38.615Z",
+      "bytes": 81897,
+      "mtime": "2026-08-03T06:35:47.989Z",
+      "indexed_at": "2026-08-03T06:37:25.958Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
