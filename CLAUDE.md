@@ -112,6 +112,14 @@ Only exception: you literally just wrote the file in the same response.
 
 ---
 
+## MOVE, DON'T RENAME (non-negotiable)
+
+When a file's architectural ownership changes — its logic moves to a new home, a new version supersedes it, a duplicate is discovered — the OLD file MUST be deleted or moved to `docs/history/` in the SAME commit. It may not be left in its original location as a duplicate, an unreferenced shim, or a silent forwarding re-export, unless the file itself carries an explicit `// intentional alias:` comment naming why it still exists (the pattern already used correctly in `lifeos-council-builder-routes.js`).
+
+**Why this is a rule and not a preference:** confirmed live, more than once, that an old file left in place — even unreferenced — gets independently re-registered by a later autonomous step, doubling execution on any request that matches its route. Checked by `scripts/check-orphaned-duplicates.mjs` (see below), wired into `builder:preflight` as a warning gate.
+
+---
+
 ## CODE OUTPUT RULES
 
 1. **Full code always** — never partial code or snippets to merge; give the COMPLETE file

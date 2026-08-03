@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-03T03:41:11.879Z",
+  "generated_at": "2026-08-03T03:45:46.767Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12930,
+  "file_count": 12931,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -30922,9 +30922,9 @@
     {
       "path": "CLAUDE.md",
       "synopsis": "CLAUDE.md — LifeOS/LimitlessOS Project Instructions",
-      "bytes": 12760,
-      "mtime": "2026-07-24T18:36:41.704Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 13685,
+      "mtime": "2026-08-03T03:42:55.952Z",
+      "indexed_at": "2026-08-03T03:45:46.767Z"
     },
     {
       "path": "client/orchestrator-app/main.js",
@@ -41733,9 +41733,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 422074,
-      "mtime": "2026-08-03T03:32:30.124Z",
-      "indexed_at": "2026-08-03T03:37:23.711Z"
+      "bytes": 424773,
+      "mtime": "2026-08-03T03:45:24.234Z",
+      "indexed_at": "2026-08-03T03:45:46.767Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -66017,9 +66017,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\":\"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",\"lifeos:file-synopsis:backfill\":\"node scripts/file-synopsis-enforce.mjs --all --auto-fix && node scripts/generate-file-synopsis-index.mjs\",\"lifeos:file-synopsis:index\":\"n",
-      "bytes": 34419,
-      "mtime": "2026-08-02T14:53:22.262Z",
-      "indexed_at": "2026-08-02T14:53:22.262Z",
+      "bytes": 34466,
+      "mtime": "2026-08-03T03:44:43.627Z",
+      "indexed_at": "2026-08-03T03:45:46.767Z",
       "synopsis_index_only": true
     },
     {
@@ -73643,6 +73643,16 @@
       "bytes": 2246,
       "mtime": "2026-06-21T21:39:06.154Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "scripts/check-orphaned-duplicates.mjs",
+      "synopsis": "check-orphaned-duplicates.mjs",
+      "bytes": 5310,
+      "mtime": "2026-08-03T03:44:22.457Z",
+      "indexed_at": "2026-08-03T03:45:46.767Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "scripts/check-overlay-syntax.js",
