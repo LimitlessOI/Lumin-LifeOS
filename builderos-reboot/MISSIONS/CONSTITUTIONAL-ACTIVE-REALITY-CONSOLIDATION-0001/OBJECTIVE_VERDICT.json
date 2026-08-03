@@ -1,0 +1,21 @@
+{
+  "mission_id": "CONSTITUTIONAL-ACTIVE-REALITY-CONSOLIDATION-0001",
+  "product_id": "builderos",
+  "version": "2026-08-04-0001",
+  "verdict": "TECHNICAL_PASS",
+  "rating_current": 7,
+  "rating_target": 10,
+  "status": "IN_PROGRESS",
+  "phase_complete": "1",
+  "evidence": {
+    "classification_report": "builderos-reboot/MISSIONS/CONSTITUTIONAL-ACTIVE-REALITY-CONSOLIDATION-0001/CLASSIFICATION_REPORT.md",
+    "candidate_ledger": "builderos-reboot/MISSIONS/CONSTITUTIONAL-ACTIVE-REALITY-CONSOLIDATION-0001/CONSTITUTIONAL_CANDIDATE_LEDGER.md",
+    "founder_packet": "builderos-reboot/MISSIONS/CONSTITUTIONAL-ACTIVE-REALITY-CONSOLIDATION-0001/FOUNDER_PACKET.md",
+    "blueprint": "builderos-reboot/MISSIONS/CONSTITUTIONAL-ACTIVE-REALITY-CONSOLIDATION-0001/BLUEPRINT.json"
+  },
+  "notes": [
+    "Phase 1 non-destructive classification and candidate extraction complete.",
+    "No files were moved, renamed, archived, or deleted.",
+    "Rating 7/10 because dispositions are identified but not yet executed; full 10 requires Founder review, disposition lock, and boundary proof."
+  ]
+}

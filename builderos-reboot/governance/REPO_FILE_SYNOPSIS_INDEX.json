@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-03T17:15:50.723Z",
+  "generated_at": "2026-08-03T17:39:10.676Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12936,
+  "file_count": 12941,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21937,6 +21937,43 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "builderos-reboot/MISSIONS/CONSTITUTIONAL-ACTIVE-REALITY-CONSOLIDATION-0001/BLUEPRINT.json",
+      "synopsis": "BuilderOS artifact — BLUEPRINT.",
+      "bytes": 2892,
+      "mtime": "2026-08-03T17:26:45.042Z",
+      "indexed_at": "2026-08-03T17:39:10.676Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/CONSTITUTIONAL-ACTIVE-REALITY-CONSOLIDATION-0001/CLASSIFICATION_REPORT.md",
+      "synopsis": "Non-destructive authority-chain classification for constitutional/active-reality consolidation. No files were moved, renamed, or deleted to produce this report.",
+      "bytes": 20650,
+      "mtime": "2026-08-03T17:34:43.101Z",
+      "indexed_at": "2026-08-03T17:39:10.676Z"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/CONSTITUTIONAL-ACTIVE-REALITY-CONSOLIDATION-0001/CONSTITUTIONAL_CANDIDATE_LEDGER.md",
+      "synopsis": "Candidate principles and ideas found outside the active Constitution that may deserve promotion, extracted non-destructively.",
+      "bytes": 12713,
+      "mtime": "2026-08-03T17:35:37.173Z",
+      "indexed_at": "2026-08-03T17:39:10.676Z"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/CONSTITUTIONAL-ACTIVE-REALITY-CONSOLIDATION-0001/FOUNDER_PACKET.md",
+      "synopsis": "Founder packet for CONSTITUTIONAL-ACTIVE-REALITY-CONSOLIDATION-0001",
+      "bytes": 3320,
+      "mtime": "2026-08-03T17:26:35.526Z",
+      "indexed_at": "2026-08-03T17:39:10.676Z"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/CONSTITUTIONAL-ACTIVE-REALITY-CONSOLIDATION-0001/OBJECTIVE_VERDICT.json",
+      "synopsis": "BuilderOS artifact — OBJECTIVE VERDICT.",
+      "bytes": 1083,
+      "mtime": "2026-08-03T17:35:49.189Z",
+      "indexed_at": "2026-08-03T17:39:10.676Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "builderos-reboot/MISSIONS/FACTORY-BLUEPRINT-AUTHORITY-0001/BUILDER_READINESS_AUDIT.md",
       "synopsis": "Phase 1 Builder Readiness Audit for FACTORY-BLUEPRINT-AUTHORITY-0001",
       "bytes": 26909,
@@ -33084,9 +33121,9 @@
     {
       "path": "data/constitutional-framework/reports/CONSTITUTIONAL_OBSERVABILITY_REPORT.json",
       "synopsis": "JSON data/config — data/constitutional-framework/reports/CONSTITUTIONAL_OBSERVABILITY_REPORT.json.",
-      "bytes": 9448,
-      "mtime": "2026-08-03T17:07:25.204Z",
-      "indexed_at": "2026-08-03T17:10:10.468Z",
+      "bytes": 9350,
+      "mtime": "2026-08-03T17:37:20.105Z",
+      "indexed_at": "2026-08-03T17:39:10.676Z",
       "synopsis_index_only": true
     },
     {
@@ -39016,9 +39053,9 @@
     {
       "path": "docs/BLUEPRINT_COMMUNICATION_FIRST_2026-08-02.md",
       "synopsis": "Communication-first execution blueprint — 8 phases sequenced from the 2026-08-02 independent audit. Phases 1, 2, 4, 6, 7 complete and verified live except 1.4 (crisis-intervention, deliberately held); Phase 5 split into 5.1a (closed) and 5.",
-      "bytes": 22405,
-      "mtime": "2026-08-03T17:09:00.561Z",
-      "indexed_at": "2026-08-03T17:10:10.468Z"
+      "bytes": 22421,
+      "mtime": "2026-08-03T17:37:03.917Z",
+      "indexed_at": "2026-08-03T17:39:10.676Z"
     },
     {
       "path": "docs/BRAINSTORM_SESSIONS_IDEAS_CATALOG.md",
@@ -41754,9 +41791,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 450888,
-      "mtime": "2026-08-03T17:15:18.257Z",
-      "indexed_at": "2026-08-03T17:15:50.723Z"
+      "bytes": 451989,
+      "mtime": "2026-08-03T17:36:53.937Z",
+      "indexed_at": "2026-08-03T17:39:10.676Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",

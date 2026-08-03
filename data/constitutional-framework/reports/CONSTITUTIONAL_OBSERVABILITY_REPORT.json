@@ -1,8 +1,8 @@
 {
   "schema": "constitutional_observability_report_v0",
   "version": "2026-08-02",
-  "generated_at": "2026-08-03T17:07:25.202Z",
-  "source_map": "/private/tmp/claude-501/-Users-adamhopkins-Projects-Lumin-LifeOS/b98a9c4f-30b0-4efc-94d3-7e9a8ac44905/scratchpad/sms-second-factor/data/constitutional-framework/PRINCIPLE_RUNTIME_MAP.json",
+  "generated_at": "2026-08-03T17:37:20.111Z",
+  "source_map": "/home/ubuntu/worktree-origin-main/data/constitutional-framework/PRINCIPLE_RUNTIME_MAP.json",
   "summary": {
     "total": 14,
     "pass": 14,
@@ -34,7 +34,7 @@
         "runtime_artifact": "services/reality-alignment.js",
         "measurement": "Reality Alignment Engine returns a score reconciling intent, predicted, observed, experienced, remembered, and shared realities",
         "pass_criteria": "alignment_score is a number between 0 and 1 and drift_report is non-null",
-        "duration_ms": 0
+        "duration_ms": 3
       },
       "error": null
     },
@@ -132,7 +132,7 @@
         "runtime_artifact": "services/readiness-engine.js",
         "measurement": "Readiness engine returns a calibrated readiness score and risk_if_forced for any insight",
         "pass_criteria": "assessReadiness returns readiness_score in [0,1] and a non-empty risk_if_forced string",
-        "duration_ms": 1
+        "duration_ms": 2
       },
       "error": null
     },
@@ -146,7 +146,7 @@
         "runtime_artifact": "services/confidence-vectors.js",
         "measurement": "Shared confidence-vector machinery is reused across engines instead of duplicating confidence logic",
         "pass_criteria": "confidence-vectors exports computeConfidenceVector, combineConfidenceVectors, calibrateConfidence, and is referenced by no duplicate confidence code in the smoke test suite",
-        "duration_ms": 0
+        "duration_ms": 1
       },
       "error": null
     },
@@ -160,7 +160,7 @@
         "runtime_artifact": "services/human-constellation.js",
         "measurement": "Human Constellation builds a single graph with typed nodes and weighted causal edges that can be projected for any product",
         "pass_criteria": "createConstellation, addObservation, weightEdge, and projectForProduct all return expected graph structures",
-        "duration_ms": 0
+        "duration_ms": 1
       },
       "error": null
     },
@@ -188,7 +188,7 @@
         "runtime_artifact": "services/institutional-constellation.js",
         "measurement": "Institutional Constellation uses the same graph, confidence, causality, and calibration machinery as the Human Constellation",
         "pass_criteria": "createInstitutionalConstellation, addBelief, addOffice, recordPrediction, recordOutcome, and getCalibrationReport all return expected structures",
-        "duration_ms": 0
+        "duration_ms": 2
       },
       "error": null
     },
@@ -202,7 +202,7 @@
         "runtime_artifact": "scripts/verify-constitutional-parity.mjs",
         "measurement": "Constitutional parity gate passes and every registry item has a matrix entry",
         "pass_criteria": "verify-constitutional-parity exits 0 and reports registry and matrix counts match",
-        "duration_ms": 116
+        "duration_ms": 82
       },
       "error": null
     }
