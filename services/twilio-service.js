@@ -112,8 +112,21 @@ export function createTwilioService(deps) {
 
       return { success: true, messageSid: sms.sid };
     } catch (error) {
-      console.error(`SMS error: ${error.message}`);
-      return { success: false, error: error.message };
+      // GAP-FILL, 2026-08-04: error.message alone was a bare, unhelpful
+      // "Authenticate" -- the trim fix in this same commit series did not
+      // resolve the live failure, so guessing further at the cause instead
+      // of surfacing the Twilio SDK's own structured error (code, status,
+      // moreInfo -- e.g. 20003 = auth error, 21211 = invalid "to" number,
+      // 21608 = unverified number on a trial account, all of which produce
+      // very different fixes) would just be another unverified claim.
+      console.error(`SMS error: ${error.message}`, { code: error.code, status: error.status, moreInfo: error.moreInfo });
+      return {
+        success: false,
+        error: error.message,
+        code: error.code ?? null,
+        status: error.status ?? null,
+        moreInfo: error.moreInfo ?? null,
+      };
     }
   }
 

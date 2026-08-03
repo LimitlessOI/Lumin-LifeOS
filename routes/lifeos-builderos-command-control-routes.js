@@ -824,22 +824,27 @@ HOW TO RESPOND:
     const phone = resolveFounderAlertPhone();
     let smsSent = false;
     let smsError = null;
+    let smsErrorDetail = null;
     if (phone) {
       try {
         // sendSMS (services/twilio-service.js) catches its own errors and
-        // returns { success:false, error } rather than throwing -- surface
-        // that reason here instead of only logging it server-side, or a
-        // real Twilio failure (bad phone format, trial-account restriction,
-        // etc.) is invisible to whoever is debugging the block.
+        // returns { success:false, error, code, status, moreInfo } rather
+        // than throwing -- surface the full structured Twilio error, not
+        // just the message, since "Authenticate" alone was not enough to
+        // diagnose the live failure and guessing further would just be
+        // another unverified claim.
         const result = await sendSMS(phone, `LifeOS confirmation code: ${code} (expires in 5 min). Purpose: ${purpose || 'execute action'}`);
         smsSent = Boolean(result?.success);
-        if (!smsSent) smsError = result?.error || 'unknown sendSMS failure';
+        if (!smsSent) {
+          smsError = result?.error || 'unknown sendSMS failure';
+          smsErrorDetail = { code: result?.code ?? null, status: result?.status ?? null, moreInfo: result?.moreInfo ?? null };
+        }
       } catch (err) {
         smsError = err.message;
         console.warn('[second-factor] SMS send failed (code still valid server-side, check Twilio config):', err.message);
       }
     }
-    return { expiresAt, phone_configured: Boolean(phone), sms_sent: smsSent, sms_error: smsError };
+    return { expiresAt, phone_configured: Boolean(phone), sms_sent: smsSent, sms_error: smsError, sms_error_detail: smsErrorDetail };
   }
 
   async function verifyAndConsumeSecondFactorCode(submittedCode) {
@@ -893,6 +898,7 @@ HOW TO RESPOND:
             : `A confirmation code was generated but the SMS send failed -- check Twilio configuration. The code exists server-side but cannot be delivered. Reason: ${issued.sms_error || 'unknown'}`)
           : 'A second factor is required for this fallback-authenticated execute action, but no alert phone is configured (ALERT_PHONE/ADMIN_PHONE/ADAM_SMS_NUMBER all unset) -- request cannot proceed.',
         sms_error: issued.sms_error || null,
+        sms_error_detail: issued.sms_error_detail || null,
         expires_in_seconds: Math.round(SECOND_FACTOR_CODE_TTL_MS / 1000),
       });
     } catch (err) {

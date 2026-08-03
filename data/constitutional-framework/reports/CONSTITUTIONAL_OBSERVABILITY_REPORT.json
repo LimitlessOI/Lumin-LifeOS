@@ -1,8 +1,8 @@
 {
   "schema": "constitutional_observability_report_v0",
   "version": "2026-08-02",
-  "generated_at": "2026-08-03T18:50:26.196Z",
-  "source_map": "/private/tmp/claude-501/-Users-adamhopkins-Projects-Lumin-LifeOS/b98a9c4f-30b0-4efc-94d3-7e9a8ac44905/scratchpad/fix-twilio-trim/data/constitutional-framework/PRINCIPLE_RUNTIME_MAP.json",
+  "generated_at": "2026-08-03T18:59:39.344Z",
+  "source_map": "/private/tmp/claude-501/-Users-adamhopkins-Projects-Lumin-LifeOS/b98a9c4f-30b0-4efc-94d3-7e9a8ac44905/scratchpad/fix-twilio-error-detail/data/constitutional-framework/PRINCIPLE_RUNTIME_MAP.json",
   "summary": {
     "total": 14,
     "pass": 14,
@@ -20,7 +20,7 @@
         "runtime_artifact": "docs/constitution/NORTH_STAR_SSOT.md",
         "measurement": "The North Star mission text is present in the canonical framework and the runtime identity endpoint returns it",
         "pass_criteria": "framework contains the mission phrase",
-        "duration_ms": 1
+        "duration_ms": 2
       },
       "error": null
     },
@@ -34,7 +34,7 @@
         "runtime_artifact": "services/reality-alignment.js",
         "measurement": "Reality Alignment Engine returns a score reconciling intent, predicted, observed, experienced, remembered, and shared realities",
         "pass_criteria": "alignment_score is a number between 0 and 1 and drift_report is non-null",
-        "duration_ms": 1
+        "duration_ms": 0
       },
       "error": null
     },
@@ -48,7 +48,7 @@
         "runtime_artifact": "services/lifeos-coaching-protocol.js",
         "measurement": "Coaching protocol runs Observe -> Curious -> Understood -> Expand -> Verify -> Ready -> Explore without forcing advice",
         "pass_criteria": "each coaching step returns a non-empty, non-directive output",
-        "duration_ms": 0
+        "duration_ms": 1
       },
       "error": null
     },
@@ -104,7 +104,7 @@
         "runtime_artifact": "services/calibration-ledger.js",
         "measurement": "Calibration ledger records predictions and outcomes per office and computes a calibration score",
         "pass_criteria": "recordPrediction returns an id, recordOutcome returns true, and getCalibrationScore returns 1 after a correct prediction for both chair and solomon",
-        "duration_ms": 5
+        "duration_ms": 4
       },
       "error": null
     },
@@ -132,7 +132,7 @@
         "runtime_artifact": "services/readiness-engine.js",
         "measurement": "Readiness engine returns a calibrated readiness score and risk_if_forced for any insight",
         "pass_criteria": "assessReadiness returns readiness_score in [0,1] and a non-empty risk_if_forced string",
-        "duration_ms": 0
+        "duration_ms": 1
       },
       "error": null
     },
@@ -202,7 +202,7 @@
         "runtime_artifact": "scripts/verify-constitutional-parity.mjs",
         "measurement": "Constitutional parity gate passes and every registry item has a matrix entry",
         "pass_criteria": "verify-constitutional-parity exits 0 and reports registry and matrix counts match",
-        "duration_ms": 123
+        "duration_ms": 119
       },
       "error": null
     }
