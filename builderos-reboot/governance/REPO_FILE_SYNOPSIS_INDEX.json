@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-04T18:39:49.183Z",
+  "generated_at": "2026-08-04T19:47:50.789Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12990,
   "files": [
@@ -42912,9 +42912,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 735330,
-      "mtime": "2026-08-04T18:39:23.510Z",
-      "indexed_at": "2026-08-04T18:39:49.183Z"
+      "bytes": 737766,
+      "mtime": "2026-08-04T19:47:22.474Z",
+      "indexed_at": "2026-08-04T19:47:50.789Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -90345,9 +90345,9 @@
     {
       "path": "services/chair-direct-agent.js",
       "synopsis": "Direct Chair agent — talks + acts; human prose obeys Lumin Communication DNA (not theater).",
-      "bytes": 31821,
-      "mtime": "2026-08-04T10:51:14.600Z",
-      "indexed_at": "2026-08-04T10:52:05.681Z",
+      "bytes": 32344,
+      "mtime": "2026-08-04T19:46:02.044Z",
+      "indexed_at": "2026-08-04T19:47:50.789Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -90435,9 +90435,9 @@
     {
       "path": "services/chair-native-facts.js",
       "synopsis": "Chair native facts — real system state Lumin IS (not chat overlay).",
-      "bytes": 15583,
-      "mtime": "2026-07-30T02:15:14.034Z",
-      "indexed_at": "2026-07-30T22:32:11.913Z",
+      "bytes": 16919,
+      "mtime": "2026-08-04T19:45:42.418Z",
+      "indexed_at": "2026-08-04T19:47:50.789Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -93790,9 +93790,9 @@
     {
       "path": "services/lifeos-commitment-service.js",
       "synopsis": "Exports captureCommitment, getCommitments, resolveCommitment, proposeCalendarEvent —",
-      "bytes": 9819,
-      "mtime": "2026-08-04T08:15:12.855Z",
-      "indexed_at": "2026-08-04T08:16:13.426Z",
+      "bytes": 10176,
+      "mtime": "2026-08-04T19:46:32.695Z",
+      "indexed_at": "2026-08-04T19:47:50.789Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

@@ -129,12 +129,37 @@ export async function gatherChairNativeFacts(input, deps = {}, chairContext = {}
       || chairContext.domain === 'personal_life'
       || conversationalDefault);
 
+  // GAP-FILL 2026-08-04 (temporal grounding): confirmed live, before this fix,
+  // no field anywhere in this object (or anywhere in the SYSTEM_FACTS/twin
+  // pipeline) told the model what time it currently is -- verified by reading
+  // gatherChairNativeFacts' full return shape, lumin-context-loader.js's Date
+  // usage (all internal write-timestamps, never surfaced back to the model),
+  // and the founder-interface request handler (no client timestamp used).
+  // Without this, the model has no way to know whether "tonight"/"yesterday"/
+  // "last night" is still accurate when it answers -- a real reality-alignment
+  // gap, not a phrasing preference, since LifeOS manages real commitments and
+  // reminders whose correctness depends on the model's own guess of "now"
+  // matching reality. America/Los_Angeles is the founder's real timezone (Las
+  // Vegas), not a config value that exists yet anywhere else in the codebase.
+  const _nowForFacts = new Date();
   const facts = {
     schema: 'chair_native_facts_v1',
     role: 'chair',
     lumin_is_chair: true,
     command_truth: 'NO_COMMAND_RAN',
     command_ran: false,
+    current_time_iso: _nowForFacts.toISOString(),
+    current_time_local: _nowForFacts.toLocaleString('en-US', {
+      timeZone: 'America/Los_Angeles',
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: '2-digit',
+      timeZoneName: 'short',
+    }),
+    timezone: 'America/Los_Angeles',
     personal_turn: personalTurn,
     domain: chairContext.domain || 'conversation',
     point_b_target: loadPointBTarget(),

@@ -45,7 +45,12 @@ export async function parseNaturalLanguage(text, { timezone: tz, db, userId }) {
     return { replyType: 'query_mode', items: replyCard };
   }
 
-  const tzStr = tz || 'America/New_York';
+  // GAP-FILL 2026-08-04 (temporal grounding audit): default was
+  // 'America/New_York', but the founder is in Las Vegas (America/Los_Angeles,
+  // per his own twin data) -- no caller in the codebase actually passes a
+  // real per-user timezone yet, so this default was silently parsing
+  // "tomorrow at 9am" three hours wrong every time it fired.
+  const tzStr = tz || 'America/Los_Angeles';
   const now = dayjs().tz(tzStr);
 
   // ── Date reference first (so numbers like "2" in "in 2 days" are not stolen as times)
@@ -190,7 +195,7 @@ export async function captureCommitment(db, text, { userId, timezone }) {
   // code or migrating any existing rows.
   const result = await db.query(
     'INSERT INTO commitments (user_id, title, datetime, duration_minutes, timezone, calendar_event_requested, status, due_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *',
-    [userId, title, datetime, durationMinutes, timezone || 'America/New_York', calendarEventRequested, 'open', datetime],
+    [userId, title, datetime, durationMinutes, timezone || 'America/Los_Angeles', calendarEventRequested, 'open', datetime],
   );
 
   return result.rows[0];
