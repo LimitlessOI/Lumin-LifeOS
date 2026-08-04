@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-04T21:58:55.879Z",
+  "generated_at": "2026-08-04T22:02:58.629Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12998,
   "files": [
@@ -29264,9 +29264,9 @@
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-SALESOS-THERAPIST-MEETING-KIT-V1-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
-      "bytes": 9936,
-      "mtime": "2026-08-04T21:58:55.879Z",
-      "indexed_at": "2026-08-04T21:58:55.879Z",
+      "bytes": 10988,
+      "mtime": "2026-08-04T22:01:59.337Z",
+      "indexed_at": "2026-08-04T22:02:58.629Z",
       "synopsis_index_only": true
     },
     {
@@ -43486,9 +43486,9 @@
     {
       "path": "docs/products/salesos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — SalesOS",
-      "bytes": 11921,
-      "mtime": "2026-08-04T21:58:55.879Z",
-      "indexed_at": "2026-08-04T21:58:55.879Z"
+      "bytes": 13881,
+      "mtime": "2026-08-04T22:02:32.456Z",
+      "indexed_at": "2026-08-04T22:02:58.629Z"
     },
     {
       "path": "docs/products/salesos/SALESOS_ZERO_STATE_AND_BP.md",
