@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-03T23:26:47.262Z",
+  "generated_at": "2026-08-04T00:42:30.156Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12947,
+  "file_count": 12957,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -33006,6 +33006,14 @@
       "synopsis_index_only": true
     },
     {
+      "path": "data/audits/constitutional-architecture-audit-2026-08-03.json",
+      "synopsis": "JSON data/config — data/audits/constitutional-architecture-audit-2026-08-03.json.",
+      "bytes": 29689,
+      "mtime": "2026-08-04T00:41:43.324Z",
+      "indexed_at": "2026-08-04T00:42:30.156Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "data/builder/receipts/ALPHA_READY_CERTIFICATION.md",
       "synopsis": "Builder Alpha-Ready Certification",
       "bytes": 4608,
@@ -40559,6 +40567,13 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "docs/history/constitution/CONSTITUTION_ARCHIVE_INDEX.md",
+      "synopsis": "Index of constitution files archived because they claimed improper authority AND were redundant. Founder-authorized convention (2026-08-03). Not itself constitutional authority.",
+      "bytes": 2459,
+      "mtime": "2026-08-04T00:41:31.159Z",
+      "indexed_at": "2026-08-04T00:42:30.156Z"
+    },
+    {
       "path": "docs/history/constitution/CONSTITUTION_CONFLICTS_archived_2026-06-29.md",
       "synopsis": "CONSTITUTION CONFLICTS",
       "bytes": 10288,
@@ -41820,9 +41835,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 453321,
-      "mtime": "2026-08-03T19:25:56.181Z",
-      "indexed_at": "2026-08-03T19:25:56.181Z"
+      "bytes": 455846,
+      "mtime": "2026-08-04T00:40:29.434Z",
+      "indexed_at": "2026-08-04T00:42:30.156Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -62864,6 +62879,13 @@
       "indexed_at": "2026-08-01T20:04:05.828Z"
     },
     {
+      "path": "docs/reports/CLAUDE_AUDIT_EXECUTIVE_SUMMARY_2026-08-03.md",
+      "synopsis": "Executive summary of the independent audit of the Taloa Constitutional Learning Architecture (2026-08-03). Audit deliverable, not product code.",
+      "bytes": 13086,
+      "mtime": "2026-08-04T00:41:57.084Z",
+      "indexed_at": "2026-08-04T00:42:30.156Z"
+    },
+    {
       "path": "docs/reports/CONSTITUTION_PRODUCT_GOVERNANCE_AUDIT.md",
       "synopsis": "Governance audit — constitution, SSOT, and product-home architecture — THINK-grade recommendation",
       "bytes": 19155,
@@ -62871,11 +62893,53 @@
       "indexed_at": "2026-08-02T09:36:38.323Z"
     },
     {
+      "path": "docs/reports/CONSTITUTIONAL_BEHAVIOR_GAPS_2026-08-03.md",
+      "synopsis": "Phase 5/6/9 behavior gaps for the Taloa architecture (2026-08-03). Audit deliverable.",
+      "bytes": 3907,
+      "mtime": "2026-08-04T00:42:07.684Z",
+      "indexed_at": "2026-08-04T00:42:30.156Z"
+    },
+    {
+      "path": "docs/reports/CONSTITUTIONAL_REQUIREMENTS_TRACEABILITY_2026-08-03.md",
+      "synopsis": "Phase 1 requirements-to-reality traceability for the Taloa architecture (2026-08-03). Audit deliverable.",
+      "bytes": 3570,
+      "mtime": "2026-08-04T00:37:33.056Z",
+      "indexed_at": "2026-08-04T00:42:30.156Z"
+    },
+    {
+      "path": "docs/reports/DEPLOYMENT_TRUTH_AUDIT_2026-08-03.md",
+      "synopsis": "Phase 8 deployment-truth audit for the Taloa architecture (2026-08-03). Audit deliverable.",
+      "bytes": 2344,
+      "mtime": "2026-08-04T00:39:02.626Z",
+      "indexed_at": "2026-08-04T00:42:30.156Z"
+    },
+    {
+      "path": "docs/reports/HIDDEN_DEPENDENCY_AUDIT_2026-08-03.md",
+      "synopsis": "Phase 7 migration / hidden-dependency + archive-decision record (2026-08-03). Audit deliverable.",
+      "bytes": 5107,
+      "mtime": "2026-08-04T00:41:50.028Z",
+      "indexed_at": "2026-08-04T00:42:30.156Z"
+    },
+    {
+      "path": "docs/reports/INDEPENDENT_CONSTITUTIONAL_ARCHITECTURE_AUDIT_2026-08-03.md",
+      "synopsis": "Main body of the independent Taloa constitutional-architecture audit (2026-08-03). Audit deliverable, not product code.",
+      "bytes": 7047,
+      "mtime": "2026-08-04T00:37:09.506Z",
+      "indexed_at": "2026-08-04T00:42:30.156Z"
+    },
+    {
       "path": "docs/reports/landing-page-status.md",
       "synopsis": "Landing Page Verification Report",
       "bytes": 569,
       "mtime": "2026-07-03T21:46:43.845Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "docs/reports/RUNTIME_REACHABILITY_MAP_2026-08-03.md",
+      "synopsis": "Phase 2/5 runtime reachability map for Taloa engines (2026-08-03). Audit deliverable.",
+      "bytes": 3288,
+      "mtime": "2026-08-04T00:37:53.260Z",
+      "indexed_at": "2026-08-04T00:42:30.156Z"
     },
     {
       "path": "docs/research/SITE_BUILDER_DESIGN_INTEL_2026_04.md",
@@ -99687,6 +99751,16 @@
       "bytes": 6534,
       "mtime": "2026-07-28T17:44:19.845Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "tests/audit-taloa-runtime-reachability.test.mjs",
+      "synopsis": "Independent audit artifact (2026-08-03). Adversarial tests for the Taloa",
+      "bytes": 4407,
+      "mtime": "2026-08-04T00:24:14.611Z",
+      "indexed_at": "2026-08-04T00:42:30.156Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "tests/auto_merge.test.js",
