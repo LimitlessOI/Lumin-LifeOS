@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-04T21:14:11.035Z",
+  "generated_at": "2026-08-04T21:58:55.879Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12997,
+  "file_count": 12998,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -29264,40 +29264,40 @@
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-SALESOS-THERAPIST-MEETING-KIT-V1-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
-      "bytes": 4056,
-      "mtime": "2026-08-04T21:14:11.035Z",
-      "indexed_at": "2026-08-04T21:14:11.035Z",
+      "bytes": 9936,
+      "mtime": "2026-08-04T21:58:55.879Z",
+      "indexed_at": "2026-08-04T21:58:55.879Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-SALESOS-THERAPIST-MEETING-KIT-V1-0001/FOUNDER_PACKET.md",
       "synopsis": "Founder Packet — SalesOS Therapist Meeting Kit Phase 1",
-      "bytes": 4325,
-      "mtime": "2026-08-04T21:14:11.035Z",
-      "indexed_at": "2026-08-04T21:14:11.035Z"
+      "bytes": 6075,
+      "mtime": "2026-08-04T21:58:55.879Z",
+      "indexed_at": "2026-08-04T21:58:55.879Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-SALESOS-THERAPIST-MEETING-KIT-V1-0001/KNOWN_ASSUMPTIONS.json",
       "synopsis": "BuilderOS artifact — KNOWN ASSUMPTIONS.",
-      "bytes": 1060,
-      "mtime": "2026-08-04T21:14:11.035Z",
-      "indexed_at": "2026-08-04T21:14:11.035Z",
+      "bytes": 1834,
+      "mtime": "2026-08-04T21:58:55.879Z",
+      "indexed_at": "2026-08-04T21:58:55.879Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-SALESOS-THERAPIST-MEETING-KIT-V1-0001/KNOWN_RISKS.json",
       "synopsis": "BuilderOS artifact — KNOWN RISKS.",
-      "bytes": 1310,
-      "mtime": "2026-08-04T21:14:11.035Z",
-      "indexed_at": "2026-08-04T21:14:11.035Z",
+      "bytes": 2016,
+      "mtime": "2026-08-04T21:58:55.879Z",
+      "indexed_at": "2026-08-04T21:58:55.879Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-SALESOS-THERAPIST-MEETING-KIT-V1-0001/OBJECTIVE_VERDICT.json",
       "synopsis": "BuilderOS artifact — OBJECTIVE VERDICT.",
-      "bytes": 1021,
-      "mtime": "2026-08-04T21:14:11.035Z",
-      "indexed_at": "2026-08-04T21:14:11.035Z",
+      "bytes": 1477,
+      "mtime": "2026-08-04T21:58:55.879Z",
+      "indexed_at": "2026-08-04T21:58:55.879Z",
       "synopsis_index_only": true
     },
     {
@@ -39643,9 +39643,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 136595,
-      "mtime": "2026-08-04T21:14:11.035Z",
-      "indexed_at": "2026-08-04T21:14:11.035Z"
+      "bytes": 138008,
+      "mtime": "2026-08-04T21:58:55.879Z",
+      "indexed_at": "2026-08-04T21:58:55.879Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -43478,17 +43478,24 @@
     {
       "path": "docs/products/salesos/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
-      "bytes": 1825,
-      "mtime": "2026-08-04T21:14:11.035Z",
-      "indexed_at": "2026-08-04T21:14:11.035Z",
+      "bytes": 2386,
+      "mtime": "2026-08-04T21:58:55.879Z",
+      "indexed_at": "2026-08-04T21:58:55.879Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/products/salesos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — SalesOS",
-      "bytes": 7797,
-      "mtime": "2026-08-04T21:14:11.035Z",
-      "indexed_at": "2026-08-04T21:14:11.035Z"
+      "bytes": 11921,
+      "mtime": "2026-08-04T21:58:55.879Z",
+      "indexed_at": "2026-08-04T21:58:55.879Z"
+    },
+    {
+      "path": "docs/products/salesos/SALESOS_ZERO_STATE_AND_BP.md",
+      "synopsis": "SalesOS grounded zero-state and build plan",
+      "bytes": 10180,
+      "mtime": "2026-08-04T21:58:55.879Z",
+      "indexed_at": "2026-08-04T21:58:55.879Z"
     },
     {
       "path": "docs/products/site-builder/AGENTS.md",
