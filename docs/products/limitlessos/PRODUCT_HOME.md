@@ -6,13 +6,13 @@
 **Parent platform:** Lumin / LifeOS ecosystem  
 **Constitutional law:** `docs/constitution/NORTH_STAR_SSOT.md`  
 **Machine manifest:** `docs/products/limitlessos/FILE_MANIFEST.json`  
-|| **Last Updated** | 2026-08-02 — GAP-FILL `routes/price-book-vendor-comparison-routes.js` for `limitlessos-step5` legacy route assertion: added `compareVendors` handler and `/api/v1/pricebook/vendors/compare` alias alongside canonical `/api/v1/price-book/vendor-comparison`. |
+|| **Last Updated** | 2026-07-23 — Added SalesOS as a child product under LimitlessOS; product home and Phase 1 mission pack drafted. |
 
 | Field | Value |
 |-------|-------|
 | **Lifecycle** | `founder-vision` — not a separate runtime repo slice yet |
 | **Status** | Business operating product (umbrella for business-facing modules) |
-| **First modules** | MarketingOS, Business Tools, Site Builder, AI Receptionist, Outreach CRM, … |
+| **First modules** | MarketingOS, Business Tools, Site Builder, AI Receptionist, Outreach CRM, SalesOS, … |
 | **Human layer** | LifeOS (employees + owners) |
 | **Improvement engine** | BuilderOS |
 
@@ -168,6 +168,7 @@ Together: AI handles repetitive, disconnected, administrative work — humans fo
 | Business Tools | `docs/products/business-tools/PRODUCT_HOME.md` |
 | Site Builder | `docs/products/site-builder/PRODUCT_HOME.md` |
 | AI Receptionist | `docs/products/ai-receptionist/PRODUCT_HOME.md` |
+| SalesOS | `docs/products/salesos/PRODUCT_HOME.md` |
 | LifeOS (human) | `docs/products/lifeos/PRODUCT_HOME.md` |
 | BuilderOS | `docs/products/builderos/PRODUCT_HOME.md` |
 
@@ -188,6 +189,7 @@ Together: AI handles repetitive, disconnected, administrative work — humans fo
 - [ ] Canonical product id for "BusinessOS" vs "LimitlessOS" in customer-facing UI  
 - [ ] Live audit data sources (Plaid? manual intake? OAuth per vendor?)  
 - [ ] CityOS / Go Vegas product home creation *(outreach pipeline v1 shipped — see Change Receipts)*
+- [ ] SalesOS open decisions: recording legal policy, CRM table strategy, default lead magnet, data retention, queue priority
 - [ ] Sticker / physical marketing SKUs under MarketingOS commerce layer  
 - [ ] Price book API for print partners (VistaPrint, Sticker Mule, …) in-app  
 
@@ -195,6 +197,7 @@ Together: AI handles repetitive, disconnected, administrative work — humans fo
 
 ## Change Receipts
 
+|| 2026-07-23 | **SalesOS child product added.** Created `docs/products/salesos/PRODUCT_HOME.md`, `FILE_MANIFEST.json`, and mission pack `PRODUCT-SALESOS-THERAPIST-MEETING-KIT-V1-0001` from founder's therapist-meeting-kit vision. SalesOS is scoped to founder-led outbound meeting prep; recording/tonality are Phase 2+ and gated by explicit jurisdiction-aware consent. | Capture the vision in canonical product form and surface open decisions before execution. | `npm run builder:preflight` PASS after doc-only changes. | — |
 || 2026-08-02 | **GAP-FILL: `services/price-book-vendor-comparison.js` + `routes/price-book-vendor-comparison-routes.js` for `limitlessos` step4/step5.** Added `// ... expensive ...` comment to satisfy `file_contains`; changed route path to `/api/v1/price-book/vendor-comparison` and added `// Vendor Comparison:` comment; updated `config/auto-registered-product-modules.json` mount_path to match. | The never-stop factory selected these steps but artifact proof failed on missing substrings/path; existing implementation was correct, only proof markers and mount path drifted. | `node --input-type=module` artifact-proof for step4 and step5 PASS; `npm run builder:preflight` PASS. | — |
 | 2026-08-02 | **Creative Director review** — generated CREATIVE_BRIEF.md using the Creative Director lens. | LimitlessOS reviewed through the BuilderOS creative responsibility; brief written to product home for founder review. | ✅ generated |
 | Date | What | Why |
