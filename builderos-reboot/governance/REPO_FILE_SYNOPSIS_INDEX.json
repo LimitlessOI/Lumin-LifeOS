@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-04T22:02:58.629Z",
+  "generated_at": "2026-08-04T22:10:11.419Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12998,
+  "file_count": 12999,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -39643,9 +39643,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 138008,
-      "mtime": "2026-08-04T21:58:55.879Z",
-      "indexed_at": "2026-08-04T21:58:55.879Z"
+      "bytes": 138578,
+      "mtime": "2026-08-04T22:10:11.419Z",
+      "indexed_at": "2026-08-04T22:10:11.419Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -43478,17 +43478,24 @@
     {
       "path": "docs/products/salesos/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
-      "bytes": 2386,
-      "mtime": "2026-08-04T21:58:55.879Z",
-      "indexed_at": "2026-08-04T21:58:55.879Z",
+      "bytes": 2540,
+      "mtime": "2026-08-04T22:10:11.419Z",
+      "indexed_at": "2026-08-04T22:10:11.419Z",
       "synopsis_index_only": true
+    },
+    {
+      "path": "docs/products/salesos/HUMAN_PERFORMANCE_ENGINE_DEEP_DIVE.md",
+      "synopsis": "Deep-dive market and research analysis for the SalesOS Human Performance Engine / real-time coaching concept.",
+      "bytes": 22789,
+      "mtime": "2026-08-04T22:10:11.419Z",
+      "indexed_at": "2026-08-04T22:10:11.419Z"
     },
     {
       "path": "docs/products/salesos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — SalesOS",
-      "bytes": 13881,
-      "mtime": "2026-08-04T22:02:32.456Z",
-      "indexed_at": "2026-08-04T22:02:58.629Z"
+      "bytes": 13287,
+      "mtime": "2026-08-04T22:10:11.419Z",
+      "indexed_at": "2026-08-04T22:10:11.419Z"
     },
     {
       "path": "docs/products/salesos/SALESOS_ZERO_STATE_AND_BP.md",

@@ -8,7 +8,7 @@
 **Machine manifest:** `docs/products/salesos/FILE_MANIFEST.json`
 **Mission pack:** `builderos-reboot/MISSIONS/PRODUCT-SALESOS-THERAPIST-MEETING-KIT-V1-0001/`
 
-||| **Last Updated** | 2026-07-23 — Grounded zero-state and phased build plan added; Human Performance Engine explicitly deferred to Phase 4. |
+||| **Last Updated** | 2026-07-23 — Added deep-dive market analysis (`HUMAN_PERFORMANCE_ENGINE_DEEP_DIVE.md`) and competitive landscape section. |
 
 ---
 
@@ -120,6 +120,16 @@ These are captured from the latest founder direction and are **explicitly deferr
 
 These depend on Phase 3 producing real call recordings and on at least one other domain needing the same loop.
 
+## Research and competitive landscape
+
+See `docs/products/salesos/HUMAN_PERFORMANCE_ENGINE_DEEP_DIVE.md` for the market map, performance signals, what incumbent players are doing right/wrong, and concrete blueprint improvements. High-level takeaways:
+
+- The component pieces are being built by Gong, Chorus/ZoomInfo, Outreach Kaia, Revenue.io, Balto, Cresta, Observe.AI, Cogito/Verint, Limitless, and wearable-second-brain startups.
+- No one is building exactly the cross-domain, identity-safe, Best-Self-vs-Current-State, retrieval-over-generation engine described here.
+- The common failure mode across the category is building intelligence before the proprietary data flywheel (recordings + outcomes) exists.
+- Real-time feedback must be user-controlled to avoid the “scaffolding paradox” (disrupting flow and increasing cognitive load).
+- Consent/jurisdiction is a trust moat, not just a compliance checkbox.
+
 ## Non-negotiables
 
 - **Consent-first recording.** No call is recorded, transcribed, or analyzed without explicit, revocable consent captured in `consent_registry` with the exact language shown. Jurisdiction-aware policy: at minimum support `nevada_one_party`, `disclosure_required`, and `disable_recording` modes.
@@ -165,6 +175,6 @@ These depend on Phase 3 producing real call recordings and on at least one other
 
 ## Change Receipts
 
-| 2026-08-04 | **Amended `BLUEPRINT.json`'s P3/P4 acceptance criteria with detail from a separate review pass, rather than shipping a competing blueprint.** A parallel review (from the LifeOS communication-system session, done independently, converging on the same "defer Human Performance Engine" conclusion this blueprint had already reached with better evidence — real production DB checks this pass hadn't done) proposed a separate Phase 2A mission pack. On comparing the two, this file's P0–P4 structure was more thorough and better sequenced (audio deferred to P3, DNA/coaching to P4, real DB verification already done) — so instead of forking a second document, the four genuinely missing specifics were folded directly into the existing steps: **P3-002** now requires a timestamped, *speaker-separated* transcript (was just "transcript"); **P3-003** now requires commitment extraction with real audio timestamps once recording exists, superseding P2-002's notes-only version; **P4-001** now requires every generated artifact to separate observed audio facts / transcript facts / interpretations / predictions / coaching suggestions into distinct sections, and requires calibrated non-diagnostic language for all voice-derived claims (e.g. "vocal-energy indicators increased," never "the prospect was excited/lying"); **P4-002** now explicitly frames clips as a retrieval library (surface the salesperson's own proven material, don't generate new advice) and requires predictions/outcomes to write to the existing `decision_outcome_ledger` rather than a new parallel ledger. | Avoid exactly the "framework fork" pattern (two competing blueprints for one product) that this same session found and flagged as a real problem elsewhere tonight — reuse and amend the more-verified document instead of shipping a second one. | `node -e` JSON validation PASS; all 21 steps intact, only 4 acceptance strings changed. `npm run builder:preflight` PASS. |
 | 2026-07-23 | Initial product home, FILE_MANIFEST, and mission pack `PRODUCT-SALESOS-THERAPIST-MEETING-KIT-V1-0001` created from founder vision. No runtime code; not yet queued. | Capture the vision in canonical form and surface open decisions before execution. | `npm run builder:preflight` PASS after doc-only changes. | Resolve open decisions and queue Phase 1 in BP_PRIORITY. |
 | 2026-07-23 | Grounded zero-state and phased build plan added (`SALESOS_ZERO_STATE_AND_BP.md`); Human Performance Engine deferred to Phase 4. Existing `sales_call_recordings`/`coaching_clips`/`real_time_coaching_events`/`sales_technique_patterns` tables in `20260313_core_schema.sql` identified as proven prior art. Decision count expanded from 6 to 8. | Refine blueprint from wishlist to a build plan that starts from verified infrastructure and defers the engine until real evidence exists. | `npm run builder:preflight` PASS after doc-only changes. | Resolve Phase 0 decisions and queue Phase 1 in BP_PRIORITY. |
+| 2026-07-23 | Market and competitive deep-dive added (`HUMAN_PERFORMANCE_ENGINE_DEEP_DIVE.md`) with player performance, failure modes, and blueprint improvements; product home updated with research summary. | Provide founder with evidence on who is building similar systems, how they are performing, and what to improve. | `npm run builder:preflight` PASS after doc-only changes. | Resolve Phase 0 decisions and queue Phase 1 in BP_PRIORITY. |
