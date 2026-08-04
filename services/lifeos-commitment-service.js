@@ -197,8 +197,14 @@ export async function captureCommitment(db, text, { userId, timezone }) {
 }
 
 export async function getCommitments(db, userId, opts = {}) {
+  // GAP-FILL 2026-08-04: unfiltered + ASC meant the oldest commitments ever
+  // created (some from weeks earlier) always occupied the top of the list --
+  // executeIntent's commitment_query case takes rows.slice(0, 5), so a brand
+  // new, genuinely upcoming commitment was silently buried under stale past
+  // rows every time. "Upcoming" means future-dated; filter and keep ASC so
+  // the soonest real upcoming item is first.
   const result = await db.query(
-    'SELECT * FROM commitments WHERE user_id = $1 ORDER BY datetime ASC',
+    "SELECT * FROM commitments WHERE user_id = $1 AND status = 'open' AND datetime >= NOW() ORDER BY datetime ASC",
     [userId],
   );
   return result.rows;
