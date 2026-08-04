@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-04T07:48:25.816Z",
+  "generated_at": "2026-08-04T07:57:12.511Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12982,
   "files": [
@@ -42877,9 +42877,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 691136,
-      "mtime": "2026-08-04T07:47:41.582Z",
-      "indexed_at": "2026-08-04T07:48:25.816Z"
+      "bytes": 694678,
+      "mtime": "2026-08-04T07:56:45.706Z",
+      "indexed_at": "2026-08-04T07:57:12.511Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -94881,9 +94881,9 @@
     {
       "path": "services/lumin-chair-orchestrator.js",
       "synopsis": "Lumin Chair — single front door for founder messages (orchestrates all channels).",
-      "bytes": 76664,
-      "mtime": "2026-07-28T17:47:22.564Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 78120,
+      "mtime": "2026-08-04T07:55:58.527Z",
+      "indexed_at": "2026-08-04T07:57:12.511Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
