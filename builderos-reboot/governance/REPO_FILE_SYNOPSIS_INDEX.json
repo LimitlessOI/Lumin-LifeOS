@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-04T03:12:08.353Z",
+  "generated_at": "2026-08-04T03:27:29.134Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12980,
   "files": [
@@ -33151,9 +33151,9 @@
     {
       "path": "data/constitutional-framework/reports/CONSTITUTIONAL_OBSERVABILITY_REPORT.json",
       "synopsis": "JSON data/config — data/constitutional-framework/reports/CONSTITUTIONAL_OBSERVABILITY_REPORT.json.",
-      "bytes": 9447,
-      "mtime": "2026-08-04T01:13:37.074Z",
-      "indexed_at": "2026-08-04T01:13:52.959Z",
+      "bytes": 12215,
+      "mtime": "2026-08-04T03:26:54.773Z",
+      "indexed_at": "2026-08-04T03:27:29.134Z",
       "synopsis_index_only": true
     },
     {
@@ -41956,9 +41956,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 455846,
-      "mtime": "2026-08-04T00:40:29.434Z",
-      "indexed_at": "2026-08-04T00:42:30.156Z"
+      "bytes": 458238,
+      "mtime": "2026-08-04T03:26:42.320Z",
+      "indexed_at": "2026-08-04T03:27:29.134Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -77817,9 +77817,9 @@
     {
       "path": "scripts/verify-constitutional-observability.mjs",
       "synopsis": "Runtime observability gate — prove each constitutional principle is backed by an executable behavior and a measurement.",
-      "bytes": 11486,
-      "mtime": "2026-08-02T14:53:22.262Z",
-      "indexed_at": "2026-08-02T14:53:22.262Z",
+      "bytes": 16988,
+      "mtime": "2026-08-04T03:25:38.606Z",
+      "indexed_at": "2026-08-04T03:27:29.134Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

@@ -30,6 +30,46 @@ function assert(condition, message) {
   if (!condition) throw new Error(message || 'Assertion failed');
 }
 
+// GAP-FILL, 2026-08-03: independent audit finding F-07 -- every verifier below
+// (except north_star_present, which has its own fix) only imports a service
+// file directly and asserts it behaves sanely in isolation. That proves the
+// library works; it does NOT prove anything in the live system ever calls it.
+// The audit's own repair order, item 2: "until PASS means a runtime action
+// was observed citing its governing principle, every other number is
+// untrustworthy." This adds that missing half: a real grep-based check of
+// whether the runtime dirs (not scripts/, not tests/) actually import each
+// service. Deliberately NOT changed: the exit-code gate this script already
+// enforces in builder:preflight. Flipping "runtime unreachable" into a hard
+// FAIL today would immediately block every commit repo-wide (all 9 engines
+// checked are currently unreachable, confirmed independently) over a finding
+// the founder hasn't yet decided how to act on -- same non-blocking pattern
+// already used for scripts/check-orphaned-duplicates.mjs. This makes the
+// report honest; it does not unilaterally expand the gate's blast radius.
+const RUNTIME_GLOBS = ['routes', 'startup', 'core', 'middleware'];
+
+function checkRuntimeReachable(serviceRelPath) {
+  // serviceRelPath like 'services/reality-alignment.js'
+  const base = path.basename(serviceRelPath, '.js');
+  const importers = [];
+  for (const dir of RUNTIME_GLOBS) {
+    const dirPath = path.join(ROOT, dir);
+    if (!fs.existsSync(dirPath)) continue;
+    for (const file of fs.readdirSync(dirPath)) {
+      if (!file.endsWith('.js')) continue;
+      const fp = path.join(dirPath, file);
+      const text = readText(fp);
+      if (text.includes(`services/${base}.js'`) || text.includes(`services/${base}.js"`) || text.includes(`services/${base}'`) || text.includes(`services/${base}"`)) {
+        importers.push(`${dir}/${file}`);
+      }
+    }
+  }
+  const serverText = readText(path.join(ROOT, 'server.js'));
+  if (serverText.includes(`services/${base}.js`) || serverText.includes(`services/${base}'`)) {
+    importers.push('server.js');
+  }
+  return { reachable: importers.length > 0, importers };
+}
+
 function runParity() {
   return new Promise((resolve) => {
     const child = spawn('node', ['scripts/verify-constitutional-parity.mjs'], { cwd: ROOT });
@@ -188,7 +228,10 @@ async function main() {
   const results = [];
   let passed = 0;
   let failed = 0;
+  let behaviorOkRuntimeUnreachable = 0;
+  let documentOnly = 0;
   const failures = [];
+  const unreachableWarnings = [];
 
   for (const principle of map.principles) {
     const verifier = verifiers[principle.verifier];
@@ -202,9 +245,46 @@ async function main() {
       try {
         const start = Date.now();
         await verifier();
-        entry.status = 'pass';
-        entry.evidence = { runtime_artifact: principle.runtime_artifact, measurement: principle.measurement, pass_criteria: principle.pass_criteria, duration_ms: Date.now() - start };
-        passed++;
+        const evidence = { runtime_artifact: principle.runtime_artifact, measurement: principle.measurement, pass_criteria: principle.pass_criteria, duration_ms: Date.now() - start };
+
+        // GAP-FILL, 2026-08-03 (audit finding F-07): behavior-in-isolation is
+        // necessary but not sufficient. A principle only genuinely "passes"
+        // when its required service is also reachable from a real runtime
+        // path -- otherwise this is a library unit test, not proof the
+        // constitution governs anything the system actually does.
+        if (principle.required_service?.startsWith('scripts/')) {
+          // A scripts/*.mjs required_service is a CI-gate verifier, not a
+          // business-logic module -- its correct invocation path is being
+          // spawned from builder:preflight (as this principle's own verifier
+          // already does above via runParity()), not being imported from
+          // routes/. The routes/startup/core/middleware check is a category
+          // error for this shape; being wired into builder:preflight IS its
+          // real reachability.
+          evidence.runtime_reachable = true;
+          evidence.runtime_wiring = 'invoked from builder:preflight (CI gate), not a routes/ import';
+          entry.status = 'pass';
+          passed++;
+        } else if (principle.required_service) {
+          const { reachable, importers } = checkRuntimeReachable(principle.required_service);
+          evidence.runtime_reachable = reachable;
+          evidence.runtime_importers = importers;
+          if (reachable) {
+            entry.status = 'pass';
+            passed++;
+          } else {
+            entry.status = 'behavior_ok_runtime_unreachable';
+            unreachableWarnings.push(`${principle.id}: ${principle.required_service} has zero real callers in routes/startup/core/middleware/server.js`);
+            behaviorOkRuntimeUnreachable++;
+          }
+        } else {
+          // No required_service means this principle can't be behaviorally
+          // wired at all (e.g. a mission statement) -- document presence is
+          // real, but it is not "installed" in the governing standard's
+          // sense (enforceable rule / runtime behavior / calibration loop).
+          entry.status = 'document_only';
+          documentOnly++;
+        }
+        entry.evidence = evidence;
       } catch (err) {
         entry.status = 'fail';
         entry.error = err.message;
@@ -216,25 +296,45 @@ async function main() {
   }
 
   const report = {
-    schema: 'constitutional_observability_report_v0',
+    schema: 'constitutional_observability_report_v1',
     version: map.version,
     generated_at: new Date().toISOString(),
     source_map: MAP_PATH,
-    summary: { total: map.principles.length, pass: passed, fail: failed, no_verifier: map.principles.length - passed - failed },
+    summary: {
+      total: map.principles.length,
+      pass: passed,
+      behavior_ok_runtime_unreachable: behaviorOkRuntimeUnreachable,
+      document_only: documentOnly,
+      fail: failed,
+      no_verifier: map.principles.length - passed - behaviorOkRuntimeUnreachable - documentOnly - failed,
+    },
     results,
-    failures
+    failures,
+    unreachable_warnings: unreachableWarnings,
   };
 
   fs.mkdirSync(path.dirname(REPORT_PATH), { recursive: true });
   fs.writeFileSync(REPORT_PATH, `${JSON.stringify(report, null, 2)}\n`);
 
+  // Gate behavior is deliberately UNCHANGED from before this fix: only a
+  // thrown behavioral assertion (or a missing verifier) hard-fails
+  // builder:preflight. `behavior_ok_runtime_unreachable` is reported loudly
+  // but does not block -- flipping that today would hard-fail every commit
+  // repo-wide over a finding (F-03: 9/9 checked engines currently
+  // unreachable) the founder has not yet decided how to act on. Same
+  // non-blocking precedent as scripts/check-orphaned-duplicates.mjs.
   if (failed > 0) {
     console.error('CONSTITUTIONAL_OBSERVABILITY: FAIL');
     for (const f of failures) console.error(`  - ${f}`);
     process.exit(1);
   }
 
-  console.log(`CONSTITUTIONAL_OBSERVABILITY: PASS (${passed}/${map.principles.length})`);
+  if (unreachableWarnings.length) {
+    console.warn(`CONSTITUTIONAL_OBSERVABILITY: ${unreachableWarnings.length} principle(s) pass behavior-in-isolation but are NOT runtime-reachable (not a block, see report):`);
+    for (const w of unreachableWarnings) console.warn(`  - ${w}`);
+  }
+
+  console.log(`CONSTITUTIONAL_OBSERVABILITY: PASS (${passed} fully wired, ${behaviorOkRuntimeUnreachable} behavior-only, ${documentOnly} document-only, of ${map.principles.length})`);
   console.log(`  report: ${REPORT_PATH}`);
 }
 
