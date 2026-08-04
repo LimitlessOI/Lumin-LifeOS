@@ -28,9 +28,13 @@ export function createCommitmentTrackerService(pool) {
   }
 
   async function getUpcomingCommitments(userId, hoursAhead = 24) {
+    // GAP-FILL 2026-08-04: no floor meant this also returned every past-due
+    // 'open' row ever created (unbounded backward), mixed in with genuinely
+    // upcoming ones -- confirmed live the dashboard route's fixed 48h window
+    // still surfaced weeks-old test/seed rows ahead of a real new commitment.
     const { rows } = await pool.query(
       `SELECT * FROM commitments
-       WHERE user_id = $1 AND status = 'open' AND due_at <= NOW() + ($2 || ' hours')::interval
+       WHERE user_id = $1 AND status = 'open' AND due_at >= NOW() AND due_at <= NOW() + ($2 || ' hours')::interval
        ORDER BY due_at ASC NULLS LAST`,
       [userId, hoursAhead]
     );

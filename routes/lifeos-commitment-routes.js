@@ -15,12 +15,17 @@ export function createLifeOSCommitmentRoutes({ pool, requireKey, logger }) {
   const resolveUserId = makeLifeOSUserResolver(pool);
   const log = logger || console;
 
-  // GET / — upcoming commitments (next 48h)
+  // GET / — upcoming commitments (next 7 days by default)
+  // GAP-FILL 2026-08-04: 48h was too narrow for real usage -- a commitment
+  // created for "tomorrow" late in the day can fall just past a 48h window,
+  // confirmed live. getUpcomingCommitments now has a floor (due_at >= NOW())
+  // so widening this no longer risks resurfacing stale past-due rows.
   router.get('/', requireKey, async (req, res) => {
     try {
       const userId = await resolveUserId(req.query.user || 'adam');
       if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
-      const commitments = await svc.getUpcomingCommitments(userId, 48);
+      const hoursAhead = Number(req.query.hours_ahead) > 0 ? Number(req.query.hours_ahead) : 168;
+      const commitments = await svc.getUpcomingCommitments(userId, hoursAhead);
       res.json({ ok: true, commitments });
     } catch (err) {
       log.error?.('[COMMITMENTS] GET /:', err.message);
