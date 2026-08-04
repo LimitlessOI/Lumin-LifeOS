@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-04T00:56:01.725Z",
+  "generated_at": "2026-08-04T01:13:52.959Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12958,
+  "file_count": 12980,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -33151,9 +33151,9 @@
     {
       "path": "data/constitutional-framework/reports/CONSTITUTIONAL_OBSERVABILITY_REPORT.json",
       "synopsis": "JSON data/config — data/constitutional-framework/reports/CONSTITUTIONAL_OBSERVABILITY_REPORT.json.",
-      "bytes": 7706,
-      "mtime": "2026-08-03T19:25:56.181Z",
-      "indexed_at": "2026-08-03T19:25:56.181Z",
+      "bytes": 9447,
+      "mtime": "2026-08-04T01:13:37.074Z",
+      "indexed_at": "2026-08-04T01:13:52.959Z",
       "synopsis_index_only": true
     },
     {
@@ -33685,25 +33685,25 @@
     {
       "path": "data/twins/default/adam/_meta.json",
       "synopsis": "JSON data/config — data/twins/default/adam/_meta.json.",
-      "bytes": 2132,
-      "mtime": "2026-07-30T01:20:55.022Z",
-      "indexed_at": "2026-07-30T01:21:52.231Z",
+      "bytes": 3072,
+      "mtime": "2026-08-01T19:17:04.000Z",
+      "indexed_at": "2026-08-04T01:13:52.959Z",
       "synopsis_index_only": true
     },
     {
       "path": "data/twins/default/adam/communication.json",
       "synopsis": "JSON data/config — data/twins/default/adam/communication.json.",
-      "bytes": 1070,
-      "mtime": "2026-07-29T20:58:43.243Z",
-      "indexed_at": "2026-07-30T01:21:52.231Z",
+      "bytes": 1739,
+      "mtime": "2026-08-01T19:17:05.000Z",
+      "indexed_at": "2026-08-04T01:13:52.959Z",
       "synopsis_index_only": true
     },
     {
       "path": "data/twins/default/adam/decision_identity.json",
       "synopsis": "JSON data/config — data/twins/default/adam/decision_identity.json.",
-      "bytes": 6658,
-      "mtime": "2026-07-29T22:03:42.695Z",
-      "indexed_at": "2026-07-30T01:21:52.231Z",
+      "bytes": 11106,
+      "mtime": "2026-08-01T19:17:02.000Z",
+      "indexed_at": "2026-08-04T01:13:52.959Z",
       "synopsis_index_only": true
     },
     {
@@ -33725,9 +33725,9 @@
     {
       "path": "data/twins/default/adam/memory.json",
       "synopsis": "JSON data/config — data/twins/default/adam/memory.json.",
-      "bytes": 1225,
-      "mtime": "2026-07-30T01:20:55.021Z",
-      "indexed_at": "2026-07-30T01:21:52.231Z",
+      "bytes": 3190,
+      "mtime": "2026-08-01T19:17:04.000Z",
+      "indexed_at": "2026-08-04T01:13:52.959Z",
       "synopsis_index_only": true
     },
     {
@@ -33816,6 +33816,22 @@
       "bytes": 642,
       "mtime": "2026-07-29T20:58:43.244Z",
       "indexed_at": "2026-07-30T01:21:52.231Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "data/twins/default/adam/study/2026-07-31-builderos-path-to-10.json",
+      "synopsis": "JSON data/config — data/twins/default/adam/study/2026-07-31-builderos-path-to-10.json.",
+      "bytes": 4562,
+      "mtime": "2026-07-31T21:22:05.000Z",
+      "indexed_at": "2026-08-04T01:13:52.959Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "data/twins/default/adam/study/2026-08-01-builderos-convergence-devin-arc.json",
+      "synopsis": "JSON data/config — data/twins/default/adam/study/2026-08-01-builderos-convergence-devin-arc.json.",
+      "bytes": 2725,
+      "mtime": "2026-08-01T19:16:55.000Z",
+      "indexed_at": "2026-08-04T01:13:52.959Z",
       "synopsis_index_only": true
     },
     {
@@ -39459,6 +39475,20 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "docs/constitution/proposals/2026-07-31-BUILDEROS-PATH-TO-10-CONSTITUTIONAL-CANDIDATES.md",
+      "synopsis": "Constitutional candidates from BuilderOS rating thread — NOT RATIFIED until Adam pastes/approves",
+      "bytes": 4036,
+      "mtime": "2026-07-31T21:15:18.000Z",
+      "indexed_at": "2026-08-04T01:13:52.959Z"
+    },
+    {
+      "path": "docs/constitution/proposals/2026-08-01-CONSTITUTION-DECISION-PACKET-FROM-CONVERSATION.md",
+      "synopsis": "Every constitution-addition mention from the Jul31–Aug1 rating/Devin/Mission2 conversation arc — for Adam YES/NO decisions",
+      "bytes": 11469,
+      "mtime": "2026-08-01T19:45:52.000Z",
+      "indexed_at": "2026-08-04T01:13:52.959Z"
+    },
+    {
       "path": "docs/constitution/proposals/2026-08-02-ARCHITECTURE-CLASSIFICATION.md",
       "synopsis": "Classification of the latest ChatGPT/Adam synthesis — and the emerging meta-architecture of Taloa.",
       "bytes": 38944,
@@ -39683,6 +39713,20 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "docs/conversation_dumps/2026-07-31-builderos-rating-governance-review.md",
+      "synopsis": "Founder + multi-agent BuilderOS rating / governance review archive — NOT AUTHORITATIVE",
+      "bytes": 3377,
+      "mtime": "2026-07-31T21:22:29.000Z",
+      "indexed_at": "2026-08-04T01:13:52.959Z"
+    },
+    {
+      "path": "docs/conversation_dumps/2026-08-01-builderos-convergence-devin-mission-arc.md",
+      "synopsis": "Master archive — BuilderOS rating through Devin Missions 1–1.7 and Mission 2 convergence — NOT AUTHORITATIVE",
+      "bytes": 5153,
+      "mtime": "2026-08-01T19:16:35.000Z",
+      "indexed_at": "2026-08-04T01:13:52.959Z"
+    },
+    {
       "path": "docs/conversation_dumps/2026-08-03-constitutional-communication-system-brainstorm.md",
       "synopsis": "Constitutional proposal overview brainstorm (verbatim) — Taloa architecture, Human Transformation Engine, communication mapping. Archived per Amendment 38 §6 step 5 (word-for-word).",
       "bytes": 48178,
@@ -39823,11 +39867,39 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "docs/conversation_dumps/by-product/sessions/48f2917e/BUILDEROS-MISSION2-DEVIN-2026-08-01.md",
+      "synopsis": "Session slice — BuilderOS Mission 2, Devin audits, convergence blueprint",
+      "bytes": 4123,
+      "mtime": "2026-08-01T19:16:40.000Z",
+      "indexed_at": "2026-08-04T01:13:52.959Z"
+    },
+    {
+      "path": "docs/conversation_dumps/by-product/sessions/48f2917e/BUILDEROS-RATING-2026-07-31.md",
+      "synopsis": "Session slice — BuilderOS rating, path-to-10, factory gates",
+      "bytes": 2035,
+      "mtime": "2026-07-31T21:14:18.000Z",
+      "indexed_at": "2026-08-04T01:13:52.959Z"
+    },
+    {
       "path": "docs/conversation_dumps/by-product/sessions/48f2917e/GENERAL-MISC.md",
       "synopsis": "General / uncategorized",
       "bytes": 366,
       "mtime": "2026-06-25T21:52:39.632Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "docs/conversation_dumps/by-product/sessions/48f2917e/GOVERNANCE-ENFORCEMENT-MATRIX-2026-08-01.md",
+      "synopsis": "Session slice — constitutional enforcement matrix, file-creation gate, ratification candidates",
+      "bytes": 2656,
+      "mtime": "2026-08-01T19:16:43.000Z",
+      "indexed_at": "2026-08-04T01:13:52.959Z"
+    },
+    {
+      "path": "docs/conversation_dumps/by-product/sessions/48f2917e/GOVERNANCE-SSOT-RATING-2026-07-31.md",
+      "synopsis": "Session slice — constitutional / SSOT governance decisions",
+      "bytes": 1940,
+      "mtime": "2026-07-31T21:14:24.000Z",
+      "indexed_at": "2026-08-04T01:13:52.959Z"
     },
     {
       "path": "docs/conversation_dumps/by-product/sessions/48f2917e/GOVERNANCE-SSOT.md",
@@ -39837,11 +39909,32 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "docs/conversation_dumps/by-product/sessions/48f2917e/LIFEOS-COMM-TWIN-2026-07-31.md",
+      "synopsis": "Session slice — LifeOS communication + Digital Twin founder preferences",
+      "bytes": 1616,
+      "mtime": "2026-07-31T21:14:30.000Z",
+      "indexed_at": "2026-08-04T01:13:52.959Z"
+    },
+    {
       "path": "docs/conversation_dumps/by-product/sessions/48f2917e/LIFEOS-LUMIN-CHAIR.md",
       "synopsis": "LifeOS / Lumin / Chair / direct connection",
       "bytes": 9517,
       "mtime": "2026-06-25T21:52:39.665Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "docs/conversation_dumps/by-product/sessions/48f2917e/LIFEOS-MEMORY-IMPORT-2026-08-01.md",
+      "synopsis": "Session slice — LifeOS memory, Twin, conversation export, Import Memory vision",
+      "bytes": 2534,
+      "mtime": "2026-08-01T19:16:46.000Z",
+      "indexed_at": "2026-08-04T01:13:52.959Z"
+    },
+    {
+      "path": "docs/conversation_dumps/by-product/sessions/48f2917e/MARKETINGOS-SMOS-REVENUE-2026-08-01.md",
+      "synopsis": "Session slice — SocialMediaOS / SMOS revenue loop from Mission 2",
+      "bytes": 1398,
+      "mtime": "2026-08-01T19:16:48.000Z",
+      "indexed_at": "2026-08-04T01:13:52.959Z"
     },
     {
       "path": "docs/conversation_dumps/by-product/sessions/48f2917e/MEMORY-GOVERNANCE.md",
@@ -39856,6 +39949,13 @@
       "bytes": 8375,
       "mtime": "2026-06-25T21:52:39.683Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "docs/conversation_dumps/by-product/sessions/48f2917e/PLATFORM-OPS-RATING-2026-07-31.md",
+      "synopsis": "Session slice — deploy truth, migrations, production monitoring",
+      "bytes": 1251,
+      "mtime": "2026-07-31T21:14:35.000Z",
+      "indexed_at": "2026-08-04T01:13:52.959Z"
     },
     {
       "path": "docs/conversation_dumps/by-product/sessions/48f2917e/PLATFORM-OPS.md",
@@ -41796,6 +41896,20 @@
       "indexed_at": "2026-07-30T22:32:11.913Z"
     },
     {
+      "path": "docs/products/builderos/conversations/2026-07-31-path-to-10-governance.md",
+      "synopsis": "BuilderOS conversation pointer — path-to-10 governance review",
+      "bytes": 779,
+      "mtime": "2026-07-31T21:15:24.000Z",
+      "indexed_at": "2026-08-04T01:13:52.959Z"
+    },
+    {
+      "path": "docs/products/builderos/conversations/2026-08-01-mission2-convergence-devin.md",
+      "synopsis": "BuilderOS conversation pointer — Devin Mission 2 convergence arc",
+      "bytes": 924,
+      "mtime": "2026-08-01T19:16:56.000Z",
+      "indexed_at": "2026-08-04T01:13:52.959Z"
+    },
+    {
       "path": "docs/products/builderos/CREATIVE_BRIEF.md",
       "synopsis": "Creative Brief — Builderos (builderos)",
       "bytes": 2491,
@@ -42495,6 +42609,20 @@
       "indexed_at": "2026-07-30T01:21:52.231Z"
     },
     {
+      "path": "docs/products/ideavault/conversations/2026-07-31-builderos-path-to-10-ideas.md",
+      "synopsis": "IdeaVault intake — BuilderOS path-to-10 / governance / Twin ideas from 2026-07-31 review",
+      "bytes": 3743,
+      "mtime": "2026-07-31T21:22:25.000Z",
+      "indexed_at": "2026-08-04T01:13:52.959Z"
+    },
+    {
+      "path": "docs/products/ideavault/conversations/2026-08-01-convergence-mission-ideas.md",
+      "synopsis": "IdeaVault intake — Devin Mission arc + Mission 2 convergence ideas",
+      "bytes": 2752,
+      "mtime": "2026-08-01T19:16:52.000Z",
+      "indexed_at": "2026-08-04T01:13:52.959Z"
+    },
+    {
       "path": "docs/products/ideavault/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
       "bytes": 1893,
@@ -42710,6 +42838,20 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "docs/products/lifeos/conversations/2026-07-31-founder-comm-and-twin.md",
+      "synopsis": "LifeOS conversation pointer — founder listen-mode + Twin gravity",
+      "bytes": 858,
+      "mtime": "2026-07-31T21:15:28.000Z",
+      "indexed_at": "2026-08-04T01:13:52.959Z"
+    },
+    {
+      "path": "docs/products/lifeos/conversations/2026-08-01-memory-import-twin-archive.md",
+      "synopsis": "LifeOS conversation pointer — memory import + Twin archive",
+      "bytes": 775,
+      "mtime": "2026-08-01T19:16:57.000Z",
+      "indexed_at": "2026-08-04T01:13:52.959Z"
+    },
+    {
       "path": "docs/products/lifeos/CREATIVE_BRIEF.md",
       "synopsis": "Creative Brief — LifeOS (lifeos)",
       "bytes": 4211,
@@ -42727,9 +42869,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 678257,
-      "mtime": "2026-08-03T20:13:47.344Z",
-      "indexed_at": "2026-08-03T20:14:24.222Z"
+      "bytes": 681354,
+      "mtime": "2026-08-04T01:13:24.431Z",
+      "indexed_at": "2026-08-04T01:13:52.959Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -42874,6 +43016,13 @@
       "bytes": 2468,
       "mtime": "2026-06-30T00:08:38.330Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "docs/products/marketingos/conversations/2026-08-01-smos-revenue-mission2.md",
+      "synopsis": "MarketingOS conversation pointer — SMOS revenue loop Mission 2",
+      "bytes": 524,
+      "mtime": "2026-08-01T19:16:57.000Z",
+      "indexed_at": "2026-08-04T01:13:52.959Z"
     },
     {
       "path": "docs/products/marketingos/CREATIVE_BRIEF.md",
@@ -43632,6 +43781,13 @@
       "bytes": 28105,
       "mtime": "2026-07-09T01:03:41.504Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "docs/projects/BRAINSTORM_SESSIONS/builderos/2026-07-31_path-to-10-governance/BRAINSTORM_AND_CONSENSUS.md",
+      "synopsis": "Consensus capture — BuilderOS path-to-10 governance brainstorm",
+      "bytes": 1213,
+      "mtime": "2026-07-31T21:15:34.000Z",
+      "indexed_at": "2026-08-04T01:13:52.959Z"
     },
     {
       "path": "docs/projects/BRAINSTORM_SESSIONS/lifeos/2026-05-08_operator-uplift/00_CHARTER.md",
@@ -67205,9 +67361,9 @@
     {
       "path": "products/receipts/POINT_B_DNA_VERIFY.json",
       "synopsis": "Product receipt — POINT B DNA VERIFY.",
-      "bytes": 280,
-      "mtime": "2026-08-03T19:25:56.181Z",
-      "indexed_at": "2026-08-03T19:25:56.181Z",
+      "bytes": 318,
+      "mtime": "2026-08-04T01:13:32.955Z",
+      "indexed_at": "2026-08-04T01:13:52.959Z",
       "synopsis_index_only": true
     },
     {
@@ -67221,9 +67377,9 @@
     {
       "path": "products/receipts/RECEIPT_TRUTH_VALIDATION.json",
       "synopsis": "Product receipt — RECEIPT TRUTH VALIDATION.",
-      "bytes": 18451,
-      "mtime": "2026-08-03T19:25:56.181Z",
-      "indexed_at": "2026-08-03T19:25:56.181Z",
+      "bytes": 25877,
+      "mtime": "2026-08-04T01:13:32.342Z",
+      "indexed_at": "2026-08-04T01:13:52.959Z",
       "synopsis_index_only": true
     },
     {
@@ -67421,17 +67577,17 @@
     {
       "path": "products/receipts/TRUTH_ENFORCEMENT_AUDIT.json",
       "synopsis": "Product receipt — TRUTH ENFORCEMENT AUDIT.",
-      "bytes": 701,
-      "mtime": "2026-08-03T19:25:56.181Z",
-      "indexed_at": "2026-08-03T19:25:56.181Z",
+      "bytes": 833,
+      "mtime": "2026-08-04T01:13:33.286Z",
+      "indexed_at": "2026-08-04T01:13:52.959Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/TRUTH_LOCKDOWN_VERIFY.json",
       "synopsis": "Product receipt — TRUTH LOCKDOWN VERIFY.",
-      "bytes": 1141,
-      "mtime": "2026-08-03T19:25:56.181Z",
-      "indexed_at": "2026-08-03T19:25:56.181Z",
+      "bytes": 1318,
+      "mtime": "2026-08-04T01:13:32.760Z",
+      "indexed_at": "2026-08-04T01:13:52.959Z",
       "synopsis_index_only": true
     },
     {
@@ -67461,9 +67617,9 @@
     {
       "path": "products/receipts/WISDOM_TRUTH_AUDIT.json",
       "synopsis": "Product receipt — WISDOM TRUTH AUDIT.",
-      "bytes": 735,
-      "mtime": "2026-08-03T19:25:56.181Z",
-      "indexed_at": "2026-08-03T19:25:56.181Z",
+      "bytes": 1001,
+      "mtime": "2026-08-04T01:13:33.439Z",
+      "indexed_at": "2026-08-04T01:13:52.959Z",
       "synopsis_index_only": true
     },
     {
@@ -94747,9 +94903,9 @@
     {
       "path": "services/lumin-context-loader.js",
       "synopsis": "Loads per-user twin + communication profile + recent learning for Lumin prompts.",
-      "bytes": 21540,
-      "mtime": "2026-08-03T20:11:54.767Z",
-      "indexed_at": "2026-08-03T20:14:24.222Z",
+      "bytes": 22398,
+      "mtime": "2026-08-04T01:10:09.278Z",
+      "indexed_at": "2026-08-04T01:13:52.959Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

@@ -1,0 +1,96 @@
+{
+  "schema": "digital_twin_study_capsule_v1",
+  "capsule_id": "2026-07-31-builderos-path-to-10",
+  "studied_at": "2026-07-31T21:25:00.000Z",
+  "source_archives": [
+    "docs/conversation_dumps/2026-07-31-builderos-rating-governance-review.md",
+    "docs/conversation_dumps/by-product/sessions/48f2917e/",
+    "docs/constitution/proposals/2026-07-31-BUILDEROS-PATH-TO-10-CONSTITUTIONAL-CANDIDATES.md",
+    "docs/products/ideavault/conversations/2026-07-31-builderos-path-to-10-ideas.md"
+  ],
+  "plain_english": "Adam ran a multi-agent rating of BuilderOS against the constitution. He cared less about a single score than about what is trustworthy, what ships for real, and what the Twin should learn from the fight.",
+  "ratings_held": {
+    "autonomy_trust_harsh": {
+      "score": 5,
+      "question": "Can this company run forever with no human and never lie about production?",
+      "evidence_level": "CLAIM",
+      "note": "Useful as urgency fuel for production-truth and self-certification gaps"
+    },
+    "capability_while_maturing": {
+      "score": 7.5,
+      "question": "Can this company repeatedly build valuable software while becoming more autonomous?",
+      "evidence_level": "CLAIM",
+      "note": "Useful as stack confidence — do not use to excuse drift"
+    },
+    "adam_use_pattern": "Never collapse trust and capability into one number when deciding what to build next. Use the harsh score for priority. Use the higher score for whether to keep investing in the stack."
+  },
+  "founder_decisions_verified": [
+    {
+      "decision": "detect-and-route on failed machine-ship gates",
+      "choice": "A",
+      "reject": "halt entire factory for one failed auth/gate commit",
+      "evidence_level": "VERIFIED"
+    },
+    {
+      "decision": "P0 hard gates plus P1 provenance/separation in same pass",
+      "choice": "C",
+      "evidence_level": "VERIFIED"
+    },
+    {
+      "decision": "Tier 1 automatic capture before prediction/simulation/dashboards",
+      "evidence_level": "VERIFIED"
+    },
+    {
+      "decision": "pin-forward secure runtime over greenwashing older mission pins",
+      "evidence_level": "VERIFIED",
+      "note": "Adam endorsed the judgment that making tests green by stripping security is wrong"
+    },
+    {
+      "decision": "listen-mode founder briefings when he will hear audio",
+      "evidence_level": "VERIFIED"
+    }
+  ],
+  "what_adam_optimized_for_in_this_thread": [
+    "Production truth over claimed completion",
+    "Honesty labels and UNSOLVED over fake done",
+    "Autonomy that keeps working when one piece fails",
+    "Twin learning from real communications, not theater architecture",
+    "Short spoken answers; paste blocks only when he must copy elsewhere",
+    "Constitutional candidates only after opinion — not silent law edits"
+  ],
+  "vetoes_reinforced": [
+    "Do not declare LIVE/SHIPPED without independent production proof",
+    "Do not let one actor plan/build/test/approve outside an explicit collapse declaration",
+    "Do not build prediction or Adam Simulator on tiny hand-typed logs",
+    "Do not open human-gated PRs as the default ship path"
+  ],
+  "strategic_beliefs_from_second_opinion_adam_did_not_reject": [
+    {
+      "belief": "Digital Twin is the center of gravity — products and workflows should leave Twin-usable residue",
+      "evidence_level": "CLAIM",
+      "status": "strategic_preference_not_hard_law"
+    },
+    {
+      "belief": "Factory should continuously improve the factory",
+      "evidence_level": "CLAIM",
+      "status": "operating_target_not_quota"
+    },
+    {
+      "belief": "Simulate cost/risk/confidence before large builds — but only after capture exists",
+      "evidence_level": "CLAIM",
+      "status": "deferred_tier_4"
+    }
+  ],
+  "constitutional_stance_compiled": {
+    "ratify_as_companion_clarifications": ["C1 production truth", "C2 machine-path gate parity", "C3 independence phased", "C4 capture-before-prediction"],
+    "soft_doctrine_not_hard_law": ["C5 Twin gravity"],
+    "do_not_constitutionalize_yet": ["C6 factory improvement quota", "C7 listen-mode UX"]
+  },
+  "how_twin_should_use_this": [
+    "When Adam asks what he would pick on ship-gate posture → prefer detect-and-route",
+    "When asked whether to build predictors → refuse until capture volume exists",
+    "When agents greenwash CI → refuse; move pins forward if live is more secure",
+    "When briefing Adam for listening → short bullets; one paste block max if needed",
+    "When scoring BuilderOS → state which question is being graded"
+  ]
+}

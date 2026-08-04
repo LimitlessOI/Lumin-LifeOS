@@ -353,6 +353,19 @@ function formatTwinInjectBlock(bundle, { maxChars = 7000 } = {}) {
         ? `Banned phrases: ${communication.banned_phrases.slice(0, 5).join('; ')}`
         : null,
     ].filter(Boolean);
+    // GAP-FILL, 2026-08-03: listen_mode is a real, founder-VERIFIED preference
+    // (source_ref "founder 2026-07-31 listen-mode") already sitting in this
+    // twin facet -- confirmed via direct file read it was never rendered here,
+    // so a real, confirmed preference never reached Chair's actual context.
+    if (communication.listen_mode) {
+      const lm = communication.listen_mode;
+      const lmBits = [
+        lm.prefer_short_bullets ? 'prefer short bullets when read aloud' : null,
+        lm.avoid_tts_hostile_copy_chrome ? 'avoid "copy history" style boxes (unreadable by TTS)' : null,
+        lm.copy_box_only_when_paste_required ? 'use a copy box only when Adam must paste it elsewhere' : null,
+      ].filter(Boolean);
+      if (lmBits.length) lines.push(`Listen mode (${lm.evidence_level || 'VERIFIED'}): ${lmBits.join('; ')}`);
+    }
     if (lines.length) parts.push(`COMMUNICATION:\n${lines.join('\n')}`);
 
     // GAP-FILL, 2026-08-03: `communication.calibration` is the interpretation-

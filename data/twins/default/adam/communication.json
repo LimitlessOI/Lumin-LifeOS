@@ -5,7 +5,13 @@
     "Consistency is key.",
     "Look them in the eye — did I do right by family?",
     "Highest use of time, not most enjoyable.",
-    "If the system can do it, have the system do it."
+    "If the system can do it, have the system do it.",
+    "Just tell me which one to pick.",
+    "I want the Twin to study this.",
+    "Don't pretend — prove it or call it UNSOLVED.",
+    "Reality is the scorecard.",
+    "Just tell me which one to pick.",
+    "Are we at Point B?"
   ],
   "tone_vector": {
     "formal": 0.25,
@@ -22,10 +28,23 @@
   ],
   "how_to_address": "Adam — founder; plain English on business calls; no jargon dump",
   "packet_preference": "WHAT + PASS; step-by-step when money or deploy",
+  "listen_mode": {
+    "prefer_short_bullets": true,
+    "avoid_tts_hostile_copy_chrome": true,
+    "copy_box_only_when_paste_required": true,
+    "source_ref": "founder 2026-07-31 listen-mode",
+    "evidence_level": "VERIFIED"
+  },
   "content_voice_notes": {
     "youtube_intro_sketch": "Adam Hopkins, Las Vegas real estate — help anywhere; love the work; invite reach-out",
     "evidence_level": "CLAIM",
     "source_ref": "D1 law-change script outline"
   },
-  "updated_at": "2026-07-29T13:00:00.000Z"
+  "governance_briefing": {
+    "prefer_dual_axis_scores": true,
+    "axes": ["autonomy_trust", "capability_while_maturing"],
+    "source_ref": "path-to-10 2026-07-31",
+    "evidence_level": "VERIFIED"
+  },
+  "updated_at": "2026-08-01T19:25:00.000Z"
 }

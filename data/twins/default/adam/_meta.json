@@ -36,6 +36,16 @@
       "path": "founder chat 2026-07-29",
       "batch_id": "supervision_pass_3",
       "note": "All core locks including wake 9–10 flex"
+    },
+    {
+      "path": "docs/conversation_dumps/2026-07-31-builderos-rating-governance-review.md",
+      "batch_id": "path_to_10_2026_07_31",
+      "note": "BuilderOS rating + governance dialogue — studied into twin capsule"
+    },
+    {
+      "path": "data/twins/default/adam/study/2026-07-31-builderos-path-to-10.json",
+      "batch_id": "path_to_10_study_capsule",
+      "note": "Compiled decisions, dual scores, constitutional stance, how-twin-should-use"
     }
   ],
   "supervision": {
@@ -48,10 +58,16 @@
       "Transparency: nothing about Adam hidden from the system — incomplete twin otherwise",
       "Videos: 5/week minimum (esp. when SocialMediaOS ready)",
       "Weight: current 205; target below 185",
-      "Wake: currently 9–10 (transitional — not permanent); push earlier; late wake OK only if up late; 6:40 aspirational"
+      "Wake: currently 9–10 (transitional — not permanent); push earlier; late wake OK only if up late; 6:40 aspirational",
+      "2026-07-31: ship-gate failure = detect-and-route (A); scope = P0+P1 (C); Tier1 capture before prediction; listen-mode for audio briefings",
+      "2026-08-01: Point B pass/fail is scorecard; consensus before new files; founder not AI message bus; Mission 2 HOLD until release"
     ],
-    "open_questions": []
+    "open_questions": [
+      "Ratify Companion clarifications C1–C4 from path-to-10 proposals?",
+      "Release Mission 2 execution from HOLD?",
+      "CC Mission 2 prompt: add 10 gaps before Devin runs?"
+    ]
   },
   "reference_for_all_twins": true,
-  "updated_at": "2026-07-29T19:34:00.000Z"
+  "updated_at": "2026-08-01T19:25:00.000Z"
 }

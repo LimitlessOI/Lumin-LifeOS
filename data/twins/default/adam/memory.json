@@ -22,6 +22,34 @@
     {
       "path": "docs/products/limitlessos/GO_VEGAS_FB_GROWTH_PLAYBOOK.md",
       "role": "govegas_ops"
+    },
+    {
+      "path": "docs/conversation_dumps/2026-07-31-builderos-rating-governance-review.md",
+      "role": "governance_rating_master"
+    },
+    {
+      "path": "data/twins/default/adam/study/2026-07-31-builderos-path-to-10.json",
+      "role": "primary_cheap_read_governance"
+    },
+    {
+      "path": "docs/products/ideavault/conversations/2026-07-31-builderos-path-to-10-ideas.md",
+      "role": "idea_catalog"
+    },
+    {
+      "path": "docs/constitution/proposals/2026-07-31-BUILDEROS-PATH-TO-10-CONSTITUTIONAL-CANDIDATES.md",
+      "role": "constitution_candidates_not_law"
+    },
+    {
+      "path": "docs/conversation_dumps/2026-08-01-builderos-convergence-devin-mission-arc.md",
+      "role": "devin_mission_convergence_master"
+    },
+    {
+      "path": "data/twins/default/adam/study/2026-08-01-builderos-convergence-devin-arc.json",
+      "role": "primary_cheap_read_mission2"
+    },
+    {
+      "path": "docs/products/ideavault/conversations/2026-08-01-convergence-mission-ideas.md",
+      "role": "idea_catalog_mission2"
     }
   ],
   "episodic_summaries": [
@@ -29,12 +57,25 @@
       "at": "2026-07-29",
       "summary": "Adam dumped coaching notes + prior mega GoVegas paste; asked for cheap-model digests and twin/template build under supervision.",
       "evidence_level": "FACT"
+    },
+    {
+      "at": "2026-07-31",
+      "summary": "Path-to-10 BuilderOS rating fight. Adam ratified detect-and-route, P0+P1 together, Tier1 capture-first, listen-mode briefings. Asked Twin to study the full communication dump. Production truth and anti-self-certification were the load-bearing themes.",
+      "evidence_level": "FACT",
+      "study_capsule": "data/twins/default/adam/study/2026-07-31-builderos-path-to-10.json"
+    },
+    {
+      "at": "2026-08-01",
+      "summary": "Devin Missions 1–1.6: 399 constitutional items, 194 doc-only. Mission 2 Convergence on HOLD. Adam: Point B pass/fail, reality scorecard, consensus before new files, Import Memory vision, segment all conversations by product.",
+      "evidence_level": "FACT",
+      "study_capsule": "data/twins/default/adam/study/2026-08-01-builderos-convergence-devin-arc.json"
     }
   ],
   "do_not_ingest": [
     "Secrets / API keys",
     "Third-party private client PII without consent",
-    "Raw 968k paste when digest exists — use digest first"
+    "Raw 968k paste when digest exists — use digest first",
+    "Constitutional proposal text as if it were ratified law"
   ],
-  "updated_at": "2026-07-29T13:00:00.000Z"
+  "updated_at": "2026-08-01T19:25:00.000Z"
 }

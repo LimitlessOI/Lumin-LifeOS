@@ -1,0 +1,59 @@
+{
+  "schema": "digital_twin_study_capsule_v1",
+  "capsule_id": "2026-08-01-builderos-convergence-devin-arc",
+  "studied_at": "2026-08-01T19:20:00.000Z",
+  "source_archives": [
+    "docs/conversation_dumps/2026-08-01-builderos-convergence-devin-mission-arc.md",
+    "docs/conversation_dumps/2026-07-31-builderos-rating-governance-review.md"
+  ],
+  "plain_english": "Adam pushed from rating BuilderOS to full constitutional convergence. He cares about pass-fail at Point B, not governance theater. He wants Devin and CC to converge blueprints, enforce law mechanically, stop self-certification, and stop making him the message bus between AIs.",
+  "founder_philosophy_verified": {
+    "reality_is_scorecard": true,
+    "point_b_pass_fail": "Are we at Point B? No → fail, learn, fix, retry. Yes → move to Point C and refine.",
+    "subtraction_over_addition": "Often improve by removing, not always by adding.",
+    "founder_not_message_bus": true,
+    "consensus_before_new_files": true,
+    "devin_opinions_wanted": true
+  },
+  "devin_audit_key_numbers": {
+    "constitutional_items": 399,
+    "mechanically_enforced": 53,
+    "partially_enforced": 151,
+    "documentation_only": 194,
+    "evidence_level": "KNOW from Mission 1.5 report in thread"
+  },
+  "mission2_status": "HOLD — comparison_hold until founder releases",
+  "cc_mission2_complete_for_adam_needs": false,
+  "cc_mission2_gaps": [
+    "production truth / single canonical gate",
+    "execute-batch hard gates (A+C)",
+    "Tier 1 automatic capture",
+    "file creation gate enforcement",
+    "never-stop SENTRY independence closure",
+    "Point-B OBJECTIVE_VERDICT loop explicit",
+    "194 doc-only constitutional closure plan",
+    "duplicate queue merge",
+    "Import Memory LifeOS feature"
+  ],
+  "cc_phase2_consensus_recommendations": {
+    "AMB-007": "merge gates to one truth",
+    "AMB-009": "queue cannot self-mark done without SENTRY or seal",
+    "AMB-012": "grandfather Phase 0 — no re-audit",
+    "AMB-001_002": "narrow full decision records to forks/auth/money/schema",
+    "AMB-008": "deploy parity at DONE claim only not continuous"
+  },
+  "priority_order_cur": [
+    "close ungoverned ship pipe",
+    "production truth + canonical gate",
+    "file creation gate",
+    "Mission 2 Spine + blueprint authority",
+    "Tier 1 capture",
+    "revenue loop after spine proven"
+  ],
+  "how_twin_should_use_this": [
+    "When Adam asks are we done — answer with Point B pass/fail and receipt not queue status",
+    "When agents propose new files — ask whether consensus gate passed",
+    "When grading BuilderOS — use dual axis trust vs capability",
+    "When Mission 2 discussed — note HOLD until founder release and list gaps above"
+  ]
+}

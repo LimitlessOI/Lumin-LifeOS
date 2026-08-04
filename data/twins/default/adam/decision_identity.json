@@ -107,6 +107,60 @@
         "evidence_level": "INVARIANT",
         "source_ref": "SYSTEM SELF-EXECUTION",
         "applies_when": "ops"
+      },
+      {
+        "pattern_text": "On failed machine-ship gates: detect-and-route — reject the bad commit, record UNSOLVED, quarantine the file, keep unrelated factory work moving unless irreversible system-wide risk",
+        "evidence_level": "VERIFIED",
+        "source_ref": "founder pick Question1=A 2026-07-31",
+        "applies_when": "ship-path gate failure"
+      },
+      {
+        "pattern_text": "Capture founder decisions and model/role outcomes automatically before building prediction, simulation, or confidence dashboards",
+        "evidence_level": "VERIFIED",
+        "source_ref": "founder Tier1-first 2026-07-31",
+        "applies_when": "Founder Intent / benchmarking roadmap"
+      },
+      {
+        "pattern_text": "When pinned mission bytes are less secure than live runtime, move the pin forward — never strip a security guard to make CI green",
+        "evidence_level": "VERIFIED",
+        "source_ref": "factory pin judgment 2026-07-30/31",
+        "applies_when": "factory:ci / mission pin drift"
+      },
+      {
+        "pattern_text": "On governance scope forks: prefer P0 hard gates plus P1 provenance/role-separation in the same pass when the architecture would otherwise be revisited immediately",
+        "evidence_level": "VERIFIED",
+        "source_ref": "founder pick Question2=C 2026-07-31",
+        "applies_when": "ship-path / governance redesign scope"
+      },
+      {
+        "pattern_text": "When rating BuilderOS or autonomy maturity, state the question being graded — trust-as-fully-autonomous vs capability-while-maturing — and do not collapse those into one number for prioritization",
+        "evidence_level": "VERIFIED",
+        "source_ref": "path-to-10 rating fight 2026-07-31 + CUR compile",
+        "applies_when": "system maturity scores / founder briefings"
+      },
+      {
+        "pattern_text": "Material product and governance work should leave Twin-usable residue (decision, preference, failure pattern, or outcome) unless pure mechanical plumbing — preference, not a hard fail-closed gate until ingest is automatic",
+        "evidence_level": "CLAIM",
+        "source_ref": "second opinion Twin gravity 2026-07-31",
+        "applies_when": "session end / documentation / feature closure"
+      },
+      {
+        "pattern_text": "Reality is the scorecard — Point B pass/fail. Not at B → fail, learn, fix, retry. At B → move to C and refine. Governance process matters less than whether reality moved.",
+        "evidence_level": "VERIFIED",
+        "source_ref": "founder 2026-08-01 convergence arc",
+        "applies_when": "mission completion / builder maturity / any done claim"
+      },
+      {
+        "pattern_text": "Consensus before new files in protected paths — two roles or gate decides new file vs extend existing; stop file proliferation without review",
+        "evidence_level": "VERIFIED",
+        "source_ref": "founder 2026-08-01 file-creation concern",
+        "applies_when": "new docs / routes / services / constitution files"
+      },
+      {
+        "pattern_text": "Founder is not the message bus between AI systems — findings and handoffs live in durable artifacts (Collaboration Spine)",
+        "evidence_level": "VERIFIED",
+        "source_ref": "Mission 2 hard law + founder repeat",
+        "applies_when": "multi-agent work / Devin+CC+Cursor"
       }
     ],
     "escalation": [
@@ -135,6 +189,12 @@
         "evidence_level": "CLAIM",
         "source_ref": "FOUNDER_VIRTUAL_TWIN.md",
         "applies_when": "twin roadmap"
+      },
+      {
+        "pattern_text": "2026-08-01 convergence: Mission 2 on HOLD; CC prompt incomplete without production truth + ship gates + file-creation enforcement + Point-B loop",
+        "evidence_level": "VERIFIED",
+        "source_ref": "study/2026-08-01-builderos-convergence-devin-arc.json",
+        "applies_when": "Mission 2 / Devin execution"
       }
     ],
     "presentation": [
@@ -155,10 +215,22 @@
         "evidence_level": "CLAIM",
         "source_ref": "user communication rules",
         "applies_when": "chat"
+      },
+      {
+        "pattern_text": "When Adam will listen audibly: short bullets; no TTS-hostile copy-history chrome; use a copy box only when he must paste elsewhere",
+        "evidence_level": "VERIFIED",
+        "source_ref": "founder 2026-07-31 listen-mode",
+        "applies_when": "founder briefing / spoken reply"
       }
     ]
   },
   "compiler_status": "seeded_manual",
-  "note": "Manual seed from digests + law + founder supervision 2026-07-29 (income split, GVBN free).",
-  "updated_at": "2026-07-29T19:17:00.000Z"
+  "note": "Manual seed from digests + law + founder supervision 2026-07-29; path-to-10 + Devin convergence arc studied 2026-07-31 / 2026-08-01.",
+  "updated_at": "2026-08-01T19:25:00.000Z",
+  "source_archives": [
+    "docs/conversation_dumps/2026-07-31-builderos-rating-governance-review.md",
+    "docs/conversation_dumps/2026-08-01-builderos-convergence-devin-mission-arc.md",
+    "data/twins/default/adam/study/2026-07-31-builderos-path-to-10.json",
+    "data/twins/default/adam/study/2026-08-01-builderos-convergence-devin-arc.json"
+  ]
 }
