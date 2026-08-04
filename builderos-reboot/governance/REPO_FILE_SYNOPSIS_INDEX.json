@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-04T10:39:09.370Z",
+  "generated_at": "2026-08-04T10:47:12.280Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12984,
+  "file_count": 12986,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -42881,6 +42881,13 @@
       "indexed_at": "2026-08-04T10:05:56.138Z"
     },
     {
+      "path": "docs/products/lifeos/DECISION_OUTCOME_LEDGER_V1.md",
+      "synopsis": "Priority 5 — the decision/prediction/outcome/calibration ledger Wisdom must eventually read from",
+      "bytes": 5525,
+      "mtime": "2026-08-04T10:44:28.613Z",
+      "indexed_at": "2026-08-04T10:47:12.280Z"
+    },
+    {
       "path": "docs/products/lifeos/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
       "bytes": 30729,
@@ -42891,9 +42898,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 720066,
-      "mtime": "2026-08-04T10:38:46.809Z",
-      "indexed_at": "2026-08-04T10:39:09.370Z"
+      "bytes": 722857,
+      "mtime": "2026-08-04T10:44:54.595Z",
+      "indexed_at": "2026-08-04T10:47:12.280Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -90289,6 +90296,16 @@
       "bytes": 13191,
       "mtime": "2026-07-24T18:36:41.704Z",
       "indexed_at": "2026-07-28T22:54:46.666Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/chair-decision-ledger.js",
+      "synopsis": "Decision -> prediction -> outcome -> comparison -> calibration ledger.",
+      "bytes": 5361,
+      "mtime": "2026-08-04T10:43:14.791Z",
+      "indexed_at": "2026-08-04T10:47:12.280Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
