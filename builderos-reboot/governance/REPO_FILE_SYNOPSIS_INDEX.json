@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-04T17:34:43.099Z",
+  "generated_at": "2026-08-04T18:09:01.272Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12989,
+  "file_count": 12990,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -39539,6 +39539,13 @@
       "indexed_at": "2026-08-02T09:36:38.323Z"
     },
     {
+      "path": "docs/constitution/proposals/2026-08-04-COGNITIVE-INTERACTION-ARCHITECTURE-PROPOSAL.md",
+      "synopsis": "Proposal — a cognitive mode-selection step before translation, from Adam's own brainstorming with another AI plus this session's analysis. NOT RATIFIED.",
+      "bytes": 9854,
+      "mtime": "2026-08-04T18:07:44.070Z",
+      "indexed_at": "2026-08-04T18:09:01.272Z"
+    },
+    {
       "path": "docs/constitution/README.md",
       "synopsis": "Constitution folder index — framework, law, authority registry, research registry, and processes",
       "bytes": 2727,
@@ -42905,9 +42912,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 728465,
-      "mtime": "2026-08-04T17:05:39.661Z",
-      "indexed_at": "2026-08-04T17:05:39.661Z"
+      "bytes": 730476,
+      "mtime": "2026-08-04T18:08:35.098Z",
+      "indexed_at": "2026-08-04T18:09:01.272Z"
     },
     {
       "path": "docs/products/LIFERE.md",
