@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-04T03:27:29.134Z",
+  "generated_at": "2026-08-04T04:51:42.034Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12980,
+  "file_count": 12981,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -33133,6 +33133,14 @@
       "synopsis_index_only": true
     },
     {
+      "path": "data/constitutional-framework/ratification-records/2026-08-04-revert-unratified-taloa-mission.json",
+      "synopsis": "JSON data/config — data/constitutional-framework/ratification-records/2026-08-04-revert-unratified-taloa-mission.json.",
+      "bytes": 5352,
+      "mtime": "2026-08-04T04:50:31.074Z",
+      "indexed_at": "2026-08-04T04:51:42.034Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "data/constitutional-framework/REGISTRY.json",
       "synopsis": "JSON data/config — data/constitutional-framework/REGISTRY.json.",
       "bytes": 81412,
@@ -41956,9 +41964,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 458238,
-      "mtime": "2026-08-04T03:26:42.320Z",
-      "indexed_at": "2026-08-04T03:27:29.134Z"
+      "bytes": 460866,
+      "mtime": "2026-08-04T04:51:12.209Z",
+      "indexed_at": "2026-08-04T04:51:42.034Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",

@@ -1,0 +1,35 @@
+{
+  "schema": "constitutional_amendment_ratification_v1",
+  "status": "proposed_pending_review",
+  "title": "Revert unratified Taloa mission content from NORTH_STAR_SSOT.md (commit 6a5b608fb)",
+  "summary": "Commit 6a5b608fb (2026-08-02, co-authored by Devin AI, message: 'PHASE 0 RATIFIED') rewrote Article I's mission statement, renamed '1.0 Lumin Core Purpose' to '1.0 Taloa Core Purpose' with new content, and added a new SS2.0M 'Constitutional Framework' section -- with no ratification record ever created. An independent, founder-commissioned audit (2026-08-03) found the described 'Taloa' architecture is 3/10 built with 11/11 core engines having zero real callers anywhere in the live system. A real multi-model AI Council consensus run (2026-08-04, gate-change proposal, protocol consensus_v4_opposite_synthesis_v27) was asked to recommend ratify-vs-revert; every model that produced substantive content converged on: revert now to restore honesty in the supreme document, then re-propose the vision properly (it already exists, correctly marked PROPOSED, in docs/constitution/proposals/2026-08-02-NORTH_STAR_AMENDMENT.md). This record proposes exactly that revert.",
+  "ai_council_vote": {
+    "unanimous": true,
+    "voters": ["gemini_flash", "groq_llama", "mistral_free"],
+    "note": "2 additional configured free-tier members (cerebras_llama, github_llama) returned HTTP errors (404 model-not-found, 401 unauthorized) on every round and produced no content -- infrastructure failure, not dissent, documented honestly rather than omitted. Among the 3 members that did produce substantive reasoning across all 3 debate rounds (initial, opposite-argument, synthesis), every final recommendation converged on revert-then-reproperly-ratify, despite one member's own APPROVE/REJECT verdict labels being applied inconsistently relative to that recommendation -- the convergence is drawn from the actual written recommendations, not the raw label field alone.",
+    "deliberation_session_id": "gate-change-12-1785817553667",
+    "final_synthesis": "Position E: revert the unratified content immediately to restore SSOT integrity, while simultaneously initiating a fast-tracked, proper Article VII ratification process for the aspirational mission statement itself, so the founder's vision can still be considered on its own merits without the supreme document asserting it as already-real in the meantime."
+  },
+  "human_guardian_approval": {
+    "approved_by": "Adam",
+    "approved_at": "2026-08-04T04:49:58Z",
+    "approval_context": "Founder asked 'what do you recommend' after being shown the full Council debate; Claude Code recommended revert + expedited review given this is a restoration of prior text (not a novel change) and the current state is an active, ongoing violation of the document's own SS2.6 honesty law. Founder replied 'ok do it', which this session is treating as approval of the revert recommendation itself -- but NOT as authorization to fabricate review-period elapsed time, which the founder did not ask for and which this record does not attempt."
+  },
+  "rationale": "The current Article I mission text and SS2.0M assert as canonical/ratified a 'Taloa constitutional learning institution' architecture that an independent audit and two independent grep-based verifications this session confirmed is 0/11 engines wired into any real runtime path -- a live violation of SS2.6 ('the system must never assert as fact what is not verified'). Reverting to the prior text ('Speed to validated revenue while protecting ethics, consent, and user dignity...') restores the document to its last state that was not a known, documented falsehood. The Taloa vision is not deleted -- it remains fully preserved and correctly labeled PROPOSED in docs/constitution/proposals/2026-08-02-NORTH_STAR_AMENDMENT.md, available for a real, separate Article VII ratification if the founder still wants it enacted, ideally once the underlying engines are actually built (per the audit's own recommended repair order).",
+  "review_period": {
+    "proposed_at": "2026-08-04T04:49:58Z",
+    "enacted_at": null,
+    "minimum_days_required": 7,
+    "note": "This record is filed today to start the real Article VII review clock. It deliberately does NOT set enacted_at yet -- scripts/verify-constitutional-amendment-ratification.mjs only activates when NORTH_STAR_SSOT.md itself is staged in the same commit, so this record can be committed today without touching the constitution and without gaming the >=7-day check. The actual revert to NORTH_STAR_SSOT.md, committed together with this record updated to set a real enacted_at timestamp, should not happen before 2026-08-11T04:49:58Z."
+  },
+  "affected_sections": [
+    "Article I: MISSION (top-level mission paragraph)",
+    "Article I, 1.0 Taloa Core Purpose -> revert to 1.0 Lumin Core Purpose",
+    "Article II, SS2.0M The Constitutional Framework (remove -- added by the same unratified commit)"
+  ],
+  "not_affected": [
+    "Article II SS2.0K Blueprint Integrity and Constitutional Manufacturing Pipeline (predates 6a5b608fb, not touched by this revert)",
+    "Article II SS2.0L Prediction -> Reality -> Calibration (predates 6a5b608fb, not touched by this revert)",
+    "Article II SS2.12a Consensus Quality and Reality-Alignment (predates 6a5b608fb, not touched by this revert)"
+  ]
+}
