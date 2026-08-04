@@ -237,7 +237,48 @@ This closes the learning loop and prevents the engine from becoming an unaccount
 
 ---
 
-## 9. Concrete blueprint improvements to consider
+## 9. The “live CRM autofill + conversation map + real-time coaching” stack — who already does it
+
+Your question: *“As the conversation flows, can key information be entered into the CRM automatically and become a blueprint/map of the conversation, while recording the actual conversation, reading tonality, coaching later, and giving real-time guidance?”*
+
+The short answer: **many vendors do one or two of these; almost no one does all of them well in one product, and no one is doing it for founder-led therapist-meeting sales.**
+
+### Players mapped to your exact asks
+
+| Capability | Vendors doing it | How close to your vision | Gaps relative to SalesOS/HPE |
+|---|---|---|---|
+| **Live/ automated CRM autofill from calls** | **Praiz** (structured signals → CRM), **Sybill** (MEDDPICC/BANT/custom fields, post-call autofill), **Aircover** (live parse → Salesforce/HubSpot custom fields), **Insyghtful** (live conversation → structured CRM fields, beta), **DialPhone AI Conversation Expert** (call → Salesforce/HubSpot auto-log), **Golden** (Chrome-native capture, pre-fills CRM before hang up), **Demodesk** (captures pain points/next steps during call, writes CRM), **Convo** (CRM auto-sync) | Close on the *data extraction* side. Some claim real-time; most are near-real-time or post-call. | None tie CRM fields back to a pre-call **Meeting Kit** or **Founder Brief**. None label fields with KNOW/THINK/GUESS. None are jurisdiction/consent-first. |
+| **Conversation map / wheel / relationship blueprint** | **Klu** (“living map of professional relationships,” per-contact profile, topics, talk ratio, accountability scores), **Bloks** (360° relationship intelligence, maps calls/emails/docs to people/companies), **Praiz** (structured conversation data + signal detection across deals), **Convo** (memory across calls), **Limitless** (perfect recall, speaker recognition, lifelogs) | Close on the *memory* side. Klu/Bloks are the most “map-like.” | No product visually maps a single conversation as a decision/commitment **wheel** or narrative blueprint. No one links the map to a **Commitment Ledger** and **next-action score**. |
+| **Real-time recording + transcription** | Gong, Chorus, Fathom, Granola, Fireflies, Avoma, Leexi, Limitless, Above AI | Commodity. Most require a bot or Chrome extension. | Audio capture is easy; **consent-aware, jurisdiction-aware, founder-controlled** capture is not. |
+| **Tonality / audio analysis beyond transcript** | **Cogito/Verint** (tone, empathy, energy), **Spiky** (momentum, tone, talk speed), **Observe.AI** (sentiment, overtalking), **Cresta** (behavioral signals), **Aircover** (in-call cues), **Above AI / KnightSense / Osiris** (wearable/audio emotion) | Emerging but real. Enterprise contact-center tools lead. | Almost all trained on **generic** top-performer models, not the user’s own **Best Self** baseline. None combine audio tonality with the user’s own proven clips. |
+| **Real-time guidance during the call** | **Convo**, **Insyghtful** (sub-second deal-risk cues), **Curvo** (live MEDDPICC/BANT scores), **Wingman** (live cards <1.5s), **Revenue.io**, **Balto** (script/playbook prompts), **DialPhone** (live prompts, objection alerts), **Aircover** (in-call AI) | Very active category. | Guidance is mostly **script/framework adherence** or **generic objection scripts**, not identity-safe, retrieval-driven coaching from the user’s own calls. |
+| **Post-call coaching replay** | Gong (AI Call Reviewer, Initiative Tracking), **Sybill** (call categorization + coaching), **Plura AI** (automated coaching insights), **Fathom** (highlight reels), **Avoma** | Well-developed. | Coaching is manager/rep-facing, not **founder self-coaching** tied to a personal Best Self. Replay is rarely linked to the **Meeting Kit** or **Founder Brief** that preceded the call. |
+
+### The closest integrated products
+
+1. **Praiz** — probably the closest to your “conversation → structured business intelligence → CRM” vision. It uses specialized AI agents to detect signals (objections, churn, competitors, pain points, SPICED summary) and update the CRM automatically. It is *post-call*, not real-time, and does not do tonality/audio coaching. It is also horizontal sales, not founder-led vertical.
+2. **Convo** — explicitly claims real-time coaching + CRM auto-sync + memory across calls + sentiment/objection detection, at a low price ($22.49/mo). It is a newer, smaller player and makes strong claims; real-world depth unverified. Its feature matrix lists real-time coaching as a differentiator vs. Gong/Chorus/Clari/Salesloft.
+3. **Insyghtful** — focused on live deal control: detects cooling champions, buried objections, fake next steps, and writes structured CRM fields from the live conversation (Salesforce/HubSpot beta). Sub-one-second latency. It is B2B SaaS sales, not therapist practices.
+4. **Aircover** — markets “AI CRM Sync” that parses live calls and syncs custom fields to Salesforce/HubSpot, plus live coaching and post-call scorecards.
+5. **Klu / Bloks** — relationship-intelligence “maps” that connect every meeting, email, doc, and commitment across a person/company. They are horizontal meeting notetakers, not sales-specific, and do not do real-time coaching.
+6. **Limitless / Above AI / KnightSense / Osiris** — wearable or earbud-based real-time coaching and memory. These are closest to the “hear everything, coach in real time, map your conversations” vision, but they are consumer/general-purpose and lack CRM/workflow integration and sales outcome tracking.
+
+### What no one is combining yet
+
+Your full stack — **pre-call Meeting Kit → live consent-aware recording → live CRM autofill + conversation map → real-time identity-safe coaching using your own Best Self clips → post-call Commitment Ledger → coaching replay → cross-domain Human Performance Loop** — is not a single product today. The pieces exist, but they are sold by 4–6 different vendors and glued together by integrations. That is the product opening.
+
+### What this means for SalesOS
+
+If you build it, you are not building a brand-new capability that no one has heard of. You are building the **first integrated, consent-first, founder-led, vertical-specific version** of a stack the market is already proving people will pay for. The differentiation is:
+
+- **Vertical depth:** therapist-practice research + meeting kit + call script + follow-up, not generic MEDDIC/BANT.
+- **Identity-safe, user-owned coaching:** not “top performer average,” but *your* best self, with retrieval-over-generation.
+- **Commitment / relationship map:** the conversation is organized around promises made and kept, not just topics and sentiment.
+- **Consent as architecture:** jurisdiction-aware recording is a feature, not a footnote.
+
+---
+
+## 10. Concrete blueprint improvements to consider
 
 1. **Add a `data_flywheel_gate` milestone** before Phase 4 starts.
 2. **Add a `user_agency` and `support_slider` design spec** to Phase 4.
@@ -249,7 +290,7 @@ This closes the learning loop and prevents the engine from becoming an unaccount
 
 ---
 
-## 10. Summary recommendation
+## 11. Summary recommendation
 
 Your instinct is directionally right: there is a real market, real ROI, and a real gap around identity-safe, Best-Self-based, retrieval-driven coaching. But the market is already well-funded and consolidating. The companies winning are the ones that built a **proprietary data flywheel and outcome loop first**, then layered intelligence on top.
 

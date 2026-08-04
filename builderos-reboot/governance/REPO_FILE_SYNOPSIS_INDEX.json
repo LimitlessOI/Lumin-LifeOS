@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-04T22:22:50.566Z",
+  "generated_at": "2026-08-04T22:25:24.790Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12999,
   "files": [
@@ -43486,16 +43486,16 @@
     {
       "path": "docs/products/salesos/HUMAN_PERFORMANCE_ENGINE_DEEP_DIVE.md",
       "synopsis": "Deep-dive market and research analysis for the SalesOS Human Performance Engine / real-time coaching concept.",
-      "bytes": 22789,
-      "mtime": "2026-08-04T22:10:11.419Z",
-      "indexed_at": "2026-08-04T22:10:11.419Z"
+      "bytes": 29648,
+      "mtime": "2026-08-04T22:25:24.790Z",
+      "indexed_at": "2026-08-04T22:25:24.790Z"
     },
     {
       "path": "docs/products/salesos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — SalesOS",
-      "bytes": 13287,
-      "mtime": "2026-08-04T22:10:11.419Z",
-      "indexed_at": "2026-08-04T22:10:11.419Z"
+      "bytes": 13898,
+      "mtime": "2026-08-04T22:25:24.790Z",
+      "indexed_at": "2026-08-04T22:25:24.790Z"
     },
     {
       "path": "docs/products/salesos/SALESOS_ZERO_STATE_AND_BP.md",

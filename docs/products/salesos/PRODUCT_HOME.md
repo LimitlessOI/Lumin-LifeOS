@@ -8,7 +8,7 @@
 **Machine manifest:** `docs/products/salesos/FILE_MANIFEST.json`
 **Mission pack:** `builderos-reboot/MISSIONS/PRODUCT-SALESOS-THERAPIST-MEETING-KIT-V1-0001/`
 
-||| **Last Updated** | 2026-07-23 — Added deep-dive market analysis (`HUMAN_PERFORMANCE_ENGINE_DEEP_DIVE.md`) and competitive landscape section. |
+||| **Last Updated** | 2026-07-23 — Added live CRM autofill + conversation map + real-time coaching vendor mapping to `HUMAN_PERFORMANCE_ENGINE_DEEP_DIVE.md` (Section 9). |
 
 ---
 
@@ -178,3 +178,4 @@ See `docs/products/salesos/HUMAN_PERFORMANCE_ENGINE_DEEP_DIVE.md` for the market
 | 2026-07-23 | Initial product home, FILE_MANIFEST, and mission pack `PRODUCT-SALESOS-THERAPIST-MEETING-KIT-V1-0001` created from founder vision. No runtime code; not yet queued. | Capture the vision in canonical form and surface open decisions before execution. | `npm run builder:preflight` PASS after doc-only changes. | Resolve open decisions and queue Phase 1 in BP_PRIORITY. |
 | 2026-07-23 | Grounded zero-state and phased build plan added (`SALESOS_ZERO_STATE_AND_BP.md`); Human Performance Engine deferred to Phase 4. Existing `sales_call_recordings`/`coaching_clips`/`real_time_coaching_events`/`sales_technique_patterns` tables in `20260313_core_schema.sql` identified as proven prior art. Decision count expanded from 6 to 8. | Refine blueprint from wishlist to a build plan that starts from verified infrastructure and defers the engine until real evidence exists. | `npm run builder:preflight` PASS after doc-only changes. | Resolve Phase 0 decisions and queue Phase 1 in BP_PRIORITY. |
 | 2026-07-23 | Market and competitive deep-dive added (`HUMAN_PERFORMANCE_ENGINE_DEEP_DIVE.md`) with player performance, failure modes, and blueprint improvements; product home updated with research summary. | Provide founder with evidence on who is building similar systems, how they are performing, and what to improve. | `npm run builder:preflight` PASS after doc-only changes. | Resolve Phase 0 decisions and queue Phase 1 in BP_PRIORITY. |
+| 2026-07-23 | Added Section 9 to `HUMAN_PERFORMANCE_ENGINE_DEEP_DIVE.md` mapping live CRM autofill, conversation map/wheel, real-time recording/tonality/coaching, and post-call coaching replay vendors (Praiz, Convo, Insyghtful, Aircover, Klu, Bloks, Granola, etc.) to the founder's exact question. | Answer the founder's question about whether integrated “conversation flows → CRM blueprint → tonality → coaching” already exists and where the gap is. | `npm run builder:preflight` PASS after doc-only changes. | Resolve Phase 0 decisions and queue Phase 1 in BP_PRIORITY. |
