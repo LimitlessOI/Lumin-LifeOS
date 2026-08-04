@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-04T00:42:30.156Z",
+  "generated_at": "2026-08-04T00:56:01.725Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12957,
+  "file_count": 12958,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -39681,6 +39681,13 @@
       "bytes": 586,
       "mtime": "2026-07-28T01:34:39.034Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "docs/conversation_dumps/2026-08-03-constitutional-communication-system-brainstorm.md",
+      "synopsis": "Constitutional proposal overview brainstorm (verbatim) — Taloa architecture, Human Transformation Engine, communication mapping. Archived per Amendment 38 §6 step 5 (word-for-word).",
+      "bytes": 48178,
+      "mtime": "2026-08-04T00:55:33.904Z",
+      "indexed_at": "2026-08-04T00:56:01.725Z"
     },
     {
       "path": "docs/conversation_dumps/by-product/sessions/2a4739f2/BUILDEROS-AUTONOMOUS.md",
