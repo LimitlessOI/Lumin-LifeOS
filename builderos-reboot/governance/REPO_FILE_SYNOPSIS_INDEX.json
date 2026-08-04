@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-04T07:57:12.511Z",
+  "generated_at": "2026-08-04T08:08:30.930Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12982,
   "files": [
@@ -42877,9 +42877,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 694678,
-      "mtime": "2026-08-04T07:56:45.706Z",
-      "indexed_at": "2026-08-04T07:57:12.511Z"
+      "bytes": 698267,
+      "mtime": "2026-08-04T08:07:59.583Z",
+      "indexed_at": "2026-08-04T08:08:30.930Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -90282,9 +90282,9 @@
     {
       "path": "services/chair-direct-agent.js",
       "synopsis": "Direct Chair agent — talks + acts; human prose obeys Lumin Communication DNA (not theater).",
-      "bytes": 28010,
-      "mtime": "2026-07-30T02:15:14.030Z",
-      "indexed_at": "2026-07-30T22:32:11.913Z",
+      "bytes": 28951,
+      "mtime": "2026-08-04T08:07:04.022Z",
+      "indexed_at": "2026-08-04T08:08:30.930Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -94881,9 +94881,9 @@
     {
       "path": "services/lumin-chair-orchestrator.js",
       "synopsis": "Lumin Chair — single front door for founder messages (orchestrates all channels).",
-      "bytes": 78120,
-      "mtime": "2026-08-04T07:55:58.527Z",
-      "indexed_at": "2026-08-04T07:57:12.511Z",
+      "bytes": 81047,
+      "mtime": "2026-08-04T08:06:16.563Z",
+      "indexed_at": "2026-08-04T08:08:30.930Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

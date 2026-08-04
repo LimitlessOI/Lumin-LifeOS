@@ -744,13 +744,64 @@ export async function runLuminChairTurn(ctx, deps) {
           operatorKey: deps.operatorKey,
           pool: deps.pool,
           memoryContext: directMemoryContext,
-          trySystemAction: (text) => tryLuminChairSystemAction(text, {
-            pool: deps.pool,
-            logger: deps.logger || console,
-            operatorKey: deps.operatorKey,
-            founderBuildBaseUrl: deps.founderBuildBaseUrl,
-            userId: resolvedUserId || ctx.userId,
-          }),
+          // GAP-FILL 2026-08-04: this closure is the ONLY tool the real, live
+          // "front door" agent loop (chair-direct-agent.js's decision.action ===
+          // 'act' branch) can call -- confirmed live that a real commitment-
+          // creation message never reached the deterministic life_admin gate
+          // further down this function, because that gate is unreachable: this
+          // front-door block returns early whenever the LLM produces any reply
+          // text, which is virtually always. tryLuminChairSystemAction() alone
+          // has no commitment/note/check-in patterns (confirmed by grep), so
+          // Chair's "I can schedule X" replies were ungrounded LLM text, never
+          // a real captureCommitment call -- explaining both why the write
+          // never landed and why a later "what are my upcoming commitments"
+          // query fabricated plausible titles instead of reading the DB.
+          // Fallback added below, only when the existing parser finds no
+          // match, to lifeos-chat-intent-executor.js's classifyIntent/
+          // executeIntent (already correct: targets the canonical `commitments`
+          // table via lifeos-commitment-service.js, already parses natural
+          // date/time phrasing). Excludes 'build_request' for the same reason
+          // as the (now-secondary) gate further down this function: that
+          // classification triggers a live /factory/execute-step call with
+          // skip_intake_gate: true and must keep going through the existing,
+          // more careful build-intent flow, not this fallback.
+          trySystemAction: async (text) => {
+            const primary = await tryLuminChairSystemAction(text, {
+              pool: deps.pool,
+              logger: deps.logger || console,
+              operatorKey: deps.operatorKey,
+              founderBuildBaseUrl: deps.founderBuildBaseUrl,
+              userId: resolvedUserId || ctx.userId,
+            });
+            if (primary?.matched || !deps.pool || !resolvedUserId) return primary;
+            try {
+              const {
+                classifyIntent: classifyChatIntent,
+                executeIntent: executeChatIntent,
+              } = await import('./lifeos-chat-intent-executor.js');
+              const chatIntent = classifyChatIntent(text);
+              if (chatIntent === 'unknown' || chatIntent === 'build_request') return primary;
+              const chatResult = await executeChatIntent({
+                db: deps.pool,
+                userId: resolvedUserId,
+                timezone: 'America/New_York',
+                intent: chatIntent,
+                text,
+              });
+              return {
+                matched: true,
+                executed: chatResult.execution_kind === 'command',
+                action_type: chatIntent,
+                ok: chatResult.ok === true,
+                human_summary: chatResult.human_summary || chatResult.message,
+                command_truth: (chatResult.execution_kind === 'command' && chatResult.ok)
+                  ? 'COMMAND_RAN'
+                  : 'NO_COMMAND_RAN',
+              };
+            } catch (chatIntentErr) {
+              return primary;
+            }
+          },
         },
         ctx: {
           userId: resolvedUserId,
