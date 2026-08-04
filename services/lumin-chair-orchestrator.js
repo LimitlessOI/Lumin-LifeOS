@@ -300,6 +300,37 @@ function finalizeTruth(truth, channel) {
   return final;
 }
 
+// GAP-FILL 2026-08-04: Priority 3 crisis safety gate response. Fixed, constant
+// resource message (never AI-generated -- a model cannot be trusted to phrase a
+// safety-critical response under pressure/latency, and a fixed message is
+// auditable). command_truth is COMMAND_RAN because a real DB receipt was
+// written (logCrisisDetection); this response never claims any action beyond
+// that receipt and never claims contact was made with anyone.
+function chairCrisisResponse(ctx, resourceMessage) {
+  const truth = finalizeTruth({
+    ok: true,
+    pass_fail: 'PASS',
+    command_truth: 'COMMAND_RAN',
+    action: 'crisis_safety',
+    human_summary_technical: resourceMessage,
+    direct_connection: true,
+    conversational_mode: ctx.conversationalMode,
+  }, 'crisis_safety');
+  return {
+    statusCode: 200,
+    body: chairEnvelope('crisis_safety', {
+      ...truth,
+      human_summary: resourceMessage,
+      intake_normalized: ctx.intakeNormalized,
+      source_mode: ctx.sourceMode,
+      auth_mode: ctx.auth_mode,
+      user_role: ctx.user_role,
+      conversational_mode: ctx.conversationalMode,
+      direct_connection: true,
+    }),
+  };
+}
+
 function chairWorkExecutorResponse(ctx, result) {
   const truth = finalizeTruth({
     ok: result.ok !== false,
@@ -522,6 +553,40 @@ export async function runLuminChairTurn(ctx, deps) {
     resolvedUserId = await deps.resolveUserId(ctx.userHandle || userHandle).catch(() => null);
   }
   _clog('resolvedUserId');
+
+  // CRISIS SAFETY GATE — mandatory, deterministic, first thing checked on every
+  // turn. Design: docs/products/lifeos/CRISIS_SAFETY_PROTOCOL_V1.md. Placed here
+  // (not as an LLM "tool" the model can choose to call) on purpose: this session's
+  // whole commitment-capture investigation found that an LLM-optional tool call is
+  // not reliable enough to depend on for a safety-critical path -- the model can
+  // simply not choose to invoke it. This check runs unconditionally, before any
+  // routing, build, or LLM call, and cannot be skipped by channel/intent
+  // classification. No AI call (regex only, same discipline as the proven
+  // services/mediator-service.js Word Keeper crisis check) so it cannot fail
+  // silently on a down/slow model provider.
+  if (!alphaProbe && !ctx.alphaProbe) {
+    try {
+      const { detectCrisisLanguage, getCrisisResourceMessage, logCrisisDetection } =
+        await import('./lifeos-crisis-language-detector.js');
+      const detection = detectCrisisLanguage(ctx.originalText || cleanedInput);
+      if (detection.crisis) {
+        await logCrisisDetection(deps.pool, {
+          userId: resolvedUserId,
+          source: 'lumin_chair_turn',
+          matchCount: detection.matches.length,
+        }).catch(() => null);
+        return chairCrisisResponse(
+          { intakeNormalized, sourceMode, auth_mode, user_role, conversationalMode },
+          getCrisisResourceMessage(),
+        );
+      }
+    } catch (crisisErr) {
+      // A failure in the crisis check itself must never block a reply, but must
+      // also never be silent: log and continue to normal processing so the
+      // founder/client is not left without a response.
+      console.error('[CRISIS-GATE] check failed, continuing to normal reply:', crisisErr.message);
+    }
+  }
 
   let mergedHistory = conversationHistory;
   if (!alphaProbe && deps.luminPersist && resolvedUserId) {

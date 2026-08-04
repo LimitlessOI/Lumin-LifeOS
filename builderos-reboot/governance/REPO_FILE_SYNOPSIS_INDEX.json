@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-04T08:26:45.361Z",
+  "generated_at": "2026-08-04T10:05:56.138Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12982,
+  "file_count": 12983,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -42867,6 +42867,13 @@
       "indexed_at": "2026-08-01T08:48:17.387Z"
     },
     {
+      "path": "docs/products/lifeos/CRISIS_SAFETY_PROTOCOL_V1.md",
+      "synopsis": "Crisis Safety Protocol v1",
+      "bytes": 6904,
+      "mtime": "2026-08-04T10:05:54.373Z",
+      "indexed_at": "2026-08-04T10:05:56.138Z"
+    },
+    {
       "path": "docs/products/lifeos/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
       "bytes": 30729,
@@ -42877,9 +42884,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 707703,
-      "mtime": "2026-08-04T08:26:19.241Z",
-      "indexed_at": "2026-08-04T08:26:45.361Z"
+      "bytes": 710937,
+      "mtime": "2026-08-04T10:05:14.263Z",
+      "indexed_at": "2026-08-04T10:05:56.138Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -93793,10 +93800,10 @@
     },
     {
       "path": "services/lifeos-crisis-language-detector.js",
-      "synopsis": "Detect crisis-language phrases for LifeOS safety routing.",
-      "bytes": 951,
-      "mtime": "2026-07-18T01:10:08.054Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "synopsis": "Detect crisis-language phrases for LifeOS safety routing, and log a",
+      "bytes": 3427,
+      "mtime": "2026-08-04T10:03:06.673Z",
+      "indexed_at": "2026-08-04T10:05:56.138Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -94881,9 +94888,9 @@
     {
       "path": "services/lumin-chair-orchestrator.js",
       "synopsis": "Lumin Chair — single front door for founder messages (orchestrates all channels).",
-      "bytes": 81047,
-      "mtime": "2026-08-04T08:06:16.563Z",
-      "indexed_at": "2026-08-04T08:08:30.930Z",
+      "bytes": 84002,
+      "mtime": "2026-08-04T10:03:49.092Z",
+      "indexed_at": "2026-08-04T10:05:56.138Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
