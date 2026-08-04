@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-04T10:47:12.280Z",
+  "generated_at": "2026-08-04T10:52:05.681Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12986,
   "files": [
@@ -42898,9 +42898,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 722857,
-      "mtime": "2026-08-04T10:44:54.595Z",
-      "indexed_at": "2026-08-04T10:47:12.280Z"
+      "bytes": 724649,
+      "mtime": "2026-08-04T10:51:41.894Z",
+      "indexed_at": "2026-08-04T10:52:05.681Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -90313,9 +90313,9 @@
     {
       "path": "services/chair-direct-agent.js",
       "synopsis": "Direct Chair agent — talks + acts; human prose obeys Lumin Communication DNA (not theater).",
-      "bytes": 30813,
-      "mtime": "2026-08-04T10:29:13.248Z",
-      "indexed_at": "2026-08-04T10:30:31.434Z",
+      "bytes": 31821,
+      "mtime": "2026-08-04T10:51:14.600Z",
+      "indexed_at": "2026-08-04T10:52:05.681Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

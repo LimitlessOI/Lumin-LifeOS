@@ -464,9 +464,24 @@ Respond with exactly one JSON object:`;
       // with the same directive instead of switching to "reply", producing
       // duplicate real writes (3 duplicate commitment rows from one request,
       // observed live in production). A write is not idempotent; retrying it
-      // is not a safe default. Return immediately on any executed action
+      // is not a safe default. Return immediately on a GENUINE success
       // instead of giving the model another chance to repeat it in this turn.
-      if (commandRan) {
+      //
+      // GAP-FILL 2026-08-04 (self-audit, found during Priority 5's final
+      // regression pass): the short-circuit condition must not be
+      // `commandRan` -- lifeos-chat-intent-executor.js's failure branches
+      // (e.g. an unparseable commitment) still set `execution_kind: 'command'`
+      // to mean "this was a deterministic attempt", which made `commandRan`
+      // true even on a FAILED parse (executed === true, ok === false).
+      // Confirmed live: a malformed-date test returned a reply wrapped in
+      // "COMMAND_RAN" / a success template while its own text said "I could
+      // not parse that as a commitment" -- a real, self-contradictory
+      // false-success claim, exactly what this whole session's discipline
+      // exists to catch. A FAILED attempt writes nothing, so there is no
+      // duplicate-write risk in letting the model take another turn to
+      // phrase the honest failure -- only require the short-circuit when
+      // actionResult.ok is explicitly true.
+      if (actionResult.ok === true) {
         const finalized = finalizeHumanReply(
           actionResult.human_summary || 'Done.',
           { commandRan, lastBuild, presenceMode: isPresenceTurn },
@@ -474,7 +489,7 @@ Respond with exactly one JSON object:`;
         return {
           reply: finalized.reply,
           command_ran: commandRan,
-          ok: actionResult.ok !== false,
+          ok: true,
           build: lastBuild,
           shell_action: shellAction,
           action_receipt: actionReceipt,
