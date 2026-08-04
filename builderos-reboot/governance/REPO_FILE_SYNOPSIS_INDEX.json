@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-04T01:13:52.959Z",
+  "generated_at": "2026-08-04T02:22:18.697Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12980,
   "files": [
@@ -39099,9 +39099,9 @@
     {
       "path": "docs/BLUEPRINT_COMMUNICATION_FIRST_2026-08-02.md",
       "synopsis": "Communication-first execution blueprint — 8 phases sequenced from the 2026-08-02 independent audit, extended 2026-08-03 with a real-client UX audit (Calibration Engine wired live, a Cognitive Core false-positive bug found+fixed via real-bro",
-      "bytes": 26498,
-      "mtime": "2026-08-03T23:26:24.904Z",
-      "indexed_at": "2026-08-03T23:26:47.262Z"
+      "bytes": 30748,
+      "mtime": "2026-08-04T02:21:57.185Z",
+      "indexed_at": "2026-08-04T02:22:18.697Z"
     },
     {
       "path": "docs/BRAINSTORM_SESSIONS_IDEAS_CATALOG.md",
