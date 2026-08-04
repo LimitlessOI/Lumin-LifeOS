@@ -173,9 +173,24 @@ export async function captureCommitment(db, text, { userId, timezone }) {
   }
 
   const { title, datetime, durationMinutes, calendarEventRequested } = commitment;
+  // GAP-FILL, 2026-08-04: proven live via a real end-to-end test (Chair creates
+  // a commitment through chat, then GET /api/v1/lifeos/commitments -- the
+  // dashboard-facing API, backed by services/commitment-tracker.js -- returned
+  // nothing). Root cause: the `commitments` table is shared by at least four
+  // uncoordinated migrations/features (Word Keeper, Mission Runtime, this chat
+  // path, commitment-tracker.js); a 2026-04-28 migration
+  // (20260428_commitments_reminder_compat.sql) already bridges column NAMES
+  // between the Word Keeper and LifeOS shapes with bidirectional backfill
+  // UPDATEs (title/description/due_at/deadline), but never touches `status`
+  // VALUES -- this insert never set status at all, defaulting to whatever the
+  // table's column default happens to be ('pending' per
+  // 20260705_create_commitments_table.sql), while commitment-tracker.js's
+  // getOpen() hard-filters WHERE status = 'open'. Setting status and due_at
+  // explicitly closes exactly that gap without touching the other table's
+  // code or migrating any existing rows.
   const result = await db.query(
-    'INSERT INTO commitments (user_id, title, datetime, duration_minutes, timezone, calendar_event_requested) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
-    [userId, title, datetime, durationMinutes, timezone || 'America/New_York', calendarEventRequested],
+    'INSERT INTO commitments (user_id, title, datetime, duration_minutes, timezone, calendar_event_requested, status, due_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *',
+    [userId, title, datetime, durationMinutes, timezone || 'America/New_York', calendarEventRequested, 'open', datetime],
   );
 
   return result.rows[0];

@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-04T04:51:42.034Z",
+  "generated_at": "2026-08-04T06:35:20.651Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12981,
   "files": [
@@ -42877,9 +42877,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 683761,
-      "mtime": "2026-08-04T03:11:38.517Z",
-      "indexed_at": "2026-08-04T03:12:08.353Z"
+      "bytes": 686164,
+      "mtime": "2026-08-04T06:34:42.990Z",
+      "indexed_at": "2026-08-04T06:35:20.651Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -93717,9 +93717,9 @@
     {
       "path": "services/lifeos-commitment-service.js",
       "synopsis": "Exports captureCommitment, getCommitments, resolveCommitment, proposeCalendarEvent —",
-      "bytes": 8217,
-      "mtime": "2026-08-01T15:58:38.797Z",
-      "indexed_at": "2026-08-01T15:59:15.107Z",
+      "bytes": 9345,
+      "mtime": "2026-08-04T06:33:28.156Z",
+      "indexed_at": "2026-08-04T06:35:20.651Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
