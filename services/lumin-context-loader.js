@@ -126,6 +126,26 @@ function normalizePatternKey(text = '') {
   return String(text).toLowerCase().replace(/\s+/g, ' ').trim().slice(0, 160);
 }
 
+// GAP-FILL, 2026-08-03: the calibration profile wired into formatTwinInjectBlock
+// (see CALIBRATION block below) was a static, never-learned default -- flagged as
+// the #1 open communication-system gap this session. This is the deterministic,
+// evidence-safe half of closing it: detect Adam EXPLICITLY correcting how something
+// was communicated (not inferred from arbitrary text -- inference from raw content
+// is what the FOUNDER_VIRTUAL_TWIN.md spec's calibration model calls for eventually,
+// but that requires real interpretive judgment this narrow fix intentionally does
+// not attempt). A literal "too long" / "shorter" quote is a fact, not a guess.
+const SHORTER_CORRECTION_RE =
+  /\b(too long|way too long|keep it short(er)?|make it shorter|give me the short version|in one (line|sentence)|one[- ]liner|less detail|too much detail|just tell me|be brief|briefly|tl;?dr|cut the (fluff|filler))\b/i;
+const LONGER_CORRECTION_RE =
+  /\b(too short|need more (detail|context|explanation)|explain more|elaborate|give me the full picture|more explanation|walk me through|go deeper|more detail)\b/i;
+
+function detectCommunicationCorrection(text = '') {
+  const t = String(text || '');
+  if (SHORTER_CORRECTION_RE.test(t)) return 'shorter';
+  if (LONGER_CORRECTION_RE.test(t)) return 'longer';
+  return null;
+}
+
 /**
  * Learn from a founder message into facet twin files (memory + decision_identity).
  * Deterministic — no model required. Does not overwrite VERIFIED locks.
@@ -211,6 +231,35 @@ export async function learnFromFounderMessage({
       writes.push('decision_identity');
       decisionLearned = true;
     }
+  }
+
+  const correctionDirection = detectCommunicationCorrection(text);
+  if (correctionDirection) {
+    const communication = store.readTwin({
+      tenantId: 'default',
+      userId: userHandle,
+      twinKey: 'communication',
+    }) || { schema: 'lifere_communication_twin_v1' };
+    if (!Array.isArray(communication.calibration_corrections)) {
+      communication.calibration_corrections = [];
+    }
+    communication.calibration_corrections.push({
+      at: now,
+      direction: correctionDirection,
+      quote: text.slice(0, 200),
+      evidence_level: 'FACT',
+      source_ref: `${source}:${now}`,
+    });
+    communication.calibration_corrections = communication.calibration_corrections.slice(-20);
+    communication.updated_at = now;
+    await store.writeTwin({
+      tenantId: 'default',
+      userId: userHandle,
+      twinKey: 'communication',
+      payload: communication,
+      receiptMeta: receipt,
+    });
+    writes.push('communication');
   }
 
   const meta = store.readTwin({ tenantId: 'default', userId: userHandle, twinKey: '_meta' });
@@ -393,6 +442,25 @@ function formatTwinInjectBlock(bundle, { maxChars = 7000 } = {}) {
       `${calLines.join(', ')}\n` +
       'Use to interpret Adam\'s intended meaning (e.g. confidence-expression scales how literally to take words like "certain"/"maybe"), not to rewrite what he says.'
     );
+
+    // GAP-FILL, 2026-08-03: real, evidence-labeled corrections Adam has actually
+    // given (detected deterministically by learnFromFounderMessage, not inferred)
+    // -- this is the learning half of the calibration loop. Surfacing the most
+    // recent few turns a captured-but-silent log into something Chair can act on.
+    const corrections = Array.isArray(communication.calibration_corrections)
+      ? communication.calibration_corrections
+      : [];
+    if (corrections.length) {
+      const recent = corrections.slice(-5);
+      const shorterCount = recent.filter((c) => c.direction === 'shorter').length;
+      const longerCount = recent.filter((c) => c.direction === 'longer').length;
+      const last = recent[recent.length - 1];
+      parts.push(
+        `RECENT COMMUNICATION CORRECTIONS (FACT — Adam's own words, last ${recent.length} of ${corrections.length} total):\n` +
+        `${shorterCount} asked for shorter/less detail, ${longerCount} asked for more detail/explanation.\n` +
+        `Most recent (${last.direction}, ${last.at}): "${last.quote}"`
+      );
+    }
   }
 
   if (personality) {

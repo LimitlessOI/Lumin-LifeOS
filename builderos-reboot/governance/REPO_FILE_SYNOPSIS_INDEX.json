@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-04T02:22:18.697Z",
+  "generated_at": "2026-08-04T03:12:08.353Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12980,
   "files": [
@@ -42869,9 +42869,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 681354,
-      "mtime": "2026-08-04T01:13:24.431Z",
-      "indexed_at": "2026-08-04T01:13:52.959Z"
+      "bytes": 683761,
+      "mtime": "2026-08-04T03:11:38.517Z",
+      "indexed_at": "2026-08-04T03:12:08.353Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -94903,9 +94903,9 @@
     {
       "path": "services/lumin-context-loader.js",
       "synopsis": "Loads per-user twin + communication profile + recent learning for Lumin prompts.",
-      "bytes": 22398,
-      "mtime": "2026-08-04T01:10:09.278Z",
-      "indexed_at": "2026-08-04T01:13:52.959Z",
+      "bytes": 25766,
+      "mtime": "2026-08-04T03:09:27.266Z",
+      "indexed_at": "2026-08-04T03:12:08.353Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -100663,9 +100663,9 @@
     {
       "path": "tests/digital-twin-loader.test.js",
       "synopsis": "Unit tests for digital twin inject loader.",
-      "bytes": 4656,
-      "mtime": "2026-08-03T20:13:00.627Z",
-      "indexed_at": "2026-08-03T20:14:24.222Z"
+      "bytes": 6789,
+      "mtime": "2026-08-04T03:10:51.361Z",
+      "indexed_at": "2026-08-04T03:12:08.353Z"
     },
     {
       "path": "tests/doc-hygiene-gate.test.js",

@@ -12,6 +12,7 @@ import {
   fieldValue,
   isFounderTwinHardGated,
   learnFromFounderMessage,
+  formatTwinInjectBlock,
 } from '../services/lumin-context-loader.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -106,4 +107,55 @@ test('learnFromFounderMessage writes memory + decision heuristics', async () => 
   assert.ok(meta.last_learned_at);
 
   fs.rmSync(TEST_DIR, { recursive: true, force: true });
+});
+
+test('learnFromFounderMessage captures an explicit communication correction, deterministically', async () => {
+  fs.rmSync(TEST_DIR, { recursive: true, force: true });
+  fs.mkdirSync(TEST_DIR, { recursive: true });
+
+  const result = await learnFromFounderMessage({
+    userHandle: TEST_USER,
+    messageText: 'that reply was way too long, just tell me the short version next time',
+    source: 'unit_test',
+  });
+  assert.ok(result.writes.includes('communication'));
+
+  const communication = JSON.parse(fs.readFileSync(path.join(TEST_DIR, 'communication.json'), 'utf8'));
+  assert.equal(communication.calibration_corrections.length, 1);
+  assert.equal(communication.calibration_corrections[0].direction, 'shorter');
+  assert.equal(communication.calibration_corrections[0].evidence_level, 'FACT');
+
+  fs.rmSync(TEST_DIR, { recursive: true, force: true });
+});
+
+test('learnFromFounderMessage does not fabricate a correction from an ordinary message', async () => {
+  fs.rmSync(TEST_DIR, { recursive: true, force: true });
+  fs.mkdirSync(TEST_DIR, { recursive: true });
+
+  const result = await learnFromFounderMessage({
+    userHandle: TEST_USER,
+    messageText: 'what should I focus on first today based on the goals we set',
+    source: 'unit_test',
+  });
+  assert.ok(!result.writes.includes('communication'));
+
+  fs.rmSync(TEST_DIR, { recursive: true, force: true });
+});
+
+test('formatTwinInjectBlock surfaces recent corrections honestly, as FACT not GUESS', () => {
+  const bundle = {
+    userHandle: 'adam',
+    _meta: { status: 'active' },
+    personal: { name: 'Adam' },
+    communication: {
+      calibration_corrections: [
+        { at: '2026-08-01T00:00:00Z', direction: 'shorter', quote: 'too long, keep it short', evidence_level: 'FACT' },
+        { at: '2026-08-02T00:00:00Z', direction: 'shorter', quote: 'just tell me which one to pick', evidence_level: 'FACT' },
+      ],
+    },
+  };
+  const inject = formatTwinInjectBlock(bundle);
+  assert.ok(inject.includes('RECENT COMMUNICATION CORRECTIONS'));
+  assert.ok(inject.includes('FACT'));
+  assert.ok(inject.includes('2 asked for shorter'));
 });
