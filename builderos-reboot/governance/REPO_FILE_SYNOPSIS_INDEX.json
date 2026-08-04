@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-04T08:08:30.930Z",
+  "generated_at": "2026-08-04T08:12:24.377Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12982,
   "files": [
@@ -41949,9 +41949,9 @@
     {
       "path": "docs/products/builderos/GAP_FILL_LEDGER.json",
       "synopsis": "Documentation — GAP FILL LEDGER.",
-      "bytes": 65466,
-      "mtime": "2026-08-02T11:14:47.904Z",
-      "indexed_at": "2026-08-02T11:18:24.885Z",
+      "bytes": 67820,
+      "mtime": "2026-08-04T08:08:31.438Z",
+      "indexed_at": "2026-08-04T08:12:24.377Z",
       "synopsis_index_only": true
     },
     {
@@ -42877,9 +42877,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 698267,
-      "mtime": "2026-08-04T08:07:59.583Z",
-      "indexed_at": "2026-08-04T08:08:30.930Z"
+      "bytes": 700126,
+      "mtime": "2026-08-04T08:12:01.297Z",
+      "indexed_at": "2026-08-04T08:12:24.377Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -90282,9 +90282,9 @@
     {
       "path": "services/chair-direct-agent.js",
       "synopsis": "Direct Chair agent — talks + acts; human prose obeys Lumin Communication DNA (not theater).",
-      "bytes": 28951,
-      "mtime": "2026-08-04T08:07:04.022Z",
-      "indexed_at": "2026-08-04T08:08:30.930Z",
+      "bytes": 29569,
+      "mtime": "2026-08-04T08:11:33.781Z",
+      "indexed_at": "2026-08-04T08:12:24.377Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

@@ -559,6 +559,14 @@
       "added_real_lines": 17,
       "justification": "narrow correctness fix to an existing generated\nfile (return-value/leak bug in one function), not new service logic — same\nclass of fix as the FCLA-001 driftReport GAP-FILL earlier this mission.",
       "commit_message_excerpt": "GAP-FILL: solomon-withheld-recommendation.js leaked the withheld recommendation body"
+    },
+    {
+      "at": "2026-08-04T08:08:31.436Z",
+      "file": "services/lumin-chair-orchestrator.js",
+      "is_new_file": false,
+      "added_real_lines": 37,
+      "justification": "narrow, well-justified correctness fix to two\nexisting files (services/lumin-chair-orchestrator.js,\nservices/chair-direct-agent.js) -- extends an existing tool closure with a\nfallback to an already-correct, already-built classifier/executor pair, plus\na system-prompt update so the model knows the tool exists. No new engine, no\nnew ledger, no new business logic.\n\nThe previous same-day fix (widening the life_admin gate) was correct in\ndiagnosis but landed in dead code: confirmed via a direct authenticated raw\nHTTP POST to /founder-interface/message that the response carried\nchair_channel: \"chair\", command_truth: \"NO_COMMAND_RAN\", execution_kind:\n\"UNKNOWN\" -- the \"DIRECT CHAIR AGENT (front door)\" block in\nlumin-chair-orchestrator.js returns before that gate is ever reached,\nwhenever the LLM produces any non-empty reply (virtually always). Its only\ntool, trySystemAction -> tryLuminChairSystemAction(), has zero\ncommitment/note/check-in patterns, so the model just replies conversationally\n-- explaining both why \"I can schedule X\" never wrote anything and why a\nlater \"what are my upcoming commitments\" query fabricated plausible titles\ninstead of reading the database.\n\nFix: extended the front door's trySystemAction closure to fall back to\nlifeos-chat-intent-executor.js's classifyIntent/executeIntent (already\ncorrect -- canonical commitments table, real date/time parsing) only when\nthe existing parser finds no match, excluding build_request since that\nclassification triggers a live /factory/execute-step call with\nskip_intake_gate: true. Also updated chair-direct-agent.js's system prompt:\nits own capability list and \"act\" example only mentioned \"open food\nlogger/redeploy/run alpha cycle\" -- no reason for the model to know\nscheduling was now a real tool -- added explicit examples, a choosing rule,\nand an honesty rule against bare \"I can schedule that\" replies with no\nact call.\n\nVerified the composed trySystemAction closure directly against the real\ndatabase (bypassing the LLM)",
+      "commit_message_excerpt": "GAP-FILL: wire commitment/note/check-in capture into Chair's real front door"
     }
   ]
 }
