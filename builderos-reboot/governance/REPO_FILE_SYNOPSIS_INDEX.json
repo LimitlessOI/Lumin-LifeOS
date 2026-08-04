@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-04T10:30:31.434Z",
+  "generated_at": "2026-08-04T10:33:52.942Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12983,
   "files": [
@@ -41949,9 +41949,9 @@
     {
       "path": "docs/products/builderos/GAP_FILL_LEDGER.json",
       "synopsis": "Documentation — GAP FILL LEDGER.",
-      "bytes": 72519,
-      "mtime": "2026-08-04T10:05:56.787Z",
-      "indexed_at": "2026-08-04T10:09:46.485Z",
+      "bytes": 74595,
+      "mtime": "2026-08-04T10:30:32.099Z",
+      "indexed_at": "2026-08-04T10:33:52.942Z",
       "synopsis_index_only": true
     },
     {
@@ -42884,9 +42884,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 715832,
-      "mtime": "2026-08-04T10:30:02.310Z",
-      "indexed_at": "2026-08-04T10:30:31.434Z"
+      "bytes": 717243,
+      "mtime": "2026-08-04T10:33:31.363Z",
+      "indexed_at": "2026-08-04T10:33:52.942Z"
     },
     {
       "path": "docs/products/LIFERE.md",
