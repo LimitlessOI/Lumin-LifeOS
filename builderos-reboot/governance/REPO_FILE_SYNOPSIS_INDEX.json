@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-04T06:35:20.651Z",
+  "generated_at": "2026-08-04T06:39:10.273Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12981,
+  "file_count": 12982,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -42877,9 +42877,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 686164,
-      "mtime": "2026-08-04T06:34:42.990Z",
-      "indexed_at": "2026-08-04T06:35:20.651Z"
+      "bytes": 687029,
+      "mtime": "2026-08-04T06:38:40.999Z",
+      "indexed_at": "2026-08-04T06:39:10.273Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -76317,6 +76317,16 @@
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md",
         "builderos-reboot/MISSIONS/PRODUCT-VOICE-RAIL-V1-0001/FOUNDER_DIRECT_PROVIDER_PROOF_SPEC.md"
+      ]
+    },
+    {
+      "path": "scripts/run-founder-e2e-loop-verification.mjs",
+      "synopsis": "Founder message -> Chair -> governed action -> receipt -> dashboard",
+      "bytes": 9572,
+      "mtime": "2026-08-04T06:29:26.854Z",
+      "indexed_at": "2026-08-04T06:39:10.273Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
       ]
     },
     {
