@@ -34,7 +34,10 @@ export function createLifeOSCommitmentRoutes({ pool, requireKey, logger }) {
       const body = req.body || {};
       const userId = await resolveUserId(body.user || req.query.user || 'adam');
       if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
-      if (!body.text) return res.status(400).json({ ok: false, error: 'text is required' });
+      // GAP-FILL 2026-08-04: lifeos-quick-entry.html (a real live caller) posts
+      // {title, due_at}, never {text} -- this check rejected every one of its
+      // requests with a live 400 before this fix. Accept either field.
+      if (!body.text && !body.title) return res.status(400).json({ ok: false, error: 'text is required' });
       const commitment = await svc.addCommitment(userId, body);
       res.status(201).json({ ok: true, commitment });
     } catch (err) {

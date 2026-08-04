@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-04T06:39:10.273Z",
+  "generated_at": "2026-08-04T07:48:25.816Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12982,
   "files": [
@@ -42877,9 +42877,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 687029,
-      "mtime": "2026-08-04T06:38:40.999Z",
-      "indexed_at": "2026-08-04T06:39:10.273Z"
+      "bytes": 691136,
+      "mtime": "2026-08-04T07:47:41.582Z",
+      "indexed_at": "2026-08-04T07:48:25.816Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -71134,9 +71134,9 @@
     {
       "path": "routes/lifeos-commitment-routes.js",
       "synopsis": "Commitment tracker API — add, complete, and list upcoming/overdue commitments.",
-      "bytes": 4745,
-      "mtime": "2026-06-29T17:21:08.521Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 4992,
+      "mtime": "2026-08-04T07:46:28.993Z",
+      "indexed_at": "2026-08-04T07:48:25.816Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -93737,9 +93737,9 @@
     {
       "path": "services/lifeos-commitment-tracker.js",
       "synopsis": "Tracks commitments Adam makes and surfaces upcoming/overdue ones.",
-      "bytes": 1619,
-      "mtime": "2026-06-29T17:21:08.901Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 2487,
+      "mtime": "2026-08-04T07:46:22.262Z",
+      "indexed_at": "2026-08-04T07:48:25.816Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
