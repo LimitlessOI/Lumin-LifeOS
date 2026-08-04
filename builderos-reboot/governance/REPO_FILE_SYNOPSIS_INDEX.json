@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-04T22:36:07.579Z",
+  "generated_at": "2026-08-04T23:56:40.485Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12999,
+  "file_count": 13003,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -39788,6 +39788,20 @@
       "indexed_at": "2026-08-04T00:56:01.725Z"
     },
     {
+      "path": "docs/conversation_dumps/2026-08-04-legacyos-mediaos-imprint-vision-ROUTING.md",
+      "synopsis": "Route map — 2026-08-04 LegacyOS/MediaOS founder vision + Digital Imprint naming proposal",
+      "bytes": 3222,
+      "mtime": "2026-08-04T23:54:39.275Z",
+      "indexed_at": "2026-08-04T23:56:40.485Z"
+    },
+    {
+      "path": "docs/conversation_dumps/2026-08-04-legacyos-mediaos-imprint-vision.md",
+      "synopsis": "Verbatim founder session — LegacyOS / MediaOS Human Legacy Initiative + Digital Imprint naming proposal",
+      "bytes": 15401,
+      "mtime": "2026-08-04T23:54:22.994Z",
+      "indexed_at": "2026-08-04T23:56:40.485Z"
+    },
+    {
       "path": "docs/conversation_dumps/by-product/sessions/2a4739f2/BUILDEROS-AUTONOMOUS.md",
       "synopsis": "BuilderOS / TSOS / autonomous / alpha",
       "bytes": 85566,
@@ -42677,6 +42691,13 @@
       "indexed_at": "2026-08-04T01:13:52.959Z"
     },
     {
+      "path": "docs/products/ideavault/conversations/2026-08-04-legacyos-mediaos-founder-vision-brief.md",
+      "synopsis": "IdeaVault — 2026-08-04 founder brainstorm: LegacyOS/MediaOS Human Legacy Initiative, PARKED, no product home yet",
+      "bytes": 6438,
+      "mtime": "2026-08-04T23:55:06.302Z",
+      "indexed_at": "2026-08-04T23:56:40.485Z"
+    },
+    {
       "path": "docs/products/ideavault/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
       "bytes": 1893,
@@ -42687,9 +42708,9 @@
     {
       "path": "docs/products/ideavault/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — IdeaVault",
-      "bytes": 65387,
-      "mtime": "2026-08-01T11:01:02.364Z",
-      "indexed_at": "2026-08-01T11:01:10.886Z"
+      "bytes": 67517,
+      "mtime": "2026-08-04T23:55:53.855Z",
+      "indexed_at": "2026-08-04T23:56:40.485Z"
     },
     {
       "path": "docs/products/INDEX.md",
@@ -42920,6 +42941,13 @@
       "indexed_at": "2026-08-04T01:13:52.959Z"
     },
     {
+      "path": "docs/products/lifeos/conversations/2026-08-04-digital-imprint-naming-proposal.md",
+      "synopsis": "LifeOS — 2026-08-04 founder naming proposal: Digital Imprint vs. Digital Twin (NOT ADOPTED, no rename applied)",
+      "bytes": 4281,
+      "mtime": "2026-08-04T23:55:27.919Z",
+      "indexed_at": "2026-08-04T23:56:40.485Z"
+    },
+    {
       "path": "docs/products/lifeos/CREATIVE_BRIEF.md",
       "synopsis": "Creative Brief — LifeOS (lifeos)",
       "bytes": 4211,
@@ -42950,10 +42978,10 @@
     },
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
-      "synopsis": "Canonical product home — LifeOS",
-      "bytes": 748695,
-      "mtime": "2026-08-04T22:35:52.462Z",
-      "indexed_at": "2026-08-04T22:36:07.579Z"
+      "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
+      "bytes": 750777,
+      "mtime": "2026-08-04T23:56:23.818Z",
+      "indexed_at": "2026-08-04T23:56:40.485Z"
     },
     {
       "path": "docs/products/LIFERE.md",
