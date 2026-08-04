@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-04T10:33:52.942Z",
+  "generated_at": "2026-08-04T10:39:09.370Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12983,
+  "file_count": 12984,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -42825,6 +42825,13 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "docs/products/lifeos/COMMUNICATION_TRANSLATION_MAPPING_2026_08_04.md",
+      "synopsis": "Priority 4 dependency-mapping audit — does a Communication Translation Layer need to be built?",
+      "bytes": 5149,
+      "mtime": "2026-08-04T10:38:20.934Z",
+      "indexed_at": "2026-08-04T10:39:09.370Z"
+    },
+    {
       "path": "docs/products/lifeos/conversations/2026-06-29-human-synergy-limitless-principle.md",
       "synopsis": "LifeOS extract — human synergy and employee digital twin",
       "bytes": 2964,
@@ -42884,9 +42891,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 717243,
-      "mtime": "2026-08-04T10:33:31.363Z",
-      "indexed_at": "2026-08-04T10:33:52.942Z"
+      "bytes": 720066,
+      "mtime": "2026-08-04T10:38:46.809Z",
+      "indexed_at": "2026-08-04T10:39:09.370Z"
     },
     {
       "path": "docs/products/LIFERE.md",
