@@ -458,6 +458,32 @@ Respond with exactly one JSON object:`;
       shellAction = actionResult.shell_action || shellAction;
       actionReceipt = actionResult.receipt || actionResult;
       actionType = actionResult.action_type || 'system_action';
+      // GAP-FILL 2026-08-04 (Priority 2, founder command-execution audit): a
+      // successful action used to `continue` back into another model call,
+      // which could -- and, confirmed live, did -- decide to call "act" again
+      // with the same directive instead of switching to "reply", producing
+      // duplicate real writes (3 duplicate commitment rows from one request,
+      // observed live in production). A write is not idempotent; retrying it
+      // is not a safe default. Return immediately on any executed action
+      // instead of giving the model another chance to repeat it in this turn.
+      if (commandRan) {
+        const finalized = finalizeHumanReply(
+          actionResult.human_summary || 'Done.',
+          { commandRan, lastBuild, presenceMode: isPresenceTurn },
+        );
+        return {
+          reply: finalized.reply,
+          command_ran: commandRan,
+          ok: actionResult.ok !== false,
+          build: lastBuild,
+          shell_action: shellAction,
+          action_receipt: actionReceipt,
+          action_type: actionType,
+          lane: shellAction ? 'system_action' : 'chair',
+          steps: step + 1,
+          communication_law: finalized.communication_law,
+        };
+      }
       observations.push(`ACTION RESULT: ${JSON.stringify({
         action_type: actionResult.action_type,
         ok: actionResult.ok,
