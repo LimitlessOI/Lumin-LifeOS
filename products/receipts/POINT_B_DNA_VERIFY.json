@@ -1,1 +1,1 @@
-{"schema":"point_b_dna_verify_v1","version":"point_b_dna_v1","at":"2026-08-04T17:04:18.247Z","ok":true,"failures":[],"supreme_authority":"docs/constitution/POINT_B_DNA.md","produced_by":"codebase","verified_by":"scripts/verify-point-b-dna.mjs","verification_kind":"deterministic"}
+{"schema":"point_b_dna_verify_v1","version":"point_b_dna_v1","at":"2026-08-05T19:40:23.713Z","ok":true,"failures":[],"supreme_authority":"docs/constitution/POINT_B_DNA.md","produced_by":"codebase","verified_by":"scripts/verify-point-b-dna.mjs","verification_kind":"deterministic"}

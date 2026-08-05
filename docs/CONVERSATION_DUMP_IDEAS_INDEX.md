@@ -18,6 +18,7 @@
 | **`Lumin-Memory/`** (no bullet) | **Mostly placeholders** — nested `00_INBOX/raw/00_INBOX/raw/*` files are 14‑byte `404: Not Found` stubs. **Do not treat as source.** |
 | [`docs/conversation_dumps/README.md`](conversation_dumps/README.md) | Dated exports; primary **verbatim brainstorm** file: [`OPERATOR_BRAINSTORM_INBOX.md`](conversation_dumps/OPERATOR_BRAINSTORM_INBOX.md) (indexed by `idea-vault:catalog-keywords`). |
 | [`docs/THREAD_REALITY/`](THREAD_REALITY/) | Structured **plans / reports / questions** for thread hygiene (not full chat logs). |
+| [`docs/products/ideavault/conversations/2026-08-05-conversation-dump-bot-catalog.md`](../products/ideavault/conversations/2026-08-05-conversation-dump-bot-catalog.md) | **Machine-built catalog** of every `docs/conversation_dumps/` `.md` file (109 files, 10.03MB), grouped by inferred product tag with size + headings. Produced by `npm run idea-vault:scan-dumps`. |
 | [`IMMEDIATE_FEATURES_AND_REVOLUTIONARY_IDEAS.md`](../IMMEDIATE_FEATURES_AND_REVOLUTIONARY_IDEAS.md) (repo root) | Dated **2025‑12‑07** feature + “25 revolutionary ideas” doc (overlaps council/cost themes). |
 
 **Tools:** [`scripts/memory/split_dumps.mjs`](../scripts/memory/split_dumps.mjs) splits huge dumps into chunk files; [`scripts/import-dumps-to-twin.js`](../scripts/import-dumps-to-twin.js) imports into twin/memory flows.

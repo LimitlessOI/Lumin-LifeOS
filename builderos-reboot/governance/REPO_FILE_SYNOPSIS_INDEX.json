@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-05T19:32:08.032Z",
+  "generated_at": "2026-08-05T19:41:53.578Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13007,
+  "file_count": 13010,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -29264,40 +29264,40 @@
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-SALESOS-THERAPIST-MEETING-KIT-V1-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
-      "bytes": 10988,
-      "mtime": "2026-08-04T22:01:59.337Z",
-      "indexed_at": "2026-08-04T22:02:58.629Z",
+      "bytes": 9936,
+      "mtime": "2026-08-05T19:41:53.578Z",
+      "indexed_at": "2026-08-05T19:41:53.578Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-SALESOS-THERAPIST-MEETING-KIT-V1-0001/FOUNDER_PACKET.md",
       "synopsis": "Founder Packet — SalesOS Therapist Meeting Kit Phase 1",
       "bytes": 6075,
-      "mtime": "2026-08-04T21:58:55.879Z",
-      "indexed_at": "2026-08-04T21:58:55.879Z"
+      "mtime": "2026-08-05T19:41:53.578Z",
+      "indexed_at": "2026-08-05T19:41:53.578Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-SALESOS-THERAPIST-MEETING-KIT-V1-0001/KNOWN_ASSUMPTIONS.json",
       "synopsis": "BuilderOS artifact — KNOWN ASSUMPTIONS.",
       "bytes": 1834,
-      "mtime": "2026-08-04T21:58:55.879Z",
-      "indexed_at": "2026-08-04T21:58:55.879Z",
+      "mtime": "2026-08-05T19:41:53.578Z",
+      "indexed_at": "2026-08-05T19:41:53.578Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-SALESOS-THERAPIST-MEETING-KIT-V1-0001/KNOWN_RISKS.json",
       "synopsis": "BuilderOS artifact — KNOWN RISKS.",
       "bytes": 2016,
-      "mtime": "2026-08-04T21:58:55.879Z",
-      "indexed_at": "2026-08-04T21:58:55.879Z",
+      "mtime": "2026-08-05T19:41:53.578Z",
+      "indexed_at": "2026-08-05T19:41:53.578Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-SALESOS-THERAPIST-MEETING-KIT-V1-0001/OBJECTIVE_VERDICT.json",
       "synopsis": "BuilderOS artifact — OBJECTIVE VERDICT.",
       "bytes": 1477,
-      "mtime": "2026-08-04T21:58:55.879Z",
-      "indexed_at": "2026-08-04T21:58:55.879Z",
+      "mtime": "2026-08-05T19:41:53.578Z",
+      "indexed_at": "2026-08-05T19:41:53.578Z",
       "synopsis_index_only": true
     },
     {
@@ -33198,9 +33198,9 @@
     {
       "path": "data/constitutional-framework/reports/CONSTITUTIONAL_OBSERVABILITY_REPORT.json",
       "synopsis": "JSON data/config — data/constitutional-framework/reports/CONSTITUTIONAL_OBSERVABILITY_REPORT.json.",
-      "bytes": 10125,
-      "mtime": "2026-08-04T17:05:39.661Z",
-      "indexed_at": "2026-08-04T17:05:39.661Z",
+      "bytes": 10126,
+      "mtime": "2026-08-05T19:41:53.578Z",
+      "indexed_at": "2026-08-05T19:41:53.578Z",
       "synopsis_index_only": true
     },
     {
@@ -39623,8 +39623,8 @@
       "path": "docs/CONTINUITY_LOG_LIFEOS.md",
       "synopsis": "Continuity Log — LifeOS Core Lane",
       "bytes": 75104,
-      "mtime": "2026-08-05T19:29:25.145Z",
-      "indexed_at": "2026-08-05T19:29:25.145Z"
+      "mtime": "2026-08-05T19:41:53.578Z",
+      "indexed_at": "2026-08-05T19:41:53.578Z"
     },
     {
       "path": "docs/CONTINUITY_LOG_SECURITY.md",
@@ -39643,16 +39643,16 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 141212,
-      "mtime": "2026-08-05T19:29:25.145Z",
-      "indexed_at": "2026-08-05T19:29:25.145Z"
+      "bytes": 142225,
+      "mtime": "2026-08-05T19:41:53.578Z",
+      "indexed_at": "2026-08-05T19:41:53.578Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
       "synopsis": "CONVERSATION_DUMP_IDEAS_INDEX — mined threads & backlog themes",
-      "bytes": 27656,
-      "mtime": "2026-06-27T23:29:26.535Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 28023,
+      "mtime": "2026-08-05T19:41:53.578Z",
+      "indexed_at": "2026-08-05T19:41:53.578Z"
     },
     {
       "path": "docs/conversation_dumps/2026-03-15-cursor-session-48f2917e-MASTER.md",
@@ -39744,6 +39744,13 @@
       "bytes": 15473,
       "mtime": "2026-07-24T18:36:41.704Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "docs/conversation_dumps/2026-07-23-human-performance-engine-salesos-synthesis.md",
+      "synopsis": "The Human Performance Engine: What We Know Now",
+      "bytes": 7140,
+      "mtime": "2026-08-05T19:41:53.578Z",
+      "indexed_at": "2026-08-05T19:41:53.578Z"
     },
     {
       "path": "docs/conversation_dumps/2026-07-27-ai-memory-governance-brainstorm.md",
@@ -42698,26 +42705,33 @@
       "indexed_at": "2026-08-04T23:56:40.485Z"
     },
     {
+      "path": "docs/products/ideavault/conversations/2026-08-05-conversation-dump-bot-catalog.md",
+      "synopsis": "Bot-generated catalog of docs/conversation_dumps/ — 2026-08-05",
+      "bytes": 70152,
+      "mtime": "2026-08-05T19:41:53.578Z",
+      "indexed_at": "2026-08-05T19:41:53.578Z"
+    },
+    {
       "path": "docs/products/ideavault/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
-      "bytes": 1893,
-      "mtime": "2026-06-29T17:21:07.990Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 1734,
+      "mtime": "2026-08-05T19:41:53.578Z",
+      "indexed_at": "2026-08-05T19:41:53.578Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/products/ideavault/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — IdeaVault",
-      "bytes": 67517,
-      "mtime": "2026-08-04T23:55:53.855Z",
-      "indexed_at": "2026-08-04T23:56:40.485Z"
+      "bytes": 66841,
+      "mtime": "2026-08-05T19:41:53.578Z",
+      "indexed_at": "2026-08-05T19:41:53.578Z"
     },
     {
       "path": "docs/products/INDEX.md",
       "synopsis": "Product index — start here",
       "bytes": 2628,
-      "mtime": "2026-08-04T23:58:10.245Z",
-      "indexed_at": "2026-08-04T23:58:10.245Z"
+      "mtime": "2026-08-05T19:41:53.578Z",
+      "indexed_at": "2026-08-05T19:41:53.578Z"
     },
     {
       "path": "docs/products/kids-os/CREATIVE_BRIEF.md",
@@ -42817,23 +42831,23 @@
       "path": "docs/products/legacyos/conversations/2026-07-23-founder-vision-brief.md",
       "synopsis": "Documentation — 2026 07 23 Founder Vision Brief.",
       "bytes": 14067,
-      "mtime": "2026-08-04T23:58:10.245Z",
-      "indexed_at": "2026-08-04T23:58:10.245Z"
+      "mtime": "2026-08-05T19:41:53.578Z",
+      "indexed_at": "2026-08-05T19:41:53.578Z"
     },
     {
       "path": "docs/products/legacyos/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
       "bytes": 1541,
-      "mtime": "2026-08-04T23:58:10.245Z",
-      "indexed_at": "2026-08-04T23:58:10.245Z",
+      "mtime": "2026-08-05T19:41:53.578Z",
+      "indexed_at": "2026-08-05T19:41:53.578Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/products/legacyos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LegacyOS / MediaOS / Human Legacy Initiative",
       "bytes": 8670,
-      "mtime": "2026-08-04T23:58:10.245Z",
-      "indexed_at": "2026-08-04T23:58:10.245Z"
+      "mtime": "2026-08-05T19:41:53.578Z",
+      "indexed_at": "2026-08-05T19:41:53.578Z"
     },
     {
       "path": "docs/products/life-coaching/CREATIVE_BRIEF.md",
@@ -42917,8 +42931,8 @@
       "path": "docs/products/lifeos/COMMUNICATION_SYSTEM_BLUEPRINT.md",
       "synopsis": "LifeOS-scoped communication / cognitive-interaction blueprint — source: TALOA Cognitive Interaction System complete blueprint 2026-08-04, cross-referenced with existing LifeOS communication canon.",
       "bytes": 28922,
-      "mtime": "2026-08-05T19:29:25.145Z",
-      "indexed_at": "2026-08-05T19:29:25.145Z"
+      "mtime": "2026-08-05T19:41:53.578Z",
+      "indexed_at": "2026-08-05T19:41:53.578Z"
     },
     {
       "path": "docs/products/lifeos/COMMUNICATION_SYSTEM_FOUNDER_REFERENCE.md",
@@ -43001,16 +43015,16 @@
       "path": "docs/products/lifeos/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
       "bytes": 25177,
-      "mtime": "2026-08-05T19:29:25.145Z",
-      "indexed_at": "2026-08-05T19:29:25.145Z",
+      "mtime": "2026-08-05T19:41:53.578Z",
+      "indexed_at": "2026-08-05T19:41:53.578Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
       "bytes": 732547,
-      "mtime": "2026-08-05T19:32:08.032Z",
-      "indexed_at": "2026-08-05T19:32:08.032Z"
+      "mtime": "2026-08-05T19:41:53.578Z",
+      "indexed_at": "2026-08-05T19:41:53.578Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -43088,8 +43102,8 @@
       "path": "docs/products/limitlessos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LimitlessOS business stack",
       "bytes": 18684,
-      "mtime": "2026-08-04T21:14:11.035Z",
-      "indexed_at": "2026-08-04T21:14:11.035Z"
+      "mtime": "2026-08-05T19:41:53.578Z",
+      "indexed_at": "2026-08-05T19:41:53.578Z"
     },
     {
       "path": "docs/products/lip/FILE_MANIFEST.json",
@@ -43393,8 +43407,8 @@
       "path": "docs/products/PRODUCT_REGISTRY.json",
       "synopsis": "Documentation — PRODUCT REGISTRY.",
       "bytes": 26179,
-      "mtime": "2026-08-04T23:58:10.245Z",
-      "indexed_at": "2026-08-04T23:58:10.245Z",
+      "mtime": "2026-08-05T19:41:53.578Z",
+      "indexed_at": "2026-08-05T19:41:53.578Z",
       "synopsis_index_only": true
     },
     {
@@ -43536,30 +43550,30 @@
       "path": "docs/products/salesos/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
       "bytes": 2540,
-      "mtime": "2026-08-04T22:10:11.419Z",
-      "indexed_at": "2026-08-04T22:10:11.419Z",
+      "mtime": "2026-08-05T19:41:53.578Z",
+      "indexed_at": "2026-08-05T19:41:53.578Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/products/salesos/HUMAN_PERFORMANCE_ENGINE_DEEP_DIVE.md",
       "synopsis": "Deep-dive market and research analysis for the SalesOS Human Performance Engine / real-time coaching concept.",
       "bytes": 29648,
-      "mtime": "2026-08-04T22:25:24.790Z",
-      "indexed_at": "2026-08-04T22:25:24.790Z"
+      "mtime": "2026-08-05T19:41:53.578Z",
+      "indexed_at": "2026-08-05T19:41:53.578Z"
     },
     {
       "path": "docs/products/salesos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — SalesOS",
       "bytes": 13898,
-      "mtime": "2026-08-04T22:25:24.790Z",
-      "indexed_at": "2026-08-04T22:25:24.790Z"
+      "mtime": "2026-08-05T19:41:53.578Z",
+      "indexed_at": "2026-08-05T19:41:53.578Z"
     },
     {
       "path": "docs/products/salesos/SALESOS_ZERO_STATE_AND_BP.md",
       "synopsis": "SalesOS grounded zero-state and build plan",
       "bytes": 10180,
-      "mtime": "2026-08-04T21:58:55.879Z",
-      "indexed_at": "2026-08-04T21:58:55.879Z"
+      "mtime": "2026-08-05T19:41:53.578Z",
+      "indexed_at": "2026-08-05T19:41:53.578Z"
     },
     {
       "path": "docs/products/site-builder/AGENTS.md",
@@ -66499,9 +66513,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\":\"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",\"lifeos:file-synopsis:backfill\":\"node scripts/file-synopsis-enforce.mjs --all --auto-fix && node scripts/generate-file-synopsis-index.mjs\",\"lifeos:file-synopsis:index\":\"n",
-      "bytes": 34466,
-      "mtime": "2026-08-03T03:44:43.627Z",
-      "indexed_at": "2026-08-03T03:45:46.767Z",
+      "bytes": 34532,
+      "mtime": "2026-08-05T19:41:53.578Z",
+      "indexed_at": "2026-08-05T19:41:53.578Z",
       "synopsis_index_only": true
     },
     {
@@ -66913,9 +66927,9 @@
     {
       "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
       "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
-      "bytes": 3047,
-      "mtime": "2026-08-04T17:09:21.096Z",
-      "indexed_at": "2026-08-04T17:09:21.096Z",
+      "bytes": 3041,
+      "mtime": "2026-08-05T19:41:53.578Z",
+      "indexed_at": "2026-08-05T19:41:53.578Z",
       "synopsis_index_only": true
     },
     {
@@ -67538,8 +67552,8 @@
       "path": "products/receipts/POINT_B_DNA_VERIFY.json",
       "synopsis": "Product receipt — POINT B DNA VERIFY.",
       "bytes": 280,
-      "mtime": "2026-08-04T17:05:39.661Z",
-      "indexed_at": "2026-08-04T17:05:39.661Z",
+      "mtime": "2026-08-05T19:41:53.578Z",
+      "indexed_at": "2026-08-05T19:41:53.578Z",
       "synopsis_index_only": true
     },
     {
@@ -67554,8 +67568,8 @@
       "path": "products/receipts/RECEIPT_TRUTH_VALIDATION.json",
       "synopsis": "Product receipt — RECEIPT TRUTH VALIDATION.",
       "bytes": 18682,
-      "mtime": "2026-08-04T17:05:39.661Z",
-      "indexed_at": "2026-08-04T17:05:39.661Z",
+      "mtime": "2026-08-05T19:41:53.578Z",
+      "indexed_at": "2026-08-05T19:41:53.578Z",
       "synopsis_index_only": true
     },
     {
@@ -67754,16 +67768,16 @@
       "path": "products/receipts/TRUTH_ENFORCEMENT_AUDIT.json",
       "synopsis": "Product receipt — TRUTH ENFORCEMENT AUDIT.",
       "bytes": 701,
-      "mtime": "2026-08-04T17:05:39.661Z",
-      "indexed_at": "2026-08-04T17:05:39.661Z",
+      "mtime": "2026-08-05T19:41:53.578Z",
+      "indexed_at": "2026-08-05T19:41:53.578Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/TRUTH_LOCKDOWN_VERIFY.json",
       "synopsis": "Product receipt — TRUTH LOCKDOWN VERIFY.",
       "bytes": 1141,
-      "mtime": "2026-08-04T17:05:39.661Z",
-      "indexed_at": "2026-08-04T17:05:39.661Z",
+      "mtime": "2026-08-05T19:41:53.578Z",
+      "indexed_at": "2026-08-05T19:41:53.578Z",
       "synopsis_index_only": true
     },
     {
@@ -67794,8 +67808,8 @@
       "path": "products/receipts/WISDOM_TRUTH_AUDIT.json",
       "synopsis": "Product receipt — WISDOM TRUTH AUDIT.",
       "bytes": 735,
-      "mtime": "2026-08-04T17:05:39.661Z",
-      "indexed_at": "2026-08-04T17:05:39.661Z",
+      "mtime": "2026-08-05T19:41:53.578Z",
+      "indexed_at": "2026-08-05T19:41:53.578Z",
       "synopsis_index_only": true
     },
     {
@@ -76985,6 +76999,16 @@
       "indexed_at": "2026-07-28T22:54:46.666Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/scan-conversation-dumps.mjs",
+      "synopsis": "Conversation dump scanner — produces a categorized catalog of",
+      "bytes": 8540,
+      "mtime": "2026-08-05T19:41:53.578Z",
+      "indexed_at": "2026-08-05T19:41:53.578Z",
+      "ssot": [
+        "docs/products/ideavault/PRODUCT_HOME.md"
       ]
     },
     {

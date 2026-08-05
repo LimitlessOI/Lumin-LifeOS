@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/ideavault/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-08-04 — Catalogued PARKED LegacyOS/MediaOS Human Legacy Initiative brainstorm (no product home exists yet; see Change Receipts and `docs/products/ideavault/conversations/2026-08-04-legacyos-mediaos-founder-vision-brief.md`). Prior: 2026-08-02 — GAP-FILL `scripts/runMemoryImport.mjs` (step 2 / `ideavault-step2`): the factory left a JSON-patch payload in the file, which failed `node --check` and the BUILD_QUEUE `file_contains` checks for `import-dumps-to-twin` and `run-memory-import`. Rewrote to a valid ES module exporting `triggerRunMemoryImport` and containing both substrings. |
+| **Last Updated** | 2026-08-05 — Added `scripts/scan-conversation-dumps.mjs` bot, `npm run idea-vault:scan-dumps` alias, and produced `docs/products/ideavault/conversations/2026-08-05-conversation-dump-bot-catalog.md` (109 files, 10.03MB, 23 masters + 86 buckets, product-tagged). Updated `FILE_MANIFEST.json`, `package.json`, and this product home. |
 
 ---
 
@@ -139,6 +139,7 @@ This amendment is the **registry of record** for content that originated in Chat
 ## How to review “every megabyte” (faster than linear reading)
 
 0. **Keyword map (machine):** `npm run idea-vault:catalog-keywords` — lists which dump files hit each default term (video, YouTube, ComfyUI, shoppable, …). Extend Stream **I** or `CONVERSATION_DUMP_IDEAS_INDEX.md` §6 when a new export shifts the map. Extra terms: pass as CLI args after the script name.
+0a. **Conversation dump scanner (machine helper):** `npm run idea-vault:scan-dumps` — walks all `docs/conversation_dumps/*.md` files, infers product tags, extracts headings, and writes a categorized catalog to `docs/products/ideavault/conversations/YYYY-MM-DD-conversation-dump-bot-catalog.md`. Costs zero LLM tokens; run first when new dumps arrive.
 1. **Heading pass (machine):** For each file > 500KB, run  
    `rg -n "^#{1,3}\\s" "<path>" | head -200`  
    to build a **table of contents** before any human read.
@@ -646,12 +647,13 @@ Cross-cutting SKUs that are **not** spec’d only under **21**. **Stream A wordi
 - [x] Cross-link **`CONVERSATION_DUMP_IDEAS_INDEX.md`**.
 - [x] **`scripts/catalog-dump-keywords.mjs`** + **`npm run idea-vault:catalog-keywords`** (machine keyword → file list).
 - [x] **`scripts/operator-corpus-pipeline.mjs`** + **`npm run operator-corpus:pipeline`** (dual-lane checklist; **Lane B** = Digital Twin ingest commands).
+- [x] **`scripts/scan-conversation-dumps.mjs`** + **`npm run idea-vault:scan-dumps`** (conversation-dump bot; produces categorized `docs/products/ideavault/conversations/YYYY-MM-DD-conversation-dump-bot-catalog.md`).
 - [ ] **→ NEXT:** Run **heading pass** (§6) on any **new** export > 500KB and append a **Stream** subsection or extend Stream I / portfolio table.
 - [ ] **→ NEXT (twin):** After large new exports, operator-run **`run-memory-import.mjs`** → **`import-dumps-to-twin.js --build-profile`** (see **§ Operator corpus — dual lane**).
 - [ ] On **folder cleanup:** consolidate `Lumin-Memory` variants; delete `404` stubs; update **`CONVERSATION_DUMP_IDEAS_INDEX`** paths.
 - [ ] Optional: `scripts/extract-dump-headings.mjs` to emit `docs/IDEA_VAULT_HEADINGS_APPENDIX.md` (machine TOC) — propose via builder if non-trivial.
 
-**Progress:** 4/8 | Est. remaining: small ongoing curation + optional twin refresh after each major export drop
+**Progress:** 5/9 | Est. remaining: small ongoing curation + optional twin refresh after each major export drop
 
 ---
 
@@ -667,7 +669,7 @@ Cross-cutting SKUs that are **not** spec’d only under **21**. **Stream A wordi
 
 | Date | What Changed | Why |
 |------|--------------|-----|
-| 2026-08-04 | **Catalogued a PARKED founder brainstorm: LegacyOS/MediaOS Human Legacy Initiative.** Adam pasted a long brainstorm (memory reconstruction, family collaboration, perspective preservation, historical archives, a Digital Imprint/Digital Twin naming proposal) and asked it be stored "in mediaOS and any other project it touches on." No `mediaos`/`legacyos` product exists in this repo; `creator-media-os` is a different, already-active product (creator video content generation) and routing it there would have conflated two missions. Applied this repo's own existing rule instead: a cross-product idea with no current owner goes to IdeaVault as PARKED, same treatment CityOS/Go Vegas got on 2026-06-29. Full verbatim archived at `docs/conversation_dumps/2026-08-04-legacyos-mediaos-imprint-vision.md`; catalog extract at `docs/products/ideavault/conversations/2026-08-04-legacyos-mediaos-founder-vision-brief.md`; the naming-proposal portion routed separately to LifeOS since it touches the real, live Twin architecture (`docs/products/lifeos/conversations/2026-08-04-digital-imprint-naming-proposal.md`) rather than duplicated here. No code changed; nothing ratified. | Adam's explicit instruction to preserve the conversation in the right place(s), with an explicit distrust of AI claiming to have done something it didn't ("I can never trust... AI does one thing, and then it really doesn't do what I said to do") — verified the actual routing decision against real repo state (checked for an existing `mediaos`/`legacyos` folder, confirmed none, checked `creator-media-os`'s actual scope before ruling it out) rather than guessing. | `git ls-tree` confirmed no pre-existing `mediaos`/`legacyos` product folder; `docs/products/creator-media-os/PRODUCT_HOME.md` read in full to confirm scope mismatch before excluding it as a home. `npm run builder:preflight` PASS. | — |
+| 2026-08-05 | **Conversation dump scanner bot.** Added `scripts/scan-conversation-dumps.mjs`, `npm run idea-vault:scan-dumps` in `package.json`, and produced `docs/products/ideavault/conversations/2026-08-05-conversation-dump-bot-catalog.md` (109 files, 23 masters + 86 buckets, 10.03MB, product-tagged). Updated `FILE_MANIFEST.json` and this product home. | Adam asked to use a bot to search, index, and catalog all conversation dumps and feed ideas into the idea vault. | `node --check scripts/scan-conversation-dumps.mjs`; `npm run idea-vault:scan-dumps` produced the catalog. | — |
 | 2026-08-02 | **GAP-FILL `scripts/runMemoryImport.mjs` (step 2 / `ideavault-step2`).** The factory left a JSON-patch payload in the file, which failed `node --check` and the BUILD_QUEUE `file_contains` checks for `import-dumps-to-twin` and `run-memory-import`. Rewrote to a valid ES module exporting `triggerRunMemoryImport`, added `@ssot docs/products/ideavault/PRODUCT_HOME.md`, and included both substrings. | Satisfy the BUILD_QUEUE artifact contract and make the script syntactically valid. | `node --check scripts/runMemoryImport.mjs`; `npm run builder:preflight` PASS. | — |
 | 2026-06-25 | **All Cursor parent sessions archived (9)** — `archive-all-cursor-transcripts.mjs`; per-session `by-product/sessions/<shortId>/`; `CURSOR_SESSIONS_INDEX.md` + `CURSOR_SESSIONS_BATCH.json`; MODELS-OPS bucket added. | Adam: save every agent session without asking — not automatic on new chat yet. | ✅ 9/9 | `npm run lifeos:archive-cursor-transcripts:all` |
 | 2026-06-13 | **Cursor session archive pipeline** — `scripts/archive-cursor-transcript.mjs`; session `e9b7659e` → raw jsonl + master index + product buckets + receipt. | Adam: save conversations for history/receipts. | ✅ superseded by batch | — |
@@ -696,6 +698,7 @@ Cross-cutting SKUs that are **not** spec’d only under **21**. **Stream A wordi
 | Field | Value |
 |-------|--------|
 | **Next task** | Paste new **ChatGPT brainstorms** into **`docs/conversation_dumps/OPERATOR_BRAINSTORM_INBOX.md`**. **L4:** add **§A.1** row (`L4-004+`) for **brainstorm / product / governance** slices (**§6** step **5**) — not bulk code-tutorial unless durable integration truth → registry/amendment. **`split_dumps.mjs`** optional. **Report:** **`CONVERSATION_DUMP` §11** L4/L5 + composite **%**. **Start:** **`CONVERSATION_DUMP` §10** for per-file theme map. New export: (1) canonical inbox or `docs/conversation_dumps/`; (2) `operator-corpus:pipeline` / `idea-vault:catalog-keywords`; (3) **heading pass** if no Stream yet — `rg -n "^#{1,3}\\s" "<file>" \| head -200`; (4) **§ Seed catalog** §A/§B/§D; (5) refresh **`CONVERSATION_DUMP`** §7 if keyword defaults changed; (6) new **Stream** letter or extend I / portfolio; (7) promote to **INDEX** / amendment when revenue path clear; (8) **Lane B** twin ingest; (9) **39** Phase 2 seed + CI evidence; (10) append **§10** row + re-sum bytes; (11) refresh **§11** L4/L5 + composite **%**; (12) **`§A.1`** receipt row per promoted chunk. |
+| **Conversation dump scanner** | `npm run idea-vault:scan-dumps` — walks `docs/conversation_dumps/*.md`, infers product tags, extracts headings, and writes a categorized catalog to `docs/products/ideavault/conversations/YYYY-MM-DD-conversation-dump-bot-catalog.md`. Zero LLM tokens; run whenever new dumps land. |
 | **Blockers** | None. |
 | **⚠️ IN PROGRESS:** | Full-byte audit of all dumps — **not** claimed complete; use chunk protocol. |
 
