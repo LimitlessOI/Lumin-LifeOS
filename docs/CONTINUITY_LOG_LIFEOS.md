@@ -8,6 +8,10 @@
 
 ---
 
+## [LIFEOS] Update 2026-08-05 — Communication System Blueprint captured and merged from TALOA attachment
+
+Audited existing communication-system docs and four attachments. Created `docs/products/lifeos/COMMUNICATION_SYSTEM_BLUEPRINT.md` as a LifeOS-scoped digest of the TALOA Cognitive Interaction System blueprint plus the HTE-to-Entity-Twin mapping from the constitutional-proposal attachment. Wired the blueprint into `docs/products/lifeos/PRODUCT_HOME.md` under `## Design Spec`, added it to `docs/products/lifeos/FILE_MANIFEST.json` owned files, and updated both continuity logs. Status: PROPOSED / founder vision capture; no new runtime code. Next: founder review of the blueprint, then decide Phase 0 governance ratification before any build.
+
 ## [LIFEOS] Update 2026-07-12 — Communications all-night: CLARIFY theater killed
 
 Adam: work communications until good. KNOW: tip was sending "don't fix me" / "did that build land?" into intent CLARIFY because isBuildRequest matched "fix"/"build". Fixed exemptions + soft clarify card + relational prompt. Next: tip prove presence + build-status answers as Chair.

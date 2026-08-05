@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-04T23:58:10.245Z",
+  "generated_at": "2026-08-05T19:29:25.145Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13006,
+  "file_count": 13007,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -39622,9 +39622,9 @@
     {
       "path": "docs/CONTINUITY_LOG_LIFEOS.md",
       "synopsis": "Continuity Log — LifeOS Core Lane",
-      "bytes": 74352,
-      "mtime": "2026-07-28T17:47:22.486Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 75104,
+      "mtime": "2026-08-05T19:29:25.145Z",
+      "indexed_at": "2026-08-05T19:29:25.145Z"
     },
     {
       "path": "docs/CONTINUITY_LOG_SECURITY.md",
@@ -39643,9 +39643,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 139723,
-      "mtime": "2026-08-04T23:58:10.245Z",
-      "indexed_at": "2026-08-04T23:58:10.245Z"
+      "bytes": 141212,
+      "mtime": "2026-08-05T19:29:25.145Z",
+      "indexed_at": "2026-08-05T19:29:25.145Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -42914,6 +42914,13 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "docs/products/lifeos/COMMUNICATION_SYSTEM_BLUEPRINT.md",
+      "synopsis": "LifeOS-scoped communication / cognitive-interaction blueprint — source: TALOA Cognitive Interaction System complete blueprint 2026-08-04, cross-referenced with existing LifeOS communication canon.",
+      "bytes": 28922,
+      "mtime": "2026-08-05T19:29:25.145Z",
+      "indexed_at": "2026-08-05T19:29:25.145Z"
+    },
+    {
       "path": "docs/products/lifeos/COMMUNICATION_SYSTEM_FOUNDER_REFERENCE.md",
       "synopsis": "One-file reference for Adam — everything the repo has documented about how he wants Lumin/Chair to communicate, and where each piece stands today",
       "bytes": 20971,
@@ -42993,17 +43000,17 @@
     {
       "path": "docs/products/lifeos/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
-      "bytes": 30729,
-      "mtime": "2026-07-24T18:36:41.691Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 25177,
+      "mtime": "2026-08-05T19:29:25.145Z",
+      "indexed_at": "2026-08-05T19:29:25.145Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
-      "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 750777,
-      "mtime": "2026-08-04T23:56:23.818Z",
-      "indexed_at": "2026-08-04T23:56:40.485Z"
+      "synopsis": "Canonical product home — LifeOS",
+      "bytes": 732331,
+      "mtime": "2026-08-05T19:29:25.145Z",
+      "indexed_at": "2026-08-05T19:29:25.145Z"
     },
     {
       "path": "docs/products/LIFERE.md",

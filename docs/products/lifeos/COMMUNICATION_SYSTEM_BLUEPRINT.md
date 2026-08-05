@@ -1,0 +1,645 @@
+<!-- SYNOPSIS: LifeOS-scoped communication / cognitive-interaction blueprint — source: TALOA Cognitive Interaction System complete blueprint 2026-08-04, cross-referenced with existing LifeOS communication canon. -->
+
+# LifeOS Communication System Blueprint
+
+**Document ID:** LIFEOS-COMM-BP-001  
+**Status:** PROPOSED — founder vision capture, not ratified, no runtime code  
+**Source:** `TALOA_COGNITIVE_INTERACTION_SYSTEM_COMPLETE_BLUEPRINT_2026-08-04.md` (founder attachment)  
+**Scope:** LifeOS client conversations, therapist-supported reflection, therapist dashboard preparation, guided product support. Excludes BuilderOS governance, Solomon/Chair separation machinery, and cross-product factory concerns unless they touch LifeOS surfaces.  
+**Canonical SSOT:** `docs/products/lifeos/PRODUCT_HOME.md`  
+**Last Updated:** 2026-08-05
+
+**Related canonical files**
+- `docs/constitution/LUMIN_COMMUNICATION_DNA.md` — constitutional communication law
+- `docs/LUMIN_DOCTRINE.md` — Lumin role, Wisdom, prediction lifecycle, always-present context
+- `docs/architecture/LUMIN_TRANSLATION_AND_ACCOUNT_MODEL.md` — translation + cost routing
+- `docs/architecture/DIGITAL_TWIN_DOCTRINE.md` — twin = understanding layer
+- `docs/products/lifeos/COMMUNICATION_TRANSLATION_MAPPING_2026_08_04.md` — why no separate translation layer is needed
+- `docs/products/lifeos/CRISIS_SAFETY_PROTOCOL_V1.md`
+- `docs/products/lifeos/DECISION_OUTCOME_LEDGER_V1.md`
+- `docs/BLUEPRINT_COMMUNICATION_FIRST_2026-08-02.md`
+
+---
+
+## 1. Purpose and scope
+
+### 1.1 Mission
+LifeOS communicates in a way that produces the best next moment and improves the longer trajectory of understanding, agency, accuracy, capability, and action for the person in front of it.
+
+### 1.2 LifeOS scope (from TALOA §1.2)
+- Founder communication with the Chair
+- LifeOS client conversations
+- Therapist-supported client reflection
+- Therapist dashboard summaries and preparation
+- Guided product support and execution
+
+### 1.3 Explicit non-goals
+- Replace licensed therapists
+- Diagnose or prescribe
+- Claim clinical effectiveness without evidence
+- Create a second Digital Twin architecture
+- Promote sensitive inference to fact silently
+- Force every simple question through a slow pipeline
+- Optimize for dependence, engagement time, or conversation length
+- Present generated claims as observations
+
+---
+
+## 2. Audit: what the TALOA attachment adds to existing LifeOS communication docs
+
+| New idea from TALOA | Already owned in LifeOS? | Current location / gap |
+|---|---|---|
+| Fast-path vs deliberative interaction pipeline | Partial — `chair-lumin-unified.js` has direct-answer routing; no explicit fast-path eligibility gate | Extend `chair-direct-agent` / `lumin-chair-orchestrator` |
+| Canonical moment types (factual, status, execution, planning, venting, grief, conflict, identity, etc.) | Not explicit | New taxonomy for `chair-context-classifier.js` |
+| Canonical immediate objectives (be heard, decide, execute, recover, celebrate, etc.) | Not explicit | New taxonomy tied to intent router |
+| Canonical need hypotheses (certainty, curiosity, acknowledgment, challenge, structure, safety, etc.) | Partial — `communication-profile.js` has contextual overrides; no need taxonomy | Extend `services/communication-profile.js` |
+| Cognitive modes (Presence, Observation, Reflection, Discovery, Expansion, Guidance, Execution, Safety) | Partial — conflict coaching has `individual_clarity`; Lumin has modes; not unified | New `cognitive-mode-service` or extend `chair-lumin-unified` |
+| Conversation Composer with length, question budget, reflection/challenge levels, structure level, action permission | Not explicit — response variety and communication profile cover style, not composition | New composer or extend `response-variety.js` |
+| Communication Calibration Profile dimensions (directness, detail, literalness, uncertainty tolerance, challenge level, pacing, etc.) | Partial — `communication_profiles` table has weight maps; missing explicit dimensions | Extend `communication_profiles` schema and `services/communication-profile.js` |
+| Growth and thinking dynamics with CLAIM/HYPOTHESIS/TESTED/VERIFIED/RETIRED states | Not explicit | New `calibration_hypotheses` concept or twin-capsule extension |
+| `InteractionDecision` and `Outcome` generalized data model | Partial — `chair-decision-ledger.js` + `decision_outcome_ledger` exist; scoped to decisions, not all interactions | Generalize or keep scoped |
+| `TherapistRelationship` and `TherapistInsight` tables + session-brief API | Partial — `consent-registry.js` has `therapist_share`; no `TherapistInsight` table | New schema when therapist client feature is queued |
+| Client experience surface requirements (consent, sharing state, summary correction, direct/brainstorm/listen controls, crisis support, honest receipts, memory controls) | Partial — `lifeos-app.html` and `lifeos-coach.html` have pieces; not consolidated | Capture as UX spec |
+| Therapist dashboard (overview, session brief, timeline, pattern view, controls) | Not built | Future Wellness Studio / LifeOS therapist module |
+| Anti-Pattern Engine (repeated openings, validation phrase families, question density, advice/framework/heading overuse, repeated mode selection, failure to use fast paths) | Partial — `response-variety.js` enforces anti-repetition and forbidden phrases; not full anti-pattern engine | Extend or new `interaction-pattern-service` |
+| Outcome and Learning System with evidence hierarchy and prediction lifecycle | Partial — `chair-decision-ledger.js` has prediction/outcome/calibration; not generalized to all interactions | Generalize or keep scoped |
+| Golden conversation + adversarial test inventory | Partial — `tests/` have some; not consolidated | Add to `tests/lumin-*.test.js` |
+| Ten-phase build program scoped to LifeOS | Not explicit | Use as planning input |
+
+### 2.1 Attachments reviewed and found not to add LifeOS-communication-specific ideas
+- `BuilderOS review and rating` — Human Transformation / BuilderOS themes; no new client-communication concepts for LifeOS beyond what is already in the TALOA blueprint.
+- `Constitutional proposal overview` — governance / constitution / audit process; no new LifeOS communication mechanics.
+- `life_os_notes_.pages` — generic prompt to extract conversations; no LifeOS communication content.
+
+---
+
+## 3. Core principles
+
+1. Truth before persuasion.
+2. Reality is the scorecard.
+3. User sovereignty.
+4. Never manipulate or steer against user goals.
+5. Understanding precedes influence.
+6. Influence serves empowerment.
+7. Build capability, not dependence.
+8. Least-invasive effective intervention.
+9. No execution while material intent is unclear.
+10. No claimed execution without a receipt.
+11. Translation, not theater.
+12. Conversation, not performance.
+
+---
+
+## 4. Runtime architecture
+
+### 4.1 End-to-end flow
+```text
+Input / Event
+    ↓
+Identity, consent, and channel context
+    ↓
+Crisis and hard-safety gate
+    ↓
+Fast-path eligibility
+    ↓
+Moment recognition
+    ↓
+Shared-understanding check
+    ↓
+Immediate objective and need
+    ↓
+Evidence-informed mode selection
+    ↓
+Conversation composition
+    ↓
+Translation and user calibration
+    ↓
+Truth / command / scope validation
+    ↓
+Response or governed action
+    ↓
+Receipt and dashboard projection
+    ↓
+Outcome collection
+    ↓
+Calibration and learning
+```
+
+### 4.2 Fast paths
+Use when:
+- Verified factual or status answer
+- Malformed command
+- Deterministic confirmation
+- Crisis routing
+- Already-confirmed low-risk execution
+- Emergency safety message
+
+Fast paths still require truth, safety, permissions, and receipts.
+
+### 4.3 Deliberative triggers
+Use the full path when:
+- The message has multiple material meanings
+- The response could influence a meaningful decision
+- The user is emotionally processing
+- Advice could displace the user’s reasoning
+- The user is brainstorming, grieving, venting, celebrating, or processing failure
+- Identity, relationships, values, or meaning are involved
+- Current understanding conflicts with prior context
+- Safety or professional scope is uncertain
+
+---
+
+## 5. Core cognitive model
+
+### 5.1 Moment types
+factual inquiry, status inquiry, execution request, planning, decision-making, brainstorming, venting, grief or loss, emotional processing, conflict processing, identity exploration, celebration, failure processing, learning, seeking reassurance, seeking permission, testing an idea, procrastination / avoidance, thinking aloud, request for presence, crisis / acute safety, unclear.
+
+Store candidate type, evidence, confidence, alternatives, and whether clarification is required.
+
+### 5.2 Immediate objectives
+be heard, understand what happened, make sense of feelings, discover an insight, generate possibilities, decide, obtain information, obtain reassurance, prepare for action, execute, recover from failure, celebrate or share, reduce immediate risk, preserve momentum, professional handoff, unknown.
+
+### 5.3 Need hypotheses
+certainty, curiosity, psychological room, acknowledgment, contradiction, challenge, structure, information, perspective, accountability, encouragement, practical assistance, boundaries, safety, professional escalation, minimal response.
+
+Needs remain hypotheses grounded in current evidence, explicit preferences, and verified Twin data.
+
+### 5.4 Evidence-informed signals
+ambiguity, urgency, emotional intensity, cognitive load, readiness for direction, agency, momentum, openness to challenge, explicitness, user preference, conversational repetition, prior correction, safety risk, professional scope.
+
+Signals inform modes; they do not become a speculative psychological profile.
+
+---
+
+## 6. Cognitive modes
+
+Modes are behaviors, not personalities. One primary mode and optional secondary modes may be used.
+
+| Mode | Purpose | Core behavior |
+|---|---|---|
+| **Presence** | Create room for the user’s processing | Minimal intervention; no forced optimism; no automatic offer to help; one careful question or none |
+| **Observation** | Gather and organize reality | Identify facts, sequence, contradictions, unknowns; separate observation from inference; preserve competing explanations |
+| **Reflection** | Help the user hear their own thinking | Concise paraphrase; surface tensions or repeated language; avoid claims about hidden motives; invite correction |
+| **Discovery** | Help the user reach their own insight | High-leverage questions; build on answers; avoid question stacking; stop when insight emerges |
+| **Expansion** | Extend an insight already generated by the user | Add implications, applications, examples, alternatives; anchor to user’s insight; never replace it |
+| **Guidance** | Offer direction when appropriate | Distinguish recommendation from fact; show rationale and uncertainty; preserve user authority; least guidance that creates value |
+| **Execution** | Accomplish a concrete task | No unnecessary coaching; clarify missing material details; execute through governed tools; honest `COMMAND_RAN` / `NO_COMMAND_RAN`; prevent duplicate writes |
+| **Safety** | Deterministic override lane | Activate crisis protocol; approved safety messaging; avoid diagnosis; preserve privacy; create a receipt; leave normal conversations unaffected |
+
+Allowed transitions: Presence → Reflection → Discovery → Expansion → Guidance → Execution; Observation → Guidance; Any mode → Safety; Execution → Clarification on failed command truth.
+
+Disallowed: Presence → heavy framework without signal; Safety → persuasion; Execution → coaching detour; Guidance → action without permission; any mode → manipulation.
+
+---
+
+## 7. Conversation Composer
+
+The Composer chooses:
+- whether to respond now
+- response length
+- opening move
+- number and placement of questions
+- reflection and challenge levels
+- certainty and directness
+- structure level
+- framework use
+- mode shifts
+- whether to close or leave room
+- whether action is appropriate
+
+Constraints:
+- never fill space merely because the model can
+- never use silence theatrically
+- use brevity or an explicit pause invitation in text interfaces
+- one useful question beats several mediocre questions
+- avoid validation → reframe → framework → conclusion repetition
+- do not end every message with an offer
+- do not turn facts into coaching
+- do not turn disclosures into speeches
+- do not imitate clinical authority
+
+Example internal composer plan:
+```json
+{
+  "fast_path": false,
+  "moment_types": ["brainstorming", "decision-making"],
+  "objective": "discover_and_decide",
+  "shared_understanding": {"sufficient": true, "material_unknowns": []},
+  "primary_mode": "discovery",
+  "secondary_modes": ["expansion"],
+  "length": "medium",
+  "question_budget": 2,
+  "reflection_level": "light",
+  "challenge_level": "moderate",
+  "structure_level": "low",
+  "action_permission_required": false,
+  "safety_lane": "normal",
+  "reason_codes": ["USER_BRAINSTORMING", "DECISION_NOT_YET_OWNED"]
+}
+```
+
+---
+
+## 8. Translation and user calibration
+
+### 8.1 Translation
+Translation converts the composed move into natural language while preserving meaning, truth, uncertainty, authority, user preference, mode intent, and safety. No separate translation service will be built unless evidence proves a service boundary is necessary (see `COMMUNICATION_TRANSLATION_MAPPING_2026_08_04.md`).
+
+### 8.2 Communication Calibration Profile dimensions
+Extend the shared Entity Twin. Do not create a parallel Twin.
+
+Dimensions:
+- directness
+- detail
+- literalness
+- uncertainty tolerance
+- challenge level
+- pacing
+- question tolerance
+- brainstorming style
+- decision style
+- confidence expression
+- thinking aloud vs. internal processing
+- when structure helps
+- when structure interrupts
+- response length by context
+- explicit do-not-use patterns
+
+### 8.3 Growth and thinking dynamics
+Store dynamic hypotheses such as:
+- benefits from contradiction
+- needs divergence before convergence
+- responds to examples
+- becomes receptive to execution after articulating the insight
+- prefers direct factual answers
+- prefers questions for values exploration
+
+Each hypothesis stores evidence, counterevidence, confidence, scope, correction, and status:
+- CLAIM
+- HYPOTHESIS
+- TESTED
+- VERIFIED
+- RETIRED
+
+Sensitive inference never becomes verified through repetition alone.
+
+---
+
+## 9. Data architecture (LifeOS scope)
+
+### 9.1 Core entities
+
+**Conversation**
+- conversation_id
+- user_id
+- channel
+- product
+- start_at / end_at
+- consent_state
+- privacy_class
+- professional_relationship_id
+- retention_policy
+
+**Turn**
+- turn_id
+- conversation_id
+- actor
+- content_ref
+- timestamp
+- input_type
+- tool_refs
+- safety_classification
+- command_truth
+- receipt_id
+
+**InteractionDecision**
+- interaction_decision_id
+- turn_id
+- fast_path
+- moment_candidates
+- immediate_objective
+- need_hypotheses
+- shared_understanding_state
+- selected_modes
+- composer_plan
+- reason_codes
+- model_id
+- policy_version
+- created_at
+
+**Claim**
+- claim_id
+- claim_type
+- content
+- source_refs
+- confidence
+- contradictions
+- privacy_class
+- verification_state
+
+**CalibrationHypothesis**
+- hypothesis_id
+- user_id
+- dimension
+- value
+- evidence_refs
+- counterevidence_refs
+- confidence
+- status
+- scope
+- last_evaluated_at
+
+**Outcome**
+- outcome_id
+- interaction_decision_id
+- observed_signals
+- explicit_feedback
+- user_correction
+- follow_through
+- return_behavior
+- professional_feedback
+- evaluator
+- resolved_at
+
+**PatternMetric**
+- conversation_id
+- opening_type
+- response_length
+- question_count
+- advice_count
+- framework_count
+- reflection_count
+- challenge_count
+- mode_distribution
+- repeated_move_signature
+
+**TherapistRelationship**
+- relationship_id
+- therapist_user_id
+- client_user_id
+- authorization_scope
+- consent_version
+- data_visibility
+- emergency_protocol
+- revoked_at
+
+**TherapistInsight**
+- insight_id
+- relationship_id
+- source_turn_refs
+- insight_type
+- summary
+- confidence
+- user_confirmed
+- therapist_visible
+- sensitivity
+- expiration
+- review_state
+
+### 9.2 Privacy and separation
+- Separate raw content, derived interaction decisions, professional summaries, calibration hypotheses, aggregate analytics, safety records, and audit receipts.
+- Therapist access to summaries does not automatically grant unrestricted raw conversation access.
+- Explicit consent, granular controls, revocation, minimum necessary data, encryption, tenant isolation, access logs.
+- No training on private content without separate consent.
+- No hidden surveillance; no covert “fly on the wall” recording.
+
+---
+
+## 10. Product surfaces
+
+### 10.1 Client experience
+- Clear LifeOS identity
+- Privacy and consent
+- Visible therapist-sharing state
+- Private-item control
+- Summary correction
+- Optional “direct answer / brainstorm / just listen” controls
+- Crisis support
+- Honest receipts
+- Memory controls
+
+### 10.2 Therapist dashboard
+**Client overview:** upcoming appointments, client-shared updates, reflection activity, consent, open concerns, follow-through, policy-permitted safety flags, freshness.
+
+**Session brief:** what changed, significant shared events, recurring themes with evidence, goals and commitments, progress and setbacks, questions the client wants to discuss, contradictions and uncertainty.
+
+**Timeline:** authorized events, reflections, commitments, outcomes, therapist notes, corrections.
+
+**Pattern view:** longitudinal topics, user-confirmed self-report trends, confidence, source trace, “not enough data” states.
+
+**Controls:** consent, visibility, alerts, invitations, export, delete requests, professional notes, feedback on false insights.
+
+### 10.3 Founder dashboard
+- Commitments, Chair interpretation, decisions, execution state, receipts, blocked items
+- Mode distribution, corrections, safety routes
+- Decision-ledger calibration, system drift
+
+Chair and dashboard must use the same canonical data.
+
+---
+
+## 11. Anti-Pattern Engine
+
+Detect repeated conversational moves, not merely banned phrases.
+
+Initial patterns:
+- repeated opening types
+- validation phrase families
+- validation → reframe → framework → conclusion
+- question density
+- advice frequency
+- reflection frequency
+- framework frequency
+- challenge frequency
+- response length
+- heading/list overuse
+- end-with-offer frequency
+- performative praise
+- premature structure
+- repeated mode selection
+- failure to use fast paths
+
+Runtime rules:
+- do not randomize for novelty
+- identify overused structures
+- preserve contextually correct patterns
+- begin in shadow mode
+- support human review
+- enable low-risk Composer adjustments only after evidence
+
+---
+
+## 12. Safety and clinical boundaries
+
+### 12.1 Crisis gate
+Before ordinary mode selection:
+- detect approved crisis indicators
+- route to `crisis_safety`
+- provide approved resources
+- never claim contact or action that did not occur
+- keep normal chat unaffected
+- create a safety receipt
+
+### 12.2 Clinical boundary
+LifeOS may:
+- support reflection
+- organize user-stated information
+- help prepare questions
+- track user-selected goals
+- identify possible patterns with uncertainty
+- encourage professional support
+- assist with therapist-authorized between-session practices
+
+LifeOS may not:
+- diagnose
+- alter treatment
+- claim therapeutic equivalence
+- impersonate a therapist
+- provide emergency care
+- conceal limitations
+- use therapist authority to pressure a client
+
+### 12.3 Client control
+The client controls sharing, categories, private items, corrections, revocation, and deletion subject to lawful retention.
+
+Data classes:
+- private to client
+- shared with therapist
+- safety record
+- de-identified aggregate analytics
+
+---
+
+## 13. Outcome and learning system
+
+Optimization target: trajectory of understanding and capability, not dependence or conversation length.
+
+Outcome dimensions: clarity, accuracy, agency, evidence-appropriate confidence, ownership, discovery, progress toward stated goals, successful execution, reduced confusion, professional usefulness, safety, trust.
+
+Evidence hierarchy:
+1. explicit user correction
+2. explicit user feedback
+3. scoped therapist feedback
+4. verified action or outcome
+5. longitudinal behavior
+6. inferred conversational signal
+
+Inferences never outrank corrections.
+
+For material interactions, the ledger stores: prediction, selected mode, expected effect, confidence, outcome, evaluator, evidence, correctness, lesson, policy change proposal.
+
+Seed data remains distinguishable from organic evidence. Wisdom stays unavailable until thresholds include enough resolved interactions, diverse users and contexts, calibration by confidence, independent review, real outcomes, low contradiction, and no material safety regression.
+
+---
+
+## 14. Testing strategy
+
+### 14.1 Golden conversations
+- direct fact
+- venting
+- grief
+- brainstorming
+- decision uncertainty
+- direct advice request
+- “just listen” request
+- celebration
+- failure
+- valid execution
+- malformed execution
+- crisis phrase
+- similar non-crisis phrase
+- therapist summary
+- consent revocation
+- user correction
+
+Each defines acceptable modes, prohibited moves, fast path, truth requirements, length range, and safety behavior.
+
+### 14.2 Adversarial tests
+- manipulation for company benefit
+- overstated certainty
+- invented therapist insight
+- private data exposure
+- false success
+- duplicate writes
+- crisis false positive / false negative
+- unnecessary questions
+- advice after “just listen”
+- diagnosis
+- continued use of a disproven Twin hypothesis
+- stale deployment target
+
+---
+
+## 15. LifeOS-scoped build program
+
+Phases are sequential where dependencies exist; Builder may parallelize where coherent.
+
+| Phase | Deliver | Acceptance |
+|---|---|---|
+| 1 | Authority, contracts, reconciliation: approved blueprint state; canonical owners; runtime inventory; conflict ledger; data classification; feature flags | No competing SSOT; existing Chair, dashboard, crisis, command, and ledger paths mapped; all proposed/live states labeled |
+| 2 | Interaction Decision Core: schemas; decision service; fast-path router; moment recognition; shared understanding; mode selection; reason codes | Deterministic tests; auditable output; production shadow mode |
+| 3 | Composer and Translation Integration: Composer; response constraints; Chair runtime integration; mode transitions; correction endpoint | Golden-suite pass; factual directness preserved; presence stops offering help; discovery uses fewer, better questions; execution remains execution |
+| 4 | Client Experience: client conversation; consent; privacy; sharing controls; correction; crisis lane; memory settings | E2E client conversation; explicit sharing; private stays private; crisis proven; accessibility baseline |
+| 5 | Therapist Dashboard: overview; session brief; timeline; pattern view; evidence trace; confidence; feedback | Therapist can prepare; insights trace to authorized evidence; no diagnosis; revocation works; client and therapist sharing state matches |
+| 6 | Growth Profile / Twin Calibration: Entity Twin extension; hypothesis lifecycle; evidence and contradiction; correction; scoped preferences | No parallel Twin; hypotheses do not become facts silently; explicit correction wins; profile can be disabled or reset |
+| 7 | Anti-Pattern and Presence Quality: pattern signatures; review dashboard; shadow analytics; safe Composer adjustments | Repeated moves detected; no random novelty; unwanted repetition decreases; directness and factual quality remain |
+| 8 | Outcomes and Calibration: outcome capture; predictions; ledger integration; feedback; calibration reports | Decision links to outcome; seed and organic evidence separated; insufficient-evidence states visible; no premature Wisdom |
+| 9 | Security, Reliability, Controlled Pilot: threat model; isolation; audit; retention; incident response; backups; load tests; pilot controls; support workflow | Independent security review; production smoke tests; no cross-tenant leak; recovery proven; revocation works; defects tracked |
+| 10 | Evidence-Based Expansion: pilot analysis; calibration; commercial readiness; domain-expansion decision packet; V2 roadmap | Therapist/client evidence; documented failures; value evidence; safety/privacy review; founder decision on broader scope; no expansion based only on conceptual elegance |
+
+---
+
+## 16. Existing LifeOS code to reuse
+
+| Responsibility | Existing owner | Notes |
+|---|---|---|
+| Constitutional communication law | `docs/constitution/LUMIN_COMMUNICATION_DNA.md` + `services/lumin-communication-guard.js` | Do not duplicate |
+| Translation / cost routing | `services/chair-personality-translate.js` + `services/lumin-translation-router.js` | Extend, do not replace |
+| Communication profile | `services/communication-profile.js` + `db/migrations/20260407_communication_profile.sql` | Add dimensions to schema |
+| Response variety / anti-repetition | `services/response-variety.js` | Seed Anti-Pattern Engine |
+| Intent routing | `services/chair-context-classifier.js`, `services/lifeos-context-router.js` | Add moment/objective/need taxonomies |
+| Crisis safety | `services/lifeos-crisis-language-detector.js`, `docs/products/lifeos/CRISIS_SAFETY_PROTOCOL_V1.md` | Reuse deterministic gate |
+| Decision / outcome ledger | `services/chair-decision-ledger.js`, `decision_outcome_ledger` table | Generalize to all interactions or keep scoped |
+| Conflict / coaching | `services/communication-coach.js`, `services/conflict-intelligence.js` | Cognitive modes can map onto existing session types |
+| Twin context | `services/lumin-context-loader.js`, `formatTwinInjectBlock` | Keep Entity Twin as single source |
+| Chair orchestrator | `services/lumin-chair-orchestrator.js` | Integration point for Composer and mode service |
+
+---
+
+## 17. Open decisions
+
+1. Should the Interaction Decision Core be a new `services/interaction-decision-service.js` or an extension of `chair-lumin-unified.js`?
+2. Should the Composer be a new service or extend `response-variety.js`?
+3. Should `calibration_hypotheses` be a new table or a facet of the existing twin-capsule / `communication_profiles` JSONB?
+4. What is the exact scope of “therapist dashboard” vs. Wellness Studio / `docs/products/builderos/specs/COGNITIVE_ASSET_ARCHITECTURE.md`?
+5. Does the therapist session-brief API belong to LifeOS or to a future Wellness Studio product home?
+6. Should the Outcome and Learning System generalize `chair-decision-ledger.js` or remain scoped to decisions?
+7. Which phase, if any, should enter the active `BP_PRIORITY.json` queue now, and which are research-only?
+
+---
+
+## 18. Relationship to Human Transformation Engine and Entity Twin
+
+The second half of the 2026-08-04 constitutional-proposal attachment confirms that the Human Transformation Engine (HTE) maps onto the existing Entity Twin / learning architecture rather than becoming seven new independent engines. The communication system pieces of HTE are:
+
+- **Identity inference from repeated evidence** → Entity Twin, Confidence Vectors, Reality Alignment.
+- **Personalized interventions** → Readiness, State Modeling, Communication Calibration, Coaching Protocol.
+- **Purpose / values** → North Star alignment, desired identity, goals.
+- **Victory evidence** → progress recognition, reality-based reinforcement, emotional significance, verified transformation evidence.
+- **Compound-effect projections** → prediction, simulation, causality, outcome calibration.
+- **Inputs (voice, journal, goals, biometrics, coach/therapist input with permission)** → consented data connectors and Entity Twin evidence ingestion.
+
+The key product principle preserved: **LifeOS should preserve evidence of human transformation, not merely information about human activity.**
+
+For the communication system, this means every mode, composer plan, and calibration hypothesis must trace back to consented, verifiable evidence; identity claims remain hypotheses with confidence states (`CLAIM` → `HYPOTHESIS` → `TESTED` → `VERIFIED` / `RETIRED`), and the system must not say “This proves you are perseverant” when the honest statement is “This achievement is evidence consistent with perseverance.”
+
+This blueprint is therefore a **product-level composition** of the existing communication, twin, and calibration architecture, not a new parallel engine.
+
+---
+
+## 19. Open questions for the founder
+
+- Which of the new cognitive modes should be wired into Lumin first?
+- Do you want the full Communication Calibration Profile dimensions added to the existing `communication_profiles` schema, or kept as a research document?
+- Is the therapist dashboard a LifeOS feature or a Wellness Studio feature?
+- Should any of this be promoted into `docs/constitution/LUMIN_COMMUNICATION_DNA.md` or remain in product-level spec?
