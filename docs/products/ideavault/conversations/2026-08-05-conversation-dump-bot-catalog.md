@@ -2,23 +2,48 @@
 
 # Conversation Dump Bot Catalog
 
-**Generated:** 2026-08-05T19:36:16.772Z
+**Generated:** 2026-08-05T19:56:40.587Z
 **Source root:** `docs/conversation_dumps/`
-**Files scanned:** 109 (23 masters, 86 buckets)
-**Total raw size:** 10.03MB
+**Files scanned:** 111 (25 masters, 86 buckets)
+**Total raw size:** 10.05MB
+**Digital Twin signals extracted:** 5747 (decisions, preferences, mood, principles, questions)
+**Signal files:** `docs/products/ideavault/data/twin-signals/adam-2026-08-05-signals.jsonl`, `docs/products/ideavault/data/twin-signals/adam-2026-08-05-profile-fragment.json`
 
-This file is a machine-built index. It groups conversation-dump files by inferred product/theme tags, shows file size, and lists the first few headings so a human or agent can route ideas to the right product home without opening multi-megabyte exports cold.
+This file is a machine-built index. It groups conversation-dump files by inferred product/theme tags, shows file size, lists the first few headings, and flags files that need human routing or archival review. It also extracts structured Digital Twin signal fragments so the Entity Twin can ingest provenance-rich observations without opening multi-megabyte dumps cold.
+
+## Flagged for human review
+
+| File | Flags | Suggested action |
+|------|-------|------------------|
+| [`docs/conversation_dumps/2026-03-15-cursor-session-48f2917e-MASTER.md`](../../docs/conversation_dumps/2026-03-15-cursor-session-48f2917e-MASTER.md) | - stale — 143 days old; review whether content is still current or should move to docs/history/ | move to docs/history/ or update index |
+| [`docs/conversation_dumps/2026-04-07-cursor-session-a70380f7-MASTER.md`](../../docs/conversation_dumps/2026-04-07-cursor-session-a70380f7-MASTER.md) | - stale — 120 days old; review whether content is still current or should move to docs/history/ | move to docs/history/ or update index |
+| [`docs/conversation_dumps/2026-04-29-cursor-session-2a4739f2-MASTER.md`](../../docs/conversation_dumps/2026-04-29-cursor-session-2a4739f2-MASTER.md) | - stale — 98 days old; review whether content is still current or should move to docs/history/ | move to docs/history/ or update index |
+| [`docs/conversation_dumps/2026-06-29-limitlessos-ecosystem-founder-vision.md`](../../docs/conversation_dumps/2026-06-29-limitlessos-ecosystem-founder-vision.md) | - orphan — no product tag inferred; route to OPERATOR_BRAINSTORM_INBOX or a product home | route to correct product home or add synopsis/headings |
+| [`docs/conversation_dumps/2026-06-29-limitlessos-ecosystem-ROUTING.md`](../../docs/conversation_dumps/2026-06-29-limitlessos-ecosystem-ROUTING.md) | - orphan — no product tag inferred; route to OPERATOR_BRAINSTORM_INBOX or a product home | route to correct product home or add synopsis/headings |
+| [`docs/conversation_dumps/by-product/sessions/2a4739f2/GENERAL-MISC.md`](../../docs/conversation_dumps/by-product/sessions/2a4739f2/GENERAL-MISC.md) | - orphan — no product tag inferred; route to OPERATOR_BRAINSTORM_INBOX or a product home | route to correct product home or add synopsis/headings |
+| [`docs/conversation_dumps/by-product/sessions/34afb0d1/GENERAL-MISC.md`](../../docs/conversation_dumps/by-product/sessions/34afb0d1/GENERAL-MISC.md) | - orphan — no product tag inferred; route to OPERATOR_BRAINSTORM_INBOX or a product home | route to correct product home or add synopsis/headings |
+| [`docs/conversation_dumps/by-product/sessions/34afb0d1/MODELS-OPS.md`](../../docs/conversation_dumps/by-product/sessions/34afb0d1/MODELS-OPS.md) | - orphan — no product tag inferred; route to OPERATOR_BRAINSTORM_INBOX or a product home | route to correct product home or add synopsis/headings |
+| [`docs/conversation_dumps/by-product/sessions/48f2917e/GENERAL-MISC.md`](../../docs/conversation_dumps/by-product/sessions/48f2917e/GENERAL-MISC.md) | - orphan — no product tag inferred; route to OPERATOR_BRAINSTORM_INBOX or a product home | route to correct product home or add synopsis/headings |
+| [`docs/conversation_dumps/by-product/sessions/48f2917e/MODELS-OPS.md`](../../docs/conversation_dumps/by-product/sessions/48f2917e/MODELS-OPS.md) | - orphan — no product tag inferred; route to OPERATOR_BRAINSTORM_INBOX or a product home | route to correct product home or add synopsis/headings |
+| [`docs/conversation_dumps/by-product/sessions/7449d204/GENERAL-MISC.md`](../../docs/conversation_dumps/by-product/sessions/7449d204/GENERAL-MISC.md) | - orphan — no product tag inferred; route to OPERATOR_BRAINSTORM_INBOX or a product home | route to correct product home or add synopsis/headings |
+| [`docs/conversation_dumps/by-product/sessions/7dc85f20/GENERAL-MISC.md`](../../docs/conversation_dumps/by-product/sessions/7dc85f20/GENERAL-MISC.md) | - orphan — no product tag inferred; route to OPERATOR_BRAINSTORM_INBOX or a product home | route to correct product home or add synopsis/headings |
+| [`docs/conversation_dumps/by-product/sessions/a70380f7/GENERAL-MISC.md`](../../docs/conversation_dumps/by-product/sessions/a70380f7/GENERAL-MISC.md) | - orphan — no product tag inferred; route to OPERATOR_BRAINSTORM_INBOX or a product home | route to correct product home or add synopsis/headings |
+| [`docs/conversation_dumps/by-product/sessions/a70380f7/MODELS-OPS.md`](../../docs/conversation_dumps/by-product/sessions/a70380f7/MODELS-OPS.md) | - orphan — no product tag inferred; route to OPERATOR_BRAINSTORM_INBOX or a product home | route to correct product home or add synopsis/headings |
+| [`docs/conversation_dumps/by-product/sessions/bc7e829e/GENERAL-MISC.md`](../../docs/conversation_dumps/by-product/sessions/bc7e829e/GENERAL-MISC.md) | - orphan — no product tag inferred; route to OPERATOR_BRAINSTORM_INBOX or a product home | route to correct product home or add synopsis/headings |
+| [`docs/conversation_dumps/by-product/sessions/d5421079/GENERAL-MISC.md`](../../docs/conversation_dumps/by-product/sessions/d5421079/GENERAL-MISC.md) | - orphan — no product tag inferred; route to OPERATOR_BRAINSTORM_INBOX or a product home | route to correct product home or add synopsis/headings |
+| [`docs/conversation_dumps/by-product/sessions/e9b7659e/GENERAL-MISC.md`](../../docs/conversation_dumps/by-product/sessions/e9b7659e/GENERAL-MISC.md) | - orphan — no product tag inferred; route to OPERATOR_BRAINSTORM_INBOX or a product home | route to correct product home or add synopsis/headings |
+| [`docs/conversation_dumps/by-product/sessions/e9b7659e/MODELS-OPS.md`](../../docs/conversation_dumps/by-product/sessions/e9b7659e/MODELS-OPS.md) | - orphan — no product tag inferred; route to OPERATOR_BRAINSTORM_INBOX or a product home | route to correct product home or add synopsis/headings |
 
 ## Tags
 
-- **BUILDEROS** (33 files, 4.65MB)
+- **BUILDEROS** (34 files, 4.66MB)
 - **CLIENTCARE** (10 files, 604.0KB)
 - **IDEAVAULT** (19 files, 413.4KB)
-- **LEGACYOS** (4 files, 94.1KB)
-- **LIFEOS** (36 files, 3.00MB)
-- **MEMORY** (16 files, 1.78MB)
-- **PLATFORM** (57 files, 7.23MB)
-- **SALESOS** (4 files, 926.3KB)
+- **LEGACYOS** (6 files, 112.3KB)
+- **LIFEOS** (37 files, 3.01MB)
+- **MEMORY** (17 files, 1.79MB)
+- **PLATFORM** (57 files, 7.24MB)
+- **SALESOS** (4 files, 926.4KB)
 - **TC** (16 files, 897.4KB)
 - **UNCATEGORIZED** (15 files, 685.8KB)
 
@@ -31,6 +56,7 @@ This file is a machine-built index. It groups conversation-dump files by inferre
 | [`docs/conversation_dumps/2026-07-31-builderos-rating-governance-review.md`](../../docs/conversation_dumps/2026-07-31-builderos-rating-governance-review.md) | 3.3KB | master | Founder + multi-agent BuilderOS rating / governance review archive — NOT AUTHORITATIVE |
 | [`docs/conversation_dumps/2026-08-01-builderos-convergence-devin-mission-arc.md`](../../docs/conversation_dumps/2026-08-01-builderos-convergence-devin-mission-arc.md) | 5.0KB | master | Master archive — BuilderOS rating through Devin Missions 1–1.7 and Mission 2 convergence — NOT AUTHORITATIVE |
 | [`docs/conversation_dumps/2026-08-03-constitutional-communication-system-brainstorm.md`](../../docs/conversation_dumps/2026-08-03-constitutional-communication-system-brainstorm.md) | 47.0KB | master | Constitutional proposal overview brainstorm (verbatim) — Taloa architecture, Human Transformation Engine, communication mapping. Archived per Amendment 38 §6 step 5 (word-for-word). |
+| [`docs/conversation_dumps/2026-08-04-legacyos-mediaos-imprint-vision.md`](../../docs/conversation_dumps/2026-08-04-legacyos-mediaos-imprint-vision.md) | 15.0KB | master | Verbatim founder session — LegacyOS / MediaOS Human Legacy Initiative + Digital Imprint naming proposal |
 | [`docs/conversation_dumps/by-product/sessions/2a4739f2/BUILDEROS-AUTONOMOUS.md`](../../docs/conversation_dumps/by-product/sessions/2a4739f2/BUILDEROS-AUTONOMOUS.md) | 83.6KB | bucket | BuilderOS / TSOS / autonomous / alpha |
 | [`docs/conversation_dumps/by-product/sessions/2a4739f2/CLIENTCARE-BILLING.md`](../../docs/conversation_dumps/by-product/sessions/2a4739f2/CLIENTCARE-BILLING.md) | 32.5KB | bucket | ClientCare billing |
 | [`docs/conversation_dumps/by-product/sessions/2a4739f2/LIFEOS-LUMIN-CHAIR.md`](../../docs/conversation_dumps/by-product/sessions/2a4739f2/LIFEOS-LUMIN-CHAIR.md) | 57.5KB | bucket | LifeOS / Lumin / Chair / direct connection |
@@ -105,6 +131,8 @@ This file is a machine-built index. It groups conversation-dump files by inferre
 |------|------|------|---------------------|
 | [`docs/conversation_dumps/2026-07-27-ai-memory-governance-brainstorm.md`](../../docs/conversation_dumps/2026-07-27-ai-memory-governance-brainstorm.md) | 3.3KB | master | Conversation dump — AI memory / governance brainstorm (NOT AUTHORITATIVE) |
 | [`docs/conversation_dumps/2026-07-27-historical-vision-revenue-dump.md`](../../docs/conversation_dumps/2026-07-27-historical-vision-revenue-dump.md) | 1.4KB | master | Conversation dump map — historical vision/revenue (NOT AUTHORITATIVE) |
+| [`docs/conversation_dumps/2026-08-04-legacyos-mediaos-imprint-vision-ROUTING.md`](../../docs/conversation_dumps/2026-08-04-legacyos-mediaos-imprint-vision-ROUTING.md) | 3.1KB | master | Route map — 2026-08-04 LegacyOS/MediaOS founder vision + Digital Imprint naming proposal |
+| [`docs/conversation_dumps/2026-08-04-legacyos-mediaos-imprint-vision.md`](../../docs/conversation_dumps/2026-08-04-legacyos-mediaos-imprint-vision.md) | 15.0KB | master | Verbatim founder session — LegacyOS / MediaOS Human Legacy Initiative + Digital Imprint naming proposal |
 | [`docs/conversation_dumps/by-product/sessions/34afb0d1/GOVERNANCE-SSOT.md`](../../docs/conversation_dumps/by-product/sessions/34afb0d1/GOVERNANCE-SSOT.md) | 54.1KB | bucket | Governance / NSSOT / founder packet |
 | [`docs/conversation_dumps/by-product/sessions/34afb0d1/LIFEOS-LUMIN-CHAIR.md`](../../docs/conversation_dumps/by-product/sessions/34afb0d1/LIFEOS-LUMIN-CHAIR.md) | 35.2KB | bucket | LifeOS / Lumin / Chair / direct connection |
 
@@ -120,6 +148,7 @@ This file is a machine-built index. It groups conversation-dump files by inferre
 | [`docs/conversation_dumps/2026-07-31-builderos-rating-governance-review.md`](../../docs/conversation_dumps/2026-07-31-builderos-rating-governance-review.md) | 3.3KB | master | Founder + multi-agent BuilderOS rating / governance review archive — NOT AUTHORITATIVE |
 | [`docs/conversation_dumps/2026-08-01-builderos-convergence-devin-mission-arc.md`](../../docs/conversation_dumps/2026-08-01-builderos-convergence-devin-mission-arc.md) | 5.0KB | master | Master archive — BuilderOS rating through Devin Missions 1–1.7 and Mission 2 convergence — NOT AUTHORITATIVE |
 | [`docs/conversation_dumps/2026-08-03-constitutional-communication-system-brainstorm.md`](../../docs/conversation_dumps/2026-08-03-constitutional-communication-system-brainstorm.md) | 47.0KB | master | Constitutional proposal overview brainstorm (verbatim) — Taloa architecture, Human Transformation Engine, communication mapping. Archived per Amendment 38 §6 step 5 (word-for-word). |
+| [`docs/conversation_dumps/2026-08-04-legacyos-mediaos-imprint-vision.md`](../../docs/conversation_dumps/2026-08-04-legacyos-mediaos-imprint-vision.md) | 15.0KB | master | Verbatim founder session — LegacyOS / MediaOS Human Legacy Initiative + Digital Imprint naming proposal |
 | [`docs/conversation_dumps/by-product/sessions/2a4739f2/CLIENTCARE-BILLING.md`](../../docs/conversation_dumps/by-product/sessions/2a4739f2/CLIENTCARE-BILLING.md) | 32.5KB | bucket | ClientCare billing |
 | [`docs/conversation_dumps/by-product/sessions/2a4739f2/LIFEOS-LUMIN-CHAIR.md`](../../docs/conversation_dumps/by-product/sessions/2a4739f2/LIFEOS-LUMIN-CHAIR.md) | 57.5KB | bucket | LifeOS / Lumin / Chair / direct connection |
 | [`docs/conversation_dumps/by-product/sessions/2a4739f2/MODELS-OPS.md`](../../docs/conversation_dumps/by-product/sessions/2a4739f2/MODELS-OPS.md) | 73.4KB | bucket | Models / open source / Codex |
@@ -155,6 +184,7 @@ This file is a machine-built index. It groups conversation-dump files by inferre
 |------|------|------|---------------------|
 | [`docs/conversation_dumps/2026-07-19-smos-cognitive-core-opus-handoff.md`](../../docs/conversation_dumps/2026-07-19-smos-cognitive-core-opus-handoff.md) | 4.9KB | master | Session archive — SMOS market-ready (Cursor) + Cognitive Core Era-1 / Opus handoff (2026-07-17→19). NOT AUTHORITATIVE. |
 | [`docs/conversation_dumps/2026-07-27-ai-memory-governance-brainstorm.md`](../../docs/conversation_dumps/2026-07-27-ai-memory-governance-brainstorm.md) | 3.3KB | master | Conversation dump — AI memory / governance brainstorm (NOT AUTHORITATIVE) |
+| [`docs/conversation_dumps/2026-08-04-legacyos-mediaos-imprint-vision.md`](../../docs/conversation_dumps/2026-08-04-legacyos-mediaos-imprint-vision.md) | 15.0KB | master | Verbatim founder session — LegacyOS / MediaOS Human Legacy Initiative + Digital Imprint naming proposal |
 | [`docs/conversation_dumps/by-product/sessions/2a4739f2/MEMORY-HIST.md`](../../docs/conversation_dumps/by-product/sessions/2a4739f2/MEMORY-HIST.md) | 41.4KB | bucket | Memory / Historian / archaeology |
 | [`docs/conversation_dumps/by-product/sessions/34afb0d1/MEMORY-HIST.md`](../../docs/conversation_dumps/by-product/sessions/34afb0d1/MEMORY-HIST.md) | 6.3KB | bucket | Memory / Historian / archaeology |
 | [`docs/conversation_dumps/by-product/sessions/48f2917e/LIFEOS-MEMORY-IMPORT-2026-08-01.md`](../../docs/conversation_dumps/by-product/sessions/48f2917e/LIFEOS-MEMORY-IMPORT-2026-08-01.md) | 2.5KB | bucket | Session slice — LifeOS memory, Twin, conversation export, Import Memory vision |
@@ -177,7 +207,7 @@ This file is a machine-built index. It groups conversation-dump files by inferre
 | [`docs/conversation_dumps/2026-03-15-cursor-session-48f2917e-MASTER.md`](../../docs/conversation_dumps/2026-03-15-cursor-session-48f2917e-MASTER.md) | 9.3KB | master | Cursor session archive — master index |
 | [`docs/conversation_dumps/2026-06-20-cursor-session-bc7e829e-MASTER.md`](../../docs/conversation_dumps/2026-06-20-cursor-session-bc7e829e-MASTER.md) | 21.8KB | master | Cursor session archive — master index |
 | [`docs/conversation_dumps/2026-07-19-smos-cognitive-core-opus-handoff.md`](../../docs/conversation_dumps/2026-07-19-smos-cognitive-core-opus-handoff.md) | 4.9KB | master | Session archive — SMOS market-ready (Cursor) + Cognitive Core Era-1 / Opus handoff (2026-07-17→19). NOT AUTHORITATIVE. |
-| [`docs/conversation_dumps/2026-07-23-human-performance-engine-salesos-synthesis.md`](../../docs/conversation_dumps/2026-07-23-human-performance-engine-salesos-synthesis.md) | 6.9KB | master | # The Human Performance Engine: What We Know Now · ## The core realization · ## Three layers · ## The augmentation slider |
+| [`docs/conversation_dumps/2026-07-23-human-performance-engine-salesos-synthesis.md`](../../docs/conversation_dumps/2026-07-23-human-performance-engine-salesos-synthesis.md) | 7.0KB | master | The Human Performance Engine: What We Know Now |
 | [`docs/conversation_dumps/2026-07-27-ai-memory-governance-brainstorm.md`](../../docs/conversation_dumps/2026-07-27-ai-memory-governance-brainstorm.md) | 3.3KB | master | Conversation dump — AI memory / governance brainstorm (NOT AUTHORITATIVE) |
 | [`docs/conversation_dumps/2026-07-31-builderos-rating-governance-review.md`](../../docs/conversation_dumps/2026-07-31-builderos-rating-governance-review.md) | 3.3KB | master | Founder + multi-agent BuilderOS rating / governance review archive — NOT AUTHORITATIVE |
 | [`docs/conversation_dumps/2026-08-03-constitutional-communication-system-brainstorm.md`](../../docs/conversation_dumps/2026-08-03-constitutional-communication-system-brainstorm.md) | 47.0KB | master | Constitutional proposal overview brainstorm (verbatim) — Taloa architecture, Human Transformation Engine, communication mapping. Archived per Amendment 38 §6 step 5 (word-for-word). |
@@ -236,7 +266,7 @@ This file is a machine-built index. It groups conversation-dump files by inferre
 
 | File | Size | Type | Synopsis / Headings |
 |------|------|------|---------------------|
-| [`docs/conversation_dumps/2026-07-23-human-performance-engine-salesos-synthesis.md`](../../docs/conversation_dumps/2026-07-23-human-performance-engine-salesos-synthesis.md) | 6.9KB | master | # The Human Performance Engine: What We Know Now · ## The core realization · ## Three layers · ## The augmentation slider |
+| [`docs/conversation_dumps/2026-07-23-human-performance-engine-salesos-synthesis.md`](../../docs/conversation_dumps/2026-07-23-human-performance-engine-salesos-synthesis.md) | 7.0KB | master | The Human Performance Engine: What We Know Now |
 | [`docs/conversation_dumps/by-product/sessions/d5421079/BUILDEROS-AUTONOMOUS.md`](../../docs/conversation_dumps/by-product/sessions/d5421079/BUILDEROS-AUTONOMOUS.md) | 314.0KB | bucket | BuilderOS / TSOS / autonomous / alpha |
 | [`docs/conversation_dumps/by-product/sessions/d5421079/PLATFORM-OPS.md`](../../docs/conversation_dumps/by-product/sessions/d5421079/PLATFORM-OPS.md) | 276.8KB | bucket | Platform / deploy / Railway / env / agent browser |
 | [`docs/conversation_dumps/by-product/sessions/e9b7659e/MEMORY-HIST.md`](../../docs/conversation_dumps/by-product/sessions/e9b7659e/MEMORY-HIST.md) | 328.6KB | bucket | Memory / Historian / archaeology |
@@ -299,13 +329,15 @@ This file is a machine-built index. It groups conversation-dump files by inferre
 | [`docs/conversation_dumps/2026-06-29-limitlessos-ecosystem-ROUTING.md`](../../docs/conversation_dumps/2026-06-29-limitlessos-ecosystem-ROUTING.md) | 2.6KB | UNCATEGORIZED |
 | [`docs/conversation_dumps/2026-07-19-smos-cognitive-core-opus-handoff.md`](../../docs/conversation_dumps/2026-07-19-smos-cognitive-core-opus-handoff.md) | 4.9KB | BUILDEROS, MEMORY, PLATFORM |
 | [`docs/conversation_dumps/2026-07-20-creative-engine-five-laws-brainstorm.md`](../../docs/conversation_dumps/2026-07-20-creative-engine-five-laws-brainstorm.md) | 15.1KB | LIFEOS, IDEAVAULT |
-| [`docs/conversation_dumps/2026-07-23-human-performance-engine-salesos-synthesis.md`](../../docs/conversation_dumps/2026-07-23-human-performance-engine-salesos-synthesis.md) | 6.9KB | SALESOS, PLATFORM |
+| [`docs/conversation_dumps/2026-07-23-human-performance-engine-salesos-synthesis.md`](../../docs/conversation_dumps/2026-07-23-human-performance-engine-salesos-synthesis.md) | 7.0KB | SALESOS, PLATFORM |
 | [`docs/conversation_dumps/2026-07-27-ai-memory-governance-brainstorm.md`](../../docs/conversation_dumps/2026-07-27-ai-memory-governance-brainstorm.md) | 3.3KB | LEGACYOS, MEMORY, PLATFORM, IDEAVAULT |
 | [`docs/conversation_dumps/2026-07-27-historical-vision-revenue-dump.md`](../../docs/conversation_dumps/2026-07-27-historical-vision-revenue-dump.md) | 1.4KB | LEGACYOS, IDEAVAULT |
 | [`docs/conversation_dumps/2026-07-27-lip-a-to-z-roadmap.md`](../../docs/conversation_dumps/2026-07-27-lip-a-to-z-roadmap.md) | 586B | IDEAVAULT |
 | [`docs/conversation_dumps/2026-07-31-builderos-rating-governance-review.md`](../../docs/conversation_dumps/2026-07-31-builderos-rating-governance-review.md) | 3.3KB | LIFEOS, BUILDEROS, PLATFORM |
 | [`docs/conversation_dumps/2026-08-01-builderos-convergence-devin-mission-arc.md`](../../docs/conversation_dumps/2026-08-01-builderos-convergence-devin-mission-arc.md) | 5.0KB | LIFEOS, BUILDEROS |
 | [`docs/conversation_dumps/2026-08-03-constitutional-communication-system-brainstorm.md`](../../docs/conversation_dumps/2026-08-03-constitutional-communication-system-brainstorm.md) | 47.0KB | LIFEOS, BUILDEROS, PLATFORM, IDEAVAULT |
+| [`docs/conversation_dumps/2026-08-04-legacyos-mediaos-imprint-vision-ROUTING.md`](../../docs/conversation_dumps/2026-08-04-legacyos-mediaos-imprint-vision-ROUTING.md) | 3.1KB | LEGACYOS |
+| [`docs/conversation_dumps/2026-08-04-legacyos-mediaos-imprint-vision.md`](../../docs/conversation_dumps/2026-08-04-legacyos-mediaos-imprint-vision.md) | 15.0KB | LIFEOS, BUILDEROS, LEGACYOS, MEMORY |
 | [`docs/conversation_dumps/by-product/sessions/2a4739f2/BUILDEROS-AUTONOMOUS.md`](../../docs/conversation_dumps/by-product/sessions/2a4739f2/BUILDEROS-AUTONOMOUS.md) | 83.6KB | BUILDEROS, PLATFORM |
 | [`docs/conversation_dumps/by-product/sessions/2a4739f2/CLIENTCARE-BILLING.md`](../../docs/conversation_dumps/by-product/sessions/2a4739f2/CLIENTCARE-BILLING.md) | 32.5KB | LIFEOS, BUILDEROS, CLIENTCARE, PLATFORM |
 | [`docs/conversation_dumps/by-product/sessions/2a4739f2/GENERAL-MISC.md`](../../docs/conversation_dumps/by-product/sessions/2a4739f2/GENERAL-MISC.md) | 8.8KB | UNCATEGORIZED |

@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/ideavault/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-08-05 — Added `scripts/scan-conversation-dumps.mjs` bot, `npm run idea-vault:scan-dumps` alias, and produced `docs/products/ideavault/conversations/2026-08-05-conversation-dump-bot-catalog.md` (109 files, 10.03MB, 23 masters + 86 buckets, product-tagged). Updated `FILE_MANIFEST.json`, `package.json`, and this product home. |
+| **Last Updated** | 2026-08-05 — Enhanced `scripts/scan-conversation-dumps.mjs` to also flag files for routing/archive and extract Digital Twin signal fragments (decisions, preferences, mood markers, principles, questions). `npm run idea-vault:scan-dumps` now writes `YYYY-MM-DD-conversation-dump-bot-catalog.md` + `docs/products/ideavault/data/twin-signals/adam-YYYY-MM-DD-signals.jsonl` + `adam-YYYY-MM-DD-profile-fragment.json` (5,747 signals from 111 files). |
 
 ---
 
@@ -139,7 +139,7 @@ This amendment is the **registry of record** for content that originated in Chat
 ## How to review “every megabyte” (faster than linear reading)
 
 0. **Keyword map (machine):** `npm run idea-vault:catalog-keywords` — lists which dump files hit each default term (video, YouTube, ComfyUI, shoppable, …). Extend Stream **I** or `CONVERSATION_DUMP_IDEAS_INDEX.md` §6 when a new export shifts the map. Extra terms: pass as CLI args after the script name.
-0a. **Conversation dump scanner (machine helper):** `npm run idea-vault:scan-dumps` — walks all `docs/conversation_dumps/*.md` files, infers product tags, extracts headings, and writes a categorized catalog to `docs/products/ideavault/conversations/YYYY-MM-DD-conversation-dump-bot-catalog.md`. Costs zero LLM tokens; run first when new dumps arrive.
+0a. **Conversation dump scanner + Digital Twin signal bot (machine helper):** `npm run idea-vault:scan-dumps` — walks all `docs/conversation_dumps/*.md` files, infers product tags, extracts headings, flags files for routing/archive review, and writes a categorized catalog to `docs/products/ideavault/conversations/YYYY-MM-DD-conversation-dump-bot-catalog.md`. It also emits `docs/products/ideavault/data/twin-signals/adam-YYYY-MM-DD-signals.jsonl` and an `adam-YYYY-MM-DD-profile-fragment.json` summary of decisions, preferences, mood markers, principles, and open questions. The catalog and signal extraction use zero LLM tokens; run first when new dumps arrive.
 1. **Heading pass (machine):** For each file > 500KB, run  
    `rg -n "^#{1,3}\\s" "<path>" | head -200`  
    to build a **table of contents** before any human read.
@@ -647,9 +647,9 @@ Cross-cutting SKUs that are **not** spec’d only under **21**. **Stream A wordi
 - [x] Cross-link **`CONVERSATION_DUMP_IDEAS_INDEX.md`**.
 - [x] **`scripts/catalog-dump-keywords.mjs`** + **`npm run idea-vault:catalog-keywords`** (machine keyword → file list).
 - [x] **`scripts/operator-corpus-pipeline.mjs`** + **`npm run operator-corpus:pipeline`** (dual-lane checklist; **Lane B** = Digital Twin ingest commands).
-- [x] **`scripts/scan-conversation-dumps.mjs`** + **`npm run idea-vault:scan-dumps`** (conversation-dump bot; produces categorized `docs/products/ideavault/conversations/YYYY-MM-DD-conversation-dump-bot-catalog.md`).
+- [x] **`scripts/scan-conversation-dumps.mjs`** + **`npm run idea-vault:scan-dumps`** (conversation-dump bot; produces categorized catalog **plus** routing flags and Digital Twin signal fragments).
 - [ ] **→ NEXT:** Run **heading pass** (§6) on any **new** export > 500KB and append a **Stream** subsection or extend Stream I / portfolio table.
-- [ ] **→ NEXT (twin):** After large new exports, operator-run **`run-memory-import.mjs`** → **`import-dumps-to-twin.js --build-profile`** (see **§ Operator corpus — dual lane**).
+- [ ] **→ NEXT (twin):** After large new exports, operator-run **`run-memory-import.mjs`** → **`import-dumps-to-twin.js --build-profile`**; use `adam-YYYY-MM-DD-signals.jsonl` + `adam-YYYY-MM-DD-profile-fragment.json` as cheap zero-token candidate input (see **§ Operator corpus — dual lane**).
 - [ ] On **folder cleanup:** consolidate `Lumin-Memory` variants; delete `404` stubs; update **`CONVERSATION_DUMP_IDEAS_INDEX`** paths.
 - [ ] Optional: `scripts/extract-dump-headings.mjs` to emit `docs/IDEA_VAULT_HEADINGS_APPENDIX.md` (machine TOC) — propose via builder if non-trivial.
 
@@ -669,7 +669,7 @@ Cross-cutting SKUs that are **not** spec’d only under **21**. **Stream A wordi
 
 | Date | What Changed | Why |
 |------|--------------|-----|
-| 2026-08-05 | **Conversation dump scanner bot.** Added `scripts/scan-conversation-dumps.mjs`, `npm run idea-vault:scan-dumps` in `package.json`, and produced `docs/products/ideavault/conversations/2026-08-05-conversation-dump-bot-catalog.md` (109 files, 23 masters + 86 buckets, 10.03MB, product-tagged). Updated `FILE_MANIFEST.json` and this product home. | Adam asked to use a bot to search, index, and catalog all conversation dumps and feed ideas into the idea vault. | `node --check scripts/scan-conversation-dumps.mjs`; `npm run idea-vault:scan-dumps` produced the catalog. | — |
+| 2026-08-05 | **Conversation dump scanner + Digital Twin signal bot.** Enhanced `scripts/scan-conversation-dumps.mjs` to flag 18 files for routing/archive review, extract 5,747 Digital Twin signal fragments, and write `docs/products/ideavault/data/twin-signals/adam-2026-08-05-signals.jsonl` + `adam-2026-08-05-profile-fragment.json`. Updated `package.json` (`npm run idea-vault:scan-dumps` now includes `--signals`), `FILE_MANIFEST.json`, `How to review`, `Build Plan`, and this product home. | Adam asked for a helper bot to catalog conversation dumps, flag moves/deletes, and capture Digital Twin signals in near real time. | `node --check scripts/scan-conversation-dumps.mjs` PASS; `npm run idea-vault:scan-dumps` produced catalog + signal files. | — |
 | 2026-08-02 | **GAP-FILL `scripts/runMemoryImport.mjs` (step 2 / `ideavault-step2`).** The factory left a JSON-patch payload in the file, which failed `node --check` and the BUILD_QUEUE `file_contains` checks for `import-dumps-to-twin` and `run-memory-import`. Rewrote to a valid ES module exporting `triggerRunMemoryImport`, added `@ssot docs/products/ideavault/PRODUCT_HOME.md`, and included both substrings. | Satisfy the BUILD_QUEUE artifact contract and make the script syntactically valid. | `node --check scripts/runMemoryImport.mjs`; `npm run builder:preflight` PASS. | — |
 | 2026-06-25 | **All Cursor parent sessions archived (9)** — `archive-all-cursor-transcripts.mjs`; per-session `by-product/sessions/<shortId>/`; `CURSOR_SESSIONS_INDEX.md` + `CURSOR_SESSIONS_BATCH.json`; MODELS-OPS bucket added. | Adam: save every agent session without asking — not automatic on new chat yet. | ✅ 9/9 | `npm run lifeos:archive-cursor-transcripts:all` |
 | 2026-06-13 | **Cursor session archive pipeline** — `scripts/archive-cursor-transcript.mjs`; session `e9b7659e` → raw jsonl + master index + product buckets + receipt. | Adam: save conversations for history/receipts. | ✅ superseded by batch | — |
@@ -698,7 +698,7 @@ Cross-cutting SKUs that are **not** spec’d only under **21**. **Stream A wordi
 | Field | Value |
 |-------|--------|
 | **Next task** | Paste new **ChatGPT brainstorms** into **`docs/conversation_dumps/OPERATOR_BRAINSTORM_INBOX.md`**. **L4:** add **§A.1** row (`L4-004+`) for **brainstorm / product / governance** slices (**§6** step **5**) — not bulk code-tutorial unless durable integration truth → registry/amendment. **`split_dumps.mjs`** optional. **Report:** **`CONVERSATION_DUMP` §11** L4/L5 + composite **%**. **Start:** **`CONVERSATION_DUMP` §10** for per-file theme map. New export: (1) canonical inbox or `docs/conversation_dumps/`; (2) `operator-corpus:pipeline` / `idea-vault:catalog-keywords`; (3) **heading pass** if no Stream yet — `rg -n "^#{1,3}\\s" "<file>" \| head -200`; (4) **§ Seed catalog** §A/§B/§D; (5) refresh **`CONVERSATION_DUMP`** §7 if keyword defaults changed; (6) new **Stream** letter or extend I / portfolio; (7) promote to **INDEX** / amendment when revenue path clear; (8) **Lane B** twin ingest; (9) **39** Phase 2 seed + CI evidence; (10) append **§10** row + re-sum bytes; (11) refresh **§11** L4/L5 + composite **%**; (12) **`§A.1`** receipt row per promoted chunk. |
-| **Conversation dump scanner** | `npm run idea-vault:scan-dumps` — walks `docs/conversation_dumps/*.md`, infers product tags, extracts headings, and writes a categorized catalog to `docs/products/ideavault/conversations/YYYY-MM-DD-conversation-dump-bot-catalog.md`. Zero LLM tokens; run whenever new dumps land. |
+| **Conversation dump scanner + Digital Twin signal bot** | `npm run idea-vault:scan-dumps` — walks `docs/conversation_dumps/*.md`, infers product tags, extracts headings, and emits a categorized catalog plus `docs/products/ideavault/data/twin-signals/adam-YYYY-MM-DD-signals.jsonl` + `adam-YYYY-MM-DD-profile-fragment.json` (decisions, preferences, mood, principles, questions). Zero LLM tokens; run whenever new dumps land. |
 | **Blockers** | None. |
 | **⚠️ IN PROGRESS:** | Full-byte audit of all dumps — **not** claimed complete; use chunk protocol. |
 

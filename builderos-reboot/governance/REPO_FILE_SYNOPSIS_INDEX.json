@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-05T19:41:53.578Z",
+  "generated_at": "2026-08-05T20:00:11.441Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13010,
+  "file_count": 13011,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -33198,9 +33198,9 @@
     {
       "path": "data/constitutional-framework/reports/CONSTITUTIONAL_OBSERVABILITY_REPORT.json",
       "synopsis": "JSON data/config — data/constitutional-framework/reports/CONSTITUTIONAL_OBSERVABILITY_REPORT.json.",
-      "bytes": 10126,
-      "mtime": "2026-08-05T19:41:53.578Z",
-      "indexed_at": "2026-08-05T19:41:53.578Z",
+      "bytes": 0,
+      "mtime": "2026-08-05T20:00:11.441Z",
+      "indexed_at": "2026-08-05T20:00:11.441Z",
       "synopsis_index_only": true
     },
     {
@@ -39642,17 +39642,17 @@
     },
     {
       "path": "docs/CONTINUITY_LOG.md",
-      "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 142225,
-      "mtime": "2026-08-05T19:41:53.578Z",
-      "indexed_at": "2026-08-05T19:41:53.578Z"
+      "synopsis": "Documentation — CONTINUITY LOG.",
+      "bytes": 0,
+      "mtime": "2026-08-05T20:00:11.441Z",
+      "indexed_at": "2026-08-05T20:00:11.441Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
-      "synopsis": "CONVERSATION_DUMP_IDEAS_INDEX — mined threads & backlog themes",
-      "bytes": 28023,
-      "mtime": "2026-08-05T19:41:53.578Z",
-      "indexed_at": "2026-08-05T19:41:53.578Z"
+      "synopsis": "Documentation — CONVERSATION DUMP IDEAS INDEX.",
+      "bytes": 0,
+      "mtime": "2026-08-05T20:00:11.441Z",
+      "indexed_at": "2026-08-05T20:00:11.441Z"
     },
     {
       "path": "docs/conversation_dumps/2026-03-15-cursor-session-48f2917e-MASTER.md",
@@ -42706,25 +42706,33 @@
     },
     {
       "path": "docs/products/ideavault/conversations/2026-08-05-conversation-dump-bot-catalog.md",
-      "synopsis": "Bot-generated catalog of docs/conversation_dumps/ — 2026-08-05",
-      "bytes": 70152,
-      "mtime": "2026-08-05T19:41:53.578Z",
-      "indexed_at": "2026-08-05T19:41:53.578Z"
+      "synopsis": "Documentation — 2026 08 05 Conversation Dump Bot Catalog.",
+      "bytes": 0,
+      "mtime": "2026-08-05T20:00:11.441Z",
+      "indexed_at": "2026-08-05T20:00:11.441Z"
+    },
+    {
+      "path": "docs/products/ideavault/data/twin-signals/adam-2026-08-05-profile-fragment.json",
+      "synopsis": "Documentation — Adam 2026 08 05 Profile Fragment.",
+      "bytes": 0,
+      "mtime": "2026-08-05T20:00:11.441Z",
+      "indexed_at": "2026-08-05T20:00:11.441Z",
+      "synopsis_index_only": true
     },
     {
       "path": "docs/products/ideavault/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
-      "bytes": 1734,
-      "mtime": "2026-08-05T19:41:53.578Z",
-      "indexed_at": "2026-08-05T19:41:53.578Z",
+      "bytes": 0,
+      "mtime": "2026-08-05T20:00:11.441Z",
+      "indexed_at": "2026-08-05T20:00:11.441Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/products/ideavault/PRODUCT_HOME.md",
-      "synopsis": "Canonical product home — IdeaVault",
-      "bytes": 66841,
-      "mtime": "2026-08-05T19:41:53.578Z",
-      "indexed_at": "2026-08-05T19:41:53.578Z"
+      "synopsis": "Documentation — PRODUCT HOME.",
+      "bytes": 0,
+      "mtime": "2026-08-05T20:00:11.441Z",
+      "indexed_at": "2026-08-05T20:00:11.441Z"
     },
     {
       "path": "docs/products/INDEX.md",
@@ -66512,10 +66520,10 @@
     },
     {
       "path": "package.json",
-      "synopsis": "enforce\":\"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",\"lifeos:file-synopsis:backfill\":\"node scripts/file-synopsis-enforce.mjs --all --auto-fix && node scripts/generate-file-synopsis-index.mjs\",\"lifeos:file-synopsis:index\":\"n",
-      "bytes": 34532,
-      "mtime": "2026-08-05T19:41:53.578Z",
-      "indexed_at": "2026-08-05T19:41:53.578Z",
+      "synopsis": "JSON data/config — package.json.",
+      "bytes": 0,
+      "mtime": "2026-08-05T20:00:11.441Z",
+      "indexed_at": "2026-08-05T20:00:11.441Z",
       "synopsis_index_only": true
     },
     {
@@ -66927,9 +66935,9 @@
     {
       "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
       "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
-      "bytes": 3041,
-      "mtime": "2026-08-05T19:41:53.578Z",
-      "indexed_at": "2026-08-05T19:41:53.578Z",
+      "bytes": 0,
+      "mtime": "2026-08-05T20:00:11.441Z",
+      "indexed_at": "2026-08-05T20:00:11.441Z",
       "synopsis_index_only": true
     },
     {
@@ -67551,9 +67559,9 @@
     {
       "path": "products/receipts/POINT_B_DNA_VERIFY.json",
       "synopsis": "Product receipt — POINT B DNA VERIFY.",
-      "bytes": 280,
-      "mtime": "2026-08-05T19:41:53.578Z",
-      "indexed_at": "2026-08-05T19:41:53.578Z",
+      "bytes": 0,
+      "mtime": "2026-08-05T20:00:11.441Z",
+      "indexed_at": "2026-08-05T20:00:11.441Z",
       "synopsis_index_only": true
     },
     {
@@ -67567,9 +67575,9 @@
     {
       "path": "products/receipts/RECEIPT_TRUTH_VALIDATION.json",
       "synopsis": "Product receipt — RECEIPT TRUTH VALIDATION.",
-      "bytes": 18682,
-      "mtime": "2026-08-05T19:41:53.578Z",
-      "indexed_at": "2026-08-05T19:41:53.578Z",
+      "bytes": 0,
+      "mtime": "2026-08-05T20:00:11.441Z",
+      "indexed_at": "2026-08-05T20:00:11.441Z",
       "synopsis_index_only": true
     },
     {
@@ -67767,17 +67775,17 @@
     {
       "path": "products/receipts/TRUTH_ENFORCEMENT_AUDIT.json",
       "synopsis": "Product receipt — TRUTH ENFORCEMENT AUDIT.",
-      "bytes": 701,
-      "mtime": "2026-08-05T19:41:53.578Z",
-      "indexed_at": "2026-08-05T19:41:53.578Z",
+      "bytes": 0,
+      "mtime": "2026-08-05T20:00:11.441Z",
+      "indexed_at": "2026-08-05T20:00:11.441Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/TRUTH_LOCKDOWN_VERIFY.json",
       "synopsis": "Product receipt — TRUTH LOCKDOWN VERIFY.",
-      "bytes": 1141,
-      "mtime": "2026-08-05T19:41:53.578Z",
-      "indexed_at": "2026-08-05T19:41:53.578Z",
+      "bytes": 0,
+      "mtime": "2026-08-05T20:00:11.441Z",
+      "indexed_at": "2026-08-05T20:00:11.441Z",
       "synopsis_index_only": true
     },
     {
@@ -67807,9 +67815,9 @@
     {
       "path": "products/receipts/WISDOM_TRUTH_AUDIT.json",
       "synopsis": "Product receipt — WISDOM TRUTH AUDIT.",
-      "bytes": 735,
-      "mtime": "2026-08-05T19:41:53.578Z",
-      "indexed_at": "2026-08-05T19:41:53.578Z",
+      "bytes": 0,
+      "mtime": "2026-08-05T20:00:11.441Z",
+      "indexed_at": "2026-08-05T20:00:11.441Z",
       "synopsis_index_only": true
     },
     {
@@ -77003,13 +77011,10 @@
     },
     {
       "path": "scripts/scan-conversation-dumps.mjs",
-      "synopsis": "Conversation dump scanner — produces a categorized catalog of",
-      "bytes": 8540,
-      "mtime": "2026-08-05T19:41:53.578Z",
-      "indexed_at": "2026-08-05T19:41:53.578Z",
-      "ssot": [
-        "docs/products/ideavault/PRODUCT_HOME.md"
-      ]
+      "synopsis": "Script — Scan Conversation Dumps.",
+      "bytes": 0,
+      "mtime": "2026-08-05T20:00:11.441Z",
+      "indexed_at": "2026-08-05T20:00:11.441Z"
     },
     {
       "path": "scripts/security-invariants-check.mjs",
