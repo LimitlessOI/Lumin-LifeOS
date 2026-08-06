@@ -9,6 +9,7 @@ import {
   SECURITY_RECEIPT_TYPES,
   SEC_F01_CORE_RECEIPT_TYPES,
 } from './oil-security-receipts.js';
+import { createUsefulWorkGuard, requireTableRows } from './useful-work-guard.js';
 
 const TYPE_DEFAULTS = {
   gemini_live_proof: 0,
@@ -79,4 +80,33 @@ export async function generateDailyOILSummary(poolOverride) {
   );
 
   return { summary, receipt_id };
+}
+
+/**
+ * Self-contained start function -- extracted 2026-08-06 from startup/boot-domains.js's
+ * bootOILDailySummary, which was gated behind fullRuntimeProfile and, one layer above
+ * that gate, lived in a file (startup/boot-domains.js) never imported in production
+ * (server.js only ever loads server-full-runtime.js when isFullRuntimeProfile() is
+ * true, which is never true on Railway -- same root cause already fixed once for the
+ * governance-review scheduler). This is passive: reads security_receipts, writes one
+ * summary receipt every 24h, takes no autonomous action -- same safety class as
+ * governance-review, not the scope-expanding schedulers correctly left fenced.
+ */
+export function startOILDailySummaryScheduler({ pool, logger, intervalMs = 24 * 60 * 60 * 1000 } = {}) {
+  const run = createUsefulWorkGuard({
+    taskName: 'OIL Daily Summary',
+    purpose: 'Aggregate 24h security receipt activity and write a daily_oil_summary receipt',
+    prerequisites: () => ({ ok: Boolean(pool?.query) }),
+    workCheck: requireTableRows(pool, 'SELECT COUNT(*) FROM security_receipts'),
+    execute: async () => {
+      const { summary, receipt_id } = await generateDailyOILSummary(pool);
+      logger?.info?.({ receipt_id, total: summary.total_receipts }, '[OIL] Daily summary written');
+    },
+    logger,
+  });
+  setTimeout(async () => {
+    await run();
+    setInterval(run, intervalMs).unref?.();
+  }, 60 * 1000).unref?.();
+  logger?.info?.('[OIL] Daily summary scheduler registered (runs every 24h after 60s delay)');
 }

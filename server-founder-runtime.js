@@ -58,6 +58,9 @@ import { startProdHealthWatchdogScheduler } from "./scripts/prod-health-watchdog
 import { startSentryChairGovernanceScheduler, startCompetitiveResearchScheduler } from "./scripts/sentry-chair-governance-audit.mjs";
 import { startMemoryEmbeddingsBackfillScheduler } from "./scripts/memory-embeddings-backfill.mjs";
 import { registerGovernanceReviewScheduler } from "./services/governance-review-scheduler.js";
+import { registerWisdomTruthAuditorScheduler } from "./services/wisdom-truth-auditor.js";
+import { registerChairPredictionScoreScheduler } from "./services/chair-prediction-score-scheduler.js";
+import { startOILDailySummaryScheduler } from "./services/oil-daily-summary.js";
 import { startBpPriorityScheduler } from "./services/builderos-bp-priority-scheduler.js";
 import { initDatabase } from "./startup/database.js";
 import { requireKey } from "./src/server/auth/requireKey.js";
@@ -557,6 +560,34 @@ async function bootFounderRuntime() {
         registerGovernanceReviewScheduler({ pool, logger });
       } catch (governanceReviewErr) {
         logger.warn("[GOVERNANCE-REVIEW] scheduler failed to start in founder runtime", { error: governanceReviewErr.message });
+      }
+      // Same root cause, same fix, applied to the other passive/read-only schedulers
+      // found dead alongside governance-review (2026-08-06 audit): all three were
+      // gated behind fullRuntimeProfile in startup/boot-domains.js, a file never
+      // imported in production. Each is passive (audit/scan/score/report, no
+      // autonomous action, no outbound messages, no unattended AI calls) and each
+      // already has its own independent kill switch -- same safety class as
+      // governance-review. Deliberately NOT wiring in bootLifeOSScheduled (sends
+      // real SMS/notifications), bootLaneIntel (unattended daily AI reasoning), or
+      // bootFactoryAutopilotRecoveryOwner (explicitly autonomous recovery actions)
+      // here -- those are genuinely scope-expanding and stay fenced per the
+      // founder's own "Railway is the governed founder-builder lane until BuilderOS
+      // is proven" directive in services/runtime-modes.js; unfencing those needs an
+      // explicit founder decision, not a bundled bug fix.
+      try {
+        registerWisdomTruthAuditorScheduler({ logger });
+      } catch (wisdomAuditorErr) {
+        logger.warn("[WISDOM-TRUTH-AUDITOR] scheduler failed to start in founder runtime", { error: wisdomAuditorErr.message });
+      }
+      try {
+        registerChairPredictionScoreScheduler({ logger });
+      } catch (chairPredictionErr) {
+        logger.warn("[CHAIR-PREDICTION-SCORE] scheduler failed to start in founder runtime", { error: chairPredictionErr.message });
+      }
+      try {
+        startOILDailySummaryScheduler({ pool, logger });
+      } catch (oilSummaryErr) {
+        logger.warn("[OIL-DAILY-SUMMARY] scheduler failed to start in founder runtime", { error: oilSummaryErr.message });
       }
       _bootLog('bootFounderRuntime_done');
       return { ok: true, attempt: bootAttempt };

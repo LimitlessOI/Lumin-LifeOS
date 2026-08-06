@@ -528,11 +528,16 @@ export async function bootAllDomains(deps) {
     ...(fullRuntimeProfile ? [bootLifeOSScheduled(deps)] : []),
     ...(fullRuntimeProfile ? [bootLaneIntel(deps)] : []),
     bootTruthScoreboard(deps),
-    ...(fullRuntimeProfile ? [bootWisdomTruthAuditor(deps)] : []),
-    ...(fullRuntimeProfile ? [bootChairPredictionScore(deps)] : []),
+    // Ungated 2026-08-06, same reasoning as bootGovernanceReview above: passive
+    // (audit/scan/score, no autonomous action, no outbound messages, no
+    // unattended AI calls), each has its own independent kill switch. Also
+    // separately re-registered directly in server-founder-runtime.js, since
+    // this file is never imported in production regardless of this gate.
+    bootWisdomTruthAuditor(deps),
+    bootChairPredictionScore(deps),
     bootGovernanceReview(deps),
     ...(twinAutoIngestBootEnabled ? [bootTwinAutoIngest(deps)] : []),
-    ...(fullRuntimeProfile ? [bootOILDailySummary(deps)] : []),
+    bootOILDailySummary(deps),
     bootSelfRepairDeployCheck(deps),
     ...(fullRuntimeProfile ? [bootFactoryAutopilotRecoveryOwner(deps)] : []),
     bootBuilderOSPriorityQueue(deps),

@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-06T23:02:50.622Z",
+  "generated_at": "2026-08-06T23:23:47.311Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13044,
   "files": [
@@ -43130,9 +43130,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 768620,
-      "mtime": "2026-08-06T20:03:22.363Z",
-      "indexed_at": "2026-08-06T20:03:43.942Z"
+      "bytes": 766035,
+      "mtime": "2026-08-06T23:23:01.023Z",
+      "indexed_at": "2026-08-06T23:23:47.311Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -43636,9 +43636,9 @@
     {
       "path": "docs/products/project-governance/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Project Governance",
-      "bytes": 71953,
-      "mtime": "2026-08-01T19:07:38.787Z",
-      "indexed_at": "2026-08-01T19:07:38.787Z"
+      "bytes": 73063,
+      "mtime": "2026-08-06T23:23:25.604Z",
+      "indexed_at": "2026-08-06T23:23:47.311Z"
     },
     {
       "path": "docs/products/project-governance/READINESS_CHECKLIST.md",
@@ -89468,9 +89468,9 @@
     {
       "path": "server-founder-runtime.js",
       "synopsis": "Founder-builder minimal runtime entrypoint.",
-      "bytes": 24074,
-      "mtime": "2026-07-31T06:06:46.391Z",
-      "indexed_at": "2026-07-31T06:09:02.116Z",
+      "bytes": 26116,
+      "mtime": "2026-08-06T23:19:59.315Z",
+      "indexed_at": "2026-08-06T23:23:47.311Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -96333,9 +96333,9 @@
     {
       "path": "services/oil-daily-summary.js",
       "synopsis": "services/oil-daily-summary.js",
-      "bytes": 2192,
-      "mtime": "2026-06-29T17:21:08.949Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 3809,
+      "mtime": "2026-08-06T23:19:31.159Z",
+      "indexed_at": "2026-08-06T23:23:47.311Z",
       "ssot": [
         "docs/products/project-governance/PRODUCT_HOME.md"
       ]
@@ -100052,9 +100052,9 @@
     {
       "path": "startup/boot-domains.js",
       "synopsis": "boot-domains.js",
-      "bytes": 22616,
-      "mtime": "2026-07-30T01:03:06.992Z",
-      "indexed_at": "2026-07-30T01:04:19.957Z",
+      "bytes": 22898,
+      "mtime": "2026-08-06T23:20:54.943Z",
+      "indexed_at": "2026-08-06T23:23:47.311Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
