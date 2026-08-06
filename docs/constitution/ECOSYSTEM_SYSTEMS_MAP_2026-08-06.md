@@ -20,6 +20,12 @@ That's a **peer relationship** — LifeOS (person) and LimitlessOS (business) ar
 
 Those two statements can't both be true. This isn't your confusion — it's a real, unresolved conflict in the document itself, a few lines apart, never reconciled. Your uncertainty ("I don't know, I'm not sure") is the correct read of what's actually written, not a gap in your own understanding.
 
+**RESOLVED, 2026-08-06 — Adam's own framing, and it dissolves the contradiction rather than picking a side:**
+
+> "LifeOS and LimitlessOS are related to businesses and individuals, and it is the heart of our products, projects. It is not the system, which really revolves around the constitution and the Builder OS."
+
+Neither LifeOS nor LimitlessOS is "the system," and neither is the other's parent or child — that whole peer-vs-child question was a category error. **The products are not the system. The products are built by the system.** "The system" is the Constitution + BuilderOS (the real, governing layer documented in `AS_IS_GOVERNANCE_STRUCTURE_2026-08-06.md`). LifeOS and LimitlessOS are both products of that system — the person-facing and business-facing halves of what it builds, exactly as the peer-relationship reading in §1 already had it. `limitlessos/PRODUCT_HOME.md`'s "Child products" table is still internally inconsistent with its own Vision Statement and would benefit from a real cleanup pass, but it no longer matters *which* is central — neither is, by design.
+
 ---
 
 ## 2. The working model that's actually consistent (synthesized from the non-contradictory parts)
@@ -107,7 +113,7 @@ Of all 47 registered products, only **8** carry any `readiness_state`/`blueprint
 ## 6. What this map deliberately does not do
 
 - Does not go deep into any single product's internal architecture — that's each product's own `PRODUCT_HOME.md`, and there are 44+ of them; this stays at the atlas altitude you asked for.
-- Does not resolve the LifeOS/LimitlessOS peer-vs-child conflict — flagged in §1 for your decision.
+- The LifeOS/LimitlessOS peer-vs-child conflict flagged in §1 is now resolved — see the RESOLVED note there. `limitlessos/PRODUCT_HOME.md`'s "Child products" table still needs a real cleanup pass to match the resolution, but that's a documentation-hygiene task, not an open decision anymore.
 - Does not re-derive the constitutional/role layer (Chair, Sentry, Architect, Builder, Wisdom, CFO, AI Council) — see the companion document, `docs/constitution/AS_IS_GOVERNANCE_STRUCTURE_2026-08-06.md`, filed the same session.
 - Does not categorize all 44 products with certainty — §4's groupings are a first pass, not verified against each product's own stated scope.
 

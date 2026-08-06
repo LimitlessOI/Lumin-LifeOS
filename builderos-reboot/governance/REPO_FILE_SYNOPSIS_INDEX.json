@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-06T23:23:47.311Z",
+  "generated_at": "2026-08-06T23:27:57.901Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13044,
   "files": [
@@ -39447,9 +39447,9 @@
     {
       "path": "docs/constitution/ECOSYSTEM_SYSTEMS_MAP_2026-08-06.md",
       "synopsis": "Top-level systems map — how the constitution, BuilderOS, LifeOS, LimitlessOS, and the ~47 registered products actually relate, checked directly against the repo. Not law, not a proposal; a ground-truth atlas for the 2026-08-06 constitutiona",
-      "bytes": 9367,
-      "mtime": "2026-08-06T19:50:51.810Z",
-      "indexed_at": "2026-08-06T19:51:51.839Z"
+      "bytes": 10657,
+      "mtime": "2026-08-06T23:27:07.189Z",
+      "indexed_at": "2026-08-06T23:27:57.901Z"
     },
     {
       "path": "docs/constitution/ENFORCEMENT_AND_LEGACY_AUDIT_2026-08-06.md",
@@ -43130,9 +43130,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 766035,
-      "mtime": "2026-08-06T23:23:01.023Z",
-      "indexed_at": "2026-08-06T23:23:47.311Z"
+      "bytes": 767305,
+      "mtime": "2026-08-06T23:27:45.056Z",
+      "indexed_at": "2026-08-06T23:27:57.901Z"
     },
     {
       "path": "docs/products/LIFERE.md",
