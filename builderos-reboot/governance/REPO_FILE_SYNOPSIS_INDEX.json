@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-06T01:13:01.298Z",
+  "generated_at": "2026-08-06T05:06:49.385Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13016,
   "files": [
@@ -39580,9 +39580,9 @@
     {
       "path": "docs/constitution/proposals/2026-08-04-COGNITIVE-INTERACTION-ARCHITECTURE-PROPOSAL.md",
       "synopsis": "Proposal — a cognitive mode-selection step before translation, from Adam's own brainstorming with another AI plus this session's analysis. NOT RATIFIED.",
-      "bytes": 38598,
-      "mtime": "2026-08-04T22:35:20.591Z",
-      "indexed_at": "2026-08-04T22:36:07.579Z"
+      "bytes": 39640,
+      "mtime": "2026-08-06T05:05:52.827Z",
+      "indexed_at": "2026-08-06T05:06:49.385Z"
     },
     {
       "path": "docs/constitution/README.md",
@@ -42967,9 +42967,9 @@
     {
       "path": "docs/products/lifeos/COMMUNICATION_SYSTEM_BLUEPRINT.md",
       "synopsis": "LifeOS-scoped communication / cognitive-interaction blueprint — source: TALOA Cognitive Interaction System complete blueprint 2026-08-04, cross-referenced with existing LifeOS communication canon.",
-      "bytes": 37811,
-      "mtime": "2026-08-06T01:09:08.422Z",
-      "indexed_at": "2026-08-06T01:09:08.422Z"
+      "bytes": 40680,
+      "mtime": "2026-08-06T05:05:33.152Z",
+      "indexed_at": "2026-08-06T05:06:49.385Z"
     },
     {
       "path": "docs/products/lifeos/COMMUNICATION_SYSTEM_FOUNDER_REFERENCE.md",
@@ -43059,9 +43059,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 735788,
-      "mtime": "2026-08-06T01:13:01.298Z",
-      "indexed_at": "2026-08-06T01:13:01.298Z"
+      "bytes": 738085,
+      "mtime": "2026-08-06T05:06:30.851Z",
+      "indexed_at": "2026-08-06T05:06:49.385Z"
     },
     {
       "path": "docs/products/LIFERE.md",
