@@ -202,7 +202,7 @@ All five were re-verified live in production as a single end-to-end pass after b
 | Digital Twin taxonomy, Communication Calibration Profile spec | `docs/products/builderos/specs/FOUNDER_VIRTUAL_TWIN.md` |
 | Your actual live twin data | `data/twins/default/adam/communication.json` |
 | Crisis Safety Protocol v1 (full 13-question design doc) | `docs/products/lifeos/CRISIS_SAFETY_PROTOCOL_V1.md` |
-| Translation Layer dependency-mapping audit | `docs/products/lifeos/COMMUNICATION_TRANSLATION_MAPPING_2026_08_04.md` |
+| Translation Layer dependency-mapping audit | `docs/products/lifeos/communication/COMMUNICATION_TRANSLATION_MAPPING_2026_08_04.md` |
 | Decision/outcome ledger design | `docs/products/lifeos/DECISION_OUTCOME_LEDGER_V1.md` |
 | Governance laws shaping interaction | `docs/CREATIVE_ENGINE_AND_PROGRESS_DOCTRINE.md` |
 | Emergency detection (health) | `docs/products/lifeos/PRODUCT_HOME.md` § Emergency Detection |

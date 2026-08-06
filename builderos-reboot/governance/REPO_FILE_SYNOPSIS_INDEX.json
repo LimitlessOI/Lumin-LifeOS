@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-06T05:14:04.797Z",
+  "generated_at": "2026-08-06T05:31:12.661Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13019,
+  "file_count": 13022,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21678,9 +21678,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3914718,
-      "mtime": "2026-08-03T10:03:17.249Z",
-      "indexed_at": "2026-08-03T10:04:15.777Z"
+      "bytes": 3943895,
+      "mtime": "2026-08-06T05:30:23.150Z",
+      "indexed_at": "2026-08-06T05:31:12.661Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -39580,9 +39580,9 @@
     {
       "path": "docs/constitution/proposals/2026-08-04-COGNITIVE-INTERACTION-ARCHITECTURE-PROPOSAL.md",
       "synopsis": "Proposal — a cognitive mode-selection step before translation, from Adam's own brainstorming with another AI plus this session's analysis. NOT RATIFIED.",
-      "bytes": 39640,
-      "mtime": "2026-08-06T05:05:52.827Z",
-      "indexed_at": "2026-08-06T05:06:49.385Z"
+      "bytes": 39654,
+      "mtime": "2026-08-06T05:20:04.118Z",
+      "indexed_at": "2026-08-06T05:30:22.273Z"
     },
     {
       "path": "docs/constitution/README.md",
@@ -39643,16 +39643,16 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 146588,
-      "mtime": "2026-08-06T05:07:10.590Z",
-      "indexed_at": "2026-08-06T05:07:10.590Z"
+      "bytes": 148007,
+      "mtime": "2026-08-06T05:18:57.326Z",
+      "indexed_at": "2026-08-06T05:30:22.273Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
       "synopsis": "CONVERSATION_DUMP_IDEAS_INDEX — mined threads & backlog themes",
-      "bytes": 29739,
-      "mtime": "2026-08-06T01:09:08.422Z",
-      "indexed_at": "2026-08-06T01:09:08.422Z"
+      "bytes": 29753,
+      "mtime": "2026-08-06T05:19:58.190Z",
+      "indexed_at": "2026-08-06T05:30:22.273Z"
     },
     {
       "path": "docs/conversation_dumps/2026-03-15-cursor-session-48f2917e-MASTER.md",
@@ -39810,17 +39810,17 @@
     },
     {
       "path": "docs/conversation_dumps/2026-08-05-cognitive-interaction-constitutional-merge-shared-engines.md",
-      "synopsis": "Documentation — 2026 08 05 Cognitive Interaction Constitutional Merge Shared Engines.",
-      "bytes": 0,
-      "mtime": "2026-08-06T00:51:14.662Z",
-      "indexed_at": "2026-08-06T00:51:14.662Z"
+      "synopsis": "Constitutional v2.0 merge of TALOA and Collaborative Cognition blueprints, plus new shared engines: Human Perception, Tonality, Evidence Fusion, and Cognitive Dynamics.",
+      "bytes": 19019,
+      "mtime": "2026-08-06T00:47:49.970Z",
+      "indexed_at": "2026-08-06T05:30:22.273Z"
     },
     {
       "path": "docs/conversation_dumps/2026-08-05-voice-interaction-torture-suite.md",
-      "synopsis": "Documentation — 2026 08 05 Voice Interaction Torture Suite.",
-      "bytes": 0,
-      "mtime": "2026-08-06T00:51:14.662Z",
-      "indexed_at": "2026-08-06T00:51:14.662Z"
+      "synopsis": "Voice interaction stress test — interruption decay, conversational contracts, presence layer, and a proposed Conversation Torture Suite for the communication system.",
+      "bytes": 13545,
+      "mtime": "2026-08-06T00:47:41.622Z",
+      "indexed_at": "2026-08-06T05:30:22.273Z"
     },
     {
       "path": "docs/conversation_dumps/by-product/sessions/2a4739f2/BUILDEROS-AUTONOMOUS.md",
@@ -42720,32 +42720,32 @@
     },
     {
       "path": "docs/products/ideavault/conversations/2026-08-05-conversation-dump-bot-catalog.md",
-      "synopsis": "Documentation — 2026 08 05 Conversation Dump Bot Catalog.",
-      "bytes": 0,
-      "mtime": "2026-08-05T20:00:11.441Z",
-      "indexed_at": "2026-08-05T20:00:11.441Z"
+      "synopsis": "Bot-generated catalog of docs/conversation_dumps/ — 2026-08-05",
+      "bytes": 77693,
+      "mtime": "2026-08-05T19:56:42.319Z",
+      "indexed_at": "2026-08-06T05:30:22.273Z"
     },
     {
       "path": "docs/products/ideavault/conversations/2026-08-06-conversation-dump-bot-catalog.md",
-      "synopsis": "Documentation — 2026 08 06 Conversation Dump Bot Catalog.",
-      "bytes": 0,
-      "mtime": "2026-08-06T00:51:14.662Z",
-      "indexed_at": "2026-08-06T00:51:14.662Z"
+      "synopsis": "Bot-generated catalog of docs/conversation_dumps/ — 2026-08-06",
+      "bytes": 78832,
+      "mtime": "2026-08-06T00:47:52.902Z",
+      "indexed_at": "2026-08-06T05:30:22.273Z"
     },
     {
       "path": "docs/products/ideavault/data/twin-signals/adam-2026-08-05-profile-fragment.json",
       "synopsis": "Documentation — Adam 2026 08 05 Profile Fragment.",
-      "bytes": 0,
-      "mtime": "2026-08-05T20:00:11.441Z",
-      "indexed_at": "2026-08-05T20:00:11.441Z",
+      "bytes": 4510,
+      "mtime": "2026-08-05T19:56:42.319Z",
+      "indexed_at": "2026-08-06T05:30:22.273Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/products/ideavault/data/twin-signals/adam-2026-08-06-profile-fragment.json",
       "synopsis": "Documentation — Adam 2026 08 06 Profile Fragment.",
-      "bytes": 0,
-      "mtime": "2026-08-06T00:51:14.662Z",
-      "indexed_at": "2026-08-06T00:51:14.662Z",
+      "bytes": 4452,
+      "mtime": "2026-08-06T00:47:52.898Z",
+      "indexed_at": "2026-08-06T05:30:22.273Z",
       "synopsis_index_only": true
     },
     {
@@ -42989,9 +42989,9 @@
     {
       "path": "docs/products/lifeos/COMMUNICATION_SYSTEM_BLUEPRINT.md",
       "synopsis": "LifeOS-scoped communication / cognitive-interaction blueprint — source: TALOA Cognitive Interaction System complete blueprint 2026-08-04, cross-referenced with existing LifeOS communication canon.",
-      "bytes": 44629,
-      "mtime": "2026-08-06T05:08:51.048Z",
-      "indexed_at": "2026-08-06T05:10:06.598Z"
+      "bytes": 41744,
+      "mtime": "2026-08-06T05:07:10.590Z",
+      "indexed_at": "2026-08-06T05:07:10.590Z"
     },
     {
       "path": "docs/products/lifeos/COMMUNICATION_SYSTEM_FOUNDER_REFERENCE.md",
@@ -43006,6 +43006,27 @@
       "bytes": 5149,
       "mtime": "2026-08-04T10:38:20.934Z",
       "indexed_at": "2026-08-04T10:39:09.370Z"
+    },
+    {
+      "path": "docs/products/lifeos/communication/COMMUNICATION_SYSTEM_BLUEPRINT.md",
+      "synopsis": "LifeOS Communication System — final consolidated blueprint. Source: every founder/model conversation and attachment about communication, perception, conversation, and the LifeOS cognitive interaction system.",
+      "bytes": 55856,
+      "mtime": "2026-08-06T05:23:46.018Z",
+      "indexed_at": "2026-08-06T05:30:22.273Z"
+    },
+    {
+      "path": "docs/products/lifeos/communication/COMMUNICATION_SYSTEM_FOUNDER_REFERENCE.md",
+      "synopsis": "One-file reference for Adam — everything the repo has documented about how he wants Lumin/Chair to communicate, and where each piece stands today",
+      "bytes": 20985,
+      "mtime": "2026-08-06T05:19:29.714Z",
+      "indexed_at": "2026-08-06T05:30:22.273Z"
+    },
+    {
+      "path": "docs/products/lifeos/communication/COMMUNICATION_TRANSLATION_MAPPING_2026_08_04.md",
+      "synopsis": "Priority 4 dependency-mapping audit — does a Communication Translation Layer need to be built?",
+      "bytes": 5149,
+      "mtime": "2026-08-04T16:56:35.898Z",
+      "indexed_at": "2026-08-06T05:30:22.273Z"
     },
     {
       "path": "docs/products/lifeos/conversations/2026-06-29-human-synergy-limitless-principle.md",
@@ -43073,17 +43094,17 @@
     {
       "path": "docs/products/lifeos/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
-      "bytes": 0,
-      "mtime": "2026-08-06T00:51:14.662Z",
-      "indexed_at": "2026-08-06T00:51:14.662Z",
+      "bytes": 25355,
+      "mtime": "2026-08-06T05:18:51.290Z",
+      "indexed_at": "2026-08-06T05:30:22.273Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 739914,
-      "mtime": "2026-08-06T05:13:56.100Z",
-      "indexed_at": "2026-08-06T05:14:04.797Z"
+      "bytes": 740618,
+      "mtime": "2026-08-06T05:25:37.446Z",
+      "indexed_at": "2026-08-06T05:30:22.273Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -43846,9 +43867,9 @@
     {
       "path": "docs/products/universal-overlay/INTELLIGENT_OVERLAY_BLUEPRINT.md",
       "synopsis": "Founder's integrated vision — Universal Overlay as a perception-aware, conversation-driven, verbal AI director. Source: 2026-08-05 conversation dumps + full Lumin-Memory corpus analysis.",
-      "bytes": 13413,
-      "mtime": "2026-08-06T01:09:08.422Z",
-      "indexed_at": "2026-08-06T01:09:08.422Z"
+      "bytes": 13427,
+      "mtime": "2026-08-06T05:19:38.274Z",
+      "indexed_at": "2026-08-06T05:30:22.273Z"
     },
     {
       "path": "docs/products/universal-overlay/PRODUCT_HOME.md",
@@ -66578,10 +66599,10 @@
     },
     {
       "path": "package.json",
-      "synopsis": "JSON data/config — package.json.",
-      "bytes": 0,
-      "mtime": "2026-08-05T20:00:11.441Z",
-      "indexed_at": "2026-08-05T20:00:11.441Z",
+      "synopsis": "enforce\":\"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",\"lifeos:file-synopsis:backfill\":\"node scripts/file-synopsis-enforce.mjs --all --auto-fix && node scripts/generate-file-synopsis-index.mjs\",\"lifeos:file-synopsis:index\":\"n",
+      "bytes": 34542,
+      "mtime": "2026-08-05T19:56:34.443Z",
+      "indexed_at": "2026-08-06T05:30:22.273Z",
       "synopsis_index_only": true
     },
     {
@@ -66994,8 +67015,8 @@
       "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
       "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
       "bytes": 3163,
-      "mtime": "2026-08-06T05:11:12.840Z",
-      "indexed_at": "2026-08-06T05:11:12.840Z",
+      "mtime": "2026-08-06T05:15:25.514Z",
+      "indexed_at": "2026-08-06T05:30:22.273Z",
       "synopsis_index_only": true
     },
     {

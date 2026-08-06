@@ -1,24 +1,27 @@
-<!-- SYNOPSIS: LifeOS-scoped communication / cognitive-interaction blueprint — source: TALOA Cognitive Interaction System complete blueprint 2026-08-04, cross-referenced with existing LifeOS communication canon. -->
+<!-- SYNOPSIS: LifeOS Communication System — final consolidated blueprint. Source: every founder/model conversation and attachment about communication, perception, conversation, and the LifeOS cognitive interaction system. -->
 
 # LifeOS Communication System Blueprint
 
 **Document ID:** LIFEOS-COMM-BP-001  
-**Status:** PROPOSED — founder vision capture, not ratified, no runtime code  
-**Source:** `TALOA_COGNITIVE_INTERACTION_SYSTEM_COMPLETE_BLUEPRINT_2026-08-04.md` (founder attachment)  
-**Scope:** LifeOS client conversations, therapist-supported reflection, therapist dashboard preparation, guided product support. Excludes BuilderOS governance, Solomon/Chair separation machinery, and cross-product factory concerns unless they touch LifeOS surfaces.  
+**Status:** FINAL — consolidated founder-vision capture, not ratified, no runtime code  
+**Location:** `docs/products/lifeos/communication/`  
+**Prior flat location:** `docs/products/lifeos/COMMUNICATION_SYSTEM_BLUEPRINT.md` (moved into this subfolder)  
+**Source inventory:** see §20  
+**Scope:** LifeOS client conversations, therapist-supported reflection, therapist dashboard preparation, guided product support, and the cross-product communication/perception layer shared with SalesOS, TherapyOS, MediaOS, LeadershipOS, and EducationOS.  
 **Canonical SSOT:** `docs/products/lifeos/PRODUCT_HOME.md`  
-**Last Updated:** 2026-08-06
+**Last Updated:** 2026-08-07
 
 **Related canonical files**
 - `docs/constitution/LUMIN_COMMUNICATION_DNA.md` — constitutional communication law
 - `docs/LUMIN_DOCTRINE.md` — Lumin role, Wisdom, prediction lifecycle, always-present context
 - `docs/architecture/LUMIN_TRANSLATION_AND_ACCOUNT_MODEL.md` — translation + cost routing
 - `docs/architecture/DIGITAL_TWIN_DOCTRINE.md` — twin = understanding layer
-- `docs/products/lifeos/COMMUNICATION_TRANSLATION_MAPPING_2026_08_04.md` — why no separate translation layer is needed
+- `docs/products/lifeos/communication/COMMUNICATION_TRANSLATION_MAPPING_2026_08_04.md` — why no separate translation layer is needed
 - `docs/products/lifeos/CRISIS_SAFETY_PROTOCOL_V1.md`
 - `docs/products/lifeos/DECISION_OUTCOME_LEDGER_V1.md`
 - `docs/BLUEPRINT_COMMUNICATION_FIRST_2026-08-02.md`
-- `docs/constitution/proposals/2026-08-04-COGNITIVE-INTERACTION-ARCHITECTURE-PROPOSAL.md` — NOT RATIFIED decision packet covering the same 2026-08-04+ brainstorming from a different angle (mode-selection philosophy, round-by-round disagreement record, citation-verified Knowledge Distribution candidates in §F, Identity-Safe Learning A15). Cross-linked so these two documents don't drift apart independently — this blueprint is the LifeOS-scoped build spec; that document is the ratification-track decision packet. **Re-added 2026-08-06** — this line and §6.1 below were both silently dropped by a later full-file rewrite of this document; re-applied rather than re-litigated since neither is a judgment call, both were already fact-checked and founder-instructed.
+- `docs/constitution/proposals/2026-08-04-COGNITIVE-INTERACTION-ARCHITECTURE-PROPOSAL.md` — NOT RATIFIED decision packet covering the same 2026-08-04+ brainstorming from a different angle (mode-selection philosophy, round-by-round disagreement record, citation-verified Knowledge Distribution candidates in §F, Identity-Safe Learning A15). Cross-linked so these two documents don't drift apart independently — this blueprint is the LifeOS-scoped build spec; that document is the ratification-track decision packet.
+- `docs/products/universal-overlay/INTELLIGENT_OVERLAY_BLUEPRINT.md` — host-agnostic conversation + action surface V0–V5
 
 ---
 
@@ -664,9 +667,9 @@ This blueprint is therefore a **product-level composition** of the existing comm
 
 ---
 
-## 20. Voice, perception, and shared-engine additions (from 2026-08-05 founder conversations)
+## 19. Voice, perception, and shared-engine additions (from 2026-08-05 founder conversations)
 
-### 20.0 Core principle: understanding emerges from evidence fusion
+### 19.0 Core principle: understanding emerges from evidence fusion
 
 **The goal is not to replace transcript understanding. The goal is to reduce ambiguity by combining independent evidence sources.**
 
@@ -700,7 +703,7 @@ This is a foundational architectural decision: every source gets its own calibra
 
 > Given all available evidence, what is the most likely current state, and how confident are we?
 
-### 20.1 Human Perception Engine
+### 19.1 Human Perception Engine
 
 The Human Perception Engine does not rely on the transcript alone. It continuously fuses evidence from multiple independent channels to estimate the current conversational state with calibrated confidence.
 
@@ -754,7 +757,7 @@ Sometimes how something is said is more informative than the words themselves.
 
 Each channel produces a calibrated confidence score. The system learns which channels are most predictive in which situations and recalibrates from real outcomes.
 
-### 20.2 Evidence Fusion Engine
+### 19.2 Evidence Fusion Engine
 
 The Evidence Fusion Engine is a **domain-independent system** that continuously combines multiple independent evidence sources into calibrated confidence estimates. Every OS — LifeOS, SalesOS, TherapyOS, MediaOS, BuilderOS — consumes those calibrated estimates rather than interpreting raw signals independently.
 
@@ -795,7 +798,7 @@ When the system predicts a state and responds, the user's reaction becomes feedb
 
 Over millions of interactions, the perception system continuously recalibrates itself.
 
-### 20.3 Tonality Engine
+### 19.3 Tonality Engine
 
 Tonality is one of the highest-value signals and deserves its own subsystem, not just a bullet point. It analyzes the acoustic and rhythmic features of speech:
 
@@ -807,10 +810,10 @@ Tonality is one of the highest-value signals and deserves its own subsystem, not
 
 Sometimes how something is said is more informative than the words themselves. It is shared as a cross-product layer for LifeOS, SalesOS, TherapyOS, MediaOS, LeadershipOS, and EducationOS.
 
-### 20.4 Cognitive Dynamics
+### 19.4 Cognitive Dynamics
 The runtime continuously estimates the current conversational state across dimensions such as ambiguity, certainty, agency, openness, cognitive load, readiness, emotional intensity, momentum, and trust. These are not personality traits; they are momentary states that the Composer uses to select modes and calibrate interventions.
 
-### 20.5 Presence, interruption, and conversational contracts
+### 19.5 Presence, interruption, and conversational contracts
 Voice has a different latency budget than text. A Presence Layer runs continuously: listening, nodding, subtle acknowledgements, breathing, “thinking” sounds, streaming partial thoughts, and trailing off naturally when interrupted.
 
 **Interruption Decay Model:**
@@ -828,7 +831,7 @@ Voice has a different latency budget than text. A Presence Layer runs continuous
 
 The response generator then continues until the completion condition or a user interruption is met.
 
-### 20.6 Authenticity Engine (expanded anti-pattern)
+### 19.6 Authenticity Engine (expanded anti-pattern)
 Detect repeated behavioral structures, not just repeated phrases:
 - validation → reframe → framework → conclusion
 - repeated paragraph rhythm, emotional cadence, question cadence
@@ -837,7 +840,7 @@ Detect repeated behavioral structures, not just repeated phrases:
 
 The existing Anti-Pattern Engine (§11) becomes the detection surface; the Composer becomes the adjustment surface. Both remain in shadow mode until evidence justifies a safe change.
 
-### 20.7 Conversation Torture Suite
+### 19.7 Conversation Torture Suite
 A test inventory of realistic conversational stress scenarios:
 - interrupt mid-sentence
 - pause unexpectedly
@@ -851,10 +854,10 @@ A test inventory of realistic conversational stress scenarios:
 
 Acceptance criteria: natural interruption decay, contract completion, presence continuity, voice latency below human-perceptible failure, and graceful recovery from truncation.
 
-### 20.8 Positive-signal recognition
+### 19.8 Positive-signal recognition
 Positive states are detected as opportunities to reinforce momentum: curiosity, excitement, relief, pride, confidence, engagement, flow, inspiration, amusement. The system leans in at these moments rather than treating only negative signals as intervention triggers.
 
-### 20.9 Cross-product engine sharing
+### 19.9 Cross-product engine sharing
 The Human Perception Engine, Tonality Engine, and Evidence Fusion Engine are shared infrastructure consumed by:
 
 - **LifeOS** — natural, present conversation
@@ -866,7 +869,7 @@ The Human Perception Engine, Tonality Engine, and Evidence Fusion Engine are sha
 
 Each OS consumes calibrated estimates rather than interpreting raw signals independently.
 
-### 20.10 Build-program fit
+### 19.10 Build-program fit
 
 | New capability | Fits in |
 |---|---|
@@ -877,13 +880,13 @@ Each OS consumes calibrated estimates rather than interpreting raw signals indep
 | Authenticity Engine | Phase 7 Anti-Pattern and Presence Quality |
 | Conversation Torture Suite | Phase 14 testing layer (extends §14 Golden/Adversarial tests) |
 
-### 20.11 Open questions added
+### 19.11 Open questions added
 1. Which modalities can we realistically collect in Phase 2? (voice only? video? wearables?)
 2. Should Evidence Fusion be a shared service or a pattern each OS consumes independently?
 3. What is the consent boundary for tonal, video, and biometric evidence in each product surface?
 4. Where is the line between “positive-signal recognition” and “positive manipulation”? How is reinforcement governed?
 
-### 20.12 Universal Overlay as a LifeOS communication surface
+### 19.12 Universal Overlay as a LifeOS communication surface
 
 The `universal-overlay` product is the primary host-agnostic surface for the communication system:
 
@@ -895,9 +898,94 @@ The `universal-overlay` product is the primary host-agnostic surface for the com
 
 The LifeOS communication phases (especially Phase 4 Client Experience and Phase 5 Therapist Dashboard) should be designed assuming the overlay is one of the primary delivery channels. See `docs/products/universal-overlay/INTELLIGENT_OVERLAY_BLUEPRINT.md` for the V0–V5 roadmap.
 
-## 19. Open questions for the founder
+## 20. Source inventory and routing
 
-- Which of the new cognitive modes should be wired into Lumin first?
-- Do you want the full Communication Calibration Profile dimensions added to the existing `communication_profiles` schema, or kept as a research document?
-- Is the therapist dashboard a LifeOS feature or a Wellness Studio feature?
-- Should any of this be promoted into `docs/constitution/LUMIN_COMMUNICATION_DNA.md` or remain in product-level spec?
+This blueprint is a consolidation of every founder/model conversation and attachment about LifeOS communication that could be located in the repository or in the attachment cache. The table below lists the source, what it contributed, and where that contribution lives in this document. Some sources are governance or product-review documents and do not add communication mechanics directly; they are included so the inventory is complete.
+
+| Source | Type | Key communication/perception ideas | Where it lives in this blueprint |
+|---|---|---|---|
+| `TALOA_COGNITIVE_INTERACTION_SYSTEM_COMPLETE_BLUEPRINT_2026-08-04.md` (attachment) | Full blueprint | Moment types, immediate objectives, need hypotheses, fast paths vs deliberative pipeline, cognitive modes, Conversation Composer, Communication Calibration Profile, Anti-Pattern Engine, crisis/safety, therapist dashboard, 10-phase build program | §1–§15, §16, §18 |
+| `Constitutional_proposal_overview...rtf` (attachment) | Governance/audit proposal | Human Transformation Engine → Entity Twin mapping; constitutional learning architecture; independent verification standard; reality as final authority | §18, §2 audit table |
+| `BuilderOS review and rating.rtfd` (attachment) | Product review | Digital Twin as the central competitive advantage; continuous learning; founder-intent prediction; real conversation capture; proof-first discipline | §8 (Twin/calibration), §13 (outcome learning), §18, §21 |
+| `life_os_notes_.pages` (attachment) | Apple Pages prompt | Generic request to extract conversation content; no additional communication mechanics beyond what TALOA and the dumps contain | Noted as non-source |
+| `2026-08-05-voice-interaction-torture-suite.md` (saved conversation dump) | Voice stress transcript | Interruption Decay Model, Conversational Contracts, Presence Layer (listening/nodding/breathing/thinking sounds), Conversation Torture Suite | §19.5, §19.7 |
+| `2026-08-05-cognitive-interaction-constitutional-merge-shared-engines.md` (saved conversation dump) | Constitutional merge transcript | Evidence Fusion Engine, Human Perception Engine, Tonality Engine, Cognitive Dynamics, positive-signal recognition, confidence-by-modality, cross-product sharing | §19.0–§19.4, §19.6–§19.9 |
+| `COMMUNICATION_SYSTEM_FOUNDER_REFERENCE.md` (repo) | One-file reference | Lumin = Chair, single front door, Honesty Contract, tonal awareness, Twin-matched voice, anti-formula, crisis/safety, governance laws | §3, §8, §12, §13 |
+| `COMMUNICATION_TRANSLATION_MAPPING_2026_08_04.md` (repo) | Dependency audit | No separate Communication Translation Layer; existing `chair-personality-translate.js` + `communication-profile.js` + `LUMIN_COMMUNICATION_LAW.json` own the behaviors | §8.1 |
+| `Lumin-Memory/00_INBOX/raw/` (17 raw GPT/Gemini/Grok/DeepSeek/LifeOS dump files, ~7.4MB) | Raw conversation corpus | Scanned for communication/perception content; high-value fragments are routed to §21 | §21 |
+| Additional `pasted-*.md` attachments in `/home/ubuntu/attachments/` | Conversation snippets and model outputs | Scanned for communication/perception/conversation content; high-value ideas routed to §21 | §21 |
+| `public/overlay/lifeos-app.html` | Active founder surface | Primary host-agnostic conversation/action surface for the overlay | §19.12 |
+
+**Note on completeness:** the raw Lumin-Memory corpus and the pasted attachments contain a large volume of repetition, governance discussion, and product-build status that is not about communication mechanics. The scan focused on communication, conversation, tonality, perception, interruption, evidence fusion, and human-perception language. Anything that materially changed the core architecture is already in §19; speculative or future-facing product signals are in §21.
+
+---
+
+## 21. High-value future signals and cross-product extensions
+
+The full conversation corpus contains a number of ideas that are not yet part of the core architecture but are worth preserving and prioritizing. They are grouped below by theme and mapped to the version where they first become buildable.
+
+### Conversation prediction and rhythm
+- **Predict which past insights the user needs right now** and surface them at the right moment. (V2 — requires Evidence Fusion + history)
+- **Predict when the user wants a summary** and offer it before they ask. (V2)
+- **Anticipate conversation branches** and prepare parallel paths, but only present the most likely one unless the user asks for alternatives. (V2)
+- **Suggest a break** when the system detects fatigue or overload from rhythm/timing signals. (V2)
+- **Conversation horizon scanner:** warn if a topic might trigger a sensitive memory before entering it deeply. (V2 — requires Twin + safety signals)
+
+### Memory and spatial conversation surfaces
+- **Visual memory scape / conversation topology:** let the user walk through past conversations spatially. (V5+ — heavy UX and storage; not a near-term build)
+- **Reconstruct the emotional arc of a past conversation** for reflection. (V2)
+
+### Language and cultural adaptation
+- **Shift languages mid-conversation** based on subtle cues. (V2 — translation layer already exists; detection is the new piece)
+- **Local cultural context adaptation** in real time. (V3 — needs data and consent)
+
+### Live coaching and overlay action (especially SalesOS)
+- **Three coaching modes for live calls:** Live Assist (tiny low-latency nudges), Replay Analysis (post-call), Macro Coach (longitudinal). (V3)
+- **Overlay puts bullet points / drag-dialogue on screen** during a live call so the user can work the deal collaboratively. (V4 — requires Verbal AI Director + overlay action)
+- **Real-time sales coaching:** detect buying signals, objections, hesitation, and suggest transitions or closes. (V3 — Tonality Engine + overlay)
+- **Continuously estimate where attention is constrained** and allocate coaching toward the highest-leverage gap while minimizing interruption. (V2–V3)
+
+### Cognitive Spine and conversation entry point
+- **The real LifeOS conversation entry point is `runChairNativeTurn` in `services/chair-lumin-unified.js`.** Any new communication capability must prove it is wired into that path or into a clearly documented successor. (gating principle, not a feature)
+- **Every real founder decision made in a LifeOS conversation should be captured** into the decision/outcome ledger automatically, not manually backfilled. (V1 — requires lightweight classification on existing turn path)
+
+### Positive and momentum signals
+- **Lean in on curiosity, excitement, relief, pride, flow, inspiration, amusement** as reinforcement opportunities. (V2 — already in §19.8; this is a reminder that positive signals are as important as risk signals)
+
+---
+
+## 22. Version order and build priority
+
+The LifeOS Communication System shares the same phased roadmap as the Universal Overlay, because the conversation surface and the action surface are the same host-agnostic runtime. The order is intentionally staged so that each version proves the next.
+
+| Version | What it is | Why it comes here | Acceptance gate |
+|---|---|---|---|
+| **V0 — Observation & Context** | Overlay reads host page, URL, title, form fields, selected text; passes context into Lumin chat. | Already exists; needs hardening before any action. | Real browser extension loads on a live site, reads a form, and the user can ask "what is this form asking for?" and get a correct answer. |
+| **V1 — Conversational Contracts & Voice Presence** | Promise → completion condition → fulfillment tracking; interruption decay; presence layer (listening, nodding, breathing, thinking sounds). | Highest trust-to-code ratio. Fixes the abandonment failure the founder just experienced. | A 25-item voice list is delivered without abandonment; interruption feels natural; the user can stop and restart without repeating context. |
+| **V2 — Evidence Fusion & Cognitive Dynamics** | Combine transcript + timing + history + simple tonal proxies into calibrated confidence estimates; learn per-context modality weights from outcomes. | Becomes the foundation for every perception feature that follows. | In a labeled test corpus, fusion-based state estimates outperform single-source guesses on frustrated/stuck/ready/celebrating moments. |
+| **V3 — Tonality, Face, Body, Biometric Perception** | Add optional visual and biometric channels under explicit per-context consent; full Tonality Engine; positive-signal recognition. | Hardware and consent surface; gated until V2 is proven. | A user opts in to camera + mic; the system correctly detects "user looks confused" or "user is looking away" with calibrated confidence and does not present inference as fact. |
+| **V4 — Verbal AI Director & Autonomous Overlay Action** | User says "do it" and the system plans and executes multi-step actions across arbitrary pages, confirming only for irreversible or sensitive steps. | Requires reliable perception and contracts first. | User says "fill this form with my info and stop before submitting"; overlay correctly fills 90%+ of fields on an unseen form and stops at submit. |
+| **V5 — Cross-Domain Personal Intelligence** | The same perception/conversation/action loop serves every LifeOS product and learns the user once, with domain firewalls. | Long-term moat; requires V4 evidence across two domains. | A single user-profile improvement in one domain measurably improves response quality in a second domain without leaking private context. |
+
+**Build priority for the next 90 days:** V1 (Conversational Contracts + interruption decay) first, because it is the cheapest fix to a real failure and can be prototyped on existing transcript metadata. V2 second, because it creates the shared Evidence Fusion layer that V3–V5 depend on.
+
+---
+
+## 23. Open questions
+
+1. Should the Interaction Decision Core be a new `services/interaction-decision-service.js` or an extension of `chair-lumin-unified.js`?
+2. Should the Composer be a new service or extend `response-variety.js`?
+3. Should `calibration_hypotheses` be a new table or a facet of the existing twin-capsule / `communication_profiles` JSONB?
+4. What is the exact scope of the therapist dashboard vs. Wellness Studio / `docs/products/builderos/specs/COGNITIVE_ASSET_ARCHITECTURE.md`?
+5. Does the therapist session-brief API belong to LifeOS or to a future Wellness Studio product home?
+6. Should the Outcome and Learning System generalize `chair-decision-ledger.js` or remain scoped to decisions?
+7. Which phase, if any, should enter the active `BP_PRIORITY.json` queue now, and which are research-only?
+8. Which modalities can we realistically collect in the first Evidence Fusion proof? (voice timing only? simple pitch/energy? video? wearables?)
+9. Should Evidence Fusion be a shared service or a pattern each OS consumes independently?
+10. What is the consent boundary for tonal, video, and biometric evidence in each product surface?
+11. Where is the line between "positive-signal recognition" and "positive manipulation"? How is reinforcement governed?
+12. Which of the new cognitive modes should be wired into Lumin first?
+13. Do you want the full Communication Calibration Profile dimensions added to the existing `communication_profiles` schema, or kept as a research document?
+14. Is the therapist dashboard a LifeOS feature or a Wellness Studio feature?
+15. Should any of this be promoted into `docs/constitution/LUMIN_COMMUNICATION_DNA.md` or remain in product-level spec?
+16. Which of the §21 future signals should be promoted to a real product home or mission pack first?

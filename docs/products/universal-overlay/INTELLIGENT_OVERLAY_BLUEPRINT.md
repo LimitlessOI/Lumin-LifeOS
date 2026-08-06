@@ -171,7 +171,7 @@ The order below is deliberate. Each version proves the next one's foundation and
 This blueprint is drawn from:
 
 - `docs/products/universal-overlay/PRODUCT_HOME.md` — existing overlay/extension architecture, form fill, struggle detection, proactive toast, approved backlog.
-- `docs/products/lifeos/COMMUNICATION_SYSTEM_BLUEPRINT.md` — cognitive modes, composer, calibration, anti-patterns, outcome hierarchy.
+- `docs/products/lifeos/communication/COMMUNICATION_SYSTEM_BLUEPRINT.md` — cognitive modes, composer, calibration, anti-patterns, outcome hierarchy.
 - `docs/conversation_dumps/2026-08-05-voice-interaction-torture-suite.md` — interruption decay, conversational contracts, presence layer, conversation torture suite.
 - `docs/conversation_dumps/2026-08-05-cognitive-interaction-constitutional-merge-shared-engines.md` — Human Perception Engine, Evidence Fusion Engine, Tonality Engine, Cognitive Dynamics, positive-signal recognition, cross-product sharing.
 - `memory_dump_chunks` table — full historical conversation corpus from GPT, Gemini, Grok, DeepSeek, LifeOS, and founder notes; theme analysis confirms overlay, builder, memory, sales, voice, evidence fusion, contracts, and face/body as recurring topics.
