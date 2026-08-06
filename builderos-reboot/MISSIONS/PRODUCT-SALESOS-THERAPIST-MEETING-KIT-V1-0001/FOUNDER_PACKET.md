@@ -53,17 +53,26 @@ This packet is only for Phase 1 (items 5–10 of the priority list + CRM + manua
 - Active founder interface remains `public/overlay/lifeos-app.html`; no new legacy overlays.
 - Do not build the Human Performance Engine in Phase 1.
 
+## Discovery Phase (added 2026-08-06)
+
+**Why this exists:** Phase 1 below assumes Adam already has a therapist practice URL to paste in. He doesn't — he asked directly for "every single one" of the Nevada mental-health practices to be found, not researched one at a time. That's a genuinely different capability (finding candidates) from Phase 1 (researching a known candidate), and it didn't exist anywhere in this blueprint until now.
+
+**What this phase is, and isn't:** Adam separately specified a full multi-agent architecture (Territory Planner, ~10 source connectors, extraction/resolution/scoring/QC bots, an evidence ledger, a model router, cost governance) for exhaustive statewide discovery. That full system is **not** what's being added to this mission — building all of it before proving the pattern works would repeat the exact "monolithic scope before validation" mistake his own spec explicitly warns against. This phase adds the **smallest real slice**: one territory, two source connectors (Psychology Today + Yelp), real evidence-ledger discipline, and a pilot acceptance test — proving the pattern before any expansion. Full statewide, all-source discovery is explicitly the *next* mission, gated on this pilot's real cost-per-record and accuracy numbers, not assumed in advance.
+
+**How it connects to Phase 1:** the discovery pilot's output — a real, source-verified list of Nevada therapy practices — is exactly the input Phase 1's `SALESOS-P1-002` (paste-a-URL research pipeline) already expects. Discovery feeds Phase 1; it doesn't replace or duplicate it.
+
 ## SEQUENCE
 
 1. Phase 0 — Lock schema strategy, consent policy, lead magnet, CRM ownership, and data retention.
-2. DB migration — `salesos_practice_profiles`, `salesos_meeting_kits`, `salesos_call_sessions` tables.
-3. Practice research service — orchestrate `web-search-service` + `site-builder-opportunity-scorer` + AI synthesis for therapist-specific fields.
-4. Meeting kit service/route — return structured one-screen dossier.
-5. Founder Brief generator — pre-meeting one-pager.
-6. CRM integration — read/write practice records, status, next action.
-7. Call script generator — therapist objection library + bullet script.
-8. Follow-up email/text templates — manual send in Phase 1.
-9. Acceptance test — end-to-end research → kit → brief → CRM → script.
+2. **Discovery pilot** — lock scope decisions, build the evidence ledger, one Territory Planner, two source connectors (Psychology Today, Yelp), entity resolution, and a pilot acceptance test against one Nevada territory. See `SALESOS-PDISC-001` through `-007` in `BLUEPRINT.json`.
+3. DB migration — `salesos_practice_profiles`, `salesos_meeting_kits`, `salesos_call_sessions` tables.
+4. Practice research service — orchestrate `web-search-service` + `site-builder-opportunity-scorer` + AI synthesis for therapist-specific fields.
+5. Meeting kit service/route — return structured one-screen dossier.
+6. Founder Brief generator — pre-meeting one-pager.
+7. CRM integration — read/write practice records, status, next action.
+8. Call script generator — therapist objection library + bullet script.
+9. Follow-up email/text templates — manual send in Phase 1.
+10. Acceptance test — end-to-end research → kit → brief → CRM → script.
 
 ## NOTES
 
@@ -75,6 +84,7 @@ This packet is only for Phase 1 (items 5–10 of the priority list + CRM + manua
 ## PHASE ROADMAP
 
 - Phase 0: decisions and schema (this mission).
+- Discovery pilot: one territory, two source connectors, evidence ledger, entity resolution (this mission — added 2026-08-06).
 - Phase 1: research packet, meeting kit, founder brief, CRM, call script, follow-up templates (this mission).
 - Phase 2: call outcome logging, commitment ledger, meeting recap, referral engine.
 - Phase 3: consent-aware recording + transcription, Evidence Layer.
@@ -91,5 +101,7 @@ Open the SalesOS view, paste `https://example-therapy-practice.com`, and within 
 - Tonality analysis.
 - Sales DNA / pattern learning.
 - A standalone Human Performance Engine.
+- Full statewide, all-source-type discovery (the complete 10-connector, 15-bot architecture Adam specified). This mission builds a one-territory, two-connector pilot only — proving the pattern, not the whole system, comes first.
+- Automated outbound dialing or texting to discovered candidates. Discovery produces a research-ready list; contacting them is still Phase 1/2's manual, consent-gated flow.
 
-These belong to Phase 3–4 and depend on real call data and a founder decision about cross-domain scope.
+These belong to Phase 3–4 (recording/coaching) or a follow-on discovery-expansion mission (full-scale sourcing), and depend on real data from this mission's own pilot before either is justified.
