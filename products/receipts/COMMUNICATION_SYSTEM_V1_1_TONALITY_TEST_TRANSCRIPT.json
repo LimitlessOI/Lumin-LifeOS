@@ -1,0 +1,472 @@
+{
+  "schema": "communication_system_v1_1_tonality_test_transcript_v1",
+  "generatedAt": "2026-08-06T08:13:27.877Z",
+  "startedAt": "2026-08-06T08:13:27.628Z",
+  "summary": {
+    "total": 15,
+    "pass": 15,
+    "fail": 0
+  },
+  "prototype": "scripts/prototype-tonality-engine-v1.mjs",
+  "tests": [
+    {
+      "suite": "pitch",
+      "name": "sine_120hz",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "durationSec": 1.48,
+        "wordRate": 0,
+        "meanPitch": 120.00959529992903,
+        "pitchStd": 0.0012341020329388016,
+        "pitchRange": 0.0033387219862106576,
+        "meanEnergy": 0.3534249159847089,
+        "energyStd": 0.003938848833655054,
+        "pitchSlope": 0.0011989062590487265,
+        "meanPauseMs": 0,
+        "pauseCount": 0,
+        "pitchSamples": 73,
+        "energySamples": 73,
+        "frames": 73
+      },
+      "at": "2026-08-06T08:13:27.646Z"
+    },
+    {
+      "suite": "pitch",
+      "name": "sine_220hz",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "durationSec": 1.48,
+        "wordRate": 0,
+        "meanPitch": 220.06705762969153,
+        "pitchStd": 0.004075735493569238,
+        "pitchRange": 0.010715798409847821,
+        "meanEnergy": 0.3534859941498352,
+        "energyStd": 0.0021544912730109217,
+        "pitchSlope": 0.004492663682867715,
+        "meanPauseMs": 0,
+        "pauseCount": 0,
+        "pitchSamples": 73,
+        "energySamples": 73,
+        "frames": 73
+      },
+      "at": "2026-08-06T08:13:27.659Z"
+    },
+    {
+      "suite": "pitch",
+      "name": "sine_440hz",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "durationSec": 1.48,
+        "wordRate": 0,
+        "meanPitch": 441.04806018612544,
+        "pitchStd": 0.015089673554465126,
+        "pitchRange": 0.039402846632981436,
+        "meanEnergy": 0.35354777008026667,
+        "energyStd": 0.000675945586600082,
+        "pitchSlope": 0.01792327288984552,
+        "meanPauseMs": 0,
+        "pauseCount": 0,
+        "pitchSamples": 73,
+        "energySamples": 73,
+        "frames": 73
+      },
+      "at": "2026-08-06T08:13:27.672Z"
+    },
+    {
+      "suite": "pitch",
+      "name": "wav_round_trip_250hz",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "durationSec": 0.98,
+        "wordRate": 0,
+        "meanPitch": 250.15507969739505,
+        "pitchStd": 2.8421709430404007e-13,
+        "pitchRange": 0,
+        "meanEnergy": 0.35354084480969106,
+        "energyStd": 1.1102230246251565e-16,
+        "pitchSlope": 0,
+        "meanPauseMs": 0,
+        "pauseCount": 0,
+        "pitchSamples": 48,
+        "energySamples": 48,
+        "frames": 48
+      },
+      "at": "2026-08-06T08:13:27.683Z"
+    },
+    {
+      "suite": "classification",
+      "name": "excited",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "profile": {
+          "durationSec": 1.98,
+          "wordRate": 303.030303030303,
+          "meanPitch": 491.35233642167674,
+          "pitchStd": 162.30384979002466,
+          "pitchRange": 415.5182831691492,
+          "meanEnergy": 0.31978383457175197,
+          "energyStd": 0.005641423271206714,
+          "pitchSlope": 351.42982801751936,
+          "meanPauseMs": 0,
+          "pauseCount": 0,
+          "pitchSamples": 14,
+          "energySamples": 98,
+          "frames": 98
+        },
+        "classes": [
+          {
+            "state": "excited",
+            "confidence": 0.7,
+            "cues": [
+              "high_energy",
+              "pitch_variation",
+              "fast_speech"
+            ]
+          },
+          {
+            "state": "frustrated",
+            "confidence": 0.6,
+            "cues": [
+              "high_energy",
+              "irregular_pauses",
+              "pitch_variation"
+            ]
+          }
+        ]
+      },
+      "at": "2026-08-06T08:13:27.702Z"
+    },
+    {
+      "suite": "classification",
+      "name": "calm",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "profile": {
+          "durationSec": 1.98,
+          "wordRate": 181.8181818181818,
+          "meanPitch": 150.0212719235096,
+          "pitchStd": 2.0567451464678047e-13,
+          "pitchRange": 2.842170943040401e-14,
+          "meanEnergy": 0.07071067789573598,
+          "energyStd": 9.71445146547012e-17,
+          "pitchSlope": 2.842170943040401e-14,
+          "meanPauseMs": 0,
+          "pauseCount": 0,
+          "pitchSamples": 98,
+          "energySamples": 98,
+          "frames": 98
+        },
+        "classes": [
+          {
+            "state": "calm",
+            "confidence": 0.65,
+            "cues": [
+              "low_energy",
+              "stable_pitch"
+            ]
+          }
+        ]
+      },
+      "at": "2026-08-06T08:13:27.720Z"
+    },
+    {
+      "suite": "classification",
+      "name": "tired",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "profile": {
+          "durationSec": 2.48,
+          "wordRate": 72.58064516129032,
+          "meanPitch": 100.00855027145417,
+          "pitchStd": 1.1662393446722858e-13,
+          "pitchRange": 7.105427357601002e-14,
+          "meanEnergy": 0.0565685429849871,
+          "energyStd": 1.1102230246251565e-16,
+          "pitchSlope": 4.263256414560601e-14,
+          "meanPauseMs": 0,
+          "pauseCount": 0,
+          "pitchSamples": 123,
+          "energySamples": 123,
+          "frames": 123
+        },
+        "classes": [
+          {
+            "state": "tired",
+            "confidence": 0.65,
+            "cues": [
+              "low_pitch",
+              "low_energy",
+              "slow_speech"
+            ]
+          },
+          {
+            "state": "calm",
+            "confidence": 0.65,
+            "cues": [
+              "low_energy",
+              "stable_pitch"
+            ]
+          }
+        ]
+      },
+      "at": "2026-08-06T08:13:27.742Z"
+    },
+    {
+      "suite": "classification",
+      "name": "uncertain",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "profile": {
+          "durationSec": 1.98,
+          "wordRate": 151.5151515151515,
+          "meanPitch": 387.29922460180455,
+          "pitchStd": 186.35359481597263,
+          "pitchRange": 572.3454767337788,
+          "meanEnergy": 0.07090695516711248,
+          "energyStd": 0.0015128320336959679,
+          "pitchSlope": 380.7073902130455,
+          "meanPauseMs": 0,
+          "pauseCount": 0,
+          "pitchSamples": 18,
+          "energySamples": 98,
+          "frames": 98
+        },
+        "classes": [
+          {
+            "state": "uncertain",
+            "confidence": 0.55,
+            "cues": [
+              "pitch_rise",
+              "low_energy"
+            ]
+          }
+        ]
+      },
+      "at": "2026-08-06T08:13:27.759Z"
+    },
+    {
+      "suite": "classification",
+      "name": "frustrated",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "profile": {
+          "durationSec": 1.48,
+          "wordRate": 243.24324324324326,
+          "meanPitch": 447.3124142850348,
+          "pitchStd": 186.5091998888873,
+          "pitchRange": 539.3845475126366,
+          "meanEnergy": 0.3553668932752046,
+          "energyStd": 0.006499724704212491,
+          "pitchSlope": 324.1680105456095,
+          "meanPauseMs": 0,
+          "pauseCount": 0,
+          "pitchSamples": 13,
+          "energySamples": 73,
+          "frames": 73
+        },
+        "classes": [
+          {
+            "state": "excited",
+            "confidence": 0.7,
+            "cues": [
+              "high_energy",
+              "pitch_variation",
+              "fast_speech"
+            ]
+          },
+          {
+            "state": "frustrated",
+            "confidence": 0.6,
+            "cues": [
+              "high_energy",
+              "irregular_pauses",
+              "pitch_variation"
+            ]
+          }
+        ]
+      },
+      "at": "2026-08-06T08:13:27.773Z"
+    },
+    {
+      "suite": "classification",
+      "name": "emphatic",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "profile": {
+          "durationSec": 1.98,
+          "wordRate": 151.5151515151515,
+          "meanPitch": 192.38279694277088,
+          "pitchStd": 34.36980911183844,
+          "pitchRange": 71.13954940695663,
+          "meanEnergy": 0.1940288336154329,
+          "energyStd": 0.0996057095775722,
+          "pitchSlope": 70.46114425694998,
+          "meanPauseMs": 0,
+          "pauseCount": 0,
+          "pitchSamples": 90,
+          "energySamples": 98,
+          "frames": 98
+        },
+        "classes": [
+          {
+            "state": "frustrated",
+            "confidence": 0.6,
+            "cues": [
+              "high_energy",
+              "irregular_pauses",
+              "pitch_variation"
+            ]
+          },
+          {
+            "state": "emphatic",
+            "confidence": 0.55,
+            "cues": [
+              "energy_spikes",
+              "pitch_jumps"
+            ]
+          }
+        ]
+      },
+      "at": "2026-08-06T08:13:27.793Z"
+    },
+    {
+      "suite": "classification",
+      "name": "neutral",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "profile": {
+          "durationSec": 1.48,
+          "wordRate": 243.24324324324326,
+          "meanPitch": 180.02345391190588,
+          "pitchStd": 0.001845340894604979,
+          "pitchRange": 0.004861549169390855,
+          "meanEnergy": 0.1060808746393147,
+          "energyStd": 0.0007906781229811999,
+          "pitchSlope": 0.0012732168430886759,
+          "meanPauseMs": 0,
+          "pauseCount": 0,
+          "pitchSamples": 73,
+          "energySamples": 73,
+          "frames": 73
+        },
+        "classes": [
+          {
+            "state": "calm",
+            "confidence": 0.65,
+            "cues": [
+              "low_energy",
+              "stable_pitch"
+            ]
+          }
+        ]
+      },
+      "at": "2026-08-06T08:13:27.807Z"
+    },
+    {
+      "suite": "pause",
+      "name": "detect_long_silence",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "durationSec": 2.48,
+        "wordRate": 145.16129032258064,
+        "meanPitch": 277.93213319110964,
+        "pitchStd": 151.25430095200588,
+        "pitchRange": 525.4938276921425,
+        "meanEnergy": 0.14249617750834132,
+        "energyStd": 0.07073350255108425,
+        "pitchSlope": 502.23484884344884,
+        "meanPauseMs": 499.9999999999999,
+        "pauseCount": 1,
+        "pitchSamples": 41,
+        "energySamples": 123,
+        "frames": 123
+      },
+      "at": "2026-08-06T08:13:27.828Z"
+    },
+    {
+      "suite": "pause",
+      "name": "no_false_pauses",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "durationSec": 1.48,
+        "wordRate": 81.08108108108108,
+        "meanPitch": 195.94577968597818,
+        "pitchStd": 51.1251311898111,
+        "pitchRange": 229.95085121800543,
+        "meanEnergy": 0.14140267219539332,
+        "energyStd": 0.0009083891179992119,
+        "pitchSlope": 191.90076594694398,
+        "meanPauseMs": 0,
+        "pauseCount": 0,
+        "pitchSamples": 56,
+        "energySamples": 73,
+        "frames": 73
+      },
+      "at": "2026-08-06T08:13:27.841Z"
+    },
+    {
+      "suite": "fusion",
+      "name": "tonality_fusion_does_not_crash",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "confidence": 55,
+        "finished": false,
+        "sources": [
+          {
+            "source": "transcript_final",
+            "value": true,
+            "weight": 25
+          },
+          {
+            "source": "trailing_punctuation",
+            "value": true,
+            "weight": 35
+          },
+          {
+            "source": "tonality_excited",
+            "value": true,
+            "weight": -5
+          }
+        ]
+      },
+      "at": "2026-08-06T08:13:27.859Z"
+    },
+    {
+      "suite": "fusion",
+      "name": "long_pause_boosts_completion",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "confidence": 60,
+        "finished": false,
+        "sources": [
+          {
+            "source": "transcript_final",
+            "value": true,
+            "weight": 25
+          },
+          {
+            "source": "tonality_pause",
+            "value": 500,
+            "weight": 10
+          }
+        ]
+      },
+      "at": "2026-08-06T08:13:27.877Z"
+    }
+  ]
+}

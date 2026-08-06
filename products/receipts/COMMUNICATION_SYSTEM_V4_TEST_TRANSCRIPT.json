@@ -1,0 +1,256 @@
+{
+  "schema": "communication_system_v4_test_transcript_v1",
+  "generatedAt": "2026-08-06T08:19:01.209Z",
+  "startedAt": "2026-08-06T08:19:00.555Z",
+  "summary": {
+    "total": 10,
+    "pass": 10,
+    "fail": 0
+  },
+  "prototype": "scripts/prototype-overlay-action-v4.mjs",
+  "tests": [
+    {
+      "suite": "parser",
+      "name": "fill_two_fields_stop",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "intent": "action_plan",
+        "steps": [
+          {
+            "action": "fill",
+            "field": "full name",
+            "value": "Alice Smith",
+            "reason": "parsed \"full name\" = \"Alice Smith\""
+          },
+          {
+            "action": "fill",
+            "field": "email",
+            "value": "alice@example.com",
+            "reason": "parsed \"email\" = \"alice@example.com\""
+          },
+          {
+            "action": "stop",
+            "reason": "explicit stop / confirmation gate detected"
+          }
+        ],
+        "command": "Fill the full name with Alice Smith and the email with alice@example.com and stop before submitting",
+        "context": {}
+      },
+      "at": "2026-08-06T08:19:00.556Z"
+    },
+    {
+      "suite": "parser",
+      "name": "type_budget_select_plan",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "intent": "action_plan",
+        "steps": [
+          {
+            "action": "fill",
+            "field": "budget",
+            "value": "5000",
+            "reason": "parsed \"budget\" = \"5000\""
+          },
+          {
+            "action": "select",
+            "field": "plan",
+            "option": "Pro",
+            "reason": "parsed select option"
+          }
+        ],
+        "command": "Type 5000 into the budget and select Pro from the plan dropdown",
+        "context": {}
+      },
+      "at": "2026-08-06T08:19:00.556Z"
+    },
+    {
+      "suite": "parser",
+      "name": "click_reset",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "intent": "action_plan",
+        "steps": [
+          {
+            "action": "click",
+            "target": "reset",
+            "reason": "parsed click intent"
+          }
+        ],
+        "command": "Click the reset button",
+        "context": {}
+      },
+      "at": "2026-08-06T08:19:00.556Z"
+    },
+    {
+      "suite": "parser",
+      "name": "submit_blocked",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "intent": "action_plan",
+        "steps": [
+          {
+            "action": "click",
+            "target": "submit",
+            "reason": "parsed click intent"
+          }
+        ],
+        "command": "Click the submit button",
+        "context": {}
+      },
+      "at": "2026-08-06T08:19:00.556Z"
+    },
+    {
+      "suite": "parser",
+      "name": "navigate_settings",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "intent": "action_plan",
+        "steps": [
+          {
+            "action": "navigate",
+            "target": "settings",
+            "reason": "parsed navigation"
+          }
+        ],
+        "command": "Go to the settings page",
+        "context": {}
+      },
+      "at": "2026-08-06T08:19:00.556Z"
+    },
+    {
+      "suite": "selector",
+      "name": "full name",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "step": {
+          "field": "full name"
+        },
+        "expect": "input[name=\"fullName\"],#fullName,input[name=\"name\"]"
+      },
+      "at": "2026-08-06T08:19:00.556Z"
+    },
+    {
+      "suite": "selector",
+      "name": "email",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "step": {
+          "field": "email"
+        },
+        "expect": "input[name=\"email\"],#email,input[type=\"email\"]"
+      },
+      "at": "2026-08-06T08:19:00.556Z"
+    },
+    {
+      "suite": "selector",
+      "name": "phone",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "step": {
+          "field": "phone"
+        },
+        "expect": "input[name=\"phone\"],#phone"
+      },
+      "at": "2026-08-06T08:19:00.556Z"
+    },
+    {
+      "suite": "selector",
+      "name": "submit",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "step": {
+          "target": "submit"
+        },
+        "expect": "#submitBtn,[type=\"submit\"]"
+      },
+      "at": "2026-08-06T08:19:00.556Z"
+    },
+    {
+      "suite": "browser",
+      "name": "fill_form_and_stop",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "plan": {
+          "intent": "action_plan",
+          "steps": [
+            {
+              "action": "fill",
+              "field": "full name",
+              "value": "Bob Jones",
+              "reason": "parsed \"full name\" = \"Bob Jones\""
+            },
+            {
+              "action": "fill",
+              "field": "email",
+              "value": "bob@example.com",
+              "reason": "parsed \"email\" = \"bob@example.com\""
+            },
+            {
+              "action": "fill",
+              "field": "phone",
+              "value": "555-1234",
+              "reason": "parsed \"phone\" = \"555-1234\""
+            },
+            {
+              "action": "stop",
+              "reason": "explicit stop / confirmation gate detected"
+            }
+          ],
+          "command": "Fill the full name with Bob Jones and the email with bob@example.com and the phone with 555-1234 and stop before submitting",
+          "context": {}
+        },
+        "receipt": {
+          "command": "Fill the full name with Bob Jones and the email with bob@example.com and the phone with 555-1234 and stop before submitting",
+          "startedAt": "2026-08-06T08:19:01.005Z",
+          "steps": [
+            {
+              "action": "fill",
+              "field": "full name",
+              "value": "Bob Jones",
+              "reason": "parsed \"full name\" = \"Bob Jones\"",
+              "timestamp": "2026-08-06T08:19:01.005Z",
+              "result": "filled",
+              "selector": "input[name=\"fullName\"],#fullName,input[name=\"name\"]"
+            },
+            {
+              "action": "fill",
+              "field": "email",
+              "value": "bob@example.com",
+              "reason": "parsed \"email\" = \"bob@example.com\"",
+              "timestamp": "2026-08-06T08:19:01.053Z",
+              "result": "filled",
+              "selector": "input[name=\"email\"],#email,input[type=\"email\"]"
+            },
+            {
+              "action": "fill",
+              "field": "phone",
+              "value": "555-1234",
+              "reason": "parsed \"phone\" = \"555-1234\"",
+              "timestamp": "2026-08-06T08:19:01.106Z",
+              "result": "filled",
+              "selector": "input[name=\"phone\"],#phone"
+            },
+            {
+              "action": "stop",
+              "reason": "explicit stop / confirmation gate detected",
+              "timestamp": "2026-08-06T08:19:01.146Z",
+              "result": "stopped_before_risky_action"
+            }
+          ],
+          "completedAt": "2026-08-06T08:19:01.146Z"
+        }
+      },
+      "at": "2026-08-06T08:19:01.209Z"
+    }
+  ]
+}

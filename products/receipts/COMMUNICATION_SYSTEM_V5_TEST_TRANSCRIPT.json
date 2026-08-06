@@ -1,0 +1,288 @@
+{
+  "schema": "communication_system_v5_test_transcript_v1",
+  "generatedAt": "2026-08-06T08:20:07.647Z",
+  "startedAt": "2026-08-06T08:20:07.646Z",
+  "summary": {
+    "total": 12,
+    "pass": 12,
+    "fail": 0
+  },
+  "prototype": "scripts/prototype-cross-domain-v5.mjs",
+  "tests": [
+    {
+      "suite": "domain",
+      "name": "store_and_query",
+      "result": "PASS",
+      "error": null,
+      "details": [
+        {
+          "id": "rec-1",
+          "title": "Lunch",
+          "time": "12pm",
+          "addedAt": "2026-08-06T08:20:07.646Z"
+        }
+      ],
+      "at": "2026-08-06T08:20:07.646Z"
+    },
+    {
+      "suite": "firewall",
+      "name": "default_deny",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "sensitive": true,
+        "shareByDefault": []
+      },
+      "at": "2026-08-06T08:20:07.646Z"
+    },
+    {
+      "suite": "firewall",
+      "name": "granular_consent",
+      "result": "PASS",
+      "error": null,
+      "details": {},
+      "at": "2026-08-06T08:20:07.646Z"
+    },
+    {
+      "suite": "firewall",
+      "name": "revoke_consent",
+      "result": "PASS",
+      "error": null,
+      "details": {},
+      "at": "2026-08-06T08:20:07.646Z"
+    },
+    {
+      "suite": "inference",
+      "name": "calendar_availability",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "question": "Am I free at 3pm?",
+        "answer": {
+          "free": false,
+          "events": [
+            {
+              "id": "rec-1",
+              "title": "Sprint review",
+              "time": "3pm",
+              "date": "2026-08-07",
+              "addedAt": "2026-08-06T08:20:07.647Z"
+            }
+          ]
+        },
+        "sources": [
+          {
+            "domain": "calendar",
+            "fields": [
+              "time",
+              "free_busy"
+            ]
+          }
+        ],
+        "blocked": [],
+        "confidence": 0.75
+      },
+      "at": "2026-08-06T08:20:07.647Z"
+    },
+    {
+      "suite": "inference",
+      "name": "finance_blocked_without_consent",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "question": "Can I afford a $500 laptop?",
+        "answer": "Finance data is sensitive; explicit consent required to answer.",
+        "sources": [],
+        "blocked": [
+          {
+            "domain": "finance",
+            "field": "balance"
+          }
+        ],
+        "confidence": 0
+      },
+      "at": "2026-08-06T08:20:07.647Z"
+    },
+    {
+      "suite": "inference",
+      "name": "finance_affordability",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "question": "Can I afford a $500 laptop?",
+        "answer": {
+          "balance": 600,
+          "assessment": "check budget"
+        },
+        "sources": [
+          {
+            "domain": "finance",
+            "fields": [
+              "balance"
+            ]
+          }
+        ],
+        "blocked": [],
+        "confidence": 0.8
+      },
+      "at": "2026-08-06T08:20:07.647Z"
+    },
+    {
+      "suite": "inference",
+      "name": "health_blocked",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "question": "Why am I tired?",
+        "answer": "Health data is sensitive; explicit consent required.",
+        "sources": [],
+        "blocked": [
+          {
+            "domain": "health",
+            "field": "sleep"
+          }
+        ],
+        "confidence": 0
+      },
+      "at": "2026-08-06T08:20:07.647Z"
+    },
+    {
+      "suite": "inference",
+      "name": "health_consented",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "question": "Why am I tired?",
+        "answer": {
+          "sleep": 5,
+          "energy": 3
+        },
+        "sources": [
+          {
+            "domain": "health",
+            "fields": [
+              "sleep",
+              "energy"
+            ]
+          }
+        ],
+        "blocked": [],
+        "confidence": 0.8
+      },
+      "at": "2026-08-06T08:20:07.647Z"
+    },
+    {
+      "suite": "fusion",
+      "name": "multi_domain_meeting_prep",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "question": "Do I have any prep work before my 10am meeting?",
+        "answer": {
+          "events": [
+            {
+              "id": "rec-1",
+              "title": "Investor call",
+              "time": "10am",
+              "date": "2026-08-07",
+              "addedAt": "2026-08-06T08:20:07.647Z"
+            }
+          ],
+          "prepTasks": [
+            {
+              "id": "rec-1",
+              "title": "Prep slides",
+              "due": "9am",
+              "status": "done",
+              "addedAt": "2026-08-06T08:20:07.647Z"
+            }
+          ]
+        },
+        "sources": [
+          {
+            "domain": "calendar",
+            "fields": [
+              "time",
+              "title"
+            ]
+          },
+          {
+            "domain": "tasks",
+            "fields": [
+              "title",
+              "due"
+            ]
+          },
+          {
+            "domain": "contacts",
+            "fields": [
+              "name"
+            ]
+          }
+        ],
+        "blocked": [],
+        "confidence": 0.6
+      },
+      "at": "2026-08-06T08:20:07.647Z"
+    },
+    {
+      "suite": "profile",
+      "name": "unified_profile_respects_consent",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "userId": "u4",
+        "domains": {
+          "calendar": {
+            "label": "Calendar",
+            "recordCount": 1,
+            "visibleFields": [
+              "time",
+              "free_busy"
+            ]
+          },
+          "finance": {
+            "label": "Finance",
+            "recordCount": 1,
+            "visibleFields": []
+          }
+        }
+      },
+      "at": "2026-08-06T08:20:07.647Z"
+    },
+    {
+      "suite": "audit",
+      "name": "receipt_logging",
+      "result": "PASS",
+      "error": null,
+      "details": [
+        {
+          "at": "2026-08-06T08:20:07.647Z",
+          "action": "cross_domain_query",
+          "details": {
+            "question": "Am I free at 3pm?",
+            "result": {
+              "question": "Am I free at 3pm?",
+              "answer": {
+                "free": true,
+                "events": []
+              },
+              "sources": [
+                {
+                  "domain": "calendar",
+                  "fields": [
+                    "time",
+                    "free_busy"
+                  ]
+                }
+              ],
+              "blocked": [],
+              "confidence": 0.75
+            }
+          }
+        }
+      ],
+      "at": "2026-08-06T08:20:07.647Z"
+    }
+  ]
+}

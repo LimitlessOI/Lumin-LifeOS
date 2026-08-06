@@ -1,0 +1,633 @@
+{
+  "schema": "communication_system_v2_test_transcript_v1",
+  "generatedAt": "2026-08-06T08:15:40.485Z",
+  "startedAt": "2026-08-06T08:15:40.471Z",
+  "summary": {
+    "total": 30,
+    "pass": 30,
+    "fail": 0
+  },
+  "prototype": "scripts/prototype-evidence-fusion-v2.mjs",
+  "tests": [
+    {
+      "suite": "transcript_modality",
+      "name": "frustrated_keywords",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "frustrated": 0.7,
+        "celebrating": 0,
+        "confused": 0,
+        "curious": 0,
+        "excited": 0,
+        "calm": 0.35,
+        "concerned": 0
+      },
+      "at": "2026-08-06T08:15:40.472Z"
+    },
+    {
+      "suite": "transcript_modality",
+      "name": "celebrating_keywords",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "frustrated": 0,
+        "celebrating": 0.7,
+        "confused": 0,
+        "curious": 0,
+        "excited": 0,
+        "calm": 0,
+        "concerned": 0
+      },
+      "at": "2026-08-06T08:15:40.472Z"
+    },
+    {
+      "suite": "transcript_modality",
+      "name": "confused_question",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "frustrated": 0,
+        "celebrating": 0,
+        "confused": 0.8999999999999999,
+        "curious": 0,
+        "excited": 0,
+        "calm": 0.35,
+        "concerned": 0
+      },
+      "at": "2026-08-06T08:15:40.472Z"
+    },
+    {
+      "suite": "transcript_modality",
+      "name": "curious_probe",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "frustrated": 0,
+        "celebrating": 0,
+        "confused": 0.8999999999999999,
+        "curious": 1,
+        "excited": 0,
+        "calm": 0,
+        "concerned": 0
+      },
+      "at": "2026-08-06T08:15:40.472Z"
+    },
+    {
+      "suite": "transcript_modality",
+      "name": "excited_energy",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "frustrated": 0,
+        "celebrating": 0.3,
+        "confused": 0,
+        "curious": 0,
+        "excited": 0.7,
+        "calm": 0.35,
+        "concerned": 0
+      },
+      "at": "2026-08-06T08:15:40.472Z"
+    },
+    {
+      "suite": "transcript_modality",
+      "name": "calm_ack",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "frustrated": 0,
+        "celebrating": 0,
+        "confused": 0,
+        "curious": 0,
+        "excited": 0,
+        "calm": 0.7,
+        "concerned": 0
+      },
+      "at": "2026-08-06T08:15:40.472Z"
+    },
+    {
+      "suite": "transcript_modality",
+      "name": "concerned_risk",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "frustrated": 0,
+        "celebrating": 0,
+        "confused": 0,
+        "curious": 0,
+        "excited": 0,
+        "calm": 0,
+        "concerned": 0.7
+      },
+      "at": "2026-08-06T08:15:40.472Z"
+    },
+    {
+      "suite": "timing_modality",
+      "name": "long_pause_finished",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "finished": 0.6
+      },
+      "at": "2026-08-06T08:15:40.472Z"
+    },
+    {
+      "suite": "timing_modality",
+      "name": "short_pause_no_finished",
+      "result": "PASS",
+      "error": null,
+      "details": {},
+      "at": "2026-08-06T08:15:40.472Z"
+    },
+    {
+      "suite": "timing_modality",
+      "name": "slow_response_confused",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "confused": 0.4
+      },
+      "at": "2026-08-06T08:15:40.472Z"
+    },
+    {
+      "suite": "timing_modality",
+      "name": "overlap_frustrated",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "frustrated": 0.3
+      },
+      "at": "2026-08-06T08:15:40.472Z"
+    },
+    {
+      "suite": "tonality_modality",
+      "name": "excited_tonality",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "excited": 0.6
+      },
+      "at": "2026-08-06T08:15:40.472Z"
+    },
+    {
+      "suite": "tonality_modality",
+      "name": "frustrated_tonality",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "frustrated": 0.5
+      },
+      "at": "2026-08-06T08:15:40.472Z"
+    },
+    {
+      "suite": "tonality_modality",
+      "name": "tired_tonality",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "tired": 0.5
+      },
+      "at": "2026-08-06T08:15:40.472Z"
+    },
+    {
+      "suite": "tonality_modality",
+      "name": "uncertain_tonality",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "confused": 0.4
+      },
+      "at": "2026-08-06T08:15:40.472Z"
+    },
+    {
+      "suite": "tonality_modality",
+      "name": "calm_tonality",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "calm": 0.5
+      },
+      "at": "2026-08-06T08:15:40.472Z"
+    },
+    {
+      "suite": "tonality_modality",
+      "name": "emphatic_tonality",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "emphatic": 0.4
+      },
+      "at": "2026-08-06T08:15:40.472Z"
+    },
+    {
+      "suite": "face_body_modality",
+      "name": "smile_celebrating",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "celebrating": 0.4
+      },
+      "at": "2026-08-06T08:15:40.472Z"
+    },
+    {
+      "suite": "face_body_modality",
+      "name": "frown_frustrated",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "frustrated": 0.4
+      },
+      "at": "2026-08-06T08:15:40.472Z"
+    },
+    {
+      "suite": "face_body_modality",
+      "name": "looking_away_confused",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "confused": 0.3
+      },
+      "at": "2026-08-06T08:15:40.472Z"
+    },
+    {
+      "suite": "face_body_modality",
+      "name": "nod_finished",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "finished": 0.3
+      },
+      "at": "2026-08-06T08:15:40.472Z"
+    },
+    {
+      "suite": "history_modality",
+      "name": "cascading_context",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "frustrated": 0.2,
+        "confused": 0.25
+      },
+      "at": "2026-08-06T08:15:40.472Z"
+    },
+    {
+      "suite": "fusion",
+      "name": "frustrated_user",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "state": "frustrated",
+        "confidence": 0.6086956521739131,
+        "finished": false,
+        "calibrated": [
+          {
+            "state": "frustrated",
+            "confidence": 0.6086956521739131,
+            "rawScore": 2
+          },
+          {
+            "state": "confused",
+            "confidence": 0.391304347826087,
+            "rawScore": 1.2857142857142858
+          }
+        ],
+        "sources": [
+          {
+            "modality": "transcript",
+            "weight": 1,
+            "dominant": {
+              "state": "frustrated",
+              "score": 0.7
+            }
+          },
+          {
+            "modality": "timing",
+            "weight": 1,
+            "dominant": {
+              "state": "confused",
+              "score": 0.4
+            }
+          },
+          {
+            "modality": "tonality",
+            "weight": 1,
+            "dominant": {
+              "state": "frustrated",
+              "score": 0.5
+            }
+          }
+        ],
+        "raw": {
+          "frustrated": 2,
+          "confused": 1.2857142857142858
+        }
+      },
+      "at": "2026-08-06T08:15:40.472Z"
+    },
+    {
+      "suite": "fusion",
+      "name": "finished_user",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "state": "finished",
+        "confidence": 0.7115384615384616,
+        "finished": true,
+        "calibrated": [
+          {
+            "state": "finished",
+            "confidence": 0.7115384615384616,
+            "rawScore": 2.466666666666667
+          },
+          {
+            "state": "calm",
+            "confidence": 0.28846153846153844,
+            "rawScore": 1
+          }
+        ],
+        "sources": [
+          {
+            "modality": "transcript",
+            "weight": 1,
+            "dominant": {
+              "state": "calm",
+              "score": 0.6
+            }
+          },
+          {
+            "modality": "timing",
+            "weight": 1,
+            "dominant": {
+              "state": "finished",
+              "score": 0.6
+            }
+          },
+          {
+            "modality": "history",
+            "weight": 0.8,
+            "dominant": {
+              "state": "finished",
+              "score": 0.25
+            }
+          }
+        ],
+        "raw": {
+          "calm": 1,
+          "finished": 2.466666666666667
+        }
+      },
+      "at": "2026-08-06T08:15:40.472Z"
+    },
+    {
+      "suite": "fusion",
+      "name": "celebrating_user",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "state": "celebrating",
+        "confidence": 0.6153846153846154,
+        "finished": true,
+        "calibrated": [
+          {
+            "state": "celebrating",
+            "confidence": 0.6153846153846154,
+            "rawScore": 1.6
+          },
+          {
+            "state": "excited",
+            "confidence": 0.3846153846153846,
+            "rawScore": 1
+          }
+        ],
+        "sources": [
+          {
+            "modality": "transcript",
+            "weight": 1,
+            "dominant": {
+              "state": "celebrating",
+              "score": 0.9
+            }
+          },
+          {
+            "modality": "tonality",
+            "weight": 1,
+            "dominant": {
+              "state": "excited",
+              "score": 0.5
+            }
+          },
+          {
+            "modality": "faceBody",
+            "weight": 0.6,
+            "dominant": {
+              "state": "celebrating",
+              "score": 0.4
+            }
+          }
+        ],
+        "raw": {
+          "celebrating": 1.6,
+          "excited": 1
+        }
+      },
+      "at": "2026-08-06T08:15:40.472Z"
+    },
+    {
+      "suite": "fusion",
+      "name": "confused_user",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "state": "confused",
+        "confidence": 1,
+        "finished": false,
+        "calibrated": [
+          {
+            "state": "confused",
+            "confidence": 1,
+            "rawScore": 3.6
+          }
+        ],
+        "sources": [
+          {
+            "modality": "transcript",
+            "weight": 1,
+            "dominant": {
+              "state": "confused",
+              "score": 0.6
+            }
+          },
+          {
+            "modality": "timing",
+            "weight": 1,
+            "dominant": {
+              "state": "confused",
+              "score": 0.4
+            }
+          },
+          {
+            "modality": "tonality",
+            "weight": 1,
+            "dominant": {
+              "state": "confused",
+              "score": 0.4
+            }
+          },
+          {
+            "modality": "faceBody",
+            "weight": 0.6,
+            "dominant": {
+              "state": "confused",
+              "score": 0.3
+            }
+          }
+        ],
+        "raw": {
+          "confused": 3.6
+        }
+      },
+      "at": "2026-08-06T08:15:40.472Z"
+    },
+    {
+      "suite": "fusion",
+      "name": "curious_user",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "state": "curious",
+        "confidence": 1,
+        "finished": false,
+        "calibrated": [
+          {
+            "state": "curious",
+            "confidence": 1,
+            "rawScore": 2
+          }
+        ],
+        "sources": [
+          {
+            "modality": "transcript",
+            "weight": 1,
+            "dominant": {
+              "state": "curious",
+              "score": 0.7
+            }
+          },
+          {
+            "modality": "tonality",
+            "weight": 1,
+            "dominant": {
+              "state": "curious",
+              "score": 0.4
+            }
+          }
+        ],
+        "raw": {
+          "curious": 2
+        }
+      },
+      "at": "2026-08-06T08:15:40.472Z"
+    },
+    {
+      "suite": "fusion",
+      "name": "positive_momentum_signal",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "state": "excited",
+        "confidence": 0.48387096774193544,
+        "finished": false,
+        "calibrated": [
+          {
+            "state": "excited",
+            "confidence": 0.48387096774193544,
+            "rawScore": 1.5
+          },
+          {
+            "state": "celebrating",
+            "confidence": 0.3225806451612903,
+            "rawScore": 1
+          },
+          {
+            "state": "smile",
+            "confidence": 0.1935483870967742,
+            "rawScore": 0.6
+          }
+        ],
+        "sources": [
+          {
+            "modality": "transcript",
+            "weight": 1,
+            "dominant": {
+              "state": "celebrating",
+              "score": 0.8
+            }
+          },
+          {
+            "modality": "tonality",
+            "weight": 1,
+            "dominant": {
+              "state": "excited",
+              "score": 0.5
+            }
+          },
+          {
+            "modality": "faceBody",
+            "weight": 0.6,
+            "dominant": {
+              "state": "smile",
+              "score": true
+            }
+          }
+        ],
+        "raw": {
+          "celebrating": 1,
+          "excited": 1.5,
+          "smile": 0.6
+        }
+      },
+      "at": "2026-08-06T08:15:40.472Z"
+    },
+    {
+      "suite": "learning",
+      "name": "weight_learning_runs",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "weights": {
+          "transcript": 0.51,
+          "timing": 1,
+          "tonality": 0.51,
+          "history": 0.755,
+          "faceBody": 0.755
+        },
+        "states": [
+          "frustrated",
+          "confused",
+          "celebrating",
+          "finished",
+          "curious"
+        ]
+      },
+      "at": "2026-08-06T08:15:40.485Z"
+    },
+    {
+      "suite": "learning",
+      "name": "training_accuracy",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "correct": 4,
+        "total": 5,
+        "weights": {
+          "transcript": 0.51,
+          "timing": 1,
+          "tonality": 0.51,
+          "history": 0.755,
+          "faceBody": 0.755
+        }
+      },
+      "at": "2026-08-06T08:15:40.485Z"
+    }
+  ]
+}

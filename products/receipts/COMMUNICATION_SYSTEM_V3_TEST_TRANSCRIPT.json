@@ -1,0 +1,737 @@
+{
+  "schema": "communication_system_v3_test_transcript_v1",
+  "generatedAt": "2026-08-06T08:16:22.398Z",
+  "startedAt": "2026-08-06T08:16:22.397Z",
+  "summary": {
+    "total": 27,
+    "pass": 27,
+    "fail": 0
+  },
+  "prototype": "scripts/prototype-perception-v3.mjs",
+  "tests": [
+    {
+      "suite": "consent",
+      "name": "channel_camera_consent_true",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "consents": {
+          "camera": true,
+          "microphone": true
+        },
+        "channel": "camera",
+        "expect": true
+      },
+      "at": "2026-08-06T08:16:22.397Z"
+    },
+    {
+      "suite": "consent",
+      "name": "channel_camera_consent_false",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "consents": {
+          "camera": false,
+          "microphone": true
+        },
+        "channel": "camera",
+        "expect": false
+      },
+      "at": "2026-08-06T08:16:22.397Z"
+    },
+    {
+      "suite": "consent",
+      "name": "channel_biometric_consent_true",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "consents": {
+          "biometric": true
+        },
+        "channel": "biometric",
+        "expect": true
+      },
+      "at": "2026-08-06T08:16:22.397Z"
+    },
+    {
+      "suite": "consent",
+      "name": "channel_camera_consent_false",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "consents": {},
+        "channel": "camera",
+        "expect": false
+      },
+      "at": "2026-08-06T08:16:22.397Z"
+    },
+    {
+      "suite": "consent",
+      "name": "channel_camera_consent_false",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "channel": "camera",
+        "expect": false
+      },
+      "at": "2026-08-06T08:16:22.397Z"
+    },
+    {
+      "suite": "face",
+      "name": "smile_celebrating",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "celebrating": 0.9
+      },
+      "at": "2026-08-06T08:16:22.398Z"
+    },
+    {
+      "suite": "face",
+      "name": "frown_frustrated",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "frustrated": 0.9
+      },
+      "at": "2026-08-06T08:16:22.398Z"
+    },
+    {
+      "suite": "face",
+      "name": "raised_eyebrows_confused",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "confused": 0.8
+      },
+      "at": "2026-08-06T08:16:22.398Z"
+    },
+    {
+      "suite": "face",
+      "name": "looking_away_confused",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "confused": 0.63
+      },
+      "at": "2026-08-06T08:16:22.398Z"
+    },
+    {
+      "suite": "face",
+      "name": "nod_finished",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "finished": 0.8
+      },
+      "at": "2026-08-06T08:16:22.398Z"
+    },
+    {
+      "suite": "face",
+      "name": "yawn_tired",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "tired": 0.9
+      },
+      "at": "2026-08-06T08:16:22.398Z"
+    },
+    {
+      "suite": "body",
+      "name": "lean_forward_curious",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "curious": 0.8,
+        "finished": 0.24
+      },
+      "at": "2026-08-06T08:16:22.398Z"
+    },
+    {
+      "suite": "body",
+      "name": "lean_back_calm",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "calm": 0.48
+      },
+      "at": "2026-08-06T08:16:22.398Z"
+    },
+    {
+      "suite": "body",
+      "name": "restless_frustrated",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "frustrated": 0.8
+      },
+      "at": "2026-08-06T08:16:22.398Z"
+    },
+    {
+      "suite": "body",
+      "name": "hand_raised_curious",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "curious": 0.4
+      },
+      "at": "2026-08-06T08:16:22.398Z"
+    },
+    {
+      "suite": "body",
+      "name": "gesturing_emphatic",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "emphatic": 0.8
+      },
+      "at": "2026-08-06T08:16:22.398Z"
+    },
+    {
+      "suite": "body",
+      "name": "slumped_tired",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "tired": 0.9
+      },
+      "at": "2026-08-06T08:16:22.398Z"
+    },
+    {
+      "suite": "biometric",
+      "name": "elevated_hr_excited",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "excited": 0.5
+      },
+      "at": "2026-08-06T08:16:22.398Z"
+    },
+    {
+      "suite": "biometric",
+      "name": "high_gsr_frustrated",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "frustrated": 0.5
+      },
+      "at": "2026-08-06T08:16:22.398Z"
+    },
+    {
+      "suite": "biometric",
+      "name": "low_hr_tired",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "tired": 0.4
+      },
+      "at": "2026-08-06T08:16:22.398Z"
+    },
+    {
+      "suite": "biometric",
+      "name": "high_hrv_calm",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "calm": 0.5
+      },
+      "at": "2026-08-06T08:16:22.398Z"
+    },
+    {
+      "suite": "positive_signals",
+      "name": "detect_all_positive_cues",
+      "result": "PASS",
+      "error": null,
+      "details": [
+        {
+          "signal": "smile",
+          "confidence": 0.9
+        },
+        {
+          "signal": "nod",
+          "confidence": 0.8
+        },
+        {
+          "signal": "leaning_forward",
+          "confidence": 0.9
+        },
+        {
+          "signal": "raised_eyebrows",
+          "confidence": 0.7
+        },
+        {
+          "signal": "steady_gaze",
+          "confidence": 0.85
+        },
+        {
+          "signal": "expressive_gesture",
+          "confidence": 0.6
+        }
+      ],
+      "at": "2026-08-06T08:16:22.398Z"
+    },
+    {
+      "suite": "fusion",
+      "name": "confused_looking_away",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "state": "confused",
+        "confidence": 1,
+        "finished": false,
+        "calibrated": [
+          {
+            "state": "confused",
+            "confidence": 1,
+            "rawScore": 1.8
+          },
+          {
+            "state": "frustrated",
+            "confidence": 0,
+            "rawScore": 0
+          },
+          {
+            "state": "celebrating",
+            "confidence": 0,
+            "rawScore": 0
+          },
+          {
+            "state": "curious",
+            "confidence": 0,
+            "rawScore": 0
+          },
+          {
+            "state": "excited",
+            "confidence": 0,
+            "rawScore": 0
+          },
+          {
+            "state": "calm",
+            "confidence": 0,
+            "rawScore": 0
+          },
+          {
+            "state": "concerned",
+            "confidence": 0,
+            "rawScore": 0
+          }
+        ],
+        "sources": [
+          {
+            "modality": "transcript",
+            "weight": 1,
+            "dominant": {
+              "state": "confused",
+              "score": 0.7
+            }
+          },
+          {
+            "modality": "face",
+            "weight": 0.8,
+            "dominant": {
+              "state": "confused",
+              "score": 0.8
+            }
+          }
+        ],
+        "raw": {
+          "frustrated": 0,
+          "celebrating": 0,
+          "confused": 1.8,
+          "curious": 0,
+          "excited": 0,
+          "calm": 0,
+          "concerned": 0
+        },
+        "modalities": {
+          "transcript": {
+            "frustrated": 0,
+            "celebrating": 0,
+            "confused": 0.7,
+            "curious": 0,
+            "excited": 0,
+            "calm": 0,
+            "concerned": 0
+          },
+          "face": {
+            "confused": 0.8
+          }
+        },
+        "positiveSignals": [
+          {
+            "signal": "raised_eyebrows",
+            "confidence": 0.8
+          }
+        ],
+        "consent": {
+          "camera": true,
+          "biometric": false
+        }
+      },
+      "at": "2026-08-06T08:16:22.398Z"
+    },
+    {
+      "suite": "fusion",
+      "name": "frustrated_frown_restless",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "state": "frustrated",
+        "confidence": 0.7142857142857143,
+        "finished": false,
+        "calibrated": [
+          {
+            "state": "frustrated",
+            "confidence": 0.7142857142857143,
+            "rawScore": 2.5
+          },
+          {
+            "state": "calm",
+            "confidence": 0.2857142857142857,
+            "rawScore": 1
+          },
+          {
+            "state": "celebrating",
+            "confidence": 0,
+            "rawScore": 0
+          },
+          {
+            "state": "confused",
+            "confidence": 0,
+            "rawScore": 0
+          },
+          {
+            "state": "curious",
+            "confidence": 0,
+            "rawScore": 0
+          },
+          {
+            "state": "excited",
+            "confidence": 0,
+            "rawScore": 0
+          },
+          {
+            "state": "concerned",
+            "confidence": 0,
+            "rawScore": 0
+          }
+        ],
+        "sources": [
+          {
+            "modality": "transcript",
+            "weight": 1,
+            "dominant": {
+              "state": "frustrated",
+              "score": 0.35
+            }
+          },
+          {
+            "modality": "face",
+            "weight": 0.8,
+            "dominant": {
+              "state": "frustrated",
+              "score": 0.9
+            }
+          },
+          {
+            "modality": "body",
+            "weight": 0.7,
+            "dominant": {
+              "state": "frustrated",
+              "score": 0.8
+            }
+          }
+        ],
+        "raw": {
+          "frustrated": 2.5,
+          "celebrating": 0,
+          "confused": 0,
+          "curious": 0,
+          "excited": 0,
+          "calm": 1,
+          "concerned": 0
+        },
+        "modalities": {
+          "transcript": {
+            "frustrated": 0.35,
+            "celebrating": 0,
+            "confused": 0,
+            "curious": 0,
+            "excited": 0,
+            "calm": 0.35,
+            "concerned": 0
+          },
+          "face": {
+            "frustrated": 0.9
+          },
+          "body": {
+            "frustrated": 0.8
+          }
+        },
+        "positiveSignals": [],
+        "consent": {
+          "camera": true,
+          "biometric": false
+        }
+      },
+      "at": "2026-08-06T08:16:22.398Z"
+    },
+    {
+      "suite": "fusion",
+      "name": "celebrating_smile_nod",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "state": "celebrating",
+        "confidence": 0.5401800600200066,
+        "finished": false,
+        "calibrated": [
+          {
+            "state": "celebrating",
+            "confidence": 0.5401800600200066,
+            "rawScore": 1.8
+          },
+          {
+            "state": "finished",
+            "confidence": 0.24974991663887958,
+            "rawScore": 0.8322222222222222
+          },
+          {
+            "state": "curious",
+            "confidence": 0.21007002334111366,
+            "rawScore": 0.7
+          },
+          {
+            "state": "frustrated",
+            "confidence": 0,
+            "rawScore": 0
+          },
+          {
+            "state": "confused",
+            "confidence": 0,
+            "rawScore": 0
+          },
+          {
+            "state": "excited",
+            "confidence": 0,
+            "rawScore": 0
+          },
+          {
+            "state": "calm",
+            "confidence": 0,
+            "rawScore": 0
+          },
+          {
+            "state": "concerned",
+            "confidence": 0,
+            "rawScore": 0
+          }
+        ],
+        "sources": [
+          {
+            "modality": "transcript",
+            "weight": 1,
+            "dominant": {
+              "state": "celebrating",
+              "score": 0.7
+            }
+          },
+          {
+            "modality": "face",
+            "weight": 0.8,
+            "dominant": {
+              "state": "celebrating",
+              "score": 0.9
+            }
+          },
+          {
+            "modality": "body",
+            "weight": 0.7,
+            "dominant": {
+              "state": "curious",
+              "score": 0.7
+            }
+          }
+        ],
+        "raw": {
+          "frustrated": 0,
+          "celebrating": 1.8,
+          "confused": 0,
+          "curious": 0.7,
+          "excited": 0,
+          "calm": 0,
+          "concerned": 0,
+          "finished": 0.8322222222222222
+        },
+        "modalities": {
+          "transcript": {
+            "frustrated": 0,
+            "celebrating": 0.7,
+            "confused": 0,
+            "curious": 0,
+            "excited": 0,
+            "calm": 0,
+            "concerned": 0
+          },
+          "face": {
+            "celebrating": 0.9,
+            "finished": 0.7
+          },
+          "body": {
+            "curious": 0.7,
+            "finished": 0.21
+          }
+        },
+        "positiveSignals": [
+          {
+            "signal": "smile",
+            "confidence": 0.9
+          },
+          {
+            "signal": "nod",
+            "confidence": 0.7
+          },
+          {
+            "signal": "leaning_forward",
+            "confidence": 0.7
+          },
+          {
+            "signal": "steady_gaze",
+            "confidence": 0.8
+          }
+        ],
+        "consent": {
+          "camera": true,
+          "biometric": false
+        }
+      },
+      "at": "2026-08-06T08:16:22.398Z"
+    },
+    {
+      "suite": "fusion",
+      "name": "camera_denied_uses_text",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "state": "concerned",
+        "confidence": 1,
+        "finished": false,
+        "calibrated": [
+          {
+            "state": "concerned",
+            "confidence": 1,
+            "rawScore": 1
+          },
+          {
+            "state": "frustrated",
+            "confidence": 0,
+            "rawScore": 0
+          },
+          {
+            "state": "celebrating",
+            "confidence": 0,
+            "rawScore": 0
+          },
+          {
+            "state": "confused",
+            "confidence": 0,
+            "rawScore": 0
+          },
+          {
+            "state": "curious",
+            "confidence": 0,
+            "rawScore": 0
+          },
+          {
+            "state": "excited",
+            "confidence": 0,
+            "rawScore": 0
+          },
+          {
+            "state": "calm",
+            "confidence": 0,
+            "rawScore": 0
+          }
+        ],
+        "sources": [
+          {
+            "modality": "transcript",
+            "weight": 1,
+            "dominant": {
+              "state": "concerned",
+              "score": 0.35
+            }
+          }
+        ],
+        "raw": {
+          "frustrated": 0,
+          "celebrating": 0,
+          "confused": 0,
+          "curious": 0,
+          "excited": 0,
+          "calm": 0,
+          "concerned": 1
+        },
+        "modalities": {
+          "transcript": {
+            "frustrated": 0,
+            "celebrating": 0,
+            "confused": 0,
+            "curious": 0,
+            "excited": 0,
+            "calm": 0,
+            "concerned": 0.35
+          }
+        },
+        "positiveSignals": [],
+        "consent": {
+          "camera": false,
+          "biometric": false
+        }
+      },
+      "at": "2026-08-06T08:16:22.398Z"
+    },
+    {
+      "suite": "fusion",
+      "name": "biometric_only_calm",
+      "result": "PASS",
+      "error": null,
+      "details": {
+        "state": "calm",
+        "confidence": 1,
+        "finished": true,
+        "calibrated": [
+          {
+            "state": "calm",
+            "confidence": 1,
+            "rawScore": 0.5
+          }
+        ],
+        "sources": [
+          {
+            "modality": "biometric",
+            "weight": 0.5,
+            "dominant": {
+              "state": "calm",
+              "score": 0.5
+            }
+          }
+        ],
+        "raw": {
+          "calm": 0.5
+        },
+        "modalities": {
+          "biometric": {
+            "calm": 0.5
+          }
+        },
+        "positiveSignals": [],
+        "consent": {
+          "camera": false,
+          "biometric": true
+        }
+      },
+      "at": "2026-08-06T08:16:22.398Z"
+    }
+  ]
+}

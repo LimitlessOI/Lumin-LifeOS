@@ -24,8 +24,8 @@ const FIXTURES = {
   ],
   contract_creation: [
     { role: 'user', text: 'I want to build a voice contract prototype' },
-    { role: 'assistant', text: "I will build a Conversational Contracts prototype that extracts promises and tracks fulfillment. I'll stop mid-sentence if you interrupt and then ask what changed.", ts: 0 },
-    { role: 'user', text: 'great, and I will test it by tomorrow', ts: 2200 },
+    { role: 'assistant', text: "I will build a Conversational Contracts prototype that extracts promises and tracks fulfillment. I'll stop mid-sentence if you interrupt and then ask what changed.", ts: 0, durationMs: 7000 },
+    { role: 'user', text: 'great, and I will test it by tomorrow.', ts: 2200 },
   ],
 };
 
@@ -85,6 +85,7 @@ export function fuseTurnCompletion(turns, options = {}) {
     pauseMs = 0,
     finalTranscript = true,
     minimumPauseMs = 600,
+    threshold = 90,
   } = options;
 
   const current = turns[currentIndex];
@@ -101,23 +102,27 @@ export function fuseTurnCompletion(turns, options = {}) {
   if (trailingPunct) {
     score += 35;
     sources.push({ source: 'trailing_punctuation', value: true, weight: 35 });
+  } else {
+    score -= 15;
+    sources.push({ source: 'no_trailing_punctuation', value: true, weight: -15 });
   }
 
-  const trailingFiller = /\b(um|uh|like|you know)\s*$/i.test(text);
+  const trailingFiller = /\b(um|uh|like|you know)[.!?…]?\s*$/i.test(text);
   if (!trailingFiller) {
     score += 15;
     sources.push({ source: 'no_trailing_filler', value: true, weight: 15 });
   } else {
-    score -= 20;
-    sources.push({ source: 'trailing_filler', value: true, weight: -20 });
+    score -= 35;
+    sources.push({ source: 'trailing_filler', value: true, weight: -35 });
   }
 
   if (pauseMs >= minimumPauseMs) {
     score += 30;
     sources.push({ source: 'pause_duration', value: pauseMs, weight: 30 });
   } else if (pauseMs > 0) {
-    score += Math.round((pauseMs / minimumPauseMs) * 30);
-    sources.push({ source: 'pause_duration', value: pauseMs, weight: Math.round((pauseMs / minimumPauseMs) * 30) });
+    const partial = Math.round((pauseMs / minimumPauseMs) * 30);
+    score += partial;
+    sources.push({ source: 'pause_duration', value: pauseMs, weight: partial });
   }
 
   // Last turn was assistant -> user is more likely finishing a reply
@@ -128,7 +133,7 @@ export function fuseTurnCompletion(turns, options = {}) {
 
   score = Math.min(100, Math.max(0, score));
   return {
-    finished: score >= 75,
+    finished: score >= threshold,
     confidence: score,
     pause_ms: pauseMs,
     sources,
@@ -137,118 +142,148 @@ export function fuseTurnCompletion(turns, options = {}) {
 
 // --- Interruption Decay simulator ---
 
-function sleep(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
 export class TtsTrack {
   constructor(text, options = {}) {
     this.text = normalize(text);
     this.wordDurationMs = options.wordDurationMs || 180;
     this.fadeMs = options.fadeMs || 150;
+    this.wordGapMs = options.wordGapMs || 0;
+    // A word is considered "inaudible" if interrupted before this much of it has been spoken.
+    this.minSpokenMs = options.minSpokenMs || Math.max(10, Math.floor(this.wordDurationMs * 0.3));
     this.words = this.text.split(/\s+/).filter(Boolean);
     this.state = 'idle';
     this.currentWordIndex = -1;
     this.interruptedAt = null;
+    this.wordsSpoken = 0;
     this.events = [];
     this._resolvers = new Set();
-    this._interruptPromise = null;
-    this._interruptResolve = null;
-    this._pendingInterrupt = false;
+    this._timeouts = [];
+    this._startedAt = null;
+    this._prePlayInterrupt = false;
   }
 
   _log(event) {
     this.events.push({ at: Date.now(), ...event });
   }
 
-  _resetInterruptPromise() {
-    this._interruptPromise = new Promise((resolve) => {
-      this._interruptResolve = resolve;
-    });
-    if (this._pendingInterrupt && this._interruptResolve) {
-      this._interruptResolve('interrupt');
-    }
+  _schedule(fn, delay) {
+    if (this.state !== 'playing') return null;
+    const t = setTimeout(() => {
+      if (this.state !== 'playing') return;
+      fn();
+    }, Math.max(0, delay));
+    this._timeouts.push(t);
+    return t;
+  }
+
+  _clearTimeouts() {
+    for (const t of this._timeouts) clearTimeout(t);
+    this._timeouts = [];
   }
 
   async play() {
-    this.state = 'playing';
-    this._pendingInterrupt = false;
-    this._log({ type: 'play_start', words_total: this.words.length });
-
     return new Promise((resolve) => {
       this._resolvers.add(resolve);
 
-      const loop = async () => {
-        for (let i = 0; i < this.words.length; i += 1) {
-          this._resetInterruptPromise();
+      this._log({ type: 'play_start', words_total: this.words.length, word_duration_ms: this.wordDurationMs, fade_ms: this.fadeMs, word_gap_ms: this.wordGapMs });
 
-          if (this._pendingInterrupt) {
-            this.state = 'stopped';
-            this._log({
-              type: 'stopped',
-              words_spoken: i,
-              words_total: this.words.length,
-              trail_off: true,
-            });
-            this._finish();
-            return;
-          }
+      if (this._prePlayInterrupt) {
+        this._finalizeStop({ trail_off: false });
+        return;
+      }
 
+      this.state = 'playing';
+      this._startedAt = Date.now();
+
+      for (let i = 0; i < this.words.length; i += 1) {
+        const wordStart = i * (this.wordDurationMs + this.wordGapMs);
+
+        // Word start.
+        this._schedule(() => {
           this.currentWordIndex = i;
           this._log({ type: 'word', index: i, word: this.words[i] });
+        }, wordStart);
 
-          const wordStart = Date.now();
-          const timer = sleep(this.wordDurationMs);
-          const winner = await Promise.race([timer, this._interruptPromise]);
+        // Word completed.
+        this._schedule(() => {
+          this.wordsSpoken += 1;
+          this.currentWordIndex = -1;
+        }, wordStart + this.wordDurationMs);
+      }
 
-          if (winner === 'interrupt' || this.state === 'interrupted') {
-            const elapsed = Date.now() - wordStart;
-            const remaining = Math.max(0, this.wordDurationMs - elapsed);
-            await sleep(remaining + this.fadeMs);
-            this.state = 'stopped';
-            this._log({
-              type: 'stopped',
-              words_spoken: i + 1,
-              words_total: this.words.length,
-              trail_off: true,
-            });
-            this._finish();
-            return;
-          }
-        }
-
+      // Natural completion.
+      const totalDuration = this.words.length * (this.wordDurationMs + this.wordGapMs) - this.wordGapMs;
+      this._schedule(() => {
+        if (this.state !== 'playing') return;
         this.state = 'completed';
-        this._log({ type: 'completed', words_spoken: this.words.length });
+        this._log({ type: 'completed', words_spoken: this.wordsSpoken, words_total: this.words.length });
         this._finish();
-      };
-
-      loop();
+      }, totalDuration);
     });
   }
 
   interrupt(now = Date.now()) {
+    if (this.state === 'stopped' || this.state === 'completed') return false;
+    if (this.state === 'idle') {
+      this._prePlayInterrupt = true;
+      this.interruptedAt = now;
+      return true;
+    }
     if (this.state !== 'playing') return false;
+
     this.interruptedAt = now;
     this.state = 'interrupted';
-    this._pendingInterrupt = true;
+    this._clearTimeouts();
+
+    const elapsed = now - this._startedAt;
+    const cycle = this.wordDurationMs + this.wordGapMs;
+    const currentIndex = Math.max(-1, Math.min(this.words.length - 1, Math.floor(elapsed / cycle)));
+    const intoWord = elapsed % cycle;
+    const inGap = intoWord >= this.wordDurationMs;
+    const tooEarly = !inGap && intoWord < this.minSpokenMs;
+
+    if (currentIndex === -1 || inGap || tooEarly) {
+      // No word has been audibly spoken yet; stop cleanly.
+      this._log({
+        type: 'interrupt_detected',
+        word_index: currentIndex,
+        word: currentIndex >= 0 ? this.words[currentIndex] : null,
+        fade_ms: 0,
+      });
+      this._finalizeStop({ trail_off: false });
+      return true;
+    }
+
+    // Finish current word, then fade.
+    const remaining = Math.max(0, this.wordDurationMs - intoWord);
     this._log({
       type: 'interrupt_detected',
-      word_index: this.currentWordIndex,
-      word: this.words[this.currentWordIndex],
+      word_index: currentIndex,
+      word: this.words[currentIndex],
       fade_ms: this.fadeMs,
     });
-    if (this._interruptResolve) this._interruptResolve('interrupt');
+
+    setTimeout(() => {
+      this.wordsSpoken += 1;
+      this._finalizeStop({ trail_off: true });
+    }, remaining + this.fadeMs);
+
     return true;
   }
 
   stop() {
     if (this.state === 'stopped' || this.state === 'completed') return;
+    this._clearTimeouts();
+    this._finalizeStop({ trail_off: false });
+  }
+
+  _finalizeStop({ trail_off }) {
     this.state = 'stopped';
     this._log({
       type: 'stopped',
-      words_spoken: this.currentWordIndex + 1,
+      words_spoken: this.wordsSpoken,
       words_total: this.words.length,
-      trail_off: false,
+      trail_off,
     });
     this._finish();
   }
@@ -256,7 +291,6 @@ export class TtsTrack {
   _finish() {
     this._resolvers.forEach((r) => r(this.summary()));
     this._resolvers.clear();
-    if (this._interruptResolve) this._interruptResolve('stop');
   }
 
   summary() {
@@ -264,7 +298,7 @@ export class TtsTrack {
       text: this.text,
       state: this.state,
       words_total: this.words.length,
-      words_spoken: this.currentWordIndex + 1,
+      words_spoken: this.wordsSpoken,
       interrupted: this.interruptedAt !== null,
       interrupted_at_word_index: this.currentWordIndex,
       events: this.events,
@@ -276,7 +310,16 @@ export class TtsTrack {
 
 export function runScenario(name, turns) {
   const contracts = extractContracts(turns);
-  const tts = new TtsTrack(turns.find((t) => t.role === 'assistant')?.text || '');
+  const assistantTurn = turns.find((t) => t.role === 'assistant');
+  const assistantText = assistantTurn?.text || '';
+  const assistantDurationMs = assistantTurn?.durationMs;
+
+  const wordCount = assistantText.split(/\s+/).filter(Boolean).length || 1;
+  const wordDurationMs = assistantDurationMs && assistantDurationMs > 0
+    ? Math.max(50, Math.floor(assistantDurationMs / wordCount))
+    : undefined;
+
+  const tts = new TtsTrack(assistantText, { wordDurationMs, fadeMs: 150, wordGapMs: 0 });
 
   // Start playback first so scheduled interruptions see a playing track.
   const playPromise = tts.play();
