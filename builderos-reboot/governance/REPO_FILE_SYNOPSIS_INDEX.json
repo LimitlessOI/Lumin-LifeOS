@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-06T18:19:08.353Z",
+  "generated_at": "2026-08-06T19:34:32.808Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13041,
+  "file_count": 13042,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -39354,6 +39354,13 @@
       "indexed_at": "2026-07-31T09:51:46.501Z"
     },
     {
+      "path": "docs/constitution/AS_IS_GOVERNANCE_STRUCTURE_2026-08-06.md",
+      "synopsis": "Factual snapshot of the real, current governance/role structure — ratified constitution + live code, checked directly against the repo. Not law, not a proposal; a ground-truth reference for the 2026-08-06 constitutional-offices brainstorm.",
+      "bytes": 11039,
+      "mtime": "2026-08-06T19:33:31.307Z",
+      "indexed_at": "2026-08-06T19:34:32.808Z"
+    },
+    {
       "path": "docs/constitution/COGNITIVE_CORE_LAWS.md",
       "synopsis": "Cognitive Core laws — judgment compiler constitution (subordinate to North Star SSOT)",
       "bytes": 6415,
@@ -43109,9 +43116,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 758339,
-      "mtime": "2026-08-06T18:18:52.479Z",
-      "indexed_at": "2026-08-06T18:19:08.353Z"
+      "bytes": 761221,
+      "mtime": "2026-08-06T19:34:15.018Z",
+      "indexed_at": "2026-08-06T19:34:32.808Z"
     },
     {
       "path": "docs/products/LIFERE.md",
