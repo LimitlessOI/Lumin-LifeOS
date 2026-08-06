@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-06T00:51:14.662Z",
+  "generated_at": "2026-08-06T00:53:26.431Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13015,
   "files": [
@@ -43060,8 +43060,8 @@
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Documentation — PRODUCT HOME.",
       "bytes": 0,
-      "mtime": "2026-08-06T00:51:14.662Z",
-      "indexed_at": "2026-08-06T00:51:14.662Z"
+      "mtime": "2026-08-06T00:53:26.431Z",
+      "indexed_at": "2026-08-06T00:53:26.431Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -66965,8 +66965,8 @@
       "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
       "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
       "bytes": 0,
-      "mtime": "2026-08-06T00:51:14.662Z",
-      "indexed_at": "2026-08-06T00:51:14.662Z",
+      "mtime": "2026-08-06T00:53:26.431Z",
+      "indexed_at": "2026-08-06T00:53:26.431Z",
       "synopsis_index_only": true
     },
     {
