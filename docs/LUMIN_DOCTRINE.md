@@ -236,6 +236,8 @@ Real-world evidence includes:
 Verbal agreement ("yeah sounds right") does not count as a resolved prediction.
 Only observable evidence resolves a prediction.
 
+> **Naming proposal, not adopted (2026-08-06):** Adam proposed renaming this role plus the institutional lessons-learned functions "Solomon." Recorded, not applied — see `docs/products/lifeos/conversations/2026-08-06-solomon-naming-proposal.md` for scope and why it wasn't renamed here directly.
+
 ---
 
 ## Universal Digital Twin (every person)

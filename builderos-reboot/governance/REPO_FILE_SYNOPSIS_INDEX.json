@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-06T17:57:33.448Z",
+  "generated_at": "2026-08-06T18:19:08.353Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13040,
+  "file_count": 13041,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -41675,9 +41675,9 @@
     {
       "path": "docs/LUMIN_DOCTRINE.md",
       "synopsis": "LUMIN DOCTRINE — Canonical Specification",
-      "bytes": 16434,
-      "mtime": "2026-07-16T19:42:53.428Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 16733,
+      "mtime": "2026-08-06T18:18:15.842Z",
+      "indexed_at": "2026-08-06T18:19:08.353Z"
     },
     {
       "path": "docs/marketing/NO_BUDGET_MARKETING_PLAN.md",
@@ -43071,6 +43071,13 @@
       "indexed_at": "2026-08-04T23:56:40.485Z"
     },
     {
+      "path": "docs/products/lifeos/conversations/2026-08-06-solomon-naming-proposal.md",
+      "synopsis": "LifeOS — 2026-08-06 founder naming proposal: \"Solomon\" for Wisdom + institutional history/lessons functions (NOT ADOPTED, no rename applied)",
+      "bytes": 4648,
+      "mtime": "2026-08-06T18:18:04.162Z",
+      "indexed_at": "2026-08-06T18:19:08.353Z"
+    },
+    {
       "path": "docs/products/lifeos/CREATIVE_BRIEF.md",
       "synopsis": "Creative Brief — LifeOS (lifeos)",
       "bytes": 4211,
@@ -43102,9 +43109,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 755374,
-      "mtime": "2026-08-06T17:57:15.227Z",
-      "indexed_at": "2026-08-06T17:57:33.448Z"
+      "bytes": 758339,
+      "mtime": "2026-08-06T18:18:52.479Z",
+      "indexed_at": "2026-08-06T18:19:08.353Z"
     },
     {
       "path": "docs/products/LIFERE.md",
