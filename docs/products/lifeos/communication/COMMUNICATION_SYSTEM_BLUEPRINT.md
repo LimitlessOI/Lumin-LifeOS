@@ -9,7 +9,7 @@
 **Source inventory:** see §20  
 **Scope:** LifeOS client conversations, therapist-supported reflection, therapist dashboard preparation, guided product support, and the cross-product communication/perception layer shared with SalesOS, TherapyOS, MediaOS, LeadershipOS, and EducationOS.  
 **Canonical SSOT:** `docs/products/lifeos/PRODUCT_HOME.md`  
-**Last Updated:** 2026-08-07
+**Last Updated:** 2026-08-07 — captured Future Lab / Dormant Blueprint / Institutional Intelligence brainstorm, AI Persona surface brainstorm, and V0.5 Avatar sandbox in the version table.
 
 **Related canonical files**
 - `docs/constitution/LUMIN_COMMUNICATION_DNA.md` — constitutional communication law
@@ -966,6 +966,34 @@ The full conversation corpus contains a number of ideas that are not yet part of
 ### Positive and momentum signals
 - **Lean in on curiosity, excitement, relief, pride, flow, inspiration, amusement** as reinforcement opportunities. (V2 — already in §19.8; this is a reminder that positive signals are as important as risk signals)
 
+### Future Lab, Dormant Blueprints, and Institutional Intelligence
+
+The following concepts are **captured for the blueprint, not scheduled for immediate build**. They came from the 2026-08-07 founder/model constitutional and innovation brainstorming. They may become constitutional offices, shared services, or product capabilities once the communication foundation (V0–V2) is proven.
+
+- **Future Lab Office:** a fifth constitutional office responsible for discovering, not building. Future technology modeling, patent-landscape awareness, white-space discovery, compounding-innovation analysis, future-blueprint creation, dormant-blueprint management, market-scenario planning, cross-product opportunity discovery, and technology-trigger monitoring. Output is blueprints, not code.
+- **Blueprint Lifecycle:** Idea → Future Lab Exploration → Patent / Prior-Art Landscape → Architectural Blueprint → Chair Approval → Builder → Sentry → Reality Audit → Lessons → Blueprint Update → Dormant / Active Library. Nothing disappears; everything becomes institutional knowledge.
+- **Architectural Foresight Review:** every capability must answer: What future does this create? What future becomes impossible if we never build it? What technologies would make this obsolete? What technologies would make this dramatically more valuable? What capabilities emerge when this combines with existing systems? What markets appear because this exists? What assumptions disappear?
+- **Future Trees:** every blueprint documents immediate value, capabilities enabled, dependencies created, capabilities made obsolete, potential patent opportunities, potential trade secrets, future products, adjacent markets, five-year implications, ten-year implications.
+- **Compounding Innovation Engine:** a service that evaluates combinations of existing capabilities (Digital Twin + Evidence Fusion + Overlay + Robotics + Standing Orders + Conversation Contracts) rather than ideas in isolation.
+- **Innovation Opportunity Engine:** not just "Is this patented?" but prior-art scan, architect-around options, white-space discovery, accidental-invention detection, and classification as Patent / Trade Secret / Defensive Publication / Open Technology before engineering starts.
+- **Dormant Blueprint Library:** completed blueprints with purpose, architecture, dependencies, effort, tech requirements, market assumptions, trigger conditions, and status. Trigger examples: voice latency under 150 ms, robots become common, AR adoption reaches 20%, model reasoning improves, GPU cost drops, regulation changes. When a trigger fires, the blueprint moves into review.
+- **Technology Trigger Monitor:** continuous monitoring of new AI capabilities, hardware, robotics, wearables, AR, interfaces, regulations, costs. Whenever one changes, ask: "What dormant blueprints just became possible?"
+- **Platform Strategy:** annual exercises asking "If robots become dominant / if AR replaces phones / if compute becomes almost free / if autonomous agents become trusted, what changes?"
+- **Architectural Inventory:** blueprints are inventory assets; when priorities change, the Builder pulls the next blueprint off the shelf.
+- **Institutionalization Principle:** *The organization should never have to rediscover what it has already understood.* Every insight, architecture, future idea, lesson, failed prediction, patent search, and white-space discovery becomes part of permanent institutional intelligence.
+- **Knowledge Curator / Wisdom Office (future):** not a creator of ideas, but an identifier of when multiple discoveries across months or years point to a new constitutional principle, architectural law, or strategic doctrine. Turns accumulated knowledge into institutional wisdom.
+
+### Avatar persona surface brainstorm
+
+The following playful/interactive micro-ideas for the visual AI persona are captured for V0.5+ exploration but **not built now**:
+
+- Idle animations: subtle bounce, breathing, blink, occasional peek.
+- Reactive micro-behaviors: foot-tap / look impatient when the user ignores it; tiny cartwheel or spin when the user celebrates; bell/jingle attention signal for important nudges; gentle wave on hover.
+- State-driven expressions: listening (soft glow), thinking (brow furrow, processing dots), speaking (mouth movement), surprised (eyebrows up), concerned (brow down), happy (smile), tired (droopy eyes).
+- Mode transitions: shrink to a tiny badge in a corner, expand to a face, expand further to a full figure or close-up on demand; smooth transitions so it never feels jarring.
+- Consent and channel indicators: mic/camera/screen dots always visible; user can mute or dismiss by dragging to a "trash" corner.
+- Personality knobs: chirpy, calm, minimal, serious — calibrated to user preference and context.
+
 ---
 
 ## 22. Version order and build priority
@@ -975,6 +1003,7 @@ The LifeOS Communication System shares the same phased roadmap as the Universal 
 | Version | What it is | Why it comes here | Acceptance gate |
 |---|---|---|---|
 | **V0 — Observation & Context** | Overlay reads host page, URL, title, form fields, selected text; passes context into Lumin chat. | Already exists; needs hardening before any action. | Real browser extension loads on a live site, reads a form, and the user can ask "what is this form asking for?" and get a correct answer. |
+| **V0.5 — AI Persona / Avatar (sandbox)** | A draggable corner avatar badge that expands to a full face/figure, shows facial expressions and mode-based border colors, and signals active consent channels (mic/camera/screen). Includes idle/interactive animations (impatient tap, cartwheel, etc.) and a JS `state` API so the Tonality/Face engines can drive it later. | Captures the founder's request for a visual assistant presence that stays reachable while the user works in other apps, without taking over the screen. Playable sandbox only — not wired to production voice/perception yet. | `scripts/prototype-avatar-widget.html` renders; can be dragged, expanded/collapsed, and its expression/mode updated via `window.lifeosAvatar.setAvatarState({ expression, mode, expanded, channels })`. |
 | **V1 — Conversational Contracts & Voice Presence** | Promise → completion condition → fulfillment tracking; interruption decay; presence layer (listening, nodding, breathing, thinking sounds). | Highest trust-to-code ratio. Fixes the abandonment failure the founder just experienced. | A 25-item voice list is delivered without abandonment; interruption feels natural; the user can stop and restart without repeating context. A standalone Node prototype (`scripts/prototype-conversational-contracts-v1.mjs`) runs synthetic fixtures and passes self-tests. |
 | **V2 — Evidence Fusion & Cognitive Dynamics** | Combine transcript + timing + history + simple tonal proxies into calibrated confidence estimates; learn per-context modality weights from outcomes. | Becomes the foundation for every perception feature that follows. | In a labeled test corpus, fusion-based state estimates outperform single-source guesses on frustrated/stuck/ready/celebrating moments. |
 | **V3 — Tonality, Face, Body, Biometric Perception** | Add optional visual and biometric channels under explicit per-context consent; full Tonality Engine; positive-signal recognition. | Hardware and consent surface; gated until V2 is proven. | A user opts in to camera + mic; the system correctly detects "user looks confused" or "user is looking away" with calibrated confidence and does not present inference as fact. |
