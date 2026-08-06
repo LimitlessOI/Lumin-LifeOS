@@ -751,6 +751,18 @@ Each OS consumes calibrated estimates rather than interpreting raw signals indep
 3. What is the consent boundary for tonal, video, and biometric evidence in each product surface?
 4. Where is the line between “positive-signal recognition” and “positive manipulation”? How is reinforcement governed?
 
+### 20.12 Universal Overlay as a LifeOS communication surface
+
+The `universal-overlay` product is the primary host-agnostic surface for the communication system:
+
+- **Observation:** `content.js` reads the host page (URL, title, form fields, selected text, visible text) and sends it as context.
+- **Perception:** future face/voice/body/wearable signals feed the Evidence Fusion Engine when the user opts in.
+- **Conversation:** the overlay drawer hosts Lumin chat with Contracts, Interruption Decay, and Presence.
+- **Action:** the overlay can fill forms, click buttons, scroll, and navigate by postMessage to `content.js`.
+- **Verbal AI Director:** the user can say "do it" and the system chooses API path or visual/RPA path, confirming before irreversible steps.
+
+The LifeOS communication phases (especially Phase 4 Client Experience and Phase 5 Therapist Dashboard) should be designed assuming the overlay is one of the primary delivery channels. See `docs/products/universal-overlay/INTELLIGENT_OVERLAY_BLUEPRINT.md` for the V0–V5 roadmap.
+
 ## 19. Open questions for the founder
 
 - Which of the new cognitive modes should be wired into Lumin first?

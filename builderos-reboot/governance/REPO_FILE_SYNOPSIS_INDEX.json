@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-06T00:53:26.431Z",
+  "generated_at": "2026-08-06T01:09:08.422Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13015,
+  "file_count": 13016,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -33198,9 +33198,9 @@
     {
       "path": "data/constitutional-framework/reports/CONSTITUTIONAL_OBSERVABILITY_REPORT.json",
       "synopsis": "JSON data/config — data/constitutional-framework/reports/CONSTITUTIONAL_OBSERVABILITY_REPORT.json.",
-      "bytes": 0,
-      "mtime": "2026-08-06T00:51:14.662Z",
-      "indexed_at": "2026-08-06T00:51:14.662Z",
+      "bytes": 10125,
+      "mtime": "2026-08-06T01:09:08.422Z",
+      "indexed_at": "2026-08-06T01:09:08.422Z",
       "synopsis_index_only": true
     },
     {
@@ -39642,17 +39642,17 @@
     },
     {
       "path": "docs/CONTINUITY_LOG.md",
-      "synopsis": "Documentation — CONTINUITY LOG.",
-      "bytes": 0,
-      "mtime": "2026-08-06T00:51:14.662Z",
-      "indexed_at": "2026-08-06T00:51:14.662Z"
+      "synopsis": "Continuity Log — chronological session handoff and key decisions.",
+      "bytes": 145504,
+      "mtime": "2026-08-06T01:09:08.422Z",
+      "indexed_at": "2026-08-06T01:09:08.422Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
-      "synopsis": "Documentation — CONVERSATION DUMP IDEAS INDEX.",
-      "bytes": 0,
-      "mtime": "2026-08-06T00:51:14.662Z",
-      "indexed_at": "2026-08-06T00:51:14.662Z"
+      "synopsis": "CONVERSATION_DUMP_IDEAS_INDEX — mined threads & backlog themes",
+      "bytes": 29739,
+      "mtime": "2026-08-06T01:09:08.422Z",
+      "indexed_at": "2026-08-06T01:09:08.422Z"
     },
     {
       "path": "docs/conversation_dumps/2026-03-15-cursor-session-48f2917e-MASTER.md",
@@ -42966,10 +42966,10 @@
     },
     {
       "path": "docs/products/lifeos/COMMUNICATION_SYSTEM_BLUEPRINT.md",
-      "synopsis": "Documentation — COMMUNICATION SYSTEM BLUEPRINT.",
-      "bytes": 0,
-      "mtime": "2026-08-06T00:51:14.662Z",
-      "indexed_at": "2026-08-06T00:51:14.662Z"
+      "synopsis": "LifeOS-scoped communication / cognitive-interaction blueprint — source: TALOA Cognitive Interaction System complete blueprint 2026-08-04, cross-referenced with existing LifeOS communication canon.",
+      "bytes": 37811,
+      "mtime": "2026-08-06T01:09:08.422Z",
+      "indexed_at": "2026-08-06T01:09:08.422Z"
     },
     {
       "path": "docs/products/lifeos/COMMUNICATION_SYSTEM_FOUNDER_REFERENCE.md",
@@ -43058,10 +43058,10 @@
     },
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
-      "synopsis": "Documentation — PRODUCT HOME.",
-      "bytes": 0,
-      "mtime": "2026-08-06T00:53:26.431Z",
-      "indexed_at": "2026-08-06T00:53:26.431Z"
+      "synopsis": "Canonical product home — LifeOS",
+      "bytes": 735689,
+      "mtime": "2026-08-06T01:09:08.422Z",
+      "indexed_at": "2026-08-06T01:09:08.422Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -43816,17 +43816,24 @@
     {
       "path": "docs/products/universal-overlay/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
-      "bytes": 559,
-      "mtime": "2026-06-29T17:21:02.585Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 567,
+      "mtime": "2026-08-06T01:09:08.422Z",
+      "indexed_at": "2026-08-06T01:09:08.422Z",
       "synopsis_index_only": true
+    },
+    {
+      "path": "docs/products/universal-overlay/INTELLIGENT_OVERLAY_BLUEPRINT.md",
+      "synopsis": "Founder's integrated vision — Universal Overlay as a perception-aware, conversation-driven, verbal AI director. Source: 2026-08-05 conversation dumps + full Lumin-Memory corpus analysis.",
+      "bytes": 13413,
+      "mtime": "2026-08-06T01:09:08.422Z",
+      "indexed_at": "2026-08-06T01:09:08.422Z"
     },
     {
       "path": "docs/products/universal-overlay/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Universal Overlay",
-      "bytes": 21996,
-      "mtime": "2026-08-01T14:24:32.053Z",
-      "indexed_at": "2026-08-01T14:24:44.270Z"
+      "bytes": 23070,
+      "mtime": "2026-08-06T01:09:08.422Z",
+      "indexed_at": "2026-08-06T01:09:08.422Z"
     },
     {
       "path": "docs/products/UNIVERSALOVERLAY.md",
@@ -66964,9 +66971,9 @@
     {
       "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
       "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
-      "bytes": 0,
-      "mtime": "2026-08-06T00:53:26.431Z",
-      "indexed_at": "2026-08-06T00:53:26.431Z",
+      "bytes": 3021,
+      "mtime": "2026-08-06T01:09:08.422Z",
+      "indexed_at": "2026-08-06T01:09:08.422Z",
       "synopsis_index_only": true
     },
     {
@@ -67588,9 +67595,9 @@
     {
       "path": "products/receipts/POINT_B_DNA_VERIFY.json",
       "synopsis": "Product receipt — POINT B DNA VERIFY.",
-      "bytes": 0,
-      "mtime": "2026-08-06T00:51:14.662Z",
-      "indexed_at": "2026-08-06T00:51:14.662Z",
+      "bytes": 280,
+      "mtime": "2026-08-06T01:09:08.422Z",
+      "indexed_at": "2026-08-06T01:09:08.422Z",
       "synopsis_index_only": true
     },
     {
@@ -67604,9 +67611,9 @@
     {
       "path": "products/receipts/RECEIPT_TRUTH_VALIDATION.json",
       "synopsis": "Product receipt — RECEIPT TRUTH VALIDATION.",
-      "bytes": 0,
-      "mtime": "2026-08-06T00:51:14.662Z",
-      "indexed_at": "2026-08-06T00:51:14.662Z",
+      "bytes": 18682,
+      "mtime": "2026-08-06T01:09:08.422Z",
+      "indexed_at": "2026-08-06T01:09:08.422Z",
       "synopsis_index_only": true
     },
     {
@@ -67804,17 +67811,17 @@
     {
       "path": "products/receipts/TRUTH_ENFORCEMENT_AUDIT.json",
       "synopsis": "Product receipt — TRUTH ENFORCEMENT AUDIT.",
-      "bytes": 0,
-      "mtime": "2026-08-06T00:51:14.662Z",
-      "indexed_at": "2026-08-06T00:51:14.662Z",
+      "bytes": 701,
+      "mtime": "2026-08-06T01:09:08.422Z",
+      "indexed_at": "2026-08-06T01:09:08.422Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/TRUTH_LOCKDOWN_VERIFY.json",
       "synopsis": "Product receipt — TRUTH LOCKDOWN VERIFY.",
-      "bytes": 0,
-      "mtime": "2026-08-06T00:51:14.662Z",
-      "indexed_at": "2026-08-06T00:51:14.662Z",
+      "bytes": 1141,
+      "mtime": "2026-08-06T01:09:08.422Z",
+      "indexed_at": "2026-08-06T01:09:08.422Z",
       "synopsis_index_only": true
     },
     {
@@ -67844,9 +67851,9 @@
     {
       "path": "products/receipts/WISDOM_TRUTH_AUDIT.json",
       "synopsis": "Product receipt — WISDOM TRUTH AUDIT.",
-      "bytes": 0,
-      "mtime": "2026-08-06T00:51:14.662Z",
-      "indexed_at": "2026-08-06T00:51:14.662Z",
+      "bytes": 735,
+      "mtime": "2026-08-06T01:09:08.422Z",
+      "indexed_at": "2026-08-06T01:09:08.422Z",
       "synopsis_index_only": true
     },
     {

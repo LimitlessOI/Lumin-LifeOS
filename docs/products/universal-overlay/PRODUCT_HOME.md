@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/universal-overlay/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-08-02 — hand-authored `db/migrations/addAdaptiveLayoutColumn.sql` to unblock step 8; restored `routes/pageSummarization.js` and auto-register entry for step 10; merged factory-generated `services/sessionReplay.js` opt-in DB-backed session replay for step6; merged/aligned `routes/firefoxExtension.js` step10 route registration (GET `/extensions/firefox/mv2`) and `firefox MV2` substring; skipped stale `universal-overlay-step4` duplicate to clear HARD false-done. |
+| **Last Updated** | 2026-08-06 — Added `INTELLIGENT_OVERLAY_BLUEPRINT.md` capturing founder vision for perception-aware, conversation-driven, verbal AI director with versioned roadmap (V0–V5), and linked it under `## Perception, Conversation, and Verbal AI Director`. |
 
 ---
 ---
@@ -154,6 +154,20 @@ routes/lifeos-extension-routes.js     Mounted at /api/v1/extension
   POST /fill-form                     Given form schema + user → return fill map
   POST /chat                          Lumin chat with page context injected
 ```
+
+---
+
+## Perception, Conversation, and Verbal AI Director
+
+A separate founder vision capture expands the overlay from a context-aware form-filler into a perception-aware, conversation-driven, verbal AI director:
+
+- **Multi-modal perception** — voice, face, body, biometrics, and screen context fused into calibrated state estimates.
+- **Conversational Contracts + Interruption Decay** — the assistant tracks promises, finishes sequences, and handles voice interruption naturally.
+- **Evidence Fusion Engine** — combines independent evidence sources, learns per-context modality weights, and recognizes positive signals (curiosity, flow, relief) as well as negative ones.
+- **Verbal AI Director** — the user can say "do it" and the overlay will use an API when available or visually click/type/select when it is not, confirming before irreversible steps.
+- **Cross-product shared layer** — the same perception/conversation/action primitives serve LifeOS, SalesOS, TherapyOS, MediaOS, LeadershipOS, and EducationOS.
+
+See `docs/products/universal-overlay/INTELLIGENT_OVERLAY_BLUEPRINT.md` for the full versioned roadmap (V0 Observation → V1 Contracts/Voice → V2 Evidence Fusion → V3 Face/Body/Biometrics → V4 Verbal AI Director → V5 Cross-Domain Intelligence) and source map.
 
 ---
 
