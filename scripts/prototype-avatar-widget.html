@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>LifeOS Avatar Widget — V0.5 Prototype</title>
+  <style>
+    :root {
+      --avatar-size: 72px;
+      --avatar-expanded: 240px;
+      --primary: #4f46e5;
+      --bg: #ffffff;
+      --shadow: 0 8px 32px rgba(0,0,0,0.18);
+      --ring: rgba(79,70,229,0.35);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #e0e7ff 0%, #f3e8ff 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    .demo-area {
+      padding: 2rem;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    h1 { margin-top: 0; color: #312e81; }
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin: 1rem 0;
+    }
+    button {
+      border: 1px solid #c7d2fe;
+      background: #fff;
+      color: #4338ca;
+      border-radius: 999px;
+      padding: 0.4rem 0.9rem;
+      cursor: pointer;
+      font-weight: 600;
+      transition: transform .1s, box-shadow .1s;
+    }
+    button:hover { box-shadow: 0 2px 8px rgba(79,70,229,0.15); transform: translateY(-1px); }
+    button.active { background: #4f46e5; color: #fff; }
+
+    /* Avatar container */
+    #avatar {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: var(--avatar-size);
+      height: var(--avatar-size);
+      z-index: 10000;
+      cursor: grab;
+      user-select: none;
+      transition: width .35s cubic-bezier(.18,.89,.32,1.28), height .35s cubic-bezier(.18,.89,.32,1.28);
+    }
+    #avatar.expanded {
+      width: var(--avatar-expanded);
+      height: var(--avatar-expanded);
+    }
+    #avatar.dragging { cursor: grabbing; transition: none; }
+
+    /* Bubble / card */
+    .bubble {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: var(--bg);
+      box-shadow: var(--shadow);
+      border: 3px solid transparent;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-radius .35s, border-color .2s;
+    }
+    #avatar.expanded .bubble {
+      border-radius: 28px;
+    }
+    #avatar.listening .bubble { border-color: #22c55e; }
+    #avatar.thinking .bubble { border-color: #f59e0b; }
+    #avatar.speaking .bubble { border-color: #3b82f6; }
+    #avatar.impatient .bubble { border-color: #ef4444; }
+
+    /* Face SVG */
+    .face {
+      width: 70%;
+      height: 70%;
+      transition: transform .2s;
+    }
+    #avatar.expanded .face { width: 55%; height: 55%; }
+
+    /* Eyes */
+    .eye { transition: transform .15s; }
+    .eye-left { transform-origin: 38% 45%; }
+    .eye-right { transform-origin: 62% 45%; }
+
+    /* Mouth paths */
+    .mouth { fill: none; stroke: #312e81; stroke-width: 4; stroke-linecap: round; transition: d .25s; }
+    .mouth.neutral { d: path('M 38 66 Q 50 70 62 66'); }
+    .mouth.happy { d: path('M 34 62 Q 50 80 66 62'); }
+    .mouth.thoughtful { d: path('M 40 70 Q 50 65 60 70'); }
+    .mouth.concerned { d: path('M 38 72 Q 50 66 62 72'); }
+    .mouth.surprised { d: path('M 46 64 A 4 4 0 1 1 46 72 A 4 4 0 1 1 46 64'); fill: #312e81; }
+
+    .eyebrow { fill: none; stroke: #312e81; stroke-width: 3; stroke-linecap: round; transition: d .2s; }
+
+    /* Animations */
+    @keyframes bob { 0%,100%{transform: translateY(0)} 50%{transform: translateY(-3px)} }
+    @keyframes tap { 0%,100%{transform: rotate(0)} 25%{transform: rotate(-4deg)} 75%{transform: rotate(4deg)} }
+    @keyframes cartwheel { 0%{transform: rotate(0) scale(1)} 50%{transform: rotate(180deg) scale(1.1)} 100%{transform: rotate(360deg) scale(1)} }
+    @keyframes pulse-ring { 0%{box-shadow: 0 0 0 0 var(--ring)} 70%{box-shadow: 0 0 0 12px transparent} 100%{box-shadow: 0 0 0 0 transparent} }
+
+    .idle .face { animation: bob 3s ease-in-out infinite; }
+    .impatient .face { animation: tap .5s ease-in-out infinite; }
+    .cartwheel .face { animation: cartwheel .8s ease-in-out; }
+    .listening .bubble { animation: pulse-ring 1.5s ease-out infinite; }
+
+    /* Expanded content */
+    .expanded-content {
+      position: absolute;
+      bottom: 16px;
+      left: 16px;
+      right: 16px;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity .25s .1s, transform .25s .1s;
+      pointer-events: none;
+    }
+    #avatar.expanded .expanded-content {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+    .expanded-content .state-label {
+      font-size: 0.85rem;
+      color: #4b5563;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+    }
+    .expanded-content .channel-dots {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+    }
+    .dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: #d1d5db;
+    }
+    .dot.on { background: #22c55e; box-shadow: 0 0 6px #22c55e; }
+    .dot.cam.on { background: #8b5cf6; box-shadow: 0 0 6px #8b5cf6; }
+    .dot.screen.on { background: #f59e0b; box-shadow: 0 0 6px #f59e0b; }
+
+    .hint {
+      position: fixed;
+      bottom: 104px;
+      right: 24px;
+      background: rgba(255,255,255,0.9);
+      padding: 0.5rem 0.75rem;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      color: #4b5563;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      max-width: 220px;
+      opacity: 0.9;
+    }
+  </style>
+</head>
+<body>
+  <div class="demo-area">
+    <h1>Avatar Widget Prototype</h1>
+    <p>This is the LifeOS assistant persona as a draggable corner companion. It can shrink to a badge, expand to a face, show expressions, and signal which channels are active.</p>
+
+    <div class="controls">
+      <button data-state="idle">Idle</button>
+      <button data-state="listening">Listening</button>
+      <button data-state="thinking">Thinking</button>
+      <button data-state="speaking">Speaking</button>
+      <button data-state="happy">Happy</button>
+      <button data-state="surprised">Surprised</button>
+      <button data-state="concerned">Concerned</button>
+      <button data-state="thoughtful">Thoughtful</button>
+      <button data-state="impatient">Impatient</button>
+      <button data-state="cartwheel" id="cartwheelBtn">Cartwheel</button>
+      <button id="toggleSize">Expand / Collapse</button>
+    </div>
+
+    <p><strong>Try it:</strong> drag the badge, double-click to expand/collapse, or use the buttons to change its mood. The expression and border color are wired to a <code>state</code> object so the Tonality / Face engines can drive them later.</p>
+  </div>
+
+  <div class="hint" id="hint">Drag me. Double-click to expand.</div>
+
+  <div id="avatar" class="idle">
+    <div class="bubble">
+      <svg class="face" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="50" cy="50" r="46" fill="#eef2ff" stroke="#c7d2fe" stroke-width="2"/>
+        <g class="eyes">
+          <ellipse class="eye eye-left" cx="36" cy="42" rx="5" ry="6" fill="#312e81"/>
+          <ellipse class="eye eye-right" cx="64" cy="42" rx="5" ry="6" fill="#312e81"/>
+        </g>
+        <path class="mouth neutral" d="M 38 66 Q 50 70 62 66"/>
+        <path class="eyebrow" d="M 28 30 Q 36 26 44 30" opacity="0"/>
+        <path class="eyebrow" d="M 56 30 Q 64 26 72 30" opacity="0"/>
+      </svg>
+
+      <div class="expanded-content">
+        <div class="state-label" id="stateLabel">idle</div>
+        <div class="channel-dots" title="Mic • Camera • Screen">
+          <div class="dot mic" id="dotMic"></div>
+          <div class="dot cam" id="dotCam"></div>
+          <div class="dot screen" id="dotScreen"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const avatar = document.getElementById('avatar');
+    const stateLabel = document.getElementById('stateLabel');
+    const mouth = avatar.querySelector('.mouth');
+    const eyebrows = avatar.querySelectorAll('.eyebrow');
+    const eyes = [avatar.querySelector('.eye-left'), avatar.querySelector('.eye-right')];
+
+    // State object that the engines will eventually drive.
+    const state = {
+      expression: 'neutral',
+      mode: 'idle',          // idle | listening | thinking | speaking | impatient
+      expanded: false,
+      channels: { mic: false, cam: false, screen: false },
+    };
+
+    const expressions = {
+      neutral:    { mouth: 'neutral',    brow: '0,0',    eyeRy: '6' },
+      happy:      { mouth: 'happy',      brow: '-2,-2', eyeRy: '6' },
+      thoughtful: { mouth: 'thoughtful', brow: '2,2',   eyeRy: '5' },
+      concerned:  { mouth: 'concerned',  brow: '4,4',   eyeRy: '5' },
+      surprised:  { mouth: 'surprised',  brow: '-4,-4', eyeRy: '8' },
+    };
+
+    function setExpression(name) {
+      if (!expressions[name]) name = 'neutral';
+      state.expression = name;
+      const cfg = expressions[name];
+      mouth.setAttribute('class', 'mouth ' + cfg.mouth);
+      const [lb, rb] = cfg.brow.split(',').map(Number);
+      eyebrows[0].setAttribute('transform', `translate(0,${lb})`);
+      eyebrows[1].setAttribute('transform', `translate(0,${rb})`);
+      eyebrows[0].setAttribute('opacity', lb !== 0 || rb !== 0 ? 1 : 0);
+      eyebrows[1].setAttribute('opacity', lb !== 0 || rb !== 0 ? 1 : 0);
+      eyes.forEach(e => e.setAttribute('ry', cfg.eyeRy));
+    }
+
+    function setMode(mode) {
+      avatar.classList.remove('idle','listening','thinking','speaking','impatient','cartwheel');
+      avatar.classList.add(mode);
+      state.mode = mode;
+      updateChannels();
+    }
+
+    function updateChannels() {
+      document.getElementById('dotMic').classList.toggle('on', state.channels.mic || state.mode === 'listening' || state.mode === 'speaking');
+      document.getElementById('dotCam').classList.toggle('on', state.channels.cam);
+      document.getElementById('dotScreen').classList.toggle('on', state.channels.screen);
+      stateLabel.textContent = state.expanded ? state.mode : '';
+    }
+
+    function setAvatarState({ expression, mode, expanded, channels }) {
+      if (expression) setExpression(expression);
+      if (mode) setMode(mode);
+      if (expanded !== undefined) {
+        state.expanded = expanded;
+        avatar.classList.toggle('expanded', expanded);
+      }
+      if (channels) Object.assign(state.channels, channels);
+      updateChannels();
+    }
+
+    // Dragging
+    let dragging = false, startX, startY, startLeft, startTop;
+    const rect = () => avatar.getBoundingClientRect();
+
+    avatar.addEventListener('mousedown', (e) => {
+      dragging = true;
+      avatar.classList.add('dragging');
+      const r = rect();
+      startX = e.clientX; startY = e.clientY;
+      startLeft = r.left; startTop = r.top;
+      e.preventDefault();
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (!dragging) return;
+      const x = startLeft + (e.clientX - startX);
+      const y = startTop + (e.clientY - startY);
+      avatar.style.left = x + 'px';
+      avatar.style.top = y + 'px';
+      avatar.style.right = 'auto';
+      avatar.style.bottom = 'auto';
+    });
+
+    window.addEventListener('mouseup', () => { dragging = false; avatar.classList.remove('dragging'); });
+
+    // Double-click to expand/collapse
+    avatar.addEventListener('dblclick', () => {
+      setAvatarState({ expanded: !state.expanded });
+    });
+
+    // Control buttons
+    document.querySelectorAll('.controls button[data-state]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const s = btn.dataset.state;
+        if (s === 'cartwheel') {
+          setMode('cartwheel');
+          setTimeout(() => setMode('idle'), 900);
+        } else if (['idle','listening','thinking','speaking','impatient'].includes(s)) {
+          setMode(s);
+        } else {
+          setExpression(s);
+          if (!['listening','thinking','speaking','impatient'].includes(state.mode)) setMode('idle');
+        }
+        document.querySelectorAll('.controls button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+
+    document.getElementById('toggleSize').addEventListener('click', () => {
+      setAvatarState({ expanded: !state.expanded });
+    });
+
+    // Initial state
+    setAvatarState({ expression: 'neutral', mode: 'idle', expanded: false });
+
+    // Expose for console play
+    window.lifeosAvatar = { state, setAvatarState };
+  </script>
+</body>
+</html>

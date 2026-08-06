@@ -84,6 +84,17 @@ The order below is deliberate. Each version proves the next one's foundation and
 
 **Acceptance gate:** Real browser extension loads on a live site, reads a form, and the user can ask "what is this form asking for?" and get a correct answer.
 
+### V0.5 — AI Persona / Avatar
+**What it is:** The assistant has a visible, interactive presence on screen — not just a chat panel.
+
+- **Badge mode:** a small, draggable avatar face/bubble in a corner of the screen that shows the assistant's current state (listening, thinking, speaking, idle).
+- **Expanded mode:** the badge can grow into a full conversational figure or close-up face when the user engages, and shrink back when the user wants space.
+- **Facial expressions & micro-reactions:** the avatar displays neutral, happy, thoughtful, concerned, surprised, and focused expressions tied to the Human Perception / Tonality Engine state.
+- **Interactive:** the user can drag the badge, tap to expand/collapse, or gesture to dismiss.
+- **Consent indicator:** a subtle visual signal shows which channels are active (mic, camera, screen) so the user always knows when the assistant is listening or watching.
+
+**Acceptance gate:** A self-contained HTML prototype lets the user drag a badge, expand/collapse a face figure, and switch expressions; the expression changes are wired to a mocked `state` object so it can later be driven by the Tonality/Face engines.
+
 ### V1 — Conversational Contracts & Voice Presence
 **What it is:** The overlay becomes reliable at finishing what it starts and sounding natural in voice.
 

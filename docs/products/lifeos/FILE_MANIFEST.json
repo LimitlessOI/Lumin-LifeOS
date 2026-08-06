@@ -232,6 +232,7 @@
     "scripts/probe-lifeos-doctrine-live.mjs",
     "scripts/prototype-conversational-contracts-v1.mjs",
     "scripts/prototype-tonality-engine-v1.mjs",
+    "scripts/prototype-avatar-widget.html",
     "scripts/provision-alpha-auditor.mjs",
     "scripts/run-action-inbox-v1-acceptance.mjs",
     "scripts/run-capture-pipeline-v2-acceptance.mjs",
