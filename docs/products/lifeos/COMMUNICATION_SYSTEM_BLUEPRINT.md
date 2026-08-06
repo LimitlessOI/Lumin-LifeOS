@@ -18,6 +18,7 @@
 - `docs/products/lifeos/CRISIS_SAFETY_PROTOCOL_V1.md`
 - `docs/products/lifeos/DECISION_OUTCOME_LEDGER_V1.md`
 - `docs/BLUEPRINT_COMMUNICATION_FIRST_2026-08-02.md`
+- `docs/constitution/proposals/2026-08-04-COGNITIVE-INTERACTION-ARCHITECTURE-PROPOSAL.md` — NOT RATIFIED decision packet covering the same 2026-08-04+ brainstorming from a different angle (mode-selection philosophy, round-by-round disagreement record, citation-verified Knowledge Distribution candidates in §F, Identity-Safe Learning A15). Cross-linked so these two documents don't drift apart independently — this blueprint is the LifeOS-scoped build spec; that document is the ratification-track decision packet. **Re-added 2026-08-06** — this line and §6.1 below were both silently dropped by a later full-file rewrite of this document; re-applied rather than re-litigated since neither is a judgment call, both were already fact-checked and founder-instructed.
 
 ---
 
@@ -198,6 +199,23 @@ Modes are behaviors, not personalities. One primary mode and optional secondary 
 Allowed transitions: Presence → Reflection → Discovery → Expansion → Guidance → Execution; Observation → Guidance; Any mode → Safety; Execution → Clarification on failed command truth.
 
 Disallowed: Presence → heavy framework without signal; Safety → persuasion; Execution → coaching detour; Guidance → action without permission; any mode → manipulation.
+
+### 6.1 Identity-Safe Learning (the mechanism underneath Guidance and Discovery)
+
+**Re-applied 2026-08-06** — this section was added once already and was silently dropped by a subsequent full-file rewrite of this document from a parallel process; re-added here rather than re-litigated, since it's not a duplicate of anything above and was already fact-checked and instructed by the founder ("if it makes sense and you like it, just add it"). First captured as A15/A15-support in `docs/constitution/proposals/2026-08-04-COGNITIVE-INTERACTION-ARCHITECTURE-PROPOSAL.md` (round 6).
+
+**The claim:** people rarely change because they're shown they're wrong. They change because they feel understood enough to safely explore another possibility. Correction is not the goal — voluntary model updating is. The real sequence has no "Correction" step:
+
+**Observe → Understand → Demonstrate Understanding → Permission → Explore Alternatives → Evidence → Self-Discovery → Choice → Support**
+
+This is why Guidance's "least guidance that creates value" line works the way it does — jumping straight to a recommendation skips the steps that make the recommendation landable at all.
+
+**Three levels of support**, escalating only as needed:
+1. **Reflection** — "here's what we're observing." Data presented as observation, never judgment: "you're struggling" is out; "here's what the data shows" is in.
+2. **Exploration** — "what do you think might explain it?"
+3. **Evidence-Informed Suggestions** — "here are approaches associated with better outcomes." Evidence, not authority — never "the correct way."
+
+**Caution, not in the original source material:** optimizing every person's feedback toward one "correct" approach risks flattening genuine outlier strengths — the person who gets exceptional results with an unconventional method shouldn't be nudged toward average. Cross-reference §8.3's Growth and thinking dynamics (CLAIM → HYPOTHESIS → TESTED → VERIFIED) — this is the same evidence-level discipline applied to *how* a person is coached, not just *what* is known about them.
 
 ---
 
