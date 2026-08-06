@@ -1,6 +1,6 @@
 /**
- * SYNOPSIS: Voice Rail — server-side STT (OpenAI Whisper) with LifeOS vocabulary bias.
- * Voice Rail — server-side STT (OpenAI Whisper) with LifeOS vocabulary bias.
+ * SYNOPSIS: Voice Rail — server-side STT (OpenAI Whisper, with a Groq Whisper
+ * fallback when OpenAI is unavailable/out of credit) with LifeOS vocabulary bias.
  * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import {
@@ -10,6 +10,7 @@ import {
 } from '../config/voice-rail-stt-vocabulary.js';
 
 const WHISPER_MODEL = process.env.VOICE_RAIL_STT_MODEL?.trim() || 'whisper-1';
+const GROQ_WHISPER_MODEL = process.env.VOICE_RAIL_STT_GROQ_MODEL?.trim() || 'whisper-large-v3-turbo';
 const MIN_BYTES = 400;
 
 async function loadUserCorrections(pool, userId) {
@@ -74,7 +75,7 @@ function extensionForMime(mimeType) {
   return 'webm';
 }
 
-function buildMultipartBody(audioBuffer, mimeType, filename, prompt) {
+function buildMultipartBody(audioBuffer, mimeType, filename, prompt, model = WHISPER_MODEL) {
   const boundary = `----VRStt${Date.now().toString(16)}`;
   const nl = '\r\n';
 
@@ -85,7 +86,7 @@ function buildMultipartBody(audioBuffer, mimeType, filename, prompt) {
 
   let middle =
     `${nl}--${boundary}${nl}` +
-    `Content-Disposition: form-data; name="model"${nl}${nl}${WHISPER_MODEL}${nl}` +
+    `Content-Disposition: form-data; name="model"${nl}${nl}${model}${nl}` +
     `${nl}--${boundary}${nl}` +
     `Content-Disposition: form-data; name="language"${nl}${nl}en${nl}`;
 
@@ -109,24 +110,53 @@ function buildMultipartBody(audioBuffer, mimeType, filename, prompt) {
 
 export function voiceRailSttStatus() {
   const openai = Boolean(process.env.OPENAI_API_KEY?.trim());
+  const groq = Boolean(process.env.GROQ_API_KEY?.trim());
+  const engine = openai ? 'openai-whisper' : groq ? 'groq-whisper' : null;
   return {
-    available: openai,
-    engine: openai ? 'openai-whisper' : null,
-    model: openai ? WHISPER_MODEL : null,
+    available: openai || groq,
+    engine,
+    model: openai ? WHISPER_MODEL : groq ? GROQ_WHISPER_MODEL : null,
+    fallback_engine: openai && groq ? 'groq-whisper' : null,
     vocabulary: listVoiceRailSttVocabularyPublic(),
   };
 }
 
+async function callWhisperEndpoint(endpoint, apiKey, audioBuffer, mimeType, filename, prompt, model) {
+  const { body, boundary } = buildMultipartBody(audioBuffer, mimeType, filename, prompt, model);
+  const response = await fetch(endpoint, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      'Content-Type': `multipart/form-data; boundary=${boundary}`,
+    },
+    body,
+  });
+  if (!response.ok) {
+    const errText = await response.text().catch(() => '');
+    return { ok: false, status: response.status, detail: errText.slice(0, 300) };
+  }
+  const data = await response.json();
+  return { ok: true, text: String(data?.text || '').trim() };
+}
+
 /**
- * Transcribe an audio buffer via OpenAI Whisper.
+ * Transcribe an audio buffer via OpenAI Whisper, falling back to Groq's hosted
+ * Whisper when OpenAI is missing/unavailable/out of credit — GAP-FILL 2026-08-06:
+ * previously this hard-failed (whisper_http_429) with no fallback whenever OpenAI
+ * credit ran out, even though a funded, working Groq key was already present
+ * (confirmed live via /api/v1/lifeos/provider-key-health at the time of the fix:
+ * OpenAI status "needs_payment", Groq status "working"). voiceRailSttStatus()
+ * also previously reported `available: true` purely from OpenAI key *presence*,
+ * which was misleading once the key stopped actually working.
  * @param {Buffer} audioBuffer
  * @param {string} [mimeType]
  * @param {{ context?: string, filename?: string, userId?: number|string, pool?: object }} [opts]
  */
 export async function transcribeVoiceRailAudio(audioBuffer, mimeType = 'audio/webm', opts = {}) {
-  const apiKey = process.env.OPENAI_API_KEY?.trim();
-  if (!apiKey) {
-    return { ok: false, error: 'openai_key_missing', text: '' };
+  const openaiKey = process.env.OPENAI_API_KEY?.trim();
+  const groqKey = process.env.GROQ_API_KEY?.trim();
+  if (!openaiKey && !groqKey) {
+    return { ok: false, error: 'no_stt_provider_key', text: '' };
   }
   if (!audioBuffer || audioBuffer.length < MIN_BYTES) {
     return { ok: true, text: '', skipped: 'too_short' };
@@ -138,29 +168,51 @@ export async function transcribeVoiceRailAudio(audioBuffer, mimeType = 'audio/we
   const ext = extensionForMime(mimeType);
   const filename = opts.filename || `voice-rail.${ext}`;
   const prompt = buildWhisperPrompt(opts.context || '', { extraTerms, correctionHints });
-  const { body, boundary } = buildMultipartBody(audioBuffer, mimeType, filename, prompt);
 
-  const response = await fetch('https://api.openai.com/v1/audio/transcriptions', {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      'Content-Type': `multipart/form-data; boundary=${boundary}`,
-    },
-    body,
-  });
+  let engineUsed = null;
+  let result = null;
+  let openaiFailure = null;
 
-  if (!response.ok) {
-    const errText = await response.text().catch(() => '');
-    return {
-      ok: false,
-      error: `whisper_http_${response.status}`,
-      detail: errText.slice(0, 300),
-      text: '',
-    };
+  if (openaiKey) {
+    const r = await callWhisperEndpoint(
+      'https://api.openai.com/v1/audio/transcriptions',
+      openaiKey, audioBuffer, mimeType, filename, prompt, WHISPER_MODEL,
+    );
+    if (r.ok) {
+      engineUsed = 'openai-whisper';
+      result = r;
+    } else {
+      openaiFailure = { error: `whisper_http_${r.status}`, detail: r.detail };
+    }
   }
 
-  const data = await response.json();
-  const raw = String(data?.text || '').trim();
+  if (!result && groqKey) {
+    // Groq's audio/transcriptions endpoint is OpenAI-compatible.
+    const r = await callWhisperEndpoint(
+      'https://api.groq.com/openai/v1/audio/transcriptions',
+      groqKey, audioBuffer, mimeType, filename, prompt, GROQ_WHISPER_MODEL,
+    );
+    if (r.ok) {
+      engineUsed = 'groq-whisper';
+      result = r;
+    } else if (!openaiFailure) {
+      return { ok: false, error: `whisper_http_${r.status}`, detail: r.detail, text: '' };
+    }
+  }
+
+  if (!result) {
+    // OpenAI failed and there was no Groq key (or Groq also failed above and returned already).
+    return { ok: false, ...openaiFailure, text: '' };
+  }
+
+  const raw = result.text;
   const text = applyVoiceRailVocabulary(raw, userCorrections);
-  return { ok: true, text, raw_text: raw !== text ? raw : undefined, corrections_used: userCorrections.length };
+  return {
+    ok: true,
+    text,
+    raw_text: raw !== text ? raw : undefined,
+    corrections_used: userCorrections.length,
+    engine: engineUsed,
+    fallback_used: engineUsed === 'groq-whisper' && Boolean(openaiFailure),
+  };
 }

@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-06T17:26:49.830Z",
+  "generated_at": "2026-08-06T17:48:08.379Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13040,
   "files": [
@@ -21678,9 +21678,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3943895,
-      "mtime": "2026-08-06T05:30:23.150Z",
-      "indexed_at": "2026-08-06T05:31:12.661Z"
+      "bytes": 3949722,
+      "mtime": "2026-08-06T17:47:13.860Z",
+      "indexed_at": "2026-08-06T17:47:44.330Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -43101,10 +43101,10 @@
     },
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
-      "synopsis": "Canonical product home — LifeOS",
-      "bytes": 749104,
-      "mtime": "2026-08-06T17:26:30.181Z",
-      "indexed_at": "2026-08-06T17:26:49.830Z"
+      "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
+      "bytes": 752704,
+      "mtime": "2026-08-06T17:46:51.424Z",
+      "indexed_at": "2026-08-06T17:47:13.777Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -99435,10 +99435,10 @@
     },
     {
       "path": "services/voice-rail-stt.js",
-      "synopsis": "Voice Rail — server-side STT (OpenAI Whisper) with LifeOS vocabulary bias.",
-      "bytes": 5560,
-      "mtime": "2026-07-28T17:47:22.578Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "synopsis": "Voice Rail — server-side STT (OpenAI Whisper, with a Groq Whisper",
+      "bytes": 7796,
+      "mtime": "2026-08-06T17:44:56.421Z",
+      "indexed_at": "2026-08-06T17:47:13.777Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
