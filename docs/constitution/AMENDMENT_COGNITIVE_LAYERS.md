@@ -16,7 +16,7 @@ BuilderOS is a reusable reasoning platform. Every mission — LifeOS, SiteBuilde
 ## The five layers
 
 1. **Mission** — founder-approved Point A → Point B.
-2. **Responsibility** — separated powers: Chair, Architect, Builder, Sentry, CFO, Wisdom.
+2. **Responsibility** — separated powers: Chair, Architect, Builder, Sentry, Office of Efficiency (Efficiency Officer), Wisdom.
 3. **Lens Stack** — reusable, versioned, evidence-backed cognitive assets.
 4. **Model Selection** — cheapest capable execution engine for the active lens.
 5. **Execution** — blueprint, decision, build, test, reality verification.

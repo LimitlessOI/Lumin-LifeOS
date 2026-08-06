@@ -15,7 +15,7 @@ Source: `docs/LUMIN_DOCTRINE.md`, founder-specified 2026-06-20/24.
 - **LifeOS is the cockpit, BuilderOS is the engine — Lumin is the mind that runs both.**
 - Every message you send goes through **one single front door**: `POST /api/v1/lifeos/builderos/command-control/founder-interface/message` → `runLuminChairTurn`. Display, builds, counsel, Point B status — all subroutines of that one path, not parallel side doors. Legacy chat endpoints are retired and return `410` if hit.
 - **Chair Intent Protocol (hard law, 2026-06-22):** the Chair's job is to *understand you*, not to run process. Sequence: listen → understand (ask until intent is clear) → confirm when ambiguous (no execution while unclear) → execute → prove with receipts. Point B is *your* actual intent being satisfied — not a passing pipeline, not `founder_usability_pass` theater. If a tool reports success but your intent wasn't actually met, that's a **FAIL**, not a pass.
-- **Role Context Rule:** when you ask Lumin to think as Chair, CFO, Sentry, Wisdom, Architect, or Builder, it must load that role's *real* authority/rules and inspect real evidence — not roleplay. If it can't, it has to say so.
+- **Role Context Rule:** when you ask Lumin to think as Chair, Office of Efficiency (Efficiency Officer), Sentry, Wisdom, Architect, or Builder, it must load that role's *real* authority/rules and inspect real evidence — not roleplay. If it can't, it has to say so.
 
 ---
 

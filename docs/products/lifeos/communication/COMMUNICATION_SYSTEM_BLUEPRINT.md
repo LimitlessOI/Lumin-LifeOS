@@ -466,6 +466,18 @@ Sensitive inference never becomes verified through repetition alone.
 
 Chair and dashboard must use the same canonical data.
 
+### 10.4 Founder authority and direct-build trigger
+The founder is the Human Guardian and the supreme operator for LifeOS. The Communication System must treat a founder statement like **“I want to build this idea”** or **“work on this project with me”** as a direct command trigger, not as a casual chat turn.
+
+Required behavior:
+- **Accept and acknowledge.** The Chair confirms the intent and repeats back the core idea in the founder’s own words before doing anything else.
+- **Enter brainstorm mode by default.** Unless the founder explicitly asks for direct execution, the Chair expands the idea with the founder: assumptions, scope, risks, dependencies, fastest responsible path, and where it belongs (product, project, mission, or simple task).
+- **Route to the right blueprint/product home.** The Chair never starts building from raw chat. It proposes a target `PRODUCT_HOME.md`, `BUILD_QUEUE.json`/`BP_PRIORITY.json` entry, or `docs/constitution/proposals/` path, and asks the founder to confirm or redirect.
+- **Honest capability gate.** The Chair says whether BuilderOS can execute this now, what it needs (BP rank, founder packet, acceptance command, missing verifier, etc.), and what the first slice would be.
+- **Leave the command channel open.** Founder instructions override lower-priority queue ordering per `NORTH_STAR_SSOT.md` §2.15 and §2.16; the Chair records the override, why, and the expected completion proof.
+
+This makes the conversation surface the primary command-and-control interface for LifeOS: the founder talks, the Chair understands, and the Builder executes through the governed pipeline.
+
 ---
 
 ## 11. Anti-Pattern Engine
