@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-06T08:26:04.243Z",
+  "generated_at": "2026-08-06T08:26:24.415Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13040,
   "files": [
@@ -39643,9 +39643,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 154753,
-      "mtime": "2026-08-06T08:21:53.633Z",
-      "indexed_at": "2026-08-06T08:23:02.648Z"
+      "bytes": 154917,
+      "mtime": "2026-08-06T08:26:22.201Z",
+      "indexed_at": "2026-08-06T08:26:24.415Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -43102,9 +43102,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 745742,
-      "mtime": "2026-08-06T08:21:50.149Z",
-      "indexed_at": "2026-08-06T08:23:02.648Z"
+      "bytes": 745837,
+      "mtime": "2026-08-06T08:26:18.533Z",
+      "indexed_at": "2026-08-06T08:26:24.415Z"
     },
     {
       "path": "docs/products/LIFERE.md",
