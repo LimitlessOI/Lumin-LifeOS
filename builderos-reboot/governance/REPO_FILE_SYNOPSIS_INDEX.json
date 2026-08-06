@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-06T22:41:15.350Z",
+  "generated_at": "2026-08-06T22:49:05.019Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13044,
   "files": [
@@ -29264,32 +29264,32 @@
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-SALESOS-THERAPIST-MEETING-KIT-V1-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
-      "bytes": 14425,
-      "mtime": "2026-08-06T22:38:10.045Z",
-      "indexed_at": "2026-08-06T22:41:15.350Z",
+      "bytes": 14882,
+      "mtime": "2026-08-06T22:46:56.527Z",
+      "indexed_at": "2026-08-06T22:49:05.019Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-SALESOS-THERAPIST-MEETING-KIT-V1-0001/FOUNDER_PACKET.md",
       "synopsis": "Founder Packet — SalesOS Therapist Meeting Kit Phase 1",
-      "bytes": 8576,
-      "mtime": "2026-08-06T22:40:00.013Z",
-      "indexed_at": "2026-08-06T22:41:15.350Z"
+      "bytes": 9416,
+      "mtime": "2026-08-06T22:48:08.362Z",
+      "indexed_at": "2026-08-06T22:49:05.019Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-SALESOS-THERAPIST-MEETING-KIT-V1-0001/KNOWN_ASSUMPTIONS.json",
       "synopsis": "BuilderOS artifact — KNOWN ASSUMPTIONS.",
-      "bytes": 2764,
-      "mtime": "2026-08-06T22:38:33.884Z",
-      "indexed_at": "2026-08-06T22:41:15.350Z",
+      "bytes": 2978,
+      "mtime": "2026-08-06T22:47:29.950Z",
+      "indexed_at": "2026-08-06T22:49:05.019Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-SALESOS-THERAPIST-MEETING-KIT-V1-0001/KNOWN_RISKS.json",
       "synopsis": "BuilderOS artifact — KNOWN RISKS.",
-      "bytes": 3376,
-      "mtime": "2026-08-06T22:38:54.057Z",
-      "indexed_at": "2026-08-06T22:41:15.350Z",
+      "bytes": 3750,
+      "mtime": "2026-08-06T22:47:16.284Z",
+      "indexed_at": "2026-08-06T22:49:05.019Z",
       "synopsis_index_only": true
     },
     {
@@ -43672,9 +43672,9 @@
     {
       "path": "docs/products/salesos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — SalesOS",
-      "bytes": 16179,
-      "mtime": "2026-08-06T22:40:55.905Z",
-      "indexed_at": "2026-08-06T22:41:15.350Z"
+      "bytes": 18312,
+      "mtime": "2026-08-06T22:48:43.611Z",
+      "indexed_at": "2026-08-06T22:49:05.019Z"
     },
     {
       "path": "docs/products/salesos/SALESOS_ZERO_STATE_AND_BP.md",

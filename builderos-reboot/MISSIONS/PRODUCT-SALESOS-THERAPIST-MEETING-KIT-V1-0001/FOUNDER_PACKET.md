@@ -57,14 +57,16 @@ This packet is only for Phase 1 (items 5–10 of the priority list + CRM + manua
 
 **Why this exists:** Phase 1 below assumes Adam already has a therapist practice URL to paste in. He doesn't — he asked directly for "every single one" of the Nevada mental-health practices to be found, not researched one at a time. That's a genuinely different capability (finding candidates) from Phase 1 (researching a known candidate), and it didn't exist anywhere in this blueprint until now.
 
-**What this phase is, and isn't:** Adam separately specified a full multi-agent architecture (Territory Planner, ~10 source connectors, extraction/resolution/scoring/QC bots, an evidence ledger, a model router, cost governance) for exhaustive statewide discovery. That full system is **not** what's being added to this mission — building all of it before proving the pattern works would repeat the exact "monolithic scope before validation" mistake his own spec explicitly warns against. This phase adds the **smallest real slice**: one territory, two source connectors (Psychology Today + Yelp), real evidence-ledger discipline, and a pilot acceptance test — proving the pattern before any expansion. Full statewide, all-source discovery is explicitly the *next* mission, gated on this pilot's real cost-per-record and accuracy numbers, not assumed in advance.
+**What this phase is, and isn't:** Adam separately specified a full multi-agent architecture (Territory Planner, ~10 source connectors, extraction/resolution/scoring/QC bots, an evidence ledger, a model router, cost governance) for exhaustive statewide discovery. That full system is **not** what's being added to this mission — building all of it before proving the pattern works would repeat the exact "monolithic scope before validation" mistake his own spec explicitly warns against. This phase adds the **smallest real slice**: one territory, one general web-search connector (Adam's own simplification, 2026-08-06: "I don't care where we get the data from... just Googling"), real evidence-ledger discipline, and a pilot acceptance test — proving the pattern before any expansion. Named-directory connectors (Psychology Today, Yelp, licensing boards) are an optional future enhancement, not a pilot requirement. Full statewide, all-source discovery is explicitly the *next* mission, gated on this pilot's real cost-per-record and accuracy numbers, not assumed in advance.
+
+**A real, current dependency, not a hypothetical one:** the general web-search connector reuses `services/web-search-service.js`, which chains Brave → Perplexity → AI-knowledge-only fallback. Both Brave and Perplexity keys are unfunded in production right now. Until at least one is funded (the $5/month Brave option already discussed separately), this connector must fail closed and report "no verified search available" — it must never silently produce candidates from the AI's own training knowledge, since a fabricated practice on a real call list is worse than an empty one.
 
 **How it connects to Phase 1:** the discovery pilot's output — a real, source-verified list of Nevada therapy practices — is exactly the input Phase 1's `SALESOS-P1-002` (paste-a-URL research pipeline) already expects. Discovery feeds Phase 1; it doesn't replace or duplicate it.
 
 ## SEQUENCE
 
 1. Phase 0 — Lock schema strategy, consent policy, lead magnet, CRM ownership, and data retention.
-2. **Discovery pilot** — lock scope decisions, build the evidence ledger, one Territory Planner, two source connectors (Psychology Today, Yelp), entity resolution, and a pilot acceptance test against one Nevada territory. See `SALESOS-PDISC-001` through `-007` in `BLUEPRINT.json`.
+2. **Discovery pilot** — lock scope decisions, build the evidence ledger, one Territory Planner, one general web-search connector, entity resolution, and a pilot acceptance test against one Nevada territory. See `SALESOS-PDISC-001` through `-007` in `BLUEPRINT.json`.
 3. DB migration — `salesos_practice_profiles`, `salesos_meeting_kits`, `salesos_call_sessions` tables.
 4. Practice research service — orchestrate `web-search-service` + `site-builder-opportunity-scorer` + AI synthesis for therapist-specific fields.
 5. Meeting kit service/route — return structured one-screen dossier.
@@ -84,7 +86,7 @@ This packet is only for Phase 1 (items 5–10 of the priority list + CRM + manua
 ## PHASE ROADMAP
 
 - Phase 0: decisions and schema (this mission).
-- Discovery pilot: one territory, two source connectors, evidence ledger, entity resolution (this mission — added 2026-08-06).
+- Discovery pilot: one territory, one general web-search connector, evidence ledger, entity resolution (this mission — added 2026-08-06, simplified to a single source same day).
 - Phase 1: research packet, meeting kit, founder brief, CRM, call script, follow-up templates (this mission).
 - Phase 2: call outcome logging, commitment ledger, meeting recap, referral engine.
 - Phase 3: consent-aware recording + transcription, Evidence Layer.
