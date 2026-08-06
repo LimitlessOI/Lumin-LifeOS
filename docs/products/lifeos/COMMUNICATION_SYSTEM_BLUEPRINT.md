@@ -7,7 +7,7 @@
 **Source:** `TALOA_COGNITIVE_INTERACTION_SYSTEM_COMPLETE_BLUEPRINT_2026-08-04.md` (founder attachment)  
 **Scope:** LifeOS client conversations, therapist-supported reflection, therapist dashboard preparation, guided product support. Excludes BuilderOS governance, Solomon/Chair separation machinery, and cross-product factory concerns unless they touch LifeOS surfaces.  
 **Canonical SSOT:** `docs/products/lifeos/PRODUCT_HOME.md`  
-**Last Updated:** 2026-08-05
+**Last Updated:** 2026-08-06
 
 **Related canonical files**
 - `docs/constitution/LUMIN_COMMUNICATION_DNA.md` — constitutional communication law
@@ -65,6 +65,12 @@ LifeOS communicates in a way that produces the best next moment and improves the
 | Outcome and Learning System with evidence hierarchy and prediction lifecycle | Partial — `chair-decision-ledger.js` has prediction/outcome/calibration; not generalized to all interactions | Generalize or keep scoped |
 | Golden conversation + adversarial test inventory | Partial — `tests/` have some; not consolidated | Add to `tests/lumin-*.test.js` |
 | Ten-phase build program scoped to LifeOS | Not explicit | Use as planning input |
+| Human Perception / Evidence Fusion / Tonality Engine | Not explicit | New §20.1–20.3; shared cross-product layer |
+| Cognitive Dynamics (ambiguity, agency, trust, momentum) | Partial — §5.4 has evidence-informed signals | New §20.4 as first-class state estimates |
+| Presence, interruption decay, conversational contracts | Not explicit | New §20.5; voice channel critical |
+| Authenticity Engine (repeated behavioral structures) | Partial — Anti-Pattern Engine heading | New §20.6 expansion |
+| Conversation Torture Suite | Not explicit | New §20.7 testing layer |
+| Positive-signal recognition | Not explicit | New §20.8 |
 
 ### 2.1 Attachments reviewed and found not to add LifeOS-communication-specific ideas
 - `BuilderOS review and rating` — Human Transformation / BuilderOS themes; no new client-communication concepts for LifeOS beyond what is already in the TALOA blueprint.
@@ -168,6 +174,9 @@ Needs remain hypotheses grounded in current evidence, explicit preferences, and 
 ambiguity, urgency, emotional intensity, cognitive load, readiness for direction, agency, momentum, openness to challenge, explicitness, user preference, conversational repetition, prior correction, safety risk, professional scope.
 
 Signals inform modes; they do not become a speculative psychological profile.
+
+### 5.5 Multi-modal evidence and confidence by modality
+Evidence quality depends on channel and context. During a phone call tonality may outweigh facial data; during video, expressions and eye contact dominate; during text, history, writing style, and rhythm dominate. The system learns weights from outcome feedback and recalibrates rather than hard-coding. Positive states (curiosity, excitement, relief, pride, confidence, engagement, flow, inspiration, amusement) are detected and treated as moments to reinforce momentum, not just risk signals.
 
 ---
 
@@ -636,6 +645,111 @@ For the communication system, this means every mode, composer plan, and calibrat
 This blueprint is therefore a **product-level composition** of the existing communication, twin, and calibration architecture, not a new parallel engine.
 
 ---
+
+## 20. Voice, perception, and shared-engine additions (from 2026-08-05 founder conversations)
+
+### 20.1 Human Perception Engine
+The system does not rely on the transcript alone. It continuously fuses evidence from multiple independent channels:
+
+- **Language**: word choice, sentence structure, vocabulary, explicit statements, questions, contradictions
+- **Tonality**: pace, volume, pitch, inflection, energy, hesitation, confidence, conviction, stress, excitement, sarcasm, frustration, curiosity, warmth, empathy, uncertainty, emotional transitions over time
+- **Conversational rhythm**: response latency, interruptions, turn-taking, silence, pause duration, speaking ratio, topic changes, end-of-turn detection
+- **Facial analysis**: eye contact, head movement, facial expressions, smile intensity, brow and mouth movement, surprise, confusion, engagement, fatigue
+- **Body language**: posture, leaning, hand gestures, fidgeting, orientation, attention, general energy
+- **Behavioral context**: conversation history, Digital Twin, preferences, prior interactions, current task, time of day, environment, known patterns
+- **Outcome feedback**: did the intervention help? was the prediction correct? did the person correct us? did trust increase? did the conversation achieve its goal?
+
+Each channel produces a calibrated confidence score. The system learns which channels are most predictive in which situations and recalibrates from real outcomes.
+
+### 20.2 Evidence Fusion Engine
+The Evidence Fusion Engine combines independent sources into a single state estimate with calibrated confidence. It asks:
+
+> Given every piece of evidence we currently have, what is the most likely explanation, how confident are we, and how should that change our communication?
+
+Rules:
+- No single modality is treated as final truth.
+- Confidence by modality is learned, not hard-coded.
+- New sensors are added as additional inputs; the core engine architecture stays stable.
+- Inferences are consumed by the Composer and Safety gate, not presented as facts about the user.
+
+### 20.3 Tonality Engine
+Tonality is a major subsystem of Human Perception, not a sentiment checkbox. It analyzes the acoustic and rhythmic features of speech and is shared as a cross-product layer for LifeOS, SalesOS, TherapyOS, MediaOS, LeadershipOS, and EducationOS.
+
+### 20.4 Cognitive Dynamics
+The runtime continuously estimates the current conversational state across dimensions such as ambiguity, certainty, agency, openness, cognitive load, readiness, emotional intensity, momentum, and trust. These are not personality traits; they are momentary states that the Composer uses to select modes and calibrate interventions.
+
+### 20.5 Presence, interruption, and conversational contracts
+Voice has a different latency budget than text. A Presence Layer runs continuously: listening, nodding, subtle acknowledgements, breathing, “thinking” sounds, streaming partial thoughts, and trailing off naturally when interrupted.
+
+**Interruption Decay Model:**
+- Detect user speech beginning
+- Finish the current syllable or word
+- Fade volume over 100–300ms
+- End with a conversational trailing phrase if appropriate
+- Immediately switch to listening
+
+**Conversational Contracts:** whenever the AI makes a promise (“I’ll read all 25,” “I’ll summarize this article”), the runtime records:
+- what was promised
+- what counts as completion
+- whether the promise is fulfilled
+- whether the user interrupted or changed the request
+
+The response generator then continues until the completion condition or a user interruption is met.
+
+### 20.6 Authenticity Engine (expanded anti-pattern)
+Detect repeated behavioral structures, not just repeated phrases:
+- validation → reframe → framework → conclusion
+- repeated paragraph rhythm, emotional cadence, question cadence
+- repeated “this is the biggest thing…” framing
+- repeated rhetorical escalation
+
+The existing Anti-Pattern Engine (§11) becomes the detection surface; the Composer becomes the adjustment surface. Both remain in shadow mode until evidence justifies a safe change.
+
+### 20.7 Conversation Torture Suite
+A test inventory of realistic conversational stress scenarios:
+- interrupt mid-sentence
+- pause unexpectedly
+- change topics
+- reference something from two minutes ago
+- make the AI commit to a long sequence
+- abrupt silence / dropped audio
+- topic drift
+- false stop / fake completion
+- micro-expression or tone mismatch with words
+
+Acceptance criteria: natural interruption decay, contract completion, presence continuity, voice latency below human-perceptible failure, and graceful recovery from truncation.
+
+### 20.8 Positive-signal recognition
+Positive states are detected as opportunities to reinforce momentum: curiosity, excitement, relief, pride, confidence, engagement, flow, inspiration, amusement. The system leans in at these moments rather than treating only negative signals as intervention triggers.
+
+### 20.9 Cross-product engine sharing
+The Human Perception Engine, Tonality Engine, and Evidence Fusion Engine are shared infrastructure consumed by:
+
+- **LifeOS** — natural, present conversation
+- **SalesOS** — confidence, buying signals, hesitation, engagement, pacing
+- **TherapyOS** — emotional shifts, progress, readiness
+- **MediaOS** — believable speech and acting
+- **LeadershipOS** — meeting facilitation, coaching, presentations
+- **EducationOS** — explanation pacing, confusion/engagement detection
+
+Each OS consumes calibrated estimates rather than interpreting raw signals independently.
+
+### 20.10 Build-program fit
+
+| New capability | Fits in |
+|---|---|
+| Evidence Fusion and modality-confidence learning | Phase 2 Interaction Decision Core (foundation for all later selection) |
+| Cognitive Dynamics | Phase 2–3 (mode selection and Composer calibration) |
+| Human Perception / Tonality | Phase 2–3 research; full integration after sensors and consent are proven |
+| Presence, interruption, contracts | Phase 4 Client Experience (voice channel) |
+| Authenticity Engine | Phase 7 Anti-Pattern and Presence Quality |
+| Conversation Torture Suite | Phase 14 testing layer (extends §14 Golden/Adversarial tests) |
+
+### 20.11 Open questions added
+1. Which modalities can we realistically collect in Phase 2? (voice only? video? wearables?)
+2. Should Evidence Fusion be a shared service or a pattern each OS consumes independently?
+3. What is the consent boundary for tonal, video, and biometric evidence in each product surface?
+4. Where is the line between “positive-signal recognition” and “positive manipulation”? How is reinforcement governed?
 
 ## 19. Open questions for the founder
 
