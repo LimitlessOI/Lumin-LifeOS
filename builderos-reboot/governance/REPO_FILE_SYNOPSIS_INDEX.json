@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-06T07:21:24.269Z",
+  "generated_at": "2026-08-06T08:22:28.785Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13026,
+  "file_count": 13043,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -39642,10 +39642,10 @@
     },
     {
       "path": "docs/CONTINUITY_LOG.md",
-      "synopsis": "Documentation — CONTINUITY LOG.",
-      "bytes": 0,
-      "mtime": "2026-08-06T07:21:24.269Z",
-      "indexed_at": "2026-08-06T07:21:24.269Z"
+      "synopsis": "Continuity Log — chronological session handoff and key decisions.",
+      "bytes": 154753,
+      "mtime": "2026-08-06T08:22:28.785Z",
+      "indexed_at": "2026-08-06T08:22:28.785Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -43009,10 +43009,10 @@
     },
     {
       "path": "docs/products/lifeos/communication/COMMUNICATION_SYSTEM_BLUEPRINT.md",
-      "synopsis": "Documentation — COMMUNICATION SYSTEM BLUEPRINT.",
-      "bytes": 0,
-      "mtime": "2026-08-06T07:21:24.269Z",
-      "indexed_at": "2026-08-06T07:21:24.269Z"
+      "synopsis": "LifeOS Communication System — final consolidated blueprint. Source: every founder/model conversation and attachment about communication, perception, conversation, and the LifeOS cognitive interaction system.",
+      "bytes": 64383,
+      "mtime": "2026-08-06T08:22:28.785Z",
+      "indexed_at": "2026-08-06T08:22:28.785Z"
     },
     {
       "path": "docs/products/lifeos/communication/COMMUNICATION_SYSTEM_FOUNDER_REFERENCE.md",
@@ -43108,10 +43108,10 @@
     },
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
-      "synopsis": "Documentation — PRODUCT HOME.",
-      "bytes": 0,
-      "mtime": "2026-08-06T07:21:24.269Z",
-      "indexed_at": "2026-08-06T07:21:24.269Z"
+      "synopsis": "Canonical product home — LifeOS",
+      "bytes": 745742,
+      "mtime": "2026-08-06T08:22:28.785Z",
+      "indexed_at": "2026-08-06T08:22:28.785Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -66883,6 +66883,54 @@
       "synopsis_index_only": true
     },
     {
+      "path": "products/receipts/COMMUNICATION_SYSTEM_V1_1_TONALITY_TEST_TRANSCRIPT.json",
+      "synopsis": "Product receipt — COMMUNICATION SYSTEM V1 1 TONALITY TEST TRANSCRIPT.",
+      "bytes": 7604,
+      "mtime": "2026-08-06T08:22:28.785Z",
+      "indexed_at": "2026-08-06T08:22:28.785Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/COMMUNICATION_SYSTEM_V1_TEST_TRANSCRIPT.json",
+      "synopsis": "Product receipt — COMMUNICATION SYSTEM V1 TEST TRANSCRIPT.",
+      "bytes": 26145,
+      "mtime": "2026-08-06T08:22:28.785Z",
+      "indexed_at": "2026-08-06T08:22:28.785Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/COMMUNICATION_SYSTEM_V2_TEST_TRANSCRIPT.json",
+      "synopsis": "Product receipt — COMMUNICATION SYSTEM V2 TEST TRANSCRIPT.",
+      "bytes": 8187,
+      "mtime": "2026-08-06T08:22:28.785Z",
+      "indexed_at": "2026-08-06T08:22:28.785Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/COMMUNICATION_SYSTEM_V3_TEST_TRANSCRIPT.json",
+      "synopsis": "Product receipt — COMMUNICATION SYSTEM V3 TEST TRANSCRIPT.",
+      "bytes": 8822,
+      "mtime": "2026-08-06T08:22:28.785Z",
+      "indexed_at": "2026-08-06T08:22:28.785Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/COMMUNICATION_SYSTEM_V4_TEST_TRANSCRIPT.json",
+      "synopsis": "Product receipt — COMMUNICATION SYSTEM V4 TEST TRANSCRIPT.",
+      "bytes": 4533,
+      "mtime": "2026-08-06T08:22:28.785Z",
+      "indexed_at": "2026-08-06T08:22:28.785Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/COMMUNICATION_SYSTEM_V5_TEST_TRANSCRIPT.json",
+      "synopsis": "Product receipt — COMMUNICATION SYSTEM V5 TEST TRANSCRIPT.",
+      "bytes": 3738,
+      "mtime": "2026-08-06T08:22:28.785Z",
+      "indexed_at": "2026-08-06T08:22:28.785Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "products/receipts/COMMUNICATION_UX_WALKTHROUGH.json",
       "synopsis": "Product receipt — COMMUNICATION UX WALKTHROUGH.",
       "bytes": 1349,
@@ -76324,17 +76372,63 @@
     },
     {
       "path": "scripts/prototype-conversational-contracts-v1.mjs",
-      "synopsis": "Script — Prototype Conversational Contracts V1.",
-      "bytes": 0,
-      "mtime": "2026-08-06T06:57:00.965Z",
-      "indexed_at": "2026-08-06T06:57:00.965Z"
+      "synopsis": "Prototype V1 — Conversational Contracts + Interruption Decay.",
+      "bytes": 14145,
+      "mtime": "2026-08-06T08:22:28.785Z",
+      "indexed_at": "2026-08-06T08:22:28.785Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/prototype-cross-domain-v5.mjs",
+      "synopsis": "Prototype V5 — Cross-Domain Personal Intelligence.",
+      "bytes": 7948,
+      "mtime": "2026-08-06T08:22:28.785Z",
+      "indexed_at": "2026-08-06T08:22:28.785Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/prototype-evidence-fusion-v2.mjs",
+      "synopsis": "Prototype V2 — Evidence Fusion & Cognitive Dynamics.",
+      "bytes": 8705,
+      "mtime": "2026-08-06T08:22:28.785Z",
+      "indexed_at": "2026-08-06T08:22:28.785Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/prototype-overlay-action-v4.mjs",
+      "synopsis": "Prototype V4 — Verbal AI Director & Autonomous Overlay Action.",
+      "bytes": 7492,
+      "mtime": "2026-08-06T08:22:28.785Z",
+      "indexed_at": "2026-08-06T08:22:28.785Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/prototype-perception-v3.mjs",
+      "synopsis": "Prototype V3 — Perception layer (face, body, biometric).",
+      "bytes": 5158,
+      "mtime": "2026-08-06T08:22:28.785Z",
+      "indexed_at": "2026-08-06T08:22:28.785Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "scripts/prototype-tonality-engine-v1.mjs",
-      "synopsis": "Script — Prototype Tonality Engine V1.",
-      "bytes": 0,
-      "mtime": "2026-08-06T07:04:51.538Z",
-      "indexed_at": "2026-08-06T07:04:51.538Z"
+      "synopsis": "Prototype V1 — Tonality Engine.",
+      "bytes": 16810,
+      "mtime": "2026-08-06T08:22:28.785Z",
+      "indexed_at": "2026-08-06T08:22:28.785Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "scripts/provision-alpha-auditor.mjs",
@@ -77641,6 +77735,43 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "scripts/test-communication-system-v1.mjs",
+      "synopsis": "Exhaustive V1 Communication System test transcript.",
+      "bytes": 15930,
+      "mtime": "2026-08-06T08:22:28.785Z",
+      "indexed_at": "2026-08-06T08:22:28.785Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/test-cross-domain-v5.mjs",
+      "synopsis": "Exhaustive V5 Cross-Domain Personal Intelligence test transcript.",
+      "bytes": 9351,
+      "mtime": "2026-08-06T08:22:28.785Z",
+      "indexed_at": "2026-08-06T08:22:28.785Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/test-evidence-fusion-v2.mjs",
+      "synopsis": "Exhaustive V2 Evidence Fusion & Cognitive Dynamics test transcript.",
+      "bytes": 11577,
+      "mtime": "2026-08-06T08:22:28.785Z",
+      "indexed_at": "2026-08-06T08:22:28.785Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/test-form-v4.html",
+      "synopsis": "HTML page: Overlay Action V4 Test Form",
+      "bytes": 1335,
+      "mtime": "2026-08-06T08:22:28.785Z",
+      "indexed_at": "2026-08-06T08:22:28.785Z"
+    },
+    {
       "path": "scripts/test-insurance-card-ocr.mjs",
       "synopsis": "Run Tesseract on fixture insurance card images and validate parseInsuranceCardText.",
       "bytes": 3195,
@@ -77658,11 +77789,41 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "scripts/test-overlay-action-v4.mjs",
+      "synopsis": "Exhaustive V4 Verbal AI Director & Overlay Action test transcript.",
+      "bytes": 6853,
+      "mtime": "2026-08-06T08:22:28.785Z",
+      "indexed_at": "2026-08-06T08:22:28.785Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/test-perception-v3.mjs",
+      "synopsis": "Exhaustive V3 Perception (face/body/biometric) test transcript.",
+      "bytes": 8788,
+      "mtime": "2026-08-06T08:22:28.785Z",
+      "indexed_at": "2026-08-06T08:22:28.785Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "scripts/test-smart-contract.sh",
       "synopsis": "Script — Test Smart Contract.",
       "bytes": 702,
       "mtime": "2026-06-21T21:39:09.304Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "scripts/test-tonality-engine-v1.mjs",
+      "synopsis": "Exhaustive V1.1 Tonality Engine test transcript.",
+      "bytes": 15824,
+      "mtime": "2026-08-06T08:22:28.785Z",
+      "indexed_at": "2026-08-06T08:22:28.785Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "scripts/tokens-health.mjs",

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: HTML page: Overlay Action V4 Test Form -->
+<html>
+<head><title>Overlay Action V4 Test Form</title></head>
+<body>
+  <h1>Demo Form</h1>
+  <form id="demo">
+    <label>Full Name <input name="fullName" id="fullName" /></label>
+    <label>Email <input name="email" id="email" type="email" /></label>
+    <label>Phone <input name="phone" id="phone" /></label>
+    <label>Budget <input name="budget" id="budget" /></label>
+    <label>Plan
+      <select name="plan" id="plan">
+        <option value="">Pick one</option>
+        <option value="free">Free</option>
+        <option value="pro">Pro</option>
+        <option value="enterprise">Enterprise</option>
+      </select>
+    </label>
+    <label>Confirm <input type="checkbox" name="confirm" id="confirm" /></label>
+    <button type="submit" id="submitBtn">Submit</button>
+    <button type="button" id="resetBtn">Reset</button>
+    <p id="status"></p>
+  </form>
+  <script>
+    document.getElementById('demo').addEventListener('submit', (e) => {
+      e.preventDefault();
+      document.getElementById('status').textContent = 'submitted';
+    });
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      document.getElementById('demo').reset();
+      document.getElementById('status').textContent = '';
+    });
+  </script>
+</body>
+</html>
