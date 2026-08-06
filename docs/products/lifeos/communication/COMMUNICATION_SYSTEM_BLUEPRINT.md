@@ -994,6 +994,23 @@ The following playful/interactive micro-ideas for the visual AI persona are capt
 - Consent and channel indicators: mic/camera/screen dots always visible; user can mute or dismiss by dragging to a "trash" corner.
 - Personality knobs: chirpy, calm, minimal, serious — calibrated to user preference and context.
 
+### Fluid, context-narrowing UI (2026-08-06 founder brainstorm)
+
+Distinct from the Conversation Composer (§7, which shapes *text*) — this is the same composing principle applied to *UI surface area*. Captured, not built.
+
+- **Contextual narrowing:** when a product surface (e.g. SocialMediaOS) and a specific mode within it (e.g. coaching-style video) become the active focus, other unrelated options fade away or are never surfaced, rather than staying visible as clutter. The UI should compose down to what's relevant to the current moment, the same way the Composer already composes down response length/structure.
+- **Per-person capability adaptation, not just per-moment:** "not everything can be communicated verbally, and what can be communicated verbally differs person to person." The UI's verbal-vs-visual balance should be a Communication Calibration Profile dimension (§8.2), not a fixed default — some people should get more UI surfaced, others more conversation, calibrated the same way tone/directness already are.
+- **Custom-set dashboards per product entry:** pulling up a product (e.g. LifeRE) should surface a dashboard already shaped to that person's own usage patterns and preferences, not a generic default — this is a consumer of the Digital Twin/Imprint (`docs/products/lifeos/conversations/2026-08-04-digital-imprint-naming-proposal.md`), not a new profile store.
+- **Template caching in the Twin, not regenerated per session:** cheap/local models (or deterministic templating, matching how V1–V5's engines are already zero-LLM-call) build the UI scaffolding once per person/context and cache it in their Twin, so the same structural work isn't redone from scratch on every visit. This is the fourth independent appearance of the same "retrieval over generation" pattern this session — SalesOS's Best-Self story retrieval, the Human Performance Engine's "retrieval beats generation" finding, and now here. Worth treating as a validated cross-product principle, not a one-off idea, next time a domain needs to decide between generating fresh or retrieving cached.
+
+### Model-tier strategy: ensembling is a good fit for classification, not generation (2026-08-06)
+
+Founder proposed having the funded-but-weaker models (Groq, Gemini, Mistral, DeepSeek — see `docs/products/ai-council/PRODUCT_HOME.md` for current provider status) work collectively to approximate stronger paid models. Worth being precise rather than applying this uniformly:
+
+- **Good fit:** discrete, classification-style decisions — moment-type classification, mode selection, "is this contract extraction plausible" — where multiple cheap models voting can genuinely approach strong-model accuracy at low cost. This is the same shape as the AI Council's existing multi-model debate pattern (`config/council-members.js`), just applied to fast per-turn decisions instead of deliberative Chair/Counsel questions.
+- **Poor fit:** the conversational text generation itself. Blending several weaker models' prose typically needs its own synthesis/judge call to combine outputs coherently, which often costs more in aggregate tokens than one call to the single best available model — and doesn't reliably improve quality the way ensembling improves classification accuracy.
+- **Efficiency-as-forcing-function, taken seriously:** the founder's own framing — "maybe we can learn to create what we're doing more efficiently as a result of having to use it this way" — is the right instinct and already has ratified authority behind it (the Zero Waste AI Call Rule, `CLAUDE.md`). The constraint of running on funded-but-weaker models is a real argument for pushing more of this system's work into the zero-LLM-call deterministic layer (matching V1–V5's own design) rather than into more model calls of any tier.
+
 ---
 
 ## 22. Version order and build priority
@@ -1032,3 +1049,4 @@ The LifeOS Communication System shares the same phased roadmap as the Universal 
 14. Is the therapist dashboard a LifeOS feature or a Wellness Studio feature?
 15. Should any of this be promoted into `docs/constitution/LUMIN_COMMUNICATION_DNA.md` or remain in product-level spec?
 16. Which of the §21 future signals should be promoted to a real product home or mission pack first?
+17. **Not yet asked, and the actual load-bearing risk behind the founder's "how token-heavy is this" question (2026-08-06):** does §4.1's 13-stage runtime flow (moment recognition → mode selection → composition → translation → etc.) mean 13 separate model calls, or one model's structured reasoning producing all of those decisions within a single call — the same shape `chair-direct-agent.js` already uses today (one call, one JSON action, a bounded 3-step tool-loop)? This is not a style preference; it is the single biggest lever on token/latency cost for this entire system, and it is currently undecided. Recommend resolving this before any of §4.1 is built, not after — a 13-call-per-turn implementation and a 1-call-per-turn implementation are different systems with the same diagram.

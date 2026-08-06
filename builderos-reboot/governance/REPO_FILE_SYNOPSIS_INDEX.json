@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-06T17:48:08.379Z",
+  "generated_at": "2026-08-06T17:57:33.448Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13040,
   "files": [
@@ -43010,9 +43010,9 @@
     {
       "path": "docs/products/lifeos/communication/COMMUNICATION_SYSTEM_BLUEPRINT.md",
       "synopsis": "LifeOS Communication System — final consolidated blueprint. Source: every founder/model conversation and attachment about communication, perception, conversation, and the LifeOS cognitive interaction system.",
-      "bytes": 65025,
-      "mtime": "2026-08-06T17:25:49.196Z",
-      "indexed_at": "2026-08-06T17:26:49.830Z"
+      "bytes": 69651,
+      "mtime": "2026-08-06T17:56:40.149Z",
+      "indexed_at": "2026-08-06T17:57:33.448Z"
     },
     {
       "path": "docs/products/lifeos/communication/COMMUNICATION_SYSTEM_FOUNDER_REFERENCE.md",
@@ -43102,9 +43102,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 752704,
-      "mtime": "2026-08-06T17:46:51.424Z",
-      "indexed_at": "2026-08-06T17:47:13.777Z"
+      "bytes": 755374,
+      "mtime": "2026-08-06T17:57:15.227Z",
+      "indexed_at": "2026-08-06T17:57:33.448Z"
     },
     {
       "path": "docs/products/LIFERE.md",
