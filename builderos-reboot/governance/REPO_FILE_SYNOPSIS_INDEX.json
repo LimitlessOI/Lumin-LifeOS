@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-06T08:28:24.674Z",
+  "generated_at": "2026-08-06T17:26:49.830Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13040,
   "files": [
@@ -43010,9 +43010,9 @@
     {
       "path": "docs/products/lifeos/communication/COMMUNICATION_SYSTEM_BLUEPRINT.md",
       "synopsis": "LifeOS Communication System — final consolidated blueprint. Source: every founder/model conversation and attachment about communication, perception, conversation, and the LifeOS cognitive interaction system.",
-      "bytes": 64383,
-      "mtime": "2026-08-06T08:21:21.833Z",
-      "indexed_at": "2026-08-06T08:23:02.648Z"
+      "bytes": 65025,
+      "mtime": "2026-08-06T17:25:49.196Z",
+      "indexed_at": "2026-08-06T17:26:49.830Z"
     },
     {
       "path": "docs/products/lifeos/communication/COMMUNICATION_SYSTEM_FOUNDER_REFERENCE.md",
@@ -43102,9 +43102,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 745837,
-      "mtime": "2026-08-06T08:26:18.533Z",
-      "indexed_at": "2026-08-06T08:26:24.415Z"
+      "bytes": 749104,
+      "mtime": "2026-08-06T17:26:30.181Z",
+      "indexed_at": "2026-08-06T17:26:49.830Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -66886,9 +66886,9 @@
     {
       "path": "products/receipts/COMMUNICATION_SYSTEM_V1_TEST_TRANSCRIPT.json",
       "synopsis": "Product receipt — COMMUNICATION SYSTEM V1 TEST TRANSCRIPT.",
-      "bytes": 46879,
-      "mtime": "2026-08-06T08:10:55.781Z",
-      "indexed_at": "2026-08-06T08:23:02.648Z",
+      "bytes": 47333,
+      "mtime": "2026-08-06T17:25:25.823Z",
+      "indexed_at": "2026-08-06T17:26:49.830Z",
       "synopsis_index_only": true
     },
     {
@@ -76359,9 +76359,9 @@
     {
       "path": "scripts/prototype-conversational-contracts-v1.mjs",
       "synopsis": "Prototype V1 — Conversational Contracts + Interruption Decay.",
-      "bytes": 14145,
-      "mtime": "2026-08-06T08:10:40.581Z",
-      "indexed_at": "2026-08-06T08:23:02.648Z",
+      "bytes": 15485,
+      "mtime": "2026-08-06T17:23:41.360Z",
+      "indexed_at": "2026-08-06T17:26:49.830Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -77713,9 +77713,9 @@
     {
       "path": "scripts/test-communication-system-v1.mjs",
       "synopsis": "Exhaustive V1 Communication System test transcript.",
-      "bytes": 15930,
-      "mtime": "2026-08-06T08:10:14.865Z",
-      "indexed_at": "2026-08-06T08:23:02.648Z",
+      "bytes": 16808,
+      "mtime": "2026-08-06T17:25:10.749Z",
+      "indexed_at": "2026-08-06T17:26:49.830Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

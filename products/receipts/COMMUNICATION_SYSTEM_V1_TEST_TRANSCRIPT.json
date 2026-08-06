@@ -1,7 +1,7 @@
 {
   "schema": "communication_system_v1_test_transcript_v1",
-  "generatedAt": "2026-08-06T08:10:55.785Z",
-  "startedAt": "2026-08-06T08:10:45.855Z",
+  "generatedAt": "2026-08-06T17:25:25.821Z",
+  "startedAt": "2026-08-06T17:25:15.882Z",
   "summary": {
     "total": 39,
     "pass": 39,
@@ -25,12 +25,12 @@
           "status": "pending",
           "evidence": {
             "source_turn_text": "I'll send the report by Friday.",
-            "extracted_at": "2026-08-06T08:10:45.855Z"
+            "extracted_at": "2026-08-06T17:25:15.882Z"
           },
-          "created_at": "2026-08-06T08:10:45.855Z"
+          "created_at": "2026-08-06T17:25:15.882Z"
         }
       ],
-      "at": "2026-08-06T08:10:45.855Z"
+      "at": "2026-08-06T17:25:15.882Z"
     },
     {
       "suite": "contract_extraction",
@@ -48,12 +48,12 @@
           "status": "pending",
           "evidence": {
             "source_turn_text": "I will call you when the meeting ends.",
-            "extracted_at": "2026-08-06T08:10:45.855Z"
+            "extracted_at": "2026-08-06T17:25:15.882Z"
           },
-          "created_at": "2026-08-06T08:10:45.855Z"
+          "created_at": "2026-08-06T17:25:15.882Z"
         }
       ],
-      "at": "2026-08-06T08:10:45.855Z"
+      "at": "2026-08-06T17:25:15.882Z"
     },
     {
       "suite": "contract_extraction",
@@ -61,7 +61,7 @@
       "result": "PASS",
       "error": null,
       "details": [],
-      "at": "2026-08-06T08:10:45.855Z"
+      "at": "2026-08-06T17:25:15.882Z"
     },
     {
       "suite": "contract_extraction",
@@ -79,12 +79,12 @@
           "status": "pending",
           "evidence": {
             "source_turn_text": "I want to build a voice contract prototype",
-            "extracted_at": "2026-08-06T08:10:45.855Z"
+            "extracted_at": "2026-08-06T17:25:15.882Z"
           },
-          "created_at": "2026-08-06T08:10:45.855Z"
+          "created_at": "2026-08-06T17:25:15.882Z"
         }
       ],
-      "at": "2026-08-06T08:10:45.855Z"
+      "at": "2026-08-06T17:25:15.882Z"
     },
     {
       "suite": "contract_extraction",
@@ -102,12 +102,12 @@
           "status": "pending",
           "evidence": {
             "source_turn_text": "I need to review the design by Tuesday.",
-            "extracted_at": "2026-08-06T08:10:45.855Z"
+            "extracted_at": "2026-08-06T17:25:15.882Z"
           },
-          "created_at": "2026-08-06T08:10:45.855Z"
+          "created_at": "2026-08-06T17:25:15.882Z"
         }
       ],
-      "at": "2026-08-06T08:10:45.855Z"
+      "at": "2026-08-06T17:25:15.882Z"
     },
     {
       "suite": "contract_extraction",
@@ -125,12 +125,12 @@
           "status": "pending",
           "evidence": {
             "source_turn_text": "Let me know when you are ready.",
-            "extracted_at": "2026-08-06T08:10:45.855Z"
+            "extracted_at": "2026-08-06T17:25:15.882Z"
           },
-          "created_at": "2026-08-06T08:10:45.855Z"
+          "created_at": "2026-08-06T17:25:15.882Z"
         }
       ],
-      "at": "2026-08-06T08:10:45.855Z"
+      "at": "2026-08-06T17:25:15.882Z"
     },
     {
       "suite": "contract_extraction",
@@ -148,12 +148,12 @@
           "status": "pending",
           "evidence": {
             "source_turn_text": "We should schedule a follow-up after the demo.",
-            "extracted_at": "2026-08-06T08:10:45.855Z"
+            "extracted_at": "2026-08-06T17:25:15.882Z"
           },
-          "created_at": "2026-08-06T08:10:45.855Z"
+          "created_at": "2026-08-06T17:25:15.882Z"
         }
       ],
-      "at": "2026-08-06T08:10:45.855Z"
+      "at": "2026-08-06T17:25:15.882Z"
     },
     {
       "suite": "contract_extraction",
@@ -171,12 +171,12 @@
           "status": "pending",
           "evidence": {
             "source_turn_text": "I can help with the integration if you give me access.",
-            "extracted_at": "2026-08-06T08:10:45.855Z"
+            "extracted_at": "2026-08-06T17:25:15.882Z"
           },
-          "created_at": "2026-08-06T08:10:45.855Z"
+          "created_at": "2026-08-06T17:25:15.882Z"
         }
       ],
-      "at": "2026-08-06T08:10:45.855Z"
+      "at": "2026-08-06T17:25:15.882Z"
     },
     {
       "suite": "contract_extraction",
@@ -184,7 +184,7 @@
       "result": "PASS",
       "error": null,
       "details": [],
-      "at": "2026-08-06T08:10:45.855Z"
+      "at": "2026-08-06T17:25:15.882Z"
     },
     {
       "suite": "contract_extraction",
@@ -192,6 +192,20 @@
       "result": "PASS",
       "error": null,
       "details": [
+        {
+          "id": "user-pizza-0",
+          "session_sequence": 0,
+          "speaker": "user",
+          "type": "request",
+          "promise": "pizza",
+          "completion_condition": null,
+          "status": "pending",
+          "evidence": {
+            "source_turn_text": "I want pizza and I'll call the restaurant.",
+            "extracted_at": "2026-08-06T17:25:15.882Z"
+          },
+          "created_at": "2026-08-06T17:25:15.882Z"
+        },
         {
           "id": "user-call-the-restaurant--0",
           "session_sequence": 0,
@@ -202,26 +216,12 @@
           "status": "pending",
           "evidence": {
             "source_turn_text": "I want pizza and I'll call the restaurant.",
-            "extracted_at": "2026-08-06T08:10:45.855Z"
+            "extracted_at": "2026-08-06T17:25:15.882Z"
           },
-          "created_at": "2026-08-06T08:10:45.855Z"
-        },
-        {
-          "id": "user-pizza-and-i-ll-call--0",
-          "session_sequence": 0,
-          "speaker": "user",
-          "type": "request",
-          "promise": "pizza and I'll call the restaurant.",
-          "completion_condition": null,
-          "status": "pending",
-          "evidence": {
-            "source_turn_text": "I want pizza and I'll call the restaurant.",
-            "extracted_at": "2026-08-06T08:10:45.855Z"
-          },
-          "created_at": "2026-08-06T08:10:45.855Z"
+          "created_at": "2026-08-06T17:25:15.882Z"
         }
       ],
-      "at": "2026-08-06T08:10:45.855Z"
+      "at": "2026-08-06T17:25:15.882Z"
     },
     {
       "suite": "contract_extraction",
@@ -229,7 +229,7 @@
       "result": "PASS",
       "error": null,
       "details": [],
-      "at": "2026-08-06T08:10:45.855Z"
+      "at": "2026-08-06T17:25:15.882Z"
     },
     {
       "suite": "contract_extraction",
@@ -238,18 +238,18 @@
       "error": null,
       "details": [
         {
-          "id": "assistant-build-the-prototype--0",
+          "id": "assistant-build-the-prototype-0",
           "session_sequence": 0,
           "speaker": "assistant",
           "type": "promise",
-          "promise": "build the prototype and send it",
-          "completion_condition": "end of day.",
+          "promise": "build the prototype",
+          "completion_condition": null,
           "status": "pending",
           "evidence": {
             "source_turn_text": "I'll build the prototype and send it by end of day.",
-            "extracted_at": "2026-08-06T08:10:45.855Z"
+            "extracted_at": "2026-08-06T17:25:15.882Z"
           },
-          "created_at": "2026-08-06T08:10:45.855Z"
+          "created_at": "2026-08-06T17:25:15.882Z"
         },
         {
           "id": "user-test-it-1",
@@ -257,13 +257,13 @@
           "speaker": "user",
           "type": "promise",
           "promise": "test it",
-          "completion_condition": "tomorrow and I want a summary before then.",
+          "completion_condition": "tomorrow",
           "status": "pending",
           "evidence": {
             "source_turn_text": "Great. I will test it by tomorrow and I want a summary before then.",
-            "extracted_at": "2026-08-06T08:10:45.855Z"
+            "extracted_at": "2026-08-06T17:25:15.882Z"
           },
-          "created_at": "2026-08-06T08:10:45.855Z"
+          "created_at": "2026-08-06T17:25:15.882Z"
         },
         {
           "id": "user-a-summary-1",
@@ -275,12 +275,12 @@
           "status": "pending",
           "evidence": {
             "source_turn_text": "Great. I will test it by tomorrow and I want a summary before then.",
-            "extracted_at": "2026-08-06T08:10:45.855Z"
+            "extracted_at": "2026-08-06T17:25:15.882Z"
           },
-          "created_at": "2026-08-06T08:10:45.855Z"
+          "created_at": "2026-08-06T17:25:15.882Z"
         }
       ],
-      "at": "2026-08-06T08:10:45.855Z"
+      "at": "2026-08-06T17:25:15.882Z"
     },
     {
       "suite": "turn_completion",
@@ -319,7 +319,7 @@
           }
         ]
       },
-      "at": "2026-08-06T08:10:45.856Z"
+      "at": "2026-08-06T17:25:15.882Z"
     },
     {
       "suite": "turn_completion",
@@ -358,7 +358,7 @@
           }
         ]
       },
-      "at": "2026-08-06T08:10:45.856Z"
+      "at": "2026-08-06T17:25:15.882Z"
     },
     {
       "suite": "turn_completion",
@@ -397,7 +397,7 @@
           }
         ]
       },
-      "at": "2026-08-06T08:10:45.856Z"
+      "at": "2026-08-06T17:25:15.882Z"
     },
     {
       "suite": "turn_completion",
@@ -436,7 +436,7 @@
           }
         ]
       },
-      "at": "2026-08-06T08:10:45.856Z"
+      "at": "2026-08-06T17:25:15.882Z"
     },
     {
       "suite": "turn_completion",
@@ -475,7 +475,7 @@
           }
         ]
       },
-      "at": "2026-08-06T08:10:45.856Z"
+      "at": "2026-08-06T17:25:15.882Z"
     },
     {
       "suite": "turn_completion",
@@ -514,7 +514,7 @@
           }
         ]
       },
-      "at": "2026-08-06T08:10:45.856Z"
+      "at": "2026-08-06T17:25:15.882Z"
     },
     {
       "suite": "turn_completion",
@@ -548,7 +548,7 @@
           }
         ]
       },
-      "at": "2026-08-06T08:10:45.856Z"
+      "at": "2026-08-06T17:25:15.882Z"
     },
     {
       "suite": "turn_completion",
@@ -587,7 +587,7 @@
           }
         ]
       },
-      "at": "2026-08-06T08:10:45.856Z"
+      "at": "2026-08-06T17:25:15.882Z"
     },
     {
       "suite": "turn_completion",
@@ -626,7 +626,7 @@
           }
         ]
       },
-      "at": "2026-08-06T08:10:45.856Z"
+      "at": "2026-08-06T17:25:15.882Z"
     },
     {
       "suite": "turn_completion",
@@ -665,7 +665,7 @@
           }
         ]
       },
-      "at": "2026-08-06T08:10:45.856Z"
+      "at": "2026-08-06T17:25:15.883Z"
     },
     {
       "suite": "turn_completion",
@@ -682,7 +682,7 @@
           100
         ]
       },
-      "at": "2026-08-06T08:10:45.856Z"
+      "at": "2026-08-06T17:25:15.883Z"
     },
     {
       "suite": "interruption_decay",
@@ -698,7 +698,7 @@
         "interrupted_at_word_index": -1,
         "events": [
           {
-            "at": 1786003845857,
+            "at": 1786037115883,
             "type": "play_start",
             "words_total": 4,
             "word_duration_ms": 50,
@@ -706,7 +706,7 @@
             "word_gap_ms": 20
           },
           {
-            "at": 1786003845857,
+            "at": 1786037115883,
             "type": "stopped",
             "words_spoken": 0,
             "words_total": 4,
@@ -714,7 +714,7 @@
           }
         ]
       },
-      "at": "2026-08-06T08:10:45.857Z"
+      "at": "2026-08-06T17:25:15.883Z"
     },
     {
       "suite": "interruption_decay",
@@ -730,7 +730,7 @@
         "interrupted_at_word_index": 0,
         "events": [
           {
-            "at": 1786003845857,
+            "at": 1786037115883,
             "type": "play_start",
             "words_total": 4,
             "word_duration_ms": 50,
@@ -738,20 +738,20 @@
             "word_gap_ms": 20
           },
           {
-            "at": 1786003845858,
+            "at": 1786037115884,
             "type": "word",
             "index": 0,
             "word": "one"
           },
           {
-            "at": 1786003845867,
+            "at": 1786037115894,
             "type": "interrupt_detected",
             "word_index": 0,
             "word": "one",
             "fade_ms": 0
           },
           {
-            "at": 1786003845867,
+            "at": 1786037115894,
             "type": "stopped",
             "words_spoken": 0,
             "words_total": 4,
@@ -759,7 +759,7 @@
           }
         ]
       },
-      "at": "2026-08-06T08:10:45.867Z"
+      "at": "2026-08-06T17:25:15.894Z"
     },
     {
       "suite": "interruption_decay",
@@ -775,7 +775,7 @@
         "interrupted_at_word_index": 0,
         "events": [
           {
-            "at": 1786003845867,
+            "at": 1786037115894,
             "type": "play_start",
             "words_total": 4,
             "word_duration_ms": 50,
@@ -783,20 +783,20 @@
             "word_gap_ms": 20
           },
           {
-            "at": 1786003845868,
+            "at": 1786037115895,
             "type": "word",
             "index": 0,
             "word": "one"
           },
           {
-            "at": 1786003845893,
+            "at": 1786037115919,
             "type": "interrupt_detected",
             "word_index": 0,
             "word": "one",
             "fade_ms": 20
           },
           {
-            "at": 1786003845938,
+            "at": 1786037115966,
             "type": "stopped",
             "words_spoken": 1,
             "words_total": 4,
@@ -804,7 +804,7 @@
           }
         ]
       },
-      "at": "2026-08-06T08:10:45.938Z"
+      "at": "2026-08-06T17:25:15.966Z"
     },
     {
       "suite": "interruption_decay",
@@ -820,7 +820,7 @@
         "interrupted_at_word_index": -1,
         "events": [
           {
-            "at": 1786003845938,
+            "at": 1786037115966,
             "type": "play_start",
             "words_total": 4,
             "word_duration_ms": 50,
@@ -828,20 +828,20 @@
             "word_gap_ms": 20
           },
           {
-            "at": 1786003845939,
+            "at": 1786037115967,
             "type": "word",
             "index": 0,
             "word": "one"
           },
           {
-            "at": 1786003845998,
+            "at": 1786037116026,
             "type": "interrupt_detected",
             "word_index": 0,
             "word": "one",
             "fade_ms": 0
           },
           {
-            "at": 1786003845998,
+            "at": 1786037116026,
             "type": "stopped",
             "words_spoken": 1,
             "words_total": 4,
@@ -849,7 +849,7 @@
           }
         ]
       },
-      "at": "2026-08-06T08:10:45.999Z"
+      "at": "2026-08-06T17:25:16.026Z"
     },
     {
       "suite": "interruption_decay",
@@ -865,7 +865,7 @@
         "interrupted_at_word_index": 1,
         "events": [
           {
-            "at": 1786003845999,
+            "at": 1786037116026,
             "type": "play_start",
             "words_total": 4,
             "word_duration_ms": 50,
@@ -873,26 +873,26 @@
             "word_gap_ms": 20
           },
           {
-            "at": 1786003846000,
+            "at": 1786037116027,
             "type": "word",
             "index": 0,
             "word": "one"
           },
           {
-            "at": 1786003846069,
+            "at": 1786037116096,
             "type": "word",
             "index": 1,
             "word": "two"
           },
           {
-            "at": 1786003846094,
+            "at": 1786037116122,
             "type": "interrupt_detected",
             "word_index": 1,
             "word": "two",
             "fade_ms": 20
           },
           {
-            "at": 1786003846140,
+            "at": 1786037116167,
             "type": "stopped",
             "words_spoken": 2,
             "words_total": 4,
@@ -900,7 +900,7 @@
           }
         ]
       },
-      "at": "2026-08-06T08:10:46.140Z"
+      "at": "2026-08-06T17:25:16.167Z"
     },
     {
       "suite": "interruption_decay",
@@ -916,7 +916,7 @@
         "interrupted_at_word_index": -1,
         "events": [
           {
-            "at": 1786003846140,
+            "at": 1786037116167,
             "type": "play_start",
             "words_total": 4,
             "word_duration_ms": 50,
@@ -924,38 +924,38 @@
             "word_gap_ms": 20
           },
           {
-            "at": 1786003846140,
+            "at": 1786037116168,
             "type": "word",
             "index": 0,
             "word": "one"
           },
           {
-            "at": 1786003846209,
+            "at": 1786037116237,
             "type": "word",
             "index": 1,
             "word": "two"
           },
           {
-            "at": 1786003846280,
+            "at": 1786037116308,
             "type": "word",
             "index": 2,
             "word": "three"
           },
           {
-            "at": 1786003846350,
+            "at": 1786037116378,
             "type": "word",
             "index": 3,
             "word": "four"
           },
           {
-            "at": 1786003846401,
+            "at": 1786037116428,
             "type": "completed",
             "words_spoken": 4,
             "words_total": 4
           }
         ]
       },
-      "at": "2026-08-06T08:10:46.401Z"
+      "at": "2026-08-06T17:25:16.429Z"
     },
     {
       "suite": "interruption_decay",
@@ -971,7 +971,7 @@
         "interrupted_at_word_index": 2,
         "events": [
           {
-            "at": 1786003846401,
+            "at": 1786037116429,
             "type": "play_start",
             "words_total": 4,
             "word_duration_ms": 50,
@@ -979,32 +979,32 @@
             "word_gap_ms": 20
           },
           {
-            "at": 1786003846402,
+            "at": 1786037116430,
             "type": "word",
             "index": 0,
             "word": "one"
           },
           {
-            "at": 1786003846472,
+            "at": 1786037116499,
             "type": "word",
             "index": 1,
             "word": "two"
           },
           {
-            "at": 1786003846542,
+            "at": 1786037116569,
             "type": "word",
             "index": 2,
             "word": "three"
           },
           {
-            "at": 1786003846567,
+            "at": 1786037116595,
             "type": "interrupt_detected",
             "word_index": 2,
             "word": "three",
             "fade_ms": 20
           },
           {
-            "at": 1786003846611,
+            "at": 1786037116640,
             "type": "stopped",
             "words_spoken": 3,
             "words_total": 4,
@@ -1012,7 +1012,7 @@
           }
         ]
       },
-      "at": "2026-08-06T08:10:46.612Z"
+      "at": "2026-08-06T17:25:16.641Z"
     },
     {
       "suite": "interruption_decay",
@@ -1028,7 +1028,7 @@
         "interrupted_at_word_index": 1,
         "events": [
           {
-            "at": 1786003846612,
+            "at": 1786037116641,
             "type": "play_start",
             "words_total": 4,
             "word_duration_ms": 50,
@@ -1036,26 +1036,26 @@
             "word_gap_ms": 20
           },
           {
-            "at": 1786003846613,
+            "at": 1786037116642,
             "type": "word",
             "index": 0,
             "word": "one"
           },
           {
-            "at": 1786003846682,
+            "at": 1786037116712,
             "type": "word",
             "index": 1,
             "word": "two"
           },
           {
-            "at": 1786003846707,
+            "at": 1786037116737,
             "type": "interrupt_detected",
             "word_index": 1,
             "word": "two",
             "fade_ms": 20
           },
           {
-            "at": 1786003846753,
+            "at": 1786037116782,
             "type": "stopped",
             "words_spoken": 2,
             "words_total": 4,
@@ -1063,7 +1063,7 @@
           }
         ]
       },
-      "at": "2026-08-06T08:10:46.753Z"
+      "at": "2026-08-06T17:25:16.782Z"
     },
     {
       "suite": "interruption_decay",
@@ -1079,7 +1079,7 @@
         "interrupted_at_word_index": 0,
         "events": [
           {
-            "at": 1786003846753,
+            "at": 1786037116782,
             "type": "play_start",
             "words_total": 4,
             "word_duration_ms": 50,
@@ -1087,13 +1087,13 @@
             "word_gap_ms": 20
           },
           {
-            "at": 1786003846754,
+            "at": 1786037116783,
             "type": "word",
             "index": 0,
             "word": "one"
           },
           {
-            "at": 1786003846784,
+            "at": 1786037116813,
             "type": "stopped",
             "words_spoken": 0,
             "words_total": 4,
@@ -1101,7 +1101,7 @@
           }
         ]
       },
-      "at": "2026-08-06T08:10:46.784Z"
+      "at": "2026-08-06T17:25:16.813Z"
     },
     {
       "suite": "interruption_decay",
@@ -1117,7 +1117,7 @@
         "interrupted_at_word_index": -1,
         "events": [
           {
-            "at": 1786003846784,
+            "at": 1786037116813,
             "type": "play_start",
             "words_total": 4,
             "word_duration_ms": 50,
@@ -1125,19 +1125,19 @@
             "word_gap_ms": 20
           },
           {
-            "at": 1786003846785,
+            "at": 1786037116814,
             "type": "word",
             "index": 0,
             "word": "one"
           },
           {
-            "at": 1786003846854,
+            "at": 1786037116883,
             "type": "word",
             "index": 1,
             "word": "two"
           },
           {
-            "at": 1786003846918,
+            "at": 1786037116948,
             "type": "stopped",
             "words_spoken": 2,
             "words_total": 4,
@@ -1145,7 +1145,7 @@
           }
         ]
       },
-      "at": "2026-08-06T08:10:46.918Z"
+      "at": "2026-08-06T17:25:16.949Z"
     },
     {
       "suite": "interruption_decay",
@@ -1161,7 +1161,7 @@
         "interrupted_at_word_index": 2,
         "events": [
           {
-            "at": 1786003846918,
+            "at": 1786037116949,
             "type": "play_start",
             "words_total": 4,
             "word_duration_ms": 50,
@@ -1169,25 +1169,25 @@
             "word_gap_ms": 20
           },
           {
-            "at": 1786003846920,
+            "at": 1786037116950,
             "type": "word",
             "index": 0,
             "word": "one"
           },
           {
-            "at": 1786003846989,
+            "at": 1786037117019,
             "type": "word",
             "index": 1,
             "word": "two"
           },
           {
-            "at": 1786003847059,
+            "at": 1786037117090,
             "type": "word",
             "index": 2,
             "word": "three"
           },
           {
-            "at": 1786003847063,
+            "at": 1786037117094,
             "type": "stopped",
             "words_spoken": 2,
             "words_total": 4,
@@ -1195,7 +1195,7 @@
           }
         ]
       },
-      "at": "2026-08-06T08:10:47.064Z"
+      "at": "2026-08-06T17:25:17.095Z"
     },
     {
       "suite": "interruption_decay",
@@ -1211,7 +1211,7 @@
         "interrupted_at_word_index": 1,
         "events": [
           {
-            "at": 1786003847064,
+            "at": 1786037117095,
             "type": "play_start",
             "words_total": 4,
             "word_duration_ms": 50,
@@ -1219,26 +1219,26 @@
             "word_gap_ms": 20
           },
           {
-            "at": 1786003847065,
+            "at": 1786037117096,
             "type": "word",
             "index": 0,
             "word": "one"
           },
           {
-            "at": 1786003847133,
+            "at": 1786037117166,
             "type": "word",
             "index": 1,
             "word": "two"
           },
           {
-            "at": 1786003847159,
+            "at": 1786037117190,
             "type": "interrupt_detected",
             "word_index": 1,
             "word": "two",
             "fade_ms": 200
           },
           {
-            "at": 1786003847384,
+            "at": 1786037117417,
             "type": "stopped",
             "words_spoken": 2,
             "words_total": 4,
@@ -1246,7 +1246,7 @@
           }
         ]
       },
-      "at": "2026-08-06T08:10:47.384Z"
+      "at": "2026-08-06T17:25:17.418Z"
     },
     {
       "suite": "scenario",
@@ -1264,7 +1264,7 @@
           "interrupted_at_word_index": 8,
           "events": [
             {
-              "at": 1786003847384,
+              "at": 1786037117419,
               "type": "play_start",
               "words_total": 15,
               "word_duration_ms": 400,
@@ -1272,68 +1272,68 @@
               "word_gap_ms": 0
             },
             {
-              "at": 1786003847384,
+              "at": 1786037117420,
               "type": "word",
               "index": 0,
               "word": "Here"
             },
             {
-              "at": 1786003847784,
+              "at": 1786037117819,
               "type": "word",
               "index": 1,
               "word": "are"
             },
             {
-              "at": 1786003848184,
+              "at": 1786037118220,
               "type": "word",
               "index": 2,
               "word": "the"
             },
             {
-              "at": 1786003848585,
+              "at": 1786037118619,
               "type": "word",
               "index": 3,
               "word": "25"
             },
             {
-              "at": 1786003848986,
+              "at": 1786037119020,
               "type": "word",
               "index": 4,
               "word": "things."
             },
             {
-              "at": 1786003849386,
+              "at": 1786037119420,
               "type": "word",
               "index": 5,
               "word": "One:"
             },
             {
-              "at": 1786003849786,
+              "at": 1786037119820,
               "type": "word",
               "index": 6,
               "word": "a."
             },
             {
-              "at": 1786003850186,
+              "at": 1786037120223,
               "type": "word",
               "index": 7,
               "word": "Two:"
             },
             {
-              "at": 1786003850586,
+              "at": 1786037120620,
               "type": "word",
               "index": 8,
               "word": "b."
             },
             {
-              "at": 1786003850586,
+              "at": 1786037120620,
               "type": "interrupt_detected",
               "word_index": 8,
               "word": "b.",
               "fade_ms": 0
             },
             {
-              "at": 1786003850586,
+              "at": 1786037120620,
               "type": "stopped",
               "words_spoken": 8,
               "words_total": 15,
@@ -1375,7 +1375,7 @@
           ]
         }
       },
-      "at": "2026-08-06T08:10:50.586Z"
+      "at": "2026-08-06T17:25:20.620Z"
     },
     {
       "suite": "scenario",
@@ -1393,7 +1393,7 @@
           "interrupted_at_word_index": 6,
           "events": [
             {
-              "at": 1786003850586,
+              "at": 1786037120620,
               "type": "play_start",
               "words_total": 16,
               "word_duration_ms": 281,
@@ -1401,56 +1401,56 @@
               "word_gap_ms": 0
             },
             {
-              "at": 1786003850587,
+              "at": 1786037120621,
               "type": "word",
               "index": 0,
               "word": "The"
             },
             {
-              "at": 1786003850869,
+              "at": 1786037120902,
               "type": "word",
               "index": 1,
               "word": "reason"
             },
             {
-              "at": 1786003851150,
+              "at": 1786037121183,
               "type": "word",
               "index": 2,
               "word": "changed"
             },
             {
-              "at": 1786003851431,
+              "at": 1786037121464,
               "type": "word",
               "index": 3,
               "word": "because"
             },
             {
-              "at": 1786003851712,
+              "at": 1786037121745,
               "type": "word",
               "index": 4,
               "word": "we"
             },
             {
-              "at": 1786003851993,
+              "at": 1786037122026,
               "type": "word",
               "index": 5,
               "word": "reclassified"
             },
             {
-              "at": 1786003852274,
+              "at": 1786037122307,
               "type": "word",
               "index": 6,
               "word": "Q1"
             },
             {
-              "at": 1786003852488,
+              "at": 1786037122521,
               "type": "interrupt_detected",
               "word_index": 6,
               "word": "Q1",
               "fade_ms": 150
             },
             {
-              "at": 1786003852704,
+              "at": 1786037122738,
               "type": "stopped",
               "words_spoken": 7,
               "words_total": 16,
@@ -1492,7 +1492,7 @@
           ]
         }
       },
-      "at": "2026-08-06T08:10:52.704Z"
+      "at": "2026-08-06T17:25:22.739Z"
     },
     {
       "suite": "scenario",
@@ -1510,7 +1510,7 @@
           "interrupted_at_word_index": 7,
           "events": [
             {
-              "at": 1786003852704,
+              "at": 1786037122739,
               "type": "play_start",
               "words_total": 24,
               "word_duration_ms": 291,
@@ -1518,62 +1518,62 @@
               "word_gap_ms": 0
             },
             {
-              "at": 1786003852706,
+              "at": 1786037122740,
               "type": "word",
               "index": 0,
               "word": "I"
             },
             {
-              "at": 1786003852997,
+              "at": 1786037123030,
               "type": "word",
               "index": 1,
               "word": "will"
             },
             {
-              "at": 1786003853288,
+              "at": 1786037123322,
               "type": "word",
               "index": 2,
               "word": "build"
             },
             {
-              "at": 1786003853579,
+              "at": 1786037123613,
               "type": "word",
               "index": 3,
               "word": "a"
             },
             {
-              "at": 1786003853870,
+              "at": 1786037123904,
               "type": "word",
               "index": 4,
               "word": "Conversational"
             },
             {
-              "at": 1786003854160,
+              "at": 1786037124196,
               "type": "word",
               "index": 5,
               "word": "Contracts"
             },
             {
-              "at": 1786003854452,
+              "at": 1786037124486,
               "type": "word",
               "index": 6,
               "word": "prototype"
             },
             {
-              "at": 1786003854743,
+              "at": 1786037124777,
               "type": "word",
               "index": 7,
               "word": "that"
             },
             {
-              "at": 1786003854905,
+              "at": 1786037124940,
               "type": "interrupt_detected",
               "word_index": 7,
               "word": "that",
               "fade_ms": 150
             },
             {
-              "at": 1786003855184,
+              "at": 1786037125219,
               "type": "stopped",
               "words_spoken": 8,
               "words_total": 24,
@@ -1592,23 +1592,37 @@
             "status": "pending",
             "evidence": {
               "source_turn_text": "I want to build a voice contract prototype",
-              "extracted_at": "2026-08-06T08:10:52.704Z"
+              "extracted_at": "2026-08-06T17:25:22.739Z"
             },
-            "created_at": "2026-08-06T08:10:52.704Z"
+            "created_at": "2026-08-06T17:25:22.739Z"
           },
           {
             "id": "assistant-build-a-conversation-1",
             "session_sequence": 1,
             "speaker": "assistant",
             "type": "promise",
-            "promise": "build a Conversational Contracts prototype that extracts promises and tracks fulfillment. I'll stop mid-sentence",
-            "completion_condition": "you interrupt and then ask what changed.",
+            "promise": "build a Conversational Contracts prototype that extracts promises",
+            "completion_condition": null,
             "status": "pending",
             "evidence": {
               "source_turn_text": "I will build a Conversational Contracts prototype that extracts promises and tracks fulfillment. I'll stop mid-sentence if you interrupt and then ask what changed.",
-              "extracted_at": "2026-08-06T08:10:52.704Z"
+              "extracted_at": "2026-08-06T17:25:22.739Z"
             },
-            "created_at": "2026-08-06T08:10:52.704Z"
+            "created_at": "2026-08-06T17:25:22.739Z"
+          },
+          {
+            "id": "assistant-stop-mid-sentence-1",
+            "session_sequence": 1,
+            "speaker": "assistant",
+            "type": "promise",
+            "promise": "stop mid-sentence",
+            "completion_condition": "you interrupt",
+            "status": "pending",
+            "evidence": {
+              "source_turn_text": "I will build a Conversational Contracts prototype that extracts promises and tracks fulfillment. I'll stop mid-sentence if you interrupt and then ask what changed.",
+              "extracted_at": "2026-08-06T17:25:22.739Z"
+            },
+            "created_at": "2026-08-06T17:25:22.739Z"
           },
           {
             "id": "user-test-it-2",
@@ -1620,9 +1634,9 @@
             "status": "pending",
             "evidence": {
               "source_turn_text": "great, and I will test it by tomorrow.",
-              "extracted_at": "2026-08-06T08:10:52.704Z"
+              "extracted_at": "2026-08-06T17:25:22.739Z"
             },
-            "created_at": "2026-08-06T08:10:52.704Z"
+            "created_at": "2026-08-06T17:25:22.739Z"
           }
         ],
         "user_finished": {
@@ -1658,7 +1672,7 @@
           ]
         }
       },
-      "at": "2026-08-06T08:10:55.184Z"
+      "at": "2026-08-06T17:25:25.220Z"
     },
     {
       "suite": "scenario",
@@ -1676,7 +1690,7 @@
           "interrupted_at_word_index": 2,
           "events": [
             {
-              "at": 1786003855184,
+              "at": 1786037125220,
               "type": "play_start",
               "words_total": 9,
               "word_duration_ms": 277,
@@ -1684,32 +1698,32 @@
               "word_gap_ms": 0
             },
             {
-              "at": 1786003855185,
+              "at": 1786037125221,
               "type": "word",
               "index": 0,
               "word": "Let"
             },
             {
-              "at": 1786003855463,
+              "at": 1786037125497,
               "type": "word",
               "index": 1,
               "word": "me"
             },
             {
-              "at": 1786003855740,
+              "at": 1786037125775,
               "type": "word",
               "index": 2,
               "word": "walk"
             },
             {
-              "at": 1786003855785,
+              "at": 1786037125821,
               "type": "interrupt_detected",
               "word_index": 2,
               "word": "walk",
               "fade_ms": 0
             },
             {
-              "at": 1786003855785,
+              "at": 1786037125821,
               "type": "stopped",
               "words_spoken": 2,
               "words_total": 9,
@@ -1723,14 +1737,14 @@
             "session_sequence": 0,
             "speaker": "assistant",
             "type": "offer",
-            "promise": "walk through the plan. First, we validate.",
+            "promise": "walk through the plan.",
             "completion_condition": null,
             "status": "pending",
             "evidence": {
               "source_turn_text": "Let me walk through the plan. First, we validate.",
-              "extracted_at": "2026-08-06T08:10:55.184Z"
+              "extracted_at": "2026-08-06T17:25:25.220Z"
             },
-            "created_at": "2026-08-06T08:10:55.184Z"
+            "created_at": "2026-08-06T17:25:25.220Z"
           }
         ],
         "user_finished": {
@@ -1761,7 +1775,7 @@
           ]
         }
       },
-      "at": "2026-08-06T08:10:55.785Z"
+      "at": "2026-08-06T17:25:25.821Z"
     }
   ]
 }

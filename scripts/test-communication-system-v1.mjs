@@ -75,7 +75,14 @@ async function contractExtractionSuite() {
     { input: 'We should schedule a follow-up after the demo.', expectType: 'offer', expectPromise: 'schedule a follow-up', expectCondition: 'the demo' },
     { input: 'I can help with the integration if you give me access.', expectType: 'offer', expectPromise: 'help with the integration', expectCondition: 'you give me access' },
     { input: 'The sky is blue.', expectType: null, expectPromise: null },
-    { input: "I want pizza and I'll call the restaurant.", expectCount: 2, expectTypes: ['promise', 'request'] },
+    // Order fixed 2026-08-06: contracts now extract left-to-right by clause (request "pizza"
+    // then promise "call the restaurant"), matching the sentence's actual order. The old
+    // ['promise', 'request'] expectation encoded the pre-fix bug's pattern-iteration order,
+    // not sentence order — see extractContracts' splitClauses for the underlying fix.
+    // Regression test for the real bug: pre-fix, the unanchored "i want" pattern greedily
+    // swallowed the second clause too, producing a "request" whose promise text was the
+    // garbled "pizza and I'll call the restaurant." instead of clean, non-overlapping clauses.
+    { input: "I want pizza and I'll call the restaurant.", expectCount: 2, expectTypes: ['request', 'promise'], expectPromises: ['pizza', 'call the restaurant.'] },
     { input: 'Finish this tomorrow', expectType: null, expectPromise: null }, // no first-person trigger
   ];
 
@@ -89,6 +96,9 @@ async function contractExtractionSuite() {
         assert.strictEqual(contracts.length, c.expectCount, `should extract ${c.expectCount} contracts from "${c.input}"`);
         for (let i = 0; i < c.expectTypes.length; i += 1) {
           assert.strictEqual(contracts[i].type, c.expectTypes[i], `contract ${i} type`);
+          if (c.expectPromises) {
+            assert.strictEqual(normalize(contracts[i].promise), c.expectPromises[i], `contract ${i} promise text exact, not overlapping`);
+          }
         }
       } else {
         assert.strictEqual(contracts.length, 1, `should extract one contract from "${c.input}"`);

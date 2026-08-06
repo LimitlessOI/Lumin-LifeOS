@@ -39,39 +39,61 @@ function slug(text) {
   return text.toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 40);
 }
 
+// Same clause-boundary split used by prototype-overlay-action-v4.mjs's parseCommand —
+// reused here rather than re-derived, since it's the same underlying problem
+// (one turn can contain multiple independent clauses).
+function splitClauses(text) {
+  return String(text || '')
+    // clause separators (and/,/then) plus sentence boundaries (lookbehind keeps the
+    // terminal punctuation on the preceding clause, e.g. "Great." stays "Great.")
+    .split(/(?:\s+and\s+|\s*,\s+|\s+then\s+|(?<=[.!?])\s+)/i)
+    .map((c) => c.trim().replace(/^(?:and|but|so|then|well|also)\s+/i, ''))
+    .filter(Boolean);
+}
+
 export function extractContracts(turns, { now = new Date().toISOString() } = {}) {
   const contracts = [];
+
+  // Promise / commitment patterns — matched per-clause, not against the whole turn.
+  // BUG (found in a live test transcript, fixed here): matching these against the
+  // full turn text let a later clause's match (e.g. "i want") greedily swallow an
+  // earlier clause's own match (e.g. "i'll call the restaurant") because none of
+  // the patterns were anchored to a clause boundary — "I want pizza and I'll call
+  // the restaurant." produced a "request" contract whose promise text was
+  // "pizza and I'll call the restaurant.", overlapping the real "i'll" promise.
+  const promisePatterns = [
+    { re: /^(?:i will|i'll)\s+(.+?)(?:\s+(?:when|after|if|by|before)\s+(.+))?$/i, type: 'promise' },
+    { re: /^(?:let me|we should|i can)\s+(.+?)(?:\s+(?:when|after|if|by|before)\s+(.+))?$/i, type: 'offer' },
+    { re: /^(?:i want|i need)\s+(?:to\s+)?(.+?)(?:\s+(?:when|after|if|by|before)\s+(.+))?$/i, type: 'request' },
+  ];
+
   for (let i = 0; i < turns.length; i += 1) {
     const turn = turns[i];
     const text = normalize(turn.text);
     const speaker = turn.role === 'assistant' ? 'assistant' : 'user';
 
-    // Promise / commitment patterns
-    const promisePatterns = [
-      { re: /(?:i will|i'll)\s+(.+?)(?:\s+(?:when|after|if|by|before)\s+(.+))?$/i, type: 'promise' },
-      { re: /(?:let me|we should|i can)\s+(.+?)(?:\s+(?:when|after|if|by|before)\s+(.+))?$/i, type: 'offer' },
-      { re: /(?:i want|i need)\s+(?:to\s+)?(.+?)(?:\s+(?:when|after|if|by|before)\s+(.+))?$/i, type: 'request' },
-    ];
-
-    for (const pat of promisePatterns) {
-      const m = text.match(pat.re);
-      if (!m) continue;
-      const promise = normalize(m[1]);
-      const completionCondition = m[2] ? normalize(m[2]) : null;
-      contracts.push({
-        id: `${slug(speaker)}-${slug(promise).slice(0, 20)}-${i}`,
-        session_sequence: i,
-        speaker,
-        type: pat.type,
-        promise,
-        completion_condition: completionCondition,
-        status: 'pending',
-        evidence: {
-          source_turn_text: text,
-          extracted_at: now,
-        },
-        created_at: now,
-      });
+    for (const clause of splitClauses(text)) {
+      for (const pat of promisePatterns) {
+        const m = clause.match(pat.re);
+        if (!m) continue;
+        const promise = normalize(m[1]);
+        const completionCondition = m[2] ? normalize(m[2]) : null;
+        contracts.push({
+          id: `${slug(speaker)}-${slug(promise).slice(0, 20)}-${i}`,
+          session_sequence: i,
+          speaker,
+          type: pat.type,
+          promise,
+          completion_condition: completionCondition,
+          status: 'pending',
+          evidence: {
+            source_turn_text: text,
+            extracted_at: now,
+          },
+          created_at: now,
+        });
+        break; // one contract per clause — don't let a second pattern also match the same clause
+      }
     }
   }
   return contracts;
