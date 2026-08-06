@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/ideavault/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-08-05 — Enhanced `scripts/scan-conversation-dumps.mjs` to also flag files for routing/archive and extract Digital Twin signal fragments (decisions, preferences, mood markers, principles, questions). `npm run idea-vault:scan-dumps` now writes `YYYY-MM-DD-conversation-dump-bot-catalog.md` + `docs/products/ideavault/data/twin-signals/adam-YYYY-MM-DD-signals.jsonl` + `adam-YYYY-MM-DD-profile-fragment.json` (5,747 signals from 111 files). |
+| **Last Updated** | 2026-08-06 — Charter clarified: IdeaVault is the canonical intake for every idea from founder/model conversations. Each idea is captured with nuance, features, and source provenance; tagged; prioritized; and promoted to a project/product folder when it matures. `npm run idea-vault:scan-dumps` remains the first-pass bot. |
 
 ---
 
@@ -19,18 +19,40 @@
 
 ## What it does
 
-IdeaVault is an intake and routing tool. Its job is to make sure no idea or conversation gets lost — and that whatever is captured ends up in the right place.
+IdeaVault is the **canonical intake and priority ledger** for every idea that comes out of founder/model conversations. Its job is to make sure no idea gets lost, that each idea keeps its nuance and feature details, and that the best ideas are promoted to the right project or product folder once they are ready.
 
 **Intake sources:**
-- Conversations with Chair/Lumin that surface product ideas mid-session
+- Founder conversations with Chair/Lumin that surface product ideas mid-session
 - Operator brainstorms pasted directly
 - BuilderOS gap analysis output
 - Any agent that identifies a feature worth preserving
 
+**Capture rule:** whenever you or the system says “that’s a great idea,” it is written into IdeaVault with:
+- the verbatim insight or feature description
+- source conversation reference
+- inferred product tag(s)
+- rough priority / readiness signal
+- open questions or dependencies
+
 **Routing output:**
-- Ideas related to a specific product → `docs/products/<product-id>/conversations/`
+- Ideas related to a specific product → `docs/products/<product-id>/conversations/` and eventually the product home
 - Cross-product or platform ideas → `docs/products/ideavault/PRODUCT_HOME.md` catalog
 - Ideas with no clear owner → `docs/conversation_dumps/OPERATOR_BRAINSTORM_INBOX.md` (pending triage)
+
+## Priority list
+
+IdeaVault maintains the **first-pass priority list**. A row in the catalog includes:
+
+| Field | Meaning |
+|---|---|
+| `idea_id` | short stable identifier |
+| `source` | conversation dump, transcript, or direct message |
+| `tags` | product/theme guesses |
+| `priority` | `NOW` / `NEXT` / `LATER` / `RESEARCH` |
+| `why` | one-line value or problem it solves |
+| `owner` | `ideavault` until promoted to a product home |
+
+Promotion to a project/product folder happens when the idea has a clear enough shape that it needs its own `PRODUCT_HOME.md`, `BUILD_QUEUE.json`, or `FOUNDER_PACKET.md`.
 
 ## Runtime files
 
@@ -52,7 +74,7 @@ IdeaVault-specific conversations (about the tool itself, not ideas it contains) 
 | **Lifecycle** | `LIVE` (documentation / backlog SSOT — not a shipping product surface) |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `operational` |
-| **Last Updated** | 2026-04-25 — **`docs/conversation_dumps/OPERATOR_BRAINSTORM_INBOX.md`** — verbatim ChatGPT brainstorm paste target; **brainstorm-dense line hints** on Streams **M/N/O/P/Q/R**. Prior: operator corpus priority (§6.5); **§A.1** **L4-001**–**003**; **`CONVERSATION_DUMP` §11** **~68% / ~32%** (L4 **3**/12). **A–S**. |
+| **Last Updated** | 2026-08-06 — Charter clarified: IdeaVault is the canonical intake and priority ledger for founder/model conversation ideas. |
 | **Verification Command** | `test -f docs/products/ideavault/PRODUCT_HOME.md && test -f docs/products/ideavault/FILE_MANIFEST.json` |
 | **Manifest** | `docs/products/ideavault/FILE_MANIFEST.json` |
 

@@ -18,7 +18,6 @@
 - `docs/products/lifeos/CRISIS_SAFETY_PROTOCOL_V1.md`
 - `docs/products/lifeos/DECISION_OUTCOME_LEDGER_V1.md`
 - `docs/BLUEPRINT_COMMUNICATION_FIRST_2026-08-02.md`
-- `docs/constitution/proposals/2026-08-04-COGNITIVE-INTERACTION-ARCHITECTURE-PROPOSAL.md` — NOT RATIFIED decision packet covering the same 2026-08-04+ brainstorming from a different angle (mode-selection philosophy, round-by-round disagreement record, citation-verified Knowledge Distribution candidates in §F, Identity-Safe Learning A15). Cross-linked here 2026-08-06 so these two documents don't drift apart independently — this blueprint is the LifeOS-scoped build spec; that document is the ratification-track decision packet. Confirmed no schema duplication between them: this blueprint's §17/§13 correctly point at the real `chair-decision-ledger.js`/`decision_outcome_ledger` rather than reinventing a parallel `OutcomeRecord`, avoiding the exact duplication the proposal doc's round-4 review flagged in an earlier draft of the same TALOA source material.
 
 ---
 
@@ -199,23 +198,6 @@ Modes are behaviors, not personalities. One primary mode and optional secondary 
 Allowed transitions: Presence → Reflection → Discovery → Expansion → Guidance → Execution; Observation → Guidance; Any mode → Safety; Execution → Clarification on failed command truth.
 
 Disallowed: Presence → heavy framework without signal; Safety → persuasion; Execution → coaching detour; Guidance → action without permission; any mode → manipulation.
-
-### 6.1 Identity-Safe Learning (the mechanism underneath Guidance and Discovery)
-
-**Gap found 2026-08-06, added directly** — not present elsewhere in this document, and not a duplicate of anything above; it's the mechanism the Guidance row names but doesn't specify. First captured as A15/A15-support in `docs/constitution/proposals/2026-08-04-COGNITIVE-INTERACTION-ARCHITECTURE-PROPOSAL.md` (round 6) and folded in here because it's squarely this document's scope.
-
-**The claim:** people rarely change because they're shown they're wrong. They change because they feel understood enough to safely explore another possibility. Correction is not the goal — voluntary model updating is. The real sequence has no "Correction" step:
-
-**Observe → Understand → Demonstrate Understanding → Permission → Explore Alternatives → Evidence → Self-Discovery → Choice → Support**
-
-This is why Guidance's "least guidance that creates value" line works the way it does — jumping straight to a recommendation skips the steps that make the recommendation landable at all.
-
-**Three levels of support**, escalating only as needed:
-1. **Reflection** — "here's what we're observing." Data presented as observation, never judgment: "you're struggling" is out; "here's what the data shows" is in.
-2. **Exploration** — "what do you think might explain it?"
-3. **Evidence-Informed Suggestions** — "here are approaches associated with better outcomes." Evidence, not authority — never "the correct way."
-
-**Caution, not in the original source material:** optimizing every person's feedback toward one "correct" approach risks flattening genuine outlier strengths — the person who gets exceptional results with an unconventional method shouldn't be nudged toward average. Cross-reference §8.3's Growth and thinking dynamics (CLAIM → HYPOTHESIS → TESTED → VERIFIED) — this is the same evidence-level discipline applied to *how* a person is coached, not just *what* is known about them.
 
 ---
 
@@ -666,21 +648,99 @@ This blueprint is therefore a **product-level composition** of the existing comm
 
 ## 20. Voice, perception, and shared-engine additions (from 2026-08-05 founder conversations)
 
-### 20.1 Human Perception Engine
-The system does not rely on the transcript alone. It continuously fuses evidence from multiple independent channels:
+### 20.0 Core principle: understanding emerges from evidence fusion
 
-- **Language**: word choice, sentence structure, vocabulary, explicit statements, questions, contradictions
-- **Tonality**: pace, volume, pitch, inflection, energy, hesitation, confidence, conviction, stress, excitement, sarcasm, frustration, curiosity, warmth, empathy, uncertainty, emotional transitions over time
-- **Conversational rhythm**: response latency, interruptions, turn-taking, silence, pause duration, speaking ratio, topic changes, end-of-turn detection
-- **Facial analysis**: eye contact, head movement, facial expressions, smile intensity, brow and mouth movement, surprise, confusion, engagement, fatigue
-- **Body language**: posture, leaning, hand gestures, fidgeting, orientation, attention, general energy
-- **Behavioral context**: conversation history, Digital Twin, preferences, prior interactions, current task, time of day, environment, known patterns
-- **Outcome feedback**: did the intervention help? was the prediction correct? did the person correct us? did trust increase? did the conversation achieve its goal?
+**The goal is not to replace transcript understanding. The goal is to reduce ambiguity by combining independent evidence sources.**
+
+The system should never rely on a single modality when multiple independent sources of evidence are available. Understanding emerges from evidence fusion, not transcript analysis alone.
+
+The old model was:
+
+```text
+Transcript
+    ↓
+Understanding
+```
+
+The new model is:
+
+```text
+Words + Tone + Timing + Facial expressions + Eye gaze
++ Body language + Interaction history + Digital Imprint
++ Environment + Task context + Past outcomes
+                    ↓
+         Evidence Fusion Engine
+                    ↓
+           Confidence model
+                    ↓
+           Understanding
+                    ↓
+      Conversation / Action
+```
+
+This is a foundational architectural decision: every source gets its own calibrated confidence, and the fusion engine asks:
+
+> Given all available evidence, what is the most likely current state, and how confident are we?
+
+### 20.1 Human Perception Engine
+
+The Human Perception Engine does not rely on the transcript alone. It continuously fuses evidence from multiple independent channels to estimate the current conversational state with calibrated confidence.
+
+Emotion recognition is one evidence source inside this engine, not the final truth. The engine internally produces estimates such as:
+
+- **Confidence 92%:** User has finished speaking.
+- **Confidence 81%:** User appears frustrated.
+- **Confidence 67%:** User seems uncertain and may benefit from clarification.
+
+These confidence estimates influence how the AI responds, but they are not presented as facts about the person.
+
+The evidence channels are:
+
+#### Language
+- Word choice, sentence structure, vocabulary
+- Explicit statements, questions, contradictions
+
+#### Tonality Engine (a major subsystem, not a sentiment checkbox)
+- Pace of speech, volume, pitch, inflection, energy
+- Hesitation, confidence, conviction, stress, excitement
+- Sarcasm, frustration, curiosity, warmth, empathy, uncertainty
+- Emotional transitions over time
+
+Sometimes how something is said is more informative than the words themselves.
+
+#### Conversational Rhythm
+- Response latency, interruptions, turn-taking, silence
+- Pause duration, speaking ratio, topic changes
+- Whether someone is finished speaking
+
+#### Facial Analysis
+- Eye contact, head movement, facial expressions
+- Smile intensity, brow and mouth movement
+- Surprise, confusion, engagement, fatigue
+
+#### Body Language
+- Posture, leaning, hand gestures, fidgeting
+- Orientation, attention, general energy
+
+#### Behavioral Context
+- Conversation history, Digital Imprint / Twin, preferences
+- Prior interactions, current task, time of day, environment, known patterns
+
+#### Outcome Feedback
+- Did the intervention help?
+- Was the prediction correct?
+- Did the person correct us?
+- Did they become clearer?
+- Did trust increase?
+- Did the conversation achieve its goal?
 
 Each channel produces a calibrated confidence score. The system learns which channels are most predictive in which situations and recalibrates from real outcomes.
 
 ### 20.2 Evidence Fusion Engine
-The Evidence Fusion Engine combines independent sources into a single state estimate with calibrated confidence. It asks:
+
+The Evidence Fusion Engine is a **domain-independent system** that continuously combines multiple independent evidence sources into calibrated confidence estimates. Every OS — LifeOS, SalesOS, TherapyOS, MediaOS, BuilderOS — consumes those calibrated estimates rather than interpreting raw signals independently.
+
+It asks:
 
 > Given every piece of evidence we currently have, what is the most likely explanation, how confident are we, and how should that change our communication?
 
@@ -690,8 +750,44 @@ Rules:
 - New sensors are added as additional inputs; the core engine architecture stays stable.
 - Inferences are consumed by the Composer and Safety gate, not presented as facts about the user.
 
+#### Confidence by modality
+
+Every source gets its own confidence score. For example:
+
+- **Transcript:** 72% confidence the user is asking for advice.
+- **Tone:** 85% confidence they are frustrated.
+- **Timing:** 90% confidence they are finished speaking.
+- **Facial expression:** 65% confidence they are surprised.
+- **History:** 94% confidence they usually brainstorm before making decisions.
+
+The system learns which modalities are most predictive in different situations:
+
+- During a **phone call**, tonality may carry more weight than facial information.
+- During a **video call**, facial expressions and eye contact become more informative.
+- During **text chat**, interaction history, writing style, and conversation rhythm carry more weight.
+
+The weighting itself is learned and recalibrated from real-world outcomes, not hard-coded forever. Five years from now, new sensors — smart glasses, rings, heart rate, breathing patterns, AR spatial awareness, cursor movement, typing rhythm, EEG devices — are simply additional inputs into the same fusion engine.
+
+#### Learning loop
+
+When the system predicts a state and responds, the user's reaction becomes feedback:
+
+- User smiles, relaxes, and says “Exactly! That's what I was trying to say.” → the evidence weighting worked.
+- User says “No, that's not what I meant.” → the engine learns that facial expressions may have been over-weighted and transcript context should have carried more weight in that situation.
+
+Over millions of interactions, the perception system continuously recalibrates itself.
+
 ### 20.3 Tonality Engine
-Tonality is a major subsystem of Human Perception, not a sentiment checkbox. It analyzes the acoustic and rhythmic features of speech and is shared as a cross-product layer for LifeOS, SalesOS, TherapyOS, MediaOS, LeadershipOS, and EducationOS.
+
+Tonality is one of the highest-value signals and deserves its own subsystem, not just a bullet point. It analyzes the acoustic and rhythmic features of speech:
+
+- Pace of speech
+- Volume, pitch, inflection
+- Energy, hesitation, confidence, conviction, stress
+- Excitement, sarcasm, frustration, curiosity, warmth, empathy, uncertainty
+- Emotional transitions over time
+
+Sometimes how something is said is more informative than the words themselves. It is shared as a cross-product layer for LifeOS, SalesOS, TherapyOS, MediaOS, LeadershipOS, and EducationOS.
 
 ### 20.4 Cognitive Dynamics
 The runtime continuously estimates the current conversational state across dimensions such as ambiguity, certainty, agency, openness, cognitive load, readiness, emotional intensity, momentum, and trust. These are not personality traits; they are momentary states that the Composer uses to select modes and calibrate interventions.

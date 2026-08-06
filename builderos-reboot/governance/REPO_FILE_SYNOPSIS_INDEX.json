@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-06T05:06:49.385Z",
+  "generated_at": "2026-08-06T05:07:10.590Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13016,
+  "file_count": 13019,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -33199,8 +33199,8 @@
       "path": "data/constitutional-framework/reports/CONSTITUTIONAL_OBSERVABILITY_REPORT.json",
       "synopsis": "JSON data/config — data/constitutional-framework/reports/CONSTITUTIONAL_OBSERVABILITY_REPORT.json.",
       "bytes": 10125,
-      "mtime": "2026-08-06T01:09:08.422Z",
-      "indexed_at": "2026-08-06T01:09:08.422Z",
+      "mtime": "2026-08-06T05:07:10.590Z",
+      "indexed_at": "2026-08-06T05:07:10.590Z",
       "synopsis_index_only": true
     },
     {
@@ -39643,9 +39643,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 145504,
-      "mtime": "2026-08-06T01:09:08.422Z",
-      "indexed_at": "2026-08-06T01:09:08.422Z"
+      "bytes": 146588,
+      "mtime": "2026-08-06T05:07:10.590Z",
+      "indexed_at": "2026-08-06T05:07:10.590Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -42751,24 +42751,24 @@
     {
       "path": "docs/products/ideavault/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
-      "bytes": 0,
-      "mtime": "2026-08-05T20:00:11.441Z",
-      "indexed_at": "2026-08-05T20:00:11.441Z",
+      "bytes": 1779,
+      "mtime": "2026-08-06T05:07:10.590Z",
+      "indexed_at": "2026-08-06T05:07:10.590Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/products/ideavault/PRODUCT_HOME.md",
-      "synopsis": "Documentation — PRODUCT HOME.",
-      "bytes": 0,
-      "mtime": "2026-08-05T20:00:11.441Z",
-      "indexed_at": "2026-08-05T20:00:11.441Z"
+      "synopsis": "Canonical product home — IdeaVault",
+      "bytes": 68416,
+      "mtime": "2026-08-06T05:07:10.590Z",
+      "indexed_at": "2026-08-06T05:07:10.590Z"
     },
     {
       "path": "docs/products/INDEX.md",
       "synopsis": "Product index — start here",
-      "bytes": 2628,
-      "mtime": "2026-08-05T19:41:53.578Z",
-      "indexed_at": "2026-08-05T19:41:53.578Z"
+      "bytes": 2634,
+      "mtime": "2026-08-06T05:07:10.590Z",
+      "indexed_at": "2026-08-06T05:07:10.590Z"
     },
     {
       "path": "docs/products/kids-os/CREATIVE_BRIEF.md",
@@ -42863,6 +42863,28 @@
       "bytes": 6443,
       "mtime": "2026-06-30T00:08:38.324Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "docs/products/legacy-imprint/conversations/2026-07-23-founder-vision-brief.md",
+      "synopsis": "Documentation — 2026 07 23 Founder Vision Brief.",
+      "bytes": 14067,
+      "mtime": "2026-08-06T05:07:10.590Z",
+      "indexed_at": "2026-08-06T05:07:10.590Z"
+    },
+    {
+      "path": "docs/products/legacy-imprint/FILE_MANIFEST.json",
+      "synopsis": "Documentation — FILE MANIFEST.",
+      "bytes": 1607,
+      "mtime": "2026-08-06T05:07:10.590Z",
+      "indexed_at": "2026-08-06T05:07:10.590Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "docs/products/legacy-imprint/PRODUCT_HOME.md",
+      "synopsis": "Canonical product home — Legacy Imprint (legacy-imprint) — formerly LegacyOS / MediaOS / Human Legacy Initiative",
+      "bytes": 8798,
+      "mtime": "2026-08-06T05:07:10.590Z",
+      "indexed_at": "2026-08-06T05:07:10.590Z"
     },
     {
       "path": "docs/products/legacyos/conversations/2026-07-23-founder-vision-brief.md",
@@ -42967,9 +42989,9 @@
     {
       "path": "docs/products/lifeos/COMMUNICATION_SYSTEM_BLUEPRINT.md",
       "synopsis": "LifeOS-scoped communication / cognitive-interaction blueprint — source: TALOA Cognitive Interaction System complete blueprint 2026-08-04, cross-referenced with existing LifeOS communication canon.",
-      "bytes": 40680,
-      "mtime": "2026-08-06T05:05:33.152Z",
-      "indexed_at": "2026-08-06T05:06:49.385Z"
+      "bytes": 41744,
+      "mtime": "2026-08-06T05:07:10.590Z",
+      "indexed_at": "2026-08-06T05:07:10.590Z"
     },
     {
       "path": "docs/products/lifeos/COMMUNICATION_SYSTEM_FOUNDER_REFERENCE.md",
@@ -43059,9 +43081,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 738085,
-      "mtime": "2026-08-06T05:06:30.851Z",
-      "indexed_at": "2026-08-06T05:06:49.385Z"
+      "bytes": 736551,
+      "mtime": "2026-08-06T05:07:10.590Z",
+      "indexed_at": "2026-08-06T05:07:10.590Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -43443,9 +43465,9 @@
     {
       "path": "docs/products/PRODUCT_REGISTRY.json",
       "synopsis": "Documentation — PRODUCT REGISTRY.",
-      "bytes": 26179,
-      "mtime": "2026-08-05T19:41:53.578Z",
-      "indexed_at": "2026-08-05T19:41:53.578Z",
+      "bytes": 26307,
+      "mtime": "2026-08-06T05:07:10.590Z",
+      "indexed_at": "2026-08-06T05:07:10.590Z",
       "synopsis_index_only": true
     },
     {
@@ -66971,9 +66993,9 @@
     {
       "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
       "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
-      "bytes": 3021,
-      "mtime": "2026-08-06T01:09:08.422Z",
-      "indexed_at": "2026-08-06T01:09:08.422Z",
+      "bytes": 3041,
+      "mtime": "2026-08-06T05:07:10.590Z",
+      "indexed_at": "2026-08-06T05:07:10.590Z",
       "synopsis_index_only": true
     },
     {
@@ -67596,8 +67618,8 @@
       "path": "products/receipts/POINT_B_DNA_VERIFY.json",
       "synopsis": "Product receipt — POINT B DNA VERIFY.",
       "bytes": 280,
-      "mtime": "2026-08-06T01:09:08.422Z",
-      "indexed_at": "2026-08-06T01:09:08.422Z",
+      "mtime": "2026-08-06T05:07:10.590Z",
+      "indexed_at": "2026-08-06T05:07:10.590Z",
       "synopsis_index_only": true
     },
     {
@@ -67612,8 +67634,8 @@
       "path": "products/receipts/RECEIPT_TRUTH_VALIDATION.json",
       "synopsis": "Product receipt — RECEIPT TRUTH VALIDATION.",
       "bytes": 18682,
-      "mtime": "2026-08-06T01:09:08.422Z",
-      "indexed_at": "2026-08-06T01:09:08.422Z",
+      "mtime": "2026-08-06T05:07:10.590Z",
+      "indexed_at": "2026-08-06T05:07:10.590Z",
       "synopsis_index_only": true
     },
     {
@@ -67812,16 +67834,16 @@
       "path": "products/receipts/TRUTH_ENFORCEMENT_AUDIT.json",
       "synopsis": "Product receipt — TRUTH ENFORCEMENT AUDIT.",
       "bytes": 701,
-      "mtime": "2026-08-06T01:09:08.422Z",
-      "indexed_at": "2026-08-06T01:09:08.422Z",
+      "mtime": "2026-08-06T05:07:10.590Z",
+      "indexed_at": "2026-08-06T05:07:10.590Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/TRUTH_LOCKDOWN_VERIFY.json",
       "synopsis": "Product receipt — TRUTH LOCKDOWN VERIFY.",
       "bytes": 1141,
-      "mtime": "2026-08-06T01:09:08.422Z",
-      "indexed_at": "2026-08-06T01:09:08.422Z",
+      "mtime": "2026-08-06T05:07:10.590Z",
+      "indexed_at": "2026-08-06T05:07:10.590Z",
       "synopsis_index_only": true
     },
     {
@@ -67852,8 +67874,8 @@
       "path": "products/receipts/WISDOM_TRUTH_AUDIT.json",
       "synopsis": "Product receipt — WISDOM TRUTH AUDIT.",
       "bytes": 735,
-      "mtime": "2026-08-06T01:09:08.422Z",
-      "indexed_at": "2026-08-06T01:09:08.422Z",
+      "mtime": "2026-08-06T05:07:10.590Z",
+      "indexed_at": "2026-08-06T05:07:10.590Z",
       "synopsis_index_only": true
     },
     {
@@ -77047,10 +77069,13 @@
     },
     {
       "path": "scripts/scan-conversation-dumps.mjs",
-      "synopsis": "Script — Scan Conversation Dumps.",
-      "bytes": 0,
-      "mtime": "2026-08-05T20:00:11.441Z",
-      "indexed_at": "2026-08-05T20:00:11.441Z"
+      "synopsis": "Conversation dump scanner — produces a categorized catalog,",
+      "bytes": 17466,
+      "mtime": "2026-08-06T05:07:10.590Z",
+      "indexed_at": "2026-08-06T05:07:10.590Z",
+      "ssot": [
+        "docs/products/ideavault/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "scripts/security-invariants-check.mjs",
