@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-06T06:57:00.965Z",
+  "generated_at": "2026-08-06T07:04:51.538Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13023,
+  "file_count": 13025,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -39644,8 +39644,8 @@
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Documentation — CONTINUITY LOG.",
       "bytes": 0,
-      "mtime": "2026-08-06T06:57:00.965Z",
-      "indexed_at": "2026-08-06T06:57:00.965Z"
+      "mtime": "2026-08-06T07:04:51.538Z",
+      "indexed_at": "2026-08-06T07:04:51.538Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -43011,8 +43011,8 @@
       "path": "docs/products/lifeos/communication/COMMUNICATION_SYSTEM_BLUEPRINT.md",
       "synopsis": "Documentation — COMMUNICATION SYSTEM BLUEPRINT.",
       "bytes": 0,
-      "mtime": "2026-08-06T06:57:00.965Z",
-      "indexed_at": "2026-08-06T06:57:00.965Z"
+      "mtime": "2026-08-06T07:04:51.538Z",
+      "indexed_at": "2026-08-06T07:04:51.538Z"
     },
     {
       "path": "docs/products/lifeos/communication/COMMUNICATION_SYSTEM_FOUNDER_REFERENCE.md",
@@ -43027,6 +43027,13 @@
       "bytes": 5149,
       "mtime": "2026-08-04T16:56:35.898Z",
       "indexed_at": "2026-08-06T05:30:22.273Z"
+    },
+    {
+      "path": "docs/products/lifeos/communication/COMPETITIVE_CATCHUP_PLAN.md",
+      "synopsis": "Documentation — COMPETITIVE CATCHUP PLAN.",
+      "bytes": 0,
+      "mtime": "2026-08-06T07:04:51.538Z",
+      "indexed_at": "2026-08-06T07:04:51.538Z"
     },
     {
       "path": "docs/products/lifeos/conversations/2026-06-29-human-synergy-limitless-principle.md",
@@ -43095,16 +43102,16 @@
       "path": "docs/products/lifeos/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
       "bytes": 0,
-      "mtime": "2026-08-06T06:57:00.965Z",
-      "indexed_at": "2026-08-06T06:57:00.965Z",
+      "mtime": "2026-08-06T07:04:51.538Z",
+      "indexed_at": "2026-08-06T07:04:51.538Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Documentation — PRODUCT HOME.",
       "bytes": 0,
-      "mtime": "2026-08-06T06:57:00.965Z",
-      "indexed_at": "2026-08-06T06:57:00.965Z"
+      "mtime": "2026-08-06T07:04:51.538Z",
+      "indexed_at": "2026-08-06T07:04:51.538Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -76314,6 +76321,13 @@
       "bytes": 0,
       "mtime": "2026-08-06T06:57:00.965Z",
       "indexed_at": "2026-08-06T06:57:00.965Z"
+    },
+    {
+      "path": "scripts/prototype-tonality-engine-v1.mjs",
+      "synopsis": "Script — Prototype Tonality Engine V1.",
+      "bytes": 0,
+      "mtime": "2026-08-06T07:04:51.538Z",
+      "indexed_at": "2026-08-06T07:04:51.538Z"
     },
     {
       "path": "scripts/provision-alpha-auditor.mjs",

@@ -820,6 +820,8 @@ Tonality is one of the highest-value signals and deserves its own subsystem, not
 - Excitement, sarcasm, frustration, curiosity, warmth, empathy, uncertainty
 - Emotional transitions over time
 
+**V1 prototype:** `scripts/prototype-tonality-engine-v1.mjs` parses 16-bit mono WAV, downsamples to 8 kHz, runs a YIN-based pitch detector on 40 ms frames, and computes RMS energy, zero-crossing rate, pauses, and speaking rate. It classifies per-utterance tonal state (`excited`, `frustrated`, `uncertain`, `tired`, `calm`, `emphatic`, `neutral`) and fuses those signals with the transcript-based `user_finished` confidence model from the Conversational Contracts prototype.
+
 Sometimes how something is said is more informative than the words themselves. It is shared as a cross-product layer for LifeOS, SalesOS, TherapyOS, MediaOS, LeadershipOS, and EducationOS.
 
 ### 19.4 Cognitive Dynamics
