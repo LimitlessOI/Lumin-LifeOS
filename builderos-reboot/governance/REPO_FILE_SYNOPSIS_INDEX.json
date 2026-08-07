@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-07T19:47:32.014Z",
+  "generated_at": "2026-08-07T20:02:47.824Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13055,
   "files": [
@@ -42817,9 +42817,9 @@
     {
       "path": "docs/products/ideavault/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — IdeaVault",
-      "bytes": 68416,
-      "mtime": "2026-08-06T05:07:10.590Z",
-      "indexed_at": "2026-08-06T05:07:10.590Z"
+      "bytes": 69589,
+      "mtime": "2026-08-07T20:02:10.181Z",
+      "indexed_at": "2026-08-07T20:02:47.824Z"
     },
     {
       "path": "docs/products/INDEX.md",
@@ -100196,9 +100196,9 @@
     {
       "path": "startup/register-founder-runtime-routes.js",
       "synopsis": "Minimal founder-builder runtime route composition.",
-      "bytes": 20998,
-      "mtime": "2026-08-07T00:42:07.795Z",
-      "indexed_at": "2026-08-07T00:45:40.077Z",
+      "bytes": 21872,
+      "mtime": "2026-08-07T20:00:12.734Z",
+      "indexed_at": "2026-08-07T20:02:47.824Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

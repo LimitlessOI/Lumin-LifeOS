@@ -24,6 +24,7 @@ import { createReceptionistRoutes } from "../routes/receptionist-routes.js";
 import { createMLSRoutes } from "../routes/mls-routes.js";
 import { createLifeOSCommitmentRoutes } from "../routes/lifeos-commitment-routes.js";
 import { createLifeOSCoreRoutes } from "../routes/lifeos-core-routes.js";
+import { createIdeaQueueRoutes } from "../routes/idea-queue-routes.js";
 import { requireLifeOSAdmin } from "../middleware/lifeos-auth-middleware.js";
 import { createTCCoordinator } from "../services/tc-coordinator.js";
 import { createAccountManager } from "../services/account-manager.js";
@@ -283,6 +284,19 @@ export async function registerFounderRuntimeRoutes(app, deps) {
     logger.info("✅ [LIFEOS-CORE] Founder-builder routes mounted at /api/v1/lifeos (reactivated 2026-08-06)");
   } catch (err) {
     logger.warn?.({ err: err.message }, "[LIFEOS-CORE] founder-lane mount failed (non-fatal)");
+  }
+
+  // 2026-08-07: routes/idea-queue-routes.js (the real IdeaVault submit/approve/
+  // reject/build API) was only ever imported by startup/register-runtime-routes.js
+  // (the full-runtime lane), same dead-in-production pattern as lifeos-core-routes.js
+  // above. Confirmed live: GET /api/v1/ideas returned 404 in production. Adam
+  // directly asked whether IdeaVault actually gets consulted -- it couldn't have
+  // been, since the submit endpoint itself was unreachable.
+  try {
+    app.use("/api/v1/ideas", createIdeaQueueRoutes({ pool, requireKey, callCouncilMember }));
+    logger.info("✅ [IDEAVAULT] Founder-builder routes mounted at /api/v1/ideas (reactivated 2026-08-07)");
+  } catch (err) {
+    logger.warn?.({ err: err.message }, "[IDEAVAULT] founder-lane mount failed (non-fatal)");
   }
 
   // ClientCare billing rescue must live on founder lane — production boots founder_builder.
