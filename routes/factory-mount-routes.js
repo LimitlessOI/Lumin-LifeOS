@@ -547,6 +547,7 @@ ${text.slice(0, 24000)}`;
         skip_intake_gate,
         claim_following_blueprint,
         model_escalation,
+        auto_generate_reasoning_plan,
       } = req.body || {};
       // Autonomous loop sends model_escalation (>0) after repeated same-signature
       // failures. Apply GRADE_ESCALATION_TIERS to every bound step's authoring.tiers
@@ -642,7 +643,13 @@ ${text.slice(0, 24000)}`;
         || twinProbe.twin_source === 'product_blueprint';
       const allowSkip = productTwin === true;
       const dispatch = async ({ mission_id: m, blueprint_id: b, step }) => dispatchExecuteStep(
-        { mission_id: m, blueprint_id: b, step, skip_intake_gate: allowSkip },
+        {
+          mission_id: m,
+          blueprint_id: b,
+          step,
+          skip_intake_gate: allowSkip,
+          auto_generate_reasoning_plan: auto_generate_reasoning_plan === true,
+        },
         dispatchOptions,
       );
       const signal = async (sig) => {
