@@ -167,7 +167,7 @@ function extensionForMime(mimeType) {
   return 'webm';
 }
 
-function buildMultipartBody(audioBuffer, mimeType, filename, prompt, model = WHISPER_MODEL) {
+function buildMultipartBody(audioBuffer, mimeType, filename, prompt, model = WHISPER_MODEL, requestVerboseJson = true) {
   const boundary = `----VRStt${Date.now().toString(16)}`;
   const nl = '\r\n';
 
@@ -180,9 +180,13 @@ function buildMultipartBody(audioBuffer, mimeType, filename, prompt, model = WHI
     `${nl}--${boundary}${nl}` +
     `Content-Disposition: form-data; name="model"${nl}${nl}${model}${nl}` +
     `${nl}--${boundary}${nl}` +
-    `Content-Disposition: form-data; name="language"${nl}${nl}en${nl}` +
-    `${nl}--${boundary}${nl}` +
-    `Content-Disposition: form-data; name="response_format"${nl}${nl}verbose_json${nl}`;
+    `Content-Disposition: form-data; name="language"${nl}${nl}en${nl}`;
+
+  if (requestVerboseJson) {
+    middle +=
+      `${nl}--${boundary}${nl}` +
+      `Content-Disposition: form-data; name="response_format"${nl}${nl}verbose_json${nl}`;
+  }
 
   if (prompt) {
     middle +=
@@ -250,9 +254,9 @@ function assessTranscriptionQuality(data) {
   }
 }
 
-async function callWhisperEndpoint(endpoint, apiKey, audioBuffer, mimeType, filename, prompt, model) {
-  const { body, boundary } = buildMultipartBody(audioBuffer, mimeType, filename, prompt, model);
-  const response = await fetch(endpoint, {
+async function postWhisperRequest(endpoint, apiKey, audioBuffer, mimeType, filename, prompt, model, requestVerboseJson) {
+  const { body, boundary } = buildMultipartBody(audioBuffer, mimeType, filename, prompt, model, requestVerboseJson);
+  return fetch(endpoint, {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${apiKey}`,
@@ -260,6 +264,37 @@ async function callWhisperEndpoint(endpoint, apiKey, audioBuffer, mimeType, file
     },
     body,
   });
+}
+
+/**
+ * GAP-FILL 2026-08-06: confirmed live against Groq's whisper-large-v3-turbo
+ * that a provider can reject response_format=verbose_json outright (400
+ * "response_format must be one of [json text verbose_json]") even though
+ * OpenAI accepts the identical request shape -- this broke real voice
+ * transcription in production for every caller once OpenAI ran out of
+ * credit and Groq became the only working provider. Quality detection must
+ * never be able to take transcription down with it, so on that specific
+ * rejection this retries the SAME provider once without response_format
+ * (plain json -- text still returned, just quality.checked:false for that
+ * call) instead of failing the whole request.
+ */
+async function callWhisperEndpoint(endpoint, apiKey, audioBuffer, mimeType, filename, prompt, model) {
+  let response = await postWhisperRequest(endpoint, apiKey, audioBuffer, mimeType, filename, prompt, model, true);
+
+  if (!response.ok && response.status === 400) {
+    const errText = await response.text().catch(() => '');
+    if (/response_format/i.test(errText)) {
+      response = await postWhisperRequest(endpoint, apiKey, audioBuffer, mimeType, filename, prompt, model, false);
+      if (!response.ok) {
+        const retryErrText = await response.text().catch(() => '');
+        return { ok: false, status: response.status, detail: retryErrText.slice(0, 300) };
+      }
+      const data = await response.json();
+      return { ok: true, text: String(data?.text || '').trim(), quality: { checked: false } };
+    }
+    return { ok: false, status: response.status, detail: errText.slice(0, 300) };
+  }
+
   if (!response.ok) {
     const errText = await response.text().catch(() => '');
     return { ok: false, status: response.status, detail: errText.slice(0, 300) };
