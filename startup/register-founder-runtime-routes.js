@@ -23,6 +23,7 @@ import { createTCRoutes } from "../routes/tc-routes.js";
 import { createReceptionistRoutes } from "../routes/receptionist-routes.js";
 import { createMLSRoutes } from "../routes/mls-routes.js";
 import { createLifeOSCommitmentRoutes } from "../routes/lifeos-commitment-routes.js";
+import { createLifeOSCoreRoutes } from "../routes/lifeos-core-routes.js";
 import { requireLifeOSAdmin } from "../middleware/lifeos-auth-middleware.js";
 import { createTCCoordinator } from "../services/tc-coordinator.js";
 import { createAccountManager } from "../services/account-manager.js";
@@ -246,6 +247,42 @@ export async function registerFounderRuntimeRoutes(app, deps) {
     logger.info("✅ [COMMITMENTS] Founder-builder routes mounted at /api/v1/lifeos/commitments");
   } catch (err) {
     logger.warn?.({ err: err.message }, "[COMMITMENTS] founder-lane mount failed (non-fatal)");
+  }
+
+  // 2026-08-06 audit finding: routes/lifeos-core-routes.js was only ever
+  // imported by startup/register-runtime-routes.js (the full-runtime lane),
+  // which server.js never loads on Railway (services/runtime-modes.js hard-locks
+  // production to founder_builder). Confirmed via git-history cross-reference:
+  // this file is the real target_file of three already "complete, TECHNICAL_PASS"
+  // BuilderOS missions (PRODUCT-CONVERSATION-COMMITMENTS-C2-0001,
+  // PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001, PRODUCT-LIFEOS-COMMITMENT-ROUTE-V2-0001,
+  // all founder_usability_pass:false) whose real routes were therefore never
+  // reachable for Adam to try. Mounted AFTER the /api/v1/lifeos/commitments
+  // block above so Express's registration-order matching keeps that already-live,
+  // already-tested router authoritative for GET/POST /commitments and
+  // GET /commitments/overdue (this file's own handlers for those three exact
+  // paths become harmless unreachable dead code, not a behavior change) while
+  // this file's non-overlapping surface (commitments/extract, from-conversation,
+  // :id/keep, :id/break, :id/snooze, simulate, load, plus its /users adaptive-prefs
+  // routes) becomes reachable in production for the first time. Founder usability
+  // still requires a real SENTRY Layer A+B pass per SO-002 before any of this is
+  // claimed "done" — wiring restores reachability, it does not itself prove UX quality.
+  try {
+    app.use(
+      "/api/v1/lifeos",
+      createLifeOSCoreRoutes({
+        pool,
+        requireKey: requireUserOrKey,
+        callCouncilMember,
+        logger,
+        sendSMS: deps.sendSMS || null,
+        sendAlertCall: deps.sendAlertCall || null,
+        makePhoneCall: deps.makePhoneCall || null,
+      })
+    );
+    logger.info("✅ [LIFEOS-CORE] Founder-builder routes mounted at /api/v1/lifeos (reactivated 2026-08-06)");
+  } catch (err) {
+    logger.warn?.({ err: err.message }, "[LIFEOS-CORE] founder-lane mount failed (non-fatal)");
   }
 
   // ClientCare billing rescue must live on founder lane — production boots founder_builder.
