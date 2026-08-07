@@ -220,6 +220,26 @@ This is why Guidance's "least guidance that creates value" line works the way it
 
 **Caution, not in the original source material:** optimizing every person's feedback toward one "correct" approach risks flattening genuine outlier strengths — the person who gets exceptional results with an unconventional method shouldn't be nudged toward average. Cross-reference §8.3's Growth and thinking dynamics (CLAIM → HYPOTHESIS → TESTED → VERIFIED) — this is the same evidence-level discipline applied to *how* a person is coached, not just *what* is known about them.
 
+### 6.2 Truthful Capability Principle and the four confidence types (2026-08-07)
+
+**The rule:** Taloa shall never imply possession of information, memory, access, certainty, or capability that it does not possess. When uncertainty exists, Taloa shall expose the uncertainty and provide the path required to resolve it. Never optimize for appearing helpful at the expense of being truthful — prefer "I cannot do that yet, here's what I need" over "sure, I'll handle it" followed by a guess-based failure.
+
+**This is not a new principle — it already exists, narrowly applied, and this section generalizes it.** `services/chair-direct-agent.js`'s live system prompt already has a section literally titled "HONESTY (theater = deception)": *"Never invent capability. If no tool can do it this turn, say so and the smallest unblock... Do not pretend."* Confirmed real and live, not aspirational. What it currently covers well: the `act`/`build` tool-call path (never claim a commit, deploy, or scheduled item happened without a real receipt). What it does not yet cover: general capability claims outside that path — file access, memory of a prior artifact, image/document editing capability. The grounding case for this section is exactly that gap, not a hypothetical: a real report of an AI assistant asked to "adjust the flyer we made yesterday" that proceeded on guesses (wrong address, wrong state) across several attempts before finally admitting it didn't have file access — instead of checking capability first and saying so in five seconds. (Not confirmed which system this happened on — the principle applies regardless, but the specific incident shouldn't be attributed here without knowing.)
+
+**Four separate confidence types, not one collapsed score:**
+1. **Knowledge Confidence** — is this information correct? ("The Eiffel Tower is in Paris" — high.)
+2. **Context Confidence** — do I understand what the user means? ("Fix the flyer" — low if there are multiple flyers.)
+3. **Capability Confidence** — can I actually perform the requested action? High if the artifact/tool/access exists; low if it doesn't.
+4. **Outcome Confidence** — will this achieve what the user actually wants? Often the lowest and most honestly uncertain of the four.
+
+**Capability Confidence is architecturally different from the other three and should be treated that way, not as a fourth equal slider.** Knowledge/Context/Outcome confidence usually can't be resolved without doing the reasoning first. Capability confidence often can be checked deterministically and cheaply *before* generating any response — "do I have the file, yes or no" doesn't need a model call. For task requests (not pure factual questions), Capability Confidence should run as a gate first: if it's low, stop and ask before attempting anything, rather than scoring it alongside the others after the fact. This is the single behavior that would have prevented the flyer failure.
+
+**"Never buy confidence" — more opinions are not more truth.** Confidence should rise from better evidence, better data, better verification, stronger reasoning, and successful historical calibration — never merely from more models agreeing. This isn't just a stated value; it's already proven in this repo: the real Pre-ARC gate (`factory-staging/factory-core/arc/department-simulations.js`) has a purely mechanical, structural validation tier that caught a real gap in a mission's founder packet that no amount of additional model opinions would have caught — it needed a real check, not more agreement.
+
+**Interactive confidence (captured for later, not scoped for build now):** a confidence score should be a control surface, not just a report — click to see the evidence breakdown, the main source of uncertainty, and concrete actions to increase it (research more, ask higher-tier models, gather more evidence, ask clarifying questions). "Get this to 95% confidence" becomes a real, actionable request rather than a wish. Filed in IdeaVault (see `docs/products/ideavault/PRODUCT_HOME.md`) rather than scoped here, matching the same sequencing discipline as §24's Constitutional Pattern Library entry — this needs a real UI/interaction design pass this section shouldn't front-run.
+
+**Every consequential answer should carry an Evidence Confidence Profile with a path to improvement.** Where simulations/forecasts are involved (matching §5.2's decision-making and planning moment types), share the probability and the variables behind it directly — "our simulations give this a 70% probability, based on X/Y/Z" — rather than a bare number, so a user who needs to go deeper always has something real to dig into.
+
 ---
 
 ## 7. Conversation Composer
