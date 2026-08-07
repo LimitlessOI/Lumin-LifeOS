@@ -11,8 +11,8 @@
       "lever": "kernel_wrap_build_ledger",
       "playbook": "DONE_GATE_BLOCKED",
       "first_at": "2026-06-24T18:48:23.949Z",
-      "count": 1,
-      "last_at": "2026-06-24T18:48:23.949Z"
+      "count": 8,
+      "last_at": "2026-08-07T23:13:56.017Z"
     },
     "UNKNOWN::builder_gaps_pattern_review": {
       "lever": "builder_gaps_pattern_review",
@@ -38,10 +38,10 @@
   },
   "failure_counts": {
     "SYNTAX_FAIL::inner_review_syntax_gate": 9,
-    "DONE_GATE_BLOCKED::kernel_wrap_build_ledger": 1,
+    "DONE_GATE_BLOCKED::kernel_wrap_build_ledger": 8,
     "UNKNOWN::builder_gaps_pattern_review": 3,
     "SAFE_SCOPE_BLOCKED::safe_scope_prefix_or_retry": 10,
     "MISSING_TARGET::blueprint_target_file_required": 5
   },
-  "last_improvement_at": "2026-07-30T18:08:22.142Z"
+  "last_improvement_at": "2026-08-07T23:13:56.017Z"
 }
