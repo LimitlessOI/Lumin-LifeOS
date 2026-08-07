@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-07T01:52:01.269Z",
+  "generated_at": "2026-08-07T01:55:29.503Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13048,
   "files": [
@@ -43144,9 +43144,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 786364,
-      "mtime": "2026-08-07T01:50:45.862Z",
-      "indexed_at": "2026-08-07T01:52:01.269Z"
+      "bytes": 789125,
+      "mtime": "2026-08-07T01:54:57.330Z",
+      "indexed_at": "2026-08-07T01:55:29.503Z"
     },
     {
       "path": "docs/products/LIFERE.md",
