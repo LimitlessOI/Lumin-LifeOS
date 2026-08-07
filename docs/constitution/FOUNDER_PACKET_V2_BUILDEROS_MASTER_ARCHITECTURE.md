@@ -230,6 +230,8 @@ Wisdom is applied knowledge, reviewing lessons, memory, history, prior failures,
 
 Wisdom asks: Have we seen this pattern before? What did we learn last time? What old drift could repeat? What memory/context should be surfaced? What prior truth, lesson, or receipt matters here? What should ARC know before translating? What should not be repeated?
 
+**IdeaVault consultation (added 2026-08-07, founder-directed):** Wisdom's review must include a real check of `docs/products/ideavault/PRODUCT_HOME.md`'s catalog and `GET /api/v1/ideas` for any previously captured idea relevant to the intent being translated — not a new gate, an extension of the existing "what prior truth, lesson, or receipt matters here" question to cover ideas as well as lessons. Found live and confirmed by the founder directly: nothing in the Pre-ARC or ARC path queried IdeaVault before this addition, and the submission API itself was unreachable in production until the same session (`routes/idea-queue-routes.js` was mounted only in the full-runtime lane). A relevant, unaddressed idea found this way becomes part of the PRE-ARC_INPUT_PACKET below, same as any other Wisdom-surfaced context — it does not bypass IDC or get built directly from the idea alone.
+
 Required artifact: **WISDOM_REVIEW_RECEIPT**
 
 ## PRE-ARC INPUT PACKET

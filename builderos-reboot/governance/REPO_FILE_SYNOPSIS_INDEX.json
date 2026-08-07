@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-07T20:02:47.824Z",
+  "generated_at": "2026-08-07T20:11:05.871Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13055,
   "files": [
@@ -39491,9 +39491,9 @@
     {
       "path": "docs/constitution/FOUNDER_PACKET_V2_BUILDEROS_MASTER_ARCHITECTURE.md",
       "synopsis": "FOUNDER_PACKET_V2 — BuilderOS / Lumin Company Foundation",
-      "bytes": 39509,
-      "mtime": "2026-06-29T17:35:42.998Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 40401,
+      "mtime": "2026-08-07T20:07:21.326Z",
+      "indexed_at": "2026-08-07T20:11:05.871Z"
     },
     {
       "path": "docs/constitution/FOUNDER_PACKET_V3_BUILDEROS_MASTER_ARCHITECTURE.md",
@@ -42103,9 +42103,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 461863,
-      "mtime": "2026-08-07T01:06:53.367Z",
-      "indexed_at": "2026-08-07T01:39:55.456Z"
+      "bytes": 464011,
+      "mtime": "2026-08-07T20:09:10.699Z",
+      "indexed_at": "2026-08-07T20:11:05.871Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -43068,9 +43068,9 @@
     {
       "path": "docs/products/lifeos/communication/COMMUNICATION_SYSTEM_BLUEPRINT.md",
       "synopsis": "LifeOS Communication System — final consolidated blueprint. Source: every founder/model conversation and attachment about communication, perception, conversation, and the LifeOS cognitive interaction system.",
-      "bytes": 69651,
-      "mtime": "2026-08-06T17:56:40.149Z",
-      "indexed_at": "2026-08-06T17:57:33.448Z"
+      "bytes": 71054,
+      "mtime": "2026-08-07T20:06:56.160Z",
+      "indexed_at": "2026-08-07T20:11:05.871Z"
     },
     {
       "path": "docs/products/lifeos/communication/COMMUNICATION_SYSTEM_FOUNDER_REFERENCE.md",
@@ -43181,9 +43181,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 796167,
-      "mtime": "2026-08-07T19:45:58.625Z",
-      "indexed_at": "2026-08-07T19:47:32.014Z"
+      "bytes": 797944,
+      "mtime": "2026-08-07T20:10:33.878Z",
+      "indexed_at": "2026-08-07T20:11:05.871Z"
     },
     {
       "path": "docs/products/LIFERE.md",
