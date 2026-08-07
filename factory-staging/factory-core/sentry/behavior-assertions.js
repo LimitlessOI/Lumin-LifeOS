@@ -129,9 +129,20 @@ export async function runSingleAssertion(assertion, runner = {}) {
         if (typeof fn !== 'function') {
           return { ...base, ok: false, reason: `export_not_a_function:${fnName}` };
         }
+        // args stays single-argument (fn(assertion.args)) for full backward
+        // compatibility with every existing assertion (e.g. greet("Factory")).
+        // args_list is new: an explicit array of positional arguments, spread
+        // into the call -- needed the first time this assertion type was used
+        // against a real multi-parameter function (computeTurnCompletionConfidence
+        // (turns, options), V1 Voice Presence, 2026-08-07): fn(assertion.args)
+        // was silently passing the whole [turns, options] array as a single
+        // first argument, so `options` was always undefined and every result
+        // silently fell back to default option values -- the test that should
+        // have proven pauseMs-driven scoring instead proved nothing.
+        const callArgs = Array.isArray(assertion.args_list) ? assertion.args_list : [assertion.args];
         let result;
         try {
-          result = await fn(assertion.args);
+          result = await fn(...callArgs);
         } catch (err) {
           return { ...base, ok: false, reason: `function_threw:${String(err?.message || err).slice(0, 300)}` };
         }

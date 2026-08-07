@@ -34,7 +34,7 @@
           "type": "function_behavior_test",
           "target": "services/interaction-decision-service.js",
           "export": "computeTurnCompletionConfidence",
-          "args": [
+          "args_list": [
             [{ "role": "assistant", "text": "ok", "ts": 0 }, { "role": "user", "text": "okay great.", "ts": 1000 }],
             { "currentIndex": 1, "pauseMs": 700, "finalTranscript": true }
           ],
@@ -44,7 +44,7 @@
           "type": "function_behavior_test",
           "target": "services/interaction-decision-service.js",
           "export": "computeTurnCompletionConfidence",
-          "args": [
+          "args_list": [
             [{ "role": "user", "text": "so i was thinking maybe um", "ts": 0 }],
             { "currentIndex": 0, "pauseMs": 100, "finalTranscript": true }
           ],
