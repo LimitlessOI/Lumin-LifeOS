@@ -97,6 +97,15 @@ data/
 # decision_identity missing while all five were committed and non-empty on disk.
 !data/twins/
 !data/twins/**
+# Same bug, same fix, different file: services/cognitive-chair.mjs's
+# loadLensRegistry() does an unguarded readFileSync on data/lenses/LENS_REGISTRY.json
+# (no existsSync fallback) -- proven live 2026-08-07: POST /factory/ship-queue
+# crashed with ENOENT on this exact path once a step actually reached Chair
+# consensus / reasoning-plan generation, the first real caller this session to
+# reach that code path. 52K, 12 static curated config files, not runtime-growing
+# state, so safe to ship every build like data/twins/.
+!data/lenses/
+!data/lenses/**
 .cursor/
 assets/
 products/
