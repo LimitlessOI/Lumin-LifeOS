@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-07T01:55:29.503Z",
+  "generated_at": "2026-08-07T03:41:15.097Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13048,
+  "file_count": 13053,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21307,9 +21307,9 @@
     {
       "path": "builderos-reboot/BP_PRIORITY.json",
       "synopsis": "BuilderOS artifact — BP PRIORITY.",
-      "bytes": 28355,
-      "mtime": "2026-08-02T16:38:26.634Z",
-      "indexed_at": "2026-08-02T16:38:26.634Z",
+      "bytes": 29409,
+      "mtime": "2026-08-07T03:35:06.773Z",
+      "indexed_at": "2026-08-07T03:41:15.097Z",
       "synopsis_index_only": true
     },
     {
@@ -26842,6 +26842,29 @@
       "bytes": 4197,
       "mtime": "2026-07-03T00:17:44.932Z",
       "indexed_at": "2026-07-28T22:54:46.666Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V1-VOICE-PRESENCE-0001/BLUEPRINT.json",
+      "synopsis": "BuilderOS artifact — BLUEPRINT.",
+      "bytes": 4027,
+      "mtime": "2026-08-07T03:39:33.935Z",
+      "indexed_at": "2026-08-07T03:41:15.097Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V1-VOICE-PRESENCE-0001/FOUNDER_PACKET.md",
+      "synopsis": "Founder Packet — Communication System V1: Voice Presence (Interruption Decay + turn-completion detection)",
+      "bytes": 6259,
+      "mtime": "2026-08-07T03:32:44.877Z",
+      "indexed_at": "2026-08-07T03:41:15.097Z"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V1-VOICE-PRESENCE-0001/OBJECTIVE_VERDICT.json",
+      "synopsis": "BuilderOS artifact — OBJECTIVE VERDICT.",
+      "bytes": 820,
+      "mtime": "2026-08-07T03:36:30.820Z",
+      "indexed_at": "2026-08-07T03:41:15.097Z",
       "synopsis_index_only": true
     },
     {
@@ -43144,9 +43167,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 789125,
-      "mtime": "2026-08-07T01:54:57.330Z",
-      "indexed_at": "2026-08-07T01:55:29.503Z"
+      "bytes": 792483,
+      "mtime": "2026-08-07T03:37:13.449Z",
+      "indexed_at": "2026-08-07T03:41:15.097Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -66642,9 +66665,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\":\"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",\"lifeos:file-synopsis:backfill\":\"node scripts/file-synopsis-enforce.mjs --all --auto-fix && node scripts/generate-file-synopsis-index.mjs\",\"lifeos:file-synopsis:index\":\"n",
-      "bytes": 34542,
-      "mtime": "2026-08-05T19:56:34.443Z",
-      "indexed_at": "2026-08-06T05:30:22.273Z",
+      "bytes": 34660,
+      "mtime": "2026-08-07T03:34:00.683Z",
+      "indexed_at": "2026-08-07T03:41:15.097Z",
       "synopsis_index_only": true
     },
     {
@@ -66971,6 +66994,14 @@
       "bytes": 1349,
       "mtime": "2026-08-03T23:23:37.377Z",
       "indexed_at": "2026-08-03T23:26:47.262Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/COMMUNICATION_V1_VOICE_PRESENCE_ACCEPTANCE.json",
+      "synopsis": "Product receipt — COMMUNICATION V1 VOICE PRESENCE ACCEPTANCE.",
+      "bytes": 2082,
+      "mtime": "2026-08-07T03:36:30.820Z",
+      "indexed_at": "2026-08-07T03:41:15.097Z",
       "synopsis_index_only": true
     },
     {
@@ -76680,6 +76711,16 @@
       "bytes": 4007,
       "mtime": "2026-07-10T00:19:23.649Z",
       "indexed_at": "2026-07-28T22:54:46.666Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/run-communication-v1-voice-presence-acceptance.mjs",
+      "synopsis": "Communication System V1 (Voice Presence) acceptance.",
+      "bytes": 4779,
+      "mtime": "2026-08-07T03:40:50.563Z",
+      "indexed_at": "2026-08-07T03:41:15.097Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

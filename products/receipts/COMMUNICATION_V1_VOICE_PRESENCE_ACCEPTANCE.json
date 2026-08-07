@@ -1,0 +1,61 @@
+{
+  "schema": "communication_v1_voice_presence_acceptance_v1",
+  "mission_id": "PRODUCT-COMMUNICATION-V1-VOICE-PRESENCE-0001",
+  "started_at": "2026-08-07T03:36:30.793Z",
+  "tests_passed": [
+    "blueprint_exists",
+    "voice_chat_module_exists",
+    "overlay_wires_barge_in"
+  ],
+  "tests_failed": [
+    "interaction_decision_service_exists",
+    "voice_chat_has_fadeAndStopSpeaking",
+    "voice_chat_documents_speechSynthesis_limitation",
+    "overlay_calls_fadeAndStopSpeaking"
+  ],
+  "steps": [
+    {
+      "step": "blueprint_exists",
+      "ok": true,
+      "detail": "/private/tmp/claude-501/-Users-adamhopkins-Projects-Lumin-LifeOS/b98a9c4f-30b0-4efc-94d3-7e9a8ac44905/scratchpad/comm-v1-v5/builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V1-VOICE-PRESENCE-0001/BLUEPRINT.json",
+      "at": "2026-08-07T03:36:30.794Z"
+    },
+    {
+      "step": "interaction_decision_service_exists",
+      "ok": false,
+      "detail": "/private/tmp/claude-501/-Users-adamhopkins-Projects-Lumin-LifeOS/b98a9c4f-30b0-4efc-94d3-7e9a8ac44905/scratchpad/comm-v1-v5/services/interaction-decision-service.js",
+      "at": "2026-08-07T03:36:30.794Z"
+    },
+    {
+      "step": "voice_chat_module_exists",
+      "ok": true,
+      "at": "2026-08-07T03:36:30.794Z"
+    },
+    {
+      "step": "voice_chat_has_fadeAndStopSpeaking",
+      "ok": false,
+      "detail": "public/shared/lifeos-voice-chat.js",
+      "at": "2026-08-07T03:36:30.795Z"
+    },
+    {
+      "step": "voice_chat_documents_speechSynthesis_limitation",
+      "ok": false,
+      "detail": "must document that speechSynthesis.cancel() cannot fade, per FOUNDER_PACKET constraint",
+      "at": "2026-08-07T03:36:30.795Z"
+    },
+    {
+      "step": "overlay_wires_barge_in",
+      "ok": true,
+      "at": "2026-08-07T03:36:30.795Z"
+    },
+    {
+      "step": "overlay_calls_fadeAndStopSpeaking",
+      "ok": false,
+      "detail": "public/overlay/lifeos-app.html",
+      "at": "2026-08-07T03:36:30.796Z"
+    }
+  ],
+  "completed_at": "2026-08-07T03:36:30.819Z",
+  "git_sha": "ecef0e01a01aeff1f4e487c37c4a323be37f7ab6",
+  "verdict": "FAIL"
+}

@@ -1,0 +1,22 @@
+{
+  "schema": "objective_verdict_v1",
+  "generated_at": "2026-08-07T03:36:30.819Z",
+  "objective_id": "PRODUCT-COMMUNICATION-V1-VOICE-PRESENCE-0001",
+  "objective_name": "Communication System V1 — Voice Presence",
+  "verdict": "NOT_COMPLETE",
+  "receipt": "products/receipts/COMMUNICATION_V1_VOICE_PRESENCE_ACCEPTANCE.json",
+  "git_sha": "ecef0e01a01aeff1f4e487c37c4a323be37f7ab6",
+  "tests_passed": [
+    "blueprint_exists",
+    "voice_chat_module_exists",
+    "overlay_wires_barge_in"
+  ],
+  "tests_failed": [
+    "interaction_decision_service_exists",
+    "voice_chat_has_fadeAndStopSpeaking",
+    "voice_chat_documents_speechSynthesis_limitation",
+    "overlay_calls_fadeAndStopSpeaking"
+  ],
+  "founder_usability_pass": false,
+  "acceptance_command": "npm run lifeos:communication-v1-voice-presence:acceptance"
+}

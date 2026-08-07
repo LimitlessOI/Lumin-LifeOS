@@ -1,0 +1,113 @@
+{
+  "mission_id": "PRODUCT-COMMUNICATION-V1-VOICE-PRESENCE-0001",
+  "blueprint_id": "COMMUNICATION-V1-VOICE-PRESENCE-2026-08-06",
+  "scope": "voice_presence_turn_completion_and_interruption_decay",
+  "authority": "FOUNDER_PACKET.md",
+  "acceptance_command": "npm run lifeos:communication-v1-voice-presence:acceptance",
+  "allowed_action_types": [
+    "builder_build",
+    "shell_command"
+  ],
+  "steps": [
+    {
+      "step_id": "CV1P-S01",
+      "phase_id": "P0",
+      "title": "Interaction Decision service: port fuseTurnCompletion into a real, callable service",
+      "target_file": "services/interaction-decision-service.js",
+      "target_files": ["services/interaction-decision-service.js"],
+      "action_type": "builder_build",
+      "assertion_spec": {
+        "expected_exports": [
+          "computeTurnCompletionConfidence"
+        ],
+        "file_contains": [
+          "no new AI/model call",
+          "reuse the proven scoring approach from scripts/prototype-conversational-contracts-v1.mjs fuseTurnCompletion"
+        ]
+      },
+      "dependencies": [],
+      "non_goals": [
+        "tonality/pitch analysis (V1.1, separate mission)",
+        "any AI/model call -- this must remain deterministic like the proven prototype",
+        "commitment/contract extraction (already live via services/commitment-tracker.js)"
+      ],
+      "status": "pending"
+    },
+    {
+      "step_id": "CV1P-S02",
+      "phase_id": "P1",
+      "title": "Graceful TTS interruption decay in the shared voice-chat module",
+      "target_file": "public/shared/lifeos-voice-chat.js",
+      "target_files": ["public/shared/lifeos-voice-chat.js"],
+      "action_type": "builder_build",
+      "assertion_spec": {
+        "expected_exports": [],
+        "file_contains": [
+          "fadeAndStopSpeaking",
+          "activeServerAudio"
+        ]
+      },
+      "dependencies": [
+        "CV1P-S01"
+      ],
+      "non_goals": [
+        "faking a volume fade on the speechSynthesis (Web Speech API) path -- it has no native ramp; that path must stop immediately and this must be documented in code comments, not worked around"
+      ],
+      "status": "pending"
+    },
+    {
+      "step_id": "CV1P-S03",
+      "phase_id": "P2",
+      "title": "Wire barge-in detection: auto-trigger graceful decay when the user speaks while Chair's TTS is playing",
+      "target_file": "public/overlay/lifeos-app.html",
+      "target_files": ["public/overlay/lifeos-app.html"],
+      "action_type": "builder_build",
+      "assertion_spec": {
+        "expected_exports": [],
+        "file_contains": [
+          "fadeAndStopSpeaking",
+          "isSpeaking"
+        ]
+      },
+      "dependencies": [
+        "CV1P-S02"
+      ],
+      "non_goals": [
+        "any change to the existing STT quality-feedback-loop code shipped earlier tonight (services/voice-rail-stt.js, routes/lifeos-voice-rail-routes.js, the lumin-stt-quality banner)",
+        "any change to the push-to-talk send flow beyond adding the barge-in fade trigger"
+      ],
+      "status": "pending"
+    },
+    {
+      "step_id": "CV1P-S04",
+      "phase_id": "P3",
+      "title": "Acceptance command + PASS receipt writer",
+      "target_file": "scripts/run-communication-v1-voice-presence-acceptance.mjs",
+      "target_files": ["scripts/run-communication-v1-voice-presence-acceptance.mjs"],
+      "action_type": "builder_build",
+      "assertion_spec": {
+        "file_contains": [
+          "computeTurnCompletionConfidence"
+        ]
+      },
+      "dependencies": [
+        "CV1P-S03"
+      ],
+      "non_goals": [],
+      "status": "pending"
+    },
+    {
+      "step_id": "CV1P-S05",
+      "phase_id": "P4",
+      "title": "Run acceptance until PASS",
+      "action_type": "shell_command",
+      "target_files": ["products/receipts/COMMUNICATION_V1_VOICE_PRESENCE_ACCEPTANCE.json"],
+      "command": "npm run lifeos:communication-v1-voice-presence:acceptance",
+      "dependencies": [
+        "CV1P-S04"
+      ],
+      "status": "pending"
+    }
+  ],
+  "blueprint_status": "pending"
+}
