@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-07T01:18:28.578Z",
+  "generated_at": "2026-08-07T01:24:29.381Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13045,
   "files": [
@@ -42058,9 +42058,9 @@
     {
       "path": "docs/products/builderos/GAP_FILL_LEDGER.json",
       "synopsis": "Documentation — GAP FILL LEDGER.",
-      "bytes": 74595,
-      "mtime": "2026-08-04T10:30:32.099Z",
-      "indexed_at": "2026-08-04T10:33:52.942Z",
+      "bytes": 79304,
+      "mtime": "2026-08-07T01:18:30.137Z",
+      "indexed_at": "2026-08-07T01:24:29.381Z",
       "synopsis_index_only": true
     },
     {
@@ -43137,9 +43137,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 774027,
-      "mtime": "2026-08-07T01:16:39.464Z",
-      "indexed_at": "2026-08-07T01:18:28.578Z"
+      "bytes": 776146,
+      "mtime": "2026-08-07T01:23:34.877Z",
+      "indexed_at": "2026-08-07T01:24:29.381Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -99471,9 +99471,9 @@
     {
       "path": "services/voice-rail-stt.js",
       "synopsis": "Voice Rail — server-side STT (OpenAI Whisper, with a Groq Whisper",
-      "bytes": 13730,
-      "mtime": "2026-08-07T01:10:43.787Z",
-      "indexed_at": "2026-08-07T01:18:28.578Z",
+      "bytes": 14326,
+      "mtime": "2026-08-07T01:22:37.805Z",
+      "indexed_at": "2026-08-07T01:24:29.381Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

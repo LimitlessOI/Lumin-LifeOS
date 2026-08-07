@@ -324,6 +324,7 @@ export async function transcribeVoiceRailAudio(audioBuffer, mimeType = 'audio/we
     }
   }
 
+  let groqFailure = null;
   if (!result && groqKey) {
     // Groq's audio/transcriptions endpoint is OpenAI-compatible.
     const r = await callWhisperEndpoint(
@@ -333,14 +334,26 @@ export async function transcribeVoiceRailAudio(audioBuffer, mimeType = 'audio/we
     if (r.ok) {
       engineUsed = 'groq-whisper';
       result = r;
-    } else if (!openaiFailure) {
-      return { ok: false, error: `whisper_http_${r.status}`, detail: r.detail, text: '' };
+    } else {
+      groqFailure = { error: `whisper_http_${r.status}`, detail: r.detail };
     }
   }
 
   if (!result) {
-    // OpenAI failed and there was no Groq key (or Groq also failed above and returned already).
-    return { ok: false, ...openaiFailure, text: '' };
+    // GAP-FILL 2026-08-06: previously, when BOTH providers failed, this
+    // returned only openaiFailure -- Groq's real failure reason was silently
+    // discarded (confirmed live: masked a real Groq-side error behind a
+    // stale OpenAI message during production verification of the STT
+    // quality-loop feature). Report whichever attempt actually ran last
+    // (Groq, if a key was present) so the true blocker is visible, and keep
+    // both failures on the response for full diagnosis.
+    const primary = groqFailure || openaiFailure || { error: 'no_stt_provider_key' };
+    return {
+      ok: false,
+      ...primary,
+      provider_failures: { openai: openaiFailure || undefined, groq: groqFailure || undefined },
+      text: '',
+    };
   }
 
   const raw = result.text;
