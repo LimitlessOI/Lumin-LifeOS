@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-07T01:46:00.176Z",
+  "generated_at": "2026-08-07T01:52:01.269Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13048,
   "files": [
@@ -42058,9 +42058,9 @@
     {
       "path": "docs/products/builderos/GAP_FILL_LEDGER.json",
       "synopsis": "Documentation — GAP FILL LEDGER.",
-      "bytes": 83612,
-      "mtime": "2026-08-07T01:39:23.280Z",
-      "indexed_at": "2026-08-07T01:39:55.456Z",
+      "bytes": 85948,
+      "mtime": "2026-08-07T01:46:03.528Z",
+      "indexed_at": "2026-08-07T01:52:01.269Z",
       "synopsis_index_only": true
     },
     {
@@ -43144,9 +43144,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 784593,
-      "mtime": "2026-08-07T01:45:09.403Z",
-      "indexed_at": "2026-08-07T01:46:00.176Z"
+      "bytes": 786364,
+      "mtime": "2026-08-07T01:50:45.862Z",
+      "indexed_at": "2026-08-07T01:52:01.269Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -71967,9 +71967,9 @@
     {
       "path": "routes/lifeos-voice-rail-routes.js",
       "synopsis": "Voice Rail v1 API — canonical communication layer.",
-      "bytes": 21885,
-      "mtime": "2026-08-07T01:11:16.273Z",
-      "indexed_at": "2026-08-07T01:18:28.578Z",
+      "bytes": 22433,
+      "mtime": "2026-08-07T01:50:01.135Z",
+      "indexed_at": "2026-08-07T01:52:01.269Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md",
         "builderos-reboot/MISSIONS/PRODUCT-VOICE-RAIL-V1-0001/FOUNDER_PACKET.md"
@@ -99495,9 +99495,9 @@
     {
       "path": "services/voice-rail-stt.js",
       "synopsis": "Voice Rail — server-side STT (OpenAI Whisper, with a Groq Whisper",
-      "bytes": 17550,
-      "mtime": "2026-08-07T01:43:28.551Z",
-      "indexed_at": "2026-08-07T01:46:00.176Z",
+      "bytes": 18385,
+      "mtime": "2026-08-07T01:49:42.172Z",
+      "indexed_at": "2026-08-07T01:52:01.269Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

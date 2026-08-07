@@ -44,6 +44,25 @@ export async function listVoiceRailSttCorrections(pool, userId) {
   return loadUserCorrections(pool, userId);
 }
 
+// GAP-FILL 2026-08-06: addVoiceRailSttCorrection had no way to remove a
+// wrong/test entry (only add/upsert) -- found live while cleaning up a
+// correction created during real production verification of the quality
+// feature, which had no other safe path to undo.
+export async function deleteVoiceRailSttCorrection(pool, userId, misheard) {
+  if (!pool || !userId) return { ok: false, error: 'missing_pool_or_user' };
+  const m = String(misheard || '').trim();
+  if (!m) return { ok: false, error: 'misheard_required' };
+  try {
+    const { rowCount } = await pool.query(
+      `DELETE FROM voice_rail_stt_corrections WHERE user_id = $1 AND LOWER(misheard) = LOWER($2)`,
+      [userId, m],
+    );
+    return { ok: true, deleted: rowCount > 0 };
+  } catch (err) {
+    return { ok: false, error: err?.message || 'db_error' };
+  }
+}
+
 export async function addVoiceRailSttCorrection(pool, userId, misheard, canonical, source = null) {
   if (!pool || !userId) return { ok: false, error: 'missing_pool_or_user' };
   const m = String(misheard || '').trim();

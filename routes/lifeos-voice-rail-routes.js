@@ -17,6 +17,7 @@ import {
   voiceRailSttStatus,
   addVoiceRailSttCorrection,
   listVoiceRailSttCorrections,
+  deleteVoiceRailSttCorrection,
   recordVoiceRailSttQualityReceipt,
   confirmVoiceRailSttQualityCorrection,
   diffVoiceRailWords,
@@ -266,6 +267,18 @@ export function createLifeOSVoiceRailRoutes({
         req.body.canonical,
         req.body.source || 'manual',
       );
+      if (!result.ok) return res.status(400).json(result);
+      res.json(result);
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  router.delete('/stt/corrections', requireKey, async (req, res, next) => {
+    try {
+      const userId = await voiceRail.resolveUserId(req.body?.user || req.query.user || 'adam');
+      if (!userId) return res.status(404).json({ ok: false, error: 'user_not_found' });
+      const result = await deleteVoiceRailSttCorrection(pool, userId, req.body?.misheard || req.query.misheard);
       if (!result.ok) return res.status(400).json(result);
       res.json(result);
     } catch (err) {
