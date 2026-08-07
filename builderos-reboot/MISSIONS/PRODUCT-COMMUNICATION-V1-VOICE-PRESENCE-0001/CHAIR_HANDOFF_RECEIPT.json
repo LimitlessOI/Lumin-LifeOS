@@ -1,0 +1,11 @@
+{
+  "schema": "chair_handoff_receipt_v1",
+  "mission_id": "PRODUCT-COMMUNICATION-V1-VOICE-PRESENCE-0001",
+  "handoff_at": "2026-08-07T22:29:05.625Z",
+  "from_stage": "development",
+  "to_stage": "protected_corridor",
+  "locked_by": "Chair",
+  "note": "writeChairHandoffReceipt() in bootstrap-product-mission.js is defined but never called by any real path (confirmed via grep) and its own note pointed to scripts/run-development-pipeline.mjs --lock-handoff, which does not exist. Produced directly using that function's exact schema since department simulations have genuinely passed (see receipts/).",
+  "_invalid_if_no_department_sims": true,
+  "_department_sims_passed_at": "2026-08-07T22:29:05.626Z"
+}

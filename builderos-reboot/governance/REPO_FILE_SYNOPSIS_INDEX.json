@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-07T22:26:04.152Z",
+  "generated_at": "2026-08-07T22:32:25.096Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13061,
+  "file_count": 13075,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -26845,11 +26845,43 @@
       "synopsis_index_only": true
     },
     {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V1-VOICE-PRESENCE-0001/ASSET_REUSE_DECISION.json",
+      "synopsis": "BuilderOS artifact — ASSET REUSE DECISION.",
+      "bytes": 1470,
+      "mtime": "2026-08-07T22:26:51.318Z",
+      "indexed_at": "2026-08-07T22:32:25.096Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V1-VOICE-PRESENCE-0001/BLUEPRINT_ROADMAP.json",
+      "synopsis": "BuilderOS artifact — BLUEPRINT ROADMAP.",
+      "bytes": 1987,
+      "mtime": "2026-08-07T22:26:51.318Z",
+      "indexed_at": "2026-08-07T22:32:25.096Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V1-VOICE-PRESENCE-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
       "bytes": 4027,
       "mtime": "2026-08-07T03:39:33.935Z",
       "indexed_at": "2026-08-07T03:41:15.097Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V1-VOICE-PRESENCE-0001/CHAIR_HANDOFF_RECEIPT.json",
+      "synopsis": "BuilderOS artifact — CHAIR HANDOFF RECEIPT.",
+      "bytes": 706,
+      "mtime": "2026-08-07T22:29:05.627Z",
+      "indexed_at": "2026-08-07T22:32:25.096Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V1-VOICE-PRESENCE-0001/DO_NOT_INVENT.json",
+      "synopsis": "BuilderOS artifact — DO NOT INVENT.",
+      "bytes": 312,
+      "mtime": "2026-08-07T22:29:05.631Z",
+      "indexed_at": "2026-08-07T22:32:25.096Z",
       "synopsis_index_only": true
     },
     {
@@ -26860,6 +26892,62 @@
       "indexed_at": "2026-08-07T22:26:04.152Z"
     },
     {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V1-VOICE-PRESENCE-0001/IDC_CONSENSUS_RECEIPT.json",
+      "synopsis": "BuilderOS artifact — IDC CONSENSUS RECEIPT.",
+      "bytes": 727,
+      "mtime": "2026-08-07T22:29:05.631Z",
+      "indexed_at": "2026-08-07T22:32:25.096Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V1-VOICE-PRESENCE-0001/INTENT_BASELINE.json",
+      "synopsis": "BuilderOS artifact — INTENT BASELINE.",
+      "bytes": 2791,
+      "mtime": "2026-08-07T22:26:51.318Z",
+      "indexed_at": "2026-08-07T22:32:25.096Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V1-VOICE-PRESENCE-0001/INTENT_COVERAGE_MAP.json",
+      "synopsis": "BuilderOS artifact — INTENT COVERAGE MAP.",
+      "bytes": 5838,
+      "mtime": "2026-08-07T22:26:51.318Z",
+      "indexed_at": "2026-08-07T22:32:25.096Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V1-VOICE-PRESENCE-0001/KNOWN_ASSUMPTIONS.json",
+      "synopsis": "BuilderOS artifact — KNOWN ASSUMPTIONS.",
+      "bytes": 937,
+      "mtime": "2026-08-07T22:29:05.631Z",
+      "indexed_at": "2026-08-07T22:32:25.096Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V1-VOICE-PRESENCE-0001/KNOWN_CONTRADICTIONS.json",
+      "synopsis": "BuilderOS artifact — KNOWN CONTRADICTIONS.",
+      "bytes": 168,
+      "mtime": "2026-08-07T22:29:05.631Z",
+      "indexed_at": "2026-08-07T22:32:25.096Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V1-VOICE-PRESENCE-0001/KNOWN_RISKS.json",
+      "synopsis": "BuilderOS artifact — KNOWN RISKS.",
+      "bytes": 275,
+      "mtime": "2026-08-07T22:29:05.631Z",
+      "indexed_at": "2026-08-07T22:32:25.096Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V1-VOICE-PRESENCE-0001/MODE_A_TO_B_TRANSITION_RECEIPT.json",
+      "synopsis": "BuilderOS artifact — MODE A TO B TRANSITION RECEIPT.",
+      "bytes": 351,
+      "mtime": "2026-08-07T22:27:15.438Z",
+      "indexed_at": "2026-08-07T22:32:25.096Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V1-VOICE-PRESENCE-0001/OBJECTIVE_VERDICT.json",
       "synopsis": "BuilderOS artifact — OBJECTIVE VERDICT.",
       "bytes": 820,
@@ -26868,35 +26956,59 @@
       "synopsis_index_only": true
     },
     {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V1-VOICE-PRESENCE-0001/PRE_ARC_INPUT_PACKET.json",
+      "synopsis": "BuilderOS artifact — PRE ARC INPUT PACKET.",
+      "bytes": 2999,
+      "mtime": "2026-08-07T22:29:05.631Z",
+      "indexed_at": "2026-08-07T22:32:25.096Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V1-VOICE-PRESENCE-0001/PREDICTION_RECEIPT.json",
+      "synopsis": "BuilderOS artifact — PREDICTION RECEIPT.",
+      "bytes": 1200,
+      "mtime": "2026-08-07T22:27:15.440Z",
+      "indexed_at": "2026-08-07T22:32:25.096Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V1-VOICE-PRESENCE-0001/receipts/CFO_RESOURCE_SIMULATION_RECEIPT.json",
       "synopsis": "BuilderOS artifact — CFO RESOURCE SIMULATION RECEIPT.",
-      "bytes": 1825,
-      "mtime": "2026-08-07T22:25:07.944Z",
-      "indexed_at": "2026-08-07T22:26:04.152Z",
+      "bytes": 1816,
+      "mtime": "2026-08-07T22:29:05.630Z",
+      "indexed_at": "2026-08-07T22:32:25.096Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V1-VOICE-PRESENCE-0001/receipts/CHAIR_FORECAST_SIMULATION_RECEIPT.json",
       "synopsis": "BuilderOS artifact — CHAIR FORECAST SIMULATION RECEIPT.",
-      "bytes": 3440,
-      "mtime": "2026-08-07T22:25:07.944Z",
-      "indexed_at": "2026-08-07T22:26:04.152Z",
+      "bytes": 3431,
+      "mtime": "2026-08-07T22:29:05.630Z",
+      "indexed_at": "2026-08-07T22:32:25.096Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V1-VOICE-PRESENCE-0001/receipts/CORRIDOR_ENTERED_GATE_REPORT.json",
+      "synopsis": "BuilderOS artifact — CORRIDOR ENTERED GATE REPORT.",
+      "bytes": 2822,
+      "mtime": "2026-08-07T22:26:51.321Z",
+      "indexed_at": "2026-08-07T22:32:25.096Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V1-VOICE-PRESENCE-0001/receipts/SNT_INTENT_ATTACK_RECEIPT.json",
       "synopsis": "BuilderOS artifact — SNT INTENT ATTACK RECEIPT.",
-      "bytes": 2649,
-      "mtime": "2026-08-07T22:25:07.944Z",
-      "indexed_at": "2026-08-07T22:26:04.152Z",
+      "bytes": 2640,
+      "mtime": "2026-08-07T22:29:05.630Z",
+      "indexed_at": "2026-08-07T22:32:25.096Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V1-VOICE-PRESENCE-0001/receipts/WISDOM_REVIEW_RECEIPT.json",
       "synopsis": "BuilderOS artifact — WISDOM REVIEW RECEIPT.",
-      "bytes": 1248,
-      "mtime": "2026-08-07T22:25:07.944Z",
-      "indexed_at": "2026-08-07T22:26:04.152Z",
+      "bytes": 1239,
+      "mtime": "2026-08-07T22:29:05.630Z",
+      "indexed_at": "2026-08-07T22:32:25.096Z",
       "synopsis_index_only": true
     },
     {
@@ -43227,9 +43339,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 802345,
-      "mtime": "2026-08-07T22:25:29.056Z",
-      "indexed_at": "2026-08-07T22:26:04.152Z"
+      "bytes": 805010,
+      "mtime": "2026-08-07T22:31:47.179Z",
+      "indexed_at": "2026-08-07T22:32:25.096Z"
     },
     {
       "path": "docs/products/LIFERE.md",

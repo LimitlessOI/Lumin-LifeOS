@@ -1,0 +1,21 @@
+{
+  "schema": "known_assumptions_v1",
+  "mission_id": "PRODUCT-COMMUNICATION-V1-VOICE-PRESENCE-0001",
+  "assumptions": [
+    {
+      "id": "A1",
+      "assumption": "Adam is primary user at Alpha",
+      "confidence": "KNOW"
+    },
+    {
+      "id": "A2",
+      "assumption": "Railway production spine is live",
+      "confidence": "THINK"
+    },
+    {
+      "id": "A3",
+      "assumption": "1. When the user starts speaking while Chair's TTS reply is still playing, the reply audio fades out gracefully (finishes the current word if possible, ramps volume down, stops) instead of hard-cutting or continuing to talk over the user.\n2. The live pipeline computes a real turn-completion confidence score (reusing `fuseTurnCompletion`'s proven logic: punctuation, pause length, trailing conjunctions/fillers) so the system has an honest signal for \"did they finish\" rather than guessing from sile",
+      "confidence": "KNOW"
+    }
+  ]
+}

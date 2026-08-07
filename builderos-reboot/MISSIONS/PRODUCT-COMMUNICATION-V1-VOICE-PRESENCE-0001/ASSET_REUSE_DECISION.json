@@ -1,0 +1,39 @@
+{
+  "schema": "asset_reuse_decision_v1",
+  "mission_id": "PRODUCT-COMMUNICATION-V1-VOICE-PRESENCE-0001",
+  "arc_decision_status": "CONFIRMED",
+  "surveyed_at": "2026-08-07",
+  "wisdom_lessons": [
+    "Reuse production spine files already built — ARC hosts byte contracts"
+  ],
+  "cfo_recommendation": "EXTEND existing repo assets; no greenfield parallel stack",
+  "assets_reviewed": [
+    "services/interaction-decision-service.js",
+    "public/shared/lifeos-voice-chat.js",
+    "public/overlay/lifeos-app.html",
+    "scripts/run-communication-v1-voice-presence-acceptance.mjs"
+  ],
+  "decisions": [
+    {
+      "asset": "services/interaction-decision-service.js",
+      "decision": "REUSE",
+      "reason": "Existing implementation snapshotted into CONTENT for system Builder path"
+    },
+    {
+      "asset": "public/shared/lifeos-voice-chat.js",
+      "decision": "REUSE",
+      "reason": "Existing implementation snapshotted into CONTENT for system Builder path"
+    },
+    {
+      "asset": "public/overlay/lifeos-app.html",
+      "decision": "REUSE",
+      "reason": "Existing implementation snapshotted into CONTENT for system Builder path"
+    },
+    {
+      "asset": "scripts/run-communication-v1-voice-presence-acceptance.mjs",
+      "decision": "REUSE",
+      "reason": "Existing implementation snapshotted into CONTENT for system Builder path"
+    }
+  ],
+  "arc_decision": "REUSE repo truth; mechanical ARC host compiler emits write_file_exact blueprint"
+}

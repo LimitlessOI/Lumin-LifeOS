@@ -1,0 +1,84 @@
+{
+  "schema": "corridor_entered_gate_v1",
+  "mission_id": "PRODUCT-COMMUNICATION-V1-VOICE-PRESENCE-0001",
+  "point": "B",
+  "pass": false,
+  "violations": [
+    "corridor:missing CHAIR_HANDOFF_RECEIPT",
+    "corridor:missing PRE_ARC_INPUT_PACKET.json",
+    "corridor:department:SNT stub receipt — system failure",
+    "corridor:department:SNT BOOTSTRAP_MECHANICAL blocked — write PREDICTION_RECEIPT + MODE_A_TO_B before sims",
+    "corridor:department:SNT simulation failed (intent_clearance_yes)",
+    "corridor:department:CHAIR stub receipt — system failure",
+    "corridor:department:CHAIR BOOTSTRAP_MECHANICAL blocked — write PREDICTION_RECEIPT + MODE_A_TO_B before sims",
+    "corridor:department:CHAIR simulation failed (forecast_acceptable)",
+    "corridor:department:CFO stub receipt — system failure",
+    "corridor:department:CFO BOOTSTRAP_MECHANICAL blocked — write PREDICTION_RECEIPT + MODE_A_TO_B before sims",
+    "corridor:department:CFO simulation failed (within_budget)",
+    "corridor:department:WISDOM stub receipt — system failure",
+    "corridor:department:WISDOM BOOTSTRAP_MECHANICAL blocked — write PREDICTION_RECEIPT + MODE_A_TO_B before sims",
+    "corridor:department:WISDOM simulation failed (proceed)"
+  ],
+  "checks": {
+    "founder_packet": {
+      "pass": true
+    },
+    "intent_baseline": {
+      "pass": true,
+      "status": "HANDOFF_READY"
+    },
+    "chair_handoff": {
+      "pass": false
+    },
+    "pre_arc_packet": {
+      "pass": false
+    },
+    "pre_arc_SNT_INTENT_ATTACK": {
+      "pass": true,
+      "path": "receipts/SNT_INTENT_ATTACK_RECEIPT.json"
+    },
+    "pre_arc_CHAIR_FORECAST": {
+      "pass": true,
+      "path": "receipts/CHAIR_FORECAST_SIMULATION_RECEIPT.json"
+    },
+    "pre_arc_CFO_RESOURCE": {
+      "pass": true,
+      "path": "receipts/CFO_RESOURCE_SIMULATION_RECEIPT.json"
+    },
+    "pre_arc_WISDOM_REVIEW": {
+      "pass": true,
+      "path": "receipts/WISDOM_REVIEW_RECEIPT.json"
+    },
+    "departments": {
+      "SNT": {
+        "pass": false,
+        "stub": true,
+        "tier": "BOOTSTRAP_MECHANICAL",
+        "bootstrapBlocked": true,
+        "verdict": "intent_clearance_yes"
+      },
+      "CHAIR": {
+        "pass": false,
+        "stub": true,
+        "tier": "BOOTSTRAP_MECHANICAL",
+        "bootstrapBlocked": true,
+        "verdict": "forecast_acceptable"
+      },
+      "CFO": {
+        "pass": false,
+        "stub": true,
+        "tier": "BOOTSTRAP_MECHANICAL",
+        "bootstrapBlocked": true,
+        "verdict": "within_budget"
+      },
+      "WISDOM": {
+        "pass": false,
+        "stub": true,
+        "tier": "BOOTSTRAP_MECHANICAL",
+        "bootstrapBlocked": true,
+        "verdict": "proceed"
+      }
+    }
+  },
+  "lesson": "Corridor not properly entered — Chair must complete development handoff first."
+}
