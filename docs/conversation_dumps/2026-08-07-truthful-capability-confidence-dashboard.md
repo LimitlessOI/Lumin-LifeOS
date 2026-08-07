@@ -16,3 +16,9 @@
 ## Real findings for provenance
 
 `services/chair-direct-agent.js` already has a live "HONESTY (theater = deception)" system-prompt section with near-identical language ("Never invent capability... Do not pretend"), currently scoped to the act/build tool-call path only — confirming the underlying instinct already exists in this system, with a real, named coverage gap (general capability claims outside that path) rather than an absent principle. See the product-space copy for the full writeup, the adopted blueprint text (§6.2), and the deferred IdeaVault entry (`1a69002f-6164-46ba-82ae-10160a784e96`) for the interactive dashboard UI.
+
+## Addendum: why Adam keeps demanding live verification, and the reference-experience framing
+
+"I've been so many times burned on it and disappointed that I wanted you to at least check it and try it and test it before I do." Direct, load-bearing reason behind the testing discipline running through this entire session — worth preserving verbatim for the Twin, not just as a stylistic note.
+
+Adam named this conversation itself as the literal reference for what Taloa should feel like — real investigation, real action, honest self-correction, regardless of how the request is phrased. Two automatic (not user-requested) triggers for the deep-verification mode were adopted into blueprint §6.2: build/change requests, and brainstorming/planning/decision-making moments (tied to the existing §5.1 moment types). A real, unplanned illustration occurred mid-conversation: a shallow check nearly mis-reported a real CSS-patch build as a no-op; checking the actual live production file instead of git history showed it was genuinely real and live, and the correction was made in the same turn rather than left standing.

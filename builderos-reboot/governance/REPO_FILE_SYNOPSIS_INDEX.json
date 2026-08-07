@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-07T22:37:00.254Z",
+  "generated_at": "2026-08-07T22:59:49.540Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13075,
   "files": [
@@ -40027,9 +40027,9 @@
     {
       "path": "docs/conversation_dumps/2026-08-07-truthful-capability-confidence-dashboard.md",
       "synopsis": "Truthful Capability Principle + interactive confidence dashboard proposal, grounded in a real AI-honesty failure (Sherry's flyer). Twin-archive copy; curated product copy at docs/products/lifeos/conversations/2026-08-07-truthful-capability-",
-      "bytes": 2518,
-      "mtime": "2026-08-07T22:20:39.397Z",
-      "indexed_at": "2026-08-07T22:21:57.757Z"
+      "bytes": 3641,
+      "mtime": "2026-08-07T22:58:24.859Z",
+      "indexed_at": "2026-08-07T22:59:49.540Z"
     },
     {
       "path": "docs/conversation_dumps/by-product/sessions/2a4739f2/BUILDEROS-AUTONOMOUS.md",
@@ -43219,9 +43219,9 @@
     {
       "path": "docs/products/lifeos/communication/COMMUNICATION_SYSTEM_BLUEPRINT.md",
       "synopsis": "LifeOS Communication System — final consolidated blueprint. Source: every founder/model conversation and attachment about communication, perception, conversation, and the LifeOS cognitive interaction system.",
-      "bytes": 75751,
-      "mtime": "2026-08-07T22:19:38.505Z",
-      "indexed_at": "2026-08-07T22:21:57.757Z"
+      "bytes": 77457,
+      "mtime": "2026-08-07T22:57:36.108Z",
+      "indexed_at": "2026-08-07T22:59:49.540Z"
     },
     {
       "path": "docs/products/lifeos/communication/COMMUNICATION_SYSTEM_FOUNDER_REFERENCE.md",
@@ -43303,9 +43303,9 @@
     {
       "path": "docs/products/lifeos/conversations/2026-08-07-truthful-capability-confidence-dashboard.md",
       "synopsis": "LifeOS — 2026-08-07 founder conversation proposing the Truthful Capability Principle, four confidence types, and an interactive confidence dashboard; grounded in a real AI-honesty failure (Sherry's flyer). Captured per SO-004.",
-      "bytes": 5428,
-      "mtime": "2026-08-07T22:20:23.722Z",
-      "indexed_at": "2026-08-07T22:21:57.757Z"
+      "bytes": 7593,
+      "mtime": "2026-08-07T22:58:03.503Z",
+      "indexed_at": "2026-08-07T22:59:49.540Z"
     },
     {
       "path": "docs/products/lifeos/CREATIVE_BRIEF.md",
@@ -43339,9 +43339,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 805010,
-      "mtime": "2026-08-07T22:31:47.179Z",
-      "indexed_at": "2026-08-07T22:32:25.096Z"
+      "bytes": 806887,
+      "mtime": "2026-08-07T22:59:19.834Z",
+      "indexed_at": "2026-08-07T22:59:49.540Z"
     },
     {
       "path": "docs/products/LIFERE.md",
