@@ -17,6 +17,9 @@ import {
   voiceRailSttStatus,
   addVoiceRailSttCorrection,
   listVoiceRailSttCorrections,
+  recordVoiceRailSttQualityReceipt,
+  confirmVoiceRailSttQualityCorrection,
+  diffVoiceRailWords,
 } from '../services/voice-rail-stt.js';
 import {
   describeVoiceRailImages,
@@ -186,14 +189,56 @@ export function createLifeOSVoiceRailRoutes({
       if (!result.ok) {
         return res.status(503).json({ ok: false, error: result.error, detail: result.detail });
       }
+      // Quality receipt is fire-and-forget from the caller's perspective: any
+      // failure to log it must never fail the transcription response itself
+      // (recordVoiceRailSttQualityReceipt never throws, but this call site
+      // also does not let its outcome affect ok/text below).
+      let receiptId = null;
+      if (result.text && !result.skipped) {
+        receiptId = await recordVoiceRailSttQualityReceipt(pool, userId, {
+          engine: result.engine,
+          rawTranscript: result.raw_text || result.text,
+          quality: result.quality,
+        });
+      }
       return res.json({
         ok: true,
         text: result.text,
-        engine: 'openai-whisper',
+        engine: result.engine || 'openai-whisper',
         raw_text: result.raw_text || undefined,
         skipped: result.skipped || undefined,
         corrections_used: result.corrections_used || 0,
+        quality: result.quality || { checked: false },
+        receipt_id: receiptId,
       });
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  router.post('/stt/confirm', requireKey, async (req, res, next) => {
+    try {
+      const userId = await voiceRail.resolveUserId(req.body?.user || 'adam');
+      if (!userId) return res.status(404).json({ ok: false, error: 'user_not_found' });
+      const receiptId = req.body?.receipt_id;
+      const correctedText = String(req.body?.corrected_text || '').trim();
+      if (!receiptId || !correctedText) {
+        return res.status(400).json({ ok: false, error: 'receipt_id_and_corrected_text_required' });
+      }
+      const result = await confirmVoiceRailSttQualityCorrection(pool, userId, receiptId, correctedText);
+      if (!result.ok) return res.status(404).json(result);
+
+      // Feed the existing word-level bias/learning loop with any single/few-
+      // word corrections detected between raw and corrected text (narrow,
+      // same-word-count diff -- see diffVoiceRailWords). Rephrasing or
+      // added/removed words still gets the transcript-level receipt above,
+      // just doesn't teach the word dictionary.
+      const wordCorrections = diffVoiceRailWords(result.receipt.raw_transcript, correctedText);
+      for (const { misheard, canonical } of wordCorrections) {
+        await addVoiceRailSttCorrection(pool, userId, misheard, canonical, 'quality_prompt').catch(() => {});
+      }
+
+      res.json({ ok: true, receipt: result.receipt, word_corrections_applied: wordCorrections.length });
     } catch (err) {
       next(err);
     }

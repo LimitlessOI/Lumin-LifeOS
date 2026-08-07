@@ -1569,6 +1569,59 @@
       flex-shrink: 0;
     }
 
+    /* STT low-confidence quality prompt -- "I'm not sure I caught that" */
+    .lumin-stt-quality {
+      display: none;
+      flex-shrink: 0;
+      margin: 0 16px 8px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--studio-border, rgba(255,255,255,0.12));
+      background: var(--studio-bg-surface2);
+    }
+    .lumin-stt-quality.visible { display: block; }
+    .lumin-stt-quality-head {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--studio-text-secondary);
+      margin-bottom: 6px;
+    }
+    .lumin-stt-quality textarea {
+      width: 100%;
+      box-sizing: border-box;
+      font: inherit;
+      font-size: 13px;
+      color: var(--studio-text);
+      background: var(--studio-bg-surface);
+      border: 1px solid var(--studio-border, rgba(255,255,255,0.12));
+      border-radius: 8px;
+      padding: 8px;
+      resize: vertical;
+      min-height: 44px;
+    }
+    .lumin-stt-quality-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+      justify-content: flex-end;
+    }
+    .lumin-stt-quality-actions button {
+      font-size: 12px;
+      padding: 5px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--studio-border, rgba(255,255,255,0.12));
+      background: var(--studio-bg-surface);
+      color: var(--studio-text);
+      cursor: pointer;
+    }
+    .lumin-stt-quality-actions button.primary {
+      background: var(--studio-accent, #4f7cff);
+      border-color: transparent;
+      color: #fff;
+    }
+
     /* Messages area */
     .lumin-messages {
       flex: 1;
@@ -2896,6 +2949,7 @@
       </div>
 
       <div class="lumin-interim" id="lumin-interim-text"></div>
+      <div class="lumin-stt-quality" id="lumin-stt-quality"></div>
       <div class="lumin-input-bar">
         <div class="lumin-wear-bar" id="lumin-wear-bar" title="Cognitive Core — wear perspective capsules before you ask">
           <span class="lumin-wear-label">Think with</span>
@@ -4804,6 +4858,9 @@ function luminAutoResize(el) {
 
 /* founder-lumin-voice-send:start — mechanical voice "send it" wire */
 let luminDrawerVoiceCtrl = null;
+// Chunks flagged low-confidence during the utterance currently being spoken;
+// reset at the start of each new utterance, consumed once on send.
+let luminSttLowConfidenceReceipts = [];
 let luminSpaceMicHeld = false;
 let luminPttHeld = false;
 
@@ -4829,7 +4886,13 @@ function luminWirePushToTalk() {
     try { luminDrawerVoiceCtrl?.stopMic?.(); } catch {}
     setTimeout(() => {
       const v = (document.getElementById('lumin-input')?.value || '').trim();
-      if (v && !luminState.sending) luminSend({ text: v, voice: true });
+      if (v && !luminState.sending) {
+        luminSend({ text: v, voice: true });
+        if (luminSttLowConfidenceReceipts.length) {
+          luminShowSttQualityPrompt(luminSttLowConfidenceReceipts.slice(), v);
+          luminSttLowConfidenceReceipts = [];
+        }
+      }
     }, 400);
   };
   ptt.addEventListener('mousedown', start);
@@ -4861,6 +4924,7 @@ function initLuminDrawerVoiceSend() {
     serverSttChunkMs: 800,
     serverSttMinBytes: 400,
     serverSttTranscribe: async (blob, { committed }) => {
+      if (!committed) luminSttLowConfidenceReceipts = []; // fresh utterance
       const form = new FormData();
       form.append('audio', blob, 'chunk.webm');
       form.append('context', String(committed || '').trim());
@@ -4870,12 +4934,19 @@ function initLuminDrawerVoiceSend() {
       const r = await fetch('/api/v1/lifeos/voice-rail/stt', { method: 'POST', headers: h, body: form });
       if (!r.ok) throw new Error('stt_failed');
       const data = await r.json().catch(() => ({}));
+      if (data.quality?.low_confidence && data.receipt_id && data.text) {
+        luminSttLowConfidenceReceipts.push({ receipt_id: data.receipt_id, raw_text: data.text });
+      }
       return data.text || '';
     },
     onVoiceSend: (text) => {
       const msg = String(text || '').trim();
       if (!msg || luminState.sending) return;
       luminSend({ text: msg, voice: true });
+      if (luminSttLowConfidenceReceipts.length) {
+        luminShowSttQualityPrompt(luminSttLowConfidenceReceipts.slice(), msg);
+        luminSttLowConfidenceReceipts = [];
+      }
     },
     serverTtsFetch: luminServerTtsFetch,
     onInterim: ({ text }) => {
@@ -4918,6 +4989,84 @@ function initLuminDrawerVoiceSend() {
     });
   }
   luminWirePushToTalk();
+}
+
+// "I'm not sure I caught that correctly" -- shown after a voice send whose
+// transcription tripped the low-confidence heuristic. Never blocks sending
+// (the message already went out with the original text); this only offers
+// an easy after-the-fact correction that feeds the learning loop. Dismissing
+// it takes no action -- nothing is silently changed without the founder
+// seeing and confirming it first.
+function luminHideSttQualityPrompt() {
+  const el = document.getElementById('lumin-stt-quality');
+  if (!el) return;
+  el.classList.remove('visible');
+  el.innerHTML = '';
+}
+
+function luminShowSttQualityPrompt(receipts, fullText) {
+  const el = document.getElementById('lumin-stt-quality');
+  if (!el || !receipts?.length) return;
+  el.innerHTML = '';
+
+  const head = document.createElement('div');
+  head.className = 'lumin-stt-quality-head';
+  head.textContent = "I'm not sure I caught that correctly — was this right?";
+  el.appendChild(head);
+
+  const box = document.createElement('textarea');
+  box.rows = 2;
+  box.value = fullText;
+  el.appendChild(box);
+
+  const actions = document.createElement('div');
+  actions.className = 'lumin-stt-quality-actions';
+
+  const dismissBtn = document.createElement('button');
+  dismissBtn.type = 'button';
+  dismissBtn.textContent = 'Dismiss';
+  dismissBtn.onclick = luminHideSttQualityPrompt;
+
+  const confirmBtn = document.createElement('button');
+  confirmBtn.type = 'button';
+  confirmBtn.textContent = 'Yes, that was right';
+  confirmBtn.onclick = () => luminSubmitSttQualityCorrection(receipts, fullText, luminHideSttQualityPrompt);
+
+  const saveBtn = document.createElement('button');
+  saveBtn.type = 'button';
+  saveBtn.className = 'primary';
+  saveBtn.textContent = 'Save correction';
+  saveBtn.onclick = () => luminSubmitSttQualityCorrection(receipts, box.value.trim(), luminHideSttQualityPrompt);
+
+  actions.appendChild(dismissBtn);
+  actions.appendChild(confirmBtn);
+  actions.appendChild(saveBtn);
+  el.appendChild(actions);
+
+  el.classList.add('visible');
+}
+
+async function luminSubmitSttQualityCorrection(receipts, correctedText, onDone) {
+  const text = String(correctedText || '').trim();
+  if (!text) return;
+  try {
+    const h = await directSystemHeaders();
+    // Applies the same corrected text to every receipt flagged during this
+    // utterance -- each receipt still keeps its own true raw transcript for
+    // audit, so this never overwrites what was actually heard, only what the
+    // founder confirmed the intended text was. Multi-chunk utterances where
+    // different chunks needed different fixes are a known limitation.
+    await Promise.all(receipts.map((r) => fetch('/api/v1/lifeos/voice-rail/stt/confirm', {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: h,
+      body: JSON.stringify({ user: USER || 'adam', receipt_id: r.receipt_id, corrected_text: text }),
+    }).catch(() => null)));
+  } catch {
+    // Best-effort -- a failed correction save must never disrupt the chat flow.
+  } finally {
+    if (typeof onDone === 'function') onDone();
+  }
 }
 
 document.addEventListener('DOMContentLoaded', () => {

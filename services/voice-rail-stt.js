@@ -1,6 +1,8 @@
 /**
  * SYNOPSIS: Voice Rail — server-side STT (OpenAI Whisper, with a Groq Whisper
- * fallback when OpenAI is unavailable/out of credit) with LifeOS vocabulary bias.
+ * fallback when OpenAI is unavailable/out of credit) with LifeOS vocabulary bias,
+ * plus a confidence/quality feedback loop (verbose_json signals -> low-confidence
+ * flag -> optional founder correction -> word-bias learning).
  * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import {
@@ -12,6 +14,15 @@ import {
 const WHISPER_MODEL = process.env.VOICE_RAIL_STT_MODEL?.trim() || 'whisper-1';
 const GROQ_WHISPER_MODEL = process.env.VOICE_RAIL_STT_GROQ_MODEL?.trim() || 'whisper-large-v3-turbo';
 const MIN_BYTES = 400;
+
+// Standard Whisper low-confidence/hallucination heuristics (OpenAI's own
+// documented guidance for using verbose_json segments to detect bad output):
+// a segment is suspect if it's mostly silence (no_speech_prob), the model
+// wasn't confident in its own tokens (avg_logprob), or the text is
+// repetitive/garbled (compression_ratio). Any one tripping is enough to flag.
+const NO_SPEECH_PROB_THRESHOLD = 0.6;
+const AVG_LOGPROB_THRESHOLD = -1.0;
+const COMPRESSION_RATIO_THRESHOLD = 2.4;
 
 async function loadUserCorrections(pool, userId) {
   if (!pool || !userId) return [];
@@ -65,6 +76,87 @@ export async function addVoiceRailSttCorrection(pool, userId, misheard, canonica
   }
 }
 
+/**
+ * Insert an audit receipt for one transcription (raw text + confidence
+ * signals). Never throws -- a receipt-logging failure must not break the
+ * transcription response it's attached to.
+ */
+export async function recordVoiceRailSttQualityReceipt(pool, userId, { engine, rawTranscript, quality }) {
+  if (!pool || !userId || !rawTranscript) return null;
+  try {
+    const q = quality || {};
+    const { rows } = await pool.query(
+      `INSERT INTO voice_rail_stt_quality_receipts
+        (user_id, engine, raw_transcript, quality_checked, low_confidence,
+         avg_logprob, no_speech_prob, compression_ratio)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+       RETURNING id`,
+      [
+        userId,
+        engine || null,
+        rawTranscript,
+        Boolean(q.checked),
+        Boolean(q.low_confidence),
+        typeof q.avg_logprob === 'number' ? q.avg_logprob : null,
+        typeof q.no_speech_prob === 'number' ? q.no_speech_prob : null,
+        typeof q.compression_ratio === 'number' ? q.compression_ratio : null,
+      ],
+    );
+    return rows?.[0]?.id ?? null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Confirm (or record as correct-as-is) a previously flagged transcription.
+ * Scoped to the owning user so one account can't overwrite another's receipt.
+ */
+export async function confirmVoiceRailSttQualityCorrection(pool, userId, receiptId, correctedText) {
+  if (!pool || !userId || !receiptId) return { ok: false, error: 'missing_pool_user_or_receipt' };
+  const corrected = String(correctedText || '').trim();
+  if (!corrected) return { ok: false, error: 'corrected_text_required' };
+  try {
+    const { rows } = await pool.query(
+      `UPDATE voice_rail_stt_quality_receipts
+         SET corrected_transcript = $1, correction_confirmed = TRUE, corrected_at = NOW()
+       WHERE id = $2 AND user_id = $3
+       RETURNING id, raw_transcript, corrected_transcript, low_confidence, created_at, corrected_at`,
+      [corrected, receiptId, userId],
+    );
+    if (!rows?.length) return { ok: false, error: 'receipt_not_found' };
+    return { ok: true, receipt: rows[0] };
+  } catch (err) {
+    return { ok: false, error: err?.message || 'db_error' };
+  }
+}
+
+/**
+ * Simple positional word diff between a raw and corrected transcript, used to
+ * feed the existing voice_rail_stt_corrections learning loop. Deliberately
+ * narrow: only fires when both strings have the same word count (single/few-
+ * word substitutions), so it can't misfire on rephrasing or added/removed
+ * words. The transcript-level correction receipt still stores the full raw
+ * and corrected text regardless -- this only controls what feeds the
+ * word-bias dictionary.
+ */
+export function diffVoiceRailWords(rawText, correctedText) {
+  const rawWords = String(rawText || '').trim().split(/\s+/).filter(Boolean);
+  const correctedWords = String(correctedText || '').trim().split(/\s+/).filter(Boolean);
+  if (!rawWords.length || !correctedWords.length || rawWords.length !== correctedWords.length) {
+    return [];
+  }
+  const pairs = [];
+  for (let i = 0; i < rawWords.length; i++) {
+    const a = rawWords[i].replace(/[.,!?;:]+$/, '');
+    const b = correctedWords[i].replace(/[.,!?;:]+$/, '');
+    if (a.length > 1 && b.length > 1 && a.toLowerCase() !== b.toLowerCase()) {
+      pairs.push({ misheard: a, canonical: b });
+    }
+  }
+  return pairs;
+}
+
 function extensionForMime(mimeType) {
   const m = String(mimeType || '').toLowerCase();
   if (m.includes('webm')) return 'webm';
@@ -88,7 +180,9 @@ function buildMultipartBody(audioBuffer, mimeType, filename, prompt, model = WHI
     `${nl}--${boundary}${nl}` +
     `Content-Disposition: form-data; name="model"${nl}${nl}${model}${nl}` +
     `${nl}--${boundary}${nl}` +
-    `Content-Disposition: form-data; name="language"${nl}${nl}en${nl}`;
+    `Content-Disposition: form-data; name="language"${nl}${nl}en${nl}` +
+    `${nl}--${boundary}${nl}` +
+    `Content-Disposition: form-data; name="response_format"${nl}${nl}verbose_json${nl}`;
 
   if (prompt) {
     middle +=
@@ -121,6 +215,41 @@ export function voiceRailSttStatus() {
   };
 }
 
+/**
+ * Assess transcription quality from a verbose_json Whisper response using
+ * segment-level no_speech_prob / avg_logprob / compression_ratio. Fails safe:
+ * any missing/unexpected shape (older model, provider quirk, request without
+ * verbose_json honored) returns { checked: false } rather than throwing --
+ * quality detection must never be able to break transcription itself.
+ */
+function assessTranscriptionQuality(data) {
+  try {
+    const segments = Array.isArray(data?.segments) ? data.segments : [];
+    if (!segments.length) return { checked: false };
+    let maxNoSpeech = 0;
+    let minLogprob = 0;
+    let maxCompression = 0;
+    for (const seg of segments) {
+      if (typeof seg?.no_speech_prob === 'number') maxNoSpeech = Math.max(maxNoSpeech, seg.no_speech_prob);
+      if (typeof seg?.avg_logprob === 'number') minLogprob = Math.min(minLogprob, seg.avg_logprob);
+      if (typeof seg?.compression_ratio === 'number') maxCompression = Math.max(maxCompression, seg.compression_ratio);
+    }
+    const lowConfidence =
+      maxNoSpeech > NO_SPEECH_PROB_THRESHOLD ||
+      minLogprob < AVG_LOGPROB_THRESHOLD ||
+      maxCompression > COMPRESSION_RATIO_THRESHOLD;
+    return {
+      checked: true,
+      low_confidence: lowConfidence,
+      no_speech_prob: maxNoSpeech,
+      avg_logprob: minLogprob,
+      compression_ratio: maxCompression,
+    };
+  } catch {
+    return { checked: false };
+  }
+}
+
 async function callWhisperEndpoint(endpoint, apiKey, audioBuffer, mimeType, filename, prompt, model) {
   const { body, boundary } = buildMultipartBody(audioBuffer, mimeType, filename, prompt, model);
   const response = await fetch(endpoint, {
@@ -136,7 +265,11 @@ async function callWhisperEndpoint(endpoint, apiKey, audioBuffer, mimeType, file
     return { ok: false, status: response.status, detail: errText.slice(0, 300) };
   }
   const data = await response.json();
-  return { ok: true, text: String(data?.text || '').trim() };
+  return {
+    ok: true,
+    text: String(data?.text || '').trim(),
+    quality: assessTranscriptionQuality(data),
+  };
 }
 
 /**
@@ -148,6 +281,11 @@ async function callWhisperEndpoint(endpoint, apiKey, audioBuffer, mimeType, file
  * OpenAI status "needs_payment", Groq status "working"). voiceRailSttStatus()
  * also previously reported `available: true` purely from OpenAI key *presence*,
  * which was misleading once the key stopped actually working.
+ *
+ * GAP-FILL 2026-08-06 (2): now also requests verbose_json and returns a
+ * `quality` block (checked/low_confidence/segment metrics) so callers can
+ * detect likely-garbled output and ask the founder to confirm/correct it --
+ * previously the system had no way to know a transcription was bad.
  * @param {Buffer} audioBuffer
  * @param {string} [mimeType]
  * @param {{ context?: string, filename?: string, userId?: number|string, pool?: object }} [opts]
@@ -214,5 +352,6 @@ export async function transcribeVoiceRailAudio(audioBuffer, mimeType = 'audio/we
     corrections_used: userCorrections.length,
     engine: engineUsed,
     fallback_used: engineUsed === 'groq-whisper' && Boolean(openaiFailure),
+    quality: result.quality || { checked: false },
   };
 }

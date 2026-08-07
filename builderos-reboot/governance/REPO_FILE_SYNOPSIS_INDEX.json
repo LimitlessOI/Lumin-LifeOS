@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-07T00:45:40.077Z",
+  "generated_at": "2026-08-07T01:18:28.578Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13044,
+  "file_count": 13045,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -37873,6 +37873,13 @@
       "indexed_at": "2026-08-01T03:07:57.310Z"
     },
     {
+      "path": "db/migrations/20260806_voice_rail_stt_quality_receipts.sql",
+      "synopsis": "Database migration — 20260806_voice_rail_stt_quality_receipts.sql",
+      "bytes": 1073,
+      "mtime": "2026-08-07T01:09:46.666Z",
+      "indexed_at": "2026-08-07T01:18:28.578Z"
+    },
+    {
       "path": "db/migrations/20261101_habit_tables.sql",
       "synopsis": "Database migration — 20261101_habit_tables.sql.",
       "bytes": 72,
@@ -43130,9 +43137,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 770117,
-      "mtime": "2026-08-07T00:44:15.645Z",
-      "indexed_at": "2026-08-07T00:45:40.077Z"
+      "bytes": 774027,
+      "mtime": "2026-08-07T01:16:39.464Z",
+      "indexed_at": "2026-08-07T01:18:28.578Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -68894,9 +68901,9 @@
     {
       "path": "public/overlay/lifeos-app.html",
       "synopsis": "HTML page: LifeOS",
-      "bytes": 228463,
-      "mtime": "2026-08-01T08:00:12.155Z",
-      "indexed_at": "2026-08-01T08:00:27.137Z"
+      "bytes": 233970,
+      "mtime": "2026-08-07T01:14:21.970Z",
+      "indexed_at": "2026-08-07T01:18:28.578Z"
     },
     {
       "path": "public/overlay/lifeos-ask-your-life.html",
@@ -71953,9 +71960,9 @@
     {
       "path": "routes/lifeos-voice-rail-routes.js",
       "synopsis": "Voice Rail v1 API — canonical communication layer.",
-      "bytes": 19632,
-      "mtime": "2026-07-28T17:47:22.535Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 21885,
+      "mtime": "2026-08-07T01:11:16.273Z",
+      "indexed_at": "2026-08-07T01:18:28.578Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md",
         "builderos-reboot/MISSIONS/PRODUCT-VOICE-RAIL-V1-0001/FOUNDER_PACKET.md"
@@ -99464,9 +99471,9 @@
     {
       "path": "services/voice-rail-stt.js",
       "synopsis": "Voice Rail — server-side STT (OpenAI Whisper, with a Groq Whisper",
-      "bytes": 7796,
-      "mtime": "2026-08-06T17:44:56.421Z",
-      "indexed_at": "2026-08-06T17:47:13.777Z",
+      "bytes": 13730,
+      "mtime": "2026-08-07T01:10:43.787Z",
+      "indexed_at": "2026-08-07T01:18:28.578Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
