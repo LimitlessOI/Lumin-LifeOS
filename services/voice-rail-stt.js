@@ -167,47 +167,56 @@ function extensionForMime(mimeType) {
   return 'webm';
 }
 
+/**
+ * GAP-FILL 2026-08-06: found live -- Groq's error for a bad model name
+ * echoed back the literal value it received: "whisper-large-v3-turbo\r\n"
+ * (visible CRLF inside the model name). Root cause: the old implementation
+ * appended a trailing CRLF to every field's value ("${value}${nl}") AND
+ * prefixed the next part with its own leading CRLF ("${nl}--${boundary}"),
+ * producing TWO CRLFs between a value and the next boundary line. Per RFC
+ * 2046 only the CRLF immediately before "--boundary" belongs to the
+ * delimiter -- the extra one gets parsed as part of the field's VALUE. This
+ * silently corrupted every field (model/language/response_format/prompt)
+ * with a trailing CRLF baked in, on both providers, most likely since this
+ * function was first written -- it plausibly explains the earlier "invalid
+ * model ID" from OpenAI too, not just tonight's Groq rejections. Rewritten
+ * to build each part with no trailing separator of its own, then join parts
+ * with exactly one CRLF -- the standard, unambiguous multipart shape.
+ */
 function buildMultipartBody(audioBuffer, mimeType, filename, prompt, model = WHISPER_MODEL, requestVerboseJson = true, includeLanguage = true) {
   const boundary = `----VRStt${Date.now().toString(16)}`;
   const nl = '\r\n';
 
-  const header =
+  const filePart = Buffer.concat([
+    Buffer.from(
+      `--${boundary}${nl}` +
+      `Content-Disposition: form-data; name="file"; filename="${filename}"${nl}` +
+      `Content-Type: ${mimeType || 'audio/webm'}${nl}${nl}`,
+    ),
+    audioBuffer,
+  ]);
+
+  const textPart = (name, value) => Buffer.from(
     `--${boundary}${nl}` +
-    `Content-Disposition: form-data; name="file"; filename="${filename}"${nl}` +
-    `Content-Type: ${mimeType || 'audio/webm'}${nl}${nl}`;
+    `Content-Disposition: form-data; name="${name}"${nl}${nl}${value}`,
+  );
 
-  let middle =
-    `${nl}--${boundary}${nl}` +
-    `Content-Disposition: form-data; name="model"${nl}${nl}${model}${nl}`;
+  const parts = [filePart, textPart('model', model)];
+  if (includeLanguage) parts.push(textPart('language', 'en'));
+  if (requestVerboseJson) parts.push(textPart('response_format', 'verbose_json'));
+  if (prompt) parts.push(textPart('prompt', prompt.slice(0, 800)));
 
-  if (includeLanguage) {
-    middle +=
-      `${nl}--${boundary}${nl}` +
-      `Content-Disposition: form-data; name="language"${nl}${nl}en${nl}`;
-  }
+  const separator = Buffer.from(nl);
+  const footer = Buffer.from(`${nl}--${boundary}--${nl}`);
 
-  if (requestVerboseJson) {
-    middle +=
-      `${nl}--${boundary}${nl}` +
-      `Content-Disposition: form-data; name="response_format"${nl}${nl}verbose_json${nl}`;
-  }
+  const joined = [];
+  parts.forEach((part, i) => {
+    if (i > 0) joined.push(separator);
+    joined.push(part);
+  });
+  joined.push(footer);
 
-  if (prompt) {
-    middle +=
-      `${nl}--${boundary}${nl}` +
-      `Content-Disposition: form-data; name="prompt"${nl}${nl}${prompt.slice(0, 800)}${nl}`;
-  }
-
-  const footer = `--${boundary}--${nl}`;
-
-  return {
-    body: Buffer.concat([
-      Buffer.from(header),
-      audioBuffer,
-      Buffer.from(middle + footer),
-    ]),
-    boundary,
-  };
+  return { body: Buffer.concat(joined), boundary };
 }
 
 export function voiceRailSttStatus() {
