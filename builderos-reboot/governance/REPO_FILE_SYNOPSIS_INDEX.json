@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-07T23:27:21.210Z",
+  "generated_at": "2026-08-07T23:31:47.388Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13075,
+  "file_count": 13076,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -26863,9 +26863,9 @@
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V1-VOICE-PRESENCE-0001/BLUEPRINT.json",
       "synopsis": "Exports computeTurnCompletionConfidence — builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V1-VOICE-PRESENCE-0001/BLUEPRINT.json.",
-      "bytes": 6542,
-      "mtime": "2026-08-07T23:26:47.357Z",
-      "indexed_at": "2026-08-07T23:27:21.210Z",
+      "bytes": 7131,
+      "mtime": "2026-08-07T23:30:25.726Z",
+      "indexed_at": "2026-08-07T23:31:47.388Z",
       "synopsis_index_only": true
     },
     {
@@ -26874,6 +26874,14 @@
       "bytes": 706,
       "mtime": "2026-08-07T22:29:05.627Z",
       "indexed_at": "2026-08-07T22:32:25.096Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V1-VOICE-PRESENCE-0001/DELIBERATION_GATE.json",
+      "synopsis": "BuilderOS artifact — DELIBERATION GATE.",
+      "bytes": 1454,
+      "mtime": "2026-08-07T23:31:20.747Z",
+      "indexed_at": "2026-08-07T23:31:47.388Z",
       "synopsis_index_only": true
     },
     {
@@ -64737,10 +64745,10 @@
     },
     {
       "path": "factory-staging/factory-core/historian/record-consensus-session.js",
-      "synopsis": "Exports recordConsensusSession — builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/historian/record-consensus-session.js.",
-      "bytes": 392,
-      "mtime": "2026-07-10T00:25:04.393Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "synopsis": "Exports recordConsensusSession, recordHistDeptCase, recordCfoDeliberationReceipt",
+      "bytes": 1533,
+      "mtime": "2026-08-07T23:31:12.760Z",
+      "indexed_at": "2026-08-07T23:31:47.388Z"
     },
     {
       "path": "factory-staging/factory-core/historian/record-decision.js",

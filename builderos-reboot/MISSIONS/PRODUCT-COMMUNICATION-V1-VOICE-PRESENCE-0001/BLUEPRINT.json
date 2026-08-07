@@ -79,6 +79,9 @@
           "activeServerAudio"
         ]
       },
+      "sandbox_boundary": "public/shared/**",
+      "authority_owner": "Builder",
+      "on_block": "BLOCKED_RETURN_TO_ARC",
       "dependencies": [
         "CV1P-S01"
       ],
@@ -101,6 +104,9 @@
           "isSpeaking"
         ]
       },
+      "sandbox_boundary": "public/overlay/**",
+      "authority_owner": "Builder",
+      "on_block": "BLOCKED_RETURN_TO_ARC",
       "dependencies": [
         "CV1P-S02"
       ],
@@ -122,6 +128,9 @@
           "computeTurnCompletionConfidence"
         ]
       },
+      "sandbox_boundary": "scripts/**",
+      "authority_owner": "Builder",
+      "on_block": "BLOCKED_RETURN_TO_ARC",
       "dependencies": [
         "CV1P-S03"
       ],
@@ -133,8 +142,12 @@
       "phase_id": "P4",
       "title": "Run acceptance until PASS",
       "action_type": "shell_command",
+      "target_file": "products/receipts/COMMUNICATION_V1_VOICE_PRESENCE_ACCEPTANCE.json",
       "target_files": ["products/receipts/COMMUNICATION_V1_VOICE_PRESENCE_ACCEPTANCE.json"],
       "command": "npm run lifeos:communication-v1-voice-presence:acceptance",
+      "sandbox_boundary": "products/receipts/**",
+      "authority_owner": "Builder",
+      "on_block": "BLOCKED_RETURN_TO_ARC",
       "dependencies": [
         "CV1P-S04"
       ],
