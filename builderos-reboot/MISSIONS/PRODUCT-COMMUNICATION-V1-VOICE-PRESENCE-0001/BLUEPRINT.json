@@ -6,6 +6,7 @@
   "acceptance_command": "npm run lifeos:communication-v1-voice-presence:acceptance",
   "allowed_action_types": [
     "builder_build",
+    "author_then_write",
     "shell_command"
   ],
   "steps": [
@@ -15,7 +16,7 @@
       "title": "Interaction Decision service: port fuseTurnCompletion into a real, callable service",
       "target_file": "services/interaction-decision-service.js",
       "target_files": ["services/interaction-decision-service.js"],
-      "action_type": "builder_build",
+      "action_type": "author_then_write",
       "task": "Create services/interaction-decision-service.js exporting computeTurnCompletionConfidence(turns, options), a deterministic port of fuseTurnCompletion from scripts/prototype-conversational-contracts-v1.mjs (39/39-proven scoring: +25 finalTranscript, +35/-15 trailing punctuation, +15/-35 trailing filler word, up to +30 scaled by pauseMs vs minimumPauseMs (default 600), +5 if previous turn was assistant; score clamped 0-100; finished = score >= threshold (default 90)). No AI/model call anywhere in this file.",
       "spec": "export function computeTurnCompletionConfidence(turns, options = {}) { currentIndex = options.currentIndex ?? turns.length - 1; pauseMs = options.pauseMs ?? 0; finalTranscript = options.finalTranscript ?? true; minimumPauseMs = options.minimumPauseMs ?? 600; threshold = options.threshold ?? 90; } Return { finished: boolean, confidence: number (0-100), pause_ms: number, sources: [{source, value, weight}] } — same shape and same scoring weights as fuseTurnCompletion in scripts/prototype-conversational-contracts-v1.mjs (read that file for the exact reference implementation to port). Pure function, no I/O, no network call, no AI/model call. Add a @ssot docs/products/lifeos/PRODUCT_HOME.md JSDoc tag at the top of the file per repo convention.",
       "assertion_spec": {

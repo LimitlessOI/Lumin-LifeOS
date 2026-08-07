@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-07T23:42:10.789Z",
+  "generated_at": "2026-08-07T23:44:57.139Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13076,
   "files": [
@@ -26863,9 +26863,9 @@
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V1-VOICE-PRESENCE-0001/BLUEPRINT.json",
       "synopsis": "Exports computeTurnCompletionConfidence — builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V1-VOICE-PRESENCE-0001/BLUEPRINT.json.",
-      "bytes": 7131,
-      "mtime": "2026-08-07T23:30:25.726Z",
-      "indexed_at": "2026-08-07T23:31:47.388Z",
+      "bytes": 7160,
+      "mtime": "2026-08-07T23:44:40.162Z",
+      "indexed_at": "2026-08-07T23:44:57.139Z",
       "synopsis_index_only": true
     },
     {
