@@ -42,6 +42,10 @@ A tested, passing prototype for exactly this already exists (`scripts/prototype-
 
 ---
 
+## FOUNDER SUCCESS TEST
+
+Interrupting Chair mid-sentence while read-aloud is playing measurably fades/stops the reply within 300ms (server-TTS path) or ~16ms (speechSynthesis fallback) instead of talking over the user, verified by an automated volume-vs-time assertion — not a manual listen — and Adam confirms it feels natural, not jarring or broken.
+
 ## Acceptance command
 
 ```bash
@@ -54,14 +58,16 @@ npm run lifeos:communication-v1-voice-presence:acceptance
 
 ## PASS criteria (both required)
 
-### 1. Technical PASS
+### 1. Technical PASS — objective, automatable (SNT-measurable, not qualitative)
 - Acceptance command exits **0**
 - Receipt: `products/receipts/COMMUNICATION_V1_VOICE_PRESENCE_ACCEPTANCE.json` with `"verdict": "PASS"`
 - Unit-level: turn-completion scoring matches the 39/39-proven prototype behavior on the same fixtures (ported, not reinvented)
+- **Numeric success metric:** on the server-TTS `<audio>` path, `fadeAndStopSpeaking()` reduces playback volume to below 5% within 300ms of a detected barge-in event, verified by a real automated test (not a manual listen) that asserts the volume-vs-time curve; on the `speechSynthesis` fallback path, playback stops within one animation frame (~16ms) of the same event, since no fade is possible there
+- **Failure mode, explicit:** if barge-in is detected but `isSpeaking()` was false (no false positive) or audio continues past 300ms/16ms respectively (missed detection or broken fade), that is a FAIL, not a partial pass
 
 ### 2. Founder usability PASS
 - With read-aloud on, starting to speak while Chair is talking measurably fades/stops the reply instead of talking over the user
-- Adam confirms this feels natural, not jarring or broken
+- Adam confirms this feels natural, not jarring or broken — this is deliberately kept as a real, separate, human PASS gate; the numeric metric above proves the mechanism works, this proves it's actually good
 
 **I'll know this worked when:** I can interrupt Chair mid-sentence while it's speaking to me, and it backs off gracefully instead of plowing through what I'm saying.
 
