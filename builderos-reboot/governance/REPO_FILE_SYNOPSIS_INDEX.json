@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-07T03:41:15.097Z",
+  "generated_at": "2026-08-07T19:47:32.014Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13053,
+  "file_count": 13055,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -31043,9 +31043,9 @@
     {
       "path": "CLAUDE.md",
       "synopsis": "CLAUDE.md — LifeOS/LimitlessOS Project Instructions",
-      "bytes": 13685,
-      "mtime": "2026-08-03T03:42:55.952Z",
-      "indexed_at": "2026-08-03T03:45:46.767Z"
+      "bytes": 15268,
+      "mtime": "2026-08-07T19:41:25.029Z",
+      "indexed_at": "2026-08-07T19:47:32.014Z"
     },
     {
       "path": "client/orchestrator-app/main.js",
@@ -39874,6 +39874,13 @@
       "indexed_at": "2026-08-06T05:30:22.273Z"
     },
     {
+      "path": "docs/conversation_dumps/2026-08-07-communication-blueprint-architecture-review.md",
+      "synopsis": "Cross-AI architecture review of the LifeOS Communication System blueprint and the BuilderOS blueprint process — ChatGPT proposal fact-checked against the real repo, four agreed amendments, produced SO-004 (conversation-archival standing ord",
+      "bytes": 4269,
+      "mtime": "2026-08-07T19:43:00.460Z",
+      "indexed_at": "2026-08-07T19:47:32.014Z"
+    },
+    {
       "path": "docs/conversation_dumps/by-product/sessions/2a4739f2/BUILDEROS-AUTONOMOUS.md",
       "synopsis": "BuilderOS / TSOS / autonomous / alpha",
       "bytes": 85566,
@@ -43136,6 +43143,13 @@
       "indexed_at": "2026-08-06T18:19:08.353Z"
     },
     {
+      "path": "docs/products/lifeos/conversations/2026-08-07-communication-blueprint-architecture-review.md",
+      "synopsis": "LifeOS — 2026-08-07 cross-AI architecture review of the Communication System blueprint and the BuilderOS blueprint process, fact-checked against the real repo; four agreed amendments; produced the SO-004 conversation-archival standing order",
+      "bytes": 8309,
+      "mtime": "2026-08-07T19:42:14.961Z",
+      "indexed_at": "2026-08-07T19:47:32.014Z"
+    },
+    {
       "path": "docs/products/lifeos/CREATIVE_BRIEF.md",
       "synopsis": "Creative Brief — LifeOS (lifeos)",
       "bytes": 4211,
@@ -43167,9 +43181,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 792483,
-      "mtime": "2026-08-07T03:37:13.449Z",
-      "indexed_at": "2026-08-07T03:41:15.097Z"
+      "bytes": 796167,
+      "mtime": "2026-08-07T19:45:58.625Z",
+      "indexed_at": "2026-08-07T19:47:32.014Z"
     },
     {
       "path": "docs/products/LIFERE.md",
