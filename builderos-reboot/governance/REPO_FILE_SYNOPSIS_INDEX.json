@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-07T01:39:22.544Z",
+  "generated_at": "2026-08-07T01:40:17.294Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13045,
+  "file_count": 13048,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21582,9 +21582,9 @@
     {
       "path": "builderos-reboot/governance/DEPARTMENT_ROLE_CONTRACT.json",
       "synopsis": "BuilderOS artifact — DEPARTMENT ROLE CONTRACT.",
-      "bytes": 5303,
-      "mtime": "2026-06-27T04:29:51.974Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 5631,
+      "mtime": "2026-08-07T01:06:52.071Z",
+      "indexed_at": "2026-08-07T01:39:55.456Z",
       "synopsis_index_only": true
     },
     {
@@ -21678,9 +21678,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3949722,
-      "mtime": "2026-08-06T17:47:13.860Z",
-      "indexed_at": "2026-08-06T17:47:44.330Z"
+      "bytes": 3952602,
+      "mtime": "2026-08-07T01:40:04.469Z",
+      "indexed_at": "2026-08-07T01:40:17.294Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -39153,9 +39153,9 @@
     {
       "path": "docs/BLUEPRINT_COMMUNICATION_FIRST_2026-08-02.md",
       "synopsis": "Communication-first execution blueprint — 8 phases sequenced from the 2026-08-02 independent audit, extended 2026-08-03 with a real-client UX audit (Calibration Engine wired live, a Cognitive Core false-positive bug found+fixed via real-bro",
-      "bytes": 30748,
-      "mtime": "2026-08-04T02:21:57.185Z",
-      "indexed_at": "2026-08-04T02:22:18.697Z"
+      "bytes": 30765,
+      "mtime": "2026-08-07T01:06:52.350Z",
+      "indexed_at": "2026-08-07T01:39:55.456Z"
     },
     {
       "path": "docs/BRAINSTORM_SESSIONS_IDEAS_CATALOG.md",
@@ -39356,9 +39356,9 @@
     {
       "path": "docs/constitution/AMENDMENT_COGNITIVE_LAYERS.md",
       "synopsis": "Constitutional amendment ratifying the five-layer cognitive reasoning stack and cognitive assets.",
-      "bytes": 2284,
-      "mtime": "2026-07-31T09:43:25.444Z",
-      "indexed_at": "2026-07-31T09:51:46.501Z"
+      "bytes": 2322,
+      "mtime": "2026-08-07T01:06:52.478Z",
+      "indexed_at": "2026-08-07T01:39:55.456Z"
     },
     {
       "path": "docs/constitution/AS_IS_GOVERNANCE_STRUCTURE_2026-08-06.md",
@@ -42058,9 +42058,9 @@
     {
       "path": "docs/products/builderos/GAP_FILL_LEDGER.json",
       "synopsis": "Documentation — GAP FILL LEDGER.",
-      "bytes": 81596,
-      "mtime": "2026-08-07T01:30:52.817Z",
-      "indexed_at": "2026-08-07T01:39:22.544Z",
+      "bytes": 83612,
+      "mtime": "2026-08-07T01:39:23.280Z",
+      "indexed_at": "2026-08-07T01:39:55.456Z",
       "synopsis_index_only": true
     },
     {
@@ -42073,9 +42073,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 460866,
-      "mtime": "2026-08-04T04:51:12.209Z",
-      "indexed_at": "2026-08-04T04:51:42.034Z"
+      "bytes": 461863,
+      "mtime": "2026-08-07T01:06:53.367Z",
+      "indexed_at": "2026-08-07T01:39:55.456Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -43045,9 +43045,9 @@
     {
       "path": "docs/products/lifeos/communication/COMMUNICATION_SYSTEM_FOUNDER_REFERENCE.md",
       "synopsis": "One-file reference for Adam — everything the repo has documented about how he wants Lumin/Chair to communicate, and where each piece stands today",
-      "bytes": 20985,
-      "mtime": "2026-08-06T05:19:29.714Z",
-      "indexed_at": "2026-08-06T05:30:22.273Z"
+      "bytes": 21023,
+      "mtime": "2026-08-07T01:06:53.482Z",
+      "indexed_at": "2026-08-07T01:39:55.456Z"
     },
     {
       "path": "docs/products/lifeos/communication/COMMUNICATION_TRANSLATION_MAPPING_2026_08_04.md",
@@ -43055,6 +43055,13 @@
       "bytes": 5149,
       "mtime": "2026-08-04T16:56:35.898Z",
       "indexed_at": "2026-08-06T05:30:22.273Z"
+    },
+    {
+      "path": "docs/products/lifeos/communication/COMPETITIVE_CATCHUP_PLAN.md",
+      "synopsis": "Competitive catch-up / leapfrog plan for the LifeOS Communication System.",
+      "bytes": 15121,
+      "mtime": "2026-08-07T01:06:53.483Z",
+      "indexed_at": "2026-08-07T01:39:55.456Z"
     },
     {
       "path": "docs/products/lifeos/conversations/2026-06-29-human-synergy-limitless-principle.md",
@@ -43129,9 +43136,9 @@
     {
       "path": "docs/products/lifeos/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
-      "bytes": 25355,
-      "mtime": "2026-08-06T05:18:51.290Z",
-      "indexed_at": "2026-08-06T05:30:22.273Z",
+      "bytes": 31198,
+      "mtime": "2026-08-07T01:06:53.397Z",
+      "indexed_at": "2026-08-07T01:39:55.456Z",
       "synopsis_index_only": true
     },
     {
@@ -43902,9 +43909,9 @@
     {
       "path": "docs/products/universal-overlay/INTELLIGENT_OVERLAY_BLUEPRINT.md",
       "synopsis": "Founder's integrated vision — Universal Overlay as a perception-aware, conversation-driven, verbal AI director. Source: 2026-08-05 conversation dumps + full Lumin-Memory corpus analysis.",
-      "bytes": 13427,
-      "mtime": "2026-08-06T05:19:38.274Z",
-      "indexed_at": "2026-08-06T05:30:22.273Z"
+      "bytes": 14596,
+      "mtime": "2026-08-07T01:06:53.643Z",
+      "indexed_at": "2026-08-07T01:39:55.456Z"
     },
     {
       "path": "docs/products/universal-overlay/PRODUCT_HOME.md",
@@ -76392,6 +76399,13 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "scripts/prototype-avatar-widget.html",
+      "synopsis": "HTML page: LifeOS Avatar Widget — V0.5 Prototype",
+      "bytes": 12365,
+      "mtime": "2026-08-07T01:06:54.405Z",
+      "indexed_at": "2026-08-07T01:39:55.456Z"
+    },
+    {
       "path": "scripts/prototype-conversational-contracts-v1.mjs",
       "synopsis": "Prototype V1 — Conversational Contracts + Interruption Decay.",
       "bytes": 15485,
@@ -76437,6 +76451,16 @@
       "bytes": 5158,
       "mtime": "2026-08-06T08:15:57.393Z",
       "indexed_at": "2026-08-06T08:23:02.648Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/prototype-tonality-engine-v1.mjs",
+      "synopsis": "Prototype V1 — Tonality Engine.",
+      "bytes": 16810,
+      "mtime": "2026-08-07T01:06:54.406Z",
+      "indexed_at": "2026-08-07T01:39:55.456Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
