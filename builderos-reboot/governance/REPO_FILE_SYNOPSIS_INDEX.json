@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-07T22:36:49.068Z",
+  "generated_at": "2026-08-07T22:37:00.254Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13075,
   "files": [
@@ -69111,9 +69111,9 @@
     {
       "path": "public/overlay/lifeos-app.html",
       "synopsis": "HTML page: LifeOS",
-      "bytes": 233970,
-      "mtime": "2026-08-07T22:36:49.068Z",
-      "indexed_at": "2026-08-07T22:36:49.068Z"
+      "bytes": 233971,
+      "mtime": "2026-08-07T22:37:00.254Z",
+      "indexed_at": "2026-08-07T22:37:00.254Z"
     },
     {
       "path": "public/overlay/lifeos-ask-your-life.html",
@@ -69236,9 +69236,9 @@
     {
       "path": "public/overlay/lifeos-dashboard.html",
       "synopsis": "HTML page: Dashboard · LifeOS",
-      "bytes": 47876,
-      "mtime": "2026-08-07T22:36:49.068Z",
-      "indexed_at": "2026-08-07T22:36:49.068Z"
+      "bytes": 47877,
+      "mtime": "2026-08-07T22:37:00.254Z",
+      "indexed_at": "2026-08-07T22:37:00.254Z"
     },
     {
       "path": "public/overlay/lifeos-date-night.html",
@@ -69545,8 +69545,8 @@
       "path": "public/overlay/lifeos-theme-overrides.css",
       "synopsis": "LifeOS overlay UI — Lifeos Theme Overrides.",
       "bytes": 6797,
-      "mtime": "2026-08-07T22:36:49.068Z",
-      "indexed_at": "2026-08-07T22:36:49.068Z"
+      "mtime": "2026-08-07T22:37:00.254Z",
+      "indexed_at": "2026-08-07T22:37:00.254Z"
     },
     {
       "path": "public/overlay/lifeos-theme.js",
@@ -69964,8 +69964,8 @@
       "path": "public/overlay/sw.js",
       "synopsis": "LifeOS Service Worker",
       "bytes": 7289,
-      "mtime": "2026-08-07T22:36:49.068Z",
-      "indexed_at": "2026-08-07T22:36:49.068Z",
+      "mtime": "2026-08-07T22:37:00.254Z",
+      "indexed_at": "2026-08-07T22:37:00.254Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

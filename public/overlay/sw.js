@@ -11,7 +11,7 @@
  * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
-const CACHE_NAME   = 'lifeos-1786142205213';
+const CACHE_NAME   = 'lifeos-1786142216784';
 const OFFLINE_URL  = '/overlay/lifeos-app.html';
 
 // App shell files to pre-cache on install
