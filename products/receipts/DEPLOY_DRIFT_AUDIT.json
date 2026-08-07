@@ -1,11 +1,11 @@
 {
   "schema": "deploy_truth_verify_v1",
-  "at": "2026-08-06T08:28:20.961Z",
+  "at": "2026-08-07T23:44:00.373Z",
   "command": "drift-audit",
   "production_base": "https://lumin-web-production-e3a9.up.railway.app",
   "deploy_branch": "main",
-  "commit_sha": "13bbe2442582a01e2135c1e11548ae511a609564",
-  "served_sha": "13bbe2442582a01e2135c1e11548ae511a609564",
+  "commit_sha": "2244f055c36bda40ac1d9d7cf45f18b77255fb18",
+  "served_sha": "2244f055c36bda40ac1d9d7cf45f18b77255fb18",
   "verdict": "PROVEN",
   "ok": true,
   "passed": [
@@ -21,11 +21,11 @@
   "skipped": [],
   "files": [],
   "deployment": {
-    "id": "e3aaec24-b65b-48c7-83d4-cab08f84e0b2",
+    "id": "fa44611c-50b3-4e9b-83e1-8b6b14884b44",
     "status": "SUCCESS",
-    "created_at": "2026-08-06T08:26:42.907Z",
-    "commit_sha": "13bbe2442582a01e2135c1e11548ae511a609564",
-    "commit_message": "Update product home and continuity log with deploy proof for V1-V5\n\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
+    "created_at": "2026-08-07T23:42:22.334Z",
+    "commit_sha": "2244f055c36bda40ac1d9d7cf45f18b77255fb18",
+    "commit_message": "GAP-FILL: chair-consensus-gate.mjs's gates check rejected every real reasoning plan\n\nHAND-AUTHORED-JUSTIFICATION: narrow correctness fix to an existing module, no\nnew logic invented. Live-reproduced: an auto-generated reasoning plan (the\n\"first ship authors from task+spec\" path) failed runChairConsensusGate with\nincomplete_reasoning_plan / missing:[\"gates\"] every single time. Root cause:\nderiveGates() in reasoning-plan.mjs has always returned an object of named\nboolean flags ({sentry_mandatory, founder_approval_required,\nblueprint_authority_required, external_research_required}) -- confirmed the\nsame shape is what every other real reader expects\n(blueprint-generator.mjs's `reasoningPlan.gates || {}` and\n`blueprint?.gates?.founder_approval_required`) -- but validatePlanFields()\nhere checked Array.isArray(plan.gates), which is unconditionally false for an\nobject. No auto-generated plan could ever have passed this check. Fixed the\noutlier (this file) to match the real shape everywhere else, not the other\nway around.",
     "url": null
   },
   "runtime_identity": {
@@ -46,18 +46,18 @@
     {
       "id": "git.fetch",
       "status": "pass",
-      "detail": "origin/main is 13bbe2442582"
+      "detail": "origin/main is 2244f055c36b"
     },
     {
       "id": "local.divergence",
       "status": "pass",
-      "detail": "local main is aligned with origin/main",
-      "local_branch": "main",
-      "local_head": "13bbe2442582a01e2135c1e11548ae511a609564",
-      "remote_head": "13bbe2442582a01e2135c1e11548ae511a609564",
+      "detail": "local gapfill/v1-build-retry is aligned with origin/main",
+      "local_branch": "gapfill/v1-build-retry",
+      "local_head": "2244f055c36bda40ac1d9d7cf45f18b77255fb18",
+      "remote_head": "2244f055c36bda40ac1d9d7cf45f18b77255fb18",
       "ahead": 0,
       "behind": 0,
-      "uncommitted": 0
+      "uncommitted": 3
     },
     {
       "id": "runtime.identity",
@@ -81,20 +81,20 @@
     {
       "id": "runtime.version",
       "status": "pass",
-      "detail": "production serves 13bbe2442582, which contains origin/main (13bbe2442582)",
-      "served_sha": "13bbe2442582a01e2135c1e11548ae511a609564",
-      "remote_head": "13bbe2442582a01e2135c1e11548ae511a609564"
+      "detail": "production serves 2244f055c36b, which contains origin/main (2244f055c36b)",
+      "served_sha": "2244f055c36bda40ac1d9d7cf45f18b77255fb18",
+      "remote_head": "2244f055c36bda40ac1d9d7cf45f18b77255fb18"
     },
     {
       "id": "deployment.state",
       "status": "pass",
-      "detail": "latest deployment SUCCESS on 13bbe2442582, nothing in flight",
+      "detail": "latest deployment SUCCESS on 2244f055c36b, nothing in flight",
       "deployment": {
-        "id": "e3aaec24-b65b-48c7-83d4-cab08f84e0b2",
+        "id": "fa44611c-50b3-4e9b-83e1-8b6b14884b44",
         "status": "SUCCESS",
-        "created_at": "2026-08-06T08:26:42.907Z",
-        "commit_sha": "13bbe2442582a01e2135c1e11548ae511a609564",
-        "commit_message": "Update product home and continuity log with deploy proof for V1-V5\n\nCo-Authored-By: Devin AI <158243242+devin-ai-integration[bot]@users.noreply.github.com>",
+        "created_at": "2026-08-07T23:42:22.334Z",
+        "commit_sha": "2244f055c36bda40ac1d9d7cf45f18b77255fb18",
+        "commit_message": "GAP-FILL: chair-consensus-gate.mjs's gates check rejected every real reasoning plan\n\nHAND-AUTHORED-JUSTIFICATION: narrow correctness fix to an existing module, no\nnew logic invented. Live-reproduced: an auto-generated reasoning plan (the\n\"first ship authors from task+spec\" path) failed runChairConsensusGate with\nincomplete_reasoning_plan / missing:[\"gates\"] every single time. Root cause:\nderiveGates() in reasoning-plan.mjs has always returned an object of named\nboolean flags ({sentry_mandatory, founder_approval_required,\nblueprint_authority_required, external_research_required}) -- confirmed the\nsame shape is what every other real reader expects\n(blueprint-generator.mjs's `reasoningPlan.gates || {}` and\n`blueprint?.gates?.founder_approval_required`) -- but validatePlanFields()\nhere checked Array.isArray(plan.gates), which is unconditionally false for an\nobject. No auto-generated plan could ever have passed this check. Fixed the\noutlier (this file) to match the real shape everywhere else, not the other\nway around.",
         "url": null
       }
     }
@@ -102,9 +102,9 @@
   "produced_by": "cursor-agent",
   "verified_by": "git+railway-api+production-http-probe",
   "verification_kind": "deterministic+external",
-  "local_head": "13bbe2442582a01e2135c1e11548ae511a609564",
-  "local_branch": "main",
+  "local_head": "2244f055c36bda40ac1d9d7cf45f18b77255fb18",
+  "local_branch": "gapfill/v1-build-retry",
   "ahead": 0,
   "behind": 0,
-  "human_summary": "PROVEN — production serves 13bbe2442582, which contains origin/main; no runtime drift found."
+  "human_summary": "PROVEN — production serves 2244f055c36b, which contains origin/main; no runtime drift found."
 }

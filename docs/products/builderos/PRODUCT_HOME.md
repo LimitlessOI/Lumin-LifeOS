@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/builderos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-|| **Last Updated** | 2026-08-07 — Renamed the `CFO` seat to `Office of Efficiency (Efficiency Officer)` in `DEPARTMENT_ROLE_CONTRACT.json` and `AMENDMENT_COGNITIVE_LAYERS.md`; kept `CFO_` artifact file names as legacy aliases. Added Communication Blueprint §10.4 (founder authority / direct-build trigger). `npm run builder:preflight` PASS; `npm run system:railway:redeploy` and `npm run deploy:truth:audit` PROVEN. |
+|| **Last Updated** | 2026-08-07 — `/factory/ship-queue`'s twin-merge silently dropped `behavior_assertions` when binding a request step to its blueprint twin, so a step's own hand-verified assertions always fell back to auto-derived ones; fixed. Prior: Renamed the `CFO` seat to `Office of Efficiency (Efficiency Officer)` in `DEPARTMENT_ROLE_CONTRACT.json` and `AMENDMENT_COGNITIVE_LAYERS.md`; kept `CFO_` artifact file names as legacy aliases. Added Communication Blueprint §10.4 (founder authority / direct-build trigger). `npm run builder:preflight` PASS; `npm run system:railway:redeploy` and `npm run deploy:truth:audit` PROVEN. |
 ### Related docs (this product)
 
 | Doc | Path |

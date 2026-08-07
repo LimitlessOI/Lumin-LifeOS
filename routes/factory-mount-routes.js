@@ -606,6 +606,7 @@ ${text.slice(0, 24000)}`;
             spec: twin.spec || s.spec,
             assertion_spec: twin.assertion_spec || s.assertion_spec,
             expected_exports: twin.expected_exports || s.expected_exports,
+            behavior_assertions: twin.behavior_assertions || s.behavior_assertions,
             action_type: twin.action_type || s.action_type,
             exact_inputs: twin.exact_inputs || s.exact_inputs,
             sandbox_boundary: s.sandbox_boundary || (twin.target_file

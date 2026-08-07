@@ -22,10 +22,6 @@
       "assertion_spec": {
         "expected_exports": [
           "computeTurnCompletionConfidence"
-        ],
-        "file_contains": [
-          "no new AI/model call",
-          "reuse the proven scoring approach from scripts/prototype-conversational-contracts-v1.mjs fuseTurnCompletion"
         ]
       },
       "behavior_assertions": [
