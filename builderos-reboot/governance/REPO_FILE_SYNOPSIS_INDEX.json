@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-07T23:39:10.974Z",
+  "generated_at": "2026-08-07T23:42:10.789Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13076,
   "files": [
@@ -64534,9 +64534,9 @@
     {
       "path": "factory-staging/factory-core/builder/chair-consensus-gate.mjs",
       "synopsis": "Chair / council consensus runtime entry gate.",
-      "bytes": 4577,
-      "mtime": "2026-08-01T19:41:37.538Z",
-      "indexed_at": "2026-08-01T19:44:34.593Z",
+      "bytes": 5015,
+      "mtime": "2026-08-07T23:41:35.416Z",
+      "indexed_at": "2026-08-07T23:42:10.789Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

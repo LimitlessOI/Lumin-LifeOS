@@ -32,7 +32,13 @@ function validatePlanFields(plan) {
   if (!plan.budget || typeof plan.budget.max_model_calls !== 'number') missing.push('budget.max_model_calls');
   if (!Array.isArray(plan.responsibilities) || plan.responsibilities.length === 0) missing.push('responsibilities');
   if (!Array.isArray(plan.lenses) || plan.lenses.length === 0) missing.push('lenses');
-  if (!Array.isArray(plan.gates) || plan.gates.length === 0) missing.push('gates');
+  // plan.gates is an object of named boolean flags (deriveGates() in
+  // reasoning-plan.mjs), not an array -- confirmed against every other real
+  // reader (blueprint-generator.mjs's `reasoningPlan.gates || {}` and
+  // `blueprint?.gates?.founder_approval_required`). The old Array.isArray()
+  // check here rejected every auto-generated plan unconditionally, since
+  // deriveGates() has never returned an array.
+  if (!plan.gates || typeof plan.gates !== 'object' || Array.isArray(plan.gates)) missing.push('gates');
   if (!plan.reality_measures || plan.reality_measures.length === 0) missing.push('reality_measures');
   return missing;
 }
