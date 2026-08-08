@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-08T09:32:39.291Z",
+  "generated_at": "2026-08-08T09:36:38.200Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13094,
+  "file_count": 13099,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21307,9 +21307,9 @@
     {
       "path": "builderos-reboot/BP_PRIORITY.json",
       "synopsis": "BuilderOS artifact — BP PRIORITY.",
-      "bytes": 37543,
-      "mtime": "2026-08-08T09:31:54.945Z",
-      "indexed_at": "2026-08-08T09:32:39.291Z",
+      "bytes": 38736,
+      "mtime": "2026-08-08T09:35:41.152Z",
+      "indexed_at": "2026-08-08T09:36:38.200Z",
       "synopsis_index_only": true
     },
     {
@@ -27110,6 +27110,37 @@
       "bytes": 2235,
       "mtime": "2026-08-08T09:28:18.501Z",
       "indexed_at": "2026-08-08T09:32:39.291Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V5-CROSS-DOMAIN-0001/BLUEPRINT.json",
+      "synopsis": "Cross-Domain Personal Intelligence -- per-domain data silos,\\n * explicit cross-domain consent, audit logging, and multi-domain inference\\n * under founder authority. Ported from the proven prototype\\n * (scripts/prototype-cross-domain-v5.m",
+      "bytes": 10273,
+      "mtime": "2026-08-08T09:34:42.114Z",
+      "indexed_at": "2026-08-08T09:36:38.200Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V5-CROSS-DOMAIN-0001/DELIBERATION_GATE.json",
+      "synopsis": "BuilderOS artifact — DELIBERATION GATE.",
+      "bytes": 1471,
+      "mtime": "2026-08-08T09:35:30.094Z",
+      "indexed_at": "2026-08-08T09:36:38.200Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V5-CROSS-DOMAIN-0001/FOUNDER_PACKET.md",
+      "synopsis": "Founder Packet — Communication System V5: Cross-Domain Personal Intelligence",
+      "bytes": 4358,
+      "mtime": "2026-08-08T09:34:02.519Z",
+      "indexed_at": "2026-08-08T09:36:38.200Z"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V5-CROSS-DOMAIN-0001/INTENT_BASELINE.json",
+      "synopsis": "BuilderOS artifact — INTENT BASELINE.",
+      "bytes": 2306,
+      "mtime": "2026-08-08T09:34:15.999Z",
+      "indexed_at": "2026-08-08T09:36:38.200Z",
       "synopsis_index_only": true
     },
     {
@@ -43454,9 +43485,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 807199,
-      "mtime": "2026-08-08T00:21:57.579Z",
-      "indexed_at": "2026-08-08T00:22:14.430Z"
+      "bytes": 807672,
+      "mtime": "2026-08-08T09:36:27.930Z",
+      "indexed_at": "2026-08-08T09:36:38.200Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -66952,9 +66983,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\":\"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",\"lifeos:file-synopsis:backfill\":\"node scripts/file-synopsis-enforce.mjs --all --auto-fix && node scripts/generate-file-synopsis-index.mjs\",\"lifeos:file-synopsis:index\":\"n",
-      "bytes": 35008,
-      "mtime": "2026-08-08T09:31:54.926Z",
-      "indexed_at": "2026-08-08T09:32:39.291Z",
+      "bytes": 35122,
+      "mtime": "2026-08-08T09:35:41.131Z",
+      "indexed_at": "2026-08-08T09:36:38.200Z",
       "synopsis_index_only": true
     },
     {
@@ -67422,9 +67453,9 @@
     {
       "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
       "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
-      "bytes": 7288,
-      "mtime": "2026-08-08T09:29:07.686Z",
-      "indexed_at": "2026-08-08T09:32:39.291Z",
+      "bytes": 7362,
+      "mtime": "2026-08-08T09:35:12.679Z",
+      "indexed_at": "2026-08-08T09:36:38.200Z",
       "synopsis_index_only": true
     },
     {
@@ -77038,6 +77069,16 @@
       "bytes": 4672,
       "mtime": "2026-08-08T09:29:36.538Z",
       "indexed_at": "2026-08-08T09:32:39.291Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/run-communication-v5-cross-domain-acceptance.mjs",
+      "synopsis": "Communication System V5 (Cross-Domain Personal Intelligence) acceptance.",
+      "bytes": 4804,
+      "mtime": "2026-08-08T09:35:01.798Z",
+      "indexed_at": "2026-08-08T09:36:38.200Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

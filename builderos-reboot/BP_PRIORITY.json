@@ -622,6 +622,23 @@
       "note": "Fourth of 5 Communication System Blueprint versions being installed per founder directive 2026-08-06/07/08 (\"install all five\"). V4: Overlay Action -- verbal command parsing into deterministic, auditable plans; risky actions gated behind explicit confirmation. Ports scripts/prototype-overlay-action-v4.mjs (10/10 tests), parse/approve/execute logic only.",
       "build_method": "system-build",
       "founder_usability_pass": false
+    },
+    {
+      "rank": 24,
+      "mission_id": "PRODUCT-COMMUNICATION-V5-CROSS-DOMAIN-0001",
+      "product_id": "lifeos",
+      "product_home": "docs/products/lifeos/",
+      "product_ssot": "docs/products/lifeos/PRODUCT_SSOT.md",
+      "objective_home": "docs/products/lifeos/OBJECTIVES/",
+      "founder_packet": "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V5-CROSS-DOMAIN-0001/FOUNDER_PACKET.md",
+      "blueprint_path": "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V5-CROSS-DOMAIN-0001/BLUEPRINT.json",
+      "blueprint_status": "pending",
+      "acceptance_command": "npm run lifeos:communication-v5-cross-domain:acceptance",
+      "receipt_path": "products/receipts/COMMUNICATION_V5_CROSS_DOMAIN_ACCEPTANCE.json",
+      "verdict": "PENDING",
+      "note": "Fifth and last of 5 Communication System Blueprint versions being installed per founder directive 2026-08-06/07/08 (\"install all five\"). V5: Cross-Domain Personal Intelligence -- per-domain silos, explicit consent, audited multi-domain inference. Ports scripts/prototype-cross-domain-v5.mjs (12/12 tests), consent/inference logic only.",
+      "build_method": "system-build",
+      "founder_usability_pass": false
     }
   ],
   "_last_updated": "2026-08-02",

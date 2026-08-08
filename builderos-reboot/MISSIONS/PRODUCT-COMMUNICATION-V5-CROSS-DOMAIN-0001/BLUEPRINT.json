@@ -1,0 +1,72 @@
+{
+  "mission_id": "PRODUCT-COMMUNICATION-V5-CROSS-DOMAIN-0001",
+  "blueprint_id": "COMMUNICATION-V5-CROSS-DOMAIN-2026-08-08",
+  "scope": "cross_domain_personal_intelligence",
+  "authority": "FOUNDER_PACKET.md",
+  "acceptance_command": "npm run lifeos:communication-v5-cross-domain:acceptance",
+  "allowed_action_types": [
+    "author_then_write",
+    "shell_command"
+  ],
+  "steps": [
+    {
+      "step_id": "CV5CD-S01",
+      "phase_id": "P0",
+      "title": "Cross-Domain Intelligence service: port Domain + PersonalIntelligence classes into a real, callable service",
+      "target_file": "services/cross-domain-intelligence-service.js",
+      "target_files": [
+        "services/cross-domain-intelligence-service.js"
+      ],
+      "action_type": "author_then_write",
+      "ssot": "docs/products/lifeos/PRODUCT_HOME.md",
+      "task": "Create services/cross-domain-intelligence-service.js exporting the Domain and PersonalIntelligence classes -- a deterministic port of the already-proven prototype scripts/prototype-cross-domain-v5.mjs (12/12 tests). No AI/model call anywhere in this file (question-matching is keyword-based, same as the prototype). Do not include the prototype's self-test auto-execution code or its dotenv/assert imports.",
+      "spec": "Port the following EXACT reference implementation (already proven, 12/12 tests, scripts/prototype-cross-domain-v5.mjs) into services/cross-domain-intelligence-service.js. Do not change any policy default, consent rule, or inference keyword match -- output the file below verbatim, character for character, including the header comment:\n\n/**\n * SYNOPSIS: Cross-Domain Personal Intelligence -- per-domain data silos,\n * explicit cross-domain consent, audit logging, and multi-domain inference\n * under founder authority. Ported from the proven prototype\n * (scripts/prototype-cross-domain-v5.mjs, 12/12 tests) -- same algorithm, no\n * changes to consent/inference logic.\n * @ssot docs/products/lifeos/PRODUCT_HOME.md\n */\n\nconst DEFAULT_POLICIES = {\n  calendar: { sensitive: false, shareByDefault: ['time', 'free_busy'] },\n  tasks: { sensitive: false, shareByDefault: ['title', 'due'] },\n  finance: { sensitive: true, shareByDefault: [] },\n  health: { sensitive: true, shareByDefault: [] },\n  contacts: { sensitive: false, shareByDefault: ['name'] },\n};\n\nexport class Domain {\n  constructor(id, label, policy = DEFAULT_POLICIES[id] || { sensitive: false, shareByDefault: [] }) {\n    this.id = id;\n    this.label = label;\n    this.policy = policy;\n    this.records = [];\n    this.accessLog = [];\n    this.sharedWith = new Map();\n  }\n\n  addRecord(record) {\n    this.records.push({ id: `rec-${this.records.length + 1}`, ...record, addedAt: new Date().toISOString() });\n    return this.records.at(-1);\n  }\n\n  query(predicate) {\n    this.accessLog.push({ at: new Date().toISOString(), predicate: typeof predicate === 'function' ? 'function' : 'all' });\n    return this.records.filter(predicate || (() => true));\n  }\n\n  grantConsent(targetDomainId, fields = []) {\n    const set = this.sharedWith.get(targetDomainId) || new Set();\n    for (const f of fields) set.add(f);\n    this.sharedWith.set(targetDomainId, set);\n    return [...set];\n  }\n\n  revokeConsent(targetDomainId) {\n    this.sharedWith.delete(targetDomainId);\n  }\n\n  canShare(targetDomainId, field) {\n    if (this.policy.sensitive && !this.sharedWith.has(targetDomainId)) return false;\n    if (this.sharedWith.has(targetDomainId) && this.sharedWith.get(targetDomainId).has(field)) return true;\n    if (this.policy.shareByDefault.includes(field)) return true;\n    return false;\n  }\n}\n\nexport class PersonalIntelligence {\n  constructor(userId, options = {}) {\n    this.userId = userId;\n    this.domains = new Map();\n    this.receipts = [];\n    this.options = options;\n  }\n\n  addDomain(domain) {\n    this.domains.set(domain.id, domain);\n    return domain;\n  }\n\n  log(action, details) {\n    const receipt = { at: new Date().toISOString(), action, details };\n    this.receipts.push(receipt);\n    return receipt;\n  }\n\n  requestShare(sourceId, targetId, fields, reason) {\n    const source = this.domains.get(sourceId);\n    if (!source) throw new Error(`Unknown source domain ${sourceId}`);\n    if (source.policy.sensitive && !fields.length) throw new Error(`Sensitive domain ${sourceId} requires explicit field list`);\n    source.grantConsent(targetId, fields);\n    return this.log('consent_granted', { sourceId, targetId, fields, reason });\n  }\n\n  queryCrossDomain(question, options = {}) {\n    const lower = question.toLowerCase();\n    const result = { question, answer: null, sources: [], blocked: [], confidence: 0 };\n\n    if (lower.includes('free') || lower.includes('available') || /\\bat\\s+\\d+(?::\\d+)?\\s*(am|pm)?/.test(lower)) {\n      const calendar = this.domains.get('calendar');\n      const tasks = this.domains.get('tasks');\n      const contacts = this.domains.get('contacts');\n      if (calendar) {\n        result.sources.push({ domain: 'calendar', fields: ['time', 'free_busy'] });\n        const events = calendar.query((r) => lower.includes(r.time?.toLowerCase?.()));\n        result.answer = { free: !(events && events.length), events: events || [] };\n        result.confidence = 0.75;\n      }\n      if (tasks) result.sources.push({ domain: 'tasks', fields: ['title', 'due'] });\n      if (contacts && this.domains.get('contacts')?.canShare('calendar', 'name')) result.sources.push({ domain: 'contacts', fields: ['name'] });\n    } else if (lower.includes('afford') || lower.includes('budget') || lower.includes('cost') || lower.includes('spend')) {\n      const finance = this.domains.get('finance');\n      if (!finance) return { ...result, answer: 'No finance domain available.', confidence: 0 };\n      const accessible = finance.policy.shareByDefault.includes('balance') || finance.canShare('assistant', 'balance');\n      if (!accessible) {\n        result.blocked.push({ domain: 'finance', field: 'balance' });\n        result.answer = 'Finance data is sensitive; explicit consent required to answer.';\n        result.confidence = 0;\n      } else {\n        const balance = finance.query((r) => r.type === 'account')[0]?.balance;\n        result.answer = { balance, assessment: balance > 1000 ? 'likely affordable' : 'check budget' };\n        result.sources.push({ domain: 'finance', fields: ['balance'] });\n        result.confidence = 0.8;\n      }\n    } else if (lower.includes('meeting') || lower.includes('prep')) {\n      const calendar = this.domains.get('calendar');\n      const tasks = this.domains.get('tasks');\n      const contacts = this.domains.get('contacts');\n      const events = calendar ? calendar.query() : [];\n      const taskList = tasks ? tasks.query() : [];\n      result.answer = { events, prepTasks: taskList };\n      result.confidence = 0.6;\n      if (calendar) result.sources.push({ domain: 'calendar', fields: ['time', 'title'] });\n      if (tasks) result.sources.push({ domain: 'tasks', fields: ['title', 'due'] });\n      if (contacts && contacts.canShare('assistant', 'name')) result.sources.push({ domain: 'contacts', fields: ['name'] });\n    } else if (lower.includes('health') || lower.includes('tired') || lower.includes('sleep') || lower.includes('energy')) {\n      const health = this.domains.get('health');\n      if (!health) return { ...result, answer: 'No health domain available.', confidence: 0 };\n      if (!health.canShare('assistant', 'sleep')) {\n        result.blocked.push({ domain: 'health', field: 'sleep' });\n        result.answer = 'Health data is sensitive; explicit consent required.';\n      } else {\n        const last = health.query().at(-1);\n        result.answer = last ? { sleep: last.sleep, energy: last.energy } : 'No recent health records.';\n        result.sources.push({ domain: 'health', fields: ['sleep', 'energy'] });\n        result.confidence = last ? 0.8 : 0.4;\n      }\n    } else {\n      result.answer = 'I need more context to answer that cross-domain question.';\n      result.confidence = 0;\n    }\n\n    this.log('cross_domain_query', { question, result });\n    return result;\n  }\n\n  getUnifiedProfile(consentedOnly = true) {\n    const profile = { userId: this.userId, domains: {} };\n    for (const [id, domain] of this.domains) {\n      const visible = consentedOnly ? domain.policy.shareByDefault : Object.keys(domain.records[0] || {});\n      profile.domains[id] = {\n        label: domain.label,\n        recordCount: domain.records.length,\n        visibleFields: consentedOnly ? visible : visible,\n      };\n    }\n    return profile;\n  }\n}\n",
+      "assertion_spec": {
+        "expected_exports": [
+          "Domain",
+          "PersonalIntelligence"
+        ]
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "target": "services/cross-domain-intelligence-service.js",
+          "exports": [
+            "Domain",
+            "PersonalIntelligence"
+          ]
+        }
+      ],
+      "sandbox_boundary": "services/**",
+      "authority_owner": "Builder",
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "dependencies": [],
+      "non_goals": [
+        "real calendar/finance/health data source integration -- fusion/consent/inference logic only, in-memory records",
+        "any AI/model call -- this must remain deterministic like the proven prototype",
+        "wiring into any live product surface",
+        "redesigning the domain policy shape or consent model"
+      ],
+      "status": "pending"
+    },
+    {
+      "step_id": "CV5CD-S02",
+      "phase_id": "P1",
+      "title": "Run acceptance until PASS",
+      "action_type": "shell_command",
+      "target_file": "products/receipts/COMMUNICATION_V5_CROSS_DOMAIN_ACCEPTANCE.json",
+      "target_files": [
+        "products/receipts/COMMUNICATION_V5_CROSS_DOMAIN_ACCEPTANCE.json"
+      ],
+      "command": "npm run lifeos:communication-v5-cross-domain:acceptance",
+      "sandbox_boundary": "products/receipts/**",
+      "authority_owner": "Builder",
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "dependencies": [
+        "CV5CD-S01"
+      ],
+      "status": "pending"
+    }
+  ],
+  "blueprint_status": "pending"
+}
