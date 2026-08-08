@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-08T09:45:40.776Z",
+  "generated_at": "2026-08-08T09:46:39.091Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13106,
+  "file_count": 13108,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21307,9 +21307,9 @@
     {
       "path": "builderos-reboot/BP_PRIORITY.json",
       "synopsis": "BuilderOS artifact — BP PRIORITY.",
-      "bytes": 39270,
-      "mtime": "2026-08-08T09:44:47.357Z",
-      "indexed_at": "2026-08-08T09:45:01.401Z",
+      "bytes": 39585,
+      "mtime": "2026-08-08T09:46:15.235Z",
+      "indexed_at": "2026-08-08T09:46:39.091Z",
       "synopsis_index_only": true
     },
     {
@@ -27100,9 +27100,9 @@
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V4-OVERLAY-ACTION-0001/BLUEPRINT.json",
       "synopsis": "Overlay Action Engine -- parses a natural-language command into a\\n * deterministic, auditable plan, gates risky actions behind explicit\\n * confirmation, and executes the plan against an already-connected page\\n * object. Ported from the p",
-      "bytes": 11056,
-      "mtime": "2026-08-08T09:28:59.640Z",
-      "indexed_at": "2026-08-08T09:32:39.291Z",
+      "bytes": 11567,
+      "mtime": "2026-08-08T09:46:15.235Z",
+      "indexed_at": "2026-08-08T09:46:39.091Z",
       "synopsis_index_only": true
     },
     {
@@ -27126,6 +27126,14 @@
       "bytes": 2235,
       "mtime": "2026-08-08T09:28:18.501Z",
       "indexed_at": "2026-08-08T09:32:39.291Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V4-OVERLAY-ACTION-0001/OBJECTIVE_VERDICT.json",
+      "synopsis": "BuilderOS artifact — OBJECTIVE VERDICT.",
+      "bytes": 791,
+      "mtime": "2026-08-08T09:46:15.239Z",
+      "indexed_at": "2026-08-08T09:46:39.091Z",
       "synopsis_index_only": true
     },
     {
@@ -30512,9 +30520,9 @@
     {
       "path": "builderos-reboot/PRODUCT_READINESS_REPORT.json",
       "synopsis": "BuilderOS artifact — PRODUCT READINESS REPORT.",
-      "bytes": 51151,
-      "mtime": "2026-08-08T09:44:47.360Z",
-      "indexed_at": "2026-08-08T09:45:01.401Z",
+      "bytes": 51290,
+      "mtime": "2026-08-08T09:46:15.239Z",
+      "indexed_at": "2026-08-08T09:46:39.091Z",
       "synopsis_index_only": true
     },
     {
@@ -67352,6 +67360,14 @@
       "bytes": 1649,
       "mtime": "2026-08-08T09:44:47.360Z",
       "indexed_at": "2026-08-08T09:45:01.401Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/COMMUNICATION_V4_OVERLAY_ACTION_ACCEPTANCE.json",
+      "synopsis": "Product receipt — COMMUNICATION V4 OVERLAY ACTION ACCEPTANCE.",
+      "bytes": 1783,
+      "mtime": "2026-08-08T09:46:15.239Z",
+      "indexed_at": "2026-08-08T09:46:39.091Z",
       "synopsis_index_only": true
     },
     {

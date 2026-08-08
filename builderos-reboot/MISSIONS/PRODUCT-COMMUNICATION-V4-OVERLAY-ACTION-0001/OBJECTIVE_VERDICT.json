@@ -1,0 +1,21 @@
+{
+  "schema": "objective_verdict_v1",
+  "generated_at": "2026-08-08T09:46:15.232Z",
+  "objective_id": "PRODUCT-COMMUNICATION-V4-OVERLAY-ACTION-0001",
+  "objective_name": "Communication System V4 — Overlay Action",
+  "verdict": "OBJECTIVE_COMPLETE",
+  "receipt": "products/receipts/COMMUNICATION_V4_OVERLAY_ACTION_ACCEPTANCE.json",
+  "git_sha": "d4789558a74864116e46f28a7fffa863e1813bda",
+  "tests_passed": [
+    "service_file_exists",
+    "service_imports_cleanly",
+    "exports_core_functions",
+    "parseCommand_fill_and_stop",
+    "approvePlan_blocks_unconfirmed_submit",
+    "approvePlan_allows_non_risky_click",
+    "bp_sync_mandatory"
+  ],
+  "tests_failed": [],
+  "founder_usability_pass": false,
+  "acceptance_command": "npm run lifeos:communication-v4-overlay-action:acceptance"
+}

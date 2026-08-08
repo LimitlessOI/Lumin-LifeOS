@@ -98,7 +98,9 @@
         "wiring into services/browser-agent.js or any live product surface (deferred)",
         "redesigning the risky-action list or approval policy shape"
       ],
-      "status": "pending"
+      "status": "complete",
+      "completed_at": "2026-08-08T09:46:15.232Z",
+      "git_sha": "d4789558a74864116e46f28a7fffa863e1813bda"
     },
     {
       "step_id": "CV4OA-S02",
@@ -116,8 +118,16 @@
       "dependencies": [
         "CV4OA-S01"
       ],
-      "status": "pending"
+      "status": "complete",
+      "completed_at": "2026-08-08T09:46:15.232Z",
+      "git_sha": "d4789558a74864116e46f28a7fffa863e1813bda",
+      "receipt_verdict": "PASS"
     }
   ],
-  "blueprint_status": "pending"
+  "blueprint_status": "complete",
+  "completed_at": "2026-08-08T09:46:15.232Z",
+  "git_sha": "d4789558a74864116e46f28a7fffa863e1813bda",
+  "receipt_path": "products/receipts/COMMUNICATION_V4_OVERLAY_ACTION_ACCEPTANCE.json",
+  "receipt_verdict": "PASS",
+  "build_method": "system-build"
 }
