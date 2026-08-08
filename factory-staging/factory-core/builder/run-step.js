@@ -152,6 +152,7 @@ export async function dispatchExecuteStep(body, options = {}) {
   const skipIntake = body?.skip_intake_gate === true;
   const assertionRunner = options?.assertionRunner || null;
   const codegenRunner = options?.codegenRunner || null;
+  const commitRunner = options?.commitRunner || null;
   const sentryBaseUrl = options?.publicBaseUrl || process.env.PUBLIC_BASE_URL || 'https://lumin-web-production-e3a9.up.railway.app';
 
   if (!step?.step_id || !step?.sandbox_boundary) {
@@ -396,11 +397,53 @@ export async function dispatchExecuteStep(body, options = {}) {
     authoringResult,
   });
 
+  // runWriteFileExact only writes to the local (ephemeral Railway container)
+  // filesystem -- confirmed live 2026-08-07: this dispatch path has never once
+  // called commitToGitHub anywhere in its chain (run-step.js, governed-shipping-
+  // runner.js, governed-autonomous-shipping-loop.js all checked directly), so a
+  // real SENTRY PASS produced by this endpoint was silently lost on the next
+  // container restart/redeploy every time. governed-shipping-runner.js already
+  // expects a commit_sha in this response (its honesty grader distinguishes
+  // 'sentry_PASS+commit_sha' from 'sentry_PASS_no_sha') -- it was simply never
+  // populated. Fail-closed: if a commitRunner is wired but the commit itself
+  // fails, this is a real failure, not an ok:true with nothing durable to show
+  // for it ("if a real command did not run and produce real receipts, it did
+  // not happen").
+  let commitResult = null;
+  if (commitRunner) {
+    try {
+      const writtenAbsPath = resolveRepoPath(step.target_file);
+      const writtenContent = fs.readFileSync(writtenAbsPath, 'utf8');
+      const commitMessage = `[system-build] ${mission_id} ${step.step_id} — ${step.target_file}`;
+      commitResult = await commitRunner(step.target_file, writtenContent, commitMessage);
+    } catch (err) {
+      appendSentryReview({ ...sentryReview, kind: 'commit_failed', error: String(err?.message || err) });
+      return {
+        httpStatus: 502,
+        body: {
+          ok: false,
+          status: 'COMMIT_FAILED',
+          error: String(err?.message || err),
+          builder: builderResult,
+          sentry: {
+            implementation_status: 'PASS',
+            step_id: step.step_id,
+            contract: sentryContract,
+            verify: sentryVerify,
+            review: sentryReview,
+          },
+        },
+      };
+    }
+  }
+
   return {
     httpStatus: 200,
     body: {
       ok: true,
       builder: builderResult,
+      commit_sha: commitResult?.sha || null,
+      committed: Boolean(commitResult?.sha),
       sentry: {
         implementation_status: 'PASS',
         step_id: step.step_id,
@@ -418,6 +461,7 @@ export async function dispatchExecuteStep(body, options = {}) {
             escalated: authoringResult.escalated,
             content_sha256: authoringResult.content_sha256,
             assertion_provenance: authoringResult.assertion_provenance,
+            commit_sha: commitResult?.sha || null,
           }
         : null,
     },

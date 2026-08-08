@@ -247,7 +247,7 @@ export async function registerRuntimeRoutes(app, deps) {
     );
     logger.info("✅ [BUILDEROS-C2] Founder-builder routes mounted");
 
-    app.use(createFactoryMountRoutes({ requireKey, logger, pool, callCouncilMember }));
+    app.use(createFactoryMountRoutes({ requireKey, logger, pool, callCouncilMember, commitToGitHub }));
 
     return {
       tcCoordinator: null,

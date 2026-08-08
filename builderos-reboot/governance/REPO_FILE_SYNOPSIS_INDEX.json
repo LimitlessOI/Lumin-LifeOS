@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-08T00:14:34.442Z",
+  "generated_at": "2026-08-08T00:22:14.430Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13078,
   "files": [
@@ -42269,9 +42269,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 467388,
-      "mtime": "2026-08-07T23:49:43.165Z",
-      "indexed_at": "2026-08-07T23:49:57.856Z"
+      "bytes": 467807,
+      "mtime": "2026-08-08T00:21:40.078Z",
+      "indexed_at": "2026-08-08T00:22:14.430Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -43361,9 +43361,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 806887,
-      "mtime": "2026-08-07T22:59:19.834Z",
-      "indexed_at": "2026-08-07T22:59:49.540Z"
+      "bytes": 807199,
+      "mtime": "2026-08-08T00:21:57.579Z",
+      "indexed_at": "2026-08-08T00:22:14.430Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -64605,9 +64605,9 @@
     {
       "path": "factory-staging/factory-core/builder/run-step.js",
       "synopsis": "Exports resolveRepoPath — factory-staging/factory-core/builder/run-step.js.",
-      "bytes": 15487,
-      "mtime": "2026-08-01T19:45:04.726Z",
-      "indexed_at": "2026-08-01T19:45:24.177Z",
+      "bytes": 17522,
+      "mtime": "2026-08-08T00:20:05.855Z",
+      "indexed_at": "2026-08-08T00:22:14.430Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -71265,9 +71265,9 @@
     {
       "path": "routes/factory-mount-routes.js",
       "synopsis": "Pure: should the codegen prompt inline this file's existing content?",
-      "bytes": 39565,
-      "mtime": "2026-08-07T23:48:51.519Z",
-      "indexed_at": "2026-08-07T23:49:57.856Z",
+      "bytes": 39758,
+      "mtime": "2026-08-08T00:20:20.168Z",
+      "indexed_at": "2026-08-08T00:22:14.430Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -100376,9 +100376,9 @@
     {
       "path": "startup/register-founder-runtime-routes.js",
       "synopsis": "Minimal founder-builder runtime route composition.",
-      "bytes": 21872,
-      "mtime": "2026-08-07T20:00:12.734Z",
-      "indexed_at": "2026-08-07T20:02:47.824Z",
+      "bytes": 21888,
+      "mtime": "2026-08-08T00:20:34.439Z",
+      "indexed_at": "2026-08-08T00:22:14.430Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -100386,9 +100386,9 @@
     {
       "path": "startup/register-runtime-routes.js",
       "synopsis": "Runtime route composition for the main Express app.",
-      "bytes": 49438,
-      "mtime": "2026-07-24T18:36:41.703Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 49454,
+      "mtime": "2026-08-08T00:20:47.687Z",
+      "indexed_at": "2026-08-08T00:22:14.430Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

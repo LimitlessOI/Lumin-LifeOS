@@ -50,7 +50,7 @@ export function shouldIncludeExistingFileContent(byteSize) {
   return Number.isFinite(byteSize) && byteSize >= 0 && byteSize <= MAX_EXISTING_CONTENT_BYTES;
 }
 
-export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncilMember } = {}) {
+export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncilMember, commitToGitHub } = {}) {
   const router = express.Router();
   const guard = typeof requireKey === 'function' ? requireKey : (_req, _res, next) => next();
 
@@ -279,7 +279,10 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
       }
     : null;
 
-  const dispatchOptions = { assertionRunner, codegenRunner };
+  const commitRunner = typeof commitToGitHub === 'function'
+    ? async (targetFile, content, message) => commitToGitHub(targetFile, content, message)
+    : null;
+  const dispatchOptions = { assertionRunner, codegenRunner, commitRunner };
 
   router.get('/factory/readiness', guard, (_req, res) => {
     try {

@@ -427,7 +427,7 @@ export async function registerFounderRuntimeRoutes(app, deps) {
   });
   logger.info("✅ [PROVIDER-KEYS] Health route mounted at /api/v1/lifeos/provider-key-health");
 
-  app.use(createFactoryMountRoutes({ requireKey, logger, pool, baseUrl: siteBaseUrl, callCouncilMember }));
+  app.use(createFactoryMountRoutes({ requireKey, logger, pool, baseUrl: siteBaseUrl, callCouncilMember, commitToGitHub }));
 
   // Convention-based auto-registration: mount every opt-in product module listed
   // in config/auto-registered-product-modules.json, recording per-module boot
