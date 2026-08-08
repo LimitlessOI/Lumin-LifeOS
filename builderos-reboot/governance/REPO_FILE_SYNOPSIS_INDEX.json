@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-08T09:23:00.145Z",
+  "generated_at": "2026-08-08T09:26:28.090Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13084,
+  "file_count": 13089,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21307,9 +21307,9 @@
     {
       "path": "builderos-reboot/BP_PRIORITY.json",
       "synopsis": "BuilderOS artifact — BP PRIORITY.",
-      "bytes": 35115,
-      "mtime": "2026-08-08T09:11:15.872Z",
-      "indexed_at": "2026-08-08T09:13:45.839Z",
+      "bytes": 36320,
+      "mtime": "2026-08-08T09:25:45.506Z",
+      "indexed_at": "2026-08-08T09:26:28.090Z",
       "synopsis_index_only": true
     },
     {
@@ -26863,9 +26863,9 @@
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V1-VOICE-PRESENCE-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
-      "bytes": 12014,
-      "mtime": "2026-08-08T09:08:31.785Z",
-      "indexed_at": "2026-08-08T09:13:45.839Z",
+      "bytes": 13671,
+      "mtime": "2026-08-08T09:25:10.058Z",
+      "indexed_at": "2026-08-08T09:26:28.090Z",
       "synopsis_index_only": true
     },
     {
@@ -27048,6 +27048,37 @@
       "bytes": 2265,
       "mtime": "2026-08-08T09:06:33.460Z",
       "indexed_at": "2026-08-08T09:13:45.839Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V3-PERCEPTION-0001/BLUEPRINT.json",
+      "synopsis": "Perception Engine -- face/body/biometric channels under explicit\\n * per-context consent, fused with transcript + tonality evidence via the\\n * shared Evidence Fusion service. Ported from the proven prototype\\n * (scripts/prototype-percepti",
+      "bytes": 8940,
+      "mtime": "2026-08-08T09:21:43.034Z",
+      "indexed_at": "2026-08-08T09:26:28.090Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V3-PERCEPTION-0001/DELIBERATION_GATE.json",
+      "synopsis": "BuilderOS artifact — DELIBERATION GATE.",
+      "bytes": 1462,
+      "mtime": "2026-08-08T09:23:06.892Z",
+      "indexed_at": "2026-08-08T09:26:28.090Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V3-PERCEPTION-0001/FOUNDER_PACKET.md",
+      "synopsis": "Founder Packet — Communication System V3: Tonality, Face, Body, Biometric Perception",
+      "bytes": 4528,
+      "mtime": "2026-08-08T09:20:30.882Z",
+      "indexed_at": "2026-08-08T09:26:28.090Z"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V3-PERCEPTION-0001/INTENT_BASELINE.json",
+      "synopsis": "BuilderOS artifact — INTENT BASELINE.",
+      "bytes": 2236,
+      "mtime": "2026-08-08T09:20:49.875Z",
+      "indexed_at": "2026-08-08T09:26:28.090Z",
       "synopsis_index_only": true
     },
     {
@@ -42300,9 +42331,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 468469,
-      "mtime": "2026-08-08T09:19:24.359Z",
-      "indexed_at": "2026-08-08T09:19:42.301Z"
+      "bytes": 468916,
+      "mtime": "2026-08-08T09:26:03.997Z",
+      "indexed_at": "2026-08-08T09:26:28.090Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -64930,9 +64961,9 @@
     {
       "path": "factory-staging/factory-core/sentry/behavior-assertions.js",
       "synopsis": "SENTRY behavioral proof. Classifies which steps require runtime",
-      "bytes": 10890,
-      "mtime": "2026-08-07T23:53:00.700Z",
-      "indexed_at": "2026-08-07T23:53:51.590Z",
+      "bytes": 11662,
+      "mtime": "2026-08-08T09:24:16.551Z",
+      "indexed_at": "2026-08-08T09:26:28.090Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -66890,9 +66921,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\":\"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",\"lifeos:file-synopsis:backfill\":\"node scripts/file-synopsis-enforce.mjs --all --auto-fix && node scripts/generate-file-synopsis-index.mjs\",\"lifeos:file-synopsis:index\":\"n",
-      "bytes": 34780,
-      "mtime": "2026-08-08T09:11:27.494Z",
-      "indexed_at": "2026-08-08T09:13:45.839Z",
+      "bytes": 34890,
+      "mtime": "2026-08-08T09:25:45.487Z",
+      "indexed_at": "2026-08-08T09:26:28.090Z",
       "synopsis_index_only": true
     },
     {
@@ -76956,6 +76987,16 @@
       "bytes": 5142,
       "mtime": "2026-08-08T09:13:01.626Z",
       "indexed_at": "2026-08-08T09:13:45.839Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/run-communication-v3-perception-acceptance.mjs",
+      "synopsis": "Communication System V3 (Perception) acceptance.",
+      "bytes": 4476,
+      "mtime": "2026-08-08T09:25:27.752Z",
+      "indexed_at": "2026-08-08T09:26:28.090Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

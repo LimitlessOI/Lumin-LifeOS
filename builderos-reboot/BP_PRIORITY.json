@@ -588,6 +588,23 @@
       "note": "Second of 5 Communication System Blueprint versions being installed per founder directive 2026-08-06/07 (\"install all five\"). V2: Evidence Fusion & Cognitive Dynamics -- shared calibrated-confidence layer V3/V4/V5 depend on. Ports the already-proven prototype (scripts/prototype-evidence-fusion-v2.mjs, 30/30 tests).",
       "build_method": "system-build",
       "founder_usability_pass": false
+    },
+    {
+      "rank": 22,
+      "mission_id": "PRODUCT-COMMUNICATION-V3-PERCEPTION-0001",
+      "product_id": "lifeos",
+      "product_home": "docs/products/lifeos/",
+      "product_ssot": "docs/products/lifeos/PRODUCT_SSOT.md",
+      "objective_home": "docs/products/lifeos/OBJECTIVES/",
+      "founder_packet": "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V3-PERCEPTION-0001/FOUNDER_PACKET.md",
+      "blueprint_path": "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V3-PERCEPTION-0001/BLUEPRINT.json",
+      "blueprint_status": "pending",
+      "acceptance_command": "npm run lifeos:communication-v3-perception:acceptance",
+      "receipt_path": "products/receipts/COMMUNICATION_V3_PERCEPTION_ACCEPTANCE.json",
+      "verdict": "PENDING",
+      "note": "Third of 5 Communication System Blueprint versions being installed per founder directive 2026-08-06/07/08 (\"install all five\"). V3: Perception -- face/body/biometric evidence under explicit consent, layered on V2's Evidence Fusion. Ports scripts/prototype-perception-v3.mjs (27/27 tests). Depends on V2 (services/evidence-fusion-service.js) already shipped.",
+      "build_method": "system-build",
+      "founder_usability_pass": false
     }
   ],
   "_last_updated": "2026-08-02",

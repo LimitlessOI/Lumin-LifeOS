@@ -1,0 +1,35 @@
+{
+  "schema": "intent_baseline_v1",
+  "intent_id": "PRODUCT-COMMUNICATION-V3-PERCEPTION-0001",
+  "mission_id": "PRODUCT-COMMUNICATION-V3-PERCEPTION-0001",
+  "tier": 1,
+  "status": "HANDOFF_READY",
+  "created_at": "2026-08-08",
+  "amendment_pack": "docs/constitution/AMENDMENT_PACK_V2.0A.md",
+  "proof_lap_only": false,
+  "outcome_statement": "A real, callable Perception service fuses optional face/body/biometric evidence (under explicit per-channel consent) with V2's Evidence Fusion service into the same calibrated state/confidence output, with positive-signal detection surfaced explicitly and no channel ever read or scored without consent.",
+  "user": "Adam (founder)",
+  "pain": "Text and timing alone miss real signal (a frown, a lean-forward, a racing heart rate), but collecting any of it without explicit, per-context, revocable consent would be a real trust violation.",
+  "value": "Richer, still-honest perception when the user has opted in, identical to V2's output when they haven't -- consent is structural, not a convention.",
+  "success_metrics": [
+    "fusePerception() matches the proven prototype's (scripts/prototype-perception-v3.mjs, 27/27 tests) exact behavior, including consent-gating -- a channel's evidence must be structurally absent from the result when consent is false"
+  ],
+  "failure_metrics": [
+    "TECHNICAL_PASS without founder_usability_pass",
+    "Any consent leak -- a channel's evidence appearing in the result without explicit consent"
+  ],
+  "constraints": [
+    "BP_PRIORITY queue authority",
+    "BuilderOS system path only -- no agent hand-build",
+    "Depends on V2 (services/evidence-fusion-service.js) already existing"
+  ],
+  "scope_boundary": "Per FOUNDER_PACKET.md",
+  "unacceptable_result": "A consent leak; reinvented scoring logic that doesn't match the proven prototype; real camera/wearable signal collection (out of scope)",
+  "ownership": "ARC emits machine twin; Builder executes; Adam owns founder usability verdict",
+  "priority_fit": "BP_PRIORITY rank 22",
+  "point_model": {
+    "A": "Vision — Adam provides FP in development stage",
+    "B": "Chair locks handoff — corridor protected; Adam done until Alpha",
+    "C": "Alpha — Adam evaluates outcome only"
+  }
+}

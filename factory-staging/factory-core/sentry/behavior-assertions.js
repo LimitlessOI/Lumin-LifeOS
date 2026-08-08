@@ -146,12 +146,23 @@ export async function runSingleAssertion(assertion, runner = {}) {
         } catch (err) {
           return { ...base, ok: false, reason: `function_threw:${String(err?.message || err).slice(0, 300)}` };
         }
-        const expect = assertion.expect && typeof assertion.expect === 'object' ? assertion.expect : {};
+        // Object-shaped expect checks named keys of an object result (existing
+        // behavior, unchanged). A scalar/array/null expect used to silently
+        // degrade to {} (zero keys -> always "passes") -- found live 2026-08-08
+        // authoring a test against hasConsent(), which returns a plain boolean:
+        // the assertion looked like it verified the return value but actually
+        // checked nothing. Now compares the whole result directly in that case.
         const mismatches = [];
-        for (const [key, expected] of Object.entries(expect)) {
-          const actual = result && typeof result === 'object' ? result[key] : undefined;
-          if (JSON.stringify(actual) !== JSON.stringify(expected)) {
-            mismatches.push(`${key}: expected ${JSON.stringify(expected)}, got ${JSON.stringify(actual)}`);
+        if (assertion.expect && typeof assertion.expect === 'object' && !Array.isArray(assertion.expect)) {
+          for (const [key, expected] of Object.entries(assertion.expect)) {
+            const actual = result && typeof result === 'object' ? result[key] : undefined;
+            if (JSON.stringify(actual) !== JSON.stringify(expected)) {
+              mismatches.push(`${key}: expected ${JSON.stringify(expected)}, got ${JSON.stringify(actual)}`);
+            }
+          }
+        } else if (assertion.expect !== undefined) {
+          if (JSON.stringify(result) !== JSON.stringify(assertion.expect)) {
+            mismatches.push(`result: expected ${JSON.stringify(assertion.expect)}, got ${JSON.stringify(result)}`);
           }
         }
         return {

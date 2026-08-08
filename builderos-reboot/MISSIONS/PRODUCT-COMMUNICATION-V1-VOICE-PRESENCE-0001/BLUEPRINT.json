@@ -165,7 +165,7 @@
       "target_files": [
         "public/overlay/lifeos-app.html"
       ],
-      "action_type": "builder_build",
+      "action_type": "author_then_write",
       "assertion_spec": {
         "expected_exports": [],
         "file_contains": [
@@ -181,9 +181,14 @@
       ],
       "non_goals": [
         "any change to the existing STT quality-feedback-loop code shipped earlier tonight (services/voice-rail-stt.js, routes/lifeos-voice-rail-routes.js, the lumin-stt-quality banner)",
-        "any change to the push-to-talk send flow beyond adding the barge-in fade trigger"
+        "any change to the push-to-talk send flow beyond adding the barge-in fade trigger",
+        "a full-file rewrite -- use patch mode only",
+        "modifying public/shared/lifeos-voice-chat.js -- the onStart hook already exists there"
       ],
-      "status": "pending"
+      "status": "pending",
+      "patch_mode": true,
+      "task": "Wire barge-in detection into public/overlay/lifeos-app.html's existing LifeOSVoiceChat.attach({...}) call using PATCH MODE (OLD/NEW block), not a full-file rewrite -- the file is 5911 lines.",
+      "spec": "Output in PATCH MODE ONLY: the OLD block below must be copied EXACTLY character-for-character from the real current file, and the NEW block adds an onStart callback to the existing LifeOSVoiceChat.attach({...}) config object (this attach() call already invokes settings.onStart when the user starts speaking -- confirmed real, existing hook in public/shared/lifeos-voice-chat.js, both the browser SpeechRecognition and server-Whisper paths already call it. Do not touch lifeos-voice-chat.js -- only add this one callback to the config object in this file).\n\nOLD:\n    idleText: 'Tap mic or hold Space \u2014 say \"send it\" to post',\n    voiceSendEnabled: true,\n\nNEW:\n    idleText: 'Tap mic or hold Space \u2014 say \"send it\" to post',\n    onStart: function () {\n      try {\n        if (window.LifeOSVoiceChat && typeof window.LifeOSVoiceChat.isSpeaking === 'function' && window.LifeOSVoiceChat.isSpeaking()) {\n          window.LifeOSVoiceChat.fadeAndStopSpeaking();\n        }\n      } catch (_) {}\n    },\n    voiceSendEnabled: true,\n\nThis is the barge-in wire: the moment the user starts speaking (onStart fires), if Chair's TTS is currently playing (isSpeaking() true), fade and stop it gracefully instead of talking over the user."
     },
     {
       "step_id": "CV1P-S04",

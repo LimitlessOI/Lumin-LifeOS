@@ -1,0 +1,123 @@
+{
+  "mission_id": "PRODUCT-COMMUNICATION-V3-PERCEPTION-0001",
+  "blueprint_id": "COMMUNICATION-V3-PERCEPTION-2026-08-08",
+  "scope": "perception_layer_face_body_biometric",
+  "authority": "FOUNDER_PACKET.md",
+  "acceptance_command": "npm run lifeos:communication-v3-perception:acceptance",
+  "allowed_action_types": [
+    "author_then_write",
+    "shell_command"
+  ],
+  "steps": [
+    {
+      "step_id": "CV3P-S01",
+      "phase_id": "P0",
+      "title": "Perception service: port fusePerception + face/body/biometric extractors into a real, callable service",
+      "target_file": "services/perception-service.js",
+      "target_files": [
+        "services/perception-service.js"
+      ],
+      "action_type": "author_then_write",
+      "ssot": "docs/products/lifeos/PRODUCT_HOME.md",
+      "task": "Create services/perception-service.js exporting hasConsent, extractFaceEvidence, extractBodyEvidence, extractBiometricEvidence, detectPositiveSignals, and fusePerception -- a deterministic port of the already-proven prototype scripts/prototype-perception-v3.mjs (27/27 tests). Import extractTranscriptEvidence, extractTonalityEvidence, fuseEvidence from ./evidence-fusion-service.js (already shipped) rather than redefining them. No AI/model call anywhere in this file. Do not include the prototype's self-test auto-execution code or its dotenv/assert imports.",
+      "spec": "Port the following EXACT reference implementation (already proven, 27/27 tests, scripts/prototype-perception-v3.mjs) into services/perception-service.js. Do not change any scoring weight, threshold, or arithmetic -- output the file below verbatim, character for character, including the header comment and the import from ./evidence-fusion-service.js (that file already exists, ported in an earlier mission):\n\n/**\n * SYNOPSIS: Perception Engine -- face/body/biometric channels under explicit\n * per-context consent, fused with transcript + tonality evidence via the\n * shared Evidence Fusion service. Ported from the proven prototype\n * (scripts/prototype-perception-v3.mjs, 27/27 tests) -- same algorithm, no\n * changes to scoring logic. Face/body/biometric signal COLLECTION is out of\n * scope here; this module only fuses already-collected signals.\n * @ssot docs/products/lifeos/PRODUCT_HOME.md\n */\nimport { extractTranscriptEvidence, extractTonalityEvidence, fuseEvidence } from './evidence-fusion-service.js';\n\nexport function hasConsent(consents, channel) {\n  return !!(consents && consents[channel]);\n}\n\nexport function extractFaceEvidence(faceFrame) {\n  const f = faceFrame || {};\n  const scores = {};\n  if (f.smile > 0.5) scores.celebrating = Math.min(1, f.smile);\n  if (f.frown > 0.4) scores.frustrated = Math.min(1, f.frown);\n  if (f.raisedEyebrows > 0.4) scores.confused = Math.min(1, f.raisedEyebrows);\n  if (f.lookingAway > 0.5) scores.confused = Math.max(scores.confused || 0, f.lookingAway * 0.7);\n  if (f.eyeContact > 0.7) scores.finished = Math.min(1, f.eyeContact * 0.5);\n  if (f.headNod > 0.5) scores.finished = Math.max(scores.finished || 0, f.headNod);\n  if (f.yawning > 0.5) scores.tired = Math.min(1, f.yawning);\n  return scores;\n}\n\nexport function extractBodyEvidence(bodyFrame) {\n  const b = bodyFrame || {};\n  const scores = {};\n  if (b.leaningForward > 0.5) {\n    scores.curious = Math.min(1, b.leaningForward);\n    scores.finished = Math.max(scores.finished || 0, b.leaningForward * 0.3);\n  }\n  if (b.leaningBack > 0.5) scores.calm = Math.min(1, b.leaningBack * 0.6);\n  if (b.restless > 0.5) scores.frustrated = Math.max(scores.frustrated || 0, b.restless);\n  if (b.handRaised) scores.curious = Math.max(scores.curious || 0, 0.4);\n  if (b.gesturing > 0.5) scores.emphatic = Math.min(1, b.gesturing);\n  if (b.slumped > 0.5) scores.tired = Math.min(1, b.slumped);\n  return scores;\n}\n\nexport function extractBiometricEvidence(bioFrame) {\n  const b = bioFrame || {};\n  const scores = {};\n  const hr = b.heartRate || 70;\n  const hrv = b.heartRateVariability || 50;\n  const gsr = b.skinConductance || 0.5;\n\n  if (hr > 95 && hrv < 30) scores.excited = 0.5;\n  if (hr > 90 && gsr > 1.2) scores.frustrated = 0.5;\n  if (hr < 60) scores.tired = 0.4;\n  if (hrv > 60 && gsr < 0.7) scores.calm = 0.5;\n  return scores;\n}\n\nexport function detectPositiveSignals(faceFrame, bodyFrame) {\n  const signals = [];\n  const f = faceFrame || {};\n  const b = bodyFrame || {};\n  if (f.smile > 0.5) signals.push({ signal: 'smile', confidence: f.smile });\n  if (f.headNod > 0.5) signals.push({ signal: 'nod', confidence: f.headNod });\n  if (b.leaningForward > 0.5) signals.push({ signal: 'leaning_forward', confidence: b.leaningForward });\n  if (f.raisedEyebrows > 0.4) signals.push({ signal: 'raised_eyebrows', confidence: f.raisedEyebrows });\n  if (f.eyeContact > 0.7) signals.push({ signal: 'steady_gaze', confidence: f.eyeContact });\n  if (b.gesturing > 0.4) signals.push({ signal: 'expressive_gesture', confidence: b.gesturing });\n  return signals;\n}\n\nexport function fusePerception({ transcript, tonality, faceFrame, bodyFrame, bioFrame, consents }, options = {}) {\n  const modalities = {};\n\n  if (transcript) modalities.transcript = extractTranscriptEvidence(transcript);\n  if (tonality) modalities.tonality = extractTonalityEvidence(tonality);\n  if (hasConsent(consents, 'camera')) {\n    if (faceFrame) modalities.face = extractFaceEvidence(faceFrame);\n    if (bodyFrame) modalities.body = extractBodyEvidence(bodyFrame);\n  }\n  if (hasConsent(consents, 'biometric') && bioFrame) modalities.biometric = extractBiometricEvidence(bioFrame);\n\n  const weights = {\n    transcript: 1,\n    tonality: 1,\n    face: 0.8,\n    body: 0.7,\n    biometric: 0.5,\n  };\n\n  const result = fuseEvidence(modalities, { ...options, weights });\n  const positive = detectPositiveSignals(faceFrame, bodyFrame);\n\n  return {\n    ...result,\n    modalities,\n    positiveSignals: positive,\n    consent: { camera: hasConsent(consents, 'camera'), biometric: hasConsent(consents, 'biometric') },\n  };\n}\n",
+      "assertion_spec": {
+        "expected_exports": [
+          "hasConsent",
+          "extractFaceEvidence",
+          "extractBodyEvidence",
+          "extractBiometricEvidence",
+          "detectPositiveSignals",
+          "fusePerception"
+        ]
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "target": "services/perception-service.js",
+          "exports": [
+            "hasConsent",
+            "extractFaceEvidence",
+            "extractBodyEvidence",
+            "extractBiometricEvidence",
+            "detectPositiveSignals",
+            "fusePerception"
+          ]
+        },
+        {
+          "type": "function_behavior_test",
+          "target": "services/perception-service.js",
+          "export": "fusePerception",
+          "args_list": [
+            {
+              "faceFrame": {
+                "frown": 0.9
+              },
+              "consents": {
+                "camera": false
+              }
+            },
+            {}
+          ],
+          "expect": {
+            "state": "neutral",
+            "confidence": 0,
+            "finished": false,
+            "modalities": {}
+          }
+        },
+        {
+          "type": "function_behavior_test",
+          "target": "services/perception-service.js",
+          "export": "fusePerception",
+          "args_list": [
+            {
+              "faceFrame": {
+                "smile": 0.9
+              },
+              "consents": {
+                "camera": true
+              }
+            },
+            {}
+          ],
+          "expect": {
+            "state": "celebrating",
+            "confidence": 1,
+            "finished": true
+          }
+        }
+      ],
+      "sandbox_boundary": "services/**",
+      "authority_owner": "Builder",
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "dependencies": [],
+      "non_goals": [
+        "real camera/wearable signal collection -- fusion logic only, operates on already-collected frame data",
+        "any AI/model call -- this must remain deterministic like the proven prototype",
+        "wiring into any live product surface (V4/V5's job)",
+        "redesigning the consent model"
+      ],
+      "status": "pending"
+    },
+    {
+      "step_id": "CV3P-S02",
+      "phase_id": "P1",
+      "title": "Run acceptance until PASS",
+      "action_type": "shell_command",
+      "target_file": "products/receipts/COMMUNICATION_V3_PERCEPTION_ACCEPTANCE.json",
+      "target_files": [
+        "products/receipts/COMMUNICATION_V3_PERCEPTION_ACCEPTANCE.json"
+      ],
+      "command": "npm run lifeos:communication-v3-perception:acceptance",
+      "sandbox_boundary": "products/receipts/**",
+      "authority_owner": "Builder",
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "dependencies": [
+        "CV3P-S01"
+      ],
+      "status": "pending"
+    }
+  ],
+  "blueprint_status": "pending"
+}
