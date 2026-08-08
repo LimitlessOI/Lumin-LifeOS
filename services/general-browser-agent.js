@@ -71,6 +71,16 @@ export function isLiveAction(type) {
   return type === 'navigate' || type === 'click' || type === 'type';
 }
 
+export const RISKY_ACTION_LABEL_PATTERNS = [/buy now/i, /purchase/i, /delete/i, /checkout/i, /pay/i, /cancel subscription/i];
+
+export function isRiskyClick(action, observation) {
+  if (!action || action.type !== 'click') return false;
+  const els = (observation && observation.elements) || [];
+  const el = els.find(function (e) { return e.selector === action.selector; });
+  const label = (el && el.text) || action.reason || '';
+  return RISKY_ACTION_LABEL_PATTERNS.some(function (re) { return re.test(label); });
+}
+
 /**
  * Run a goal on a live browser via the observe -> decide -> act loop.
  *
