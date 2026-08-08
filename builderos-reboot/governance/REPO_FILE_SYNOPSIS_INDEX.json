@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-08T12:28:09.337Z",
+  "generated_at": "2026-08-08T12:30:15.196Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13111,
   "files": [
@@ -31351,9 +31351,9 @@
     {
       "path": "CLAUDE.md",
       "synopsis": "CLAUDE.md — LifeOS/LimitlessOS Project Instructions",
-      "bytes": 15268,
-      "mtime": "2026-08-07T19:41:25.029Z",
-      "indexed_at": "2026-08-07T19:47:32.014Z"
+      "bytes": 16714,
+      "mtime": "2026-08-08T12:30:07.565Z",
+      "indexed_at": "2026-08-08T12:30:15.196Z"
     },
     {
       "path": "client/orchestrator-app/main.js",

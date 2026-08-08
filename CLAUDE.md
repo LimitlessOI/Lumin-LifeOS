@@ -149,6 +149,16 @@ If you are about to add code to `server.js` — STOP. Find the correct target fi
 
 ---
 
+## ACCEPTANCE MUST PROVE REACHABILITY, NOT JUST EXISTENCE (non-negotiable)
+
+Found live 2026-08-08: five governed-factory missions (Communication System V1-V5) each shipped a real, unit-tested `services/*.js` module that passed `exports_smoke` + `function_behavior_test` — and every one of them had **zero real callers** anywhere in the live product. The code was correct; the capability didn't exist for anyone. A pure unit test cannot catch this (the function still passes in isolation even if every caller is deleted).
+
+**Rule:** every acceptance script for a new `services/*.js` module MUST include a check against the real consumer file(s) — not just that the service exports cleanly, but that a real, live call path (`routes/`, another `services/` file actually reachable from a route, `public/**` wired into a real UI event) imports it AND calls it. Grep the caller file directly for the import + the call site; string-presence checks are cheap and sufficient (see `scripts/run-communication-v1-voice-presence-acceptance.mjs` and `-v2-evidence-fusion-` for the pattern: `voice_chat_scheduleSilenceAutoSend_calls_computeSilenceWaitMs`, `chair_direct_agent_calls_fuseEvidence_and_attaches_conversational_state`).
+
+A mission does not earn `founder_usability_pass` on "built and unit-tested" alone. "The file exists and passes its own tests" is not "wired" — same standard as the Self-Repair Doctrine's existing definition-of-done.
+
+---
+
 ## SSOT MAINTENANCE — ATOMIC, PER-FILE (non-negotiable)
 
 Every .js file must have a `@ssot` JSDoc tag pointing to its product `PRODUCT_HOME.md`.
