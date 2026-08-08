@@ -544,14 +544,29 @@
       return true;
     }
 
+    function computeSilenceWaitMs(text) {
+      const base = Number(settings.silenceAutoSendMs || 0);
+      if (!base) return 0;
+      const trimmed = String(text || '').replace(/\s+/g, ' ').trim();
+      let score = 50;
+      if (/[.!?\u2026]\s*$/.test(trimmed)) score += 35;
+      else score -= 15;
+      if (/\b(um|uh|like|you know)[.!?\u2026]?\s*$/i.test(trimmed)) score -= 35;
+      else score += 15;
+      score = Math.min(100, Math.max(0, score));
+      const factor = 1.6 - (score / 100) * 1.2;
+      return Math.max(200, Math.round(base * factor));
+    }
+
     function scheduleSilenceAutoSend() {
       const ms = Number(settings.silenceAutoSendMs || 0);
       if (!ms || ms <= 0 || typeof settings.onAutoSend !== 'function') return;
       clearSilenceTimer();
+      const wait = computeSilenceWaitMs(input && input.value);
       state.silenceTimer = global.setTimeout(() => {
         state.silenceTimer = null;
         fireAutoSend('silence');
-      }, ms);
+      }, wait);
     }
 
     function scheduleMicRestart(delayMs) {
