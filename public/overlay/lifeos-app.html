@@ -4915,6 +4915,13 @@ function initLuminDrawerVoiceSend() {
     statusId: 'lumin-status-text',
     iconOnly: true,
     idleText: 'Tap mic or hold Space — say "send it" to post',
+    onStart: function () {
+      try {
+        if (window.LifeOSVoiceChat && typeof window.LifeOSVoiceChat.isSpeaking === 'function' && window.LifeOSVoiceChat.isSpeaking()) {
+          window.LifeOSVoiceChat.fadeAndStopSpeaking();
+        }
+      } catch (_) {}
+    },
     voiceSendEnabled: true,
     voiceSendPhrases: ['send it', 'send message', 'send that', 'send now'],
     voiceSendRequireFinal: true,
