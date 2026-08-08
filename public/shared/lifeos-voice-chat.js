@@ -235,6 +235,32 @@
     if (synth) synth.cancel();
   }
 
+  function fadeAndStopSpeaking(options) {
+    const opts = options || {};
+    const fadeMs = typeof opts.fadeMs === 'number' ? opts.fadeMs : 150;
+    if (activeServerAudio) {
+      const audio = activeServerAudio;
+      const startVolume = audio.volume;
+      const steps = 10;
+      const stepMs = Math.max(1, Math.floor(fadeMs / steps));
+      let step = 0;
+      const timer = setInterval(function () {
+        step += 1;
+        const nextVolume = Math.max(0, startVolume * (1 - step / steps));
+        try { audio.volume = nextVolume; } catch (_) {}
+        if (step >= steps) {
+          clearInterval(timer);
+          try { audio.pause(); } catch (_) {}
+          if (activeServerAudio === audio) activeServerAudio = null;
+        }
+      }, stepMs);
+      return;
+    }
+    if (synth && synth.speaking) {
+      synth.cancel();
+    }
+  }
+
   function isSpeaking() {
     return Boolean((synth && synth.speaking) || activeServerAudio);
   }
