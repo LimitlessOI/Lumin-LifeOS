@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-08T12:30:15.196Z",
+  "generated_at": "2026-08-08T23:18:12.196Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13111,
+  "file_count": 13115,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -40203,6 +40203,13 @@
       "indexed_at": "2026-08-08T00:13:11.613Z"
     },
     {
+      "path": "docs/conversation_dumps/2026-08-08-zero-capital-economic-engine-strategy.md",
+      "synopsis": "Zero-capital funding strategy for Taloa's autonomous economic engine -- ChatGPT-authored strategy pasted and engaged with directly, Adam's real-world constraint (all capital already invested, zero remaining) and reframe (dropshipping/POD, e",
+      "bytes": 11523,
+      "mtime": "2026-08-08T23:15:53.735Z",
+      "indexed_at": "2026-08-08T23:18:12.196Z"
+    },
+    {
       "path": "docs/conversation_dumps/by-product/sessions/2a4739f2/BUILDEROS-AUTONOMOUS.md",
       "synopsis": "BuilderOS / TSOS / autonomous / alpha",
       "bytes": 85566,
@@ -43113,6 +43120,13 @@
       "indexed_at": "2026-08-06T05:30:22.273Z"
     },
     {
+      "path": "docs/products/ideavault/conversations/2026-08-08-conversation-dump-bot-catalog.md",
+      "synopsis": "Bot-generated catalog of docs/conversation_dumps/ — 2026-08-08",
+      "bytes": 83808,
+      "mtime": "2026-08-08T23:16:50.620Z",
+      "indexed_at": "2026-08-08T23:18:12.196Z"
+    },
+    {
       "path": "docs/products/ideavault/data/twin-signals/adam-2026-08-05-profile-fragment.json",
       "synopsis": "Documentation — Adam 2026 08 05 Profile Fragment.",
       "bytes": 4510,
@@ -43129,6 +43143,14 @@
       "synopsis_index_only": true
     },
     {
+      "path": "docs/products/ideavault/data/twin-signals/adam-2026-08-08-profile-fragment.json",
+      "synopsis": "Documentation — Adam 2026 08 08 Profile Fragment.",
+      "bytes": 4530,
+      "mtime": "2026-08-08T23:16:50.619Z",
+      "indexed_at": "2026-08-08T23:18:12.196Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "docs/products/ideavault/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
       "bytes": 1779,
@@ -43139,9 +43161,9 @@
     {
       "path": "docs/products/ideavault/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — IdeaVault",
-      "bytes": 69589,
-      "mtime": "2026-08-07T20:02:10.181Z",
-      "indexed_at": "2026-08-07T20:02:47.824Z"
+      "bytes": 70652,
+      "mtime": "2026-08-08T23:17:58.687Z",
+      "indexed_at": "2026-08-08T23:18:12.196Z"
     },
     {
       "path": "docs/products/INDEX.md",
@@ -43690,9 +43712,9 @@
     {
       "path": "docs/products/marketingos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — MarketingOS",
-      "bytes": 139125,
-      "mtime": "2026-08-01T15:42:44.253Z",
-      "indexed_at": "2026-08-01T15:44:25.624Z"
+      "bytes": 140981,
+      "mtime": "2026-08-08T23:17:44.187Z",
+      "indexed_at": "2026-08-08T23:18:12.196Z"
     },
     {
       "path": "docs/products/marketingos/socialmediaos/conversations/2026-06-29-producer-director-model.md",
@@ -44422,6 +44444,13 @@
       "bytes": 6871,
       "mtime": "1970-01-01T00:00:00.000Z",
       "indexed_at": "2026-07-30T01:21:52.231Z"
+    },
+    {
+      "path": "docs/products/ZERO_CAPITAL_ECONOMIC_ENGINE.md",
+      "synopsis": "Zero-capital funding strategy — how Taloa generates its own operating capital from $0, starting from existing assets (SMOS $49 offer) and marketplace/POD commerce, before any advertising or inventory spend is possible.",
+      "bytes": 9954,
+      "mtime": "2026-08-08T23:16:37.095Z",
+      "indexed_at": "2026-08-08T23:18:12.196Z"
     },
     {
       "path": "docs/products/zero-drift-handoff-protocol/CREATIVE_BRIEF.md",
