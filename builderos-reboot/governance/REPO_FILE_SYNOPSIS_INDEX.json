@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-08T09:46:39.091Z",
+  "generated_at": "2026-08-08T09:48:59.684Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13108,
+  "file_count": 13109,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -92574,6 +92574,16 @@
       "indexed_at": "2026-08-01T19:07:38.787Z",
       "ssot": [
         "docs/products/word-keeper/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/cross-domain-intelligence-service.js",
+      "synopsis": "Cross-Domain Personal Intelligence -- per-domain data silos,",
+      "bytes": 6921,
+      "mtime": "2026-08-08T09:48:59.684Z",
+      "indexed_at": "2026-08-08T09:48:59.684Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
       ]
     },
     {
