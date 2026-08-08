@@ -1383,6 +1383,7 @@
     speakText: speakText,
     speakTextAsync: speakTextAsync,
     stopSpeaking: stopSpeaking,
+    fadeAndStopSpeaking: fadeAndStopSpeaking,
     isSpeaking: isSpeaking,
     listSpeakableVoices: listSpeakableVoices,
     listAudioInputDevices: listAudioInputDevices,
