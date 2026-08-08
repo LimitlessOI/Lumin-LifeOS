@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-08T09:48:59.684Z",
+  "generated_at": "2026-08-08T09:49:46.379Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13109,
+  "file_count": 13111,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21307,9 +21307,9 @@
     {
       "path": "builderos-reboot/BP_PRIORITY.json",
       "synopsis": "BuilderOS artifact — BP PRIORITY.",
-      "bytes": 39585,
-      "mtime": "2026-08-08T09:46:15.235Z",
-      "indexed_at": "2026-08-08T09:46:39.091Z",
+      "bytes": 39880,
+      "mtime": "2026-08-08T09:49:26.894Z",
+      "indexed_at": "2026-08-08T09:49:46.379Z",
       "synopsis_index_only": true
     },
     {
@@ -27139,9 +27139,9 @@
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V5-CROSS-DOMAIN-0001/BLUEPRINT.json",
       "synopsis": "Cross-Domain Personal Intelligence -- per-domain data silos,\\n * explicit cross-domain consent, audit logging, and multi-domain inference\\n * under founder authority. Ported from the proven prototype\\n * (scripts/prototype-cross-domain-v5.m",
-      "bytes": 10273,
-      "mtime": "2026-08-08T09:34:42.114Z",
-      "indexed_at": "2026-08-08T09:36:38.200Z",
+      "bytes": 10782,
+      "mtime": "2026-08-08T09:49:26.894Z",
+      "indexed_at": "2026-08-08T09:49:46.379Z",
       "synopsis_index_only": true
     },
     {
@@ -27165,6 +27165,14 @@
       "bytes": 2306,
       "mtime": "2026-08-08T09:34:15.999Z",
       "indexed_at": "2026-08-08T09:36:38.200Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V5-CROSS-DOMAIN-0001/OBJECTIVE_VERDICT.json",
+      "synopsis": "BuilderOS artifact — OBJECTIVE VERDICT.",
+      "bytes": 846,
+      "mtime": "2026-08-08T09:49:26.898Z",
+      "indexed_at": "2026-08-08T09:49:46.379Z",
       "synopsis_index_only": true
     },
     {
@@ -30520,9 +30528,9 @@
     {
       "path": "builderos-reboot/PRODUCT_READINESS_REPORT.json",
       "synopsis": "BuilderOS artifact — PRODUCT READINESS REPORT.",
-      "bytes": 51290,
-      "mtime": "2026-08-08T09:46:15.239Z",
-      "indexed_at": "2026-08-08T09:46:39.091Z",
+      "bytes": 51429,
+      "mtime": "2026-08-08T09:49:26.898Z",
+      "indexed_at": "2026-08-08T09:49:46.379Z",
       "synopsis_index_only": true
     },
     {
@@ -67368,6 +67376,14 @@
       "bytes": 1783,
       "mtime": "2026-08-08T09:46:15.239Z",
       "indexed_at": "2026-08-08T09:46:39.091Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/COMMUNICATION_V5_CROSS_DOMAIN_ACCEPTANCE.json",
+      "synopsis": "Product receipt — COMMUNICATION V5 CROSS DOMAIN ACCEPTANCE.",
+      "bytes": 1961,
+      "mtime": "2026-08-08T09:49:26.898Z",
+      "indexed_at": "2026-08-08T09:49:46.379Z",
       "synopsis_index_only": true
     },
     {

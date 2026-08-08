@@ -47,7 +47,9 @@
         "wiring into any live product surface",
         "redesigning the domain policy shape or consent model"
       ],
-      "status": "pending"
+      "status": "complete",
+      "completed_at": "2026-08-08T09:49:26.891Z",
+      "git_sha": "4d2cfd9a622f15bbb19b93992a7986c92a308afe"
     },
     {
       "step_id": "CV5CD-S02",
@@ -65,8 +67,16 @@
       "dependencies": [
         "CV5CD-S01"
       ],
-      "status": "pending"
+      "status": "complete",
+      "completed_at": "2026-08-08T09:49:26.891Z",
+      "git_sha": "4d2cfd9a622f15bbb19b93992a7986c92a308afe",
+      "receipt_verdict": "PASS"
     }
   ],
-  "blueprint_status": "pending"
+  "blueprint_status": "complete",
+  "completed_at": "2026-08-08T09:49:26.891Z",
+  "git_sha": "4d2cfd9a622f15bbb19b93992a7986c92a308afe",
+  "receipt_path": "products/receipts/COMMUNICATION_V5_CROSS_DOMAIN_ACCEPTANCE.json",
+  "receipt_verdict": "PASS",
+  "build_method": "system-build"
 }
