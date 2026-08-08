@@ -99,9 +99,9 @@
       "status": "pending",
       "authoring": {
         "tiers": [
-          "claude_sonnet",
-          "openai_gpt",
-          "gemini_flash"
+          "deepseek",
+          "groq_llama",
+          "mistral_free"
         ]
       }
     },
