@@ -301,6 +301,26 @@ export async function runChairDirectAgent({ message, history = [], deps = {}, ct
     });
   } catch { systemFacts = {}; }
 
+  // CV2EF-S05: Evidence Fusion (V2) grounding signal -- transcript + recent-history
+  // modalities only, since no tonality/face/body data source exists at this layer.
+  // Informational grounding fact only (SYSTEM_FACTS is already documented to Chair as
+  // 'truth only... NOT a script to recite') -- deliberately does not add a new behavior
+  // lock, so it cannot fight the existing presenceLock/governanceLock tuning. Only
+  // attached above a confidence floor to avoid noise on ordinary neutral turns.
+  try {
+    const recentQuestionCount = history.slice(-3).filter((h) => /\?/.test(String(h?.content || ''))).length;
+    const fused = fuseEvidence({
+      transcript: extractTranscriptEvidence(message),
+      history: extractHistoryEvidence({ consecutiveQuestions: recentQuestionCount }),
+    }, { weights: { transcript: 1, history: 0.8 } });
+    if (fused && fused.state && fused.state !== 'neutral' && fused.confidence >= 0.35) {
+      systemFacts.conversational_state = {
+        state: fused.state,
+        confidence: Math.round(fused.confidence * 100) / 100,
+      };
+    }
+  } catch { /* non-fatal -- grounding-only signal, never blocks a reply */ }
+
   // SO-003: attach a verified program/factual grounding block so SMOS/SSOT questions
   // get a real answer instead of an invented refusal.
   try {
