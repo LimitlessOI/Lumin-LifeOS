@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-08T09:43:36.304Z",
+  "generated_at": "2026-08-08T09:44:24.593Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13102,
+  "file_count": 13103,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -97050,6 +97050,16 @@
       "bytes": 1481,
       "mtime": "2026-07-12T03:38:20.562Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "services/perception-service.js",
+      "synopsis": "Perception Engine -- face/body/biometric channels under explicit",
+      "bytes": 4162,
+      "mtime": "2026-08-08T09:44:24.593Z",
+      "indexed_at": "2026-08-08T09:44:24.593Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/performanceDisclosureApproval.js",
