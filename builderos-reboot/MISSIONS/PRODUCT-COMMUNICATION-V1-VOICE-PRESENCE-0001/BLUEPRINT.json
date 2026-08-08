@@ -158,6 +158,36 @@
       "status": "pending"
     },
     {
+      "step_id": "CV1P-S02c",
+      "phase_id": "P1",
+      "title": "Document the speechSynthesis no-fade limitation in code comments (founder packet requirement, missed in CV1P-S02)",
+      "target_file": "public/shared/lifeos-voice-chat.js",
+      "target_files": [
+        "public/shared/lifeos-voice-chat.js"
+      ],
+      "action_type": "author_then_write",
+      "patch_mode": true,
+      "task": "Add a documenting comment above synth.cancel() in fadeAndStopSpeaking() explaining why the speechSynthesis path cannot fade, using PATCH MODE (small exact OLD/NEW block).",
+      "spec": "Output in PATCH MODE ONLY: the OLD block below must be copied EXACTLY character-for-character from the real current file, and the NEW block adds a one-line documenting comment above synth.cancel() explaining why no fade happens on this path (required by the founder packet's non_goals: 'must be documented in code comments, not worked around' -- this was missed in the original CV1P-S02 patch and is being added now).\n\nOLD:\n    if (synth && synth.speaking) {\n      synth.cancel();\n    }\n  }\n\nNEW:\n    if (synth && synth.speaking) {\n      // speechSynthesis (Web Speech API) has no native volume ramp -- an\n      // instant cancel() is the correct, honest behavior on this fallback\n      // path. Do not fake a fade here.\n      synth.cancel();\n    }\n  }",
+      "assertion_spec": {
+        "expected_exports": [],
+        "file_contains": [
+          "no native volume ramp",
+          "fadeAndStopSpeaking"
+        ]
+      },
+      "sandbox_boundary": "public/shared/**",
+      "authority_owner": "Builder",
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "dependencies": [
+        "CV1P-S02b"
+      ],
+      "non_goals": [
+        "a full-file rewrite -- use patch mode only"
+      ],
+      "status": "pending"
+    },
+    {
       "step_id": "CV1P-S03",
       "phase_id": "P2",
       "title": "Wire barge-in detection: auto-trigger graceful decay when the user speaks while Chair's TTS is playing",
@@ -191,29 +221,6 @@
       "spec": "Output in PATCH MODE ONLY: the OLD block below must be copied EXACTLY character-for-character from the real current file, and the NEW block adds an onStart callback to the existing LifeOSVoiceChat.attach({...}) config object (this attach() call already invokes settings.onStart when the user starts speaking -- confirmed real, existing hook in public/shared/lifeos-voice-chat.js, both the browser SpeechRecognition and server-Whisper paths already call it. Do not touch lifeos-voice-chat.js -- only add this one callback to the config object in this file).\n\nOLD:\n    idleText: 'Tap mic or hold Space \u2014 say \"send it\" to post',\n    voiceSendEnabled: true,\n\nNEW:\n    idleText: 'Tap mic or hold Space \u2014 say \"send it\" to post',\n    onStart: function () {\n      try {\n        if (window.LifeOSVoiceChat && typeof window.LifeOSVoiceChat.isSpeaking === 'function' && window.LifeOSVoiceChat.isSpeaking()) {\n          window.LifeOSVoiceChat.fadeAndStopSpeaking();\n        }\n      } catch (_) {}\n    },\n    voiceSendEnabled: true,\n\nThis is the barge-in wire: the moment the user starts speaking (onStart fires), if Chair's TTS is currently playing (isSpeaking() true), fade and stop it gracefully instead of talking over the user."
     },
     {
-      "step_id": "CV1P-S04",
-      "phase_id": "P3",
-      "title": "Acceptance command + PASS receipt writer",
-      "target_file": "scripts/run-communication-v1-voice-presence-acceptance.mjs",
-      "target_files": [
-        "scripts/run-communication-v1-voice-presence-acceptance.mjs"
-      ],
-      "action_type": "builder_build",
-      "assertion_spec": {
-        "file_contains": [
-          "computeTurnCompletionConfidence"
-        ]
-      },
-      "sandbox_boundary": "scripts/**",
-      "authority_owner": "Builder",
-      "on_block": "BLOCKED_RETURN_TO_ARC",
-      "dependencies": [
-        "CV1P-S03"
-      ],
-      "non_goals": [],
-      "status": "pending"
-    },
-    {
       "step_id": "CV1P-S05",
       "phase_id": "P4",
       "title": "Run acceptance until PASS",
@@ -227,7 +234,8 @@
       "authority_owner": "Builder",
       "on_block": "BLOCKED_RETURN_TO_ARC",
       "dependencies": [
-        "CV1P-S04"
+        "CV1P-S02c",
+        "CV1P-S03"
       ],
       "status": "pending"
     }

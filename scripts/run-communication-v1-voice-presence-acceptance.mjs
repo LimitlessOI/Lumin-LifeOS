@@ -70,11 +70,23 @@ if (fs.existsSync(SERVICE)) {
       exported: Object.keys(mod),
     });
     if (typeof mod.computeTurnCompletionConfidence === 'function') {
-      // Behavioral fixtures mirroring the proven prototype's own self-test cases
-      // (finished statement vs. trailing conjunction/mid-thought) -- not a
-      // byte-identical port check, a real behavioral one.
-      const finished = mod.computeTurnCompletionConfidence('I will call the bank tomorrow.', { pauseMs: 900 });
-      const midThought = mod.computeTurnCompletionConfidence('I will call the bank and', { pauseMs: 200 });
+      // Real interface is (turns, options) where turns is an array of
+      // {role, text, ts} objects -- confirmed live 2026-08-08: this test
+      // previously called the function with a raw STRING as `turns`, which
+      // JS happily string-indexes without throwing (turns[currentIndex] is a
+      // single character with no .text), so the safe-access guard silently
+      // fell back to text='' on every call. The test still "passed" because
+      // pauseMs alone (900 vs 200) produced different scores, but it was not
+      // actually exercising any text-based scoring at all -- shape-valid,
+      // logically meaningless. Fixed to call with a real turns array.
+      const finished = mod.computeTurnCompletionConfidence(
+        [{ role: 'user', text: 'I will call the bank tomorrow.', ts: 0 }],
+        { currentIndex: 0, pauseMs: 900 },
+      );
+      const midThought = mod.computeTurnCompletionConfidence(
+        [{ role: 'user', text: 'I will call the bank and', ts: 0 }],
+        { currentIndex: 0, pauseMs: 200 },
+      );
       const finishedScore = typeof finished === 'number' ? finished : finished?.confidence;
       const midScore = typeof midThought === 'number' ? midThought : midThought?.confidence;
       step('finished_statement_scores_higher_than_mid_thought',

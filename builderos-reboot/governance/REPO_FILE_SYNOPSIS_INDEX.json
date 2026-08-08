@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-08T09:55:50.920Z",
+  "generated_at": "2026-08-08T09:59:55.449Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13111,
   "files": [
@@ -26863,9 +26863,9 @@
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V1-VOICE-PRESENCE-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
-      "bytes": 13671,
-      "mtime": "2026-08-08T09:25:10.058Z",
-      "indexed_at": "2026-08-08T09:26:28.090Z",
+      "bytes": 14843,
+      "mtime": "2026-08-08T09:58:51.002Z",
+      "indexed_at": "2026-08-08T09:59:55.449Z",
       "synopsis_index_only": true
     },
     {
@@ -43517,9 +43517,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 807672,
-      "mtime": "2026-08-08T09:36:27.930Z",
-      "indexed_at": "2026-08-08T09:36:38.200Z"
+      "bytes": 808180,
+      "mtime": "2026-08-08T09:59:39.538Z",
+      "indexed_at": "2026-08-08T09:59:55.449Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -77100,9 +77100,9 @@
     {
       "path": "scripts/run-communication-v1-voice-presence-acceptance.mjs",
       "synopsis": "Communication System V1 (Voice Presence) acceptance.",
-      "bytes": 4779,
-      "mtime": "2026-08-07T03:40:50.563Z",
-      "indexed_at": "2026-08-07T03:41:15.097Z",
+      "bytes": 5388,
+      "mtime": "2026-08-08T09:57:48.681Z",
+      "indexed_at": "2026-08-08T09:59:55.449Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
