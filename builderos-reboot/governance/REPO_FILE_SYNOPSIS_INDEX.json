@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-08T12:23:10.669Z",
+  "generated_at": "2026-08-08T12:28:09.337Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13111,
   "files": [
@@ -27022,9 +27022,9 @@
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V2-EVIDENCE-FUSION-0001/BLUEPRINT.json",
       "synopsis": "Evidence Fusion Engine -- combines transcript, timing, tonality,\\n * history, and face/body signals into calibrated confidence estimates for\\n * user cognitive/emotional state, and learns per-context modality weights\\n * from labeled outcom",
-      "bytes": 19382,
-      "mtime": "2026-08-08T12:20:08.427Z",
-      "indexed_at": "2026-08-08T12:21:09.762Z",
+      "bytes": 19597,
+      "mtime": "2026-08-08T12:27:25.494Z",
+      "indexed_at": "2026-08-08T12:28:02.889Z",
       "synopsis_index_only": true
     },
     {
@@ -27053,9 +27053,9 @@
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V2-EVIDENCE-FUSION-0001/OBJECTIVE_VERDICT.json",
       "synopsis": "BuilderOS artifact — OBJECTIVE VERDICT.",
-      "bytes": 845,
-      "mtime": "2026-08-08T09:43:18.165Z",
-      "indexed_at": "2026-08-08T09:43:36.304Z",
+      "bytes": 974,
+      "mtime": "2026-08-08T12:27:25.495Z",
+      "indexed_at": "2026-08-08T12:28:02.889Z",
       "synopsis_index_only": true
     },
     {
@@ -43517,9 +43517,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 811483,
-      "mtime": "2026-08-08T12:16:55.699Z",
-      "indexed_at": "2026-08-08T12:17:07.218Z"
+      "bytes": 813592,
+      "mtime": "2026-08-08T12:27:25.501Z",
+      "indexed_at": "2026-08-08T12:28:02.889Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -67357,9 +67357,9 @@
     {
       "path": "products/receipts/COMMUNICATION_V2_EVIDENCE_FUSION_ACCEPTANCE.json",
       "synopsis": "Product receipt — COMMUNICATION V2 EVIDENCE FUSION ACCEPTANCE.",
-      "bytes": 1946,
-      "mtime": "2026-08-08T09:43:18.165Z",
-      "indexed_at": "2026-08-08T09:43:36.304Z",
+      "bytes": 2566,
+      "mtime": "2026-08-08T12:27:25.502Z",
+      "indexed_at": "2026-08-08T12:28:02.889Z",
       "synopsis_index_only": true
     },
     {
@@ -77110,9 +77110,9 @@
     {
       "path": "scripts/run-communication-v2-evidence-fusion-acceptance.mjs",
       "synopsis": "Communication System V2 (Evidence Fusion) acceptance.",
-      "bytes": 5142,
-      "mtime": "2026-08-08T09:13:01.626Z",
-      "indexed_at": "2026-08-08T09:13:45.839Z",
+      "bytes": 6224,
+      "mtime": "2026-08-08T12:27:25.502Z",
+      "indexed_at": "2026-08-08T12:28:02.889Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
