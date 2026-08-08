@@ -1,0 +1,61 @@
+{
+  "schema": "communication_v3_perception_acceptance_v1",
+  "mission_id": "PRODUCT-COMMUNICATION-V3-PERCEPTION-0001",
+  "started_at": "2026-08-08T09:44:47.342Z",
+  "tests_passed": [
+    "service_file_exists",
+    "service_imports_cleanly",
+    "exports_fusePerception_and_hasConsent",
+    "fusePerception_happy_path_with_consent",
+    "fusePerception_consent_denied_face_ignored",
+    "bp_sync_mandatory"
+  ],
+  "tests_failed": [],
+  "steps": [
+    {
+      "step": "service_file_exists",
+      "ok": true,
+      "detail": null,
+      "at": "2026-08-08T09:44:47.343Z"
+    },
+    {
+      "step": "service_imports_cleanly",
+      "ok": true,
+      "detail": null,
+      "at": "2026-08-08T09:44:47.344Z"
+    },
+    {
+      "step": "exports_fusePerception_and_hasConsent",
+      "ok": true,
+      "detail": null,
+      "at": "2026-08-08T09:44:47.344Z"
+    },
+    {
+      "step": "fusePerception_happy_path_with_consent",
+      "ok": true,
+      "detail": null,
+      "at": "2026-08-08T09:44:47.344Z"
+    },
+    {
+      "step": "fusePerception_consent_denied_face_ignored",
+      "ok": true,
+      "detail": null,
+      "at": "2026-08-08T09:44:47.344Z"
+    }
+  ],
+  "completed_at": "2026-08-08T09:44:47.354Z",
+  "git_sha": "fd16db5219ee8440f18062afd43e071e41ebf90f",
+  "verdict": "PASS",
+  "bp_sync": {
+    "updated": [
+      "builderos-reboot/BP_PRIORITY.json",
+      "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V3-PERCEPTION-0001/BLUEPRINT.json"
+    ],
+    "skipped": []
+  },
+  "artifact_sync": {
+    "mode": "technical_acceptance",
+    "readiness_report": "builderos-reboot/PRODUCT_READINESS_REPORT.json",
+    "freshness_status": "CURRENT"
+  }
+}

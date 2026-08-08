@@ -98,7 +98,9 @@
         "wiring into any live product surface (V4/V5's job)",
         "redesigning the consent model"
       ],
-      "status": "pending"
+      "status": "complete",
+      "completed_at": "2026-08-08T09:44:47.354Z",
+      "git_sha": "fd16db5219ee8440f18062afd43e071e41ebf90f"
     },
     {
       "step_id": "CV3P-S02",
@@ -116,8 +118,16 @@
       "dependencies": [
         "CV3P-S01"
       ],
-      "status": "pending"
+      "status": "complete",
+      "completed_at": "2026-08-08T09:44:47.354Z",
+      "git_sha": "fd16db5219ee8440f18062afd43e071e41ebf90f",
+      "receipt_verdict": "PASS"
     }
   ],
-  "blueprint_status": "pending"
+  "blueprint_status": "complete",
+  "completed_at": "2026-08-08T09:44:47.354Z",
+  "git_sha": "fd16db5219ee8440f18062afd43e071e41ebf90f",
+  "receipt_path": "products/receipts/COMMUNICATION_V3_PERCEPTION_ACCEPTANCE.json",
+  "receipt_verdict": "PASS",
+  "build_method": "system-build"
 }

@@ -1,0 +1,20 @@
+{
+  "schema": "objective_verdict_v1",
+  "generated_at": "2026-08-08T09:44:47.354Z",
+  "objective_id": "PRODUCT-COMMUNICATION-V3-PERCEPTION-0001",
+  "objective_name": "Communication System V3 — Perception",
+  "verdict": "OBJECTIVE_COMPLETE",
+  "receipt": "products/receipts/COMMUNICATION_V3_PERCEPTION_ACCEPTANCE.json",
+  "git_sha": "fd16db5219ee8440f18062afd43e071e41ebf90f",
+  "tests_passed": [
+    "service_file_exists",
+    "service_imports_cleanly",
+    "exports_fusePerception_and_hasConsent",
+    "fusePerception_happy_path_with_consent",
+    "fusePerception_consent_denied_face_ignored",
+    "bp_sync_mandatory"
+  ],
+  "tests_failed": [],
+  "founder_usability_pass": false,
+  "acceptance_command": "npm run lifeos:communication-v3-perception:acceptance"
+}

@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-08T09:44:24.593Z",
+  "generated_at": "2026-08-08T09:45:01.401Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13103,
+  "file_count": 13105,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21307,9 +21307,9 @@
     {
       "path": "builderos-reboot/BP_PRIORITY.json",
       "synopsis": "BuilderOS artifact — BP PRIORITY.",
-      "bytes": 38976,
-      "mtime": "2026-08-08T09:43:18.161Z",
-      "indexed_at": "2026-08-08T09:43:36.304Z",
+      "bytes": 39270,
+      "mtime": "2026-08-08T09:44:47.357Z",
+      "indexed_at": "2026-08-08T09:45:01.401Z",
       "synopsis_index_only": true
     },
     {
@@ -27061,9 +27061,9 @@
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V3-PERCEPTION-0001/BLUEPRINT.json",
       "synopsis": "Perception Engine -- face/body/biometric channels under explicit\\n * per-context consent, fused with transcript + tonality evidence via the\\n * shared Evidence Fusion service. Ported from the proven prototype\\n * (scripts/prototype-percepti",
-      "bytes": 8940,
-      "mtime": "2026-08-08T09:21:43.034Z",
-      "indexed_at": "2026-08-08T09:26:28.090Z",
+      "bytes": 9447,
+      "mtime": "2026-08-08T09:44:47.356Z",
+      "indexed_at": "2026-08-08T09:45:01.401Z",
       "synopsis_index_only": true
     },
     {
@@ -27087,6 +27087,14 @@
       "bytes": 2236,
       "mtime": "2026-08-08T09:20:49.875Z",
       "indexed_at": "2026-08-08T09:26:28.090Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V3-PERCEPTION-0001/OBJECTIVE_VERDICT.json",
+      "synopsis": "BuilderOS artifact — OBJECTIVE VERDICT.",
+      "bytes": 765,
+      "mtime": "2026-08-08T09:44:47.360Z",
+      "indexed_at": "2026-08-08T09:45:01.401Z",
       "synopsis_index_only": true
     },
     {
@@ -30504,9 +30512,9 @@
     {
       "path": "builderos-reboot/PRODUCT_READINESS_REPORT.json",
       "synopsis": "BuilderOS artifact — PRODUCT READINESS REPORT.",
-      "bytes": 51012,
-      "mtime": "2026-08-08T09:43:18.165Z",
-      "indexed_at": "2026-08-08T09:43:36.304Z",
+      "bytes": 51151,
+      "mtime": "2026-08-08T09:44:47.360Z",
+      "indexed_at": "2026-08-08T09:45:01.401Z",
       "synopsis_index_only": true
     },
     {
@@ -67336,6 +67344,14 @@
       "bytes": 1946,
       "mtime": "2026-08-08T09:43:18.165Z",
       "indexed_at": "2026-08-08T09:43:36.304Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/COMMUNICATION_V3_PERCEPTION_ACCEPTANCE.json",
+      "synopsis": "Product receipt — COMMUNICATION V3 PERCEPTION ACCEPTANCE.",
+      "bytes": 1649,
+      "mtime": "2026-08-08T09:44:47.360Z",
+      "indexed_at": "2026-08-08T09:45:01.401Z",
       "synopsis_index_only": true
     },
     {
