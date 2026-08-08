@@ -226,4 +226,4 @@ export async function runBrowserGoal(opts = {}) {
   return { ok: false, reached: false, reason: `max_steps_exhausted:${maxSteps}`, steps, evidence: null, template: null };
 }
 
-export default { runBrowserGoal, normalizeAction, isLiveAction, BROWSER_ACTIONS, BrowserAgentError };
+export default { runBrowserGoal, normalizeAction, isLiveAction, isRiskyClick, RISKY_ACTION_LABEL_PATTERNS, BROWSER_ACTIONS, BrowserAgentError };
