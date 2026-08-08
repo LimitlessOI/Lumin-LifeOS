@@ -413,7 +413,20 @@ export async function dispatchExecuteStep(body, options = {}) {
   if (commitRunner) {
     try {
       const writtenAbsPath = resolveRepoPath(step.target_file);
-      const writtenContent = fs.readFileSync(writtenAbsPath, 'utf8');
+      let writtenContent = fs.readFileSync(writtenAbsPath, 'utf8');
+      // Codegen was asked (task/spec) to include an @ssot JSDoc tag and
+      // skipped it twice in a row live 2026-08-07, including after an
+      // explicit repair retry naming the exact fix -- a model-compliance
+      // gap for what is actually deterministic metadata the blueprint
+      // already knows. Same doctrine as ensureSynopsisInContent (deployment-
+      // service.js): don't keep re-asking the model for something we can
+      // just supply. Only injects when the blueprint step declares `ssot`
+      // AND the written content has no @ssot tag already -- never overrides
+      // a real one the model did write.
+      if (step.ssot && !/^\s*\*\s*@ssot\s+/m.test(writtenContent)) {
+        writtenContent = `/**\n * @ssot ${step.ssot}\n */\n${writtenContent}`;
+        fs.writeFileSync(writtenAbsPath, writtenContent);
+      }
       const commitMessage = `[system-build] ${mission_id} ${step.step_id} — ${step.target_file}`;
       commitResult = await commitRunner(step.target_file, writtenContent, commitMessage);
     } catch (err) {

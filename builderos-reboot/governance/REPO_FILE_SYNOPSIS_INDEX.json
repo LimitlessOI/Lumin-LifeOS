@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-08T00:22:14.430Z",
+  "generated_at": "2026-08-08T00:27:19.145Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13078,
   "files": [
@@ -26863,9 +26863,9 @@
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V1-VOICE-PRESENCE-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
-      "bytes": 7858,
-      "mtime": "2026-08-08T00:14:17.409Z",
-      "indexed_at": "2026-08-08T00:14:34.442Z",
+      "bytes": 7912,
+      "mtime": "2026-08-08T00:26:54.983Z",
+      "indexed_at": "2026-08-08T00:27:19.145Z",
       "synopsis_index_only": true
     },
     {
@@ -64605,9 +64605,9 @@
     {
       "path": "factory-staging/factory-core/builder/run-step.js",
       "synopsis": "Exports resolveRepoPath — factory-staging/factory-core/builder/run-step.js.",
-      "bytes": 17522,
-      "mtime": "2026-08-08T00:20:05.855Z",
-      "indexed_at": "2026-08-08T00:22:14.430Z",
+      "bytes": 18368,
+      "mtime": "2026-08-08T00:26:39.440Z",
+      "indexed_at": "2026-08-08T00:27:19.145Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
