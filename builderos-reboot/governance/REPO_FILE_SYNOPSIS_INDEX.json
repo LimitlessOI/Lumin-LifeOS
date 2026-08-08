@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-07T23:53:51.590Z",
+  "generated_at": "2026-08-08T00:13:11.613Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13076,
+  "file_count": 13078,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -40040,6 +40040,13 @@
       "indexed_at": "2026-08-07T22:59:49.540Z"
     },
     {
+      "path": "docs/conversation_dumps/2026-08-07-v1-voice-presence-build-and-voice-rail-lessons.md",
+      "synopsis": "SO-004 capture — V1 Voice Presence governed-build debugging session + Voice Rail retirement lessons + captured voice UX ideas",
+      "bytes": 5397,
+      "mtime": "2026-08-08T00:12:07.200Z",
+      "indexed_at": "2026-08-08T00:13:11.613Z"
+    },
+    {
       "path": "docs/conversation_dumps/by-product/sessions/2a4739f2/BUILDEROS-AUTONOMOUS.md",
       "synopsis": "BuilderOS / TSOS / autonomous / alpha",
       "bytes": 85566,
@@ -43227,9 +43234,9 @@
     {
       "path": "docs/products/lifeos/communication/COMMUNICATION_SYSTEM_BLUEPRINT.md",
       "synopsis": "LifeOS Communication System — final consolidated blueprint. Source: every founder/model conversation and attachment about communication, perception, conversation, and the LifeOS cognitive interaction system.",
-      "bytes": 77457,
-      "mtime": "2026-08-07T22:57:36.108Z",
-      "indexed_at": "2026-08-07T22:59:49.540Z"
+      "bytes": 78453,
+      "mtime": "2026-08-08T00:12:38.237Z",
+      "indexed_at": "2026-08-08T00:13:11.613Z"
     },
     {
       "path": "docs/products/lifeos/communication/COMMUNICATION_SYSTEM_FOUNDER_REFERENCE.md",
@@ -43314,6 +43321,13 @@
       "bytes": 7593,
       "mtime": "2026-08-07T22:58:03.503Z",
       "indexed_at": "2026-08-07T22:59:49.540Z"
+    },
+    {
+      "path": "docs/products/lifeos/conversations/2026-08-07-v1-voice-presence-build-and-voice-rail-lessons.md",
+      "synopsis": "SO-004 capture — V1 Voice Presence governed-build debugging session + Voice Rail retirement lessons + captured voice UX ideas",
+      "bytes": 5397,
+      "mtime": "2026-08-08T00:12:01.428Z",
+      "indexed_at": "2026-08-08T00:13:11.613Z"
     },
     {
       "path": "docs/products/lifeos/CREATIVE_BRIEF.md",
