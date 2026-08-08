@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-08T12:17:16.397Z",
+  "generated_at": "2026-08-08T12:21:09.762Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13111,
   "files": [
@@ -27022,9 +27022,9 @@
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V2-EVIDENCE-FUSION-0001/BLUEPRINT.json",
       "synopsis": "Evidence Fusion Engine -- combines transcript, timing, tonality,\\n * history, and face/body signals into calibrated confidence estimates for\\n * user cognitive/emotional state, and learns per-context modality weights\\n * from labeled outcom",
-      "bytes": 12476,
-      "mtime": "2026-08-08T09:43:18.160Z",
-      "indexed_at": "2026-08-08T09:43:36.304Z",
+      "bytes": 19382,
+      "mtime": "2026-08-08T12:20:08.427Z",
+      "indexed_at": "2026-08-08T12:21:09.762Z",
       "synopsis_index_only": true
     },
     {
