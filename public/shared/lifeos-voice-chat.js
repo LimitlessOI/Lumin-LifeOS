@@ -257,6 +257,9 @@
       return;
     }
     if (synth && synth.speaking) {
+      // speechSynthesis (Web Speech API) has no native volume ramp -- an
+      // instant cancel() is the correct, honest behavior on this fallback
+      // path. Do not fake a fade here.
       synth.cancel();
     }
   }
