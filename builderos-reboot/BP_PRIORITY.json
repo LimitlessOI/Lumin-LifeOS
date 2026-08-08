@@ -598,12 +598,12 @@
       "build_method": "system-build",
       "founder_usability_pass": false,
       "receipt_verdict": "PASS",
-      "technical_pass_at": "2026-08-08T09:43:18.159Z",
-      "git_sha": "3aa7f0a501c0ae05d5b5de1550023ce7db5f8ed8",
+      "technical_pass_at": "2026-08-08T12:26:29.432Z",
+      "git_sha": "ba3c2e594d8fec539cb9c9a2bea273012b5e87c1",
       "production_base": "",
       "objective_verdict": "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V2-EVIDENCE-FUSION-0001/OBJECTIVE_VERDICT.json",
       "artifact_sync": {
-        "at": "2026-08-08T09:43:18.159Z",
+        "at": "2026-08-08T12:26:29.432Z",
         "mode": "technical_acceptance",
         "status": "CURRENT"
       }

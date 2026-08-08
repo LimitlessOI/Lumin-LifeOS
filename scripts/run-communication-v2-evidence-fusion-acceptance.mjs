@@ -118,6 +118,24 @@ async function main() {
     step('learnWeights_smoke', false, String(err?.message || err));
   }
 
+  // CV2EF-S04/S05: real-caller enforcement -- the audit that prompted this
+  // wiring found fuseEvidence built and unit-proven with ZERO live callers.
+  // A pure unit-test PASS above cannot catch that regression on its own
+  // (the function still works fine in isolation even if every caller is
+  // deleted), so this checks the actual consumer file directly.
+  const CALLER = path.join(ROOT, 'services/chair-direct-agent.js');
+  if (fs.existsSync(CALLER)) {
+    const callerSrc = fs.readFileSync(CALLER, 'utf8');
+    step('chair_direct_agent_imports_evidence_fusion',
+      /from ['"]\.\/evidence-fusion-service\.js['"]/.test(callerSrc),
+      'services/chair-direct-agent.js must import from evidence-fusion-service.js');
+    step('chair_direct_agent_calls_fuseEvidence_and_attaches_conversational_state',
+      callerSrc.includes('fuseEvidence(') && callerSrc.includes('systemFacts.conversational_state'),
+      'must actually call fuseEvidence and attach the result to systemFacts, not just import it');
+  } else {
+    step('chair_direct_agent_exists', false, CALLER);
+  }
+
   finish();
 }
 

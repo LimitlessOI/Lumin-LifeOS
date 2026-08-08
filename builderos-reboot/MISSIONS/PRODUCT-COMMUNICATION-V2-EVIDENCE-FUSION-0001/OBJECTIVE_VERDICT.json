@@ -1,11 +1,11 @@
 {
   "schema": "objective_verdict_v1",
-  "generated_at": "2026-08-08T09:43:18.159Z",
+  "generated_at": "2026-08-08T12:26:29.432Z",
   "objective_id": "PRODUCT-COMMUNICATION-V2-EVIDENCE-FUSION-0001",
   "objective_name": "Communication System V2 — Evidence Fusion & Cognitive Dynamics",
   "verdict": "OBJECTIVE_COMPLETE",
   "receipt": "products/receipts/COMMUNICATION_V2_EVIDENCE_FUSION_ACCEPTANCE.json",
-  "git_sha": "3aa7f0a501c0ae05d5b5de1550023ce7db5f8ed8",
+  "git_sha": "ba3c2e594d8fec539cb9c9a2bea273012b5e87c1",
   "tests_passed": [
     "service_file_exists",
     "service_imports_cleanly",
@@ -14,6 +14,8 @@
     "fuseEvidence_clean_celebrating",
     "fuseEvidence_empty_neutral",
     "learnWeights_smoke",
+    "chair_direct_agent_imports_evidence_fusion",
+    "chair_direct_agent_calls_fuseEvidence_and_attaches_conversational_state",
     "bp_sync_mandatory"
   ],
   "tests_failed": [],

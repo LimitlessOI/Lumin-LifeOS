@@ -1,7 +1,7 @@
 {
   "schema": "communication_v2_evidence_fusion_acceptance_v1",
   "mission_id": "PRODUCT-COMMUNICATION-V2-EVIDENCE-FUSION-0001",
-  "started_at": "2026-08-08T09:43:18.146Z",
+  "started_at": "2026-08-08T12:26:29.414Z",
   "tests_passed": [
     "service_file_exists",
     "service_imports_cleanly",
@@ -10,6 +10,8 @@
     "fuseEvidence_clean_celebrating",
     "fuseEvidence_empty_neutral",
     "learnWeights_smoke",
+    "chair_direct_agent_imports_evidence_fusion",
+    "chair_direct_agent_calls_fuseEvidence_and_attaches_conversational_state",
     "bp_sync_mandatory"
   ],
   "tests_failed": [],
@@ -18,47 +20,59 @@
       "step": "service_file_exists",
       "ok": true,
       "detail": null,
-      "at": "2026-08-08T09:43:18.147Z"
+      "at": "2026-08-08T12:26:29.415Z"
     },
     {
       "step": "service_imports_cleanly",
       "ok": true,
       "detail": null,
-      "at": "2026-08-08T09:43:18.147Z"
+      "at": "2026-08-08T12:26:29.416Z"
     },
     {
       "step": "exports_fuseEvidence_and_learnWeights",
       "ok": true,
       "detail": null,
-      "at": "2026-08-08T09:43:18.147Z"
+      "at": "2026-08-08T12:26:29.416Z"
     },
     {
       "step": "fuseEvidence_mixed_modalities",
       "ok": true,
       "detail": null,
-      "at": "2026-08-08T09:43:18.147Z"
+      "at": "2026-08-08T12:26:29.416Z"
     },
     {
       "step": "fuseEvidence_clean_celebrating",
       "ok": true,
       "detail": null,
-      "at": "2026-08-08T09:43:18.147Z"
+      "at": "2026-08-08T12:26:29.416Z"
     },
     {
       "step": "fuseEvidence_empty_neutral",
       "ok": true,
       "detail": null,
-      "at": "2026-08-08T09:43:18.147Z"
+      "at": "2026-08-08T12:26:29.416Z"
     },
     {
       "step": "learnWeights_smoke",
       "ok": true,
       "detail": null,
-      "at": "2026-08-08T09:43:18.150Z"
+      "at": "2026-08-08T12:26:29.418Z"
+    },
+    {
+      "step": "chair_direct_agent_imports_evidence_fusion",
+      "ok": true,
+      "detail": "services/chair-direct-agent.js must import from evidence-fusion-service.js",
+      "at": "2026-08-08T12:26:29.418Z"
+    },
+    {
+      "step": "chair_direct_agent_calls_fuseEvidence_and_attaches_conversational_state",
+      "ok": true,
+      "detail": "must actually call fuseEvidence and attach the result to systemFacts, not just import it",
+      "at": "2026-08-08T12:26:29.418Z"
     }
   ],
-  "completed_at": "2026-08-08T09:43:18.159Z",
-  "git_sha": "3aa7f0a501c0ae05d5b5de1550023ce7db5f8ed8",
+  "completed_at": "2026-08-08T12:26:29.432Z",
+  "git_sha": "ba3c2e594d8fec539cb9c9a2bea273012b5e87c1",
   "verdict": "PASS",
   "bp_sync": {
     "updated": [
