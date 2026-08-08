@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-08T12:21:09.762Z",
+  "generated_at": "2026-08-08T12:23:01.371Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13111,
   "files": [
@@ -91268,9 +91268,9 @@
     {
       "path": "services/chair-direct-agent.js",
       "synopsis": "Direct Chair agent — talks + acts; human prose obeys Lumin Communication DNA (not theater).",
-      "bytes": 32732,
-      "mtime": "2026-08-04T21:00:00.438Z",
-      "indexed_at": "2026-08-04T21:01:05.563Z",
+      "bytes": 32844,
+      "mtime": "2026-08-08T12:23:01.371Z",
+      "indexed_at": "2026-08-08T12:23:01.371Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
