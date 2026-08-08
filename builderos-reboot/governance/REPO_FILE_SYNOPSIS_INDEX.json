@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-08T23:34:19.626Z",
+  "generated_at": "2026-08-08T23:40:28.344Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13120,
   "files": [
@@ -26720,9 +26720,9 @@
     {
       "path": "builderos-reboot/MISSIONS/OVERLAY-ENGINE-RISK-GATE-0001/BLUEPRINT.json",
       "synopsis": "Exports isLiveAction — builderos-reboot/MISSIONS/OVERLAY-ENGINE-RISK-GATE-0001/BLUEPRINT.json.",
-      "bytes": 20663,
-      "mtime": "2026-08-08T23:32:05.983Z",
-      "indexed_at": "2026-08-08T23:34:19.626Z",
+      "bytes": 21216,
+      "mtime": "2026-08-08T23:40:21.287Z",
+      "indexed_at": "2026-08-08T23:40:28.344Z",
       "synopsis_index_only": true
     },
     {
