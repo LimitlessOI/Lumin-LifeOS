@@ -230,7 +230,16 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
                   }
                   try { fs.unlinkSync(syntaxCheckFile); } catch {}
 
-                  const importCheckFile = absTarget
+                  // ES-import-resolution check only makes sense for real ES modules.
+                  // public/** browser scripts in this repo are loaded via plain
+                  // <script src="..."> tags (confirmed: public/overlay/lifeos-app.html
+                  // loads lifeos-voice-chat.js with no type="module"), commonly as the
+                  // classic (function (global) { ... })(window) IIFE-global pattern --
+                  // Node's bare `import` of that file throws ReferenceError on `window`,
+                  // a category error, not a real bug in the generated content. Confirmed
+                  // live 2026-08-08: this false-failed a correct patch twice in a row.
+                  const isPublicBrowserScript = /^public\//.test(String(target_file || '').replace(/\\/g, '/'));
+                  const importCheckFile = (absTarget && !isPublicBrowserScript)
                     ? path.join(path.dirname(absTarget), `.factory-import-check-${Date.now()}-${process.pid}.mjs`)
                     : null;
                   if (importCheckFile) {

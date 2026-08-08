@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-08T09:13:45.839Z",
+  "generated_at": "2026-08-08T09:19:42.301Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13084,
   "files": [
@@ -42300,9 +42300,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 468140,
-      "mtime": "2026-08-08T09:10:25.086Z",
-      "indexed_at": "2026-08-08T09:13:45.839Z"
+      "bytes": 468469,
+      "mtime": "2026-08-08T09:19:24.359Z",
+      "indexed_at": "2026-08-08T09:19:42.301Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -71296,9 +71296,9 @@
     {
       "path": "routes/factory-mount-routes.js",
       "synopsis": "Pure: should the codegen prompt inline this file's existing content?",
-      "bytes": 40303,
-      "mtime": "2026-08-08T09:09:23.831Z",
-      "indexed_at": "2026-08-08T09:13:45.839Z",
+      "bytes": 41143,
+      "mtime": "2026-08-08T09:19:06.570Z",
+      "indexed_at": "2026-08-08T09:19:42.301Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
