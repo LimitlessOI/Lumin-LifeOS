@@ -111,6 +111,7 @@ export async function runBrowserGoal(opts = {}) {
     onStep = null,
     onAfterStep = null,
     maxSteps = 25,
+    allowRiskyActions = false,
   } = opts;
 
   if (!String(goal || '').trim()) throw new BrowserAgentError('runBrowserGoal requires a goal');
@@ -130,6 +131,13 @@ export async function runBrowserGoal(opts = {}) {
   // GUARDRAIL: confirm we are on the intended account/site before a live action.
   const guard = async (observation, action) => {
     if (!isLiveAction(action.type)) return { ok: true };
+    // GUARDRAIL: never click a real observed element whose own label reads as
+    // a financially/consequentially risky action, unless explicitly authorized.
+    if (isRiskyClick(action, observation) && !allowRiskyActions) {
+      const el = (observation?.elements || []).find((e) => e.selector === action.selector);
+      const label = el?.text || action.reason || action.selector || 'unknown';
+      return { ok: false, reason: `risky_action_requires_authorization:${label}` };
+    }
     if (!confirmContext || !expectedContext) return { ok: true };
     const verdict = await confirmContext({ observation, expectedContext, action });
     if (!verdict || verdict.ok !== true) {
