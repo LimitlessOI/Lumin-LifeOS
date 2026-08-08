@@ -1,6 +1,6 @@
 {
   "schema": "product_readiness_report_v1",
-  "updated_at": "2026-08-08T10:02:18.401Z",
+  "updated_at": "2026-08-08T12:16:02.349Z",
   "authority": {
     "product_registry": "docs/products/PRODUCT_REGISTRY.json",
     "bp_priority": "builderos-reboot/BP_PRIORITY.json",
@@ -711,11 +711,11 @@
           "rank": 10,
           "mission_id": "FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001",
           "blueprint_status": "complete",
-          "verdict": "TECHNICAL_PASS",
+          "verdict": "FAIL",
           "founder_usability_pass": false,
           "completion_receipt_id": null,
           "artifact_sync": {
-            "at": "2026-07-10T06:26:20.612Z",
+            "at": "2026-08-08T10:51:52.469Z",
             "mode": "technical_acceptance",
             "status": "CURRENT"
           }
@@ -741,7 +741,7 @@
           "founder_usability_pass": false,
           "completion_receipt_id": null,
           "artifact_sync": {
-            "at": "2026-08-08T10:02:18.401Z",
+            "at": "2026-08-08T12:16:02.349Z",
             "mode": "technical_acceptance",
             "status": "CURRENT"
           }
@@ -1449,7 +1449,7 @@
   ],
   "freshness": {
     "status": "CURRENT",
-    "updated_at": "2026-08-08T10:02:18.401Z",
+    "updated_at": "2026-08-08T12:16:02.349Z",
     "authority_paths": [
       "docs/products/PRODUCT_REGISTRY.json",
       "builderos-reboot/BP_PRIORITY.json",

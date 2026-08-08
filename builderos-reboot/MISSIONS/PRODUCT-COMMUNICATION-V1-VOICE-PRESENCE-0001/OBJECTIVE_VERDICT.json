@@ -1,11 +1,11 @@
 {
   "schema": "objective_verdict_v1",
-  "generated_at": "2026-08-08T10:02:18.401Z",
+  "generated_at": "2026-08-08T12:16:02.349Z",
   "objective_id": "PRODUCT-COMMUNICATION-V1-VOICE-PRESENCE-0001",
   "objective_name": "Communication System V1 — Voice Presence",
   "verdict": "OBJECTIVE_COMPLETE",
   "receipt": "products/receipts/COMMUNICATION_V1_VOICE_PRESENCE_ACCEPTANCE.json",
-  "git_sha": "edaf9f78eff00d1bdd9f3c1e02e8481d0749f525",
+  "git_sha": "e7a0b98118442d61ace447d93bc1e95ac037fc12",
   "tests_passed": [
     "blueprint_exists",
     "interaction_decision_service_exists",
@@ -16,6 +16,9 @@
     "voice_chat_documents_speechSynthesis_limitation",
     "overlay_wires_barge_in",
     "overlay_calls_fadeAndStopSpeaking",
+    "voice_chat_scheduleSilenceAutoSend_calls_computeSilenceWaitMs",
+    "voice_chat_computeSilenceWaitMs_extracted",
+    "voice_chat_confidence_wait_finished_faster_than_midthought",
     "bp_sync_mandatory"
   ],
   "tests_failed": [],

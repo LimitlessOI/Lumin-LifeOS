@@ -112,4 +112,32 @@ if (fs.existsSync(OVERLAY)) {
   step('overlay_calls_fadeAndStopSpeaking', src.includes('fadeAndStopSpeaking'), 'public/overlay/lifeos-app.html');
 }
 
+// CV1P-S06: the turn-completion confidence work (CV1P-S01) had zero live
+// callers until this step wired it into the real silence-timer auto-send
+// decision. This check is real enforcement, not a string-presence stub: it
+// extracts computeSilenceWaitMs from the actual shipped file and executes it
+// in isolation, so a future edit that reverts the wiring (e.g. re-hardcoding
+// a fixed wait) fails this acceptance run instead of silently regressing.
+if (fs.existsSync(VOICE_CHAT)) {
+  const src = fs.readFileSync(VOICE_CHAT, 'utf8');
+  step('voice_chat_scheduleSilenceAutoSend_calls_computeSilenceWaitMs',
+    /scheduleSilenceAutoSend[\s\S]{0,400}computeSilenceWaitMs\(/.test(src),
+    'silence timer must use the confidence-scaled wait, not a fixed delay');
+  const fnMatch = src.match(/function computeSilenceWaitMs\(text\) \{[\s\S]*?\n {4}\}\n/);
+  step('voice_chat_computeSilenceWaitMs_extracted', Boolean(fnMatch), 'public/shared/lifeos-voice-chat.js');
+  if (fnMatch) {
+    try {
+      // eslint-disable-next-line no-new-func
+      const fn = new Function('settings', `${fnMatch[0]}\nreturn computeSilenceWaitMs;`)({ silenceAutoSendMs: 1000 });
+      const finished = fn('I will call the bank tomorrow.');
+      const midThought = fn('so i was thinking maybe um');
+      step('voice_chat_confidence_wait_finished_faster_than_midthought',
+        typeof finished === 'number' && typeof midThought === 'number' && finished < 1000 && midThought > 1000 && finished < midThought,
+        { finished, midThought });
+    } catch (err) {
+      step('voice_chat_computeSilenceWaitMs_executes_cleanly', false, { error: err.message });
+    }
+  }
+}
+
 finish();

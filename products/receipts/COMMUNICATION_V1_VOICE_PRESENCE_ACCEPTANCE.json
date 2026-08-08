@@ -1,7 +1,7 @@
 {
   "schema": "communication_v1_voice_presence_acceptance_v1",
   "mission_id": "PRODUCT-COMMUNICATION-V1-VOICE-PRESENCE-0001",
-  "started_at": "2026-08-08T10:02:18.389Z",
+  "started_at": "2026-08-08T12:16:02.332Z",
   "tests_passed": [
     "blueprint_exists",
     "interaction_decision_service_exists",
@@ -12,6 +12,9 @@
     "voice_chat_documents_speechSynthesis_limitation",
     "overlay_wires_barge_in",
     "overlay_calls_fadeAndStopSpeaking",
+    "voice_chat_scheduleSilenceAutoSend_calls_computeSilenceWaitMs",
+    "voice_chat_computeSilenceWaitMs_extracted",
+    "voice_chat_confidence_wait_finished_faster_than_midthought",
     "bp_sync_mandatory"
   ],
   "tests_failed": [],
@@ -20,13 +23,13 @@
       "step": "blueprint_exists",
       "ok": true,
       "detail": "/private/tmp/claude-501/-Users-adamhopkins-Projects-Lumin-LifeOS/b98a9c4f-30b0-4efc-94d3-7e9a8ac44905/scratchpad/v1-build-retry/builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V1-VOICE-PRESENCE-0001/BLUEPRINT.json",
-      "at": "2026-08-08T10:02:18.390Z"
+      "at": "2026-08-08T12:16:02.333Z"
     },
     {
       "step": "interaction_decision_service_exists",
       "ok": true,
       "detail": "/private/tmp/claude-501/-Users-adamhopkins-Projects-Lumin-LifeOS/b98a9c4f-30b0-4efc-94d3-7e9a8ac44905/scratchpad/v1-build-retry/services/interaction-decision-service.js",
-      "at": "2026-08-08T10:02:18.390Z"
+      "at": "2026-08-08T12:16:02.333Z"
     },
     {
       "step": "exports_computeTurnCompletionConfidence",
@@ -36,7 +39,7 @@
           "computeTurnCompletionConfidence"
         ]
       },
-      "at": "2026-08-08T10:02:18.391Z"
+      "at": "2026-08-08T12:16:02.333Z"
     },
     {
       "step": "finished_statement_scores_higher_than_mid_thought",
@@ -45,39 +48,60 @@
         "finishedScore": 100,
         "midScore": 35
       },
-      "at": "2026-08-08T10:02:18.391Z"
+      "at": "2026-08-08T12:16:02.333Z"
     },
     {
       "step": "voice_chat_module_exists",
       "ok": true,
-      "at": "2026-08-08T10:02:18.391Z"
+      "at": "2026-08-08T12:16:02.333Z"
     },
     {
       "step": "voice_chat_has_fadeAndStopSpeaking",
       "ok": true,
       "detail": "public/shared/lifeos-voice-chat.js",
-      "at": "2026-08-08T10:02:18.391Z"
+      "at": "2026-08-08T12:16:02.333Z"
     },
     {
       "step": "voice_chat_documents_speechSynthesis_limitation",
       "ok": true,
       "detail": "must document that speechSynthesis.cancel() cannot fade, per FOUNDER_PACKET constraint",
-      "at": "2026-08-08T10:02:18.391Z"
+      "at": "2026-08-08T12:16:02.334Z"
     },
     {
       "step": "overlay_wires_barge_in",
       "ok": true,
-      "at": "2026-08-08T10:02:18.391Z"
+      "at": "2026-08-08T12:16:02.334Z"
     },
     {
       "step": "overlay_calls_fadeAndStopSpeaking",
       "ok": true,
       "detail": "public/overlay/lifeos-app.html",
-      "at": "2026-08-08T10:02:18.392Z"
+      "at": "2026-08-08T12:16:02.334Z"
+    },
+    {
+      "step": "voice_chat_scheduleSilenceAutoSend_calls_computeSilenceWaitMs",
+      "ok": true,
+      "detail": "silence timer must use the confidence-scaled wait, not a fixed delay",
+      "at": "2026-08-08T12:16:02.335Z"
+    },
+    {
+      "step": "voice_chat_computeSilenceWaitMs_extracted",
+      "ok": true,
+      "detail": "public/shared/lifeos-voice-chat.js",
+      "at": "2026-08-08T12:16:02.335Z"
+    },
+    {
+      "step": "voice_chat_confidence_wait_finished_faster_than_midthought",
+      "ok": true,
+      "detail": {
+        "finished": 400,
+        "midThought": 1600
+      },
+      "at": "2026-08-08T12:16:02.335Z"
     }
   ],
-  "completed_at": "2026-08-08T10:02:18.401Z",
-  "git_sha": "edaf9f78eff00d1bdd9f3c1e02e8481d0749f525",
+  "completed_at": "2026-08-08T12:16:02.349Z",
+  "git_sha": "e7a0b98118442d61ace447d93bc1e95ac037fc12",
   "verdict": "PASS",
   "bp_sync": {
     "updated": [
