@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-08T09:22:11.863Z",
+  "generated_at": "2026-08-08T09:23:00.145Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13084,
   "files": [
@@ -70271,9 +70271,9 @@
     {
       "path": "public/shared/lifeos-voice-chat.js",
       "synopsis": "Shared browser voice input/output controls for LifeOS chat surfaces.",
-      "bytes": 50220,
-      "mtime": "2026-08-08T09:22:11.863Z",
-      "indexed_at": "2026-08-08T09:22:11.863Z",
+      "bytes": 50266,
+      "mtime": "2026-08-08T09:23:00.145Z",
+      "indexed_at": "2026-08-08T09:23:00.145Z",
       "ssot": [
         "docs/products/command-center/PRODUCT_HOME.md"
       ]
