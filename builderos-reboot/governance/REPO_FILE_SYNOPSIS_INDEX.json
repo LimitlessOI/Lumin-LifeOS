@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-08T10:02:40.904Z",
+  "generated_at": "2026-08-08T10:56:44.360Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13111,
   "files": [
@@ -21307,9 +21307,9 @@
     {
       "path": "builderos-reboot/BP_PRIORITY.json",
       "synopsis": "BuilderOS artifact — BP PRIORITY.",
-      "bytes": 40201,
-      "mtime": "2026-08-08T10:02:18.404Z",
-      "indexed_at": "2026-08-08T10:02:40.904Z",
+      "bytes": 40166,
+      "mtime": "2026-08-08T10:56:24.541Z",
+      "indexed_at": "2026-08-08T10:56:44.360Z",
       "synopsis_index_only": true
     },
     {
@@ -23606,9 +23606,9 @@
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001/OBJECTIVE_VERDICT.json",
       "synopsis": "BuilderOS artifact — OBJECTIVE VERDICT.",
-      "bytes": 812,
-      "mtime": "2026-07-10T06:28:08.571Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 590,
+      "mtime": "2026-08-08T10:51:52.470Z",
+      "indexed_at": "2026-08-08T10:56:44.360Z",
       "synopsis_index_only": true
     },
     {
@@ -43517,9 +43517,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 808180,
-      "mtime": "2026-08-08T09:59:39.538Z",
-      "indexed_at": "2026-08-08T09:59:55.449Z"
+      "bytes": 808954,
+      "mtime": "2026-08-08T10:55:17.209Z",
+      "indexed_at": "2026-08-08T10:56:44.360Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -67517,9 +67517,9 @@
     {
       "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
       "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
-      "bytes": 7362,
-      "mtime": "2026-08-08T09:35:12.679Z",
-      "indexed_at": "2026-08-08T09:36:38.200Z",
+      "bytes": 5666,
+      "mtime": "2026-08-08T10:04:29.019Z",
+      "indexed_at": "2026-08-08T10:56:44.360Z",
       "synopsis_index_only": true
     },
     {
@@ -67541,9 +67541,9 @@
     {
       "path": "products/receipts/FOUNDER_CHAT_ALPHA_BATTERY.json",
       "synopsis": "Product receipt — FOUNDER CHAT ALPHA BATTERY.",
-      "bytes": 10445,
-      "mtime": "2026-07-10T06:28:08.584Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 1605,
+      "mtime": "2026-08-08T10:51:52.470Z",
+      "indexed_at": "2026-08-08T10:56:44.360Z",
       "synopsis_index_only": true
     },
     {
@@ -67589,9 +67589,9 @@
     {
       "path": "products/receipts/FOUNDER_UI_LOGIN_E2E.json",
       "synopsis": "Product receipt — FOUNDER UI LOGIN E2E.",
-      "bytes": 14713,
-      "mtime": "2026-08-03T09:48:06.848Z",
-      "indexed_at": "2026-08-03T09:49:03.227Z",
+      "bytes": 1223,
+      "mtime": "2026-08-08T10:51:28.191Z",
+      "indexed_at": "2026-08-08T10:56:44.360Z",
       "synopsis_index_only": true
     },
     {
@@ -71829,9 +71829,9 @@
     {
       "path": "routes/lifeos-auth-routes.js",
       "synopsis": "routes/lifeos-auth-routes.js",
-      "bytes": 46013,
-      "mtime": "2026-07-30T17:58:19.132Z",
-      "indexed_at": "2026-07-30T22:32:11.913Z",
+      "bytes": 47023,
+      "mtime": "2026-08-08T10:53:41.905Z",
+      "indexed_at": "2026-08-08T10:56:44.360Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

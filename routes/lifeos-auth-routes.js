@@ -590,6 +590,27 @@ export function createLifeOSAuthRoutes({ pool, logger, requireKey }) {
         await new Promise((r) => setTimeout(r, 2500));
         const stillOnApp = /lifeos-app\.html/i.test(page.url());
         report.steps.session_held = { ok: stillOnApp, url: page.url() };
+
+        // Audit-only, no assertion impact: report whether the Voice Presence
+        // wiring shipped 2026-08-08 (fadeAndStopSpeaking/isSpeaking on
+        // window.LifeOSVoiceChat, public/shared/lifeos-voice-chat.js) is
+        // actually live inside a real authenticated session -- the unit-level
+        // acceptance test only proves the module's own exports, never that it
+        // initializes inside the real page.
+        try {
+          const voicePresence = await page.evaluate(() => {
+            const vc = window.LifeOSVoiceChat;
+            return {
+              lifeos_voice_chat_present: Boolean(vc),
+              fadeAndStopSpeaking_is_function: typeof vc?.fadeAndStopSpeaking === 'function',
+              isSpeaking_is_function: typeof vc?.isSpeaking === 'function',
+            };
+          });
+          report.steps.voice_presence_wiring = voicePresence;
+        } catch (vErr) {
+          report.steps.voice_presence_wiring = { error: String(vErr?.message || vErr) };
+        }
+
         report.ok = Boolean(report.steps.form_login?.ok || report.steps.app_nav?.ok) && stillOnApp;
         report.blocker = report.ok ? null : 'SESSION_LOST';
         report.duration_ms = Date.now() - started;

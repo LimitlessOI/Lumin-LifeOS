@@ -1,11 +1,11 @@
 {
   "schema": "deploy_truth_verify_v1",
-  "at": "2026-08-08T09:35:12.673Z",
+  "at": "2026-08-08T10:04:29.014Z",
   "command": "drift-audit",
   "production_base": "https://lumin-web-production-e3a9.up.railway.app",
   "deploy_branch": "main",
-  "commit_sha": "5626356d3f036efd16981ed59561a1c6b70fc7d8",
-  "served_sha": "5626356d3f036efd16981ed59561a1c6b70fc7d8",
+  "commit_sha": "5afdf819909de44346ac8929b2ddc0666d697533",
+  "served_sha": "5afdf819909de44346ac8929b2ddc0666d697533",
   "verdict": "PROVEN",
   "ok": true,
   "passed": [
@@ -21,11 +21,11 @@
   "skipped": [],
   "files": [],
   "deployment": {
-    "id": "bc4907d1-a869-49ee-8cdd-4fc6aa83187d",
+    "id": "e94e97b4-94e0-4673-b374-46111bef9d85",
     "status": "SUCCESS",
-    "created_at": "2026-08-08T09:32:56.885Z",
-    "commit_sha": "5626356d3f036efd16981ed59561a1c6b70fc7d8",
-    "commit_message": "GAP-FILL: patch_mode's existing-content ceiling blocked any target file over 200KB; queue V4 Overlay Action mission\n\nHAND-AUTHORED-JUSTIFICATION for routes/factory-mount-routes.js: narrow\ncorrectness fix, no new module. Live-reproduced twice: CV1P-S03's patch-mode\ndispatch against public/overlay/lifeos-app.html (234KB) returned near-empty\noutput (90 bytes, then 480 bytes) with no syntax/import error -- meaning the\nmodel wasn't failing to generate valid content, it was failing to find\nanything to patch. Traced the actual prompt construction: PATCH MODE's own\ninstructions tell the model to copy its OLD block \"verbatim from EXISTING\nFILE CONTENT below\", but that section is gated by\nshouldIncludeExistingFileContent(), which used the same 200KB ceiling\n(MAX_EXISTING_CONTENT_BYTES) as full-file regeneration -- so for anything over\n200KB, the model was told to copy from a section that was never actually\nincluded in its prompt. This is a real prompt-construction gap, not a codegen\nquality issue, and it made patch_mode -- the feature specifically built\ntonight to handle large files safely -- silently unusable for the largest\nfiles that need it most. Gave patch_mode its own, much higher ceiling (2MB)\nsince its output size doesn't scale with input size the way full-file\nregeneration does; full-file regeneration's own 200KB ceiling is unchanged.\n\nBLUEPRINT/FOUNDER_PACKET/BP_PRIORITY/package.json changes are blueprint/spec\ntext only (SO-001 carve-out). V4 Overlay Action mission scaffolded following\nthe same minimal-real-requirements path proven for V1/V2/V3 tonight. Ports the\nalready-proven prototype scripts/prototype-overlay-action-v4.mjs (10/10\ntests), parse/approve/execute logic only -- browser session management\n(launching Puppeteer) is explicitly out of scope per the founder packet, since\nservices/browser-agent.js already exists for that.",
+    "created_at": "2026-08-08T10:02:57.273Z",
+    "commit_sha": "5afdf819909de44346ac8929b2ddc0666d697533",
+    "commit_message": "[system-build] V1 Voice Presence ACCEPTANCE PASS -- all five Communication System versions now complete\n\nReal acceptance run: npm run lifeos:communication-v1-voice-presence:acceptance\nexited 0, verdict PASS, all 7 checks passed against the real shipped code --\ncomputeTurnCompletionConfidence (real turns-array test, finishedScore:100 vs\nmidScore:35, meaningful this time after fixing the test's argument shape),\nfadeAndStopSpeaking present and documented (speechSynthesis no-fade\nlimitation now in code comments per founder packet requirement), and\nbarge-in wiring present in the overlay. BP_PRIORITY and mission BLUEPRINT\nstatus synced automatically by finishBpAcceptance.\n\nThis closes out all five Communication System Blueprint versions installed\nper founder directive (\"install all five\"): V1 Voice Presence, V2 Evidence\nFusion, V3 Perception, V4 Overlay Action, V5 Cross-Domain Personal\nIntelligence -- each independently ACCEPTANCE PASS against its own proven\nprototype's real behavior, not just file-existence checks.",
     "url": null
   },
   "runtime_identity": {
@@ -46,18 +46,18 @@
     {
       "id": "git.fetch",
       "status": "pass",
-      "detail": "origin/main is 5626356d3f03"
+      "detail": "origin/main is 5afdf819909d"
     },
     {
       "id": "local.divergence",
       "status": "pass",
       "detail": "local gapfill/v1-build-retry is aligned with origin/main",
       "local_branch": "gapfill/v1-build-retry",
-      "local_head": "5626356d3f036efd16981ed59561a1c6b70fc7d8",
-      "remote_head": "5626356d3f036efd16981ed59561a1c6b70fc7d8",
+      "local_head": "5afdf819909de44346ac8929b2ddc0666d697533",
+      "remote_head": "5afdf819909de44346ac8929b2ddc0666d697533",
       "ahead": 0,
       "behind": 0,
-      "uncommitted": 2
+      "uncommitted": 0
     },
     {
       "id": "runtime.identity",
@@ -81,20 +81,20 @@
     {
       "id": "runtime.version",
       "status": "pass",
-      "detail": "production serves 5626356d3f03, which contains origin/main (5626356d3f03)",
-      "served_sha": "5626356d3f036efd16981ed59561a1c6b70fc7d8",
-      "remote_head": "5626356d3f036efd16981ed59561a1c6b70fc7d8"
+      "detail": "production serves 5afdf819909d, which contains origin/main (5afdf819909d)",
+      "served_sha": "5afdf819909de44346ac8929b2ddc0666d697533",
+      "remote_head": "5afdf819909de44346ac8929b2ddc0666d697533"
     },
     {
       "id": "deployment.state",
       "status": "pass",
-      "detail": "latest deployment SUCCESS on 5626356d3f03, nothing in flight",
+      "detail": "latest deployment SUCCESS on 5afdf819909d, nothing in flight",
       "deployment": {
-        "id": "bc4907d1-a869-49ee-8cdd-4fc6aa83187d",
+        "id": "e94e97b4-94e0-4673-b374-46111bef9d85",
         "status": "SUCCESS",
-        "created_at": "2026-08-08T09:32:56.885Z",
-        "commit_sha": "5626356d3f036efd16981ed59561a1c6b70fc7d8",
-        "commit_message": "GAP-FILL: patch_mode's existing-content ceiling blocked any target file over 200KB; queue V4 Overlay Action mission\n\nHAND-AUTHORED-JUSTIFICATION for routes/factory-mount-routes.js: narrow\ncorrectness fix, no new module. Live-reproduced twice: CV1P-S03's patch-mode\ndispatch against public/overlay/lifeos-app.html (234KB) returned near-empty\noutput (90 bytes, then 480 bytes) with no syntax/import error -- meaning the\nmodel wasn't failing to generate valid content, it was failing to find\nanything to patch. Traced the actual prompt construction: PATCH MODE's own\ninstructions tell the model to copy its OLD block \"verbatim from EXISTING\nFILE CONTENT below\", but that section is gated by\nshouldIncludeExistingFileContent(), which used the same 200KB ceiling\n(MAX_EXISTING_CONTENT_BYTES) as full-file regeneration -- so for anything over\n200KB, the model was told to copy from a section that was never actually\nincluded in its prompt. This is a real prompt-construction gap, not a codegen\nquality issue, and it made patch_mode -- the feature specifically built\ntonight to handle large files safely -- silently unusable for the largest\nfiles that need it most. Gave patch_mode its own, much higher ceiling (2MB)\nsince its output size doesn't scale with input size the way full-file\nregeneration does; full-file regeneration's own 200KB ceiling is unchanged.\n\nBLUEPRINT/FOUNDER_PACKET/BP_PRIORITY/package.json changes are blueprint/spec\ntext only (SO-001 carve-out). V4 Overlay Action mission scaffolded following\nthe same minimal-real-requirements path proven for V1/V2/V3 tonight. Ports the\nalready-proven prototype scripts/prototype-overlay-action-v4.mjs (10/10\ntests), parse/approve/execute logic only -- browser session management\n(launching Puppeteer) is explicitly out of scope per the founder packet, since\nservices/browser-agent.js already exists for that.",
+        "created_at": "2026-08-08T10:02:57.273Z",
+        "commit_sha": "5afdf819909de44346ac8929b2ddc0666d697533",
+        "commit_message": "[system-build] V1 Voice Presence ACCEPTANCE PASS -- all five Communication System versions now complete\n\nReal acceptance run: npm run lifeos:communication-v1-voice-presence:acceptance\nexited 0, verdict PASS, all 7 checks passed against the real shipped code --\ncomputeTurnCompletionConfidence (real turns-array test, finishedScore:100 vs\nmidScore:35, meaningful this time after fixing the test's argument shape),\nfadeAndStopSpeaking present and documented (speechSynthesis no-fade\nlimitation now in code comments per founder packet requirement), and\nbarge-in wiring present in the overlay. BP_PRIORITY and mission BLUEPRINT\nstatus synced automatically by finishBpAcceptance.\n\nThis closes out all five Communication System Blueprint versions installed\nper founder directive (\"install all five\"): V1 Voice Presence, V2 Evidence\nFusion, V3 Perception, V4 Overlay Action, V5 Cross-Domain Personal\nIntelligence -- each independently ACCEPTANCE PASS against its own proven\nprototype's real behavior, not just file-existence checks.",
         "url": null
       }
     }
@@ -102,9 +102,9 @@
   "produced_by": "cursor-agent",
   "verified_by": "git+railway-api+production-http-probe",
   "verification_kind": "deterministic+external",
-  "local_head": "5626356d3f036efd16981ed59561a1c6b70fc7d8",
+  "local_head": "5afdf819909de44346ac8929b2ddc0666d697533",
   "local_branch": "gapfill/v1-build-retry",
   "ahead": 0,
   "behind": 0,
-  "human_summary": "PROVEN — production serves 5626356d3f03, which contains origin/main; no runtime drift found."
+  "human_summary": "PROVEN — production serves 5afdf819909d, which contains origin/main; no runtime drift found."
 }
