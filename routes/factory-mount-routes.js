@@ -44,10 +44,22 @@ const __dirname = path.dirname(__filename);
 const REPO_ROOT = path.resolve(__dirname, '..');
 
 export const MAX_EXISTING_CONTENT_BYTES = 200000;
+// patch_mode's whole point is efficient editing of large files via a small
+// OLD/NEW block, not full-file regeneration -- but PATCH MODE instructs the
+// model to copy its OLD block verbatim from "EXISTING FILE CONTENT below", so
+// gating that section by the SAME threshold used for full-file regeneration
+// left patch_mode structurally broken for anything over 200KB: the model was
+// told to copy from a section that was never included, and produced garbage
+// (confirmed live 2026-08-08: two straight ~100-500 byte outputs against a
+// 234KB target, both real MODEL failures caused by this real PROMPT gap, not
+// a codegen quality issue). Patch mode gets a much higher ceiling since its
+// output size doesn't scale with input size the way full regeneration does.
+export const MAX_EXISTING_CONTENT_BYTES_PATCH_MODE = 2_000_000;
 
 /** Pure: should the codegen prompt inline this file's existing content? */
-export function shouldIncludeExistingFileContent(byteSize) {
-  return Number.isFinite(byteSize) && byteSize >= 0 && byteSize <= MAX_EXISTING_CONTENT_BYTES;
+export function shouldIncludeExistingFileContent(byteSize, { patchMode = false } = {}) {
+  const ceiling = patchMode ? MAX_EXISTING_CONTENT_BYTES_PATCH_MODE : MAX_EXISTING_CONTENT_BYTES;
+  return Number.isFinite(byteSize) && byteSize >= 0 && byteSize <= ceiling;
 }
 
 export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncilMember, commitToGitHub } = {}) {
@@ -133,7 +145,7 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
           if (absTarget) {
             try {
               if (fs.existsSync(absTarget) && fs.statSync(absTarget).isFile()
-                && shouldIncludeExistingFileContent(fs.statSync(absTarget).size)) {
+                && shouldIncludeExistingFileContent(fs.statSync(absTarget).size, { patchMode: patch_mode === true })) {
                 existingFileContent = fs.readFileSync(absTarget, 'utf8');
                 existingContentLines.push('EXISTING FILE CONTENT (preserve all existing code; output the complete updated file):\n' + existingFileContent);
               }

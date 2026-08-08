@@ -1,0 +1,123 @@
+{
+  "mission_id": "PRODUCT-COMMUNICATION-V4-OVERLAY-ACTION-0001",
+  "blueprint_id": "COMMUNICATION-V4-OVERLAY-ACTION-2026-08-08",
+  "scope": "verbal_ai_director_and_overlay_action",
+  "authority": "FOUNDER_PACKET.md",
+  "acceptance_command": "npm run lifeos:communication-v4-overlay-action:acceptance",
+  "allowed_action_types": [
+    "author_then_write",
+    "shell_command"
+  ],
+  "steps": [
+    {
+      "step_id": "CV4OA-S01",
+      "phase_id": "P0",
+      "title": "Overlay Action service: port parseCommand/resolveSelector/approvePlan/executePlan into a real, callable service",
+      "target_file": "services/overlay-action-service.js",
+      "target_files": [
+        "services/overlay-action-service.js"
+      ],
+      "action_type": "author_then_write",
+      "ssot": "docs/products/lifeos/PRODUCT_HOME.md",
+      "task": "Create services/overlay-action-service.js exporting parseCommand, resolveSelector, approvePlan, and executePlan -- a deterministic port of the already-proven prototype scripts/prototype-overlay-action-v4.mjs (10/10 tests), EXCLUDING runOverlayAction (which launches its own browser -- out of scope per founder packet). No AI/model call anywhere in this file. Do not include the prototype's self-test auto-execution code, dotenv/assert/fs/path imports (unused once runOverlayAction is excluded), or the `let puppeteer;` module-level variable (also unused).",
+      "spec": "Port the following EXACT reference implementation (already proven, 10/10 tests, scripts/prototype-overlay-action-v4.mjs) into services/overlay-action-service.js. Do not change any parsing regex, risky-target list, or approval logic -- output the file below verbatim, character for character, including the header comment. Note this port deliberately OMITS the prototype's runOverlayAction() function (which launches its own Puppeteer browser) -- executePlan(page, plan) takes an already-connected page instead, per the founder packet's explicit scope boundary:\n\n/**\n * SYNOPSIS: Overlay Action Engine -- parses a natural-language command into a\n * deterministic, auditable plan, gates risky actions behind explicit\n * confirmation, and executes the plan against an already-connected page\n * object. Ported from the proven prototype (scripts/prototype-overlay-action-v4.mjs,\n * 10/10 tests) -- same algorithm, no changes to parsing/approval logic.\n * Browser session management (launching/connecting a page) is intentionally\n * out of scope here -- executePlan takes an already-connected page (e.g. from\n * services/browser-agent.js) rather than launching its own.\n * @ssot docs/products/lifeos/PRODUCT_HOME.md\n */\n\nexport function parseCommand(command, context = {}) {\n  const lower = String(command || '').toLowerCase();\n  const steps = [];\n\n  const clauses = String(command || '').split(/(?:\\s+and\\s+|\\s*,\\s+|\\s+then\\s+)/i);\n\n  for (let clause of clauses) {\n    clause = clause.trim().replace(/^(?:please|ok|okay|now)\\s+/i, '');\n    if (!clause) continue;\n\n    let m = clause.match(/^(?:(?:fill|set|put)\\s+(?:the\\s+)?|the\\s+)(?<field>[A-Za-z0-9 ]+?)\\s+(?:with|to|as)\\s+(?<value>.+)$/i);\n    if (!m && /\\b(?:type|enter)\\b/i.test(clause)) {\n      m = clause.match(/^(?:type|enter)\\s*(?<value>[^,]+?)\\s+(?:into|in)\\s+(?:the\\s+)?(?<field>[A-Za-z0-9 ]+?)$/i);\n    }\n    if (m) {\n      const value = m.groups.value.replace(/\\s+(?:stop|before|do\\s+not|and\\s+then|and\\s+select|and\\s+click|and\\s+go|then\\s+select|then\\s+click).*/i, '').trim();\n      steps.push({ action: 'fill', field: m.groups.field.trim(), value, reason: `parsed \"${m.groups.field.trim()}\" = \"${value}\"` });\n      continue;\n    }\n\n    m = clause.match(/^(?:select|choose|pick)?\\s*(?:the\\s+)?(?<option>[^,]+?)\\s+(?:from|in)\\s+(?:the\\s+)?(?<field>[A-Za-z0-9 ]+?)$/i);\n    if (m) {\n      steps.push({ action: 'select', field: m.groups.field.trim().replace(/\\s+(?:drop\\s*down|menu|list)$/i, ''), option: m.groups.option.trim(), reason: 'parsed select option' });\n      continue;\n    }\n\n    m = clause.match(/^(?:click|press|tap)\\s*(?:the\\s+)?(?<target>[A-Za-z0-9 ]+?)(?:\\s+button|\\s+link|\\s+tab)?$/i);\n    if (m) {\n      steps.push({ action: 'click', target: m.groups.target.trim(), reason: 'parsed click intent' });\n      continue;\n    }\n\n    m = clause.match(/^(?:go|navigate)?\\s+(?:to|over)\\s+(?:the\\s+)?(?<page>[A-Za-z0-9 ]+?)(?:\\s+page|\\s+tab|\\s+screen)?$/i);\n    if (m) {\n      steps.push({ action: 'navigate', target: m.groups.page.trim(), reason: 'parsed navigation' });\n      continue;\n    }\n  }\n\n  if (/\\bstop\\b|\\bdo\\s+not\\s+(?:submit|click)\\b|\\bbefore\\s+(?:submitting|clicking)\\b|wait\\s+for\\s+confirmation/i.test(lower)) {\n    steps.push({ action: 'stop', reason: 'explicit stop / confirmation gate detected' });\n  }\n\n  return { intent: steps.length ? 'action_plan' : 'unknown', steps, command, context };\n}\n\nexport function resolveSelector(step, available = {}) {\n  const synonyms = {\n    fullname: 'input[name=\"fullName\"],#fullName,input[name=\"name\"]',\n    name: 'input[name=\"fullName\"],#fullName,input[name=\"name\"]',\n    email: 'input[name=\"email\"],#email,input[type=\"email\"]',\n    phone: 'input[name=\"phone\"],#phone',\n    budget: 'input[name=\"budget\"],#budget',\n    plan: 'select[name=\"plan\"],#plan',\n    confirm: 'input[name=\"confirm\"],#confirm',\n    submit: '#submitBtn,[type=\"submit\"]',\n    reset: '#resetBtn',\n    settings: 'a[href*=\"setting\"],button:has-text(\"settings\")',\n  };\n  const key = (step.field || step.target || step.option || '').toLowerCase().replace(/\\s+/g, '');\n  if (synonyms[key]) return synonyms[key];\n  return available[key] || `input[name=\"${key}\"],#${key}`;\n}\n\nexport function approvePlan(plan, policy = { requireConfirm: true }) {\n  const risky = ['submit', 'delete', 'purchase', 'pay', 'confirm'];\n  const hasRisk = plan.steps.some((s) => s.action === 'click' && risky.some((r) => (s.target || '').toLowerCase().includes(r)));\n  const hasStop = plan.steps.some((s) => s.action === 'stop');\n  return {\n    approved: !hasRisk || hasStop,\n    hasRisk,\n    hasStop,\n    requiresConfirmation: hasRisk,\n  };\n}\n\nexport async function executePlan(page, plan) {\n  const receipt = { command: plan.command, startedAt: new Date().toISOString(), steps: [] };\n  const approval = approvePlan(plan);\n  if (!approval.approved) throw new Error(`Risky action requires explicit stop/confirmation: ${JSON.stringify(plan)}`);\n\n  for (const step of plan.steps) {\n    const entry = { ...step, timestamp: new Date().toISOString() };\n    if (step.action === 'stop') {\n      entry.result = 'stopped_before_risky_action';\n      receipt.steps.push(entry);\n      break;\n    }\n\n    if (step.action === 'fill') {\n      const sel = resolveSelector(step);\n      await page.locator(sel).fill(step.value);\n      entry.result = 'filled';\n      entry.selector = sel;\n    } else if (step.action === 'select') {\n      const sel = resolveSelector(step);\n      await page.locator(sel).selectOption(step.option);\n      entry.result = 'selected';\n      entry.selector = sel;\n    } else if (step.action === 'click') {\n      const risky = ['submit', 'delete', 'purchase', 'pay', 'confirm'];\n      if (risky.some((r) => (step.target || '').toLowerCase().includes(r))) {\n        entry.result = 'blocked_pending_confirmation';\n        receipt.steps.push(entry);\n        break;\n      }\n      const sel = resolveSelector(step);\n      await page.locator(sel).click();\n      entry.result = 'clicked';\n      entry.selector = sel;\n    } else if (step.action === 'navigate') {\n      const target = step.target.toLowerCase().replace(/\\s/g, '-');\n      await page.goto(`${page.url().split('/').slice(0, -1).join('/')}/${target}.html`);\n      entry.result = 'navigated';\n    } else {\n      entry.result = 'skipped_unsupported';\n    }\n    receipt.steps.push(entry);\n  }\n\n  receipt.completedAt = new Date().toISOString();\n  return receipt;\n}\n",
+      "assertion_spec": {
+        "expected_exports": [
+          "parseCommand",
+          "resolveSelector",
+          "approvePlan",
+          "executePlan"
+        ]
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "target": "services/overlay-action-service.js",
+          "exports": [
+            "parseCommand",
+            "resolveSelector",
+            "approvePlan",
+            "executePlan"
+          ]
+        },
+        {
+          "type": "function_behavior_test",
+          "target": "services/overlay-action-service.js",
+          "export": "parseCommand",
+          "args_list": [
+            "Fill the full name with Alice Smith and stop before submitting"
+          ],
+          "expect": {
+            "intent": "action_plan",
+            "steps": [
+              {
+                "action": "fill",
+                "field": "full name",
+                "value": "Alice Smith",
+                "reason": "parsed \"full name\" = \"Alice Smith\""
+              },
+              {
+                "action": "stop",
+                "reason": "explicit stop / confirmation gate detected"
+              }
+            ]
+          }
+        },
+        {
+          "type": "function_behavior_test",
+          "target": "services/overlay-action-service.js",
+          "export": "approvePlan",
+          "args_list": [
+            {
+              "steps": [
+                {
+                  "action": "click",
+                  "target": "submit"
+                }
+              ]
+            },
+            {
+              "requireConfirm": true
+            }
+          ],
+          "expect": {
+            "approved": false,
+            "hasRisk": true,
+            "hasStop": false,
+            "requiresConfirmation": true
+          }
+        }
+      ],
+      "sandbox_boundary": "services/**",
+      "authority_owner": "Builder",
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "dependencies": [],
+      "non_goals": [
+        "launching or managing a browser session -- executePlan takes an already-connected page",
+        "any AI/model call -- this must remain deterministic like the proven prototype",
+        "wiring into services/browser-agent.js or any live product surface (deferred)",
+        "redesigning the risky-action list or approval policy shape"
+      ],
+      "status": "pending"
+    },
+    {
+      "step_id": "CV4OA-S02",
+      "phase_id": "P1",
+      "title": "Run acceptance until PASS",
+      "action_type": "shell_command",
+      "target_file": "products/receipts/COMMUNICATION_V4_OVERLAY_ACTION_ACCEPTANCE.json",
+      "target_files": [
+        "products/receipts/COMMUNICATION_V4_OVERLAY_ACTION_ACCEPTANCE.json"
+      ],
+      "command": "npm run lifeos:communication-v4-overlay-action:acceptance",
+      "sandbox_boundary": "products/receipts/**",
+      "authority_owner": "Builder",
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "dependencies": [
+        "CV4OA-S01"
+      ],
+      "status": "pending"
+    }
+  ],
+  "blueprint_status": "pending"
+}

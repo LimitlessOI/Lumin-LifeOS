@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-08T09:26:28.090Z",
+  "generated_at": "2026-08-08T09:32:39.291Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13089,
+  "file_count": 13094,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21307,9 +21307,9 @@
     {
       "path": "builderos-reboot/BP_PRIORITY.json",
       "synopsis": "BuilderOS artifact — BP PRIORITY.",
-      "bytes": 36320,
-      "mtime": "2026-08-08T09:25:45.506Z",
-      "indexed_at": "2026-08-08T09:26:28.090Z",
+      "bytes": 37543,
+      "mtime": "2026-08-08T09:31:54.945Z",
+      "indexed_at": "2026-08-08T09:32:39.291Z",
       "synopsis_index_only": true
     },
     {
@@ -27079,6 +27079,37 @@
       "bytes": 2236,
       "mtime": "2026-08-08T09:20:49.875Z",
       "indexed_at": "2026-08-08T09:26:28.090Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V4-OVERLAY-ACTION-0001/BLUEPRINT.json",
+      "synopsis": "Overlay Action Engine -- parses a natural-language command into a\\n * deterministic, auditable plan, gates risky actions behind explicit\\n * confirmation, and executes the plan against an already-connected page\\n * object. Ported from the p",
+      "bytes": 11056,
+      "mtime": "2026-08-08T09:28:59.640Z",
+      "indexed_at": "2026-08-08T09:32:39.291Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V4-OVERLAY-ACTION-0001/DELIBERATION_GATE.json",
+      "synopsis": "BuilderOS artifact — DELIBERATION GATE.",
+      "bytes": 1447,
+      "mtime": "2026-08-08T09:30:10.129Z",
+      "indexed_at": "2026-08-08T09:32:39.291Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V4-OVERLAY-ACTION-0001/FOUNDER_PACKET.md",
+      "synopsis": "Founder Packet — Communication System V4: Verbal AI Director & Autonomous Overlay Action",
+      "bytes": 4297,
+      "mtime": "2026-08-08T09:28:06.620Z",
+      "indexed_at": "2026-08-08T09:32:39.291Z"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V4-OVERLAY-ACTION-0001/INTENT_BASELINE.json",
+      "synopsis": "BuilderOS artifact — INTENT BASELINE.",
+      "bytes": 2235,
+      "mtime": "2026-08-08T09:28:18.501Z",
+      "indexed_at": "2026-08-08T09:32:39.291Z",
       "synopsis_index_only": true
     },
     {
@@ -42331,9 +42362,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 468916,
-      "mtime": "2026-08-08T09:26:03.997Z",
-      "indexed_at": "2026-08-08T09:26:28.090Z"
+      "bytes": 469480,
+      "mtime": "2026-08-08T09:32:08.779Z",
+      "indexed_at": "2026-08-08T09:32:39.291Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -66921,9 +66952,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\":\"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",\"lifeos:file-synopsis:backfill\":\"node scripts/file-synopsis-enforce.mjs --all --auto-fix && node scripts/generate-file-synopsis-index.mjs\",\"lifeos:file-synopsis:index\":\"n",
-      "bytes": 34890,
-      "mtime": "2026-08-08T09:25:45.487Z",
-      "indexed_at": "2026-08-08T09:26:28.090Z",
+      "bytes": 35008,
+      "mtime": "2026-08-08T09:31:54.926Z",
+      "indexed_at": "2026-08-08T09:32:39.291Z",
       "synopsis_index_only": true
     },
     {
@@ -67391,9 +67422,9 @@
     {
       "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
       "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
-      "bytes": 5676,
-      "mtime": "2026-08-07T23:44:00.379Z",
-      "indexed_at": "2026-08-07T23:49:57.856Z",
+      "bytes": 7288,
+      "mtime": "2026-08-08T09:29:07.686Z",
+      "indexed_at": "2026-08-08T09:32:39.291Z",
       "synopsis_index_only": true
     },
     {
@@ -71327,9 +71358,9 @@
     {
       "path": "routes/factory-mount-routes.js",
       "synopsis": "Pure: should the codegen prompt inline this file's existing content?",
-      "bytes": 41143,
-      "mtime": "2026-08-08T09:19:06.570Z",
-      "indexed_at": "2026-08-08T09:19:42.301Z",
+      "bytes": 42122,
+      "mtime": "2026-08-08T09:31:33.891Z",
+      "indexed_at": "2026-08-08T09:32:39.291Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -76997,6 +77028,16 @@
       "bytes": 4476,
       "mtime": "2026-08-08T09:25:27.752Z",
       "indexed_at": "2026-08-08T09:26:28.090Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/run-communication-v4-overlay-action-acceptance.mjs",
+      "synopsis": "Communication System V4 (Overlay Action) acceptance.",
+      "bytes": 4672,
+      "mtime": "2026-08-08T09:29:36.538Z",
+      "indexed_at": "2026-08-08T09:32:39.291Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

@@ -605,6 +605,23 @@
       "note": "Third of 5 Communication System Blueprint versions being installed per founder directive 2026-08-06/07/08 (\"install all five\"). V3: Perception -- face/body/biometric evidence under explicit consent, layered on V2's Evidence Fusion. Ports scripts/prototype-perception-v3.mjs (27/27 tests). Depends on V2 (services/evidence-fusion-service.js) already shipped.",
       "build_method": "system-build",
       "founder_usability_pass": false
+    },
+    {
+      "rank": 23,
+      "mission_id": "PRODUCT-COMMUNICATION-V4-OVERLAY-ACTION-0001",
+      "product_id": "lifeos",
+      "product_home": "docs/products/lifeos/",
+      "product_ssot": "docs/products/lifeos/PRODUCT_SSOT.md",
+      "objective_home": "docs/products/lifeos/OBJECTIVES/",
+      "founder_packet": "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V4-OVERLAY-ACTION-0001/FOUNDER_PACKET.md",
+      "blueprint_path": "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V4-OVERLAY-ACTION-0001/BLUEPRINT.json",
+      "blueprint_status": "pending",
+      "acceptance_command": "npm run lifeos:communication-v4-overlay-action:acceptance",
+      "receipt_path": "products/receipts/COMMUNICATION_V4_OVERLAY_ACTION_ACCEPTANCE.json",
+      "verdict": "PENDING",
+      "note": "Fourth of 5 Communication System Blueprint versions being installed per founder directive 2026-08-06/07/08 (\"install all five\"). V4: Overlay Action -- verbal command parsing into deterministic, auditable plans; risky actions gated behind explicit confirmation. Ports scripts/prototype-overlay-action-v4.mjs (10/10 tests), parse/approve/execute logic only.",
+      "build_method": "system-build",
+      "founder_usability_pass": false
     }
   ],
   "_last_updated": "2026-08-02",
