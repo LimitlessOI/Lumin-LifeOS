@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-08T09:49:46.379Z",
+  "generated_at": "2026-08-08T09:55:50.920Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13111,
   "files": [
@@ -69321,9 +69321,9 @@
     {
       "path": "public/overlay/lifeos-app.html",
       "synopsis": "HTML page: LifeOS",
-      "bytes": 233971,
-      "mtime": "2026-08-07T22:37:00.254Z",
-      "indexed_at": "2026-08-07T22:37:00.254Z"
+      "bytes": 234240,
+      "mtime": "2026-08-08T09:55:50.920Z",
+      "indexed_at": "2026-08-08T09:55:50.920Z"
     },
     {
       "path": "public/overlay/lifeos-ask-your-life.html",
