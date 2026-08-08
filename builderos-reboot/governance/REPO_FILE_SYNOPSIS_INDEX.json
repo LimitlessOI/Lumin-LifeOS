@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-08T10:56:44.360Z",
+  "generated_at": "2026-08-08T12:10:20.801Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13111,
   "files": [
@@ -26863,9 +26863,9 @@
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V1-VOICE-PRESENCE-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
-      "bytes": 15796,
-      "mtime": "2026-08-08T10:02:18.403Z",
-      "indexed_at": "2026-08-08T10:02:40.904Z",
+      "bytes": 20275,
+      "mtime": "2026-08-08T12:10:13.564Z",
+      "indexed_at": "2026-08-08T12:10:20.801Z",
       "synopsis_index_only": true
     },
     {
