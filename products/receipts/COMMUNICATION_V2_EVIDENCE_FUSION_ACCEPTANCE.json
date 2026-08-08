@@ -1,0 +1,75 @@
+{
+  "schema": "communication_v2_evidence_fusion_acceptance_v1",
+  "mission_id": "PRODUCT-COMMUNICATION-V2-EVIDENCE-FUSION-0001",
+  "started_at": "2026-08-08T09:43:18.146Z",
+  "tests_passed": [
+    "service_file_exists",
+    "service_imports_cleanly",
+    "exports_fuseEvidence_and_learnWeights",
+    "fuseEvidence_mixed_modalities",
+    "fuseEvidence_clean_celebrating",
+    "fuseEvidence_empty_neutral",
+    "learnWeights_smoke",
+    "bp_sync_mandatory"
+  ],
+  "tests_failed": [],
+  "steps": [
+    {
+      "step": "service_file_exists",
+      "ok": true,
+      "detail": null,
+      "at": "2026-08-08T09:43:18.147Z"
+    },
+    {
+      "step": "service_imports_cleanly",
+      "ok": true,
+      "detail": null,
+      "at": "2026-08-08T09:43:18.147Z"
+    },
+    {
+      "step": "exports_fuseEvidence_and_learnWeights",
+      "ok": true,
+      "detail": null,
+      "at": "2026-08-08T09:43:18.147Z"
+    },
+    {
+      "step": "fuseEvidence_mixed_modalities",
+      "ok": true,
+      "detail": null,
+      "at": "2026-08-08T09:43:18.147Z"
+    },
+    {
+      "step": "fuseEvidence_clean_celebrating",
+      "ok": true,
+      "detail": null,
+      "at": "2026-08-08T09:43:18.147Z"
+    },
+    {
+      "step": "fuseEvidence_empty_neutral",
+      "ok": true,
+      "detail": null,
+      "at": "2026-08-08T09:43:18.147Z"
+    },
+    {
+      "step": "learnWeights_smoke",
+      "ok": true,
+      "detail": null,
+      "at": "2026-08-08T09:43:18.150Z"
+    }
+  ],
+  "completed_at": "2026-08-08T09:43:18.159Z",
+  "git_sha": "3aa7f0a501c0ae05d5b5de1550023ce7db5f8ed8",
+  "verdict": "PASS",
+  "bp_sync": {
+    "updated": [
+      "builderos-reboot/BP_PRIORITY.json",
+      "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V2-EVIDENCE-FUSION-0001/BLUEPRINT.json"
+    ],
+    "skipped": []
+  },
+  "artifact_sync": {
+    "mode": "technical_acceptance",
+    "readiness_report": "builderos-reboot/PRODUCT_READINESS_REPORT.json",
+    "freshness_status": "CURRENT"
+  }
+}

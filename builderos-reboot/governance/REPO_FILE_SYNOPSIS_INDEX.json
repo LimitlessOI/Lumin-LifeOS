@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-08T09:42:30.563Z",
+  "generated_at": "2026-08-08T09:43:36.304Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13100,
+  "file_count": 13102,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21307,9 +21307,9 @@
     {
       "path": "builderos-reboot/BP_PRIORITY.json",
       "synopsis": "BuilderOS artifact — BP PRIORITY.",
-      "bytes": 38736,
-      "mtime": "2026-08-08T09:35:41.152Z",
-      "indexed_at": "2026-08-08T09:36:38.200Z",
+      "bytes": 38976,
+      "mtime": "2026-08-08T09:43:18.161Z",
+      "indexed_at": "2026-08-08T09:43:36.304Z",
       "synopsis_index_only": true
     },
     {
@@ -27022,9 +27022,9 @@
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V2-EVIDENCE-FUSION-0001/BLUEPRINT.json",
       "synopsis": "Evidence Fusion Engine -- combines transcript, timing, tonality,\\n * history, and face/body signals into calibrated confidence estimates for\\n * user cognitive/emotional state, and learns per-context modality weights\\n * from labeled outcom",
-      "bytes": 11967,
-      "mtime": "2026-08-08T09:12:18.094Z",
-      "indexed_at": "2026-08-08T09:13:45.839Z",
+      "bytes": 12476,
+      "mtime": "2026-08-08T09:43:18.160Z",
+      "indexed_at": "2026-08-08T09:43:36.304Z",
       "synopsis_index_only": true
     },
     {
@@ -27048,6 +27048,14 @@
       "bytes": 2265,
       "mtime": "2026-08-08T09:06:33.460Z",
       "indexed_at": "2026-08-08T09:13:45.839Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V2-EVIDENCE-FUSION-0001/OBJECTIVE_VERDICT.json",
+      "synopsis": "BuilderOS artifact — OBJECTIVE VERDICT.",
+      "bytes": 845,
+      "mtime": "2026-08-08T09:43:18.165Z",
+      "indexed_at": "2026-08-08T09:43:36.304Z",
       "synopsis_index_only": true
     },
     {
@@ -30496,9 +30504,9 @@
     {
       "path": "builderos-reboot/PRODUCT_READINESS_REPORT.json",
       "synopsis": "BuilderOS artifact — PRODUCT READINESS REPORT.",
-      "bytes": 35732,
-      "mtime": "2026-08-02T15:26:11.792Z",
-      "indexed_at": "2026-08-02T15:26:11.792Z",
+      "bytes": 51012,
+      "mtime": "2026-08-08T09:43:18.165Z",
+      "indexed_at": "2026-08-08T09:43:36.304Z",
       "synopsis_index_only": true
     },
     {
@@ -67320,6 +67328,14 @@
       "bytes": 2082,
       "mtime": "2026-08-07T03:36:30.820Z",
       "indexed_at": "2026-08-07T03:41:15.097Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/COMMUNICATION_V2_EVIDENCE_FUSION_ACCEPTANCE.json",
+      "synopsis": "Product receipt — COMMUNICATION V2 EVIDENCE FUSION ACCEPTANCE.",
+      "bytes": 1946,
+      "mtime": "2026-08-08T09:43:18.165Z",
+      "indexed_at": "2026-08-08T09:43:36.304Z",
       "synopsis_index_only": true
     },
     {
