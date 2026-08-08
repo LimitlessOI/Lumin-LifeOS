@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-08T23:56:26.999Z",
+  "generated_at": "2026-08-08T23:58:12.897Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13120,
   "files": [
@@ -93873,9 +93873,9 @@
     {
       "path": "services/general-browser-agent.js",
       "synopsis": "General goal-driven browser agent — the loop that lets the system",
-      "bytes": 9181,
-      "mtime": "2026-07-10T22:02:00.600Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 9699,
+      "mtime": "2026-08-08T23:58:12.897Z",
+      "indexed_at": "2026-08-08T23:58:12.897Z",
       "ssot": [
         "docs/products/tc-service/PRODUCT_HOME.md"
       ]
