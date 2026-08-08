@@ -599,23 +599,28 @@ ${text.slice(0, 24000)}`;
           bound = { ...s };
         } else {
           const twin = loaded.step;
+          // Twin (the committed blueprint step) is authoritative over the caller's
+          // request body for every field the blueprint actually declares -- was a
+          // hardcoded per-field whitelist here (target_file/task/spec/assertion_spec/
+          // expected_exports/behavior_assertions/action_type/exact_inputs only), so
+          // any newly-used blueprint field (patch_mode, ssot, ...) silently never
+          // reached dispatch. Confirmed live 2026-08-08: CV1P-S02's blueprint-declared
+          // patch_mode:true was dropped here, so a 1369-line file kept going through
+          // full-file regeneration (which failed twice on an unrelated truncation)
+          // instead of the safer patch it was configured to use. Full twin spread
+          // fixes this for every field, present and future, in one place. Ephemeral
+          // per-call fields the blueprint never declares (last_error, model_escalation)
+          // still pass through untouched since twin has no key to overwrite them with.
           bound = {
             ...s,
+            ...twin,
             step_id: s.step_id || sid,
             blueprint_step_id: sid,
             blueprint_id,
-            target_file: twin.target_file || s.target_file,
-            task: twin.task || s.task,
-            spec: twin.spec || s.spec,
-            assertion_spec: twin.assertion_spec || s.assertion_spec,
-            expected_exports: twin.expected_exports || s.expected_exports,
-            behavior_assertions: twin.behavior_assertions || s.behavior_assertions,
-            action_type: twin.action_type || s.action_type,
-            exact_inputs: twin.exact_inputs || s.exact_inputs,
-            sandbox_boundary: s.sandbox_boundary || (twin.target_file
-              ? `${String(twin.target_file).split('/')[0]}/**`
-              : s.sandbox_boundary),
           };
+          if (!bound.sandbox_boundary && twin.target_file) {
+            bound.sandbox_boundary = `${String(twin.target_file).split('/')[0]}/**`;
+          }
         }
         if (escalationTiers) {
           bound.authoring = {

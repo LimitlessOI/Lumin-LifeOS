@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-08T08:54:07.114Z",
+  "generated_at": "2026-08-08T09:13:45.839Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13079,
+  "file_count": 13084,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21307,9 +21307,9 @@
     {
       "path": "builderos-reboot/BP_PRIORITY.json",
       "synopsis": "BuilderOS artifact — BP PRIORITY.",
-      "bytes": 29409,
-      "mtime": "2026-08-07T03:35:06.773Z",
-      "indexed_at": "2026-08-07T03:41:15.097Z",
+      "bytes": 35115,
+      "mtime": "2026-08-08T09:11:15.872Z",
+      "indexed_at": "2026-08-08T09:13:45.839Z",
       "synopsis_index_only": true
     },
     {
@@ -26863,9 +26863,9 @@
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V1-VOICE-PRESENCE-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
-      "bytes": 10069,
-      "mtime": "2026-08-08T08:53:51.784Z",
-      "indexed_at": "2026-08-08T08:54:07.114Z",
+      "bytes": 12014,
+      "mtime": "2026-08-08T09:08:31.785Z",
+      "indexed_at": "2026-08-08T09:13:45.839Z",
       "synopsis_index_only": true
     },
     {
@@ -27017,6 +27017,37 @@
       "bytes": 1239,
       "mtime": "2026-08-07T22:29:05.630Z",
       "indexed_at": "2026-08-07T22:32:25.096Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V2-EVIDENCE-FUSION-0001/BLUEPRINT.json",
+      "synopsis": "Evidence Fusion Engine -- combines transcript, timing, tonality,\\n * history, and face/body signals into calibrated confidence estimates for\\n * user cognitive/emotional state, and learns per-context modality weights\\n * from labeled outcom",
+      "bytes": 11967,
+      "mtime": "2026-08-08T09:12:18.094Z",
+      "indexed_at": "2026-08-08T09:13:45.839Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V2-EVIDENCE-FUSION-0001/DELIBERATION_GATE.json",
+      "synopsis": "BuilderOS artifact — DELIBERATION GATE.",
+      "bytes": 1544,
+      "mtime": "2026-08-08T09:09:47.705Z",
+      "indexed_at": "2026-08-08T09:13:45.839Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V2-EVIDENCE-FUSION-0001/FOUNDER_PACKET.md",
+      "synopsis": "Founder Packet — Communication System V2: Evidence Fusion & Cognitive Dynamics",
+      "bytes": 5433,
+      "mtime": "2026-08-08T09:06:21.047Z",
+      "indexed_at": "2026-08-08T09:13:45.839Z"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-COMMUNICATION-V2-EVIDENCE-FUSION-0001/INTENT_BASELINE.json",
+      "synopsis": "BuilderOS artifact — INTENT BASELINE.",
+      "bytes": 2265,
+      "mtime": "2026-08-08T09:06:33.460Z",
+      "indexed_at": "2026-08-08T09:13:45.839Z",
       "synopsis_index_only": true
     },
     {
@@ -42269,9 +42300,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 467807,
-      "mtime": "2026-08-08T00:21:40.078Z",
-      "indexed_at": "2026-08-08T00:22:14.430Z"
+      "bytes": 468140,
+      "mtime": "2026-08-08T09:10:25.086Z",
+      "indexed_at": "2026-08-08T09:13:45.839Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -66859,9 +66890,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\":\"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",\"lifeos:file-synopsis:backfill\":\"node scripts/file-synopsis-enforce.mjs --all --auto-fix && node scripts/generate-file-synopsis-index.mjs\",\"lifeos:file-synopsis:index\":\"n",
-      "bytes": 34660,
-      "mtime": "2026-08-07T03:34:00.683Z",
-      "indexed_at": "2026-08-07T03:41:15.097Z",
+      "bytes": 34780,
+      "mtime": "2026-08-08T09:11:27.494Z",
+      "indexed_at": "2026-08-08T09:13:45.839Z",
       "synopsis_index_only": true
     },
     {
@@ -71265,9 +71296,9 @@
     {
       "path": "routes/factory-mount-routes.js",
       "synopsis": "Pure: should the codegen prompt inline this file's existing content?",
-      "bytes": 39758,
-      "mtime": "2026-08-08T00:20:20.168Z",
-      "indexed_at": "2026-08-08T00:22:14.430Z",
+      "bytes": 40303,
+      "mtime": "2026-08-08T09:09:23.831Z",
+      "indexed_at": "2026-08-08T09:13:45.839Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -76915,6 +76946,16 @@
       "bytes": 4779,
       "mtime": "2026-08-07T03:40:50.563Z",
       "indexed_at": "2026-08-07T03:41:15.097Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/run-communication-v2-evidence-fusion-acceptance.mjs",
+      "synopsis": "Communication System V2 (Evidence Fusion) acceptance.",
+      "bytes": 5142,
+      "mtime": "2026-08-08T09:13:01.626Z",
+      "indexed_at": "2026-08-08T09:13:45.839Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

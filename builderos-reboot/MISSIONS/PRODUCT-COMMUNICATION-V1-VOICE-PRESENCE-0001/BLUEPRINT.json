@@ -15,7 +15,9 @@
       "phase_id": "P0",
       "title": "Interaction Decision service: port fuseTurnCompletion into a real, callable service",
       "target_file": "services/interaction-decision-service.js",
-      "target_files": ["services/interaction-decision-service.js"],
+      "target_files": [
+        "services/interaction-decision-service.js"
+      ],
       "action_type": "author_then_write",
       "ssot": "docs/products/lifeos/PRODUCT_HOME.md",
       "task": "Create services/interaction-decision-service.js exporting computeTurnCompletionConfidence(turns, options), a deterministic port of fuseTurnCompletion from scripts/prototype-conversational-contracts-v1.mjs (39/39-proven scoring: +25 finalTranscript, +35/-15 trailing punctuation, +15/-35 trailing filler word, up to +30 scaled by pauseMs vs minimumPauseMs (default 600), +5 if previous turn was assistant; score clamped 0-100; finished = score >= threshold (default 90)). No AI/model call anywhere in this file.",
@@ -29,27 +31,59 @@
         {
           "type": "exports_smoke",
           "target": "services/interaction-decision-service.js",
-          "exports": ["computeTurnCompletionConfidence"]
+          "exports": [
+            "computeTurnCompletionConfidence"
+          ]
         },
         {
           "type": "function_behavior_test",
           "target": "services/interaction-decision-service.js",
           "export": "computeTurnCompletionConfidence",
           "args_list": [
-            [{ "role": "assistant", "text": "ok", "ts": 0 }, { "role": "user", "text": "okay great.", "ts": 1000 }],
-            { "currentIndex": 1, "pauseMs": 700, "finalTranscript": true }
+            [
+              {
+                "role": "assistant",
+                "text": "ok",
+                "ts": 0
+              },
+              {
+                "role": "user",
+                "text": "okay great.",
+                "ts": 1000
+              }
+            ],
+            {
+              "currentIndex": 1,
+              "pauseMs": 700,
+              "finalTranscript": true
+            }
           ],
-          "expect": { "finished": true, "confidence": 100 }
+          "expect": {
+            "finished": true,
+            "confidence": 100
+          }
         },
         {
           "type": "function_behavior_test",
           "target": "services/interaction-decision-service.js",
           "export": "computeTurnCompletionConfidence",
           "args_list": [
-            [{ "role": "user", "text": "so i was thinking maybe um", "ts": 0 }],
-            { "currentIndex": 0, "pauseMs": 100, "finalTranscript": true }
+            [
+              {
+                "role": "user",
+                "text": "so i was thinking maybe um",
+                "ts": 0
+              }
+            ],
+            {
+              "currentIndex": 0,
+              "pauseMs": 100,
+              "finalTranscript": true
+            }
           ],
-          "expect": { "finished": false }
+          "expect": {
+            "finished": false
+          }
         }
       ],
       "sandbox_boundary": "services/**",
@@ -66,12 +100,15 @@
     {
       "step_id": "CV1P-S02",
       "phase_id": "P1",
-      "title": "Graceful TTS interruption decay in the shared voice-chat module",
+      "title": "Graceful TTS interruption decay in the shared voice-chat module (patch: insert function)",
       "target_file": "public/shared/lifeos-voice-chat.js",
-      "target_files": ["public/shared/lifeos-voice-chat.js"],
+      "target_files": [
+        "public/shared/lifeos-voice-chat.js"
+      ],
       "action_type": "author_then_write",
-      "task": "Add exactly one new function, fadeAndStopSpeaking(options), to public/shared/lifeos-voice-chat.js, and expose it on the global.LifeOSVoiceChat export object. Do not modify, remove, or reformat any other existing line in the file -- this is a pure addition. The file is a browser-only IIFE (no ES module exports), so add the function as a normal function declaration inside the same (function (global) { ... })(...) scope as the existing stopSpeaking/isSpeaking functions, and reuse the existing module-level `activeServerAudio` variable and `synth` constant already defined in this file -- do not redeclare them.",
-      "spec": "Insert this function immediately after the existing stopSpeaking() function (do not touch stopSpeaking or isSpeaking themselves):\n\nfunction fadeAndStopSpeaking(options) {\n  const opts = options || {};\n  const fadeMs = typeof opts.fadeMs === 'number' ? opts.fadeMs : 150;\n  if (activeServerAudio) {\n    const audio = activeServerAudio;\n    const startVolume = audio.volume;\n    const steps = 10;\n    const stepMs = Math.max(1, Math.floor(fadeMs / steps));\n    let step = 0;\n    const timer = setInterval(function () {\n      step += 1;\n      const nextVolume = Math.max(0, startVolume * (1 - step / steps));\n      try { audio.volume = nextVolume; } catch (_) {}\n      if (step >= steps) {\n        clearInterval(timer);\n        try { audio.pause(); } catch (_) {}\n        if (activeServerAudio === audio) activeServerAudio = null;\n      }\n    }, stepMs);\n    return;\n  }\n  if (synth && synth.speaking) {\n    synth.cancel();\n  }\n}\n\nThen add `fadeAndStopSpeaking: fadeAndStopSpeaking,` to the `global.LifeOSVoiceChat = { ... }` object literal near the end of the file, on its own line right after the existing `stopSpeaking: stopSpeaking,` line. IMPORTANT: on the speechSynthesis (Web Speech API) path there is no native volume ramp -- calling synth.cancel() immediately (no fade) is the correct, honest behavior, not a bug; do not attempt to fake a fade on that path. Return the COMPLETE file with every existing line unchanged plus this one addition in the two places named above.",
+      "patch_mode": true,
+      "task": "Insert the fadeAndStopSpeaking function into public/shared/lifeos-voice-chat.js using PATCH MODE (OLD/NEW block), not a full-file rewrite -- the file is 1369 lines and full-file regeneration has failed twice on an unrelated syntax error. Output ONLY the OLD/NEW patch block, nothing else.",
+      "spec": "Output in PATCH MODE ONLY (per the PATCH MODE instructions given to you): the OLD block below must be copied EXACTLY character-for-character (it is given to you verbatim from the real current file -- do not retype or reformat it), and the NEW block is that same text with one new function, fadeAndStopSpeaking, inserted between stopSpeaking and isSpeaking.\n\nOLD:\n  function stopSpeaking() {\n    stopServerAudio();\n    if (synth) synth.cancel();\n  }\n\n  function isSpeaking() {\n\nNEW:\n  function stopSpeaking() {\n    stopServerAudio();\n    if (synth) synth.cancel();\n  }\n\n  function fadeAndStopSpeaking(options) {\n    const opts = options || {};\n    const fadeMs = typeof opts.fadeMs === 'number' ? opts.fadeMs : 150;\n    if (activeServerAudio) {\n      const audio = activeServerAudio;\n      const startVolume = audio.volume;\n      const steps = 10;\n      const stepMs = Math.max(1, Math.floor(fadeMs / steps));\n      let step = 0;\n      const timer = setInterval(function () {\n        step += 1;\n        const nextVolume = Math.max(0, startVolume * (1 - step / steps));\n        try { audio.volume = nextVolume; } catch (_) {}\n        if (step >= steps) {\n          clearInterval(timer);\n          try { audio.pause(); } catch (_) {}\n          if (activeServerAudio === audio) activeServerAudio = null;\n        }\n      }, stepMs);\n      return;\n    }\n    if (synth && synth.speaking) {\n      synth.cancel();\n    }\n  }\n\n  function isSpeaking() {\n\nfadeAndStopSpeaking ramps activeServerAudio.volume down over ~150ms in 10 steps then pauses and clears activeServerAudio (server-TTS path); on the speechSynthesis path there is no native volume ramp so it calls synth.cancel() immediately -- that is the correct, honest behavior, not a bug.",
       "assertion_spec": {
         "expected_exports": [],
         "file_contains": [
@@ -86,7 +123,37 @@
         "CV1P-S01"
       ],
       "non_goals": [
-        "faking a volume fade on the speechSynthesis (Web Speech API) path -- it has no native ramp; that path must stop immediately and this must be documented in code comments, not worked around"
+        "faking a volume fade on the speechSynthesis (Web Speech API) path -- it has no native ramp; that path must stop immediately and this must be documented in code comments, not worked around",
+        "a full-file rewrite -- use patch mode only"
+      ],
+      "status": "pending"
+    },
+    {
+      "step_id": "CV1P-S02b",
+      "phase_id": "P1",
+      "title": "Graceful TTS interruption decay (patch: expose fadeAndStopSpeaking on global.LifeOSVoiceChat)",
+      "target_file": "public/shared/lifeos-voice-chat.js",
+      "target_files": [
+        "public/shared/lifeos-voice-chat.js"
+      ],
+      "action_type": "author_then_write",
+      "patch_mode": true,
+      "task": "Expose fadeAndStopSpeaking (already added by CV1P-S02) on the global.LifeOSVoiceChat export object literal, using PATCH MODE only.",
+      "spec": "Output in PATCH MODE ONLY: the OLD block below must be copied EXACTLY character-for-character from the real current file, and the NEW block adds fadeAndStopSpeaking to the exported object.\n\nOLD:\n    stopSpeaking: stopSpeaking,\n    isSpeaking: isSpeaking,\n\nNEW:\n    stopSpeaking: stopSpeaking,\n    fadeAndStopSpeaking: fadeAndStopSpeaking,\n    isSpeaking: isSpeaking,",
+      "assertion_spec": {
+        "expected_exports": [],
+        "file_contains": [
+          "fadeAndStopSpeaking: fadeAndStopSpeaking"
+        ]
+      },
+      "sandbox_boundary": "public/shared/**",
+      "authority_owner": "Builder",
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "dependencies": [
+        "CV1P-S02"
+      ],
+      "non_goals": [
+        "a full-file rewrite -- use patch mode only"
       ],
       "status": "pending"
     },
@@ -95,7 +162,9 @@
       "phase_id": "P2",
       "title": "Wire barge-in detection: auto-trigger graceful decay when the user speaks while Chair's TTS is playing",
       "target_file": "public/overlay/lifeos-app.html",
-      "target_files": ["public/overlay/lifeos-app.html"],
+      "target_files": [
+        "public/overlay/lifeos-app.html"
+      ],
       "action_type": "builder_build",
       "assertion_spec": {
         "expected_exports": [],
@@ -108,7 +177,7 @@
       "authority_owner": "Builder",
       "on_block": "BLOCKED_RETURN_TO_ARC",
       "dependencies": [
-        "CV1P-S02"
+        "CV1P-S02b"
       ],
       "non_goals": [
         "any change to the existing STT quality-feedback-loop code shipped earlier tonight (services/voice-rail-stt.js, routes/lifeos-voice-rail-routes.js, the lumin-stt-quality banner)",
@@ -121,7 +190,9 @@
       "phase_id": "P3",
       "title": "Acceptance command + PASS receipt writer",
       "target_file": "scripts/run-communication-v1-voice-presence-acceptance.mjs",
-      "target_files": ["scripts/run-communication-v1-voice-presence-acceptance.mjs"],
+      "target_files": [
+        "scripts/run-communication-v1-voice-presence-acceptance.mjs"
+      ],
       "action_type": "builder_build",
       "assertion_spec": {
         "file_contains": [
@@ -143,7 +214,9 @@
       "title": "Run acceptance until PASS",
       "action_type": "shell_command",
       "target_file": "products/receipts/COMMUNICATION_V1_VOICE_PRESENCE_ACCEPTANCE.json",
-      "target_files": ["products/receipts/COMMUNICATION_V1_VOICE_PRESENCE_ACCEPTANCE.json"],
+      "target_files": [
+        "products/receipts/COMMUNICATION_V1_VOICE_PRESENCE_ACCEPTANCE.json"
+      ],
       "command": "npm run lifeos:communication-v1-voice-presence:acceptance",
       "sandbox_boundary": "products/receipts/**",
       "authority_owner": "Builder",
