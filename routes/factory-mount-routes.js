@@ -82,7 +82,19 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
     importModule: async (relPath) => {
       const target = resolveRepoPath(relPath);
       if (!fs.existsSync(target)) return undefined;
-      const mod = await import(pathToFileURL(target).href);
+      // Cache-bust: Node's ESM loader caches by resolved URL, so re-importing
+      // the same path without a unique query string returns whatever version
+      // was FIRST imported into this process (often at server boot, for any
+      // file already in the live route/service graph) -- never the content
+      // this dispatch just wrote to disk. Confirmed live 2026-08-08: 5
+      // consecutive SENTRY_FAILED attempts against services/general-browser-agent.js
+      // (a boot-time-imported file) all reported the identical stale
+      // missing_exports failure regardless of model tier, patch vs full-regen,
+      // or genuinely different generated content (different sha256 each time)
+      // -- SENTRY was verifying the pre-dispatch cached module, not the write.
+      // Brand-new (never-before-imported) files never hit this, which is why
+      // it didn't surface during tonight's earlier greenfield service builds.
+      const mod = await import(`${pathToFileURL(target).href}?t=${Date.now()}`);
       return mod;
     },
     reload: async (target) => {
