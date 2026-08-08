@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-08T23:48:54.889Z",
+  "generated_at": "2026-08-08T23:52:19.925Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13120,
   "files": [
@@ -26719,10 +26719,10 @@
     },
     {
       "path": "builderos-reboot/MISSIONS/OVERLAY-ENGINE-RISK-GATE-0001/BLUEPRINT.json",
-      "synopsis": "General goal-driven browser agent \\u2014 the loop that lets the system\\n * operate an ARBITRARY website like a human instead of a hand-written selector\\n * script per site. Given a goal, it observes the live page, asks a (cheapest-tier\\n * ",
-      "bytes": 30682,
-      "mtime": "2026-08-08T23:48:32.781Z",
-      "indexed_at": "2026-08-08T23:48:54.889Z",
+      "synopsis": "@ssot docs/products/tc-service/PRODUCT_HOME.md\\n",
+      "bytes": 19226,
+      "mtime": "2026-08-08T23:52:09.124Z",
+      "indexed_at": "2026-08-08T23:52:19.925Z",
       "synopsis_index_only": true
     },
     {
