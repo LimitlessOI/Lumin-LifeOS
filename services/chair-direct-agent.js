@@ -8,6 +8,7 @@ import { formatThreadForPrompt } from './lumin-thread-context.js';
 import { formatExecutionTruthReply } from './lifeos-execution-truth.js';
 import { isCounselPresenceIntent } from './chair-intent-signals.js';
 import { resolveGroundedDirectAnswer } from './chair-lumin-unified.js';
+import { fuseEvidence, extractTranscriptEvidence, extractHistoryEvidence } from './evidence-fusion-service.js';
 import {
   enforceCommunicationLaw,
   loadLuminCommunicationLaw,
