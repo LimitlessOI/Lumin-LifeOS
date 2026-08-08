@@ -1,0 +1,261 @@
+{
+  "mission_id": "OVERLAY-ENGINE-RISK-GATE-0001",
+  "blueprint_id": "OVERLAY-ENGINE-RISK-GATE-2026-08-08",
+  "scope": "overlay_engine_risk_authorization_gate",
+  "authority": "FOUNDER_PACKET.md",
+  "acceptance_command": "npm run overlay:engine-risk-gate:acceptance",
+  "allowed_action_types": [
+    "builder_build",
+    "author_then_write",
+    "shell_command"
+  ],
+  "steps": [
+    {
+      "step_id": "RGE-S01",
+      "phase_id": "P0",
+      "title": "Overlay risk gate: add RISKY_ACTION_LABEL_PATTERNS + isRiskyClick (patch 1 of 3)",
+      "target_file": "services/general-browser-agent.js",
+      "target_files": [
+        "services/general-browser-agent.js"
+      ],
+      "action_type": "author_then_write",
+      "patch_mode": true,
+      "task": "Insert a RISKY_ACTION_LABEL_PATTERNS constant and isRiskyClick(action, observation) function into services/general-browser-agent.js using PATCH MODE (OLD/NEW block), not a full-file rewrite.",
+      "spec": "Output in PATCH MODE ONLY: the OLD block below must be copied EXACTLY character-for-character from the real current file. NEW inserts RISKY_ACTION_LABEL_PATTERNS (a frozen array of regexes matching risky action labels: buy now, purchase, place order, complete purchase/order/checkout, confirm purchase/order/payment, pay/pay now, checkout, delete, remove account, cancel subscription, close account) and isRiskyClick(action, observation) (returns false for non-click actions; otherwise looks up the real observed element by action.selector in observation.elements, reads its .text label (falling back to action.reason), and returns true if any pattern matches) between the existing isLiveAction function and the JSDoc comment for runBrowserGoal. Exact text below, no other change.\n\nOLD:\nexport function isLiveAction(type) {\n  return type === 'navigate' || type === 'click' || type === 'type';\n}\n\n/**\n * Run a goal on a live browser via the observe -> decide -> act loop.\n\nNEW:\nexport function isLiveAction(type) {\n  return type === 'navigate' || type === 'click' || type === 'type';\n}\n\n/**\n * Financially/consequentially risky action labels -- matched against the REAL\n * observed element text (from observation.elements), not the raw action\n * object, since decideAction's `selector` is usually a generic `#id` or\n * `tag:nth-of-type(N)` with no semantic meaning on its own.\n */\nexport const RISKY_ACTION_LABEL_PATTERNS = Object.freeze([\n  /\\bbuy now\\b/i,\n  /\\bpurchase\\b/i,\n  /\\bplace order\\b/i,\n  /\\bcomplete (?:purchase|order|checkout)\\b/i,\n  /\\bconfirm (?:purchase|order|payment)\\b/i,\n  /\\bpay(?:\\s+now)?\\b/i,\n  /\\bcheckout\\b/i,\n  /\\bdelete\\b/i,\n  /\\bremove account\\b/i,\n  /\\bcancel subscription\\b/i,\n  /\\bclose account\\b/i,\n]);\n\n/**\n * Whether a click action targets a real observed element whose own label\n * matches a risky-action pattern. Only `click` is checked -- typing into a\n * field (e.g. an address or promo code) is not itself the point of no\n * return; the risky moment is the confirming click.\n */\nexport function isRiskyClick(action, observation) {\n  if (!action || action.type !== 'click') return false;\n  const el = (observation?.elements || []).find((e) => e.selector === action.selector);\n  const label = String(el?.text || action.reason || '');\n  return RISKY_ACTION_LABEL_PATTERNS.some((re) => re.test(label));\n}\n\n/**\n * Run a goal on a live browser via the observe -> decide -> act loop.\n",
+      "assertion_spec": {
+        "expected_exports": [
+          "isRiskyClick",
+          "RISKY_ACTION_LABEL_PATTERNS"
+        ],
+        "file_contains": [
+          "export function isRiskyClick",
+          "RISKY_ACTION_LABEL_PATTERNS"
+        ]
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "target": "services/general-browser-agent.js",
+          "exports": [
+            "runBrowserGoal",
+            "normalizeAction",
+            "isLiveAction",
+            "isRiskyClick",
+            "RISKY_ACTION_LABEL_PATTERNS",
+            "BROWSER_ACTIONS"
+          ]
+        },
+        {
+          "type": "function_behavior_test",
+          "target": "services/general-browser-agent.js",
+          "export": "isRiskyClick",
+          "args_list": [
+            {
+              "type": "click",
+              "selector": "#buy-btn-142"
+            },
+            {
+              "url": "x",
+              "elements": [
+                {
+                  "selector": "#buy-btn-142",
+                  "text": "Complete Purchase"
+                }
+              ]
+            }
+          ],
+          "expect": true
+        },
+        {
+          "type": "function_behavior_test",
+          "target": "services/general-browser-agent.js",
+          "export": "isRiskyClick",
+          "args_list": [
+            {
+              "type": "click",
+              "selector": "#login-btn"
+            },
+            {
+              "url": "x",
+              "elements": [
+                {
+                  "selector": "#login-btn",
+                  "text": "Log In"
+                }
+              ]
+            }
+          ],
+          "expect": false
+        }
+      ],
+      "sandbox_boundary": "services/**",
+      "authority_owner": "Builder",
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "dependencies": [],
+      "non_goals": [
+        "a full-file rewrite -- use patch mode only",
+        "checking `type` actions -- only click is the point of no return"
+      ],
+      "status": "pending"
+    },
+    {
+      "step_id": "RGE-S02",
+      "phase_id": "P0",
+      "title": "Overlay risk gate: wire allowRiskyActions + risk check into guard() (patch 2 of 3)",
+      "target_file": "services/general-browser-agent.js",
+      "target_files": [
+        "services/general-browser-agent.js"
+      ],
+      "action_type": "author_then_write",
+      "patch_mode": true,
+      "task": "Add an allowRiskyActions opt (default false) to runBrowserGoal and check isRiskyClick inside the existing guard() function, blocking fail-closed unless explicitly authorized, using PATCH MODE.",
+      "spec": "Output in PATCH MODE ONLY: the OLD block below must be copied EXACTLY character-for-character from the real current file (it spans the opts destructure through the end of the existing guard function -- copy it exactly). NEW adds `allowRiskyActions = false` to the destructured opts, and inside guard(), right after the isLiveAction early-return and BEFORE the existing confirmContext check, adds a new check: if isRiskyClick(action, observation) is true and allowRiskyActions is not true, return { ok: false, reason: `risky_action_requires_authorization:${label}` } where label is the real observed element's .text (looked up from observation.elements by action.selector), falling back to action.reason, then action.selector, then 'unknown'. This must run BEFORE confirmContext so a risky action is blocked even when confirmContext would have passed. Depends on RGE-S01 (isRiskyClick must already exist in this file). Exact text below, no other change to the rest of the function.\n\nOLD:\n  const {\n    goal,\n    startUrl = null,\n    expectedContext = null,\n    observe,\n    decideAction,\n    act,\n    verifyGoal,\n    confirmContext = null,\n    onStep = null,\n    onAfterStep = null,\n    maxSteps = 25,\n  } = opts;\n\n  if (!String(goal || '').trim()) throw new BrowserAgentError('runBrowserGoal requires a goal');\n  assertFn(observe, 'observe');\n  assertFn(decideAction, 'decideAction');\n  assertFn(act, 'act');\n  assertFn(verifyGoal, 'verifyGoal');\n\n  const steps = [];\n  const templateSteps = [];\n\n  const record = async (rec) => {\n    steps.push(rec);\n    if (onStep) await onStep(rec);\n  };\n\n  // GUARDRAIL: confirm we are on the intended account/site before a live action.\n  const guard = async (observation, action) => {\n    if (!isLiveAction(action.type)) return { ok: true };\n    if (!confirmContext || !expectedContext) return { ok: true };\n    const verdict = await confirmContext({ observation, expectedContext, action });\n    if (!verdict || verdict.ok !== true) {\n      return { ok: false, reason: `context_unconfirmed:${verdict?.reason || 'unknown'}` };\n    }\n    return { ok: true };\n  };\n\nNEW:\n  const {\n    goal,\n    startUrl = null,\n    expectedContext = null,\n    observe,\n    decideAction,\n    act,\n    verifyGoal,\n    confirmContext = null,\n    onStep = null,\n    onAfterStep = null,\n    maxSteps = 25,\n    allowRiskyActions = false,\n  } = opts;\n\n  if (!String(goal || '').trim()) throw new BrowserAgentError('runBrowserGoal requires a goal');\n  assertFn(observe, 'observe');\n  assertFn(decideAction, 'decideAction');\n  assertFn(act, 'act');\n  assertFn(verifyGoal, 'verifyGoal');\n\n  const steps = [];\n  const templateSteps = [];\n\n  const record = async (rec) => {\n    steps.push(rec);\n    if (onStep) await onStep(rec);\n  };\n\n  // GUARDRAIL: confirm we are on the intended account/site before a live action.\n  const guard = async (observation, action) => {\n    if (!isLiveAction(action.type)) return { ok: true };\n    // GUARDRAIL: never click a real observed element whose own label reads as\n    // a financially/consequentially risky action, unless explicitly authorized.\n    if (isRiskyClick(action, observation) && !allowRiskyActions) {\n      const el = (observation?.elements || []).find((e) => e.selector === action.selector);\n      const label = el?.text || action.reason || action.selector || 'unknown';\n      return { ok: false, reason: `risky_action_requires_authorization:${label}` };\n    }\n    if (!confirmContext || !expectedContext) return { ok: true };\n    const verdict = await confirmContext({ observation, expectedContext, action });\n    if (!verdict || verdict.ok !== true) {\n      return { ok: false, reason: `context_unconfirmed:${verdict?.reason || 'unknown'}` };\n    }\n    return { ok: true };\n  };\n",
+      "assertion_spec": {
+        "expected_exports": [
+          "runBrowserGoal"
+        ],
+        "file_contains": [
+          "allowRiskyActions",
+          "risky_action_requires_authorization"
+        ]
+      },
+      "sandbox_boundary": "services/**",
+      "authority_owner": "Builder",
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "dependencies": [
+        "RGE-S01"
+      ],
+      "non_goals": [
+        "a full-file rewrite -- use patch mode only",
+        "changing the existing confirmContext guardrail's own behavior"
+      ],
+      "status": "pending"
+    },
+    {
+      "step_id": "RGE-S03",
+      "phase_id": "P0",
+      "title": "Overlay risk gate: add new exports to default export (patch 3 of 3)",
+      "target_file": "services/general-browser-agent.js",
+      "target_files": [
+        "services/general-browser-agent.js"
+      ],
+      "action_type": "author_then_write",
+      "patch_mode": true,
+      "task": "Add isRiskyClick and RISKY_ACTION_LABEL_PATTERNS to the file's default export object, using PATCH MODE.",
+      "spec": "Output in PATCH MODE ONLY: the OLD block below must be copied EXACTLY character-for-character from the real current file. NEW adds isRiskyClick and RISKY_ACTION_LABEL_PATTERNS to the default export object, keeping every existing key. Exact text below, no other change.\n\nOLD:\nexport default { runBrowserGoal, normalizeAction, isLiveAction, BROWSER_ACTIONS, BrowserAgentError };\n\nNEW:\nexport default { runBrowserGoal, normalizeAction, isLiveAction, isRiskyClick, RISKY_ACTION_LABEL_PATTERNS, BROWSER_ACTIONS, BrowserAgentError };\n",
+      "assertion_spec": {
+        "expected_exports": [],
+        "file_contains": [
+          "isRiskyClick, RISKY_ACTION_LABEL_PATTERNS"
+        ]
+      },
+      "sandbox_boundary": "services/**",
+      "authority_owner": "Builder",
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "dependencies": [
+        "RGE-S01"
+      ],
+      "non_goals": [
+        "a full-file rewrite -- use patch mode only"
+      ],
+      "status": "pending"
+    },
+    {
+      "step_id": "RGE-S04",
+      "phase_id": "P1",
+      "title": "Overlay risk gate: thread allowRiskyActions through runGoalOnSession",
+      "target_file": "services/general-browser-agent-live.js",
+      "target_files": [
+        "services/general-browser-agent-live.js"
+      ],
+      "action_type": "author_then_write",
+      "task": "Add allowRiskyActions param to runGoalOnSession and pass it through to runBrowserGoal.",
+      "spec": "Write the EXACT file content given below, character for character -- this is a small (56-line), already-correct wrapper file getting exactly one change: a new `allowRiskyActions = false` parameter added to the destructured options (right after maxSteps) and threaded through into the runBrowserGoal(...) call at the bottom (right after confirmContext). Every other line is byte-identical to the current file. Do not reformat, do not change quote style, do not add/remove blank lines beyond what's shown.\n\n=== EXACT FILE CONTENT ===\n/**\n * SYNOPSIS: @ssot docs/products/tc-service/PRODUCT_HOME.md\n */\n// @ssot docs/products/tc-service/PRODUCT_HOME.md\nimport { runBrowserGoal } from './general-browser-agent.js';\nimport { observePage, makeDecider, makeEvidenceVerifier, makeAccountConfirmer, executeAction } from './general-browser-agent-runtime.js';\n\nexport async function runGoalOnSession({\n    session,\n    goal,\n    startUrl = null,\n    callModel,\n    tiers = ['cerebras_llama', 'openai', 'claude_sonnet'],\n    mustContain = [],\n    mustHaveSelector = [],\n    expectSiteHost = null,\n    expectAccountText = null,\n    maxSteps = 20,\n    allowRiskyActions = false,\n    onScreenshot = null,\n    onAfterStep = null,\n    logger = console\n}) {\n    const observe = async () => observePage(session);\n    const decideAction = makeDecider({ callModel, tiers });\n    const act = async (action) => executeAction(session, action);\n    const verifyGoal = makeEvidenceVerifier({ mustContain, mustHaveSelector });\n    const confirmContext = expectSiteHost || expectAccountText ? makeAccountConfirmer({ expectSiteHost, expectAccountText }) : null;\n    const expectedContext = expectSiteHost || expectAccountText ? { site: expectSiteHost, account: expectAccountText } : null;\n\n    const onStep = async (rec) => {\n        try {\n            if (session.screenshot) {\n                const shot = await session.screenshot('step-' + (rec.step ?? 'x')).catch(() => null);\n                if (typeof onScreenshot === 'function') {\n                    await onScreenshot({ step: rec.step, action: rec.action, screenshot: shot });\n                }\n            }\n        } catch (e) {\n            // Guard against any errors in onStep\n        }\n    };\n\n    return await runBrowserGoal({\n        goal,\n        startUrl,\n        expectedContext,\n        observe,\n        decideAction,\n        act,\n        verifyGoal,\n        confirmContext,\n        allowRiskyActions,\n        onStep,\n        onAfterStep,\n        maxSteps\n    });\n}\n",
+      "assertion_spec": {
+        "expected_exports": [
+          "runGoalOnSession"
+        ],
+        "file_contains": [
+          "allowRiskyActions"
+        ]
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "target": "services/general-browser-agent-live.js",
+          "exports": [
+            "runGoalOnSession"
+          ]
+        }
+      ],
+      "sandbox_boundary": "services/**",
+      "authority_owner": "Builder",
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "dependencies": [
+        "RGE-S02"
+      ],
+      "non_goals": [
+        "changing any other behavior of this wrapper"
+      ],
+      "status": "pending"
+    },
+    {
+      "step_id": "RGE-S05",
+      "phase_id": "P1",
+      "title": "Overlay risk gate: accept allowRiskyActions on POST /api/v1/browser-agent/run (patch 1 of 2)",
+      "target_file": "routes/general-browser-agent-routes.js",
+      "target_files": [
+        "routes/general-browser-agent-routes.js"
+      ],
+      "action_type": "author_then_write",
+      "patch_mode": true,
+      "task": "Accept an allowRiskyActions field (default false) from the request body on POST /api/v1/browser-agent/run, using PATCH MODE.",
+      "spec": "Output in PATCH MODE ONLY: the OLD block below must be copied EXACTLY character-for-character from the real current file. NEW adds `allowRiskyActions = false` to the destructured req.body, with a short comment explaining it must be explicitly opted into. Exact text below, no other change.\n\nOLD:\n    const {\n      goal,\n      url = null,\n      startUrl = null,\n      site = null,\n      vaultService = null,\n      /** Inject login from tip process.env \u2014 e.g. WRM_WIX \u2192 WRM_WIX_EMAIL + WRM_WIX_PASSWORD (never echo values). */\n      envCreds = null,\n      mustContain = [],\n      mustHaveSelector = [],\n      expectSiteHost = null,\n      expectAccountText = null,\n      maxSteps = 20,\n    } = req.body || {};\n\nNEW:\n    const {\n      goal,\n      url = null,\n      startUrl = null,\n      site = null,\n      vaultService = null,\n      /** Inject login from tip process.env \u2014 e.g. WRM_WIX \u2192 WRM_WIX_EMAIL + WRM_WIX_PASSWORD (never echo values). */\n      envCreds = null,\n      mustContain = [],\n      mustHaveSelector = [],\n      expectSiteHost = null,\n      expectAccountText = null,\n      maxSteps = 20,\n      /** Explicit opt-in required for the overlay engine to click a real observed\n       *  buy/purchase/pay/checkout/delete/cancel-labeled element. Default false. */\n      allowRiskyActions = false,\n    } = req.body || {};\n",
+      "assertion_spec": {
+        "expected_exports": [],
+        "file_contains": [
+          "allowRiskyActions = false"
+        ]
+      },
+      "sandbox_boundary": "routes/**",
+      "authority_owner": "Builder",
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "dependencies": [],
+      "non_goals": [
+        "a full-file rewrite -- use patch mode only"
+      ],
+      "status": "pending"
+    },
+    {
+      "step_id": "RGE-S06",
+      "phase_id": "P1",
+      "title": "Overlay risk gate: pass allowRiskyActions into runGoalOnSession (patch 2 of 2)",
+      "target_file": "routes/general-browser-agent-routes.js",
+      "target_files": [
+        "routes/general-browser-agent-routes.js"
+      ],
+      "action_type": "author_then_write",
+      "patch_mode": true,
+      "task": "Pass allowRiskyActions through to the runGoalOnSession call in the /run handler, using PATCH MODE.",
+      "spec": "Output in PATCH MODE ONLY: the OLD block below must be copied EXACTLY character-for-character from the real current file (this is the FIRST occurrence of this exact runGoalOnSession call -- the one inside the main goal-loop try block, NOT the wrm-wix-dns-cutover or signup handlers further down which have different call shapes). NEW adds `allowRiskyActions: allowRiskyActions === true,` right after `maxSteps: stepCap,`. Exact text below, no other change.\n\nOLD:\n      const result = await runGoalOnSession({\n        session,\n        goal: effectiveGoal,\n        startUrl: targetUrl || startUrl,\n        callModel,\n        tiers: ['groq_llama', 'gemini_flash', 'cerebras_llama', 'openai_gpt', 'claude_sonnet'],\n        mustContain,\n        mustHaveSelector,\n        expectSiteHost: host || expectSiteHost,\n        expectAccountText,\n        maxSteps: stepCap,\n        onScreenshot: ({ step, screenshot }) => { if (screenshot) screenshots.push({ step, screenshot }); },\n        logger,\n      });\n\nNEW:\n      const result = await runGoalOnSession({\n        session,\n        goal: effectiveGoal,\n        startUrl: targetUrl || startUrl,\n        callModel,\n        tiers: ['groq_llama', 'gemini_flash', 'cerebras_llama', 'openai_gpt', 'claude_sonnet'],\n        mustContain,\n        mustHaveSelector,\n        expectSiteHost: host || expectSiteHost,\n        expectAccountText,\n        maxSteps: stepCap,\n        allowRiskyActions: allowRiskyActions === true,\n        onScreenshot: ({ step, screenshot }) => { if (screenshot) screenshots.push({ step, screenshot }); },\n        logger,\n      });\n",
+      "assertion_spec": {
+        "expected_exports": [],
+        "file_contains": [
+          "allowRiskyActions: allowRiskyActions === true"
+        ]
+      },
+      "sandbox_boundary": "routes/**",
+      "authority_owner": "Builder",
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "dependencies": [
+        "RGE-S05",
+        "RGE-S04"
+      ],
+      "non_goals": [
+        "a full-file rewrite -- use patch mode only",
+        "touching the wrm-wix-dns-cutover or signup handlers"
+      ],
+      "status": "pending"
+    }
+  ]
+}

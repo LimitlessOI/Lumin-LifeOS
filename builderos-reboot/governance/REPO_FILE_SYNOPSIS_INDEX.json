@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-08T23:18:12.196Z",
+  "generated_at": "2026-08-08T23:34:19.626Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13115,
+  "file_count": 13120,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21307,9 +21307,9 @@
     {
       "path": "builderos-reboot/BP_PRIORITY.json",
       "synopsis": "BuilderOS artifact — BP PRIORITY.",
-      "bytes": 40105,
-      "mtime": "2026-08-08T12:16:02.352Z",
-      "indexed_at": "2026-08-08T12:17:07.218Z",
+      "bytes": 41093,
+      "mtime": "2026-08-08T23:33:18.463Z",
+      "indexed_at": "2026-08-08T23:34:19.626Z",
       "synopsis_index_only": true
     },
     {
@@ -26715,6 +26715,37 @@
       "bytes": 443,
       "mtime": "2026-06-29T04:00:50.969Z",
       "indexed_at": "2026-07-28T22:54:46.666Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/OVERLAY-ENGINE-RISK-GATE-0001/BLUEPRINT.json",
+      "synopsis": "Exports isLiveAction — builderos-reboot/MISSIONS/OVERLAY-ENGINE-RISK-GATE-0001/BLUEPRINT.json.",
+      "bytes": 20663,
+      "mtime": "2026-08-08T23:32:05.983Z",
+      "indexed_at": "2026-08-08T23:34:19.626Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/OVERLAY-ENGINE-RISK-GATE-0001/DELIBERATION_GATE.json",
+      "synopsis": "BuilderOS artifact — DELIBERATION GATE.",
+      "bytes": 1357,
+      "mtime": "2026-08-08T23:32:12.562Z",
+      "indexed_at": "2026-08-08T23:34:19.626Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/OVERLAY-ENGINE-RISK-GATE-0001/FOUNDER_PACKET.md",
+      "synopsis": "Founder Packet — real risk-authorization guardrail for the live, model-driven overlay/browser-agent engine.",
+      "bytes": 3869,
+      "mtime": "2026-08-08T23:29:26.721Z",
+      "indexed_at": "2026-08-08T23:34:19.626Z"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/OVERLAY-ENGINE-RISK-GATE-0001/INTENT_BASELINE.json",
+      "synopsis": "BuilderOS artifact — INTENT BASELINE.",
+      "bytes": 2610,
+      "mtime": "2026-08-08T23:29:41.402Z",
+      "indexed_at": "2026-08-08T23:34:19.626Z",
       "synopsis_index_only": true
     },
     {
@@ -42432,9 +42463,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 469480,
-      "mtime": "2026-08-08T09:32:08.779Z",
-      "indexed_at": "2026-08-08T09:32:39.291Z"
+      "bytes": 472340,
+      "mtime": "2026-08-08T23:34:08.731Z",
+      "indexed_at": "2026-08-08T23:34:19.626Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -67044,9 +67075,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\":\"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",\"lifeos:file-synopsis:backfill\":\"node scripts/file-synopsis-enforce.mjs --all --auto-fix && node scripts/generate-file-synopsis-index.mjs\",\"lifeos:file-synopsis:index\":\"n",
-      "bytes": 35122,
-      "mtime": "2026-08-08T09:35:41.131Z",
-      "indexed_at": "2026-08-08T09:36:38.200Z",
+      "bytes": 35219,
+      "mtime": "2026-08-08T23:33:29.336Z",
+      "indexed_at": "2026-08-08T23:34:19.626Z",
       "synopsis_index_only": true
     },
     {
@@ -77607,6 +77638,16 @@
       "indexed_at": "2026-07-28T22:54:46.666Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/run-overlay-engine-risk-gate-acceptance.mjs",
+      "synopsis": "Overlay Engine Risk Gate acceptance.",
+      "bytes": 7498,
+      "mtime": "2026-08-08T23:32:45.983Z",
+      "indexed_at": "2026-08-08T23:34:19.626Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
       ]
     },
     {
