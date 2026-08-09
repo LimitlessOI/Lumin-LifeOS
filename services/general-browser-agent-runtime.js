@@ -120,6 +120,6 @@ export async function executeAction(session, action) {
         }
         return { ok: true };
     } catch (error) {
-        return { ok: false, error };
+        return { ok: false, error: error?.message || String(error) };
     }
 }
