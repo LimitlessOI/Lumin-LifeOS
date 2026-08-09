@@ -49,6 +49,28 @@
     injectOverlay(frameVersion);
   });
 
+  // ── Auto-pickup: the server can start a drive session on its own (a direct
+  // API call, no click anywhere), and this tab claims + drives it completely
+  // unattended. This is the actual point of the overlay -- Adam never has to
+  // open the panel or click Start for the AI to act through his real browser.
+  let autoPickupClaimed = false;
+  function checkPendingDriveSession() {
+    if (autoPickupClaimed || !frameReady) return;
+    if (!authState.commandKey && !authState.token) return;
+    fetch(`${FRAME_ORIGIN}/api/v1/extension/drive/pending-for-user?user=${encodeURIComponent(authState.user || 'adam')}`, {
+      headers: { 'x-command-key': authState.commandKey || '' },
+    })
+      .then((r) => r.json())
+      .then((d) => {
+        if (d?.ok && d.session_id && !autoPickupClaimed) {
+          autoPickupClaimed = true;
+          postToFrame({ type: 'AUTO_START_DRIVE', sessionId: d.session_id, goal: d.goal || '' });
+        }
+      })
+      .catch(() => {});
+  }
+  setInterval(checkPendingDriveSession, 4000);
+
   // ── Inject the overlay ──────────────────────────────────────────────────────
   function injectOverlay(version) {
     const root = document.createElement('div');

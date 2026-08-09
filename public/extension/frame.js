@@ -95,6 +95,21 @@ window.addEventListener('message', (event) => {
         drivePollLoop();
       }
       break;
+
+    // The server started a session with no one clicking anything -- this tab
+    // claimed it. Open the panel so Adam actually sees it happen, and go.
+    case 'AUTO_START_DRIVE':
+      if (msg.sessionId && !driveSessionId) {
+        driveSessionId = msg.sessionId;
+        driveGoalText  = msg.goal || '';
+        postParent({ type: 'SET_DRIVE_SESSION', sessionId: driveSessionId, goal: driveGoalText });
+        if (!drawerOpen) openDrawer();
+        switchTab('drive');
+        enterDriveRunningUI(driveGoalText);
+        driveLog('Picked up automatically — no click needed.');
+        drivePollLoop();
+      }
+      break;
   }
 });
 
