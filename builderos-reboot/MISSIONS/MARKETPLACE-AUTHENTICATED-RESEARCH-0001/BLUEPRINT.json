@@ -47,7 +47,15 @@
         "any anti-bot circumvention technique -- authenticated-session automation only",
         "structured signal extraction from search results -- separate later mission"
       ],
-      "status": "pending"
+      "status": "complete",
+      "completed_at": "2026-08-09T00:40:23.319Z",
+      "git_sha": "fb4e0582bbef8690e9f33d0bd15fedf9fdabdd97"
     }
-  ]
+  ],
+  "blueprint_status": "complete",
+  "completed_at": "2026-08-09T00:40:23.319Z",
+  "git_sha": "fb4e0582bbef8690e9f33d0bd15fedf9fdabdd97",
+  "receipt_path": "products/receipts/MARKETPLACE_AUTHENTICATED_RESEARCH_ACCEPTANCE.json",
+  "receipt_verdict": "PASS",
+  "build_method": "system-build"
 }

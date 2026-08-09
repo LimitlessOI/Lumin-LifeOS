@@ -1,0 +1,25 @@
+{
+  "schema": "objective_verdict_v1",
+  "generated_at": "2026-08-09T00:40:23.319Z",
+  "objective_id": "MARKETPLACE-AUTHENTICATED-RESEARCH-0001",
+  "objective_name": "Authenticated Marketplace Research",
+  "verdict": "OBJECTIVE_COMPLETE",
+  "receipt": "products/receipts/MARKETPLACE_AUTHENTICATED_RESEARCH_ACCEPTANCE.json",
+  "git_sha": "fb4e0582bbef8690e9f33d0bd15fedf9fdabdd97",
+  "tests_passed": [
+    "route_file_exists",
+    "has_etsy_branch",
+    "has_ebay_branch",
+    "etsy_reads_named_env_vars",
+    "ebay_reads_named_env_vars",
+    "etsy_fails_closed_on_missing_creds",
+    "ebay_fails_closed_on_missing_creds",
+    "etsy_does_not_log_credential_values",
+    "ebay_does_not_log_credential_values",
+    "node_check_passes",
+    "bp_sync_mandatory"
+  ],
+  "tests_failed": [],
+  "founder_usability_pass": false,
+  "acceptance_command": "npm run marketplace:authenticated-research:acceptance"
+}

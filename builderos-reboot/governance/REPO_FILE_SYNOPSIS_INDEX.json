@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-09T00:38:04.380Z",
+  "generated_at": "2026-08-09T00:41:04.658Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13136,
+  "file_count": 13138,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21307,9 +21307,9 @@
     {
       "path": "builderos-reboot/BP_PRIORITY.json",
       "synopsis": "BuilderOS artifact — BP PRIORITY.",
-      "bytes": 43742,
-      "mtime": "2026-08-09T00:34:48.376Z",
-      "indexed_at": "2026-08-09T00:35:29.366Z",
+      "bytes": 44052,
+      "mtime": "2026-08-09T00:40:23.323Z",
+      "indexed_at": "2026-08-09T00:41:04.658Z",
       "synopsis_index_only": true
     },
     {
@@ -26720,9 +26720,9 @@
     {
       "path": "builderos-reboot/MISSIONS/MARKETPLACE-AUTHENTICATED-RESEARCH-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
-      "bytes": 6716,
-      "mtime": "2026-08-09T00:34:02.361Z",
-      "indexed_at": "2026-08-09T00:35:29.366Z",
+      "bytes": 7118,
+      "mtime": "2026-08-09T00:40:23.322Z",
+      "indexed_at": "2026-08-09T00:41:04.658Z",
       "synopsis_index_only": true
     },
     {
@@ -26746,6 +26746,14 @@
       "bytes": 2431,
       "mtime": "2026-08-09T00:33:19.941Z",
       "indexed_at": "2026-08-09T00:35:29.366Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/MARKETPLACE-AUTHENTICATED-RESEARCH-0001/OBJECTIVE_VERDICT.json",
+      "synopsis": "BuilderOS artifact — OBJECTIVE VERDICT.",
+      "bytes": 900,
+      "mtime": "2026-08-09T00:40:23.327Z",
+      "indexed_at": "2026-08-09T00:41:04.658Z",
       "synopsis_index_only": true
     },
     {
@@ -30637,9 +30645,9 @@
     {
       "path": "builderos-reboot/PRODUCT_READINESS_REPORT.json",
       "synopsis": "BuilderOS artifact — PRODUCT READINESS REPORT.",
-      "bytes": 52421,
-      "mtime": "2026-08-09T00:21:38.212Z",
-      "indexed_at": "2026-08-09T00:22:18.030Z",
+      "bytes": 52859,
+      "mtime": "2026-08-09T00:40:23.327Z",
+      "indexed_at": "2026-08-09T00:41:04.658Z",
       "synopsis_index_only": true
     },
     {
@@ -42541,9 +42549,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 482777,
-      "mtime": "2026-08-09T00:35:11.468Z",
-      "indexed_at": "2026-08-09T00:35:29.366Z"
+      "bytes": 483892,
+      "mtime": "2026-08-09T00:40:40.636Z",
+      "indexed_at": "2026-08-09T00:41:04.658Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -68218,6 +68226,14 @@
       "bytes": 2248,
       "mtime": "2026-07-31T06:21:12.569Z",
       "indexed_at": "2026-07-31T06:22:29.192Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/MARKETPLACE_AUTHENTICATED_RESEARCH_ACCEPTANCE.json",
+      "synopsis": "Product receipt — MARKETPLACE AUTHENTICATED RESEARCH ACCEPTANCE.",
+      "bytes": 2968,
+      "mtime": "2026-08-09T00:40:23.327Z",
+      "indexed_at": "2026-08-09T00:41:04.658Z",
       "synopsis_index_only": true
     },
     {

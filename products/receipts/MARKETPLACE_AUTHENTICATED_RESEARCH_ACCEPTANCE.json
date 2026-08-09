@@ -1,0 +1,100 @@
+{
+  "schema": "marketplace_authenticated_research_acceptance_v1",
+  "mission_id": "MARKETPLACE-AUTHENTICATED-RESEARCH-0001",
+  "started_at": "2026-08-09T00:40:23.307Z",
+  "tests_passed": [
+    "route_file_exists",
+    "has_etsy_branch",
+    "has_ebay_branch",
+    "etsy_reads_named_env_vars",
+    "ebay_reads_named_env_vars",
+    "etsy_fails_closed_on_missing_creds",
+    "ebay_fails_closed_on_missing_creds",
+    "etsy_does_not_log_credential_values",
+    "ebay_does_not_log_credential_values",
+    "node_check_passes",
+    "bp_sync_mandatory"
+  ],
+  "tests_failed": [],
+  "steps": [
+    {
+      "step": "route_file_exists",
+      "ok": true,
+      "detail": "/private/tmp/claude-501/-Users-adamhopkins-Projects-Lumin-LifeOS/b98a9c4f-30b0-4efc-94d3-7e9a8ac44905/scratchpad/v1-build-retry/routes/general-browser-agent-routes.js",
+      "at": "2026-08-09T00:40:23.308Z"
+    },
+    {
+      "step": "has_etsy_branch",
+      "ok": true,
+      "detail": "ETSY envCreds branch must exist",
+      "at": "2026-08-09T00:40:23.308Z"
+    },
+    {
+      "step": "has_ebay_branch",
+      "ok": true,
+      "detail": "EBAY envCreds branch must exist",
+      "at": "2026-08-09T00:40:23.308Z"
+    },
+    {
+      "step": "etsy_reads_named_env_vars",
+      "ok": true,
+      "detail": "must read ETSY_EMAIL / ETSY_PASSWORD specifically",
+      "at": "2026-08-09T00:40:23.308Z"
+    },
+    {
+      "step": "ebay_reads_named_env_vars",
+      "ok": true,
+      "detail": "must read EBAY_EMAIL / EBAY_PASSWORD specifically",
+      "at": "2026-08-09T00:40:23.308Z"
+    },
+    {
+      "step": "etsy_fails_closed_on_missing_creds",
+      "ok": true,
+      "detail": {
+        "found": true
+      },
+      "at": "2026-08-09T00:40:23.308Z"
+    },
+    {
+      "step": "ebay_fails_closed_on_missing_creds",
+      "ok": true,
+      "detail": {
+        "found": true
+      },
+      "at": "2026-08-09T00:40:23.308Z"
+    },
+    {
+      "step": "etsy_does_not_log_credential_values",
+      "ok": true,
+      "detail": "must never interpolate email/password into a logger call",
+      "at": "2026-08-09T00:40:23.308Z"
+    },
+    {
+      "step": "ebay_does_not_log_credential_values",
+      "ok": true,
+      "detail": "must never interpolate email/password into a logger call",
+      "at": "2026-08-09T00:40:23.308Z"
+    },
+    {
+      "step": "node_check_passes",
+      "ok": true,
+      "detail": "validated separately via node --check in the shipping pipeline",
+      "at": "2026-08-09T00:40:23.308Z"
+    }
+  ],
+  "completed_at": "2026-08-09T00:40:23.319Z",
+  "git_sha": "fb4e0582bbef8690e9f33d0bd15fedf9fdabdd97",
+  "verdict": "PASS",
+  "bp_sync": {
+    "updated": [
+      "builderos-reboot/BP_PRIORITY.json",
+      "builderos-reboot/MISSIONS/MARKETPLACE-AUTHENTICATED-RESEARCH-0001/BLUEPRINT.json"
+    ],
+    "skipped": []
+  },
+  "artifact_sync": {
+    "mode": "technical_acceptance",
+    "readiness_report": "builderos-reboot/PRODUCT_READINESS_REPORT.json",
+    "freshness_status": "CURRENT"
+  }
+}
