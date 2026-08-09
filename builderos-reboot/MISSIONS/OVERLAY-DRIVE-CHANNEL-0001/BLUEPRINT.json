@@ -142,7 +142,13 @@
           "createExtensionDriveRoutes"
         ]
       },
-      "behavior_assertions": null,
+      "behavior_assertions": [
+        {
+          "type": "file_contains",
+          "target": "startup/register-founder-runtime-routes.js",
+          "substring": "createExtensionDriveRoutes } from \"../routes/extension-drive-routes.js\""
+        }
+      ],
       "sandbox_boundary": "startup/**",
       "authority_owner": "Builder",
       "on_block": "BLOCKED_RETURN_TO_ARC",
@@ -173,7 +179,20 @@
           "createExtensionDriveRoutes({ pool, requireKey, callCouncilMember, logger })"
         ]
       },
-      "behavior_assertions": null,
+      "behavior_assertions": [
+        {
+          "type": "module_mounts",
+          "method": "GET",
+          "path": "/api/v1/extension/drive/next",
+          "target": "startup/register-founder-runtime-routes.js",
+          "expect_status": [
+            200,
+            400,
+            401,
+            403
+          ]
+        }
+      ],
       "sandbox_boundary": "startup/**",
       "authority_owner": "Builder",
       "on_block": "BLOCKED_RETURN_TO_ARC",

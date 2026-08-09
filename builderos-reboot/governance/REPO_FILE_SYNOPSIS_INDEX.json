@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-09T18:05:38.439Z",
+  "generated_at": "2026-08-09T18:06:35.836Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13151,
+  "file_count": 13149,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -26798,9 +26798,9 @@
     {
       "path": "builderos-reboot/MISSIONS/OVERLAY-DRIVE-CHANNEL-0001/BLUEPRINT.json",
       "synopsis": "In-memory poll/post bridge that lets the generic browser-agent loop\\n * (services/general-browser-agent.js) drive Adam's REAL browser through the\\n * Universal Overlay extension instead of a server-side headless Puppeteer\\n * session. The e",
-      "bytes": 21274,
-      "mtime": "2026-08-09T18:02:46.252Z",
-      "indexed_at": "2026-08-09T18:02:58.454Z",
+      "bytes": 21810,
+      "mtime": "2026-08-09T18:06:30.056Z",
+      "indexed_at": "2026-08-09T18:06:35.836Z",
       "synopsis_index_only": true
     },
     {
@@ -71699,16 +71699,6 @@
       ]
     },
     {
-      "path": "routes/extension-drive-routes.js",
-      "synopsis": "routes/extension-drive-routes.js -- Universal Overlay live driving",
-      "bytes": 7669,
-      "mtime": "2026-08-09T18:05:38.439Z",
-      "indexed_at": "2026-08-09T18:05:38.439Z",
-      "ssot": [
-        "docs/products/universal-overlay/PRODUCT_HOME.md"
-      ]
-    },
-    {
       "path": "routes/factory-mount-routes.js",
       "synopsis": "Pure: should the codegen prompt inline this file's existing content?",
       "bytes": 43077,
@@ -93493,16 +93483,6 @@
       "indexed_at": "2026-08-01T16:09:16.342Z",
       "ssot": [
         "docs/products/wellness-studio/PRODUCT_HOME.md"
-      ]
-    },
-    {
-      "path": "services/extension-drive-bridge.js",
-      "synopsis": "In-memory poll/post bridge that lets the generic browser-agent loop",
-      "bytes": 4850,
-      "mtime": "2026-08-09T18:05:22.424Z",
-      "indexed_at": "2026-08-09T18:05:22.424Z",
-      "ssot": [
-        "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
     },
     {
