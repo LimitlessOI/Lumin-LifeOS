@@ -7,7 +7,7 @@
  */
 'use strict';
 
-const SERVER = 'https://lumin-lifeos.up.railway.app';
+const SERVER = 'https://lumin-web-production-e3a9.up.railway.app';
 
 const $ = id => document.getElementById(id);
 

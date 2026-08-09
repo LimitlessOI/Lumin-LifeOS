@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-09T02:44:44.906Z",
+  "generated_at": "2026-08-09T10:44:19.572Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13145,
   "files": [
@@ -44467,9 +44467,9 @@
     {
       "path": "docs/products/universal-overlay/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Universal Overlay",
-      "bytes": 26652,
-      "mtime": "2026-08-09T02:44:35.165Z",
-      "indexed_at": "2026-08-09T02:44:44.906Z"
+      "bytes": 28104,
+      "mtime": "2026-08-09T10:44:08.952Z",
+      "indexed_at": "2026-08-09T10:44:19.572Z"
     },
     {
       "path": "docs/products/UNIVERSALOVERLAY.md",
@@ -64419,9 +64419,9 @@
     {
       "path": "extension/popup.js",
       "synopsis": "extension/popup.js — Lumin Universal Overlay",
-      "bytes": 2302,
-      "mtime": "2026-06-29T17:21:08.061Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 2315,
+      "mtime": "2026-08-09T10:43:48.380Z",
+      "indexed_at": "2026-08-09T10:44:19.572Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
