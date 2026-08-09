@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-09T19:26:38.442Z",
+  "generated_at": "2026-08-09T19:45:12.421Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13158,
+  "file_count": 13162,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -26824,6 +26824,37 @@
       "bytes": 934,
       "mtime": "2026-08-09T00:21:38.212Z",
       "indexed_at": "2026-08-09T00:22:18.030Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/OVERLAY-DRIVE-AUTOPICKUP-0001/BLUEPRINT.json",
+      "synopsis": "BuilderOS artifact — BLUEPRINT.",
+      "bytes": 9438,
+      "mtime": "2026-08-09T19:44:28.697Z",
+      "indexed_at": "2026-08-09T19:45:12.421Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/OVERLAY-DRIVE-AUTOPICKUP-0001/DELIBERATION_GATE.json",
+      "synopsis": "BuilderOS artifact — DELIBERATION GATE.",
+      "bytes": 1102,
+      "mtime": "2026-08-09T19:45:00.203Z",
+      "indexed_at": "2026-08-09T19:45:12.421Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/OVERLAY-DRIVE-AUTOPICKUP-0001/FOUNDER_PACKET.md",
+      "synopsis": "Founder Packet — auto-pickup so an already-open browser tab drives a server-started session with zero clicks.",
+      "bytes": 1461,
+      "mtime": "2026-08-09T19:44:41.166Z",
+      "indexed_at": "2026-08-09T19:45:12.421Z"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/OVERLAY-DRIVE-AUTOPICKUP-0001/INTENT_BASELINE.json",
+      "synopsis": "BuilderOS artifact — INTENT BASELINE.",
+      "bytes": 1659,
+      "mtime": "2026-08-09T19:44:51.704Z",
+      "indexed_at": "2026-08-09T19:45:12.421Z",
       "synopsis_index_only": true
     },
     {

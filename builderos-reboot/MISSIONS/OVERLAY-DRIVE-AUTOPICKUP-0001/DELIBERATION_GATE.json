@@ -1,0 +1,22 @@
+{
+  "session_id": "mission:OVERLAY-DRIVE-AUTOPICKUP-0001",
+  "mission_id": "OVERLAY-DRIVE-AUTOPICKUP-0001",
+  "authorities": ["BPB", "CDR", "SNT"],
+  "reps": [{ "name": "LifeOS" }, { "name": "Founder" }],
+  "models": [{ "id": "bpb-slot", "focus": "BPB" }, { "id": "cdr-slot", "focus": "CDR" }],
+  "partial": true,
+  "hist_case": {
+    "session_id": "mission:OVERLAY-DRIVE-AUTOPICKUP-0001",
+    "problem": "The drive channel required a manual Start click in the extension panel, defeating the point of an overlay meant to act as the founder's real hands.",
+    "case_text": "Auto-seeded Historian case for mission OVERLAY-DRIVE-AUTOPICKUP-0001.",
+    "ideas": [],
+    "opportunity": "Atomic claim endpoint lets an already-open tab pick up and drive a server-started session automatically.",
+    "uncertainty": "KNOW"
+  },
+  "cfo_receipt": {
+    "session_id": "mission:OVERLAY-DRIVE-AUTOPICKUP-0001",
+    "dept": "CFO", "role": "mission_execute", "model": "factory-local", "tokens": 0, "cost_usd": 0, "founder_priority_mode": false
+  },
+  "seeded_at": "2026-08-09T19:10:00.000Z",
+  "auto_seeded": true
+}

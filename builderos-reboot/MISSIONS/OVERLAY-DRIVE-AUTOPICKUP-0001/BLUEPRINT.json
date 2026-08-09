@@ -1,0 +1,141 @@
+{
+  "mission_id": "OVERLAY-DRIVE-AUTOPICKUP-0001",
+  "blueprint_id": "OVERLAY-DRIVE-AUTOPICKUP-0001-BP1",
+  "scope": "Add a GET /pending-for-user endpoint so an already-open browser tab can auto-claim and auto-drive a session the server starts, with zero clicks required from the founder.",
+  "authority": "BPB",
+  "acceptance_command": "npm run overlay:drive-autopickup:acceptance",
+  "allowed_action_types": [
+    "author_then_write"
+  ],
+  "steps": [
+    {
+      "step_id": "ODAP-S01",
+      "phase_id": "P0",
+      "title": "Add /pending-for-user route doc comment",
+      "target_file": "routes/extension-drive-routes.js",
+      "target_files": [
+        "routes/extension-drive-routes.js"
+      ],
+      "action_type": "author_then_write",
+      "patch_mode": true,
+      "task": "Update the file's header doc comment to document the new /pending-for-user endpoint, using PATCH MODE.",
+      "spec": "Output in PATCH MODE ONLY: the OLD block below must be copied EXACTLY character-for-character from the real current file. Exact text below, no other change.\n\nOLD:\n  Mounted at /api/v1/extension/drive\n *   POST /start    { user, goal, url?, expectedSiteHost?, allowRiskyActions?, maxSteps? } -> { ok, session_id }\n *   GET  /next      ?session_id=X -> { ok, pending, status }   (frame polls this)\n *   POST /result     { session_id, payload } -> { ok }          (frame posts result/observation back)\n *   POST /stop        { session_id } -> { ok }\n *   GET  /status      ?session_id=X -> { ok, session }\n *\n * @ssot docs/products/universal-overlay/PRODUCT_HOME.md\n */\n\nNEW:\n  Mounted at /api/v1/extension/drive\n *   POST /start    { user, goal, url?, expectedSiteHost?, allowRiskyActions?, maxSteps? } -> { ok, session_id }\n *   GET  /next      ?session_id=X -> { ok, pending, status }   (frame polls this)\n *   POST /result     { session_id, payload } -> { ok }          (frame posts result/observation back)\n *   POST /stop        { session_id } -> { ok }\n *   GET  /status      ?session_id=X -> { ok, session }\n *   GET  /pending-for-user  ?user=X -> { ok, session_id, goal } | { ok:true, session_id:null }\n *        Atomically claims (and returns) the newest unclaimed running session\n *        for a user, so an already-open browser tab can auto-start driving\n *        without anyone clicking Start -- the server starts the session, the\n *        tab's own short poll picks it up on its own.\n *\n * @ssot docs/products/universal-overlay/PRODUCT_HOME.md\n */",
+      "authoring": {
+        "tiers": [
+          "deepseek",
+          "groq_llama",
+          "mistral_free"
+        ]
+      },
+      "assertion_spec": {
+        "expected_exports": [],
+        "file_contains": [
+          "GET  /pending-for-user"
+        ]
+      },
+      "behavior_assertions": null,
+      "sandbox_boundary": "routes/**",
+      "authority_owner": "Builder",
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "non_goals": [
+        "a full-file rewrite -- use patch mode only"
+      ],
+      "dependencies": []
+    },
+    {
+      "step_id": "ODAP-S02",
+      "phase_id": "P0",
+      "title": "Add claimed_at column to schema bootstrap",
+      "target_file": "routes/extension-drive-routes.js",
+      "target_files": [
+        "routes/extension-drive-routes.js"
+      ],
+      "action_type": "author_then_write",
+      "patch_mode": true,
+      "task": "Add a claimed_at column to ensureDriveSchema via ALTER TABLE ADD COLUMN IF NOT EXISTS, using PATCH MODE.",
+      "spec": "Output in PATCH MODE ONLY: the OLD block below must be copied EXACTLY character-for-character from the real current file. Exact text below, no other change.\n\nOLD:\nasync function ensureDriveSchema(pool) {\n  await pool.query(`\n    CREATE TABLE IF NOT EXISTS extension_drive_sessions (\n      id TEXT PRIMARY KEY,\n      user_handle TEXT NOT NULL,\n      goal TEXT NOT NULL,\n      start_url TEXT,\n      allow_risky BOOLEAN NOT NULL DEFAULT false,\n      status TEXT NOT NULL DEFAULT 'running',\n      steps JSONB NOT NULL DEFAULT '[]'::jsonb,\n      result JSONB,\n      created_at TIMESTAMPTZ NOT NULL DEFAULT now(),\n      updated_at TIMESTAMPTZ NOT NULL DEFAULT now()\n    )\n  `);\n}\n\nNEW:\nasync function ensureDriveSchema(pool) {\n  await pool.query(`\n    CREATE TABLE IF NOT EXISTS extension_drive_sessions (\n      id TEXT PRIMARY KEY,\n      user_handle TEXT NOT NULL,\n      goal TEXT NOT NULL,\n      start_url TEXT,\n      allow_risky BOOLEAN NOT NULL DEFAULT false,\n      status TEXT NOT NULL DEFAULT 'running',\n      steps JSONB NOT NULL DEFAULT '[]'::jsonb,\n      result JSONB,\n      created_at TIMESTAMPTZ NOT NULL DEFAULT now(),\n      updated_at TIMESTAMPTZ NOT NULL DEFAULT now()\n    )\n  `);\n  await pool.query(`ALTER TABLE extension_drive_sessions ADD COLUMN IF NOT EXISTS claimed_at TIMESTAMPTZ`);\n}",
+      "authoring": {
+        "tiers": [
+          "deepseek",
+          "groq_llama",
+          "mistral_free"
+        ]
+      },
+      "assertion_spec": {
+        "expected_exports": [],
+        "file_contains": [
+          "ADD COLUMN IF NOT EXISTS claimed_at"
+        ]
+      },
+      "behavior_assertions": null,
+      "sandbox_boundary": "routes/**",
+      "authority_owner": "Builder",
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "non_goals": [
+        "a full-file rewrite -- use patch mode only"
+      ],
+      "dependencies": [
+        "ODAP-S01"
+      ]
+    },
+    {
+      "step_id": "ODAP-S03",
+      "phase_id": "P0",
+      "title": "Add GET /pending-for-user route -- atomic claim for auto-pickup",
+      "target_file": "routes/extension-drive-routes.js",
+      "target_files": [
+        "routes/extension-drive-routes.js"
+      ],
+      "action_type": "author_then_write",
+      "patch_mode": true,
+      "task": "Add the GET /pending-for-user route directly after the existing GET /status route, using PATCH MODE.",
+      "spec": "Output in PATCH MODE ONLY: the OLD block below must be copied EXACTLY character-for-character from the real current file (including the trailing blank line inside the string, exactly as shown). Exact text below, no other change.\n\nOLD:\n  router.get('/status', requireKey, async (req, res) => {\n    try {\n      const sessionId = req.query.session_id;\n      if (!sessionId) return res.status(400).json({ ok: false, error: 'session_id required' });\n      const { rows } = await pool.query(`SELECT * FROM extension_drive_sessions WHERE id = $1`, [sessionId]);\n      if (!rows[0]) return res.status(404).json({ ok: false, error: 'not_found' });\n      res.json({ ok: true, session: rows[0] });\n    } catch (err) {\n      res.status(500).json({ ok: false, error: err.message });\n    }\n  });\n\n\nNEW:\n  router.get('/status', requireKey, async (req, res) => {\n    try {\n      const sessionId = req.query.session_id;\n      if (!sessionId) return res.status(400).json({ ok: false, error: 'session_id required' });\n      const { rows } = await pool.query(`SELECT * FROM extension_drive_sessions WHERE id = $1`, [sessionId]);\n      if (!rows[0]) return res.status(404).json({ ok: false, error: 'not_found' });\n      res.json({ ok: true, session: rows[0] });\n    } catch (err) {\n      res.status(500).json({ ok: false, error: err.message });\n    }\n  });\n\n  // Atomic claim: an already-open browser tab polls this on its own, with no\n  // click required, so a session the server starts (e.g. via a direct API\n  // call) gets picked up and driven automatically.\n  router.get('/pending-for-user', requireKey, async (req, res) => {\n    try {\n      await ready();\n      const user = String(req.query.user || 'adam');\n      const { rows } = await pool.query(\n        `UPDATE extension_drive_sessions\n           SET claimed_at = now()\n         WHERE id = (\n           SELECT id FROM extension_drive_sessions\n            WHERE user_handle = $1 AND status = 'running' AND claimed_at IS NULL\n            ORDER BY created_at DESC LIMIT 1\n         )\n         RETURNING id, goal`,\n        [user]\n      );\n      if (!rows[0]) return res.json({ ok: true, session_id: null });\n      res.json({ ok: true, session_id: rows[0].id, goal: rows[0].goal });\n    } catch (err) {\n      res.status(500).json({ ok: false, error: err.message });\n    }\n  });\n",
+      "authoring": {
+        "tiers": [
+          "deepseek",
+          "groq_llama",
+          "mistral_free"
+        ]
+      },
+      "assertion_spec": {
+        "expected_exports": [],
+        "file_contains": [
+          "/pending-for-user",
+          "claimed_at = now()"
+        ]
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "target": "routes/extension-drive-routes.js",
+          "exports": [
+            "createExtensionDriveRoutes"
+          ]
+        },
+        {
+          "type": "module_mounts",
+          "method": "GET",
+          "path": "/api/v1/extension/drive/pending-for-user?user=adam",
+          "target": "startup/register-founder-runtime-routes.js",
+          "expect_status": [
+            200,
+            400,
+            401,
+            403
+          ]
+        }
+      ],
+      "sandbox_boundary": "routes/**",
+      "authority_owner": "Builder",
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "non_goals": [
+        "a full-file rewrite -- use patch mode only",
+        "touching any other route"
+      ],
+      "dependencies": [
+        "ODAP-S02"
+      ]
+    }
+  ],
+  "blueprint_status": "handoff_ready"
+}
