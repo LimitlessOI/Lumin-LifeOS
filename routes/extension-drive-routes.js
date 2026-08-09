@@ -13,6 +13,11 @@
  *   POST /result     { session_id, payload } -> { ok }          (frame posts result/observation back)
  *   POST /stop        { session_id } -> { ok }
  *   GET  /status      ?session_id=X -> { ok, session }
+ *   GET  /pending-for-user  ?user=X -> { ok, session_id, goal } | { ok:true, session_id:null }
+ *        Atomically claims (and returns) the newest unclaimed running session
+ *        for a user, so an already-open browser tab can auto-start driving
+ *        without anyone clicking Start -- the server starts the session, the
+ *        tab's own short poll picks it up on its own.
  *
  * @ssot docs/products/universal-overlay/PRODUCT_HOME.md
  */
@@ -172,6 +177,31 @@ export function createExtensionDriveRoutes({ pool, requireKey, callCouncilMember
       const { rows } = await pool.query(`SELECT * FROM extension_drive_sessions WHERE id = $1`, [sessionId]);
       if (!rows[0]) return res.status(404).json({ ok: false, error: 'not_found' });
       res.json({ ok: true, session: rows[0] });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // Atomic claim: an already-open browser tab polls this on its own, with no
+  // click required, so a session the server starts (e.g. via a direct API
+  // call) gets picked up and driven automatically.
+  router.get('/pending-for-user', requireKey, async (req, res) => {
+    try {
+      await ready();
+      const user = String(req.query.user || 'adam');
+      const { rows } = await pool.query(
+        `UPDATE extension_drive_sessions
+           SET claimed_at = now()
+         WHERE id = (
+           SELECT id FROM extension_drive_sessions
+            WHERE user_handle = $1 AND status = 'running' AND claimed_at IS NULL
+            ORDER BY created_at DESC LIMIT 1
+         )
+         RETURNING id, goal`,
+        [user]
+      );
+      if (!rows[0]) return res.json({ ok: true, session_id: null });
+      res.json({ ok: true, session_id: rows[0].id, goal: rows[0].goal });
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
     }
