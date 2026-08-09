@@ -167,6 +167,11 @@ export async function createSession({ headless = true, logger = console } = {}) 
   async function navigate(url) {
     logger.log?.(`[BROWSER] Navigating to ${url}`);
     await page.goto(url, { waitUntil: "domcontentloaded", timeout: DEFAULT_NAV_TIMEOUT });
+    // Settle delay: domcontentloaded fires before JS-heavy single-page apps (e.g.
+    // Etsy) finish hydrating, so an immediate observe() can see a half-rendered
+    // page -- a real, plausible contributor to a stuck-loop found live tonight.
+    // A human pauses to look at a page before reacting; this gives it that beat.
+    await new Promise((resolve) => setTimeout(resolve, 1200));
   }
 
   /**
