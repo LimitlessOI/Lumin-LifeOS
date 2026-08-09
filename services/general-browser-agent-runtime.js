@@ -26,9 +26,12 @@ export async function observePage(session, opts = {}) {
     }
 }
 
-export function formatObservation(observation, goal) {
+export function formatObservation(observation, goal, opts = {}) {
     const elementsList = observation.elements.map((el, index) => `${index + 1}. <${el.tag}>: ${el.text} (selector: ${el.selector})`).join('\n');
-    return `Goal: ${goal}\nURL: ${observation.url}\nTitle: ${observation.title}\nText: ${observation.text.substring(0, 1500)}\nElements:\n${elementsList}`;
+    const stuckNote = opts.stuck
+        ? `\n\nWARNING: your last action produced NO visible change to this page (same URL, same title, same elements as before). Do NOT repeat that exact action again. Pick a genuinely different element, scroll to reveal more of the page, or try a different navigation path entirely.`
+        : '';
+    return `Goal: ${goal}\nURL: ${observation.url}\nTitle: ${observation.title}\nText: ${observation.text.substring(0, 1500)}\nElements:\n${elementsList}${stuckNote}`;
 }
 
 export function parseModelAction(text) {
@@ -45,9 +48,17 @@ export function parseModelAction(text) {
 }
 
 export function makeDecider({ callModel, tiers }) {
-    return async function decideAction({ goal, observation, history }) {
-        const prompt = formatObservation(observation, goal) + '\nPlease respond ONLY with a JSON action of the form {"type":"navigate|click|type|wait|done|give_up", ...fields}';
-        for (const tier of tiers) {
+    return async function decideAction({ goal, observation, history, stuck = false, stuckCount = 0 }) {
+        const prompt = formatObservation(observation, goal, { stuck }) + '\nPlease respond ONLY with a JSON action of the form {"type":"navigate|click|type|wait|done|give_up", ...fields}';
+        // Escalate: a decision the cheap tiers already got wrong twice deserves the
+        // strongest available model, not another cheap guess -- same escalation
+        // philosophy as SO-003, triggered by observed difficulty instead of only
+        // pre-set. Generic: no site-specific tier names, just "try tiers in reverse
+        // (strongest-presumed-last -> first) when meaningfully stuck."
+        const effectiveTiers = stuck && stuckCount >= 2 && tiers.length > 1
+            ? [...tiers].reverse()
+            : tiers;
+        for (const tier of effectiveTiers) {
             try {
                 const output = await callModel(tier, prompt);
                 if (output) {
