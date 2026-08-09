@@ -1,5 +1,5 @@
 {
-  "version": "20260421-0001",
-  "build":   "initial-scaffold",
+  "version": "20260809-0002",
+  "build":   "drive-channel-ui",
   "note":    "Bump this whenever the overlay frame ships a meaningful change. content.js polls this every 30min and notifies all active tabs."
 }
