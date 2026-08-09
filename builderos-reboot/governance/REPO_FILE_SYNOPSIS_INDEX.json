@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-09T18:05:22.424Z",
+  "generated_at": "2026-08-09T18:05:38.439Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13150,
+  "file_count": 13151,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -71696,6 +71696,16 @@
       "indexed_at": "2026-08-01T01:14:48.370Z",
       "ssot": [
         "docs/products/lumin-university/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "routes/extension-drive-routes.js",
+      "synopsis": "routes/extension-drive-routes.js -- Universal Overlay live driving",
+      "bytes": 7669,
+      "mtime": "2026-08-09T18:05:38.439Z",
+      "indexed_at": "2026-08-09T18:05:38.439Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
     },
     {
