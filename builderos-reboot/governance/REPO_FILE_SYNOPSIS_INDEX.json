@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-09T18:45:34.828Z",
+  "generated_at": "2026-08-09T19:18:01.956Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13158,
   "files": [
@@ -21678,9 +21678,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3989999,
-      "mtime": "2026-08-09T18:14:46.057Z",
-      "indexed_at": "2026-08-09T18:15:26.278Z"
+      "bytes": 3991291,
+      "mtime": "2026-08-09T19:17:34.426Z",
+      "indexed_at": "2026-08-09T19:17:59.331Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -44537,9 +44537,9 @@
     {
       "path": "docs/products/universal-overlay/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Universal Overlay",
-      "bytes": 31791,
-      "mtime": "2026-08-09T18:15:13.334Z",
-      "indexed_at": "2026-08-09T18:15:26.278Z"
+      "bytes": 34155,
+      "mtime": "2026-08-09T19:17:29.138Z",
+      "indexed_at": "2026-08-09T19:17:59.331Z"
     },
     {
       "path": "docs/products/UNIVERSALOVERLAY.md",
@@ -64454,9 +64454,9 @@
     {
       "path": "extension/background.js",
       "synopsis": "extension/background.js — Lumin Universal Overlay",
-      "bytes": 4132,
-      "mtime": "2026-08-09T02:00:36.681Z",
-      "indexed_at": "2026-08-09T02:00:54.979Z",
+      "bytes": 4885,
+      "mtime": "2026-08-09T19:17:29.138Z",
+      "indexed_at": "2026-08-09T19:17:59.331Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
@@ -64464,9 +64464,9 @@
     {
       "path": "extension/content.js",
       "synopsis": "extension/content.js — Lumin Universal Overlay",
-      "bytes": 15109,
-      "mtime": "2026-08-09T17:46:27.666Z",
-      "indexed_at": "2026-08-09T17:46:40.637Z",
+      "bytes": 17373,
+      "mtime": "2026-08-09T19:17:29.138Z",
+      "indexed_at": "2026-08-09T19:17:59.331Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
@@ -69125,16 +69125,16 @@
     {
       "path": "public/extension/frame.html",
       "synopsis": "HTML page: Lumin Overlay",
-      "bytes": 15443,
-      "mtime": "2026-06-21T21:39:00.711Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 20078,
+      "mtime": "2026-08-09T19:17:29.138Z",
+      "indexed_at": "2026-08-09T19:17:59.331Z"
     },
     {
       "path": "public/extension/frame.js",
       "synopsis": "public/extension/frame.js — Lumin Universal Overlay",
-      "bytes": 15446,
-      "mtime": "2026-06-29T17:21:08.427Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 25388,
+      "mtime": "2026-08-09T19:17:29.141Z",
+      "indexed_at": "2026-08-09T19:17:59.331Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
