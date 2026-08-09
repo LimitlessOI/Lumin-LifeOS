@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-09T00:15:21.594Z",
+  "generated_at": "2026-08-09T00:17:26.203Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13127,
+  "file_count": 13128,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -96398,6 +96398,16 @@
       "indexed_at": "2026-07-28T22:54:46.666Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/marketplace-opportunity-scanner.js",
+      "synopsis": "Marketplace Opportunity Scanner -- pure, deterministic scoring",
+      "bytes": 5273,
+      "mtime": "2026-08-09T00:17:26.203Z",
+      "indexed_at": "2026-08-09T00:17:26.203Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
       ]
     },
     {
