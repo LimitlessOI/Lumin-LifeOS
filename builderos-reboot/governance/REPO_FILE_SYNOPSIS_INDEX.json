@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-09T01:35:38.135Z",
+  "generated_at": "2026-08-09T01:41:04.130Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13143,
+  "file_count": 13145,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21307,9 +21307,9 @@
     {
       "path": "builderos-reboot/BP_PRIORITY.json",
       "synopsis": "BuilderOS artifact — BP PRIORITY.",
-      "bytes": 45021,
-      "mtime": "2026-08-09T01:31:52.679Z",
-      "indexed_at": "2026-08-09T01:32:34.924Z",
+      "bytes": 45359,
+      "mtime": "2026-08-09T01:40:25.413Z",
+      "indexed_at": "2026-08-09T01:41:04.130Z",
       "synopsis_index_only": true
     },
     {
@@ -26837,9 +26837,9 @@
     {
       "path": "builderos-reboot/MISSIONS/OVERLAY-STUCK-LOOP-RECOVERY-0001/BLUEPRINT.json",
       "synopsis": "Exports isRiskyClick — builderos-reboot/MISSIONS/OVERLAY-STUCK-LOOP-RECOVERY-0001/BLUEPRINT.json.",
-      "bytes": 23374,
-      "mtime": "2026-08-09T01:30:41.100Z",
-      "indexed_at": "2026-08-09T01:32:34.924Z",
+      "bytes": 24105,
+      "mtime": "2026-08-09T01:40:25.413Z",
+      "indexed_at": "2026-08-09T01:41:04.130Z",
       "synopsis_index_only": true
     },
     {
@@ -26863,6 +26863,14 @@
       "bytes": 2383,
       "mtime": "2026-08-09T01:28:55.754Z",
       "indexed_at": "2026-08-09T01:32:34.924Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/OVERLAY-STUCK-LOOP-RECOVERY-0001/OBJECTIVE_VERDICT.json",
+      "synopsis": "BuilderOS artifact — OBJECTIVE VERDICT.",
+      "bytes": 1236,
+      "mtime": "2026-08-09T01:40:25.418Z",
+      "indexed_at": "2026-08-09T01:41:04.130Z",
       "synopsis_index_only": true
     },
     {
@@ -30676,9 +30684,9 @@
     {
       "path": "builderos-reboot/PRODUCT_READINESS_REPORT.json",
       "synopsis": "BuilderOS artifact — PRODUCT READINESS REPORT.",
-      "bytes": 52859,
-      "mtime": "2026-08-09T00:40:23.327Z",
-      "indexed_at": "2026-08-09T00:41:04.658Z",
+      "bytes": 53290,
+      "mtime": "2026-08-09T01:40:25.417Z",
+      "indexed_at": "2026-08-09T01:41:04.130Z",
       "synopsis_index_only": true
     },
     {
@@ -42580,9 +42588,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 486105,
-      "mtime": "2026-08-09T01:32:14.489Z",
-      "indexed_at": "2026-08-09T01:32:34.924Z"
+      "bytes": 487417,
+      "mtime": "2026-08-09T01:40:46.935Z",
+      "indexed_at": "2026-08-09T01:41:04.130Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -68305,6 +68313,14 @@
       "bytes": 6342,
       "mtime": "2026-08-09T00:06:39.031Z",
       "indexed_at": "2026-08-09T00:07:27.839Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/OVERLAY_STUCK_LOOP_RECOVERY_ACCEPTANCE.json",
+      "synopsis": "Product receipt — OVERLAY STUCK LOOP RECOVERY ACCEPTANCE.",
+      "bytes": 6308,
+      "mtime": "2026-08-09T01:40:25.417Z",
+      "indexed_at": "2026-08-09T01:41:04.130Z",
       "synopsis_index_only": true
     },
     {

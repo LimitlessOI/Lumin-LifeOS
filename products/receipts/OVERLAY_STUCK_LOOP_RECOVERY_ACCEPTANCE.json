@@ -1,0 +1,229 @@
+{
+  "schema": "overlay_stuck_loop_recovery_acceptance_v1",
+  "mission_id": "OVERLAY-STUCK-LOOP-RECOVERY-0001",
+  "started_at": "2026-08-09T01:40:25.384Z",
+  "tests_passed": [
+    "core_engine_exists",
+    "exports_fingerprintObservation",
+    "fingerprint_deterministic_same_state_same_print",
+    "fingerprint_differs_on_different_state",
+    "first_iteration_never_flagged_stuck",
+    "repeated_identical_observation_flags_stuck_with_rising_count",
+    "loop_still_honestly_reports_exhaustion_not_fake_success",
+    "genuine_progress_never_false_positives_stuck",
+    "runtime_adapter_exists",
+    "formatObservation_includes_stuck_warning",
+    "formatObservation_no_warning_when_not_stuck",
+    "escalates_to_strongest_tier_first_when_meaningfully_stuck",
+    "normal_turns_still_try_cheapest_tier_first",
+    "browser_agent_exists",
+    "navigate_has_settle_delay",
+    "bp_sync_mandatory"
+  ],
+  "tests_failed": [],
+  "steps": [
+    {
+      "step": "core_engine_exists",
+      "ok": true,
+      "detail": "/private/tmp/claude-501/-Users-adamhopkins-Projects-Lumin-LifeOS/b98a9c4f-30b0-4efc-94d3-7e9a8ac44905/scratchpad/v1-build-retry/services/general-browser-agent.js",
+      "at": "2026-08-09T01:40:25.385Z"
+    },
+    {
+      "step": "exports_fingerprintObservation",
+      "ok": true,
+      "detail": {
+        "exported": [
+          "BROWSER_ACTIONS",
+          "BrowserAgentError",
+          "RISKY_ACTION_LABEL_PATTERNS",
+          "default",
+          "fingerprintObservation",
+          "isLiveAction",
+          "isRiskyClick",
+          "normalizeAction",
+          "runBrowserGoal"
+        ]
+      },
+      "at": "2026-08-09T01:40:25.386Z"
+    },
+    {
+      "step": "fingerprint_deterministic_same_state_same_print",
+      "ok": true,
+      "detail": {
+        "fp1": "https://x.com/a::A::1::a:#x",
+        "fp2": "https://x.com/a::A::1::a:#x"
+      },
+      "at": "2026-08-09T01:40:25.386Z"
+    },
+    {
+      "step": "fingerprint_differs_on_different_state",
+      "ok": true,
+      "detail": {
+        "fp1": "https://x.com/a::A::1::a:#x",
+        "fp3": "https://x.com/b::B::1::button:#y"
+      },
+      "at": "2026-08-09T01:40:25.386Z"
+    },
+    {
+      "step": "first_iteration_never_flagged_stuck",
+      "ok": true,
+      "detail": {
+        "stuck": false,
+        "stuckCount": 0
+      },
+      "at": "2026-08-09T01:40:25.387Z"
+    },
+    {
+      "step": "repeated_identical_observation_flags_stuck_with_rising_count",
+      "ok": true,
+      "detail": [
+        {
+          "stuck": false,
+          "stuckCount": 0
+        },
+        {
+          "stuck": true,
+          "stuckCount": 1
+        },
+        {
+          "stuck": true,
+          "stuckCount": 2
+        },
+        {
+          "stuck": true,
+          "stuckCount": 3
+        }
+      ],
+      "at": "2026-08-09T01:40:25.387Z"
+    },
+    {
+      "step": "loop_still_honestly_reports_exhaustion_not_fake_success",
+      "ok": true,
+      "detail": {
+        "ok": false,
+        "reached": false,
+        "reason": "max_steps_exhausted:4",
+        "steps": [
+          {
+            "step": 1,
+            "action": {
+              "type": "click",
+              "selector": "#btn"
+            },
+            "result": {
+              "ok": true
+            }
+          },
+          {
+            "step": 2,
+            "action": {
+              "type": "click",
+              "selector": "#btn"
+            },
+            "result": {
+              "ok": true
+            }
+          },
+          {
+            "step": 3,
+            "action": {
+              "type": "click",
+              "selector": "#btn"
+            },
+            "result": {
+              "ok": true
+            }
+          },
+          {
+            "step": 4,
+            "action": {
+              "type": "click",
+              "selector": "#btn"
+            },
+            "result": {
+              "ok": true
+            }
+          }
+        ],
+        "evidence": null,
+        "template": null
+      },
+      "at": "2026-08-09T01:40:25.387Z"
+    },
+    {
+      "step": "genuine_progress_never_false_positives_stuck",
+      "ok": true,
+      "detail": [
+        false,
+        false,
+        false
+      ],
+      "at": "2026-08-09T01:40:25.387Z"
+    },
+    {
+      "step": "runtime_adapter_exists",
+      "ok": true,
+      "detail": "/private/tmp/claude-501/-Users-adamhopkins-Projects-Lumin-LifeOS/b98a9c4f-30b0-4efc-94d3-7e9a8ac44905/scratchpad/v1-build-retry/services/general-browser-agent-runtime.js",
+      "at": "2026-08-09T01:40:25.387Z"
+    },
+    {
+      "step": "formatObservation_includes_stuck_warning",
+      "ok": true,
+      "detail": "must append an explicit corrective note when stuck:true",
+      "at": "2026-08-09T01:40:25.387Z"
+    },
+    {
+      "step": "formatObservation_no_warning_when_not_stuck",
+      "ok": true,
+      "detail": "must not append the warning on normal turns",
+      "at": "2026-08-09T01:40:25.387Z"
+    },
+    {
+      "step": "escalates_to_strongest_tier_first_when_meaningfully_stuck",
+      "ok": true,
+      "detail": [
+        "cheap1",
+        "cheap2",
+        "strong"
+      ],
+      "at": "2026-08-09T01:40:25.387Z"
+    },
+    {
+      "step": "normal_turns_still_try_cheapest_tier_first",
+      "ok": true,
+      "detail": [
+        "cheap1",
+        "cheap2",
+        "strong"
+      ],
+      "at": "2026-08-09T01:40:25.387Z"
+    },
+    {
+      "step": "browser_agent_exists",
+      "ok": true,
+      "detail": "/private/tmp/claude-501/-Users-adamhopkins-Projects-Lumin-LifeOS/b98a9c4f-30b0-4efc-94d3-7e9a8ac44905/scratchpad/v1-build-retry/services/browser-agent.js",
+      "at": "2026-08-09T01:40:25.387Z"
+    },
+    {
+      "step": "navigate_has_settle_delay",
+      "ok": true,
+      "detail": "navigate() must wait after goto() before returning",
+      "at": "2026-08-09T01:40:25.388Z"
+    }
+  ],
+  "completed_at": "2026-08-09T01:40:25.410Z",
+  "git_sha": "e0fef2b5b8b2a2810e272069e5c2a33f3c6476af",
+  "verdict": "PASS",
+  "bp_sync": {
+    "updated": [
+      "builderos-reboot/BP_PRIORITY.json",
+      "builderos-reboot/MISSIONS/OVERLAY-STUCK-LOOP-RECOVERY-0001/BLUEPRINT.json"
+    ],
+    "skipped": []
+  },
+  "artifact_sync": {
+    "mode": "technical_acceptance",
+    "readiness_report": "builderos-reboot/PRODUCT_READINESS_REPORT.json",
+    "freshness_status": "CURRENT"
+  }
+}

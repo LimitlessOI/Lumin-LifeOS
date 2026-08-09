@@ -1,0 +1,30 @@
+{
+  "schema": "objective_verdict_v1",
+  "generated_at": "2026-08-09T01:40:25.410Z",
+  "objective_id": "OVERLAY-STUCK-LOOP-RECOVERY-0001",
+  "objective_name": "Overlay Stuck-Loop Recovery",
+  "verdict": "OBJECTIVE_COMPLETE",
+  "receipt": "products/receipts/OVERLAY_STUCK_LOOP_RECOVERY_ACCEPTANCE.json",
+  "git_sha": "e0fef2b5b8b2a2810e272069e5c2a33f3c6476af",
+  "tests_passed": [
+    "core_engine_exists",
+    "exports_fingerprintObservation",
+    "fingerprint_deterministic_same_state_same_print",
+    "fingerprint_differs_on_different_state",
+    "first_iteration_never_flagged_stuck",
+    "repeated_identical_observation_flags_stuck_with_rising_count",
+    "loop_still_honestly_reports_exhaustion_not_fake_success",
+    "genuine_progress_never_false_positives_stuck",
+    "runtime_adapter_exists",
+    "formatObservation_includes_stuck_warning",
+    "formatObservation_no_warning_when_not_stuck",
+    "escalates_to_strongest_tier_first_when_meaningfully_stuck",
+    "normal_turns_still_try_cheapest_tier_first",
+    "browser_agent_exists",
+    "navigate_has_settle_delay",
+    "bp_sync_mandatory"
+  ],
+  "tests_failed": [],
+  "founder_usability_pass": false,
+  "acceptance_command": "npm run overlay:stuck-loop-recovery:acceptance"
+}

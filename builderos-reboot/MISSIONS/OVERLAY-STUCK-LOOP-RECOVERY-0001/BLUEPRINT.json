@@ -74,7 +74,9 @@
         "a full-file rewrite -- use patch mode only",
         "any site-specific logic"
       ],
-      "status": "pending"
+      "status": "complete",
+      "completed_at": "2026-08-09T01:40:25.410Z",
+      "git_sha": "e0fef2b5b8b2a2810e272069e5c2a33f3c6476af"
     },
     {
       "step_id": "OSL-S01b",
@@ -116,7 +118,9 @@
         "any site-specific logic",
         "changing the risky-action or context guardrails"
       ],
-      "status": "pending"
+      "status": "complete",
+      "completed_at": "2026-08-09T01:40:25.410Z",
+      "git_sha": "e0fef2b5b8b2a2810e272069e5c2a33f3c6476af"
     },
     {
       "step_id": "OSL-S02",
@@ -194,7 +198,9 @@
         "any site-specific logic",
         "changing observePage's capture logic"
       ],
-      "status": "pending"
+      "status": "complete",
+      "completed_at": "2026-08-09T01:40:25.410Z",
+      "git_sha": "e0fef2b5b8b2a2810e272069e5c2a33f3c6476af"
     },
     {
       "step_id": "OSL-S03",
@@ -229,7 +235,15 @@
         "a full-file rewrite -- use patch mode only",
         "changing any other browser-agent.js function"
       ],
-      "status": "pending"
+      "status": "complete",
+      "completed_at": "2026-08-09T01:40:25.410Z",
+      "git_sha": "e0fef2b5b8b2a2810e272069e5c2a33f3c6476af"
     }
-  ]
+  ],
+  "blueprint_status": "complete",
+  "completed_at": "2026-08-09T01:40:25.410Z",
+  "git_sha": "e0fef2b5b8b2a2810e272069e5c2a33f3c6476af",
+  "receipt_path": "products/receipts/OVERLAY_STUCK_LOOP_RECOVERY_ACCEPTANCE.json",
+  "receipt_verdict": "PASS",
+  "build_method": "system-build"
 }

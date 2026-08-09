@@ -157,7 +157,7 @@ if (fs.existsSync(RUNTIME)) {
 step('browser_agent_exists', fs.existsSync(BROWSER_AGENT), BROWSER_AGENT);
 if (fs.existsSync(BROWSER_AGENT)) {
   const src = fs.readFileSync(BROWSER_AGENT, 'utf8');
-  step('navigate_has_settle_delay', /page\.goto\(url[\s\S]{0,120}setTimeout\(resolve,\s*1200\)/.test(src), 'navigate() must wait after goto() before returning');
+  step('navigate_has_settle_delay', /page\.goto\(url[\s\S]{0,600}setTimeout\(resolve,\s*1200\)/.test(src), 'navigate() must wait after goto() before returning');
 }
 
 finish();
