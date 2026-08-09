@@ -156,6 +156,9 @@ export function registerGeneralBrowserAgentRoutes(app, deps = {}) {
       expectSiteHost = null,
       expectAccountText = null,
       maxSteps = 20,
+      /** Explicit opt-in required for the overlay engine to click a real observed
+       *  buy/purchase/pay/checkout/delete/cancel-labeled element. Default false. */
+      allowRiskyActions = false,
     } = req.body || {};
 
     if (!goal || !String(goal).trim()) return res.status(400).json({ ok: false, error: 'goal is required' });
