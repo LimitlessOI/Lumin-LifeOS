@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-09T00:00:11.070Z",
+  "generated_at": "2026-08-09T00:02:17.564Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13120,
   "files": [
@@ -93851,12 +93851,11 @@
     },
     {
       "path": "services/general-browser-agent-live.js",
-      "synopsis": "@ssot docs/products/tc-service/PRODUCT_HOME.md",
-      "bytes": 1939,
-      "mtime": "2026-07-10T22:02:00.694Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "synopsis": "runGoalOnSession -- services/general-browser-agent-live.js.",
+      "bytes": 1987,
+      "mtime": "2026-08-09T00:02:17.564Z",
+      "indexed_at": "2026-08-09T00:02:17.564Z",
       "ssot": [
-        "docs/products/tc-service/PRODUCT_HOME.md",
         "docs/products/tc-service/PRODUCT_HOME.md"
       ]
     },
