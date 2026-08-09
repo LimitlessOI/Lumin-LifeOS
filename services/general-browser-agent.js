@@ -133,6 +133,8 @@ export async function runBrowserGoal(opts = {}) {
 
   const steps = [];
   const templateSteps = [];
+  let lastFingerprint = null;
+  let stuckCount = 0;
 
   const record = async (rec) => {
     steps.push(rec);
@@ -173,8 +175,17 @@ export async function runBrowserGoal(opts = {}) {
   for (let i = 1; i <= maxSteps; i += 1) {
     const observation = await observe();
 
+    // STUCK DETECTION: a fingerprint identical to the previous step's means the
+    // last action produced no visible change -- surface this as real context to
+    // the decider instead of letting it silently repeat the same mistake for the
+    // whole step budget (confirmed live: exactly this happened on a real run).
+    const fingerprint = fingerprintObservation(observation);
+    const stuck = lastFingerprint !== null && fingerprint === lastFingerprint;
+    stuckCount = stuck ? stuckCount + 1 : 0;
+    lastFingerprint = fingerprint;
+
     if (typeof onAfterStep === 'function') {
-      const after = await onAfterStep({ observation, step: i, history: steps });
+      const after = await onAfterStep({ observation, step: i, history: steps, stuck, stuckCount });
       if (after?.stop) {
         await record({
           step: i,
@@ -193,7 +204,7 @@ export async function runBrowserGoal(opts = {}) {
       }
     }
 
-    const raw = await decideAction({ goal, observation, history: steps });
+    const raw = await decideAction({ goal, observation, history: steps, stuck, stuckCount });
     const norm = normalizeAction(raw);
 
     if (!norm.ok) {
