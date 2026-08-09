@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-09T00:02:17.564Z",
+  "generated_at": "2026-08-09T00:02:25.812Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13120,
   "files": [
@@ -71649,9 +71649,9 @@
     {
       "path": "routes/general-browser-agent-routes.js",
       "synopsis": "Founder-lane browser agent — any-site goals + founder-authorized account signup.",
-      "bytes": 28940,
-      "mtime": "2026-07-27T22:18:56.504Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 29141,
+      "mtime": "2026-08-09T00:02:25.812Z",
+      "indexed_at": "2026-08-09T00:02:25.812Z",
       "ssot": [
         "docs/products/tc-service/PRODUCT_HOME.md"
       ]
