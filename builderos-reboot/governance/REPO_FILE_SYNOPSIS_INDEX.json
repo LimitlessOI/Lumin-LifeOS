@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-09T19:48:42.952Z",
+  "generated_at": "2026-08-09T19:50:52.981Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13162,
   "files": [
@@ -21678,9 +21678,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3991291,
-      "mtime": "2026-08-09T19:17:34.426Z",
-      "indexed_at": "2026-08-09T19:17:59.331Z"
+      "bytes": 3992573,
+      "mtime": "2026-08-09T19:50:49.979Z",
+      "indexed_at": "2026-08-09T19:50:50.368Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -44568,9 +44568,9 @@
     {
       "path": "docs/products/universal-overlay/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Universal Overlay",
-      "bytes": 34155,
-      "mtime": "2026-08-09T19:17:29.138Z",
-      "indexed_at": "2026-08-09T19:17:59.331Z"
+      "bytes": 36206,
+      "mtime": "2026-08-09T19:50:43.493Z",
+      "indexed_at": "2026-08-09T19:50:50.368Z"
     },
     {
       "path": "docs/products/UNIVERSALOVERLAY.md",
@@ -64495,9 +64495,9 @@
     {
       "path": "extension/content.js",
       "synopsis": "extension/content.js — Lumin Universal Overlay",
-      "bytes": 17373,
-      "mtime": "2026-08-09T19:17:29.138Z",
-      "indexed_at": "2026-08-09T19:17:59.331Z",
+      "bytes": 18406,
+      "mtime": "2026-08-09T19:50:43.493Z",
+      "indexed_at": "2026-08-09T19:50:50.368Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
@@ -69163,9 +69163,9 @@
     {
       "path": "public/extension/frame.js",
       "synopsis": "public/extension/frame.js — Lumin Universal Overlay",
-      "bytes": 25388,
-      "mtime": "2026-08-09T19:17:29.141Z",
-      "indexed_at": "2026-08-09T19:17:59.331Z",
+      "bytes": 26020,
+      "mtime": "2026-08-09T19:50:43.494Z",
+      "indexed_at": "2026-08-09T19:50:50.368Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
