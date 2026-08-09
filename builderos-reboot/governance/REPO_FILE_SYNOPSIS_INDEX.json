@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-09T18:15:52.069Z",
+  "generated_at": "2026-08-09T18:43:45.658Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13154,
+  "file_count": 13158,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21904,6 +21904,37 @@
       "bytes": 1894,
       "mtime": "2026-06-11T08:17:13.848Z",
       "indexed_at": "2026-07-28T22:54:46.666Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/BROWSER-AGENT-ERROR-VISIBILITY-0001/BLUEPRINT.json",
+      "synopsis": "BuilderOS artifact — BLUEPRINT.",
+      "bytes": 2884,
+      "mtime": "2026-08-09T18:43:03.233Z",
+      "indexed_at": "2026-08-09T18:43:45.658Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/BROWSER-AGENT-ERROR-VISIBILITY-0001/DELIBERATION_GATE.json",
+      "synopsis": "BuilderOS artifact — DELIBERATION GATE.",
+      "bytes": 1176,
+      "mtime": "2026-08-09T18:43:36.584Z",
+      "indexed_at": "2026-08-09T18:43:45.658Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/BROWSER-AGENT-ERROR-VISIBILITY-0001/FOUNDER_PACKET.md",
+      "synopsis": "Founder Packet — fix swallowed error visibility in the browser-agent executeAction catch block.",
+      "bytes": 1440,
+      "mtime": "2026-08-09T18:43:17.588Z",
+      "indexed_at": "2026-08-09T18:43:45.658Z"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/BROWSER-AGENT-ERROR-VISIBILITY-0001/INTENT_BASELINE.json",
+      "synopsis": "BuilderOS artifact — INTENT BASELINE.",
+      "bytes": 1657,
+      "mtime": "2026-08-09T18:43:27.903Z",
+      "indexed_at": "2026-08-09T18:43:45.658Z",
       "synopsis_index_only": true
     },
     {

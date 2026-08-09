@@ -1,0 +1,74 @@
+{
+  "mission_id": "BROWSER-AGENT-ERROR-VISIBILITY-0001",
+  "blueprint_id": "BROWSER-AGENT-ERROR-VISIBILITY-0001-BP1",
+  "scope": "Fix a real bug where executeAction's catch block returns a raw Error object that silently serializes to {} in every JSON API response, hiding real failure reasons from every browser-agent caller.",
+  "authority": "BPB",
+  "acceptance_command": "npm run browser-agent:error-visibility:acceptance",
+  "allowed_action_types": [
+    "author_then_write"
+  ],
+  "steps": [
+    {
+      "step_id": "BAEV-S01",
+      "phase_id": "P0",
+      "title": "Fix swallowed error in executeAction -- raw Error object serializes to {} over JSON",
+      "target_file": "services/general-browser-agent-runtime.js",
+      "target_files": [
+        "services/general-browser-agent-runtime.js"
+      ],
+      "action_type": "author_then_write",
+      "patch_mode": true,
+      "task": "executeAction's catch block returns the raw Error object, which has no enumerable own properties and serializes to {} in every JSON response, hiding the real failure reason from every caller. Return error.message instead, using PATCH MODE.",
+      "spec": "Output in PATCH MODE ONLY: the OLD block below must be copied EXACTLY character-for-character from the real current file. NEW returns error.message (or String(error) as fallback) instead of the raw Error object. Exact text below, no other change.\n\nOLD:\n    } catch (error) {\n        return { ok: false, error };\n    }\n\nNEW:\n    } catch (error) {\n        return { ok: false, error: error?.message || String(error) };\n    }",
+      "authoring": {
+        "tiers": [
+          "deepseek",
+          "groq_llama",
+          "mistral_free"
+        ]
+      },
+      "assertion_spec": {
+        "expected_exports": [],
+        "file_contains": [
+          "error: error?.message || String(error)"
+        ]
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "target": "services/general-browser-agent-runtime.js",
+          "exports": [
+            "executeAction",
+            "observePage",
+            "formatObservation",
+            "makeDecider"
+          ]
+        },
+        {
+          "type": "function_behavior_test",
+          "target": "services/general-browser-agent-runtime.js",
+          "export": "executeAction",
+          "args_list": [
+            [
+              {},
+              {
+                "type": "click",
+                "selector": "#nonexistent"
+              }
+            ]
+          ],
+          "expect_type": "object"
+        }
+      ],
+      "sandbox_boundary": "services/**",
+      "authority_owner": "Builder",
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "non_goals": [
+        "a full-file rewrite -- use patch mode only",
+        "any site-specific logic"
+      ],
+      "dependencies": []
+    }
+  ],
+  "blueprint_status": "handoff_ready"
+}

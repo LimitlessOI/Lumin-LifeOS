@@ -1,0 +1,26 @@
+{
+  "schema": "intent_baseline_v1",
+  "intent_id": "BROWSER-AGENT-ERROR-VISIBILITY-0001",
+  "mission_id": "BROWSER-AGENT-ERROR-VISIBILITY-0001",
+  "tier": 1,
+  "status": "HANDOFF_READY",
+  "created_at": "2026-08-09",
+  "amendment_pack": "docs/constitution/AMENDMENT_PACK_V2.0A.md",
+  "proof_lap_only": false,
+  "outcome_statement": "executeAction returns a real error message string instead of a raw Error object that silently serializes to {} in every JSON API response.",
+  "user": "Adam (founder)",
+  "pain": "Every browser-agent action failure this session (and likely prior sessions) reported error: {} -- zero diagnostic information -- found live while debugging a real stuck Etsy revenue signup.",
+  "value": "Every future browser-agent debugging session gets a real, actionable error message instead of flying blind.",
+  "success_metrics": ["A thrown error returns a real non-empty message string, not {}"],
+  "failure_metrics": ["TECHNICAL_PASS without founder_usability_pass", "Any unrelated change"],
+  "constraints": ["BP_PRIORITY queue authority", "BuilderOS system path only", "Patch mode only, single line change"],
+  "scope_boundary": "Per FOUNDER_PACKET.md",
+  "unacceptable_result": "Any change beyond the one catch-block return statement",
+  "ownership": "ARC emits machine twin; Builder executes; Adam owns founder usability verdict",
+  "priority_fit": "Small, urgent bugfix blocking live revenue-signup debugging -- rank 30",
+  "point_model": {
+    "A": "Vision -- Adam provides FP in development stage",
+    "B": "Chair locks handoff -- corridor protected; Adam done until Alpha",
+    "C": "Alpha -- Adam evaluates outcome only"
+  }
+}
