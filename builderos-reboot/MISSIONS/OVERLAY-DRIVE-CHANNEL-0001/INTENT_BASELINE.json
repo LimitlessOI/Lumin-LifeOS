@@ -1,0 +1,41 @@
+{
+  "schema": "intent_baseline_v1",
+  "intent_id": "OVERLAY-DRIVE-CHANNEL-0001",
+  "mission_id": "OVERLAY-DRIVE-CHANNEL-0001",
+  "tier": 1,
+  "status": "HANDOFF_READY",
+  "created_at": "2026-08-09",
+  "amendment_pack": "docs/constitution/AMENDMENT_PACK_V2.0A.md",
+  "proof_lap_only": false,
+  "outcome_statement": "A generic poll/post bridge lets the already-proven observe/decide/act/verify browser-agent loop drive Adam's real browser tab through the Universal Overlay extension, with Adam's own confirmation as the goal-verification evidence -- no site-specific code, no change to the existing proven loop.",
+  "user": "Adam (founder)",
+  "pain": "The extension only answers when asked today -- there is no channel for the server to push an action into it or receive results back, so the 'AI drives my real browser like my own hands' vision has no wiring yet.",
+  "value": "Reuses the exact loop already proven against real sites (risk gate, stuck-loop recovery, generic decider) instead of building a second automation engine -- the extension becomes a real actuator for it.",
+  "success_metrics": [
+    "GET /next returns a real pending observe request for a freshly started session",
+    "A posted observation produces a real pending act request derived from a real decided action",
+    "A risky-click scenario without allowRiskyActions blocks with risky_action_requires_authorization, proving the existing gate still applies unmodified",
+    "A decider done claim produces a confirm_done pending request, never an automatic pass"
+  ],
+  "failure_metrics": [
+    "TECHNICAL_PASS without founder_usability_pass",
+    "Any site-specific code introduced",
+    "Any modification to services/general-browser-agent.js's core loop",
+    "Goal verification that trusts a self-reported model claim instead of Adam's own confirmation"
+  ],
+  "constraints": [
+    "BP_PRIORITY queue authority",
+    "BuilderOS system path only -- no agent hand-build for services/routes/ files",
+    "100% generic -- no site-specific selectors, URLs, or flow logic",
+    "Reuse services/general-browser-agent.js and the pure decider functions in services/general-browser-agent-runtime.js unchanged"
+  ],
+  "scope_boundary": "Per FOUNDER_PACKET.md",
+  "unacceptable_result": "Any site-specific code; goal verification that is not Adam's own real confirmation; a second, divergent automation engine instead of reusing the proven one",
+  "ownership": "ARC emits machine twin; Builder executes; Adam owns founder usability verdict",
+  "priority_fit": "BP_PRIORITY rank 29 -- direct successor to OVERLAY-STUCK-LOOP-RECOVERY-0001, makes the whole overlay-engine effort actually drivable",
+  "point_model": {
+    "A": "Vision -- Adam provides FP in development stage",
+    "B": "Chair locks handoff -- corridor protected; Adam done until Alpha",
+    "C": "Alpha -- Adam evaluates outcome only"
+  }
+}

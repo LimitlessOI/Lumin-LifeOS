@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-09T17:47:16.164Z",
+  "generated_at": "2026-08-09T18:00:04.922Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13145,
+  "file_count": 13149,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -26793,6 +26793,37 @@
       "bytes": 934,
       "mtime": "2026-08-09T00:21:38.212Z",
       "indexed_at": "2026-08-09T00:22:18.030Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/OVERLAY-DRIVE-CHANNEL-0001/BLUEPRINT.json",
+      "synopsis": "In-memory poll/post bridge that lets the generic browser-agent loop\\n * (services/general-browser-agent.js) drive Adam's REAL browser through the\\n * Universal Overlay extension instead of a server-side headless Puppeteer\\n * session. The e",
+      "bytes": 18049,
+      "mtime": "2026-08-09T17:59:15.131Z",
+      "indexed_at": "2026-08-09T18:00:04.922Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/OVERLAY-DRIVE-CHANNEL-0001/DELIBERATION_GATE.json",
+      "synopsis": "BuilderOS artifact — DELIBERATION GATE.",
+      "bytes": 1421,
+      "mtime": "2026-08-09T17:57:39.160Z",
+      "indexed_at": "2026-08-09T18:00:04.922Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/OVERLAY-DRIVE-CHANNEL-0001/FOUNDER_PACKET.md",
+      "synopsis": "Founder Packet — live server-to-extension driving channel, generic across any goal/site.",
+      "bytes": 3966,
+      "mtime": "2026-08-09T17:56:58.184Z",
+      "indexed_at": "2026-08-09T18:00:04.922Z"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/OVERLAY-DRIVE-CHANNEL-0001/INTENT_BASELINE.json",
+      "synopsis": "BuilderOS artifact — INTENT BASELINE.",
+      "bytes": 2871,
+      "mtime": "2026-08-09T17:57:29.907Z",
+      "indexed_at": "2026-08-09T18:00:04.922Z",
       "synopsis_index_only": true
     },
     {
