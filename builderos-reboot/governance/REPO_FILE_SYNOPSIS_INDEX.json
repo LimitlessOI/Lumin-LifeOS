@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-09T00:17:34.846Z",
+  "generated_at": "2026-08-09T00:19:42.412Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13129,
   "files": [
@@ -43609,9 +43609,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 813592,
-      "mtime": "2026-08-08T12:27:25.501Z",
-      "indexed_at": "2026-08-08T12:28:02.889Z"
+      "bytes": 814761,
+      "mtime": "2026-08-09T00:19:27.290Z",
+      "indexed_at": "2026-08-09T00:19:42.412Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -100800,9 +100800,9 @@
     {
       "path": "startup/register-founder-runtime-routes.js",
       "synopsis": "Minimal founder-builder runtime route composition.",
-      "bytes": 21888,
-      "mtime": "2026-08-08T00:20:34.439Z",
-      "indexed_at": "2026-08-08T00:22:14.430Z",
+      "bytes": 22540,
+      "mtime": "2026-08-09T00:18:27.883Z",
+      "indexed_at": "2026-08-09T00:19:42.412Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

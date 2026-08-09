@@ -25,6 +25,7 @@ import { createMLSRoutes } from "../routes/mls-routes.js";
 import { createLifeOSCommitmentRoutes } from "../routes/lifeos-commitment-routes.js";
 import { createLifeOSCoreRoutes } from "../routes/lifeos-core-routes.js";
 import { createIdeaQueueRoutes } from "../routes/idea-queue-routes.js";
+import { createMarketplaceOpportunityRoutes } from "../routes/marketplace-opportunity-routes.js";
 import { requireLifeOSAdmin } from "../middleware/lifeos-auth-middleware.js";
 import { createTCCoordinator } from "../services/tc-coordinator.js";
 import { createAccountManager } from "../services/account-manager.js";
@@ -297,6 +298,16 @@ export async function registerFounderRuntimeRoutes(app, deps) {
     logger.info("✅ [IDEAVAULT] Founder-builder routes mounted at /api/v1/ideas (reactivated 2026-08-07)");
   } catch (err) {
     logger.warn?.({ err: err.message }, "[IDEAVAULT] founder-lane mount failed (non-fatal)");
+  }
+
+  // 2026-08-08: Marketplace Opportunity Scanner -- first real stage of the
+  // zero-capital autonomous opportunity engine (pure scoring + persistence,
+  // no capital at risk, no AI/model call).
+  try {
+    app.use("/api/v1/marketplace/opportunities", createMarketplaceOpportunityRoutes({ pool, requireKey }));
+    logger.info("✅ [MARKETPLACE-SCANNER] Founder-builder routes mounted at /api/v1/marketplace/opportunities");
+  } catch (err) {
+    logger.warn?.({ err: err.message }, "[MARKETPLACE-SCANNER] founder-lane mount failed (non-fatal)");
   }
 
   // ClientCare billing rescue must live on founder lane — production boots founder_builder.
