@@ -26,6 +26,7 @@ import { createLifeOSCommitmentRoutes } from "../routes/lifeos-commitment-routes
 import { createLifeOSCoreRoutes } from "../routes/lifeos-core-routes.js";
 import { createIdeaQueueRoutes } from "../routes/idea-queue-routes.js";
 import { createMarketplaceOpportunityRoutes } from "../routes/marketplace-opportunity-routes.js";
+import { createLifeOSExtensionRoutes } from "../routes/lifeos-extension-routes.js";
 import { requireLifeOSAdmin } from "../middleware/lifeos-auth-middleware.js";
 import { createTCCoordinator } from "../services/tc-coordinator.js";
 import { createAccountManager } from "../services/account-manager.js";
@@ -308,6 +309,21 @@ export async function registerFounderRuntimeRoutes(app, deps) {
     logger.info("✅ [MARKETPLACE-SCANNER] Founder-builder routes mounted at /api/v1/marketplace/opportunities");
   } catch (err) {
     logger.warn?.({ err: err.message }, "[MARKETPLACE-SCANNER] founder-lane mount failed (non-fatal)");
+  }
+
+  // 2026-08-08: Universal Overlay extension backend (status/context/fill-form/chat)
+  // was only ever mounted in startup/register-runtime-routes.js, gated behind
+  // fullRuntimeProfile && LIFEOS_ENABLE_EXTENSION_ROUTE -- double-gated to never
+  // run in production, same dead-route pattern as IdeaVault before it. Confirmed
+  // live: GET /api/v1/extension/status returned 404 in production. The extension
+  // itself (content.js/frame.html) is real and correctly points at this Railway
+  // URL -- only the backend it talks to was unreachable. No feature flag here,
+  // matching the IdeaVault/Marketplace-Scanner precedent directly above.
+  try {
+    app.use("/api/v1/extension", createLifeOSExtensionRoutes({ pool, requireKey, callCouncilMember, logger }));
+    logger.info("✅ [EXTENSION] Universal Overlay routes mounted at /api/v1/extension/{status,context,fill-form,chat}");
+  } catch (err) {
+    logger.warn?.({ err: err.message }, "[EXTENSION] founder-lane mount failed (non-fatal)");
   }
 
   // ClientCare billing rescue must live on founder lane — production boots founder_builder.

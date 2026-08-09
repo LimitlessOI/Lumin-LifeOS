@@ -90,7 +90,7 @@ chrome.alarms.onAlarm.addListener((alarm) => {
 
 async function checkForOverlayUpdate() {
   try {
-    const res  = await fetch('https://lumin-lifeos.up.railway.app/extension/version.json?' + Date.now());
+    const res  = await fetch('https://lumin-web-production-e3a9.up.railway.app/extension/version.json?' + Date.now());
     const data = await res.json();
     const stored = await new Promise(r => chrome.storage.local.get([STORAGE_KEY_VERSION], r));
     if (data.version && data.version !== stored[STORAGE_KEY_VERSION]) {
