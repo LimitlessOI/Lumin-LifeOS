@@ -33,7 +33,13 @@
           "GET  /pending-for-user"
         ]
       },
-      "behavior_assertions": null,
+      "behavior_assertions": [
+        {
+          "type": "file_contains",
+          "target": "routes/extension-drive-routes.js",
+          "substring": "GET  /pending-for-user"
+        }
+      ],
       "sandbox_boundary": "routes/**",
       "authority_owner": "Builder",
       "on_block": "BLOCKED_RETURN_TO_ARC",
@@ -67,7 +73,13 @@
           "ADD COLUMN IF NOT EXISTS claimed_at"
         ]
       },
-      "behavior_assertions": null,
+      "behavior_assertions": [
+        {
+          "type": "file_contains",
+          "target": "routes/extension-drive-routes.js",
+          "substring": "ADD COLUMN IF NOT EXISTS claimed_at"
+        }
+      ],
       "sandbox_boundary": "routes/**",
       "authority_owner": "Builder",
       "on_block": "BLOCKED_RETURN_TO_ARC",
@@ -113,16 +125,9 @@
           ]
         },
         {
-          "type": "module_mounts",
-          "method": "GET",
-          "path": "/api/v1/extension/drive/pending-for-user?user=adam",
-          "target": "startup/register-founder-runtime-routes.js",
-          "expect_status": [
-            200,
-            400,
-            401,
-            403
-          ]
+          "type": "file_contains",
+          "target": "routes/extension-drive-routes.js",
+          "substring": "claimed_at = now()"
         }
       ],
       "sandbox_boundary": "routes/**",

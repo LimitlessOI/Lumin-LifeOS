@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-09T19:45:12.421Z",
+  "generated_at": "2026-08-09T19:48:06.492Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13162,
   "files": [
@@ -26829,9 +26829,9 @@
     {
       "path": "builderos-reboot/MISSIONS/OVERLAY-DRIVE-AUTOPICKUP-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
-      "bytes": 9438,
-      "mtime": "2026-08-09T19:44:28.697Z",
-      "indexed_at": "2026-08-09T19:45:12.421Z",
+      "bytes": 9606,
+      "mtime": "2026-08-09T19:47:58.447Z",
+      "indexed_at": "2026-08-09T19:48:06.492Z",
       "synopsis_index_only": true
     },
     {
