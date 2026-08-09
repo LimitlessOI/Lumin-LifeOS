@@ -1,0 +1,39 @@
+{
+  "schema": "intent_baseline_v1",
+  "intent_id": "MARKETPLACE-OPPORTUNITY-SCANNER-0001",
+  "mission_id": "MARKETPLACE-OPPORTUNITY-SCANNER-0001",
+  "tier": 1,
+  "status": "HANDOFF_READY",
+  "created_at": "2026-08-08",
+  "amendment_pack": "docs/constitution/AMENDMENT_PACK_V2.0A.md",
+  "proof_lap_only": false,
+  "outcome_statement": "A real, pure, deterministic scoreOpportunity function plus a self-bootstrapping marketplace_opportunities table and a submit/list route -- the discovery/scoring substrate for the zero-capital autonomous opportunity engine, with zero capital risk and zero AI/model cost.",
+  "user": "Adam (founder)",
+  "pain": "No real, callable way to score a candidate product/niche opportunity exists -- the concept is strategy-doc prose, not code, so nothing can gate future experiments on evidence yet.",
+  "value": "The first real, safe stage of an engine that identifies opportunities nonstop and eventually funds marketing/API costs/bills -- buildable and testable today with zero capital and zero external dependency.",
+  "success_metrics": [
+    "scoreOpportunity is deterministic (same inputs -> same output every time)",
+    "A strong-signal candidate scores >70; a weak-signal candidate scores <30",
+    "Partial-data candidates report confidence:'partial' and name the missing factors, never silently treated as fully evidenced",
+    "recordOpportunity persists a real row queryable via listOpportunities"
+  ],
+  "failure_metrics": [
+    "TECHNICAL_PASS without founder_usability_pass",
+    "A partial-data score presented without a confidence flag",
+    "Any AI/model call in the scoring path (must stay deterministic per Tier-1 discipline)"
+  ],
+  "constraints": [
+    "BP_PRIORITY queue authority",
+    "BuilderOS system path only -- no agent hand-build",
+    "No live marketplace browsing, no listing creation, no capital spend -- explicitly out of scope this mission"
+  ],
+  "scope_boundary": "Per FOUNDER_PACKET.md",
+  "unacceptable_result": "A non-deterministic scorer; a score that hides which factors were actually evidenced; any code path that spends money or creates a real marketplace listing",
+  "ownership": "ARC emits machine twin; Builder executes; Adam owns founder usability verdict",
+  "priority_fit": "BP_PRIORITY rank 26 -- first real stage of the zero-capital economic engine",
+  "point_model": {
+    "A": "Vision -- Adam provides FP in development stage",
+    "B": "Chair locks handoff -- corridor protected; Adam done until Alpha",
+    "C": "Alpha -- Adam evaluates outcome only"
+  }
+}

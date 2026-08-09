@@ -1,0 +1,212 @@
+{
+  "mission_id": "MARKETPLACE-OPPORTUNITY-SCANNER-0001",
+  "blueprint_id": "MARKETPLACE-OPPORTUNITY-SCANNER-2026-08-08",
+  "scope": "marketplace_opportunity_scanner_scoring_and_persistence",
+  "authority": "FOUNDER_PACKET.md",
+  "acceptance_command": "npm run marketplace:opportunity-scanner:acceptance",
+  "allowed_action_types": [
+    "builder_build",
+    "author_then_write",
+    "shell_command"
+  ],
+  "steps": [
+    {
+      "step_id": "MOS-S01",
+      "phase_id": "P0",
+      "title": "Marketplace Opportunity Scanner: pure scorer + persistence",
+      "target_file": "services/marketplace-opportunity-scanner.js",
+      "target_files": [
+        "services/marketplace-opportunity-scanner.js"
+      ],
+      "action_type": "author_then_write",
+      "patch_mode": false,
+      "task": "Create services/marketplace-opportunity-scanner.js with the exact given content: a pure, deterministic scoreOpportunity function plus self-bootstrapping persistence (recordOpportunity/listOpportunities/updateOpportunityStatus).",
+      "spec": "Write the EXACT file content given below, character for character. No AI/model call anywhere in this file -- scoreOpportunity must be pure and deterministic (same inputs always produce the same output). Do not paraphrase, reformat, or add commentary.\n\n=== EXACT FILE CONTENT ===\n/**\n * SYNOPSIS: Marketplace Opportunity Scanner -- pure, deterministic scoring\n * for candidate products/niches (demand, competition, margin, trend, capital\n * required, complexity, risk), plus persistence for scored candidates. No\n * AI/model call anywhere in this file -- Tier 1 deterministic, per the\n * zero-capital economic engine doctrine's own reasoning-tier discipline.\n * @ssot docs/products/builderos/PRODUCT_HOME.md\n */\n\nconst FACTOR_KEYS = ['demand', 'competition', 'margin', 'trend', 'capitalRequired', 'complexity', 'risk'];\n\n// Positive factors raise the score; negative factors (competition, capitalRequired,\n// complexity, risk) are inverted (100 - value) before weighting, so a HIGH input\n// value for a negative factor still LOWERS the final score.\nconst WEIGHTS = {\n  demand: 0.25,\n  margin: 0.25,\n  trend: 0.15,\n  competition: 0.15,\n  capitalRequired: 0.10,\n  complexity: 0.05,\n  risk: 0.05,\n};\nconst NEGATIVE_FACTORS = new Set(['competition', 'capitalRequired', 'complexity', 'risk']);\n\nfunction clamp0to100(value) {\n  const n = Number(value);\n  if (!Number.isFinite(n)) return null;\n  return Math.max(0, Math.min(100, n));\n}\n\n/**\n * Pure, deterministic. Each factor in `signals` is 0-100. Missing factors are\n * excluded from the weighted sum (not defaulted to a fake middle value) and\n * named in `missingFactors`, so a partial-data score is never presented as\n * fully evidenced -- the confidence field makes that explicit.\n */\nexport function scoreOpportunity(signals = {}) {\n  const provided = {};\n  const missingFactors = [];\n\n  for (const key of FACTOR_KEYS) {\n    const raw = signals[key];\n    const clamped = clamp0to100(raw);\n    if (clamped === null) {\n      missingFactors.push(key);\n      continue;\n    }\n    provided[key] = NEGATIVE_FACTORS.has(key) ? 100 - clamped : clamped;\n  }\n\n  const providedKeys = Object.keys(provided);\n  let weightedSum = 0;\n  let weightTotal = 0;\n  const breakdown = [];\n\n  for (const key of providedKeys) {\n    const weight = WEIGHTS[key];\n    weightedSum += provided[key] * weight;\n    weightTotal += weight;\n    breakdown.push({\n      factor: key,\n      raw_input: clamp0to100(signals[key]),\n      normalized: provided[key],\n      weight,\n      contribution: provided[key] * weight,\n    });\n  }\n\n  const score = weightTotal > 0 ? Math.round((weightedSum / weightTotal) * 100) / 100 : 0;\n  const confidence = missingFactors.length === 0 ? 'full' : (providedKeys.length === 0 ? 'none' : 'partial');\n\n  return {\n    score,\n    confidence,\n    missingFactors,\n    breakdown,\n    factors_provided: providedKeys.length,\n    factors_total: FACTOR_KEYS.length,\n  };\n}\n\nasync function ensureOpportunityScannerSchema(pool) {\n  await pool.query(`\n    CREATE TABLE IF NOT EXISTS marketplace_opportunities (\n      id UUID PRIMARY KEY DEFAULT gen_random_uuid(),\n      niche TEXT NOT NULL,\n      source TEXT,\n      signals JSONB NOT NULL DEFAULT '{}'::jsonb,\n      score NUMERIC,\n      confidence TEXT,\n      missing_factors JSONB NOT NULL DEFAULT '[]'::jsonb,\n      status TEXT NOT NULL DEFAULT 'candidate',\n      notes TEXT,\n      created_at TIMESTAMPTZ NOT NULL DEFAULT now(),\n      updated_at TIMESTAMPTZ NOT NULL DEFAULT now()\n    )\n  `);\n}\n\nexport async function recordOpportunity(pool, { niche, source = null, signals = {}, notes = null } = {}) {\n  if (!niche || !String(niche).trim()) throw new Error('recordOpportunity requires niche');\n  await ensureOpportunityScannerSchema(pool);\n  const result = scoreOpportunity(signals);\n  const { rows } = await pool.query(\n    `INSERT INTO marketplace_opportunities (niche, source, signals, score, confidence, missing_factors, notes)\n     VALUES ($1, $2, $3, $4, $5, $6, $7)\n     RETURNING *`,\n    [\n      String(niche).trim(),\n      source,\n      JSON.stringify(signals || {}),\n      result.score,\n      result.confidence,\n      JSON.stringify(result.missingFactors),\n      notes,\n    ],\n  );\n  return { ...rows[0], scoring: result };\n}\n\nexport async function listOpportunities(pool, { status = null, minScore = null, limit = 50 } = {}) {\n  await ensureOpportunityScannerSchema(pool);\n  const conditions = [];\n  const params = [];\n  if (status) {\n    params.push(status);\n    conditions.push(`status = $${params.length}`);\n  }\n  if (minScore !== null && minScore !== undefined) {\n    params.push(Number(minScore));\n    conditions.push(`score >= $${params.length}`);\n  }\n  const whereClause = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';\n  params.push(Math.min(Math.max(Number(limit) || 50, 1), 200));\n  const { rows } = await pool.query(\n    `SELECT * FROM marketplace_opportunities ${whereClause} ORDER BY score DESC NULLS LAST, created_at DESC LIMIT $${params.length}`,\n    params,\n  );\n  return rows;\n}\n\nexport async function updateOpportunityStatus(pool, id, status) {\n  if (!id) throw new Error('updateOpportunityStatus requires id');\n  const allowed = new Set(['candidate', 'scored', 'sentry_reviewed', 'experiment_launched', 'killed']);\n  if (!allowed.has(status)) throw new Error(`invalid status: ${status}`);\n  await ensureOpportunityScannerSchema(pool);\n  const { rows } = await pool.query(\n    `UPDATE marketplace_opportunities SET status = $2, updated_at = now() WHERE id = $1 RETURNING *`,\n    [id, status],\n  );\n  return rows[0] || null;\n}\n",
+      "authoring": {
+        "tiers": [
+          "deepseek",
+          "groq_llama",
+          "mistral_free"
+        ]
+      },
+      "assertion_spec": {
+        "expected_exports": [
+          "scoreOpportunity",
+          "recordOpportunity",
+          "listOpportunities",
+          "updateOpportunityStatus"
+        ],
+        "file_contains": [
+          "export function scoreOpportunity",
+          "CREATE TABLE IF NOT EXISTS marketplace_opportunities"
+        ]
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "target": "services/marketplace-opportunity-scanner.js",
+          "exports": [
+            "scoreOpportunity",
+            "recordOpportunity",
+            "listOpportunities",
+            "updateOpportunityStatus"
+          ]
+        },
+        {
+          "type": "function_behavior_test",
+          "target": "services/marketplace-opportunity-scanner.js",
+          "export": "scoreOpportunity",
+          "args_list": [
+            {
+              "demand": 90,
+              "margin": 80,
+              "trend": 85,
+              "competition": 20,
+              "capitalRequired": 10,
+              "complexity": 15,
+              "risk": 10
+            }
+          ],
+          "expect": {
+            "score": 85,
+            "confidence": "full"
+          }
+        },
+        {
+          "type": "function_behavior_test",
+          "target": "services/marketplace-opportunity-scanner.js",
+          "export": "scoreOpportunity",
+          "args_list": [
+            {
+              "demand": 80,
+              "margin": 70
+            }
+          ],
+          "expect": {
+            "score": 75,
+            "confidence": "partial"
+          }
+        }
+      ],
+      "sandbox_boundary": "services/**",
+      "authority_owner": "Builder",
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "dependencies": [],
+      "non_goals": [
+        "any AI/model call -- must stay deterministic",
+        "live marketplace browsing -- separate later mission",
+        "any code path that spends money or creates a real listing"
+      ],
+      "status": "pending"
+    },
+    {
+      "step_id": "MOS-S02",
+      "phase_id": "P0",
+      "title": "Marketplace Opportunity Scanner: REST route",
+      "target_file": "routes/marketplace-opportunity-routes.js",
+      "target_files": [
+        "routes/marketplace-opportunity-routes.js"
+      ],
+      "action_type": "author_then_write",
+      "patch_mode": false,
+      "task": "Create routes/marketplace-opportunity-routes.js with the exact given content, exposing submit/list/update-status endpoints backed by services/marketplace-opportunity-scanner.js.",
+      "spec": "Write the EXACT file content given below, character for character. Do not paraphrase, reformat, or add commentary.\n\n=== EXACT FILE CONTENT ===\n/**\n * SYNOPSIS: routes/marketplace-opportunity-routes.js\n * REST API for the Marketplace Opportunity Scanner -- submit a candidate for\n * scoring, list scored opportunities, update status.\n * @ssot docs/products/builderos/PRODUCT_HOME.md\n */\nimport express from 'express';\nimport { recordOpportunity, listOpportunities, updateOpportunityStatus } from '../services/marketplace-opportunity-scanner.js';\n\nexport function createMarketplaceOpportunityRoutes({ pool, requireKey }) {\n  const router = express.Router();\n\n  router.post('/', requireKey, async (req, res) => {\n    try {\n      const { niche, source, signals, notes } = req.body || {};\n      const opportunity = await recordOpportunity(pool, { niche, source, signals, notes });\n      res.status(201).json({ ok: true, opportunity });\n    } catch (err) {\n      res.status(400).json({ ok: false, error: err.message });\n    }\n  });\n\n  router.get('/', requireKey, async (req, res) => {\n    try {\n      const { status, minScore, limit } = req.query || {};\n      const opportunities = await listOpportunities(pool, { status: status || null, minScore: minScore || null, limit });\n      res.json({ ok: true, count: opportunities.length, opportunities });\n    } catch (err) {\n      res.status(500).json({ ok: false, error: err.message });\n    }\n  });\n\n  router.patch('/:id/status', requireKey, async (req, res) => {\n    try {\n      const { status } = req.body || {};\n      const opportunity = await updateOpportunityStatus(pool, req.params.id, status);\n      if (!opportunity) return res.status(404).json({ ok: false, error: 'not_found' });\n      res.json({ ok: true, opportunity });\n    } catch (err) {\n      res.status(400).json({ ok: false, error: err.message });\n    }\n  });\n\n  return router;\n}\n\nexport default createMarketplaceOpportunityRoutes;\n",
+      "authoring": {
+        "tiers": [
+          "deepseek",
+          "groq_llama",
+          "mistral_free"
+        ]
+      },
+      "assertion_spec": {
+        "expected_exports": [
+          "createMarketplaceOpportunityRoutes"
+        ],
+        "file_contains": [
+          "export function createMarketplaceOpportunityRoutes",
+          "recordOpportunity",
+          "listOpportunities"
+        ]
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "target": "routes/marketplace-opportunity-routes.js",
+          "exports": [
+            "createMarketplaceOpportunityRoutes"
+          ]
+        }
+      ],
+      "sandbox_boundary": "routes/**",
+      "authority_owner": "Builder",
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "dependencies": [
+        "MOS-S01"
+      ],
+      "non_goals": [
+        "mounting the route -- separate step"
+      ],
+      "status": "pending"
+    },
+    {
+      "step_id": "MOS-S03",
+      "phase_id": "P1",
+      "title": "Mount Marketplace Opportunity Scanner routes: import (patch 1 of 2)",
+      "target_file": "startup/register-founder-runtime-routes.js",
+      "target_files": [
+        "startup/register-founder-runtime-routes.js"
+      ],
+      "action_type": "author_then_write",
+      "patch_mode": true,
+      "task": "Add the import line for createMarketplaceOpportunityRoutes, using PATCH MODE.",
+      "spec": "Output in PATCH MODE ONLY: the OLD block below must be copied EXACTLY character-for-character from the real current file. NEW adds one import line for createMarketplaceOpportunityRoutes right after the existing createIdeaQueueRoutes import. Exact text below, no other change.\n\nOLD:\nimport { createIdeaQueueRoutes } from \"../routes/idea-queue-routes.js\";\n\nNEW:\nimport { createIdeaQueueRoutes } from \"../routes/idea-queue-routes.js\";\nimport { createMarketplaceOpportunityRoutes } from \"../routes/marketplace-opportunity-routes.js\";\n",
+      "assertion_spec": {
+        "expected_exports": [],
+        "file_contains": [
+          "createMarketplaceOpportunityRoutes"
+        ]
+      },
+      "sandbox_boundary": "startup/**",
+      "authority_owner": "Builder",
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "dependencies": [
+        "MOS-S02"
+      ],
+      "non_goals": [
+        "a full-file rewrite -- use patch mode only"
+      ],
+      "status": "pending"
+    },
+    {
+      "step_id": "MOS-S04",
+      "phase_id": "P1",
+      "title": "Mount Marketplace Opportunity Scanner routes: app.use block (patch 2 of 2)",
+      "target_file": "startup/register-founder-runtime-routes.js",
+      "target_files": [
+        "startup/register-founder-runtime-routes.js"
+      ],
+      "action_type": "author_then_write",
+      "patch_mode": true,
+      "task": "Mount createMarketplaceOpportunityRoutes at /api/v1/marketplace/opportunities, using PATCH MODE, matching the exact adjacent idea-queue mount pattern.",
+      "spec": "Output in PATCH MODE ONLY: the OLD block below must be copied EXACTLY character-for-character from the real current file (it is the existing idea-queue mount try/catch block, unchanged). NEW keeps that block byte-identical and appends a new try/catch immediately after it that mounts createMarketplaceOpportunityRoutes at /api/v1/marketplace/opportunities, matching the exact same try/catch/logger.info/logger.warn pattern. Exact text below, no other change.\n\nOLD:\n  // 2026-08-07: routes/idea-queue-routes.js (the real IdeaVault submit/approve/\n  // reject/build API) was only ever imported by startup/register-runtime-routes.js\n  // (the full-runtime lane), same dead-in-production pattern as lifeos-core-routes.js\n  // above. Confirmed live: GET /api/v1/ideas returned 404 in production. Adam\n  // directly asked whether IdeaVault actually gets consulted -- it couldn't have\n  // been, since the submit endpoint itself was unreachable.\n  try {\n    app.use(\"/api/v1/ideas\", createIdeaQueueRoutes({ pool, requireKey, callCouncilMember }));\n    logger.info(\"\u2705 [IDEAVAULT] Founder-builder routes mounted at /api/v1/ideas (reactivated 2026-08-07)\");\n  } catch (err) {\n    logger.warn?.({ err: err.message }, \"[IDEAVAULT] founder-lane mount failed (non-fatal)\");\n  }\n\nNEW:\n  // 2026-08-07: routes/idea-queue-routes.js (the real IdeaVault submit/approve/\n  // reject/build API) was only ever imported by startup/register-runtime-routes.js\n  // (the full-runtime lane), same dead-in-production pattern as lifeos-core-routes.js\n  // above. Confirmed live: GET /api/v1/ideas returned 404 in production. Adam\n  // directly asked whether IdeaVault actually gets consulted -- it couldn't have\n  // been, since the submit endpoint itself was unreachable.\n  try {\n    app.use(\"/api/v1/ideas\", createIdeaQueueRoutes({ pool, requireKey, callCouncilMember }));\n    logger.info(\"\u2705 [IDEAVAULT] Founder-builder routes mounted at /api/v1/ideas (reactivated 2026-08-07)\");\n  } catch (err) {\n    logger.warn?.({ err: err.message }, \"[IDEAVAULT] founder-lane mount failed (non-fatal)\");\n  }\n\n  // 2026-08-08: Marketplace Opportunity Scanner -- first real stage of the\n  // zero-capital autonomous opportunity engine (pure scoring + persistence,\n  // no capital at risk, no AI/model call).\n  try {\n    app.use(\"/api/v1/marketplace/opportunities\", createMarketplaceOpportunityRoutes({ pool, requireKey }));\n    logger.info(\"\u2705 [MARKETPLACE-SCANNER] Founder-builder routes mounted at /api/v1/marketplace/opportunities\");\n  } catch (err) {\n    logger.warn?.({ err: err.message }, \"[MARKETPLACE-SCANNER] founder-lane mount failed (non-fatal)\");\n  }\n",
+      "assertion_spec": {
+        "expected_exports": [],
+        "file_contains": [
+          "/api/v1/marketplace/opportunities",
+          "createMarketplaceOpportunityRoutes({ pool, requireKey })"
+        ]
+      },
+      "sandbox_boundary": "startup/**",
+      "authority_owner": "Builder",
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "dependencies": [
+        "MOS-S03"
+      ],
+      "non_goals": [
+        "a full-file rewrite -- use patch mode only",
+        "touching any other route mount in this file"
+      ],
+      "status": "pending"
+    }
+  ]
+}

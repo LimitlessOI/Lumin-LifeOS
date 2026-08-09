@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-09T00:07:27.839Z",
+  "generated_at": "2026-08-09T00:13:29.415Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13122,
+  "file_count": 13127,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21307,9 +21307,9 @@
     {
       "path": "builderos-reboot/BP_PRIORITY.json",
       "synopsis": "BuilderOS artifact — BP PRIORITY.",
-      "bytes": 41422,
-      "mtime": "2026-08-09T00:06:39.026Z",
-      "indexed_at": "2026-08-09T00:07:27.839Z",
+      "bytes": 42406,
+      "mtime": "2026-08-09T00:12:50.018Z",
+      "indexed_at": "2026-08-09T00:13:29.415Z",
       "synopsis_index_only": true
     },
     {
@@ -26715,6 +26715,37 @@
       "bytes": 443,
       "mtime": "2026-06-29T04:00:50.969Z",
       "indexed_at": "2026-07-28T22:54:46.666Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/MARKETPLACE-OPPORTUNITY-SCANNER-0001/BLUEPRINT.json",
+      "synopsis": "Marketplace Opportunity Scanner -- pure, deterministic scoring\\n * for candidate products/niches (demand, competition, margin, trend, capital\\n * required, complexity, risk), plus persistence for scored candidates. No\\n * AI/model call anyw",
+      "bytes": 17640,
+      "mtime": "2026-08-09T00:12:04.006Z",
+      "indexed_at": "2026-08-09T00:13:29.415Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/MARKETPLACE-OPPORTUNITY-SCANNER-0001/DELIBERATION_GATE.json",
+      "synopsis": "BuilderOS artifact — DELIBERATION GATE.",
+      "bytes": 1328,
+      "mtime": "2026-08-09T00:12:16.649Z",
+      "indexed_at": "2026-08-09T00:13:29.415Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/MARKETPLACE-OPPORTUNITY-SCANNER-0001/FOUNDER_PACKET.md",
+      "synopsis": "Founder Packet — Marketplace Opportunity Scanner, first real stage of the zero-capital autonomous opportunity engine.",
+      "bytes": 4064,
+      "mtime": "2026-08-09T00:09:49.464Z",
+      "indexed_at": "2026-08-09T00:13:29.415Z"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/MARKETPLACE-OPPORTUNITY-SCANNER-0001/INTENT_BASELINE.json",
+      "synopsis": "BuilderOS artifact — INTENT BASELINE.",
+      "bytes": 2542,
+      "mtime": "2026-08-09T00:10:03.843Z",
+      "indexed_at": "2026-08-09T00:13:29.415Z",
       "synopsis_index_only": true
     },
     {
@@ -42471,9 +42502,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 477340,
-      "mtime": "2026-08-09T00:07:09.158Z",
-      "indexed_at": "2026-08-09T00:07:27.839Z"
+      "bytes": 50894,
+      "mtime": "2026-08-09T00:13:14.907Z",
+      "indexed_at": "2026-08-09T00:13:29.415Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -67083,9 +67114,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\":\"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",\"lifeos:file-synopsis:backfill\":\"node scripts/file-synopsis-enforce.mjs --all --auto-fix && node scripts/generate-file-synopsis-index.mjs\",\"lifeos:file-synopsis:index\":\"n",
-      "bytes": 35219,
-      "mtime": "2026-08-08T23:33:29.336Z",
-      "indexed_at": "2026-08-08T23:34:19.626Z",
+      "bytes": 35330,
+      "mtime": "2026-08-09T00:12:50.036Z",
+      "indexed_at": "2026-08-09T00:13:29.415Z",
       "synopsis_index_only": true
     },
     {
@@ -77601,6 +77632,16 @@
       "bytes": 6663,
       "mtime": "2026-07-11T08:56:55.030Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "scripts/run-marketplace-opportunity-scanner-acceptance.mjs",
+      "synopsis": "Marketplace Opportunity Scanner acceptance.",
+      "bytes": 5363,
+      "mtime": "2026-08-09T00:12:37.658Z",
+      "indexed_at": "2026-08-09T00:13:29.415Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "scripts/run-master-a-to-z-demo.mjs",
