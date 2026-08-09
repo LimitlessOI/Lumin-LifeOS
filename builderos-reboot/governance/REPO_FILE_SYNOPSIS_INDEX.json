@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-09T18:43:45.658Z",
+  "generated_at": "2026-08-09T18:45:34.828Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13158,
   "files": [
@@ -94167,9 +94167,9 @@
     {
       "path": "services/general-browser-agent-runtime.js",
       "synopsis": "Exports observePage — services/general-browser-agent-runtime.js.",
-      "bytes": 6027,
-      "mtime": "2026-08-09T01:35:30.044Z",
-      "indexed_at": "2026-08-09T01:35:30.044Z",
+      "bytes": 6060,
+      "mtime": "2026-08-09T18:45:34.828Z",
+      "indexed_at": "2026-08-09T18:45:34.828Z",
       "ssot": [
         "docs/products/tc-service/PRODUCT_HOME.md"
       ]
