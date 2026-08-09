@@ -258,6 +258,7 @@ export function registerGeneralBrowserAgentRoutes(app, deps = {}) {
         expectSiteHost: host || expectSiteHost,
         expectAccountText,
         maxSteps: stepCap,
+        allowRiskyActions: allowRiskyActions === true,
         onScreenshot: ({ step, screenshot }) => { if (screenshot) screenshots.push({ step, screenshot }); },
         logger,
       });
