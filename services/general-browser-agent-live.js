@@ -1,24 +1,25 @@
 /**
- * SYNOPSIS: @ssot docs/products/tc-service/PRODUCT_HOME.md
+ * SYNOPSIS: runGoalOnSession -- services/general-browser-agent-live.js.
+ * @ssot docs/products/tc-service/PRODUCT_HOME.md
  */
-// @ssot docs/products/tc-service/PRODUCT_HOME.md
 import { runBrowserGoal } from './general-browser-agent.js';
 import { observePage, makeDecider, makeEvidenceVerifier, makeAccountConfirmer, executeAction } from './general-browser-agent-runtime.js';
 
-export async function runGoalOnSession({ 
-    session, 
-    goal, 
-    startUrl = null, 
-    callModel, 
-    tiers = ['cerebras_llama', 'openai', 'claude_sonnet'], 
-    mustContain = [], 
-    mustHaveSelector = [], 
-    expectSiteHost = null, 
-    expectAccountText = null, 
-    maxSteps = 20, 
+export async function runGoalOnSession({
+    session,
+    goal,
+    startUrl = null,
+    callModel,
+    tiers = ['cerebras_llama', 'openai', 'claude_sonnet'],
+    mustContain = [],
+    mustHaveSelector = [],
+    expectSiteHost = null,
+    expectAccountText = null,
+    maxSteps = 20,
+    allowRiskyActions = false,
     onScreenshot = null,
     onAfterStep = null,
-    logger = console 
+    logger = console
 }) {
     const observe = async () => observePage(session);
     const decideAction = makeDecider({ callModel, tiers });
@@ -40,17 +41,18 @@ export async function runGoalOnSession({
         }
     };
 
-    return await runBrowserGoal({ 
-        goal, 
-        startUrl, 
-        expectedContext, 
-        observe, 
-        decideAction, 
-        act, 
-        verifyGoal, 
-        confirmContext, 
+    return await runBrowserGoal({
+        goal,
+        startUrl,
+        expectedContext,
+        observe,
+        decideAction,
+        act,
+        verifyGoal,
+        confirmContext,
+        allowRiskyActions,
         onStep,
         onAfterStep,
-        maxSteps 
+        maxSteps
     });
 }
