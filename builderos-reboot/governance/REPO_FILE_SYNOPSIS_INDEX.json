@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-09T18:00:04.922Z",
+  "generated_at": "2026-08-09T18:02:58.454Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13149,
   "files": [
@@ -26798,9 +26798,9 @@
     {
       "path": "builderos-reboot/MISSIONS/OVERLAY-DRIVE-CHANNEL-0001/BLUEPRINT.json",
       "synopsis": "In-memory poll/post bridge that lets the generic browser-agent loop\\n * (services/general-browser-agent.js) drive Adam's REAL browser through the\\n * Universal Overlay extension instead of a server-side headless Puppeteer\\n * session. The e",
-      "bytes": 18049,
-      "mtime": "2026-08-09T17:59:15.131Z",
-      "indexed_at": "2026-08-09T18:00:04.922Z",
+      "bytes": 21274,
+      "mtime": "2026-08-09T18:02:46.252Z",
+      "indexed_at": "2026-08-09T18:02:58.454Z",
       "synopsis_index_only": true
     },
     {
