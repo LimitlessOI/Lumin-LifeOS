@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-08T23:58:28.387Z",
+  "generated_at": "2026-08-09T00:00:11.070Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13120,
   "files": [
@@ -26719,10 +26719,10 @@
     },
     {
       "path": "builderos-reboot/MISSIONS/OVERLAY-ENGINE-RISK-GATE-0001/BLUEPRINT.json",
-      "synopsis": "@ssot docs/products/tc-service/PRODUCT_HOME.md\\n",
-      "bytes": 19226,
-      "mtime": "2026-08-08T23:52:09.124Z",
-      "indexed_at": "2026-08-08T23:52:19.925Z",
+      "synopsis": "runGoalOnSession -- services/general-browser-agent-live.js.\\n * @ssot docs/products/tc-service/PRODUCT_HOME.md\\n",
+      "bytes": 19239,
+      "mtime": "2026-08-08T23:59:57.354Z",
+      "indexed_at": "2026-08-09T00:00:11.070Z",
       "synopsis_index_only": true
     },
     {
