@@ -97,7 +97,9 @@
         "live marketplace browsing -- separate later mission",
         "any code path that spends money or creates a real listing"
       ],
-      "status": "pending"
+      "status": "complete",
+      "completed_at": "2026-08-09T00:21:38.202Z",
+      "git_sha": "2d0ef87123e6554b7e1360ee8e2ed90123f30ec8"
     },
     {
       "step_id": "MOS-S02",
@@ -146,7 +148,9 @@
       "non_goals": [
         "mounting the route -- separate step"
       ],
-      "status": "pending"
+      "status": "complete",
+      "completed_at": "2026-08-09T00:21:38.202Z",
+      "git_sha": "2d0ef87123e6554b7e1360ee8e2ed90123f30ec8"
     },
     {
       "step_id": "MOS-S03",
@@ -175,7 +179,9 @@
       "non_goals": [
         "a full-file rewrite -- use patch mode only"
       ],
-      "status": "pending"
+      "status": "complete",
+      "completed_at": "2026-08-09T00:21:38.202Z",
+      "git_sha": "2d0ef87123e6554b7e1360ee8e2ed90123f30ec8"
     },
     {
       "step_id": "MOS-S04",
@@ -188,7 +194,7 @@
       "action_type": "author_then_write",
       "patch_mode": true,
       "task": "Mount createMarketplaceOpportunityRoutes at /api/v1/marketplace/opportunities, using PATCH MODE, matching the exact adjacent idea-queue mount pattern.",
-      "spec": "Output in PATCH MODE ONLY: the OLD block below must be copied EXACTLY character-for-character from the real current file (it is the existing idea-queue mount try/catch block, unchanged). NEW keeps that block byte-identical and appends a new try/catch immediately after it that mounts createMarketplaceOpportunityRoutes at /api/v1/marketplace/opportunities, matching the exact same try/catch/logger.info/logger.warn pattern. Exact text below, no other change.\n\nOLD:\n  // 2026-08-07: routes/idea-queue-routes.js (the real IdeaVault submit/approve/\n  // reject/build API) was only ever imported by startup/register-runtime-routes.js\n  // (the full-runtime lane), same dead-in-production pattern as lifeos-core-routes.js\n  // above. Confirmed live: GET /api/v1/ideas returned 404 in production. Adam\n  // directly asked whether IdeaVault actually gets consulted -- it couldn't have\n  // been, since the submit endpoint itself was unreachable.\n  try {\n    app.use(\"/api/v1/ideas\", createIdeaQueueRoutes({ pool, requireKey, callCouncilMember }));\n    logger.info(\"\u2705 [IDEAVAULT] Founder-builder routes mounted at /api/v1/ideas (reactivated 2026-08-07)\");\n  } catch (err) {\n    logger.warn?.({ err: err.message }, \"[IDEAVAULT] founder-lane mount failed (non-fatal)\");\n  }\n\nNEW:\n  // 2026-08-07: routes/idea-queue-routes.js (the real IdeaVault submit/approve/\n  // reject/build API) was only ever imported by startup/register-runtime-routes.js\n  // (the full-runtime lane), same dead-in-production pattern as lifeos-core-routes.js\n  // above. Confirmed live: GET /api/v1/ideas returned 404 in production. Adam\n  // directly asked whether IdeaVault actually gets consulted -- it couldn't have\n  // been, since the submit endpoint itself was unreachable.\n  try {\n    app.use(\"/api/v1/ideas\", createIdeaQueueRoutes({ pool, requireKey, callCouncilMember }));\n    logger.info(\"\u2705 [IDEAVAULT] Founder-builder routes mounted at /api/v1/ideas (reactivated 2026-08-07)\");\n  } catch (err) {\n    logger.warn?.({ err: err.message }, \"[IDEAVAULT] founder-lane mount failed (non-fatal)\");\n  }\n\n  // 2026-08-08: Marketplace Opportunity Scanner -- first real stage of the\n  // zero-capital autonomous opportunity engine (pure scoring + persistence,\n  // no capital at risk, no AI/model call).\n  try {\n    app.use(\"/api/v1/marketplace/opportunities\", createMarketplaceOpportunityRoutes({ pool, requireKey }));\n    logger.info(\"\u2705 [MARKETPLACE-SCANNER] Founder-builder routes mounted at /api/v1/marketplace/opportunities\");\n  } catch (err) {\n    logger.warn?.({ err: err.message }, \"[MARKETPLACE-SCANNER] founder-lane mount failed (non-fatal)\");\n  }\n",
+      "spec": "Output in PATCH MODE ONLY: the OLD block below must be copied EXACTLY character-for-character from the real current file (it is the existing idea-queue mount try/catch block, unchanged). NEW keeps that block byte-identical and appends a new try/catch immediately after it that mounts createMarketplaceOpportunityRoutes at /api/v1/marketplace/opportunities, matching the exact same try/catch/logger.info/logger.warn pattern. Exact text below, no other change.\n\nOLD:\n  // 2026-08-07: routes/idea-queue-routes.js (the real IdeaVault submit/approve/\n  // reject/build API) was only ever imported by startup/register-runtime-routes.js\n  // (the full-runtime lane), same dead-in-production pattern as lifeos-core-routes.js\n  // above. Confirmed live: GET /api/v1/ideas returned 404 in production. Adam\n  // directly asked whether IdeaVault actually gets consulted -- it couldn't have\n  // been, since the submit endpoint itself was unreachable.\n  try {\n    app.use(\"/api/v1/ideas\", createIdeaQueueRoutes({ pool, requireKey, callCouncilMember }));\n    logger.info(\"✅ [IDEAVAULT] Founder-builder routes mounted at /api/v1/ideas (reactivated 2026-08-07)\");\n  } catch (err) {\n    logger.warn?.({ err: err.message }, \"[IDEAVAULT] founder-lane mount failed (non-fatal)\");\n  }\n\nNEW:\n  // 2026-08-07: routes/idea-queue-routes.js (the real IdeaVault submit/approve/\n  // reject/build API) was only ever imported by startup/register-runtime-routes.js\n  // (the full-runtime lane), same dead-in-production pattern as lifeos-core-routes.js\n  // above. Confirmed live: GET /api/v1/ideas returned 404 in production. Adam\n  // directly asked whether IdeaVault actually gets consulted -- it couldn't have\n  // been, since the submit endpoint itself was unreachable.\n  try {\n    app.use(\"/api/v1/ideas\", createIdeaQueueRoutes({ pool, requireKey, callCouncilMember }));\n    logger.info(\"✅ [IDEAVAULT] Founder-builder routes mounted at /api/v1/ideas (reactivated 2026-08-07)\");\n  } catch (err) {\n    logger.warn?.({ err: err.message }, \"[IDEAVAULT] founder-lane mount failed (non-fatal)\");\n  }\n\n  // 2026-08-08: Marketplace Opportunity Scanner -- first real stage of the\n  // zero-capital autonomous opportunity engine (pure scoring + persistence,\n  // no capital at risk, no AI/model call).\n  try {\n    app.use(\"/api/v1/marketplace/opportunities\", createMarketplaceOpportunityRoutes({ pool, requireKey }));\n    logger.info(\"✅ [MARKETPLACE-SCANNER] Founder-builder routes mounted at /api/v1/marketplace/opportunities\");\n  } catch (err) {\n    logger.warn?.({ err: err.message }, \"[MARKETPLACE-SCANNER] founder-lane mount failed (non-fatal)\");\n  }\n",
       "assertion_spec": {
         "expected_exports": [],
         "file_contains": [
@@ -206,7 +212,15 @@
         "a full-file rewrite -- use patch mode only",
         "touching any other route mount in this file"
       ],
-      "status": "pending"
+      "status": "complete",
+      "completed_at": "2026-08-09T00:21:38.202Z",
+      "git_sha": "2d0ef87123e6554b7e1360ee8e2ed90123f30ec8"
     }
-  ]
+  ],
+  "blueprint_status": "complete",
+  "completed_at": "2026-08-09T00:21:38.202Z",
+  "git_sha": "2d0ef87123e6554b7e1360ee8e2ed90123f30ec8",
+  "receipt_path": "products/receipts/MARKETPLACE_OPPORTUNITY_SCANNER_ACCEPTANCE.json",
+  "receipt_verdict": "PASS",
+  "build_method": "system-build"
 }

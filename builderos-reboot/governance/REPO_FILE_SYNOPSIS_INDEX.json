@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-09T00:19:42.412Z",
+  "generated_at": "2026-08-09T00:22:18.030Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13129,
+  "file_count": 13131,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21307,9 +21307,9 @@
     {
       "path": "builderos-reboot/BP_PRIORITY.json",
       "synopsis": "BuilderOS artifact — BP PRIORITY.",
-      "bytes": 42406,
-      "mtime": "2026-08-09T00:12:50.018Z",
-      "indexed_at": "2026-08-09T00:13:29.415Z",
+      "bytes": 42737,
+      "mtime": "2026-08-09T00:21:38.207Z",
+      "indexed_at": "2026-08-09T00:22:18.030Z",
       "synopsis_index_only": true
     },
     {
@@ -26720,9 +26720,9 @@
     {
       "path": "builderos-reboot/MISSIONS/MARKETPLACE-OPPORTUNITY-SCANNER-0001/BLUEPRINT.json",
       "synopsis": "Marketplace Opportunity Scanner -- pure, deterministic scoring\\n * for candidate products/niches (demand, competition, margin, trend, capital\\n * required, complexity, risk), plus persistence for scored candidates. No\\n * AI/model call anyw",
-      "bytes": 17640,
-      "mtime": "2026-08-09T00:12:04.006Z",
-      "indexed_at": "2026-08-09T00:13:29.415Z",
+      "bytes": 18366,
+      "mtime": "2026-08-09T00:21:38.207Z",
+      "indexed_at": "2026-08-09T00:22:18.030Z",
       "synopsis_index_only": true
     },
     {
@@ -26746,6 +26746,14 @@
       "bytes": 2542,
       "mtime": "2026-08-09T00:10:03.843Z",
       "indexed_at": "2026-08-09T00:13:29.415Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/MARKETPLACE-OPPORTUNITY-SCANNER-0001/OBJECTIVE_VERDICT.json",
+      "synopsis": "BuilderOS artifact — OBJECTIVE VERDICT.",
+      "bytes": 934,
+      "mtime": "2026-08-09T00:21:38.212Z",
+      "indexed_at": "2026-08-09T00:22:18.030Z",
       "synopsis_index_only": true
     },
     {
@@ -30598,9 +30606,9 @@
     {
       "path": "builderos-reboot/PRODUCT_READINESS_REPORT.json",
       "synopsis": "BuilderOS artifact — PRODUCT READINESS REPORT.",
-      "bytes": 51986,
-      "mtime": "2026-08-09T00:06:39.031Z",
-      "indexed_at": "2026-08-09T00:07:27.839Z",
+      "bytes": 52421,
+      "mtime": "2026-08-09T00:21:38.212Z",
+      "indexed_at": "2026-08-09T00:22:18.030Z",
       "synopsis_index_only": true
     },
     {
@@ -42502,9 +42510,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 479130,
-      "mtime": "2026-08-09T00:14:58.533Z",
-      "indexed_at": "2026-08-09T00:15:21.594Z"
+      "bytes": 480659,
+      "mtime": "2026-08-09T00:22:02.388Z",
+      "indexed_at": "2026-08-09T00:22:18.030Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -68179,6 +68187,14 @@
       "bytes": 2248,
       "mtime": "2026-07-31T06:21:12.569Z",
       "indexed_at": "2026-07-31T06:22:29.192Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/MARKETPLACE_OPPORTUNITY_SCANNER_ACCEPTANCE.json",
+      "synopsis": "Product receipt — MARKETPLACE OPPORTUNITY SCANNER ACCEPTANCE.",
+      "bytes": 7355,
+      "mtime": "2026-08-09T00:21:38.212Z",
+      "indexed_at": "2026-08-09T00:22:18.030Z",
       "synopsis_index_only": true
     },
     {

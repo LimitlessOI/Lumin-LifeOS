@@ -1,0 +1,270 @@
+{
+  "schema": "marketplace_opportunity_scanner_acceptance_v1",
+  "mission_id": "MARKETPLACE-OPPORTUNITY-SCANNER-0001",
+  "started_at": "2026-08-09T00:21:38.190Z",
+  "tests_passed": [
+    "service_file_exists",
+    "exports_all_functions",
+    "strong_signal_scores_above_70",
+    "weak_signal_scores_below_30",
+    "partial_data_flagged_not_hidden",
+    "empty_signals_confidence_none",
+    "deterministic_same_input_same_output",
+    "route_file_exists",
+    "route_imports_and_calls_scanner_service",
+    "mount_file_exists",
+    "route_is_actually_mounted",
+    "bp_sync_mandatory"
+  ],
+  "tests_failed": [],
+  "steps": [
+    {
+      "step": "service_file_exists",
+      "ok": true,
+      "detail": "/private/tmp/claude-501/-Users-adamhopkins-Projects-Lumin-LifeOS/b98a9c4f-30b0-4efc-94d3-7e9a8ac44905/scratchpad/v1-build-retry/services/marketplace-opportunity-scanner.js",
+      "at": "2026-08-09T00:21:38.191Z"
+    },
+    {
+      "step": "exports_all_functions",
+      "ok": true,
+      "detail": {
+        "exported": [
+          "listOpportunities",
+          "recordOpportunity",
+          "scoreOpportunity",
+          "updateOpportunityStatus"
+        ]
+      },
+      "at": "2026-08-09T00:21:38.191Z"
+    },
+    {
+      "step": "strong_signal_scores_above_70",
+      "ok": true,
+      "detail": {
+        "score": 85,
+        "confidence": "full",
+        "missingFactors": [],
+        "breakdown": [
+          {
+            "factor": "demand",
+            "raw_input": 90,
+            "normalized": 90,
+            "weight": 0.25,
+            "contribution": 22.5
+          },
+          {
+            "factor": "competition",
+            "raw_input": 20,
+            "normalized": 80,
+            "weight": 0.15,
+            "contribution": 12
+          },
+          {
+            "factor": "margin",
+            "raw_input": 80,
+            "normalized": 80,
+            "weight": 0.25,
+            "contribution": 20
+          },
+          {
+            "factor": "trend",
+            "raw_input": 85,
+            "normalized": 85,
+            "weight": 0.15,
+            "contribution": 12.75
+          },
+          {
+            "factor": "capitalRequired",
+            "raw_input": 10,
+            "normalized": 90,
+            "weight": 0.1,
+            "contribution": 9
+          },
+          {
+            "factor": "complexity",
+            "raw_input": 15,
+            "normalized": 85,
+            "weight": 0.05,
+            "contribution": 4.25
+          },
+          {
+            "factor": "risk",
+            "raw_input": 10,
+            "normalized": 90,
+            "weight": 0.05,
+            "contribution": 4.5
+          }
+        ],
+        "factors_provided": 7,
+        "factors_total": 7
+      },
+      "at": "2026-08-09T00:21:38.191Z"
+    },
+    {
+      "step": "weak_signal_scores_below_30",
+      "ok": true,
+      "detail": {
+        "score": 14.5,
+        "confidence": "full",
+        "missingFactors": [],
+        "breakdown": [
+          {
+            "factor": "demand",
+            "raw_input": 15,
+            "normalized": 15,
+            "weight": 0.25,
+            "contribution": 3.75
+          },
+          {
+            "factor": "competition",
+            "raw_input": 90,
+            "normalized": 10,
+            "weight": 0.15,
+            "contribution": 1.5
+          },
+          {
+            "factor": "margin",
+            "raw_input": 10,
+            "normalized": 10,
+            "weight": 0.25,
+            "contribution": 2.5
+          },
+          {
+            "factor": "trend",
+            "raw_input": 20,
+            "normalized": 20,
+            "weight": 0.15,
+            "contribution": 3
+          },
+          {
+            "factor": "capitalRequired",
+            "raw_input": 85,
+            "normalized": 15,
+            "weight": 0.1,
+            "contribution": 1.5
+          },
+          {
+            "factor": "complexity",
+            "raw_input": 80,
+            "normalized": 20,
+            "weight": 0.05,
+            "contribution": 1
+          },
+          {
+            "factor": "risk",
+            "raw_input": 75,
+            "normalized": 25,
+            "weight": 0.05,
+            "contribution": 1.25
+          }
+        ],
+        "factors_provided": 7,
+        "factors_total": 7
+      },
+      "at": "2026-08-09T00:21:38.191Z"
+    },
+    {
+      "step": "partial_data_flagged_not_hidden",
+      "ok": true,
+      "detail": {
+        "score": 75,
+        "confidence": "partial",
+        "missingFactors": [
+          "competition",
+          "trend",
+          "capitalRequired",
+          "complexity",
+          "risk"
+        ],
+        "breakdown": [
+          {
+            "factor": "demand",
+            "raw_input": 80,
+            "normalized": 80,
+            "weight": 0.25,
+            "contribution": 20
+          },
+          {
+            "factor": "margin",
+            "raw_input": 70,
+            "normalized": 70,
+            "weight": 0.25,
+            "contribution": 17.5
+          }
+        ],
+        "factors_provided": 2,
+        "factors_total": 7
+      },
+      "at": "2026-08-09T00:21:38.191Z"
+    },
+    {
+      "step": "empty_signals_confidence_none",
+      "ok": true,
+      "detail": {
+        "score": 0,
+        "confidence": "none",
+        "missingFactors": [
+          "demand",
+          "competition",
+          "margin",
+          "trend",
+          "capitalRequired",
+          "complexity",
+          "risk"
+        ],
+        "breakdown": [],
+        "factors_provided": 0,
+        "factors_total": 7
+      },
+      "at": "2026-08-09T00:21:38.191Z"
+    },
+    {
+      "step": "deterministic_same_input_same_output",
+      "ok": true,
+      "detail": {
+        "s1": 57.75,
+        "s2": 57.75
+      },
+      "at": "2026-08-09T00:21:38.191Z"
+    },
+    {
+      "step": "route_file_exists",
+      "ok": true,
+      "detail": "/private/tmp/claude-501/-Users-adamhopkins-Projects-Lumin-LifeOS/b98a9c4f-30b0-4efc-94d3-7e9a8ac44905/scratchpad/v1-build-retry/routes/marketplace-opportunity-routes.js",
+      "at": "2026-08-09T00:21:38.191Z"
+    },
+    {
+      "step": "route_imports_and_calls_scanner_service",
+      "ok": true,
+      "detail": "routes/marketplace-opportunity-routes.js must import from and call the scanner service, not just import it",
+      "at": "2026-08-09T00:21:38.192Z"
+    },
+    {
+      "step": "mount_file_exists",
+      "ok": true,
+      "detail": "/private/tmp/claude-501/-Users-adamhopkins-Projects-Lumin-LifeOS/b98a9c4f-30b0-4efc-94d3-7e9a8ac44905/scratchpad/v1-build-retry/startup/register-founder-runtime-routes.js",
+      "at": "2026-08-09T00:21:38.192Z"
+    },
+    {
+      "step": "route_is_actually_mounted",
+      "ok": true,
+      "detail": "must be imported AND app.use()-mounted in the real production startup file, not just created",
+      "at": "2026-08-09T00:21:38.192Z"
+    }
+  ],
+  "completed_at": "2026-08-09T00:21:38.202Z",
+  "git_sha": "2d0ef87123e6554b7e1360ee8e2ed90123f30ec8",
+  "verdict": "PASS",
+  "bp_sync": {
+    "updated": [
+      "builderos-reboot/BP_PRIORITY.json",
+      "builderos-reboot/MISSIONS/MARKETPLACE-OPPORTUNITY-SCANNER-0001/BLUEPRINT.json"
+    ],
+    "skipped": []
+  },
+  "artifact_sync": {
+    "mode": "technical_acceptance",
+    "readiness_report": "builderos-reboot/PRODUCT_READINESS_REPORT.json",
+    "freshness_status": "CURRENT"
+  }
+}

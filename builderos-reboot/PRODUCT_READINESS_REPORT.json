@@ -1,6 +1,6 @@
 {
   "schema": "product_readiness_report_v1",
-  "updated_at": "2026-08-09T00:06:39.022Z",
+  "updated_at": "2026-08-09T00:21:38.202Z",
   "authority": {
     "product_registry": "docs/products/PRODUCT_REGISTRY.json",
     "bp_priority": "builderos-reboot/BP_PRIORITY.json",
@@ -257,6 +257,19 @@
           "completion_receipt_id": null,
           "artifact_sync": {
             "at": "2026-08-09T00:06:39.022Z",
+            "mode": "technical_acceptance",
+            "status": "CURRENT"
+          }
+        },
+        {
+          "rank": 26,
+          "mission_id": "MARKETPLACE-OPPORTUNITY-SCANNER-0001",
+          "blueprint_status": "complete",
+          "verdict": "TECHNICAL_PASS",
+          "founder_usability_pass": false,
+          "completion_receipt_id": null,
+          "artifact_sync": {
+            "at": "2026-08-09T00:21:38.202Z",
             "mode": "technical_acceptance",
             "status": "CURRENT"
           }
@@ -1462,7 +1475,7 @@
   ],
   "freshness": {
     "status": "CURRENT",
-    "updated_at": "2026-08-09T00:06:39.022Z",
+    "updated_at": "2026-08-09T00:21:38.202Z",
     "authority_paths": [
       "docs/products/PRODUCT_REGISTRY.json",
       "builderos-reboot/BP_PRIORITY.json",
