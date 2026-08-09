@@ -212,6 +212,48 @@ export function registerGeneralBrowserAgentRoutes(app, deps = {}) {
         logger.info?.('[BROWSER-AGENT] envCreds TC_IMAP/ADAM_GMAIL injected (email present, password redacted)');
       }
 
+      // 2026-08-08: anonymous headless access to Etsy/eBay search pages is
+      // actively blocked by anti-bot systems (Etsy: DataDome device-check
+      // interstitial; eBay: hard error page) -- confirmed live. Adam: 'build
+      // our overlay system as if it's a human being pushing the button...
+      // it is acting as my hands.' Authenticated-session automation on his
+      // own account, not anonymous scraping -- same safe pattern as WRM_WIX/TC_IMAP.
+      if (envCredKey === 'ETSY') {
+        const email = String(process.env.ETSY_EMAIL || '').trim();
+        const password = String(process.env.ETSY_PASSWORD || '').trim();
+        if (!email || !password) {
+          return res.status(503).json({
+            ok: false,
+            error: 'ETSY_EMAIL / ETSY_PASSWORD not set on tip',
+          });
+        }
+        effectiveGoal = [
+          `Log in to Etsy with email ${email} and password ${password}.`,
+          'If already logged in, continue.',
+          'Do not invent credentials. Stay on etsy.com.',
+          effectiveGoal,
+        ].join('\n');
+        logger.info?.('[BROWSER-AGENT] envCreds ETSY injected (email present, password redacted)');
+      }
+
+      if (envCredKey === 'EBAY') {
+        const email = String(process.env.EBAY_EMAIL || '').trim();
+        const password = String(process.env.EBAY_PASSWORD || '').trim();
+        if (!email || !password) {
+          return res.status(503).json({
+            ok: false,
+            error: 'EBAY_EMAIL / EBAY_PASSWORD not set on tip',
+          });
+        }
+        effectiveGoal = [
+          `Log in to eBay with email ${email} and password ${password}.`,
+          'If already logged in, continue.',
+          'Do not invent credentials. Stay on ebay.com.',
+          effectiveGoal,
+        ].join('\n');
+        logger.info?.('[BROWSER-AGENT] envCreds EBAY injected (email present, password redacted)');
+      }
+
       if (vaultService) {
         const accountManager = await getAccountManager();
         const acct = await resolveVaultAccount(accountManager, String(vaultService));
