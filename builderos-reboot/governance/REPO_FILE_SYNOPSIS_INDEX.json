@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-09T00:41:04.658Z",
+  "generated_at": "2026-08-09T01:32:34.924Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13138,
+  "file_count": 13143,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21307,9 +21307,9 @@
     {
       "path": "builderos-reboot/BP_PRIORITY.json",
       "synopsis": "BuilderOS artifact — BP PRIORITY.",
-      "bytes": 44052,
-      "mtime": "2026-08-09T00:40:23.323Z",
-      "indexed_at": "2026-08-09T00:41:04.658Z",
+      "bytes": 45021,
+      "mtime": "2026-08-09T01:31:52.679Z",
+      "indexed_at": "2026-08-09T01:32:34.924Z",
       "synopsis_index_only": true
     },
     {
@@ -26832,6 +26832,37 @@
       "bytes": 1101,
       "mtime": "2026-08-09T00:06:39.031Z",
       "indexed_at": "2026-08-09T00:07:27.839Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/OVERLAY-STUCK-LOOP-RECOVERY-0001/BLUEPRINT.json",
+      "synopsis": "Exports isRiskyClick — builderos-reboot/MISSIONS/OVERLAY-STUCK-LOOP-RECOVERY-0001/BLUEPRINT.json.",
+      "bytes": 23374,
+      "mtime": "2026-08-09T01:30:41.100Z",
+      "indexed_at": "2026-08-09T01:32:34.924Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/OVERLAY-STUCK-LOOP-RECOVERY-0001/DELIBERATION_GATE.json",
+      "synopsis": "BuilderOS artifact — DELIBERATION GATE.",
+      "bytes": 1386,
+      "mtime": "2026-08-09T01:31:07.511Z",
+      "indexed_at": "2026-08-09T01:32:34.924Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/OVERLAY-STUCK-LOOP-RECOVERY-0001/FOUNDER_PACKET.md",
+      "synopsis": "Founder Packet — generic stuck-loop detection/recovery for the overlay engine, no site-specific code.",
+      "bytes": 3402,
+      "mtime": "2026-08-09T01:28:41.411Z",
+      "indexed_at": "2026-08-09T01:32:34.924Z"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/OVERLAY-STUCK-LOOP-RECOVERY-0001/INTENT_BASELINE.json",
+      "synopsis": "BuilderOS artifact — INTENT BASELINE.",
+      "bytes": 2383,
+      "mtime": "2026-08-09T01:28:55.754Z",
+      "indexed_at": "2026-08-09T01:32:34.924Z",
       "synopsis_index_only": true
     },
     {
@@ -42549,9 +42580,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 483892,
-      "mtime": "2026-08-09T00:40:40.636Z",
-      "indexed_at": "2026-08-09T00:41:04.658Z"
+      "bytes": 486105,
+      "mtime": "2026-08-09T01:32:14.489Z",
+      "indexed_at": "2026-08-09T01:32:34.924Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -67161,9 +67192,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\":\"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",\"lifeos:file-synopsis:backfill\":\"node scripts/file-synopsis-enforce.mjs --all --auto-fix && node scripts/generate-file-synopsis-index.mjs\",\"lifeos:file-synopsis:index\":\"n",
-      "bytes": 35447,
-      "mtime": "2026-08-09T00:34:48.396Z",
-      "indexed_at": "2026-08-09T00:35:29.366Z",
+      "bytes": 35550,
+      "mtime": "2026-08-09T01:31:52.698Z",
+      "indexed_at": "2026-08-09T01:32:34.924Z",
       "synopsis_index_only": true
     },
     {
@@ -77786,6 +77817,16 @@
       "bytes": 7895,
       "mtime": "2026-08-09T00:06:33.895Z",
       "indexed_at": "2026-08-09T00:07:27.839Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/run-overlay-stuck-loop-recovery-acceptance.mjs",
+      "synopsis": "Overlay Stuck-Loop Recovery acceptance.",
+      "bytes": 8126,
+      "mtime": "2026-08-09T01:31:39.286Z",
+      "indexed_at": "2026-08-09T01:32:34.924Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

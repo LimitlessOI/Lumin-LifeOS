@@ -1,0 +1,235 @@
+{
+  "mission_id": "OVERLAY-STUCK-LOOP-RECOVERY-0001",
+  "blueprint_id": "OVERLAY-STUCK-LOOP-RECOVERY-2026-08-08",
+  "scope": "overlay_stuck_loop_detection_and_recovery",
+  "authority": "FOUNDER_PACKET.md",
+  "acceptance_command": "npm run overlay:stuck-loop-recovery:acceptance",
+  "allowed_action_types": [
+    "builder_build",
+    "author_then_write",
+    "shell_command"
+  ],
+  "steps": [
+    {
+      "step_id": "OSL-S01a",
+      "phase_id": "P0",
+      "title": "Stuck-loop recovery: add fingerprintObservation (patch 1 of 2)",
+      "target_file": "services/general-browser-agent.js",
+      "target_files": [
+        "services/general-browser-agent.js"
+      ],
+      "action_type": "author_then_write",
+      "patch_mode": true,
+      "task": "Insert fingerprintObservation(observation) into services/general-browser-agent.js using PATCH MODE.",
+      "spec": "Output in PATCH MODE ONLY: the OLD block below must be copied EXACTLY character-for-character from the real current file. NEW inserts fingerprintObservation between isRiskyClick and the runBrowserGoal JSDoc. Exact text below, no other change.\n\nOLD:\nexport function isRiskyClick(action, observation) {\n  if (!action || action.type !== 'click') return false;\n  const els = (observation && observation.elements) || [];\n  const el = els.find(function (e) { return e.selector === action.selector; });\n  const label = (el && el.text) || action.reason || '';\n  return RISKY_ACTION_LABEL_PATTERNS.some(function (re) { return re.test(label); });\n}\n\n/**\n * Run a goal on a live browser via the observe -> decide -> act loop.\n\nNEW:\nexport function isRiskyClick(action, observation) {\n  if (!action || action.type !== 'click') return false;\n  const els = (observation && observation.elements) || [];\n  const el = els.find(function (e) { return e.selector === action.selector; });\n  const label = (el && el.text) || action.reason || '';\n  return RISKY_ACTION_LABEL_PATTERNS.some(function (re) { return re.test(label); });\n}\n\n/**\n * Cheap, deterministic fingerprint of an observation -- used to detect when an\n * action produced no visible change (the direct cause of a real stuck-loop\n * found live on an Etsy shop-signup flow: the same navigate action repeated\n * for the entire step budget with zero forward progress).\n */\nexport function fingerprintObservation(observation) {\n  const elSig = (observation?.elements || []).slice(0, 10).map((e) => `${e.tag}:${e.selector}`).join('|');\n  return `${observation?.url || ''}::${observation?.title || ''}::${(observation?.elements || []).length}::${elSig}`;\n}\n\n/**\n * Run a goal on a live browser via the observe -> decide -> act loop.\n",
+      "authoring": {
+        "tiers": [
+          "deepseek",
+          "groq_llama",
+          "mistral_free"
+        ]
+      },
+      "assertion_spec": {
+        "expected_exports": [
+          "fingerprintObservation"
+        ],
+        "file_contains": [
+          "export function fingerprintObservation"
+        ]
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "target": "services/general-browser-agent.js",
+          "exports": [
+            "runBrowserGoal",
+            "fingerprintObservation",
+            "isRiskyClick"
+          ]
+        },
+        {
+          "type": "function_behavior_test",
+          "target": "services/general-browser-agent.js",
+          "export": "fingerprintObservation",
+          "args_list": [
+            {
+              "url": "https://x.com/a",
+              "title": "A",
+              "elements": [
+                {
+                  "tag": "a",
+                  "selector": "#x"
+                }
+              ]
+            }
+          ],
+          "expect": "https://x.com/a::A::1::a:#x"
+        }
+      ],
+      "sandbox_boundary": "services/**",
+      "authority_owner": "Builder",
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "dependencies": [],
+      "non_goals": [
+        "a full-file rewrite -- use patch mode only",
+        "any site-specific logic"
+      ],
+      "status": "pending"
+    },
+    {
+      "step_id": "OSL-S01b",
+      "phase_id": "P0",
+      "title": "Stuck-loop recovery: wire stuck/stuckCount into the loop (patch 2 of 2)",
+      "target_file": "services/general-browser-agent.js",
+      "target_files": [
+        "services/general-browser-agent.js"
+      ],
+      "action_type": "author_then_write",
+      "patch_mode": true,
+      "task": "Track a fingerprint of each observation and pass stuck/stuckCount into decideAction and onAfterStep, using PATCH MODE.",
+      "spec": "Output in PATCH MODE ONLY: the OLD block below must be copied EXACTLY character-for-character from the real current file (it is a large contiguous span from the steps/templateSteps declaration through the decideAction call -- copy it exactly). NEW adds lastFingerprint/stuckCount state, computes a fingerprint each loop iteration via fingerprintObservation (added in OSL-S01a, which this step depends on), sets stuck=true only when the fingerprint matches the PREVIOUS iteration's fingerprint (never on the very first iteration, since lastFingerprint starts null), and passes stuck/stuckCount into both onAfterStep and decideAction. Exact text below, no other change to the rest of the function.\n\nOLD:\n  const steps = [];\n  const templateSteps = [];\n\n  const record = async (rec) => {\n    steps.push(rec);\n    if (onStep) await onStep(rec);\n  };\n\n  // GUARDRAIL: confirm we are on the intended account/site before a live action.\n  const guard = async (observation, action) => {\n    if (!isLiveAction(action.type)) return { ok: true };\n    // GUARDRAIL: never click a real observed element whose own label reads as\n    // a financially/consequentially risky action, unless explicitly authorized.\n    if (isRiskyClick(action, observation) && !allowRiskyActions) {\n      const el = (observation?.elements || []).find((e) => e.selector === action.selector);\n      const label = el?.text || action.reason || action.selector || 'unknown';\n      return { ok: false, reason: `risky_action_requires_authorization:${label}` };\n    }\n    if (!confirmContext || !expectedContext) return { ok: true };\n    const verdict = await confirmContext({ observation, expectedContext, action });\n    if (!verdict || verdict.ok !== true) {\n      return { ok: false, reason: `context_unconfirmed:${verdict?.reason || 'unknown'}` };\n    }\n    return { ok: true };\n  };\n\n  // Optional guarded start navigation.\n  if (startUrl) {\n    let observation = await observe();\n    const g = await guard(observation, { type: 'navigate', url: startUrl });\n    if (!g.ok) {\n      await record({ step: 0, action: { type: 'navigate', url: startUrl }, blocked: true, reason: g.reason });\n      return { ok: false, reached: false, reason: g.reason, steps, evidence: null, template: null };\n    }\n    const res = await act({ type: 'navigate', url: startUrl });\n    await record({ step: 0, action: { type: 'navigate', url: startUrl }, result: res });\n    templateSteps.push({ type: 'navigate', url: startUrl });\n  }\n\n  for (let i = 1; i <= maxSteps; i += 1) {\n    const observation = await observe();\n\n    if (typeof onAfterStep === 'function') {\n      const after = await onAfterStep({ observation, step: i, history: steps });\n      if (after?.stop) {\n        await record({\n          step: i,\n          action: { type: 'done', reason: after.reason || 'onAfterStep_stop' },\n          handoff: after.handoff || null,\n        });\n        return {\n          ok: after.ok !== false,\n          reached: false,\n          reason: after.reason || 'onAfterStep_stop',\n          steps,\n          evidence: null,\n          template: null,\n          handoff: after.handoff || null,\n        };\n      }\n    }\n\n    const raw = await decideAction({ goal, observation, history: steps });\n\nNEW:\n  const steps = [];\n  const templateSteps = [];\n  let lastFingerprint = null;\n  let stuckCount = 0;\n\n  const record = async (rec) => {\n    steps.push(rec);\n    if (onStep) await onStep(rec);\n  };\n\n  // GUARDRAIL: confirm we are on the intended account/site before a live action.\n  const guard = async (observation, action) => {\n    if (!isLiveAction(action.type)) return { ok: true };\n    // GUARDRAIL: never click a real observed element whose own label reads as\n    // a financially/consequentially risky action, unless explicitly authorized.\n    if (isRiskyClick(action, observation) && !allowRiskyActions) {\n      const el = (observation?.elements || []).find((e) => e.selector === action.selector);\n      const label = el?.text || action.reason || action.selector || 'unknown';\n      return { ok: false, reason: `risky_action_requires_authorization:${label}` };\n    }\n    if (!confirmContext || !expectedContext) return { ok: true };\n    const verdict = await confirmContext({ observation, expectedContext, action });\n    if (!verdict || verdict.ok !== true) {\n      return { ok: false, reason: `context_unconfirmed:${verdict?.reason || 'unknown'}` };\n    }\n    return { ok: true };\n  };\n\n  // Optional guarded start navigation.\n  if (startUrl) {\n    let observation = await observe();\n    const g = await guard(observation, { type: 'navigate', url: startUrl });\n    if (!g.ok) {\n      await record({ step: 0, action: { type: 'navigate', url: startUrl }, blocked: true, reason: g.reason });\n      return { ok: false, reached: false, reason: g.reason, steps, evidence: null, template: null };\n    }\n    const res = await act({ type: 'navigate', url: startUrl });\n    await record({ step: 0, action: { type: 'navigate', url: startUrl }, result: res });\n    templateSteps.push({ type: 'navigate', url: startUrl });\n  }\n\n  for (let i = 1; i <= maxSteps; i += 1) {\n    const observation = await observe();\n\n    // STUCK DETECTION: a fingerprint identical to the previous step's means the\n    // last action produced no visible change -- surface this as real context to\n    // the decider instead of letting it silently repeat the same mistake for the\n    // whole step budget (confirmed live: exactly this happened on a real run).\n    const fingerprint = fingerprintObservation(observation);\n    const stuck = lastFingerprint !== null && fingerprint === lastFingerprint;\n    stuckCount = stuck ? stuckCount + 1 : 0;\n    lastFingerprint = fingerprint;\n\n    if (typeof onAfterStep === 'function') {\n      const after = await onAfterStep({ observation, step: i, history: steps, stuck, stuckCount });\n      if (after?.stop) {\n        await record({\n          step: i,\n          action: { type: 'done', reason: after.reason || 'onAfterStep_stop' },\n          handoff: after.handoff || null,\n        });\n        return {\n          ok: after.ok !== false,\n          reached: false,\n          reason: after.reason || 'onAfterStep_stop',\n          steps,\n          evidence: null,\n          template: null,\n          handoff: after.handoff || null,\n        };\n      }\n    }\n\n    const raw = await decideAction({ goal, observation, history: steps, stuck, stuckCount });\n",
+      "authoring": {
+        "tiers": [
+          "deepseek",
+          "groq_llama",
+          "mistral_free"
+        ]
+      },
+      "assertion_spec": {
+        "expected_exports": [
+          "runBrowserGoal"
+        ],
+        "file_contains": [
+          "stuckCount",
+          "fingerprintObservation(observation)",
+          "stuck, stuckCount"
+        ]
+      },
+      "sandbox_boundary": "services/**",
+      "authority_owner": "Builder",
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "dependencies": [
+        "OSL-S01a"
+      ],
+      "non_goals": [
+        "a full-file rewrite -- use patch mode only",
+        "any site-specific logic",
+        "changing the risky-action or context guardrails"
+      ],
+      "status": "pending"
+    },
+    {
+      "step_id": "OSL-S02",
+      "phase_id": "P0",
+      "title": "Stuck-loop recovery: stuck-aware prompt + tier escalation in the runtime adapter",
+      "target_file": "services/general-browser-agent-runtime.js",
+      "target_files": [
+        "services/general-browser-agent-runtime.js"
+      ],
+      "action_type": "author_then_write",
+      "patch_mode": false,
+      "task": "Add a stuck-warning note to formatObservation and tier-escalation-on-stuck to makeDecider, using the exact given full-file content.",
+      "spec": "Write the EXACT file content given below, character for character. This is a full-file replacement of a small (98-line) file getting two real changes: (1) formatObservation gains a third opts param and appends a stuck-warning note to the prompt when opts.stuck is true, (2) makeDecider's returned decideAction function now accepts stuck/stuckCount and, when stuckCount >= 2, tries the tier list in REVERSE order (escalating to the presumed-strongest tier first) instead of cheapest-first. Every other line is byte-identical to the current file. Do not reformat, do not change quote style.\n\n=== EXACT FILE CONTENT ===\n/**\n * SYNOPSIS: Exports observePage -- services/general-browser-agent-runtime.js.\n * @ssot docs/products/tc-service/PRODUCT_HOME.md\n */\n\nexport async function observePage(session, opts = {}) {\n    try {\n        const url = await session.currentUrl() || session.page.url();\n        const title = await session.page.title();\n        const text = (await session.pageText()).substring(0, opts.maxTextChars || 4000);\n        const elements = await session.page.evaluate((maxElements) => {\n            const interactiveElements = [...document.querySelectorAll('a, button, input, select, textarea, [role=button]')];\n            return interactiveElements.filter(el => el.offsetParent !== null).slice(0, maxElements).map((el) => {\n                const tag = el.tagName.toLowerCase();\n                const type = el.type || '';\n                const name = el.name || '';\n                const id = el.id || '';\n                const text = (el.innerText || el.placeholder || el.value || el.getAttribute('aria-label') || '').trim().substring(0, 80);\n                const selector = id ? `#${id}` : `${tag}:nth-of-type(${Array.from(el.parentNode.children).indexOf(el) + 1})`;\n                return { tag, type, name, id, text, selector };\n            });\n        }, opts.maxElements || 40);\n        return { url, title, text, elements };\n    } catch {\n        return { url: '', title: '', text: '', elements: [] };\n    }\n}\n\nexport function formatObservation(observation, goal, opts = {}) {\n    const elementsList = observation.elements.map((el, index) => `${index + 1}. <${el.tag}>: ${el.text} (selector: ${el.selector})`).join('\\n');\n    const stuckNote = opts.stuck\n        ? `\\n\\nWARNING: your last action produced NO visible change to this page (same URL, same title, same elements as before). Do NOT repeat that exact action again. Pick a genuinely different element, scroll to reveal more of the page, or try a different navigation path entirely.`\n        : '';\n    return `Goal: ${goal}\\nURL: ${observation.url}\\nTitle: ${observation.title}\\nText: ${observation.text.substring(0, 1500)}\\nElements:\\n${elementsList}${stuckNote}`;\n}\n\nexport function parseModelAction(text) {\n    const regex = /{[^]*?}/;\n    const match = text.match(regex);\n    if (match) {\n        try {\n            return JSON.parse(match[0]);\n        } catch {\n            return { type: 'give_up', reason: 'unparseable_model_output' };\n        }\n    }\n    return { type: 'give_up', reason: 'unparseable_model_output' };\n}\n\nexport function makeDecider({ callModel, tiers }) {\n    return async function decideAction({ goal, observation, history, stuck = false, stuckCount = 0 }) {\n        const prompt = formatObservation(observation, goal, { stuck }) + '\\nPlease respond ONLY with a JSON action of the form {\"type\":\"navigate|click|type|wait|done|give_up\", ...fields}';\n        // Escalate: a decision the cheap tiers already got wrong twice deserves the\n        // strongest available model, not another cheap guess -- same escalation\n        // philosophy as SO-003, triggered by observed difficulty instead of only\n        // pre-set. Generic: no site-specific tier names, just \"try tiers in reverse\n        // (strongest-presumed-last -> first) when meaningfully stuck.\"\n        const effectiveTiers = stuck && stuckCount >= 2 && tiers.length > 1\n            ? [...tiers].reverse()\n            : tiers;\n        for (const tier of effectiveTiers) {\n            try {\n                const output = await callModel(tier, prompt);\n                if (output) {\n                    return parseModelAction(output);\n                }\n            } catch {}\n        }\n        return { type: 'give_up', reason: 'all_tiers_failed' };\n    };\n}\n\nexport function makeEvidenceVerifier({ mustContain = [], mustHaveSelector = [] }) {\n    return async function verifyGoal({ goal, observation }) {\n        const matchedText = mustContain.filter(text => observation.text.toLowerCase().includes(text.toLowerCase()));\n        const matchedSelectors = mustHaveSelector.filter(selector => observation.elements.some(el => el.selector === selector || el.text.toLowerCase().includes(selector.toLowerCase())));\n        const reached = matchedText.length === mustContain.length && matchedSelectors.length === mustHaveSelector.length;\n        return { reached, evidence: { matchedText, matchedSelectors, url: observation.url } };\n    };\n}\n\nexport function makeAccountConfirmer({ expectSiteHost = null, expectAccountText = null }) {\n    return async function confirmContext({ observation, action = null }) {\n        // Allow first navigate TO the expected host from about:blank / other pages.\n        if (\n            action?.type === 'navigate' &&\n            expectSiteHost &&\n            typeof action.url === 'string' &&\n            action.url.includes(expectSiteHost)\n        ) {\n            return { ok: true };\n        }\n        const ok =\n            (expectSiteHost === null || String(observation?.url || '').includes(expectSiteHost)) &&\n            (expectAccountText === null || String(observation?.text || '').includes(expectAccountText));\n        return { ok, reason: ok ? undefined : 'context_mismatch' };\n    };\n}\n\nexport async function executeAction(session, action) {\n    try {\n        switch (action.type) {\n            case 'navigate':\n                await session.navigate(action.url);\n                break;\n            case 'click':\n                await session.click(action.selector);\n                break;\n            case 'type':\n                await session.fill(action.selector, action.text);\n                break;\n            case 'wait':\n                await new Promise(r => setTimeout(r, Math.min(action.ms || 1000, 5000)));\n                break;\n            case 'done':\n            case 'give_up':\n                return { ok: true, noop: true };\n            default:\n                return { ok: false, error: 'unknown_action_type' };\n        }\n        return { ok: true };\n    } catch (error) {\n        return { ok: false, error };\n    }\n}\n",
+      "authoring": {
+        "tiers": [
+          "deepseek",
+          "groq_llama",
+          "mistral_free"
+        ]
+      },
+      "assertion_spec": {
+        "expected_exports": [
+          "observePage",
+          "formatObservation",
+          "parseModelAction",
+          "makeDecider",
+          "makeEvidenceVerifier",
+          "makeAccountConfirmer",
+          "executeAction"
+        ],
+        "file_contains": [
+          "opts.stuck",
+          "stuckCount >= 2",
+          "[...tiers].reverse()"
+        ]
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "target": "services/general-browser-agent-runtime.js",
+          "exports": [
+            "observePage",
+            "formatObservation",
+            "parseModelAction",
+            "makeDecider",
+            "makeEvidenceVerifier",
+            "makeAccountConfirmer",
+            "executeAction"
+          ]
+        },
+        {
+          "type": "function_behavior_test",
+          "target": "services/general-browser-agent-runtime.js",
+          "export": "formatObservation",
+          "args_list": [
+            {
+              "url": "https://x.com",
+              "title": "X",
+              "text": "",
+              "elements": []
+            },
+            "test goal",
+            {
+              "stuck": true
+            }
+          ],
+          "expect": "Goal: test goal\nURL: https://x.com\nTitle: X\nText: \nElements:\n\n\nWARNING: your last action produced NO visible change to this page (same URL, same title, same elements as before). Do NOT repeat that exact action again. Pick a genuinely different element, scroll to reveal more of the page, or try a different navigation path entirely."
+        }
+      ],
+      "sandbox_boundary": "services/**",
+      "authority_owner": "Builder",
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "dependencies": [],
+      "non_goals": [
+        "any site-specific logic",
+        "changing observePage's capture logic"
+      ],
+      "status": "pending"
+    },
+    {
+      "step_id": "OSL-S03",
+      "phase_id": "P0",
+      "title": "Stuck-loop recovery: settle delay after navigate() for JS-heavy pages",
+      "target_file": "services/browser-agent.js",
+      "target_files": [
+        "services/browser-agent.js"
+      ],
+      "action_type": "author_then_write",
+      "patch_mode": true,
+      "task": "Add a 1200ms settle delay after page.goto() in navigate(), using PATCH MODE.",
+      "spec": "Output in PATCH MODE ONLY: the OLD block below must be copied EXACTLY character-for-character from the real current file. NEW adds a 1200ms delay after the existing page.goto() call so JS-heavy pages get a real render-settle beat before the loop observes them again. Exact text below, no other change.\n\nOLD:\n  async function navigate(url) {\n    logger.log?.(`[BROWSER] Navigating to ${url}`);\n    await page.goto(url, { waitUntil: \"domcontentloaded\", timeout: DEFAULT_NAV_TIMEOUT });\n  }\n\nNEW:\n  async function navigate(url) {\n    logger.log?.(`[BROWSER] Navigating to ${url}`);\n    await page.goto(url, { waitUntil: \"domcontentloaded\", timeout: DEFAULT_NAV_TIMEOUT });\n    // Settle delay: domcontentloaded fires before JS-heavy single-page apps (e.g.\n    // Etsy) finish hydrating, so an immediate observe() can see a half-rendered\n    // page -- a real, plausible contributor to a stuck-loop found live tonight.\n    // A human pauses to look at a page before reacting; this gives it that beat.\n    await new Promise((resolve) => setTimeout(resolve, 1200));\n  }\n",
+      "authoring": {
+        "tiers": [
+          "deepseek",
+          "groq_llama",
+          "mistral_free"
+        ]
+      },
+      "assertion_spec": {
+        "expected_exports": [],
+        "file_contains": [
+          "setTimeout(resolve, 1200)"
+        ]
+      },
+      "sandbox_boundary": "services/**",
+      "authority_owner": "Builder",
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "dependencies": [],
+      "non_goals": [
+        "a full-file rewrite -- use patch mode only",
+        "changing any other browser-agent.js function"
+      ],
+      "status": "pending"
+    }
+  ]
+}
