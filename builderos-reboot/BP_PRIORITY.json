@@ -788,6 +788,31 @@
         "mode": "technical_acceptance",
         "status": "CURRENT"
       }
+    },
+    {
+      "rank": 29,
+      "mission_id": "OVERLAY-DRIVE-CHANNEL-0001",
+      "product_id": "universal-overlay",
+      "product_home": "docs/products/universal-overlay/",
+      "founder_packet": "builderos-reboot/MISSIONS/OVERLAY-DRIVE-CHANNEL-0001/FOUNDER_PACKET.md",
+      "blueprint_path": "builderos-reboot/MISSIONS/OVERLAY-DRIVE-CHANNEL-0001/BLUEPRINT.json",
+      "blueprint_status": "complete",
+      "acceptance_command": "npm run overlay:drive-channel:acceptance",
+      "receipt_path": "products/receipts/OVERLAY_DRIVE_CHANNEL_ACCEPTANCE.json",
+      "verdict": "TECHNICAL_PASS",
+      "note": "Live server-to-extension driving channel -- backend confirmed live via real curl calls (session start, real pending observe request, real DB persistence, real stop) before this receipt was generated.",
+      "build_method": "system-build + hand-authored composition-root mount (GAP-FILL)",
+      "founder_usability_pass": false,
+      "receipt_verdict": "PASS",
+      "technical_pass_at": "2026-08-09T18:14:26.097Z",
+      "git_sha": "6c05aea4fd72188b5b84120045bd75193322a9de",
+      "production_base": "",
+      "objective_verdict": "builderos-reboot/MISSIONS/OVERLAY-DRIVE-CHANNEL-0001/OBJECTIVE_VERDICT.json",
+      "artifact_sync": {
+        "at": "2026-08-09T18:14:26.097Z",
+        "mode": "technical_acceptance",
+        "status": "CURRENT"
+      }
     }
   ],
   "_last_updated": "2026-08-02",

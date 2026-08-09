@@ -68,7 +68,10 @@
       "non_goals": [
         "any site-specific logic",
         "modifying services/general-browser-agent.js"
-      ]
+      ],
+      "status": "complete",
+      "completed_at": "2026-08-09T18:14:26.097Z",
+      "git_sha": "6c05aea4fd72188b5b84120045bd75193322a9de"
     },
     {
       "step_id": "ODC-S02",
@@ -118,7 +121,10 @@
       "non_goals": [
         "mounting the route -- separate step",
         "any site-specific logic"
-      ]
+      ],
+      "status": "complete",
+      "completed_at": "2026-08-09T18:14:26.097Z",
+      "git_sha": "6c05aea4fd72188b5b84120045bd75193322a9de"
     },
     {
       "step_id": "ODC-S03",
@@ -154,7 +160,10 @@
       "on_block": "BLOCKED_RETURN_TO_ARC",
       "non_goals": [
         "a full-file rewrite -- use patch mode only"
-      ]
+      ],
+      "status": "complete",
+      "completed_at": "2026-08-09T18:14:26.097Z",
+      "git_sha": "6c05aea4fd72188b5b84120045bd75193322a9de"
     },
     {
       "step_id": "ODC-S04",
@@ -170,7 +179,7 @@
         "ODC-S03"
       ],
       "task": "Mount createExtensionDriveRoutes at /api/v1/extension/drive, using PATCH MODE, matching the exact adjacent try/catch style already used for the extension status/chat mount directly above it.",
-      "spec": "Output in PATCH MODE ONLY: the OLD block below must be copied EXACTLY character-for-character from the real current file. NEW adds a second try/catch mount block directly after it, for the drive route, same style. Exact text below, no other change.\n\nOLD:\n  try {\n    app.use(\"/api/v1/extension\", createLifeOSExtensionRoutes({ pool, requireKey, callCouncilMember, logger }));\n    logger.info(\"\u2705 [EXTENSION] Universal Overlay routes mounted at /api/v1/extension/{status,context,fill-form,chat}\");\n  } catch (err) {\n    logger.warn?.({ err: err.message }, \"[EXTENSION] founder-lane mount failed (non-fatal)\");\n  }\n\nNEW:\n  try {\n    app.use(\"/api/v1/extension\", createLifeOSExtensionRoutes({ pool, requireKey, callCouncilMember, logger }));\n    logger.info(\"\u2705 [EXTENSION] Universal Overlay routes mounted at /api/v1/extension/{status,context,fill-form,chat}\");\n  } catch (err) {\n    logger.warn?.({ err: err.message }, \"[EXTENSION] founder-lane mount failed (non-fatal)\");\n  }\n\n  try {\n    app.use(\"/api/v1/extension/drive\", createExtensionDriveRoutes({ pool, requireKey, callCouncilMember, logger }));\n    logger.info(\"\u2705 [EXTENSION-DRIVE] Live driving channel mounted at /api/v1/extension/drive/{start,next,result,stop,status}\");\n  } catch (err) {\n    logger.warn?.({ err: err.message }, \"[EXTENSION-DRIVE] founder-lane mount failed (non-fatal)\");\n  }",
+      "spec": "Output in PATCH MODE ONLY: the OLD block below must be copied EXACTLY character-for-character from the real current file. NEW adds a second try/catch mount block directly after it, for the drive route, same style. Exact text below, no other change.\n\nOLD:\n  try {\n    app.use(\"/api/v1/extension\", createLifeOSExtensionRoutes({ pool, requireKey, callCouncilMember, logger }));\n    logger.info(\"✅ [EXTENSION] Universal Overlay routes mounted at /api/v1/extension/{status,context,fill-form,chat}\");\n  } catch (err) {\n    logger.warn?.({ err: err.message }, \"[EXTENSION] founder-lane mount failed (non-fatal)\");\n  }\n\nNEW:\n  try {\n    app.use(\"/api/v1/extension\", createLifeOSExtensionRoutes({ pool, requireKey, callCouncilMember, logger }));\n    logger.info(\"✅ [EXTENSION] Universal Overlay routes mounted at /api/v1/extension/{status,context,fill-form,chat}\");\n  } catch (err) {\n    logger.warn?.({ err: err.message }, \"[EXTENSION] founder-lane mount failed (non-fatal)\");\n  }\n\n  try {\n    app.use(\"/api/v1/extension/drive\", createExtensionDriveRoutes({ pool, requireKey, callCouncilMember, logger }));\n    logger.info(\"✅ [EXTENSION-DRIVE] Live driving channel mounted at /api/v1/extension/drive/{start,next,result,stop,status}\");\n  } catch (err) {\n    logger.warn?.({ err: err.message }, \"[EXTENSION-DRIVE] founder-lane mount failed (non-fatal)\");\n  }",
       "authoring": null,
       "assertion_spec": {
         "expected_exports": [],
@@ -199,8 +208,16 @@
       "non_goals": [
         "a full-file rewrite -- use patch mode only",
         "touching any other route mount in this file"
-      ]
+      ],
+      "status": "complete",
+      "completed_at": "2026-08-09T18:14:26.097Z",
+      "git_sha": "6c05aea4fd72188b5b84120045bd75193322a9de"
     }
   ],
-  "blueprint_status": "handoff_ready"
+  "blueprint_status": "complete",
+  "completed_at": "2026-08-09T18:14:26.097Z",
+  "git_sha": "6c05aea4fd72188b5b84120045bd75193322a9de",
+  "receipt_path": "products/receipts/OVERLAY_DRIVE_CHANNEL_ACCEPTANCE.json",
+  "receipt_verdict": "PASS",
+  "build_method": "system-build + hand-authored composition-root mount (GAP-FILL)"
 }

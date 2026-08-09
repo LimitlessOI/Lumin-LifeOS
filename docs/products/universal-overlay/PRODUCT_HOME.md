@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/universal-overlay/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-08-06 — Added `INTELLIGENT_OVERLAY_BLUEPRINT.md` capturing founder vision for perception-aware, conversation-driven, verbal AI director with versioned roadmap (V0–V5), and linked it under `## Perception, Conversation, and Verbal AI Director`. |
+| **Last Updated** | 2026-08-09 — OVERLAY-DRIVE-CHANNEL-0001 shipped: live server-to-extension driving channel backend, 15/15 acceptance PASS. Prior: 2026-08-06 `INTELLIGENT_OVERLAY_BLUEPRINT.md` (perception-aware verbal AI director vision, V0–V5). |
 
 ---
 ---

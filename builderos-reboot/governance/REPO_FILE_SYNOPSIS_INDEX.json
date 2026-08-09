@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-09T18:10:22.093Z",
+  "generated_at": "2026-08-09T18:15:52.069Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13149,
+  "file_count": 13154,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21307,9 +21307,9 @@
     {
       "path": "builderos-reboot/BP_PRIORITY.json",
       "synopsis": "BuilderOS artifact — BP PRIORITY.",
-      "bytes": 45359,
-      "mtime": "2026-08-09T01:40:25.413Z",
-      "indexed_at": "2026-08-09T01:41:04.130Z",
+      "bytes": 46729,
+      "mtime": "2026-08-09T18:14:26.100Z",
+      "indexed_at": "2026-08-09T18:14:44.802Z",
       "synopsis_index_only": true
     },
     {
@@ -21678,9 +21678,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3975244,
-      "mtime": "2026-08-08T12:17:07.302Z",
-      "indexed_at": "2026-08-08T12:17:16.397Z"
+      "bytes": 3989999,
+      "mtime": "2026-08-09T18:14:46.057Z",
+      "indexed_at": "2026-08-09T18:15:26.278Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -26798,9 +26798,9 @@
     {
       "path": "builderos-reboot/MISSIONS/OVERLAY-DRIVE-CHANNEL-0001/BLUEPRINT.json",
       "synopsis": "In-memory poll/post bridge that lets the generic browser-agent loop\\n * (services/general-browser-agent.js) drive Adam's REAL browser through the\\n * Universal Overlay extension instead of a server-side headless Puppeteer\\n * session. The e",
-      "bytes": 21810,
-      "mtime": "2026-08-09T18:06:30.056Z",
-      "indexed_at": "2026-08-09T18:06:35.836Z",
+      "bytes": 22646,
+      "mtime": "2026-08-09T18:14:26.099Z",
+      "indexed_at": "2026-08-09T18:14:44.802Z",
       "synopsis_index_only": true
     },
     {
@@ -26824,6 +26824,14 @@
       "bytes": 2871,
       "mtime": "2026-08-09T17:57:29.907Z",
       "indexed_at": "2026-08-09T18:00:04.922Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/OVERLAY-DRIVE-CHANNEL-0001/OBJECTIVE_VERDICT.json",
+      "synopsis": "BuilderOS artifact — OBJECTIVE VERDICT.",
+      "bytes": 1023,
+      "mtime": "2026-08-09T18:14:26.103Z",
+      "indexed_at": "2026-08-09T18:14:44.802Z",
       "synopsis_index_only": true
     },
     {
@@ -30715,9 +30723,9 @@
     {
       "path": "builderos-reboot/PRODUCT_READINESS_REPORT.json",
       "synopsis": "BuilderOS artifact — PRODUCT READINESS REPORT.",
-      "bytes": 53290,
-      "mtime": "2026-08-09T01:40:25.417Z",
-      "indexed_at": "2026-08-09T01:41:04.130Z",
+      "bytes": 53706,
+      "mtime": "2026-08-09T18:14:26.103Z",
+      "indexed_at": "2026-08-09T18:14:44.802Z",
       "synopsis_index_only": true
     },
     {
@@ -44498,9 +44506,9 @@
     {
       "path": "docs/products/universal-overlay/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Universal Overlay",
-      "bytes": 31811,
-      "mtime": "2026-08-09T18:10:09.298Z",
-      "indexed_at": "2026-08-09T18:10:22.093Z"
+      "bytes": 31791,
+      "mtime": "2026-08-09T18:15:13.334Z",
+      "indexed_at": "2026-08-09T18:15:26.278Z"
     },
     {
       "path": "docs/products/UNIVERSALOVERLAY.md",
@@ -67230,10 +67238,10 @@
     },
     {
       "path": "package.json",
-      "synopsis": "enforce\":\"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",\"lifeos:file-synopsis:backfill\":\"node scripts/file-synopsis-enforce.mjs --all --auto-fix && node scripts/generate-file-synopsis-index.mjs\",\"lifeos:file-synopsis:index\":\"n",
-      "bytes": 35550,
-      "mtime": "2026-08-09T01:31:52.698Z",
-      "indexed_at": "2026-08-09T01:32:34.924Z",
+      "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\", \"lifeos:file-synopsis:backfill\": \"node scripts/file-synopsis-enforce.mjs --all --auto-fix && node scripts/generate-file-synopsis-index.mjs\", \"lifeos:file-synopsis:index",
+      "bytes": 36468,
+      "mtime": "2026-08-09T18:14:13.837Z",
+      "indexed_at": "2026-08-09T18:14:44.802Z",
       "synopsis_index_only": true
     },
     {
@@ -68336,6 +68344,14 @@
       "bytes": 341,
       "mtime": "2026-06-28T23:37:30.211Z",
       "indexed_at": "2026-07-28T22:54:46.666Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/OVERLAY_DRIVE_CHANNEL_ACCEPTANCE.json",
+      "synopsis": "Product receipt — OVERLAY DRIVE CHANNEL ACCEPTANCE.",
+      "bytes": 5191,
+      "mtime": "2026-08-09T18:14:26.103Z",
+      "indexed_at": "2026-08-09T18:14:44.802Z",
       "synopsis_index_only": true
     },
     {
@@ -71696,6 +71712,16 @@
       "indexed_at": "2026-08-01T01:14:48.370Z",
       "ssot": [
         "docs/products/lumin-university/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "routes/extension-drive-routes.js",
+      "synopsis": "routes/extension-drive-routes.js -- Universal Overlay live driving",
+      "bytes": 7669,
+      "mtime": "2026-08-09T18:06:57.487Z",
+      "indexed_at": "2026-08-09T18:14:44.802Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
     },
     {
@@ -77856,6 +77882,16 @@
       "indexed_at": "2026-07-28T22:54:46.666Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/run-overlay-drive-channel-acceptance.mjs",
+      "synopsis": "Overlay Drive Channel acceptance.",
+      "bytes": 7137,
+      "mtime": "2026-08-09T18:13:58.054Z",
+      "indexed_at": "2026-08-09T18:14:44.802Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
     },
     {
@@ -93483,6 +93519,16 @@
       "indexed_at": "2026-08-01T16:09:16.342Z",
       "ssot": [
         "docs/products/wellness-studio/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/extension-drive-bridge.js",
+      "synopsis": "In-memory poll/post bridge that lets the generic browser-agent loop",
+      "bytes": 4850,
+      "mtime": "2026-08-09T18:06:57.489Z",
+      "indexed_at": "2026-08-09T18:14:44.802Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
     },
     {
