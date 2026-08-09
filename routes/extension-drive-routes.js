@@ -52,6 +52,7 @@ async function ensureDriveSchema(pool) {
       updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
     )
   `);
+  await pool.query(`ALTER TABLE extension_drive_sessions ADD COLUMN IF NOT EXISTS claimed_at TIMESTAMPTZ`);
 }
 
 function makeCallModel(callCouncilMember) {
