@@ -1,0 +1,223 @@
+{
+  "schema": "overlay_engine_risk_gate_acceptance_v1",
+  "mission_id": "OVERLAY-ENGINE-RISK-GATE-0001",
+  "started_at": "2026-08-09T00:06:39.009Z",
+  "tests_passed": [
+    "core_engine_exists",
+    "exports_isRiskyClick_and_patterns",
+    "detects_risky_purchase_click",
+    "detects_risky_delete_click",
+    "does_not_flag_login_click",
+    "does_not_flag_non_click_actions",
+    "runBrowserGoal_blocks_risky_click_by_default",
+    "runBrowserGoal_allows_risky_click_when_authorized",
+    "runBrowserGoal_unaffected_for_non_risky_goals",
+    "wrapper_exists",
+    "wrapper_threads_allowRiskyActions",
+    "route_exists",
+    "route_accepts_allowRiskyActions_from_request_body",
+    "route_forwards_allowRiskyActions_into_runGoalOnSession",
+    "bp_sync_mandatory"
+  ],
+  "tests_failed": [],
+  "steps": [
+    {
+      "step": "core_engine_exists",
+      "ok": true,
+      "detail": "/private/tmp/claude-501/-Users-adamhopkins-Projects-Lumin-LifeOS/b98a9c4f-30b0-4efc-94d3-7e9a8ac44905/scratchpad/v1-build-retry/services/general-browser-agent.js",
+      "at": "2026-08-09T00:06:39.010Z"
+    },
+    {
+      "step": "exports_isRiskyClick_and_patterns",
+      "ok": true,
+      "detail": {
+        "exported": [
+          "BROWSER_ACTIONS",
+          "BrowserAgentError",
+          "RISKY_ACTION_LABEL_PATTERNS",
+          "default",
+          "isLiveAction",
+          "isRiskyClick",
+          "normalizeAction",
+          "runBrowserGoal"
+        ]
+      },
+      "at": "2026-08-09T00:06:39.010Z"
+    },
+    {
+      "step": "detects_risky_purchase_click",
+      "ok": true,
+      "detail": {
+        "risky": true
+      },
+      "at": "2026-08-09T00:06:39.010Z"
+    },
+    {
+      "step": "detects_risky_delete_click",
+      "ok": true,
+      "detail": {
+        "deleteRisky": true
+      },
+      "at": "2026-08-09T00:06:39.010Z"
+    },
+    {
+      "step": "does_not_flag_login_click",
+      "ok": true,
+      "detail": {
+        "safe": false
+      },
+      "at": "2026-08-09T00:06:39.010Z"
+    },
+    {
+      "step": "does_not_flag_non_click_actions",
+      "ok": true,
+      "detail": {
+        "notClick": false
+      },
+      "at": "2026-08-09T00:06:39.010Z"
+    },
+    {
+      "step": "runBrowserGoal_blocks_risky_click_by_default",
+      "ok": true,
+      "detail": {
+        "blockedResult": {
+          "ok": false,
+          "reached": false,
+          "reason": "risky_action_requires_authorization:Buy Now",
+          "steps": [
+            {
+              "step": 1,
+              "action": {
+                "type": "click",
+                "selector": "#buy-btn"
+              },
+              "blocked": true,
+              "reason": "risky_action_requires_authorization:Buy Now"
+            }
+          ],
+          "evidence": null,
+          "template": null
+        },
+        "acted": false
+      },
+      "at": "2026-08-09T00:06:39.010Z"
+    },
+    {
+      "step": "runBrowserGoal_allows_risky_click_when_authorized",
+      "ok": true,
+      "detail": {
+        "allowedResult": {
+          "ok": false,
+          "reached": false,
+          "reason": "max_steps_exhausted:1",
+          "steps": [
+            {
+              "step": 1,
+              "action": {
+                "type": "click",
+                "selector": "#buy-btn"
+              },
+              "result": {
+                "ok": true
+              }
+            }
+          ],
+          "evidence": null,
+          "template": null
+        },
+        "acted": true
+      },
+      "at": "2026-08-09T00:06:39.010Z"
+    },
+    {
+      "step": "runBrowserGoal_unaffected_for_non_risky_goals",
+      "ok": true,
+      "detail": {
+        "safeResult": {
+          "ok": true,
+          "reached": true,
+          "reason": "goal_verified",
+          "steps": [
+            {
+              "step": 1,
+              "action": {
+                "type": "click",
+                "selector": "#login-btn"
+              },
+              "result": {
+                "ok": true
+              }
+            },
+            {
+              "step": 2,
+              "action": {
+                "type": "done"
+              },
+              "verified": true,
+              "evidence": {}
+            }
+          ],
+          "evidence": {},
+          "template": {
+            "site": null,
+            "goal": "log in",
+            "steps": [
+              {
+                "type": "click",
+                "selector": "#login-btn"
+              }
+            ],
+            "captured_at": "2026-08-09T00:06:39.011Z"
+          }
+        },
+        "safeActed": true
+      },
+      "at": "2026-08-09T00:06:39.011Z"
+    },
+    {
+      "step": "wrapper_exists",
+      "ok": true,
+      "detail": "/private/tmp/claude-501/-Users-adamhopkins-Projects-Lumin-LifeOS/b98a9c4f-30b0-4efc-94d3-7e9a8ac44905/scratchpad/v1-build-retry/services/general-browser-agent-live.js",
+      "at": "2026-08-09T00:06:39.011Z"
+    },
+    {
+      "step": "wrapper_threads_allowRiskyActions",
+      "ok": true,
+      "detail": "services/general-browser-agent-live.js must accept AND forward allowRiskyActions into runBrowserGoal",
+      "at": "2026-08-09T00:06:39.011Z"
+    },
+    {
+      "step": "route_exists",
+      "ok": true,
+      "detail": "/private/tmp/claude-501/-Users-adamhopkins-Projects-Lumin-LifeOS/b98a9c4f-30b0-4efc-94d3-7e9a8ac44905/scratchpad/v1-build-retry/routes/general-browser-agent-routes.js",
+      "at": "2026-08-09T00:06:39.011Z"
+    },
+    {
+      "step": "route_accepts_allowRiskyActions_from_request_body",
+      "ok": true,
+      "detail": "must be a real req.body field with a safe default",
+      "at": "2026-08-09T00:06:39.011Z"
+    },
+    {
+      "step": "route_forwards_allowRiskyActions_into_runGoalOnSession",
+      "ok": true,
+      "detail": "the live /run endpoint must actually pass the flag through, not just accept it",
+      "at": "2026-08-09T00:06:39.011Z"
+    }
+  ],
+  "completed_at": "2026-08-09T00:06:39.022Z",
+  "git_sha": "f20b60d7ddeccd7a8ccb0a9c42cee181edb84de1",
+  "verdict": "PASS",
+  "bp_sync": {
+    "updated": [
+      "builderos-reboot/BP_PRIORITY.json",
+      "builderos-reboot/MISSIONS/OVERLAY-ENGINE-RISK-GATE-0001/BLUEPRINT.json"
+    ],
+    "skipped": []
+  },
+  "artifact_sync": {
+    "mode": "technical_acceptance",
+    "readiness_report": "builderos-reboot/PRODUCT_READINESS_REPORT.json",
+    "freshness_status": "CURRENT"
+  }
+}

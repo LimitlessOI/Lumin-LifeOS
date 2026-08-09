@@ -124,17 +124,24 @@ if (fs.existsSync(CORE)) {
       step('runBrowserGoal_allows_risky_click_when_authorized', acted === true, { allowedResult, acted });
 
       // Regression proof: a non-risky goal must behave exactly as before this mission.
+      // decideAction is stateful (click once, then done) so the loop can reach a real
+      // goal_verified outcome -- a single fixed action can never produce ok:true on its
+      // own since the loop only terminates successfully on a 'done' action.
       const safeObservation = { url: 'https://example.com', title: 'Home', text: '', elements: [{ selector: '#login-btn', text: 'Log In' }] };
       let safeActed = false;
+      let safeCall = 0;
       const safeResult = await mod.runBrowserGoal({
         goal: 'log in',
         observe: async () => safeObservation,
-        decideAction: async () => ({ type: 'click', selector: '#login-btn' }),
+        decideAction: async () => {
+          safeCall += 1;
+          return safeCall === 1 ? { type: 'click', selector: '#login-btn' } : { type: 'done' };
+        },
         act: async () => { safeActed = true; return { ok: true }; },
         verifyGoal: async () => ({ reached: true, evidence: {} }),
-        maxSteps: 1,
+        maxSteps: 3,
       });
-      step('runBrowserGoal_unaffected_for_non_risky_goals', safeActed === true && safeResult.ok === true, { safeResult, safeActed });
+      step('runBrowserGoal_unaffected_for_non_risky_goals', safeActed === true && safeResult.ok === true && safeResult.reached === true, { safeResult, safeActed });
     }
   } catch (err) {
     step('core_engine_imports_and_behaves_correctly', false, { error: err.message, stack: err.stack });

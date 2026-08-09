@@ -3,58 +3,58 @@
     "domain": "Machine",
     "status": "CANONICAL",
     "not_hist_domain": true,
-    "role": "Ordered blueprint priority list \u2014 active product scheduler queue (NOT Historian domain); scheduling only, never blueprint replacement",
+    "role": "Ordered blueprint priority list — active product scheduler queue (NOT Historian domain); scheduling only, never blueprint replacement",
     "replaces_for_orchestration": "Hist-owned MISSION_QUEUE.json and overnight artifacts",
     "mandatory_read": "builderos-reboot/AGENTS.md"
   },
   "queue_id": "BP-PRIORITY-0001",
-  "updated_at": "2026-08-08",
-  "operator_lock": "Adam 2026-06-22 \u2014 Voice Rail SCRAPPED (salvage only). BP_PRIORITY is the scheduler queue; each mission's founder packet and blueprint remain the execution authority.",
+  "updated_at": "2026-08-09",
+  "operator_lock": "Adam 2026-06-22 — Voice Rail SCRAPPED (salvage only). BP_PRIORITY is the scheduler queue; each mission's founder packet and blueprint remain the execution authority.",
   "lifeos_version_queue": "builderos-reboot/LIFEOS_VERSION_QUEUE.json",
   "scrapped_items": [
     {
       "mission_id": "PRODUCT-VOICE-RAIL-V1-0001",
       "status": "SCRAPPED_SALVAGE",
-      "operator_lock": "Adam 2026-06-22 \u2014 program scrapped; salvage reusable pieces only",
+      "operator_lock": "Adam 2026-06-22 — program scrapped; salvage reusable pieces only",
       "salvage_manifest": "builderos-reboot/MISSIONS/PRODUCT-VOICE-RAIL-V1-0001/SALVAGE_MANIFEST.json",
       "receipt_path": "products/receipts/VOICE_RAIL_V1_ACCEPTANCE.json",
       "hist_doc": "docs/VOICE_RAIL_HISTORY_ONLY.md",
-      "note": "NOT active queue. STT/TTS/wake-word salvage \u2192 Lumin Chair. Overlay redirects to /lifeos."
+      "note": "NOT active queue. STT/TTS/wake-word salvage → Lumin Chair. Overlay redirects to /lifeos."
     },
     {
       "mission_id": "FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001",
       "status": "INTERNAL_PROOF_ONLY",
-      "operator_lock": "Internal factory proof receipt \u2014 not an active product queue item.",
+      "operator_lock": "Internal factory proof receipt — not an active product queue item.",
       "receipt_path": "products/receipts/BUILDEROS_AUTONOMY_CLOSURE_V1_ACCEPTANCE.json",
       "note": "Canonical closure acceptance receipt for the BuilderOS autonomy-closure mission."
     },
     {
       "mission_id": "FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001",
       "status": "INTERNAL_PROOF_ONLY",
-      "operator_lock": "Internal transport/deploy proof receipt \u2014 not an active product queue item.",
+      "operator_lock": "Internal transport/deploy proof receipt — not an active product queue item.",
       "receipt_path": "products/receipts/BUILDEROS_BUILD_DEPLOY_TRUTH.json",
       "note": "Canonical build/deploy/runtime proof receipt for the BuilderOS autonomy-closure mission."
     },
     {
       "mission_id": "PRODUCT-SITE-BUILDER-PREALPHA-LAYER-A",
       "status": "INTERNAL_PROOF_ONLY",
-      "operator_lock": "Internal Layer A structural walkthrough receipt \u2014 not an active product queue item.",
+      "operator_lock": "Internal Layer A structural walkthrough receipt — not an active product queue item.",
       "receipt_path": "products/receipts/SITE_BUILDER_PREALPHA_LAYER_A.json",
-      "note": "Site Builder pre-alpha Layer A tip proof; registered to satisfy \u00a72.18 orphan-PASS guard."
+      "note": "Site Builder pre-alpha Layer A tip proof; registered to satisfy §2.18 orphan-PASS guard."
     },
     {
       "mission_id": "FACTORY-GOVERNANCE-ROLE-SEPARATION-0001",
       "status": "INTERNAL_PROOF_ONLY",
-      "operator_lock": "Internal governance proof receipt \u2014 not an active product queue item.",
+      "operator_lock": "Internal governance proof receipt — not an active product queue item.",
       "receipt_path": "products/receipts/GOVERNANCE_ROLE_SEPARATION_P0.json",
-      "note": "Role-separation P0: security invariants enforced on the machine ship path (githooks could not cover a GitHub API commit), migrations must prove their declared end state, and receipt validation no longer lets a filename opt a PASS claim out of review. Chair ruling c646160f-128a-4b43-9884-af37cd5a868a. Declares separation_collapsed:true \u2014 one actor wrote both the gates and their tests."
+      "note": "Role-separation P0: security invariants enforced on the machine ship path (githooks could not cover a GitHub API commit), migrations must prove their declared end state, and receipt validation no longer lets a filename opt a PASS claim out of review. Chair ruling c646160f-128a-4b43-9884-af37cd5a868a. Declares separation_collapsed:true — one actor wrote both the gates and their tests."
     },
     {
       "mission_id": "FACTORY-BUILDEROS-CONVERGENCE-0001",
       "status": "INTERNAL_PROOF_ONLY",
-      "operator_lock": "Internal factory improvement mission \u2014 not an active product queue item.",
+      "operator_lock": "Internal factory improvement mission — not an active product queue item.",
       "receipt_path": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-CONVERGENCE-0001/OBJECTIVE_VERDICT.json",
-      "note": "Mission 2 \u2014 BuilderOS Convergence: P0 false-seal stop-gate, P1 readiness audit, P2 Collaboration Spine, P3 blueprint-authority gate, P4 runtime/scheduler convergence, P5 SMOS revenue readiness, P7 wisdom/reality scorecard and handoff. Revenue loop prepared but awaiting founder credentials."
+      "note": "Mission 2 — BuilderOS Convergence: P0 false-seal stop-gate, P1 readiness audit, P2 Collaboration Spine, P3 blueprint-authority gate, P4 runtime/scheduler convergence, P5 SMOS revenue readiness, P7 wisdom/reality scorecard and handoff. Revenue loop prepared but awaiting founder credentials."
     }
   ],
   "items": [
@@ -122,7 +122,7 @@
       "acceptance_command": "npm run lifeos:capture-pipeline:v2-acceptance",
       "receipt_path": "products/receipts/CAPTURE_PIPELINE_V2_ACCEPTANCE.json",
       "verdict": "TECHNICAL_PASS",
-      "note": "Capture pipeline v2 \u2014 intake staging (Voice Rail scrapped; salvage STT/TTS via Chair path).",
+      "note": "Capture pipeline v2 — intake staging (Voice Rail scrapped; salvage STT/TTS via Chair path).",
       "build_method": "system-build",
       "founder_usability_pass": false,
       "objective_verdict": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001/OBJECTIVE_VERDICT.json",
@@ -149,7 +149,7 @@
       "acceptance_command": "npm run lifeos:commitment-route:v2-acceptance",
       "receipt_path": "products/receipts/COMMITMENT_ROUTE_V2_ACCEPTANCE.json",
       "verdict": "TECHNICAL_PASS",
-      "note": "LifeOS v2.1 \u2014 inbox commitment \u2192 commitment tracker",
+      "note": "LifeOS v2.1 — inbox commitment → commitment tracker",
       "build_method": "system-build",
       "founder_usability_pass": false,
       "objective_verdict": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-COMMITMENT-ROUTE-V2-0001/OBJECTIVE_VERDICT.json",
@@ -435,7 +435,7 @@
       "receipt_verdict": "PASS",
       "build_method": "system-build",
       "founder_usability_pass": false,
-      "note": "BuilderOS Path to 10 ratified at 10/10 autonomous builder capacity. FACTORY-DEMO-SAMPLE-0001 proved idea \u2192 founder packet \u2192 blueprint \u2192 deployed code \u2192 SENTRY PASS. SMOS revenue is a product-stage credential blocker, not a builder-stage failure.",
+      "note": "BuilderOS Path to 10 ratified at 10/10 autonomous builder capacity. FACTORY-DEMO-SAMPLE-0001 proved idea → founder packet → blueprint → deployed code → SENTRY PASS. SMOS revenue is a product-stage credential blocker, not a builder-stage failure.",
       "objective_verdict": "builderos-reboot/MISSIONS/FACTORY-PATH-TO-TEN-0001/OBJECTIVE_VERDICT.json",
       "technical_pass_at": "2026-07-31T20:39:15.814Z",
       "git_sha": "6f41618af71cbd366a35dee081a6b4c2c0e35325",
@@ -696,15 +696,25 @@
       "product_home": "docs/products/builderos/",
       "founder_packet": "builderos-reboot/MISSIONS/OVERLAY-ENGINE-RISK-GATE-0001/FOUNDER_PACKET.md",
       "blueprint_path": "builderos-reboot/MISSIONS/OVERLAY-ENGINE-RISK-GATE-0001/BLUEPRINT.json",
-      "blueprint_status": "pending",
+      "blueprint_status": "complete",
       "acceptance_command": "npm run overlay:engine-risk-gate:acceptance",
       "receipt_path": "products/receipts/OVERLAY_ENGINE_RISK_GATE_ACCEPTANCE.json",
-      "verdict": "PENDING",
-      "note": "Foundational safety gate for the real, live, model-driven overlay engine (services/general-browser-agent.js) before any autonomous commerce/opportunity-engine capability is built on top of it. Adam: the overlay is what everything else sits on.",
+      "verdict": "TECHNICAL_PASS",
+      "note": "Fail-closed risk-authorization guardrail for the real, live, model-driven overlay engine -- foundational prerequisite before any autonomous commerce/opportunity capability is built on top of it.",
       "build_method": "system-build",
-      "founder_usability_pass": false
+      "founder_usability_pass": false,
+      "receipt_verdict": "PASS",
+      "technical_pass_at": "2026-08-09T00:06:39.022Z",
+      "git_sha": "f20b60d7ddeccd7a8ccb0a9c42cee181edb84de1",
+      "production_base": "",
+      "objective_verdict": "builderos-reboot/MISSIONS/OVERLAY-ENGINE-RISK-GATE-0001/OBJECTIVE_VERDICT.json",
+      "artifact_sync": {
+        "at": "2026-08-09T00:06:39.022Z",
+        "mode": "technical_acceptance",
+        "status": "CURRENT"
+      }
     }
   ],
   "_last_updated": "2026-08-02",
-  "_note": "SSM and LSC added 2026-06-29 \u2014 execute SSM first (LSC-006 depends on SSM-007 output)"
+  "_note": "SSM and LSC added 2026-06-29 — execute SSM first (LSC-006 depends on SSM-007 output)"
 }

@@ -102,7 +102,9 @@
       "non_goals": [
         "checking `type` actions -- only click is the point of no return"
       ],
-      "status": "pending"
+      "status": "complete",
+      "completed_at": "2026-08-09T00:06:39.022Z",
+      "git_sha": "f20b60d7ddeccd7a8ccb0a9c42cee181edb84de1"
     },
     {
       "step_id": "RGE-S02",
@@ -135,7 +137,9 @@
         "a full-file rewrite -- use patch mode only",
         "changing the existing confirmContext guardrail's own behavior"
       ],
-      "status": "pending"
+      "status": "complete",
+      "completed_at": "2026-08-09T00:06:39.022Z",
+      "git_sha": "f20b60d7ddeccd7a8ccb0a9c42cee181edb84de1"
     },
     {
       "step_id": "RGE-S03",
@@ -164,7 +168,9 @@
       "non_goals": [
         "a full-file rewrite -- use patch mode only"
       ],
-      "status": "pending"
+      "status": "complete",
+      "completed_at": "2026-08-09T00:06:39.022Z",
+      "git_sha": "f20b60d7ddeccd7a8ccb0a9c42cee181edb84de1"
     },
     {
       "step_id": "RGE-S04",
@@ -203,7 +209,9 @@
       "non_goals": [
         "changing any other behavior of this wrapper"
       ],
-      "status": "pending"
+      "status": "complete",
+      "completed_at": "2026-08-09T00:06:39.022Z",
+      "git_sha": "f20b60d7ddeccd7a8ccb0a9c42cee181edb84de1"
     },
     {
       "step_id": "RGE-S05",
@@ -216,7 +224,7 @@
       "action_type": "author_then_write",
       "patch_mode": true,
       "task": "Accept an allowRiskyActions field (default false) from the request body on POST /api/v1/browser-agent/run, using PATCH MODE.",
-      "spec": "Output in PATCH MODE ONLY: the OLD block below must be copied EXACTLY character-for-character from the real current file. NEW adds `allowRiskyActions = false` to the destructured req.body, with a short comment explaining it must be explicitly opted into. Exact text below, no other change.\n\nOLD:\n    const {\n      goal,\n      url = null,\n      startUrl = null,\n      site = null,\n      vaultService = null,\n      /** Inject login from tip process.env \u2014 e.g. WRM_WIX \u2192 WRM_WIX_EMAIL + WRM_WIX_PASSWORD (never echo values). */\n      envCreds = null,\n      mustContain = [],\n      mustHaveSelector = [],\n      expectSiteHost = null,\n      expectAccountText = null,\n      maxSteps = 20,\n    } = req.body || {};\n\nNEW:\n    const {\n      goal,\n      url = null,\n      startUrl = null,\n      site = null,\n      vaultService = null,\n      /** Inject login from tip process.env \u2014 e.g. WRM_WIX \u2192 WRM_WIX_EMAIL + WRM_WIX_PASSWORD (never echo values). */\n      envCreds = null,\n      mustContain = [],\n      mustHaveSelector = [],\n      expectSiteHost = null,\n      expectAccountText = null,\n      maxSteps = 20,\n      /** Explicit opt-in required for the overlay engine to click a real observed\n       *  buy/purchase/pay/checkout/delete/cancel-labeled element. Default false. */\n      allowRiskyActions = false,\n    } = req.body || {};\n",
+      "spec": "Output in PATCH MODE ONLY: the OLD block below must be copied EXACTLY character-for-character from the real current file. NEW adds `allowRiskyActions = false` to the destructured req.body, with a short comment explaining it must be explicitly opted into. Exact text below, no other change.\n\nOLD:\n    const {\n      goal,\n      url = null,\n      startUrl = null,\n      site = null,\n      vaultService = null,\n      /** Inject login from tip process.env — e.g. WRM_WIX → WRM_WIX_EMAIL + WRM_WIX_PASSWORD (never echo values). */\n      envCreds = null,\n      mustContain = [],\n      mustHaveSelector = [],\n      expectSiteHost = null,\n      expectAccountText = null,\n      maxSteps = 20,\n    } = req.body || {};\n\nNEW:\n    const {\n      goal,\n      url = null,\n      startUrl = null,\n      site = null,\n      vaultService = null,\n      /** Inject login from tip process.env — e.g. WRM_WIX → WRM_WIX_EMAIL + WRM_WIX_PASSWORD (never echo values). */\n      envCreds = null,\n      mustContain = [],\n      mustHaveSelector = [],\n      expectSiteHost = null,\n      expectAccountText = null,\n      maxSteps = 20,\n      /** Explicit opt-in required for the overlay engine to click a real observed\n       *  buy/purchase/pay/checkout/delete/cancel-labeled element. Default false. */\n      allowRiskyActions = false,\n    } = req.body || {};\n",
       "assertion_spec": {
         "expected_exports": [],
         "file_contains": [
@@ -230,7 +238,9 @@
       "non_goals": [
         "a full-file rewrite -- use patch mode only"
       ],
-      "status": "pending"
+      "status": "complete",
+      "completed_at": "2026-08-09T00:06:39.022Z",
+      "git_sha": "f20b60d7ddeccd7a8ccb0a9c42cee181edb84de1"
     },
     {
       "step_id": "RGE-S06",
@@ -261,7 +271,15 @@
         "a full-file rewrite -- use patch mode only",
         "touching the wrm-wix-dns-cutover or signup handlers"
       ],
-      "status": "pending"
+      "status": "complete",
+      "completed_at": "2026-08-09T00:06:39.022Z",
+      "git_sha": "f20b60d7ddeccd7a8ccb0a9c42cee181edb84de1"
     }
-  ]
+  ],
+  "blueprint_status": "complete",
+  "completed_at": "2026-08-09T00:06:39.022Z",
+  "git_sha": "f20b60d7ddeccd7a8ccb0a9c42cee181edb84de1",
+  "receipt_path": "products/receipts/OVERLAY_ENGINE_RISK_GATE_ACCEPTANCE.json",
+  "receipt_verdict": "PASS",
+  "build_method": "system-build"
 }

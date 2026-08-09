@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-09T00:02:34.437Z",
+  "generated_at": "2026-08-09T00:07:27.839Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13120,
+  "file_count": 13122,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21307,9 +21307,9 @@
     {
       "path": "builderos-reboot/BP_PRIORITY.json",
       "synopsis": "BuilderOS artifact — BP PRIORITY.",
-      "bytes": 41093,
-      "mtime": "2026-08-08T23:33:18.463Z",
-      "indexed_at": "2026-08-08T23:34:19.626Z",
+      "bytes": 41422,
+      "mtime": "2026-08-09T00:06:39.026Z",
+      "indexed_at": "2026-08-09T00:07:27.839Z",
       "synopsis_index_only": true
     },
     {
@@ -26720,9 +26720,9 @@
     {
       "path": "builderos-reboot/MISSIONS/OVERLAY-ENGINE-RISK-GATE-0001/BLUEPRINT.json",
       "synopsis": "runGoalOnSession -- services/general-browser-agent-live.js.\\n * @ssot docs/products/tc-service/PRODUCT_HOME.md\\n",
-      "bytes": 19239,
-      "mtime": "2026-08-08T23:59:57.354Z",
-      "indexed_at": "2026-08-09T00:00:11.070Z",
+      "bytes": 20179,
+      "mtime": "2026-08-09T00:06:39.025Z",
+      "indexed_at": "2026-08-09T00:07:27.839Z",
       "synopsis_index_only": true
     },
     {
@@ -26746,6 +26746,14 @@
       "bytes": 2610,
       "mtime": "2026-08-08T23:29:41.402Z",
       "indexed_at": "2026-08-08T23:34:19.626Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/OVERLAY-ENGINE-RISK-GATE-0001/OBJECTIVE_VERDICT.json",
+      "synopsis": "BuilderOS artifact — OBJECTIVE VERDICT.",
+      "bytes": 1101,
+      "mtime": "2026-08-09T00:06:39.031Z",
+      "indexed_at": "2026-08-09T00:07:27.839Z",
       "synopsis_index_only": true
     },
     {
@@ -30559,9 +30567,9 @@
     {
       "path": "builderos-reboot/PRODUCT_READINESS_REPORT.json",
       "synopsis": "BuilderOS artifact — PRODUCT READINESS REPORT.",
-      "bytes": 51558,
-      "mtime": "2026-08-08T12:16:02.356Z",
-      "indexed_at": "2026-08-08T12:17:07.218Z",
+      "bytes": 51986,
+      "mtime": "2026-08-09T00:06:39.031Z",
+      "indexed_at": "2026-08-09T00:07:27.839Z",
       "synopsis_index_only": true
     },
     {
@@ -42463,9 +42471,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 474919,
-      "mtime": "2026-08-08T23:56:10.413Z",
-      "indexed_at": "2026-08-08T23:56:26.999Z"
+      "bytes": 477340,
+      "mtime": "2026-08-09T00:07:09.158Z",
+      "indexed_at": "2026-08-09T00:07:27.839Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -68167,6 +68175,14 @@
       "synopsis_index_only": true
     },
     {
+      "path": "products/receipts/OVERLAY_ENGINE_RISK_GATE_ACCEPTANCE.json",
+      "synopsis": "Product receipt — OVERLAY ENGINE RISK GATE ACCEPTANCE.",
+      "bytes": 6342,
+      "mtime": "2026-08-09T00:06:39.031Z",
+      "indexed_at": "2026-08-09T00:07:27.839Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "products/receipts/PATH_TO_10_T02_LEAN_BUILT.json",
       "synopsis": "Product receipt — PATH TO 10 T02 LEAN BUILT.",
       "bytes": 837,
@@ -77643,9 +77659,9 @@
     {
       "path": "scripts/run-overlay-engine-risk-gate-acceptance.mjs",
       "synopsis": "Overlay Engine Risk Gate acceptance.",
-      "bytes": 7498,
-      "mtime": "2026-08-08T23:32:45.983Z",
-      "indexed_at": "2026-08-08T23:34:19.626Z",
+      "bytes": 7895,
+      "mtime": "2026-08-09T00:06:33.895Z",
+      "indexed_at": "2026-08-09T00:07:27.839Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
