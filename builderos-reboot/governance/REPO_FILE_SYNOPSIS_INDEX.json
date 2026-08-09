@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-09T01:35:30.044Z",
+  "generated_at": "2026-08-09T01:35:38.135Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13143,
   "files": [
@@ -90822,9 +90822,9 @@
     {
       "path": "services/browser-agent.js",
       "synopsis": "browser-agent.js",
-      "bytes": 14954,
-      "mtime": "2026-07-24T18:36:41.703Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 15344,
+      "mtime": "2026-08-09T01:35:38.135Z",
+      "indexed_at": "2026-08-09T01:35:38.135Z",
       "ssot": [
         "docs/products/tc-service/PRODUCT_HOME.md"
       ]
