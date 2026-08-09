@@ -82,6 +82,17 @@ export function isRiskyClick(action, observation) {
 }
 
 /**
+ * Cheap, deterministic fingerprint of an observation -- used to detect when an
+ * action produced no visible change (the direct cause of a real stuck-loop
+ * found live on an Etsy shop-signup flow: the same navigate action repeated
+ * for the entire step budget with zero forward progress).
+ */
+export function fingerprintObservation(observation) {
+  const elSig = (observation?.elements || []).slice(0, 10).map((e) => `${e.tag}:${e.selector}`).join('|');
+  return `${observation?.url || ''}::${observation?.title || ''}::${(observation?.elements || []).length}::${elSig}`;
+}
+
+/**
  * Run a goal on a live browser via the observe -> decide -> act loop.
  *
  * @param {object} opts
