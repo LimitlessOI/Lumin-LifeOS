@@ -166,6 +166,61 @@
     .fill-all-btn:hover { background: #2bc787; }
     .fill-all-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
+    /* ── Drive tab ── */
+    .drive-panel { padding: 14px; flex: 1; overflow-y: auto; display: flex; flex-direction: column; }
+    .drive-intro { font-size: 12px; color: var(--muted); line-height: 1.55; margin-bottom: 12px; }
+    .drive-goal-input {
+      width: 100%; background: var(--surface); border: 1px solid var(--border);
+      border-radius: 10px; color: var(--text); padding: 10px 12px;
+      font-size: 13px; outline: none; resize: vertical; min-height: 64px;
+      font-family: inherit; line-height: 1.5; margin-bottom: 10px;
+    }
+    .drive-goal-input:focus { border-color: var(--accent); }
+    .drive-risky-row { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; font-size: 11px; color: var(--muted); }
+    .drive-start-btn {
+      width: 100%; padding: 10px; border-radius: 8px;
+      background: var(--accent); border: none; color: #fff;
+      font-size: 13px; font-weight: 600; cursor: pointer; transition: background .15s;
+    }
+    .drive-start-btn:hover { background: #4a5adf; }
+    .drive-start-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    .drive-status-row {
+      display: flex; align-items: center; gap: 8px; padding: 10px 12px;
+      background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+      margin-bottom: 10px; font-size: 12px;
+    }
+    .drive-status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent2); flex-shrink: 0; animation: pulse-dot 1.4s ease-in-out infinite; }
+    @keyframes pulse-dot { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
+    .drive-goal-label { color: var(--text); flex: 1; }
+    .drive-stop-btn {
+      padding: 5px 10px; border-radius: 6px; background: var(--danger); border: none;
+      color: #fff; font-size: 11px; font-weight: 600; cursor: pointer; flex-shrink: 0;
+    }
+    .drive-log { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; }
+    .drive-log-item {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+      padding: 8px 10px; font-size: 12px; color: var(--text); line-height: 1.4;
+    }
+    .drive-log-item .dl-meta { font-size: 10px; color: var(--muted); margin-top: 2px; }
+    .drive-log-item.warn { border-color: var(--warn); }
+    .drive-log-item.err  { border-color: var(--danger); }
+
+    .drive-confirm-box {
+      background: var(--surface); border: 1px solid var(--accent); border-radius: 10px;
+      padding: 12px; margin-bottom: 10px;
+    }
+    .drive-confirm-text { font-size: 12px; color: var(--text); line-height: 1.5; margin-bottom: 10px; }
+    .drive-confirm-actions { display: flex; gap: 8px; }
+    .dc-btn { flex: 1; padding: 8px; border-radius: 8px; border: none; font-size: 12px; font-weight: 600; cursor: pointer; }
+    .dc-yes { background: var(--accent2); color: #0a0a0f; }
+    .dc-no  { background: var(--surface2); color: var(--text); }
+
+    .drive-blocked-box {
+      background: rgba(224,85,85,0.08); border: 1px solid var(--danger); border-radius: 10px;
+      padding: 12px; margin-bottom: 10px; font-size: 12px; color: var(--text); line-height: 1.5;
+    }
+
     /* ── Help tab ── */
     .help-panel { padding: 14px; flex: 1; overflow-y: auto; }
     .help-section { margin-bottom: 18px; }
@@ -273,6 +328,7 @@
     <!-- Tab bar -->
     <div class="tab-bar">
       <button class="tab-btn active" data-tab="chat"    onclick="switchTab('chat')">💬 Chat</button>
+      <button class="tab-btn"        data-tab="drive"   onclick="switchTab('drive')">▶ Drive</button>
       <button class="tab-btn"        data-tab="context" onclick="switchTab('context')">📋 This Page</button>
       <button class="tab-btn"        data-tab="help"    onclick="switchTab('help')">⚡ Actions</button>
     </div>
@@ -292,6 +348,38 @@
           onkeydown="handleChatKey(event)"
           oninput="autoResize(this)"></textarea>
         <button class="send-btn" id="send-btn" onclick="sendChat()" title="Send">➤</button>
+      </div>
+    </div>
+
+    <!-- DRIVE TAB -->
+    <div class="tab-panel" id="tab-drive">
+      <div class="drive-panel">
+
+        <!-- Idle state: goal entry -->
+        <div id="drive-idle">
+          <div class="drive-intro">Tell me what to do on this page (or the site you navigate to) and I'll do it — clicking, typing, reading — right here, live. You'll see every step.</div>
+          <textarea class="drive-goal-input" id="drive-goal-input" placeholder="e.g. Sign in with my saved credentials and check if my order shipped"></textarea>
+          <label class="drive-risky-row">
+            <input type="checkbox" id="drive-allow-risky">
+            Allow risky actions (buy, pay, delete, submit) without stopping to ask
+          </label>
+          <button class="drive-start-btn" id="drive-start-btn" onclick="startDrive()">Start</button>
+        </div>
+
+        <!-- Running state -->
+        <div id="drive-running" style="display:none; flex:1; flex-direction:column;">
+          <div class="drive-status-row">
+            <div class="drive-status-dot"></div>
+            <div class="drive-goal-label" id="drive-goal-label">Working…</div>
+            <button class="drive-stop-btn" onclick="stopDrive()">Stop</button>
+          </div>
+
+          <div id="drive-confirm-slot"></div>
+          <div id="drive-blocked-slot"></div>
+
+          <div class="drive-log" id="drive-log"></div>
+        </div>
+
       </div>
     </div>
 

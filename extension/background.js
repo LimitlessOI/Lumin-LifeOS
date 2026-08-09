@@ -16,6 +16,7 @@ const STORAGE_KEY_TOKEN   = 'lumin_access_token';
 const STORAGE_KEY_KEY     = 'lumin_command_key';
 const STORAGE_KEY_USER    = 'lumin_user_handle';
 const STORAGE_KEY_VERSION = 'lumin_overlay_version';
+const STORAGE_KEY_DRIVE_SESSION = 'lumin_drive_session';
 
 // ── Install / update handler ──────────────────────────────────────────────────
 chrome.runtime.onInstalled.addListener((details) => {
@@ -73,6 +74,27 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       chrome.storage.local.set({ [STORAGE_KEY_VERSION]: message.version }, () =>
         sendResponse({ ok: true })
       );
+      return true;
+    }
+
+    case 'SET_DRIVE_SESSION': {
+      chrome.storage.local.set(
+        { [STORAGE_KEY_DRIVE_SESSION]: { sessionId: message.sessionId, goal: message.goal || '' } },
+        () => sendResponse({ ok: true })
+      );
+      return true;
+    }
+
+    case 'GET_DRIVE_SESSION': {
+      chrome.storage.local.get([STORAGE_KEY_DRIVE_SESSION], (data) => {
+        const session = data[STORAGE_KEY_DRIVE_SESSION] || null;
+        sendResponse({ sessionId: session?.sessionId || null, goal: session?.goal || '' });
+      });
+      return true;
+    }
+
+    case 'CLEAR_DRIVE_SESSION': {
+      chrome.storage.local.remove([STORAGE_KEY_DRIVE_SESSION], () => sendResponse({ ok: true }));
       return true;
     }
 

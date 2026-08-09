@@ -98,6 +98,13 @@
       // Send initial auth + page context to frame
       postToFrame({ type: 'AUTH_STATE', ...authState });
       postToFrame({ type: 'PAGE_CONTEXT', ...readPageContext() });
+      // Resume an in-progress drive session across a full page navigation --
+      // the iframe (and this whole script) is destroyed and re-injected on
+      // reload, but the actual session state lives on the server; the
+      // extension only needs to remember the session id to reconnect.
+      chrome.runtime.sendMessage({ type: 'GET_DRIVE_SESSION' }, (res) => {
+        if (res?.sessionId) postToFrame({ type: 'DRIVE_SESSION_STATE', sessionId: res.sessionId, goal: res.goal || '' });
+      });
     });
   }
 
@@ -182,6 +189,27 @@
       case 'REFRESH_CONTEXT':
         postToFrame({ type: 'PAGE_CONTEXT', ...readPageContext() });
         break;
+
+      // ── Drive channel (OVERLAY-DRIVE-CHANNEL-0001 client side) ─────────────
+
+      // Frame wants a full observation (fields + clickables) for the drive loop
+      case 'REQUEST_DRIVE_OBSERVATION':
+        postToFrame({ type: 'DRIVE_OBSERVATION', ...readDriveObservation() });
+        break;
+
+      // Frame wants the page to navigate (a decided 'navigate' action)
+      case 'NAVIGATE':
+        if (msg.url) location.href = msg.url;
+        break;
+
+      // Frame started/stopped a drive session -- persist so it survives a full
+      // page navigation (the iframe is destroyed and re-injected on reload).
+      case 'SET_DRIVE_SESSION':
+        chrome.runtime.sendMessage({ type: 'SET_DRIVE_SESSION', sessionId: msg.sessionId, goal: msg.goal });
+        break;
+      case 'CLEAR_DRIVE_SESSION':
+        chrome.runtime.sendMessage({ type: 'CLEAR_DRIVE_SESSION' });
+        break;
     }
   });
 
@@ -214,6 +242,25 @@
       bodyText,
       fieldCount:   fields.length,
     };
+  }
+
+  // ── Clickable elements reader (for the drive channel's observe step) ───────
+  // Separate from readPageContext's form fields -- the drive loop also needs to
+  // see buttons/links to click, not just fields to fill.
+  function readClickables() {
+    const clickables = [];
+    document.querySelectorAll('a, button, [role=button], input[type=submit], input[type=button]').forEach(el => {
+      if (!isVisible(el)) return;
+      const text = (el.innerText || el.value || el.getAttribute('aria-label') || '').trim().slice(0, 80);
+      if (!text) return;
+      clickables.push({ tag: el.tagName.toLowerCase(), text, selector: cssSelector(el) });
+    });
+    return clickables.slice(0, 40);
+  }
+
+  function readDriveObservation() {
+    const ctx = readPageContext();
+    return { ...ctx, clickables: readClickables() };
   }
 
   function isVisible(el) {
