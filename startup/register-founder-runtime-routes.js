@@ -27,6 +27,7 @@ import { createLifeOSCoreRoutes } from "../routes/lifeos-core-routes.js";
 import { createIdeaQueueRoutes } from "../routes/idea-queue-routes.js";
 import { createMarketplaceOpportunityRoutes } from "../routes/marketplace-opportunity-routes.js";
 import { createLifeOSExtensionRoutes } from "../routes/lifeos-extension-routes.js";
+import { createExtensionDriveRoutes } from "../routes/extension-drive-routes.js";
 import { requireLifeOSAdmin } from "../middleware/lifeos-auth-middleware.js";
 import { createTCCoordinator } from "../services/tc-coordinator.js";
 import { createAccountManager } from "../services/account-manager.js";
@@ -324,6 +325,17 @@ export async function registerFounderRuntimeRoutes(app, deps) {
     logger.info("✅ [EXTENSION] Universal Overlay routes mounted at /api/v1/extension/{status,context,fill-form,chat}");
   } catch (err) {
     logger.warn?.({ err: err.message }, "[EXTENSION] founder-lane mount failed (non-fatal)");
+  }
+
+  // GAP-FILL (OVERLAY-DRIVE-CHANNEL-0001): protected-path carve-out -- this file is
+  // composition-root-adjacent, so the governed factory rejects autonomous writes here
+  // (commitToGitHub BLOCKED: builder-safe-scope). Hand-authored per the same
+  // GAP-FILL precedent as the IdeaVault/Marketplace-Scanner/Extension mounts above.
+  try {
+    app.use("/api/v1/extension/drive", createExtensionDriveRoutes({ pool, requireKey, callCouncilMember, logger }));
+    logger.info("✅ [EXTENSION-DRIVE] Live driving channel mounted at /api/v1/extension/drive/{start,next,result,stop,status}");
+  } catch (err) {
+    logger.warn?.({ err: err.message }, "[EXTENSION-DRIVE] founder-lane mount failed (non-fatal)");
   }
 
   // ClientCare billing rescue must live on founder lane — production boots founder_builder.
