@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-09T18:02:58.454Z",
+  "generated_at": "2026-08-09T18:05:22.424Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13149,
+  "file_count": 13150,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -93483,6 +93483,16 @@
       "indexed_at": "2026-08-01T16:09:16.342Z",
       "ssot": [
         "docs/products/wellness-studio/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/extension-drive-bridge.js",
+      "synopsis": "In-memory poll/post bridge that lets the generic browser-agent loop",
+      "bytes": 4850,
+      "mtime": "2026-08-09T18:05:22.424Z",
+      "indexed_at": "2026-08-09T18:05:22.424Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
     },
     {
