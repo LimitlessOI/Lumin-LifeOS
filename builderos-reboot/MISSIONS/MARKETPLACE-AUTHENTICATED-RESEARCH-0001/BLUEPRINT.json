@@ -1,0 +1,53 @@
+{
+  "mission_id": "MARKETPLACE-AUTHENTICATED-RESEARCH-0001",
+  "blueprint_id": "MARKETPLACE-AUTHENTICATED-RESEARCH-2026-08-08",
+  "scope": "marketplace_authenticated_research_envcreds",
+  "authority": "FOUNDER_PACKET.md",
+  "acceptance_command": "npm run marketplace:authenticated-research:acceptance",
+  "allowed_action_types": [
+    "builder_build",
+    "author_then_write",
+    "shell_command"
+  ],
+  "steps": [
+    {
+      "step_id": "MAR-S01",
+      "phase_id": "P0",
+      "title": "Add ETSY/EBAY envCreds branches to the overlay engine's authenticated-session pattern",
+      "target_file": "routes/general-browser-agent-routes.js",
+      "target_files": [
+        "routes/general-browser-agent-routes.js"
+      ],
+      "action_type": "author_then_write",
+      "patch_mode": true,
+      "task": "Add ETSY and EBAY envCreds branches to POST /api/v1/browser-agent/run, matching the exact WRM_WIX/TC_IMAP pattern, using PATCH MODE.",
+      "spec": "Output in PATCH MODE ONLY: the OLD block below must be copied EXACTLY character-for-character from the real current file. NEW keeps the existing TC_IMAP block byte-identical and inserts two new envCreds branches (ETSY, EBAY) between it and the existing `if (vaultService)` block, matching the EXACT same structure as the WRM_WIX/TC_IMAP branches: read email/password from named env vars, fail closed with a 503 naming the exact missing env vars if either is empty, otherwise prepend a login instruction to effectiveGoal that includes the real credentials, log only that credentials were injected (never the values themselves). Exact text below, no other change.\n\nOLD:\n      if (envCredKey === 'TC_IMAP' || envCredKey === 'ADAM_GMAIL' || envCredKey === 'GMAIL_ADAM') {\n        const { getTCImapUser, getTCImapPassword } = await import('../services/credential-aliases.js');\n        const email = String(getTCImapUser() || process.env.TC_IMAP_USER || 'adam@hopkinsgroup.org').trim();\n        const password = String(getTCImapPassword() || process.env.TC_IMAP_APP_PASSWORD || '').trim();\n        if (!email || !password) {\n          return res.status(503).json({\n            ok: false,\n            error: 'TC_IMAP_USER / TC_IMAP_APP_PASSWORD not set on tip',\n          });\n        }\n        effectiveGoal = [\n          `Log in to Google/Gmail with email ${email} and app password ${password}.`,\n          'If Google asks for an app password, use the provided app password.',\n          'If already logged in as that account, continue.',\n          'Do not invent credentials. Stay on accounts.google.com / mail.google.com.',\n          effectiveGoal,\n        ].join('\\n');\n        logger.info?.('[BROWSER-AGENT] envCreds TC_IMAP/ADAM_GMAIL injected (email present, password redacted)');\n      }\n\n      if (vaultService) {\n\nNEW:\n      if (envCredKey === 'TC_IMAP' || envCredKey === 'ADAM_GMAIL' || envCredKey === 'GMAIL_ADAM') {\n        const { getTCImapUser, getTCImapPassword } = await import('../services/credential-aliases.js');\n        const email = String(getTCImapUser() || process.env.TC_IMAP_USER || 'adam@hopkinsgroup.org').trim();\n        const password = String(getTCImapPassword() || process.env.TC_IMAP_APP_PASSWORD || '').trim();\n        if (!email || !password) {\n          return res.status(503).json({\n            ok: false,\n            error: 'TC_IMAP_USER / TC_IMAP_APP_PASSWORD not set on tip',\n          });\n        }\n        effectiveGoal = [\n          `Log in to Google/Gmail with email ${email} and app password ${password}.`,\n          'If Google asks for an app password, use the provided app password.',\n          'If already logged in as that account, continue.',\n          'Do not invent credentials. Stay on accounts.google.com / mail.google.com.',\n          effectiveGoal,\n        ].join('\\n');\n        logger.info?.('[BROWSER-AGENT] envCreds TC_IMAP/ADAM_GMAIL injected (email present, password redacted)');\n      }\n\n      // 2026-08-08: anonymous headless access to Etsy/eBay search pages is\n      // actively blocked by anti-bot systems (Etsy: DataDome device-check\n      // interstitial; eBay: hard error page) -- confirmed live. Adam: 'build\n      // our overlay system as if it's a human being pushing the button...\n      // it is acting as my hands.' Authenticated-session automation on his\n      // own account, not anonymous scraping -- same safe pattern as WRM_WIX/TC_IMAP.\n      if (envCredKey === 'ETSY') {\n        const email = String(process.env.ETSY_EMAIL || '').trim();\n        const password = String(process.env.ETSY_PASSWORD || '').trim();\n        if (!email || !password) {\n          return res.status(503).json({\n            ok: false,\n            error: 'ETSY_EMAIL / ETSY_PASSWORD not set on tip',\n          });\n        }\n        effectiveGoal = [\n          `Log in to Etsy with email ${email} and password ${password}.`,\n          'If already logged in, continue.',\n          'Do not invent credentials. Stay on etsy.com.',\n          effectiveGoal,\n        ].join('\\n');\n        logger.info?.('[BROWSER-AGENT] envCreds ETSY injected (email present, password redacted)');\n      }\n\n      if (envCredKey === 'EBAY') {\n        const email = String(process.env.EBAY_EMAIL || '').trim();\n        const password = String(process.env.EBAY_PASSWORD || '').trim();\n        if (!email || !password) {\n          return res.status(503).json({\n            ok: false,\n            error: 'EBAY_EMAIL / EBAY_PASSWORD not set on tip',\n          });\n        }\n        effectiveGoal = [\n          `Log in to eBay with email ${email} and password ${password}.`,\n          'If already logged in, continue.',\n          'Do not invent credentials. Stay on ebay.com.',\n          effectiveGoal,\n        ].join('\\n');\n        logger.info?.('[BROWSER-AGENT] envCreds EBAY injected (email present, password redacted)');\n      }\n\n      if (vaultService) {\n",
+      "authoring": {
+        "tiers": [
+          "deepseek",
+          "groq_llama",
+          "mistral_free"
+        ]
+      },
+      "assertion_spec": {
+        "expected_exports": [],
+        "file_contains": [
+          "envCredKey === 'ETSY'",
+          "envCredKey === 'EBAY'",
+          "ETSY_EMAIL",
+          "EBAY_EMAIL"
+        ]
+      },
+      "sandbox_boundary": "routes/**",
+      "authority_owner": "Builder",
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "dependencies": [],
+      "non_goals": [
+        "a full-file rewrite -- use patch mode only",
+        "any anti-bot circumvention technique -- authenticated-session automation only",
+        "structured signal extraction from search results -- separate later mission"
+      ],
+      "status": "pending"
+    }
+  ]
+}

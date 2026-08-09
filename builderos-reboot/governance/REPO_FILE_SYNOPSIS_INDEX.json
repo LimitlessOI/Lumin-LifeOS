@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-09T00:22:18.030Z",
+  "generated_at": "2026-08-09T00:35:29.366Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13131,
+  "file_count": 13136,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21307,9 +21307,9 @@
     {
       "path": "builderos-reboot/BP_PRIORITY.json",
       "synopsis": "BuilderOS artifact — BP PRIORITY.",
-      "bytes": 42737,
-      "mtime": "2026-08-09T00:21:38.207Z",
-      "indexed_at": "2026-08-09T00:22:18.030Z",
+      "bytes": 43742,
+      "mtime": "2026-08-09T00:34:48.376Z",
+      "indexed_at": "2026-08-09T00:35:29.366Z",
       "synopsis_index_only": true
     },
     {
@@ -26715,6 +26715,37 @@
       "bytes": 443,
       "mtime": "2026-06-29T04:00:50.969Z",
       "indexed_at": "2026-07-28T22:54:46.666Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/MARKETPLACE-AUTHENTICATED-RESEARCH-0001/BLUEPRINT.json",
+      "synopsis": "BuilderOS artifact — BLUEPRINT.",
+      "bytes": 6716,
+      "mtime": "2026-08-09T00:34:02.361Z",
+      "indexed_at": "2026-08-09T00:35:29.366Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/MARKETPLACE-AUTHENTICATED-RESEARCH-0001/DELIBERATION_GATE.json",
+      "synopsis": "BuilderOS artifact — DELIBERATION GATE.",
+      "bytes": 1339,
+      "mtime": "2026-08-09T00:34:15.207Z",
+      "indexed_at": "2026-08-09T00:35:29.366Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/MARKETPLACE-AUTHENTICATED-RESEARCH-0001/FOUNDER_PACKET.md",
+      "synopsis": "Founder Packet — authenticated-session marketplace research, \"the overlay acts as Adam's hands.\"",
+      "bytes": 4020,
+      "mtime": "2026-08-09T00:33:05.719Z",
+      "indexed_at": "2026-08-09T00:35:29.366Z"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/MARKETPLACE-AUTHENTICATED-RESEARCH-0001/INTENT_BASELINE.json",
+      "synopsis": "BuilderOS artifact — INTENT BASELINE.",
+      "bytes": 2431,
+      "mtime": "2026-08-09T00:33:19.941Z",
+      "indexed_at": "2026-08-09T00:35:29.366Z",
       "synopsis_index_only": true
     },
     {
@@ -42510,9 +42541,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 480659,
-      "mtime": "2026-08-09T00:22:02.388Z",
-      "indexed_at": "2026-08-09T00:22:18.030Z"
+      "bytes": 482777,
+      "mtime": "2026-08-09T00:35:11.468Z",
+      "indexed_at": "2026-08-09T00:35:29.366Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -67122,9 +67153,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\":\"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",\"lifeos:file-synopsis:backfill\":\"node scripts/file-synopsis-enforce.mjs --all --auto-fix && node scripts/generate-file-synopsis-index.mjs\",\"lifeos:file-synopsis:index\":\"n",
-      "bytes": 35330,
-      "mtime": "2026-08-09T00:12:50.036Z",
-      "indexed_at": "2026-08-09T00:13:29.415Z",
+      "bytes": 35447,
+      "mtime": "2026-08-09T00:34:48.396Z",
+      "indexed_at": "2026-08-09T00:35:29.366Z",
       "synopsis_index_only": true
     },
     {
@@ -77658,6 +77689,16 @@
       "bytes": 6663,
       "mtime": "2026-07-11T08:56:55.030Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "scripts/run-marketplace-authenticated-research-acceptance.mjs",
+      "synopsis": "Authenticated Marketplace Research acceptance.",
+      "bytes": 4313,
+      "mtime": "2026-08-09T00:34:36.595Z",
+      "indexed_at": "2026-08-09T00:35:29.366Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "scripts/run-marketplace-opportunity-scanner-acceptance.mjs",

@@ -1,0 +1,38 @@
+{
+  "schema": "intent_baseline_v1",
+  "intent_id": "MARKETPLACE-AUTHENTICATED-RESEARCH-0001",
+  "mission_id": "MARKETPLACE-AUTHENTICATED-RESEARCH-0001",
+  "tier": 1,
+  "status": "HANDOFF_READY",
+  "created_at": "2026-08-08",
+  "amendment_pack": "docs/constitution/AMENDMENT_PACK_V2.0A.md",
+  "proof_lap_only": false,
+  "outcome_statement": "The overlay engine can authenticate as Adam's own Etsy/eBay account (matching the existing WRM_WIX/TC_IMAP envCreds pattern) instead of browsing anonymously -- anonymous headless access to both platforms was confirmed live-blocked by anti-bot systems.",
+  "user": "Adam (founder)",
+  "pain": "Anonymous headless browser access to Etsy and eBay search pages is actively blocked (DataDome device-check, hard error page) -- confirmed live, not assumed. The overlay needs to act as Adam's own hands, on his own authenticated session, not as an anonymous bot.",
+  "value": "Unlocks real marketplace research once credentials are provided, using a legitimate, already-proven-safe automation pattern instead of attempting to defeat anti-bot detection anonymously.",
+  "success_metrics": [
+    "envCreds: 'ETSY' / 'EBAY' inject a real login instruction when the matching env vars are set",
+    "Missing env vars fail closed with a specific, named error -- never fall back to anonymous browsing",
+    "Credential values never appear in logs"
+  ],
+  "failure_metrics": [
+    "TECHNICAL_PASS without founder_usability_pass",
+    "Silent fallback to anonymous/unauthenticated browsing when credentials are missing",
+    "Credential values logged or echoed anywhere"
+  ],
+  "constraints": [
+    "BP_PRIORITY queue authority",
+    "BuilderOS system path only -- no agent hand-build",
+    "No anti-bot circumvention techniques (proxies, fingerprint spoofing, CAPTCHA-solving) -- authenticated-session automation only"
+  ],
+  "scope_boundary": "Per FOUNDER_PACKET.md",
+  "unacceptable_result": "Any code path that falls back to anonymous browsing when auth creds are missing; any credential value logged",
+  "ownership": "ARC emits machine twin; Builder executes; Adam owns founder usability verdict",
+  "priority_fit": "BP_PRIORITY rank 27 -- direct successor to OVERLAY-ENGINE-RISK-GATE-0001",
+  "point_model": {
+    "A": "Vision -- Adam provides FP in development stage",
+    "B": "Chair locks handoff -- corridor protected; Adam done until Alpha",
+    "C": "Alpha -- Adam evaluates outcome only"
+  }
+}
