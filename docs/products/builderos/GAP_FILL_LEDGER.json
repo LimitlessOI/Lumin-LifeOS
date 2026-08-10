@@ -655,6 +655,14 @@
       "added_real_lines": 54,
       "justification": "routes/system-notify-routes.js is a small,\nfresh file (not novel logic design -- reusing an already-proven send\npattern verbatim from an existing working file) and time-sensitive\n(founder waiting live on a real email). Verified locally: with neither\nprovider configured, the endpoint correctly falls through to\nsmtp_credentials_not_configured rather than crashing -- proving the\nfailover control flow itself is sound before relying on production's\nreal credentials to complete the send.\n\nCo-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>",
       "commit_message_excerpt": "GAP-FILL: add SMTP fallback to system-notify email -- production's POSTMARK_SERVER_TOKEN is itself invalid"
+    },
+    {
+      "at": "2026-08-10T11:22:03.788Z",
+      "file": "routes/android-command-routes.js",
+      "is_new_file": true,
+      "added_real_lines": 85,
+      "justification": "governed factory hit a real, consistent\n(2/2 attempts) anti-stub false-positive on this file -- not a\ntransient miss like earlier @ssot-omission retries that succeeded on\nretry. Hand-authored per established precedent once the factory\ndemonstrably couldn't produce it. Full real end-to-end test against\nthe live DB (not just a mount check): enqueue -> atomic claim ->\ncorrectly-empty re-claim (no double-claim race) -> result report, all\nreal HTTP calls with the real command key. Also verified: route mounts\nand is auth-gated (401 on fake key) via a real local boot.\n\nCo-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>",
+      "commit_message_excerpt": "GAP-FILL: Android remote-command queue -- the last manual-tap gap, closed"
     }
   ]
 }
