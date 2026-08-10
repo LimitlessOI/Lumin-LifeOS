@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-10T11:55:54.960Z",
+  "generated_at": "2026-08-10T11:56:42.751Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13213,
+  "file_count": 13214,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -40507,9 +40507,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 154917,
-      "mtime": "2026-08-06T08:26:22.201Z",
-      "indexed_at": "2026-08-06T08:26:24.415Z"
+      "bytes": 158838,
+      "mtime": "2026-08-10T11:56:17.902Z",
+      "indexed_at": "2026-08-10T11:56:42.751Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -43917,9 +43917,9 @@
     {
       "path": "docs/products/lifeos/communication/COMMUNICATION_SYSTEM_BLUEPRINT.md",
       "synopsis": "LifeOS Communication System — final consolidated blueprint. Source: every founder/model conversation and attachment about communication, perception, conversation, and the LifeOS cognitive interaction system.",
-      "bytes": 78453,
-      "mtime": "2026-08-08T00:12:38.237Z",
-      "indexed_at": "2026-08-08T00:13:11.613Z"
+      "bytes": 96923,
+      "mtime": "2026-08-10T11:50:03.961Z",
+      "indexed_at": "2026-08-10T11:56:42.751Z"
     },
     {
       "path": "docs/products/lifeos/communication/COMMUNICATION_SYSTEM_FOUNDER_REFERENCE.md",
@@ -67611,6 +67611,13 @@
       "mtime": "2025-12-22T18:15:07.166Z",
       "indexed_at": "2026-07-28T22:54:46.666Z",
       "synopsis_index_only": true
+    },
+    {
+      "path": "native/macos-overlay/build.sh",
+      "synopsis": "Shell script — Build.",
+      "bytes": 958,
+      "mtime": "2026-08-10T11:56:41.605Z",
+      "indexed_at": "2026-08-10T11:56:42.751Z"
     },
     {
       "path": "NEON_OPTIMIZATION_STRATEGY.md",
