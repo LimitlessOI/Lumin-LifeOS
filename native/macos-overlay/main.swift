@@ -5,6 +5,7 @@
 // a real bug found live 2026-08-10 (window only appeared on one of three
 // monitors). See docs/products/lifeos/communication/COMMUNICATION_SYSTEM_BLUEPRINT.md §21.1.
 import Cocoa
+import CoreGraphics
 import ServiceManagement
 
 let app = NSApplication.shared
@@ -65,7 +66,16 @@ func makeOverlayWindow(for screen: NSScreen) -> OverlayWindow {
     )
     window.isOpaque = false
     window.backgroundColor = .clear
-    window.level = .floating
+    // REVERTED 2026-08-10: .maximumWindow (the actual CGWindowLevel ceiling,
+    // reserved for things like the lock screen) was tried and rolled back
+    // immediately -- the two external monitors dropped out of
+    // `system_profiler`'s display list (3 -> 1, built-in only) right after
+    // switching to it. Not proven as the cause, but treated as guilty until
+    // proven innocent rather than left active while investigating further at
+    // this hour. .screenSaver is the safe known-good level -- real
+    // improvement over .floating, imperfect (an IDE panel could still
+    // partially cover her), but with no observed side effects.
+    window.level = .screenSaver
     window.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary, .stationary]
     window.hasShadow = true
     window.isMovableByWindowBackground = false // ContainerView handles drag/resize itself
