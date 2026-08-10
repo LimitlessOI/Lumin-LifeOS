@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-10T07:24:49.006Z",
+  "generated_at": "2026-08-10T07:48:14.963Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13184,
+  "file_count": 13185,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -93359,6 +93359,16 @@
       "indexed_at": "2026-08-01T12:51:41.009Z",
       "ssot": [
         "docs/products/personal-finance-os/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/drive-sensitive-content-filter.js",
+      "synopsis": "Service module — Drive Sensitive Content Filter.",
+      "bytes": 4497,
+      "mtime": "2026-08-10T07:48:14.963Z",
+      "indexed_at": "2026-08-10T07:48:14.963Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
     },
     {
