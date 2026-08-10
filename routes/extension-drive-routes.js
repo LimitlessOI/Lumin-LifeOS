@@ -129,7 +129,11 @@ export function createExtensionDriveRoutes({ pool, requireKey, callCouncilMember
         const action = last?.action;
         if (!action || (action.type !== 'click' && action.type !== 'type')) return { stop: false };
         const el = (observation?.elements || []).find((e) => e.selector === action.selector);
-        const label = (el && (el.text || el.label)) || action.reason || action.selector || 'this field';
+        // Never show a raw CSS selector as the label -- found live 2026-08-10:
+        // "Stuck -- needs you: div > article.hemmed.sidenav > main > ..." reads
+        // as broken to a real user, not helpful. Prefer real text, then the
+        // decider's own stated reason, then a plain generic phrase.
+        const label = (el && (el.text || el.label)) || action.reason || 'this field';
         return {
           stop: true,
           ok: false,
@@ -286,7 +290,11 @@ export function createExtensionDriveRoutes({ pool, requireKey, callCouncilMember
         const action = last?.action;
         if (!action || (action.type !== 'click' && action.type !== 'type')) return { stop: false };
         const el = (observation?.elements || []).find((e) => e.selector === action.selector);
-        const label = (el && (el.text || el.label)) || action.reason || action.selector || 'this field';
+        // Never show a raw CSS selector as the label -- found live 2026-08-10:
+        // "Stuck -- needs you: div > article.hemmed.sidenav > main > ..." reads
+        // as broken to a real user, not helpful. Prefer real text, then the
+        // decider's own stated reason, then a plain generic phrase.
+        const label = (el && (el.text || el.label)) || action.reason || 'this field';
         return {
           stop: true,
           ok: false,
