@@ -389,6 +389,12 @@ export function createAccountManagerRoutes({ requireKey, accountManager, pool, l
         links: result.links,
         verifyLink: findVerificationLink(result.links, { preferDomain: body.fromDomain || null }),
         codes,
+        // Found live 2026-08-10: `codes` alone is often ambiguous (a copyright
+        // year, a tracking id, etc. can also match \d{4,8}) with no way to tell
+        // which candidate is the real code -- a text preview lets a human or an
+        // AI disambiguate by surrounding context instead of guessing against a
+        // real signup form.
+        bodyPreview: text.replace(/\s+/g, ' ').trim().slice(0, 1200),
       });
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });

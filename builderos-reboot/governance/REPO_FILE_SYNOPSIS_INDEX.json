@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-10T09:18:12.118Z",
+  "generated_at": "2026-08-10T09:23:47.010Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13194,
   "files": [
@@ -43982,9 +43982,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 815796,
-      "mtime": "2026-08-09T02:00:18.199Z",
-      "indexed_at": "2026-08-09T02:00:54.979Z"
+      "bytes": 817632,
+      "mtime": "2026-08-10T09:22:57.605Z",
+      "indexed_at": "2026-08-10T09:23:47.010Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -71215,9 +71215,9 @@
     {
       "path": "routes/account-manager-routes.js",
       "synopsis": "account-manager-routes.js — managed accounts + LifeOS connect guide APIs.",
-      "bytes": 18122,
-      "mtime": "2026-07-28T17:47:22.532Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 18543,
+      "mtime": "2026-08-10T09:22:08.783Z",
+      "indexed_at": "2026-08-10T09:23:47.010Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
