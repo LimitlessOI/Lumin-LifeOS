@@ -18,6 +18,8 @@ swiftc -O OverlayWindow.swift TaloaImageCharacterView.swift ContainerView.swift 
 
 cp Info.plist "$APP_BUNDLE/Contents/Info.plist"
 cp Assets/TaloaCharacter.png "$APP_BUNDLE/Contents/Resources/TaloaCharacter.png"
+cp Assets/TaloaCharacterBlink.png "$APP_BUNDLE/Contents/Resources/TaloaCharacterBlink.png"
+cp Assets/TaloaCharacterSpeak.png "$APP_BUNDLE/Contents/Resources/TaloaCharacterSpeak.png"
 
 # Ad-hoc signature -- no Developer ID needed for local use; makes Gatekeeper
 # and SMAppService registration behave like a normal installed app instead

@@ -1,16 +1,16 @@
-// SYNOPSIS: Native small-state character view for the Taloa overlay -- now a
-// real generated character image instead of hand-coded vector shapes, direct
-// response to founder feedback 2026-08-10: "give me what I want despite the
-// limitation... figure the fuck this out." No image-generation tool was
-// available to Claude directly or on this Mac (checked: no Draw Things, no
-// local Stable Diffusion, Ollama models here are vision-understanding only,
-// not generation) -- the actual unlock was a free, no-API-key public
-// text-to-image endpoint (image.pollinations.ai) reachable via plain curl,
-// plus local `rembg` (pip-installed, U2Net model) for background removal so
-// the result composites as a real floating character, not a rectangle.
-// Asset: Assets/TaloaCharacter.png (768x768 RGBA, verified transparent --
-// corner alpha=0 checked directly, not assumed from a preview).
-// Supersedes TaloaFairyView.swift.
+// SYNOPSIS: Native small-state character view for the Taloa overlay -- a
+// real generated character (image.pollinations.ai + local rembg for
+// transparency, see Assets/) that now cross-fades between three real frames
+// (idle / blink / speaking) instead of sitting as one frozen photo. Direct
+// founder correction 2026-08-10: "it made it look more real, but it's not a
+// character, it's an image." A still picture, however good, isn't alive --
+// this adds real periodic blinking and a speaking frame swapped in during
+// the same real cast-spell event as before, so something actually changes
+// over time and in response to events, not just glow/breathe on one image.
+// Known honest limit: blink timing is a local timer (like the earlier vector
+// version had), not driven by real perception/conversation state -- that
+// wiring still doesn't exist. Supersedes the single-image version of this
+// same file.
 // See docs/products/lifeos/communication/COMMUNICATION_SYSTEM_BLUEPRINT.md §21.1.
 import Cocoa
 
@@ -22,42 +22,62 @@ enum TaloaMode: String {
     case idle, listening, thinking, speaking, impatient
 }
 
+private enum FrameKind { case idle, blink, speak }
+
 final class TaloaImageCharacterView: NSView {
-    var expression: TaloaExpression = .neutral // not yet expressed by the static image -- see known gaps
+    var expression: TaloaExpression = .neutral
     var mode: TaloaMode = .idle
 
     private var phase: CGFloat = 0
     private var timer: Timer?
-    private let characterImage: NSImage?
 
-    // "Casting a spell" flourish (2026-08-10, founder ask: "she can pretend
-    // like she's doing a spell when she brings up a new page or a new
-    // layout") -- tied to REAL WKNavigationDelegate events in ContainerView,
-    // not a decorative loop, so it reads as her causing the change rather
-    // than a random animation that happens to coincide with one.
+    private let idleImage: NSImage?
+    private let blinkImage: NSImage?
+    private let speakImage: NSImage?
+
+    private var currentFrame: FrameKind = .idle
+    private var currentImage: NSImage?
+    private var previousImage: NSImage?
+    private var blendProgress: CGFloat = 1.0
+    private let blendSpeed: CGFloat = 1.0 / 0.12 // ~120ms cross-fade
+
+    private var nextBlinkAt: CGFloat = 0
+    private var blinkUntil: CGFloat = 0
+
     private var castActive = false
     private var castStartedAt: CGFloat = 0
     private let castDuration: CGFloat = 0.9
     private var castParticles: [(angle: CGFloat, speed: CGFloat, size: CGFloat)] = []
 
     override init(frame frameRect: NSRect) {
-        self.characterImage = TaloaImageCharacterView.loadCharacterImage()
+        idleImage = TaloaImageCharacterView.loadImage(named: "TaloaCharacter")
+        blinkImage = TaloaImageCharacterView.loadImage(named: "TaloaCharacterBlink")
+        speakImage = TaloaImageCharacterView.loadImage(named: "TaloaCharacterSpeak")
         super.init(frame: frameRect)
+        currentImage = idleImage
         wantsLayer = true
         layer?.masksToBounds = false
+        nextBlinkAt = CGFloat.random(in: 2.5...5)
+
         timer = Timer.scheduledTimer(withTimeInterval: 1.0 / 30.0, repeats: true) { [weak self] _ in
-            guard let self = self else { return }
-            self.phase += 1.0 / 30.0
-            if self.castActive, self.phase - self.castStartedAt > self.castDuration {
-                self.castActive = false
-            }
-            self.needsDisplay = true
+            self?.tick()
         }
     }
 
-    /// Trigger the cast-a-spell flourish. Call this from a real event (page
-    /// navigation, layout change) -- never on a timer/loop, or it stops
-    /// meaning anything.
+    required init?(coder: NSCoder) { fatalError("init(coder:) not used") }
+
+    private static func loadImage(named name: String) -> NSImage? {
+        if let path = Bundle.main.path(forResource: name, ofType: "png") {
+            return NSImage(contentsOfFile: path)
+        }
+        let devPath = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .appendingPathComponent("Assets/\(name).png").path
+        return NSImage(contentsOfFile: devPath)
+    }
+
+    /// Trigger the cast-a-spell flourish + speaking frame. Call this from a
+    /// real event (page navigation, layout change) -- never on a timer/loop.
     func castSpell() {
         FileHandle.standardError.write("Taloa: casting (real navigation event)\n".data(using: .utf8)!)
         castActive = true
@@ -67,17 +87,52 @@ final class TaloaImageCharacterView: NSView {
         }
     }
 
-    required init?(coder: NSCoder) { fatalError("init(coder:) not used") }
+    private func tick() {
+        let dt: CGFloat = 1.0 / 30.0
+        phase += dt
 
-    private static func loadCharacterImage() -> NSImage? {
-        if let path = Bundle.main.path(forResource: "TaloaCharacter", ofType: "png") {
-            return NSImage(contentsOfFile: path)
+        if castActive, phase - castStartedAt > castDuration {
+            castActive = false
         }
-        // Dev-run fallback (running the bare binary outside a bundle, e.g. via swiftc directly).
-        let devPath = URL(fileURLWithPath: #filePath)
-            .deletingLastPathComponent()
-            .appendingPathComponent("Assets/TaloaCharacter.png").path
-        return NSImage(contentsOfFile: devPath)
+
+        // Local idle-blink timer -- honest limitation: not driven by real
+        // perception/conversation state, same as the vector version before it.
+        if currentFrame != .blink, phase >= nextBlinkAt {
+            blinkUntil = phase + 0.18
+        }
+        if phase < blinkUntil {
+            setFrame(.blink)
+        } else if castActive {
+            setFrame(.speak)
+        } else {
+            if currentFrame == .blink, phase >= blinkUntil {
+                nextBlinkAt = phase + CGFloat.random(in: 3...7)
+            }
+            setFrame(.idle)
+        }
+
+        if blendProgress < 1 {
+            blendProgress = min(1, blendProgress + dt * blendSpeed)
+        }
+
+        needsDisplay = true
+    }
+
+    private func setFrame(_ kind: FrameKind) {
+        guard kind != currentFrame else { return }
+        if kind == .blink {
+            FileHandle.standardError.write("Taloa: blink\n".data(using: .utf8)!)
+        }
+        currentFrame = kind
+        previousImage = currentImage
+        let target: NSImage?
+        switch kind {
+        case .idle: target = idleImage
+        case .blink: target = blinkImage
+        case .speak: target = speakImage
+        }
+        currentImage = target ?? idleImage
+        blendProgress = 0
     }
 
     private func coreColor() -> NSColor {
@@ -94,7 +149,7 @@ final class TaloaImageCharacterView: NSView {
         NSColor.clear.set()
         dirtyRect.fill()
 
-        guard let image = characterImage else {
+        guard let image = currentImage ?? idleImage else {
             // Fail visibly, not silently -- an empty transparent view would look
             // like "it's still not working" with no clue why.
             NSColor.red.withAlphaComponent(0.6).setFill()
@@ -104,7 +159,7 @@ final class TaloaImageCharacterView: NSView {
 
         let color = coreColor()
         let castT = castActive ? min(1.0, (phase - castStartedAt) / castDuration) : 0
-        let castPulse = castActive ? sin(castT * .pi) : 0 // 0 -> 1 -> 0 over the cast window
+        let castPulse = castActive ? sin(castT * .pi) : 0
 
         let breathe = 1.0 + 0.02 * sin(phase * 1.0) + 0.08 * castPulse
         let hover = sin(phase * 1.1) * bounds.height * 0.02
@@ -114,16 +169,19 @@ final class TaloaImageCharacterView: NSView {
         let h = baseSize.height * breathe
         let drawRect = NSRect(x: bounds.midX - w / 2, y: bounds.midY - h / 2 + hover, width: w, height: h)
 
-        // Soft mode-colored glow behind the character, brightened during a
-        // cast, same language as every prior iteration so state changes
-        // still read even though the art is now a fixed image.
         NSGraphicsContext.saveGraphicsState()
         let glow = NSShadow()
         glow.shadowColor = color.withAlphaComponent(0.65 + 0.3 * castPulse)
         glow.shadowBlurRadius = min(bounds.width, bounds.height) * (0.18 + 0.12 * castPulse)
         glow.shadowOffset = .zero
         glow.set()
-        image.draw(in: drawRect, from: .zero, operation: .sourceOver, fraction: 1.0)
+
+        if blendProgress < 1, let prev = previousImage {
+            prev.draw(in: drawRect, from: .zero, operation: .sourceOver, fraction: 1.0 - blendProgress)
+            image.draw(in: drawRect, from: .zero, operation: .sourceOver, fraction: blendProgress)
+        } else {
+            image.draw(in: drawRect, from: .zero, operation: .sourceOver, fraction: 1.0)
+        }
         NSGraphicsContext.restoreGraphicsState()
 
         if castActive {
@@ -139,7 +197,6 @@ final class TaloaImageCharacterView: NSView {
         let maxRadius = min(bounds.width, bounds.height) * 0.6
         let fade = 1.0 - t
 
-        // Expanding ring.
         let ringRadius = maxRadius * t
         let ring = NSBezierPath(ovalIn: NSRect(x: center.x - ringRadius, y: center.y - ringRadius,
                                                 width: ringRadius * 2, height: ringRadius * 2))
@@ -147,7 +204,6 @@ final class TaloaImageCharacterView: NSView {
         sparkleColor.withAlphaComponent(0.7 * fade).setStroke()
         ring.stroke()
 
-        // Outward-flying particles.
         for p in castParticles {
             let dist = maxRadius * 0.8 * t * p.speed
             let x = center.x + cos(p.angle) * dist

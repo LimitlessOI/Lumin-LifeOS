@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-10T11:56:42.751Z",
+  "generated_at": "2026-08-10T12:12:15.981Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13214,
   "files": [
@@ -67615,9 +67615,9 @@
     {
       "path": "native/macos-overlay/build.sh",
       "synopsis": "Shell script — Build.",
-      "bytes": 958,
-      "mtime": "2026-08-10T11:56:41.605Z",
-      "indexed_at": "2026-08-10T11:56:42.751Z"
+      "bytes": 1140,
+      "mtime": "2026-08-10T12:08:18.529Z",
+      "indexed_at": "2026-08-10T12:12:15.981Z"
     },
     {
       "path": "NEON_OPTIMIZATION_STRATEGY.md",
