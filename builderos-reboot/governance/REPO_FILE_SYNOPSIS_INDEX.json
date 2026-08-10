@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-10T06:36:15.637Z",
+  "generated_at": "2026-08-10T06:37:40.755Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13179,
   "files": [
@@ -21940,9 +21940,9 @@
     {
       "path": "builderos-reboot/MISSIONS/BROWSER-AGENT-GMAIL-SIGNUP-CREDS-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
-      "bytes": 4441,
-      "mtime": "2026-08-10T06:35:58.710Z",
-      "indexed_at": "2026-08-10T06:36:15.637Z",
+      "bytes": 4631,
+      "mtime": "2026-08-10T06:37:39.547Z",
+      "indexed_at": "2026-08-10T06:37:40.755Z",
       "synopsis_index_only": true
     },
     {
