@@ -375,7 +375,17 @@ export function createAccountManagerRoutes({ requireKey, accountManager, pool, l
           sinceMinutes,
         });
       }
-      const text = String(result.body || "")
+      // result.body is the RAW RFC822 message source (headers + body) --
+      // found live 2026-08-10: without skipping past the header block, both
+      // `codes` and `bodyPreview` were pulling from SMTP routing/DKIM
+      // headers instead of the actual message content, producing digit
+      // sequences that looked like codes but weren't (fragments of
+      // "Received:"/signature lines) and a preview useless for disambiguation.
+      // Headers end at the first blank line per RFC 822/2822.
+      const rawSource = String(result.body || "");
+      const headerBoundary = rawSource.search(/\r?\n\r?\n/);
+      const messageBody = headerBoundary >= 0 ? rawSource.slice(headerBoundary) : rawSource;
+      const text = messageBody
         .replace(/=\r?\n/g, "")
         .replace(/<[^>]+>/g, " ")
         .replace(/&nbsp;/g, " ");
