@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-10T07:49:34.431Z",
+  "generated_at": "2026-08-10T07:51:21.196Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13189,
+  "file_count": 13193,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -22058,6 +22058,37 @@
       "indexed_at": "2026-08-03T19:25:56.181Z"
     },
     {
+      "path": "builderos-reboot/MISSIONS/DRIVE-SENSITIVE-CONTENT-FILTER-0001/BLUEPRINT.json",
+      "synopsis": "BuilderOS artifact — BLUEPRINT.",
+      "bytes": 4307,
+      "mtime": "2026-08-10T07:49:34.926Z",
+      "indexed_at": "2026-08-10T07:51:21.196Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/DRIVE-SENSITIVE-CONTENT-FILTER-0001/DELIBERATION_GATE.json",
+      "synopsis": "BuilderOS artifact — DELIBERATION GATE.",
+      "bytes": 1103,
+      "mtime": "2026-08-10T07:49:34.926Z",
+      "indexed_at": "2026-08-10T07:51:21.196Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/DRIVE-SENSITIVE-CONTENT-FILTER-0001/FOUNDER_PACKET.md",
+      "synopsis": "Founder Packet — sensitive-content redaction for the drive channel.",
+      "bytes": 1967,
+      "mtime": "2026-08-10T07:49:34.926Z",
+      "indexed_at": "2026-08-10T07:51:21.196Z"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/DRIVE-SENSITIVE-CONTENT-FILTER-0001/INTENT_BASELINE.json",
+      "synopsis": "BuilderOS artifact — INTENT BASELINE.",
+      "bytes": 1987,
+      "mtime": "2026-08-10T07:49:34.927Z",
+      "indexed_at": "2026-08-10T07:51:21.196Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "builderos-reboot/MISSIONS/EXTENSION-DRIVE-STUCK-HANDOFF-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
       "bytes": 12944,
@@ -42829,9 +42860,9 @@
     {
       "path": "docs/products/builderos/GAP_FILL_LEDGER.json",
       "synopsis": "Documentation — GAP FILL LEDGER.",
-      "bytes": 87234,
-      "mtime": "2026-08-10T06:43:11.819Z",
-      "indexed_at": "2026-08-10T07:22:29.315Z",
+      "bytes": 88507,
+      "mtime": "2026-08-10T07:49:34.901Z",
+      "indexed_at": "2026-08-10T07:51:21.196Z",
       "synopsis_index_only": true
     },
     {
@@ -44730,9 +44761,9 @@
     {
       "path": "docs/products/universal-overlay/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Universal Overlay",
-      "bytes": 45045,
-      "mtime": "2026-08-10T07:49:16.513Z",
-      "indexed_at": "2026-08-10T07:49:28.274Z"
+      "bytes": 48047,
+      "mtime": "2026-08-10T07:50:47.393Z",
+      "indexed_at": "2026-08-10T07:51:21.196Z"
     },
     {
       "path": "docs/products/UNIVERSALOVERLAY.md",
@@ -93794,9 +93825,9 @@
     {
       "path": "services/extension-drive-bridge.js",
       "synopsis": "In-memory poll/post bridge that lets the generic browser-agent loop",
-      "bytes": 4850,
-      "mtime": "2026-08-09T18:06:57.489Z",
-      "indexed_at": "2026-08-09T18:14:44.802Z",
+      "bytes": 5280,
+      "mtime": "2026-08-10T07:49:59.792Z",
+      "indexed_at": "2026-08-10T07:51:21.196Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]

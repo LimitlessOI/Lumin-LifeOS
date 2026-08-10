@@ -11,6 +11,8 @@
  * @ssot docs/products/universal-overlay/PRODUCT_HOME.md
  */
 
+import driveSensitiveContentFilter from './drive-sensitive-content-filter.js';
+
 const sessions = new Map();
 
 export function createDriveSession(sessionId, meta = {}) {
@@ -108,12 +110,16 @@ function toObservation(payload) {
     })),
   ].slice(0, 40);
 
-  return {
+  // Redact at the single real capture point: every downstream consumer
+  // (the AI model prompt, the steps log, the drive UI) only ever sees the
+  // redacted version, never the original -- founder requirement (2026-08-10):
+  // sensitive content is never seen or recorded, not just hidden in the UI.
+  return driveSensitiveContentFilter.redactObservation({
     url: payload?.url || '',
     title: payload?.title || '',
     text: (payload?.bodyText || '').slice(0, 4000),
     elements,
-  };
+  });
 }
 
 export function makeExtensionObserve(sessionId) {

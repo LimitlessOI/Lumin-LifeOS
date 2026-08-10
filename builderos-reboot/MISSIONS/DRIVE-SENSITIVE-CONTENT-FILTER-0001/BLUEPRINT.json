@@ -1,0 +1,38 @@
+{
+  "mission_id": "DRIVE-SENSITIVE-CONTENT-FILTER-0001",
+  "blueprint_id": "DRIVE-SENSITIVE-CONTENT-FILTER-0001-BP1",
+  "scope": "New services/drive-sensitive-content-filter.js: redacts explicit-content signals and PII-shaped patterns (SSN, credit card, password fields) from observation text/elements, tagging each redaction with a category (never the original value) so the UI can show a labeled placeholder without ever storing or displaying the sensitive value itself.",
+  "authority": "BPB",
+  "acceptance_command": "npm run drive-sensitive-content-filter:acceptance",
+  "allowed_action_types": ["author_then_write"],
+  "platform_gap_fill": true,
+  "platform_gap_fill_reason": "GAP-FILL: founder-directed live privacy fix (Adam, 2026-08-10) discovered while shipping the drive channel and Android AccessibilityService driver -- not a pre-planned BP_PRIORITY queue item.",
+  "steps": [
+    {
+      "step_id": "DSCF-S01",
+      "phase_id": "P0",
+      "title": "Create services/drive-sensitive-content-filter.js",
+      "target_file": "services/drive-sensitive-content-filter.js",
+      "target_files": ["services/drive-sensitive-content-filter.js"],
+      "action_type": "author_then_write",
+      "patch_mode": false,
+      "task": "The file MUST begin with a JSDoc block comment containing a line exactly '@ssot docs/products/universal-overlay/PRODUCT_HOME.md' (this is mandatory and checked by a commit gate -- omitting it will cause the commit to be rejected). After that JSDoc header: create a new file exporting redactSensitiveText(text, url) and redactSensitiveElements(elements) and redactObservation(observation). redactSensitiveText detects (a) explicit-content site domains/keywords (porn/nsfw/xxx/onlyfans-style keyword and domain regex lists) -- if matched, return { text: a fixed marker string, redacted: true, category: 'explicit' }, never the original text. (b) PII-shaped patterns: SSN-shaped \\d{3}-\\d{2}-\\d{4} and 13-16 digit credit-card-shaped sequences -- replace matched spans with a fixed marker, return { text: replaced, redacted: true, category: 'pii' } if any replacement happened. If nothing matched, return { text: original, redacted: false, category: null }. redactSensitiveElements maps over an elements array (each element has a .text and optional .type field): if el.type is 'password' (case-insensitive), replace .text with the fixed marker and tag category 'password'; otherwise run el.text through redactSensitiveText and replace if redacted. redactObservation takes an { url, title, text, elements } observation object, runs text through redactSensitiveText(text, url), runs elements through redactSensitiveElements, and returns a new observation object (do not mutate the input) with the redacted text/elements plus a top-level _redactions array listing every category that was redacted in this observation (e.g. ['password'] or ['explicit']) so callers can log that redaction occurred without knowing what was redacted. Default export an object with all three functions. Include a JSDoc header stating this is heuristic v1 (domain/keyword/pattern matching for the clearest cases only, not a full content classifier) -- do not claim complete coverage anywhere in the file. No side effects, no I/O, no imports beyond nothing (pure functions only) -- must be independently unit-testable with zero dependencies.",
+      "authoring": { "tiers": ["deepseek", "groq_llama", "mistral_free"] },
+      "assertion_spec": {
+        "expected_exports": ["redactSensitiveText", "redactSensitiveElements", "redactObservation"],
+        "file_contains": ["heuristic", "password"]
+      },
+      "behavior_assertions": [
+        { "type": "exports_smoke", "target": "services/drive-sensitive-content-filter.js" },
+        { "type": "file_contains", "target": "services/drive-sensitive-content-filter.js", "substring": "redactObservation" },
+        { "type": "file_contains", "target": "services/drive-sensitive-content-filter.js", "substring": "password" }
+      ],
+      "sandbox_boundary": "services/**",
+      "authority_owner": "Builder",
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "non_goals": ["editing any other file", "a full content-classifier model call -- pure pattern matching only"],
+      "dependencies": []
+    }
+  ],
+  "blueprint_status": "handoff_ready"
+}

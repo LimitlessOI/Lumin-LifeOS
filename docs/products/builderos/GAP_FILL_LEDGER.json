@@ -639,6 +639,14 @@
       "added_real_lines": 17,
       "justification": "this is the identical content the factory\nitself generated and SENTRY-verified sound 3 times in a row (same\nsha256 across all attempts: 74c04131fa6b...) -- the factory's own\ncodegen+verify pipeline already proved this code correct. What failed\nwas specifically its commit step silently no-op'ing while reporting\nfalse success. Re-dispatching a 4th time would just hit the same\ncommit bug again with no new information. Applying the already-proven\ncontent directly is lower-risk than either (a) trusting a governance\nlayer known-broken in this exact path, or (b) spending more time\nre-diagnosing a separate, real bug (now logged in the SSOT receipt for\nlater Architect/Chair review) while a live, in-progress task (Fiverr\nsignup verification) sits blocked. This is a one-line credential-\ninjection branch matching an already-shipped pattern exactly (ETSY/\nEBAY), not novel logic design.\n\nCo-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>",
       "commit_message_excerpt": "GAP-FILL: hand-apply GMAIL_SIGNUP envCreds branch -- real factory commit-verification bug found live"
+    },
+    {
+      "at": "2026-08-10T07:43:03.113Z",
+      "file": "routes/extension-drive-routes.js",
+      "is_new_file": false,
+      "added_real_lines": 100,
+      "justification": "attempted through the governed factory\nfirst (mission EXTENSION-DRIVE-STUCK-HANDOFF-0001, 3 patch-mode steps,\nbuilderos-reboot/MISSIONS/EXTENSION-DRIVE-STUCK-HANDOFF-0001/). Found a\nreal, new, reproducible bug: routes/extension-drive-routes.js is 220\nlines, over services/builderos-patch-mode-policy.js's 150-line Zone-3\nthreshold, and the local canonical executor's Zone-3 additive-patch\ncodegen failed with \"Zone 3 additive-patch failed -- empty additive\nsnippet\" against a well-formed, non-empty OLD/NEW patch spec. Distinct\nfrom the earlier GMAIL_SIGNUP commit-verification bug found tonight --\na separate gap in the Zone-3 codegen path itself, logged in the SSOT\nreceipt for Architect review rather than re-attempted blindly. Content\nwas hand-verified against the real file (exact OLD blocks copied from\ndirect Read output before editing), node --check PASS.\n\nCo-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>",
+      "commit_message_excerpt": "GAP-FILL: stuck-field human handoff for the drive channel -- founder-directed, real Zone-3 factory bug found live"
     }
   ]
 }

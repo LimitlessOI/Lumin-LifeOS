@@ -1,0 +1,26 @@
+{
+  "schema": "intent_baseline_v1",
+  "intent_id": "DRIVE-SENSITIVE-CONTENT-FILTER-0001",
+  "mission_id": "DRIVE-SENSITIVE-CONTENT-FILTER-0001",
+  "tier": 1,
+  "status": "HANDOFF_READY",
+  "created_at": "2026-08-10",
+  "amendment_pack": "docs/constitution/AMENDMENT_PACK_V2.0A.md",
+  "proof_lap_only": false,
+  "outcome_statement": "Sensitive content (explicit material, PII patterns) observed by the drive channel is redacted at the source before it ever reaches an AI model prompt, the DB log, or the UI -- functionally never seen or recorded.",
+  "user": "Adam (founder)",
+  "pain": "The drive channel and the new Android AccessibilityService driver can observe anything on screen with zero filtering today -- a real privacy gap now that real driving capability exists.",
+  "value": "Founder and Sherry can trust the driving capability never records or exposes sensitive personal content, and it's provable (redaction happens at one auditable chokepoint).",
+  "success_metrics": ["Explicit-content domain/keyword in observation text/elements returns a redacted marker, never the original", "SSN/credit-card-shaped patterns are redacted"],
+  "failure_metrics": ["TECHNICAL_PASS without founder_usability_pass", "Any unrelated change", "Redaction claimed complete/perfect without stating heuristic-v1 limitation"],
+  "constraints": ["BP_PRIORITY queue authority", "BuilderOS system path only", "New file only -- no patch to existing files in this mission"],
+  "scope_boundary": "Per FOUNDER_PACKET.md",
+  "unacceptable_result": "Sensitive content passed through unredacted, or the module silently claims complete coverage",
+  "ownership": "ARC emits machine twin; Builder executes; Adam owns founder usability verdict",
+  "priority_fit": "Urgent live privacy fix -- rank 33",
+  "point_model": {
+    "A": "Vision -- Adam provides FP in development stage",
+    "B": "Chair locks handoff -- corridor protected; Adam done until Alpha",
+    "C": "Alpha -- Adam evaluates outcome only"
+  }
+}
