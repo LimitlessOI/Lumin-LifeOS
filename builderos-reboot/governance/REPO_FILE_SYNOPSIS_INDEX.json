@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-10T07:51:21.196Z",
+  "generated_at": "2026-08-10T08:01:20.208Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13193,
+  "file_count": 13194,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -74078,6 +74078,16 @@
       "bytes": 922,
       "mtime": "2026-07-15T08:32:59.621Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "routes/system-notify-routes.js",
+      "synopsis": "Exports createSystemNotifyRoutes — routes/system-notify-routes.js.",
+      "bytes": 1775,
+      "mtime": "2026-08-10T08:01:20.208Z",
+      "indexed_at": "2026-08-10T08:01:20.208Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/tc-billing-routes.js",
