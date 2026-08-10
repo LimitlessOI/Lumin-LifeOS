@@ -219,6 +219,35 @@
     },
   };
 
+  /**
+   * Always-on background poller (real Android foreground service, visible
+   * notification, no hiding) -- lets LifeOS act on this device even when the
+   * app UI isn't open. Founder ask, 2026-08-10: "you should be able to open
+   * it yourself... do whatever the fuck I need" without keeping the app open.
+   */
+  function getBackgroundAgentPlugin() {
+    return global.Capacitor?.Plugins?.LifeosBackgroundAgent || null;
+  }
+
+  global.LifeOSBackgroundAgent = {
+    isAvailable: () => Boolean(getBackgroundAgentPlugin()),
+    saveToken: async (token) => {
+      const plugin = getBackgroundAgentPlugin();
+      if (!plugin) return { ok: false };
+      try { await plugin.saveToken({ token }); return { ok: true }; } catch (e) { return { ok: false, error: String(e?.message || e) }; }
+    },
+    start: async () => {
+      const plugin = getBackgroundAgentPlugin();
+      if (!plugin) return { started: false, error: 'not_available' };
+      try { return await plugin.start(); } catch (e) { return { started: false, error: String(e?.message || e) }; }
+    },
+    isRunning: async () => {
+      const plugin = getBackgroundAgentPlugin();
+      if (!plugin) return { running: false };
+      try { return await plugin.isRunning(); } catch (e) { return { running: false, error: String(e?.message || e) }; }
+    },
+  };
+
   function routeDeepLink(url) {
     if (!url) return;
     try {

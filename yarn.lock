@@ -2674,6 +2674,10 @@ libqp@2.1.1:
   version "1.0.0"
   resolved "file:mobile/plugins/lifeos-accessibility-driver"
 
+"lifeos-background-agent@file:mobile/plugins/lifeos-background-agent":
+  version "1.0.0"
+  resolved "file:mobile/plugins/lifeos-background-agent"
+
 "lifeos-biometric-gate@file:mobile/plugins/lifeos-biometric-gate":
   version "1.0.0"
   resolved "file:mobile/plugins/lifeos-biometric-gate"

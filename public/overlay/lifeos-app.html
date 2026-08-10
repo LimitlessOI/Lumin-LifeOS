@@ -2810,6 +2810,11 @@
       <button type="button" class="settings-invite-btn" id="driving-enable-btn" onclick="enableAccessibilityDriving()">Enable driving</button>
       <div id="driving-steps-box" style="display:none; margin-top:8px; font-size:13px; opacity:0.85;"></div>
       <div class="settings-row" style="margin-top:14px;">
+        <div class="settings-label">Background agent</div>
+        <div class="settings-value" id="st-background-agent-status">Checking…</div>
+      </div>
+      <p class="settings-hint">A real, visible Android background service (you'll see a permanent "LifeOS is active" notification -- never hidden) so LifeOS can act on tasks you've asked for even when the app isn't open.</p>
+      <div class="settings-row" style="margin-top:14px;">
         <div class="settings-label">Fingerprint / PIN gate</div>
         <div class="settings-value" id="st-biometric-status">Checking…</div>
       </div>
@@ -3025,7 +3030,19 @@ CTX.startSessionKeepAlive();
   }
   syncAccountUiFromContext();
   startAndroidCommandPoll();
+  startBackgroundAgent();
 })().catch(() => {});
+
+/* ── Always-on background agent (native Android only) ────────────
+ * Real Android foreground service, visible notification, no hiding --
+ * lets LifeOS act on this device even when the app UI isn't open. */
+async function startBackgroundAgent() {
+  if (!window.LifeOSBackgroundAgent?.isAvailable?.()) return;
+  const currentToken = localStorage.getItem('lifeos_access_token');
+  if (!currentToken) return;
+  await LifeOSBackgroundAgent.saveToken(currentToken);
+  await LifeOSBackgroundAgent.start();
+}
 
 /* ── Remote command poll (native Android only) ───────────────────
  * Mirrors the browser extension's pending-for-user poll loop
@@ -3719,6 +3736,18 @@ async function refreshDrivingSection() {
     }
   } else if (galleryStatus) {
     galleryStatus.textContent = 'Not available on this build';
+  }
+
+  const bgStatus = document.getElementById('st-background-agent-status');
+  if (window.LifeOSBackgroundAgent?.isAvailable?.()) {
+    try {
+      const res = await LifeOSBackgroundAgent.isRunning();
+      if (bgStatus) bgStatus.textContent = res?.running ? 'Running ✓' : 'Not running';
+    } catch (_) {
+      if (bgStatus) bgStatus.textContent = 'Unknown';
+    }
+  } else if (bgStatus) {
+    bgStatus.textContent = 'Not available on this build';
   }
 }
 

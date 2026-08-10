@@ -16,3 +16,6 @@ project(':lifeos-biometric-gate').projectDir = new File('../mobile/plugins/lifeo
 
 include ':lifeos-gallery-upload'
 project(':lifeos-gallery-upload').projectDir = new File('../mobile/plugins/lifeos-gallery-upload/android')
+
+include ':lifeos-background-agent'
+project(':lifeos-background-agent').projectDir = new File('../mobile/plugins/lifeos-background-agent/android')

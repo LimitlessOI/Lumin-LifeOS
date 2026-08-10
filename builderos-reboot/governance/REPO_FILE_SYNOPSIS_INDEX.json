@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-10T11:36:54.883Z",
+  "generated_at": "2026-08-10T11:50:25.442Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13210,
+  "file_count": 13213,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -44823,9 +44823,9 @@
     {
       "path": "docs/products/universal-overlay/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Universal Overlay",
-      "bytes": 70658,
-      "mtime": "2026-08-10T11:36:36.119Z",
-      "indexed_at": "2026-08-10T11:36:54.883Z"
+      "bytes": 73410,
+      "mtime": "2026-08-10T11:50:01.421Z",
+      "indexed_at": "2026-08-10T11:50:25.442Z"
     },
     {
       "path": "docs/products/UNIVERSALOVERLAY.md",
@@ -67397,6 +67397,28 @@
       "synopsis_index_only": true
     },
     {
+      "path": "mobile/plugins/lifeos-background-agent/android/src/main/AndroidManifest.xml",
+      "synopsis": "xml — mobile/plugins/lifeos-background-agent/android/src/main/AndroidManifest.xml.",
+      "bytes": 1037,
+      "mtime": "2026-08-10T11:46:03.180Z",
+      "indexed_at": "2026-08-10T11:50:25.442Z"
+    },
+    {
+      "path": "mobile/plugins/lifeos-background-agent/index.js",
+      "synopsis": "JS-side handle for the native LifeosBackgroundAgent plugin. lifeos-app.html",
+      "bytes": 535,
+      "mtime": "2026-08-10T11:50:23.567Z",
+      "indexed_at": "2026-08-10T11:50:25.442Z"
+    },
+    {
+      "path": "mobile/plugins/lifeos-background-agent/package.json",
+      "synopsis": "JSON data/config — mobile/plugins/lifeos-background-agent/package.json.",
+      "bytes": 533,
+      "mtime": "2026-08-10T11:45:30.574Z",
+      "indexed_at": "2026-08-10T11:50:25.442Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "mobile/plugins/lifeos-biometric-gate/android/src/main/AndroidManifest.xml",
       "synopsis": "xml — mobile/plugins/lifeos-biometric-gate/android/src/main/AndroidManifest.xml.",
       "bytes": 193,
@@ -67628,17 +67650,17 @@
     {
       "path": "package-lock.json",
       "synopsis": "JSON data/config — package-lock.json.",
-      "bytes": 353679,
-      "mtime": "2026-08-10T10:57:22.224Z",
-      "indexed_at": "2026-08-10T11:03:03.478Z",
+      "bytes": 354096,
+      "mtime": "2026-08-10T11:47:38.332Z",
+      "indexed_at": "2026-08-10T11:50:25.442Z",
       "synopsis_index_only": true
     },
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\", \"lifeos:file-synopsis:backfill\": \"node scripts/file-synopsis-enforce.mjs --all --auto-fix && node scripts/generate-file-synopsis-index.mjs\", \"lifeos:file-synopsis:index",
-      "bytes": 36690,
-      "mtime": "2026-08-10T10:57:14.869Z",
-      "indexed_at": "2026-08-10T11:03:03.478Z",
+      "bytes": 36764,
+      "mtime": "2026-08-10T11:47:30.804Z",
+      "indexed_at": "2026-08-10T11:50:25.442Z",
       "synopsis_index_only": true
     },
     {
@@ -69982,9 +70004,9 @@
     {
       "path": "public/overlay/lifeos-app.html",
       "synopsis": "HTML page: LifeOS",
-      "bytes": 244636,
-      "mtime": "2026-08-10T11:19:40.766Z",
-      "indexed_at": "2026-08-10T11:22:03.299Z"
+      "bytes": 246089,
+      "mtime": "2026-08-10T11:49:17.851Z",
+      "indexed_at": "2026-08-10T11:50:25.442Z"
     },
     {
       "path": "public/overlay/lifeos-ask-your-life.html",
@@ -71069,9 +71091,9 @@
     {
       "path": "public/shared/lifeos-native-shell.js",
       "synopsis": "Native Universal Overlay shell — Capacitor bridge; same platform as lifeos-app + extension overlay.",
-      "bytes": 10277,
-      "mtime": "2026-08-10T10:59:32.240Z",
-      "indexed_at": "2026-08-10T11:03:03.478Z",
+      "bytes": 11600,
+      "mtime": "2026-08-10T11:48:04.175Z",
+      "indexed_at": "2026-08-10T11:50:25.442Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]

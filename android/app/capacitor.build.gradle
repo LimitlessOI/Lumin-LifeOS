@@ -14,6 +14,7 @@ dependencies {
     implementation project(':lifeos-accessibility-driver')
     implementation project(':lifeos-biometric-gate')
     implementation project(':lifeos-gallery-upload')
+    implementation project(':lifeos-background-agent')
 
 }
 

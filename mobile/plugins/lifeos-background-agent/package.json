@@ -1,0 +1,21 @@
+{
+  "name": "lifeos-background-agent",
+  "version": "1.0.0",
+  "description": "Capacitor plugin: always-on Android foreground service that polls the remote command queue and executes actions (e.g. photo upload) independent of whether the LifeOS app UI is open.",
+  "main": "index.js",
+  "module": "index.js",
+  "files": [
+    "android",
+    "index.js"
+  ],
+  "capacitor": {
+    "android": {
+      "src": "android"
+    }
+  },
+  "peerDependencies": {
+    "@capacitor/core": "^7.0.0"
+  },
+  "license": "UNLICENSED",
+  "private": true
+}
