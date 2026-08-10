@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-10T03:30:58.504Z",
+  "generated_at": "2026-08-10T03:35:29.817Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13171,
   "files": [
@@ -44637,9 +44637,9 @@
     {
       "path": "docs/products/universal-overlay/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Universal Overlay",
-      "bytes": 36206,
-      "mtime": "2026-08-09T19:50:43.493Z",
-      "indexed_at": "2026-08-09T19:50:50.368Z"
+      "bytes": 38388,
+      "mtime": "2026-08-10T03:35:11.524Z",
+      "indexed_at": "2026-08-10T03:35:29.817Z"
     },
     {
       "path": "docs/products/UNIVERSALOVERLAY.md",
@@ -66156,9 +66156,9 @@
     {
       "path": "middleware/apply-middleware.js",
       "synopsis": "Apply Middleware — registers all Express middleware for the app: body parsers,",
-      "bytes": 3849,
-      "mtime": "2026-07-13T20:29:53.078Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 4473,
+      "mtime": "2026-08-10T03:34:22.584Z",
+      "indexed_at": "2026-08-10T03:35:29.817Z",
       "ssot": [
         "docs/products/command-center/PRODUCT_HOME.md"
       ]

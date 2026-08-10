@@ -93,6 +93,13 @@ export function applyMiddleware(app, {
     res.header("Surrogate-Control", "no-store");
 
     const origin = req.headers.origin;
+    // Extension content-script routes are deliberately called from arbitrary
+    // third-party host pages (that's the whole point of the overlay) and are
+    // protected by the requireKey secret header regardless of origin -- found
+    // live: this handler was returning 200 for their OPTIONS preflight
+    // without ever setting Access-Control-Allow-Origin, so the browser
+    // silently refused to send the real follow-up request every time.
+    const isExtensionRoute = req.path.startsWith("/api/v1/extension/");
 
     if (isSameOrigin(req)) {
       res.header("Access-Control-Allow-Origin", origin || "*");
@@ -100,6 +107,8 @@ export function applyMiddleware(app, {
     } else if (origin && ALLOWED_ORIGINS_LIST.includes(origin)) {
       res.header("Access-Control-Allow-Origin", origin);
       res.header("Access-Control-Allow-Credentials", "true");
+    } else if (isExtensionRoute && origin) {
+      res.header("Access-Control-Allow-Origin", origin);
     } else if (!origin) {
       res.header("Access-Control-Allow-Origin", "*");
     }
