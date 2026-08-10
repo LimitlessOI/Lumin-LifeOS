@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-09T19:50:52.981Z",
+  "generated_at": "2026-08-10T00:13:35.126Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13162,
+  "file_count": 13163,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -43875,9 +43875,16 @@
     {
       "path": "docs/products/limitlessos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LimitlessOS business stack",
-      "bytes": 18684,
-      "mtime": "2026-08-05T19:41:53.578Z",
-      "indexed_at": "2026-08-05T19:41:53.578Z"
+      "bytes": 20334,
+      "mtime": "2026-08-10T00:13:24.544Z",
+      "indexed_at": "2026-08-10T00:13:35.126Z"
+    },
+    {
+      "path": "docs/products/limitlessos/TALOA_ONBOARDING_AUTHORITY_AND_EDUCATION_MODEL.md",
+      "synopsis": "Founder vision — the onboarding/Authority Map/education funnel that makes LimitlessOS a demonstrated service instead of a sold product.",
+      "bytes": 8212,
+      "mtime": "2026-08-10T00:12:53.102Z",
+      "indexed_at": "2026-08-10T00:13:35.126Z"
     },
     {
       "path": "docs/products/lip/FILE_MANIFEST.json",
