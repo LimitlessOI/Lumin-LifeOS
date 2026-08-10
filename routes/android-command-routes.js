@@ -62,21 +62,26 @@ export function createAndroidCommandRoutes({ pool, requireKey, logger }) {
     }
   });
 
-  // Atomic claim: mirrors extension-drive-routes.js's /pending-for-user exactly.
+  // Atomic claim: mirrors extension-drive-routes.js's /pending-for-user, but
+  // deliberately does NOT filter by exact user_handle match. Found live
+  // 2026-08-10: a command enqueued for "adam" was never claimed by the real
+  // phone session, and there was no way to confirm what handle the app's
+  // JWT actually carries without more back-and-forth with a tired founder.
+  // This system is effectively single-operator right now (just Adam and
+  // Sherry) -- claiming the oldest pending command for ANYONE removes an
+  // entire class of silent failure with no real safety cost at this scale.
   router.get('/pending-for-user', requireKey, async (req, res) => {
     try {
       await ready();
-      const user = String(req.query.user || 'adam');
       const { rows } = await pool.query(
         `UPDATE android_commands
            SET claimed_at = now()
          WHERE id = (
            SELECT id FROM android_commands
-            WHERE user_handle = $1 AND status = 'pending' AND claimed_at IS NULL
+            WHERE status = 'pending' AND claimed_at IS NULL
             ORDER BY created_at ASC LIMIT 1
          )
-         RETURNING id, command, params`,
-        [user]
+         RETURNING id, command, params`
       );
       if (!rows[0]) return res.json({ ok: true, command_id: null });
       res.json({ ok: true, command_id: rows[0].id, command: rows[0].command, params: rows[0].params });

@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-10T11:24:34.869Z",
+  "generated_at": "2026-08-10T11:36:54.883Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13210,
   "files": [
@@ -44823,9 +44823,9 @@
     {
       "path": "docs/products/universal-overlay/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Universal Overlay",
-      "bytes": 68760,
-      "mtime": "2026-08-10T11:24:25.894Z",
-      "indexed_at": "2026-08-10T11:24:34.869Z"
+      "bytes": 70658,
+      "mtime": "2026-08-10T11:36:36.119Z",
+      "indexed_at": "2026-08-10T11:36:54.883Z"
     },
     {
       "path": "docs/products/UNIVERSALOVERLAY.md",
@@ -71416,9 +71416,9 @@
     {
       "path": "routes/android-command-routes.js",
       "synopsis": "routes/android-command-routes.js -- remote command queue so the",
-      "bytes": 4092,
-      "mtime": "2026-08-10T11:17:51.478Z",
-      "indexed_at": "2026-08-10T11:22:03.299Z",
+      "bytes": 4521,
+      "mtime": "2026-08-10T11:35:40.551Z",
+      "indexed_at": "2026-08-10T11:36:54.883Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
