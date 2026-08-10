@@ -2800,6 +2800,22 @@
         <span class="settings-link" onclick="alert('LifeOS native app = this same shell with a home-screen icon.\\n\\nOn Mac: npm run mobile:add:ios then npm run mobile:ios\\n\\nOr Safari → Share → Add to Home Screen for PWA.')">Build / install →</span>
       </div>
     </div>
+    <div class="settings-section" id="settings-driving-section" style="display:none;">
+      <div class="settings-section-title">Device driving &amp; security</div>
+      <p class="settings-hint">Lets LifeOS drive apps on this phone for tasks you ask it to do -- filling forms, clicking buttons. Requires a one-time Accessibility permission (Android's own anti-malware toggle -- no app can self-grant it). The fingerprint/PIN gate confirms it's really you before any driven action runs.</p>
+      <div class="settings-row">
+        <div class="settings-label">Accessibility driving</div>
+        <div class="settings-value" id="st-driving-status">Checking…</div>
+      </div>
+      <button type="button" class="settings-invite-btn" id="driving-enable-btn" onclick="enableAccessibilityDriving()">Enable driving</button>
+      <div id="driving-steps-box" style="display:none; margin-top:8px; font-size:13px; opacity:0.85;"></div>
+      <div class="settings-row" style="margin-top:14px;">
+        <div class="settings-label">Fingerprint / PIN gate</div>
+        <div class="settings-value" id="st-biometric-status">Checking…</div>
+      </div>
+      <button type="button" class="settings-invite-btn" id="biometric-test-btn" onclick="testBiometricGate()">Test now</button>
+      <div id="biometric-result-box" style="display:none; margin-top:8px; font-size:13px; opacity:0.85;"></div>
+    </div>
     <div class="settings-divider"></div>
     <div class="settings-section">
       <div class="settings-section-title">Family tone guard</div>
@@ -3579,10 +3595,82 @@ function openSettings(e) {
   }
   const opSec = document.getElementById('settings-operator-section');
   if (opSec) opSec.style.display = CTX.role === 'admin' ? '' : 'none';
+  refreshDrivingSection();
 }
 function closeSettings() {
   document.getElementById('settings-panel').classList.remove('open');
   document.getElementById('settings-backdrop').classList.remove('open');
+}
+
+/* ── Device driving & security (native Android only) ────────────── */
+async function refreshDrivingSection() {
+  const section = document.getElementById('settings-driving-section');
+  if (!section) return;
+  const isNativeAndroid = Boolean(window.LifeOSNativeShell?.isCapacitor?.()) &&
+    window.LifeOSNativeShell.getState?.().platform === 'android';
+  if (!isNativeAndroid) {
+    section.style.display = 'none';
+    return;
+  }
+  section.style.display = '';
+
+  const drivingStatus = document.getElementById('st-driving-status');
+  const drivingBtn = document.getElementById('driving-enable-btn');
+  if (window.LifeOSAccessibilityDriver?.isAvailable?.()) {
+    try {
+      const enabled = await LifeOSAccessibilityDriver.isEnabled();
+      if (drivingStatus) drivingStatus.textContent = enabled ? 'Enabled ✓' : 'Not enabled';
+      if (drivingBtn) drivingBtn.style.display = enabled ? 'none' : '';
+    } catch (_) {
+      if (drivingStatus) drivingStatus.textContent = 'Unknown';
+    }
+  } else if (drivingStatus) {
+    drivingStatus.textContent = 'Not available on this build';
+  }
+
+  const bioStatus = document.getElementById('st-biometric-status');
+  if (window.LifeOSBiometricGate) {
+    try {
+      const res = await LifeOSBiometricGate.isAvailable();
+      if (bioStatus) {
+        bioStatus.textContent = res?.available
+          ? 'Ready'
+          : (res?.status === 'none_enrolled' ? 'No fingerprint/PIN set on this phone' : 'Not available');
+      }
+    } catch (_) {
+      if (bioStatus) bioStatus.textContent = 'Unknown';
+    }
+  } else if (bioStatus) {
+    bioStatus.textContent = 'Not available on this build';
+  }
+}
+
+async function enableAccessibilityDriving() {
+  const box = document.getElementById('driving-steps-box');
+  if (!window.LifeOSAccessibilityDriver?.isAvailable?.()) {
+    if (box) { box.style.display = ''; box.textContent = 'Not available -- update the app to the latest version.'; }
+    return;
+  }
+  const result = await LifeOSAccessibilityDriver.requestEnable();
+  if (box) {
+    box.style.display = '';
+    box.innerHTML = (result.steps || []).map((s, i) => `${i + 1}. ${s}`).join('<br>');
+  }
+}
+
+async function testBiometricGate() {
+  const box = document.getElementById('biometric-result-box');
+  if (!window.LifeOSBiometricGate) {
+    if (box) { box.style.display = ''; box.textContent = 'Not available -- update the app to the latest version.'; }
+    return;
+  }
+  const result = await LifeOSBiometricGate.authenticate('Test the LifeOS security gate');
+  if (box) {
+    box.style.display = '';
+    box.textContent = result.ok
+      ? `✓ Confirmed via ${result.authType === 'device_credential' ? 'PIN/pattern' : 'biometric'}.`
+      : `Not confirmed: ${result.error || 'cancelled'}`;
+  }
 }
 
 async function loadAdminInvites() {

@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-10T09:56:13.190Z",
+  "generated_at": "2026-08-10T10:04:45.235Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13197,
   "files": [
@@ -44761,9 +44761,9 @@
     {
       "path": "docs/products/universal-overlay/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Universal Overlay",
-      "bytes": 61358,
-      "mtime": "2026-08-10T09:56:05.094Z",
-      "indexed_at": "2026-08-10T09:56:13.190Z"
+      "bytes": 63025,
+      "mtime": "2026-08-10T10:03:58.161Z",
+      "indexed_at": "2026-08-10T10:04:45.235Z"
     },
     {
       "path": "docs/products/UNIVERSALOVERLAY.md",
@@ -69898,9 +69898,9 @@
     {
       "path": "public/overlay/lifeos-app.html",
       "synopsis": "HTML page: LifeOS",
-      "bytes": 234240,
-      "mtime": "2026-08-08T09:55:50.920Z",
-      "indexed_at": "2026-08-08T09:55:50.920Z"
+      "bytes": 238432,
+      "mtime": "2026-08-10T10:03:14.343Z",
+      "indexed_at": "2026-08-10T10:04:45.235Z"
     },
     {
       "path": "public/overlay/lifeos-ask-your-life.html",
