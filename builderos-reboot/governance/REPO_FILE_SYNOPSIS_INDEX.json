@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-10T12:23:21.830Z",
+  "generated_at": "2026-08-10T14:09:59.095Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13214,
+  "file_count": 13215,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -44727,11 +44727,18 @@
       "synopsis_index_only": true
     },
     {
+      "path": "docs/products/tc-service/FIVERR_GIG_DRAFTS.md",
+      "synopsis": "Draft Fiverr gig listings for the lifeosautomate account -- for founder review before publishing, not auto-published.",
+      "bytes": 5150,
+      "mtime": "2026-08-10T14:09:22.725Z",
+      "indexed_at": "2026-08-10T14:09:59.095Z"
+    },
+    {
       "path": "docs/products/tc-service/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — TC Service",
-      "bytes": 135825,
-      "mtime": "2026-08-10T12:22:52.374Z",
-      "indexed_at": "2026-08-10T12:23:21.830Z"
+      "bytes": 137287,
+      "mtime": "2026-08-10T14:09:46.054Z",
+      "indexed_at": "2026-08-10T14:09:59.095Z"
     },
     {
       "path": "docs/products/TCSERVICE.md",
