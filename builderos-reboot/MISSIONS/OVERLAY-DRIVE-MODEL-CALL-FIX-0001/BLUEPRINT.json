@@ -1,0 +1,99 @@
+{
+  "mission_id": "OVERLAY-DRIVE-MODEL-CALL-FIX-0001",
+  "blueprint_id": "OVERLAY-DRIVE-MODEL-CALL-FIX-0001-BP1",
+  "scope": "Fix a real bug: extension-drive-routes.js called callCouncilMember with the wrong argument shape and invalid member ids, causing every model tier to fail (all_tiers_failed) on the first real live-driven browser test.",
+  "authority": "BPB",
+  "acceptance_command": "npm run overlay:drive-model-call-fix:acceptance",
+  "allowed_action_types": [
+    "author_then_write"
+  ],
+  "steps": [
+    {
+      "step_id": "ODMC-S01",
+      "phase_id": "P0",
+      "title": "Fix callCouncilMember call shape -- was passing an object where a string prompt is required, and 'anthropic' where a real tier/member id is required",
+      "target_file": "routes/extension-drive-routes.js",
+      "target_files": [
+        "routes/extension-drive-routes.js"
+      ],
+      "action_type": "author_then_write",
+      "patch_mode": true,
+      "task": "makeCallModel called callCouncilMember('anthropic', {model,system,messages,max_tokens}) -- the real signature (confirmed against routes/general-browser-agent-routes.js's already-working usage) is callCouncilMember(member, promptString, {taskType}). Fix using PATCH MODE.",
+      "spec": "Output in PATCH MODE ONLY: the OLD block below must be copied EXACTLY character-for-character from the real current file. Exact text below, no other change.\n\nOLD:\nfunction makeCallModel(callCouncilMember) {\n  const TIER_MODELS = { cheap: 'claude-haiku-4-5-20251001', strong: 'claude-sonnet-5' };\n  return async function callModel(tier, prompt) {\n    const model = TIER_MODELS[tier] || TIER_MODELS.cheap;\n    const reply = await callCouncilMember('anthropic', {\n      model,\n      system: 'You are a browser-automation planner driving a real browser tab on behalf of its owner. Given the current page observation, respond with ONLY a single JSON action object of the form {\"type\":\"navigate|click|type|wait|done|give_up\", ...fields}. Never invent a selector that was not listed in Elements.',\n      messages: [{ role: 'user', content: prompt }],\n      max_tokens: 300,\n    });\n    return reply?.content?.[0]?.text || reply?.text || '';\n  };\n}\n\nNEW:\nfunction makeCallModel(callCouncilMember) {\n  const SYSTEM_PREFIX = 'You are a browser-automation planner driving a real browser tab on behalf of its owner. Given the current page observation, respond with ONLY a single JSON action object of the form {\"type\":\"navigate|click|type|wait|done|give_up\", ...fields}. Never invent a selector that was not listed in Elements.\\n\\n';\n  return async function callModel(tier, prompt) {\n    const reply = await callCouncilMember(tier, SYSTEM_PREFIX + prompt, { taskType: 'browser_agent' });\n    return typeof reply === 'string' ? reply : (reply?.text || reply?.content || '');\n  };\n}",
+      "authoring": {
+        "tiers": [
+          "deepseek",
+          "groq_llama",
+          "mistral_free"
+        ]
+      },
+      "assertion_spec": {
+        "expected_exports": [],
+        "file_contains": [
+          "taskType: 'browser_agent'"
+        ]
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "target": "routes/extension-drive-routes.js",
+          "exports": [
+            "createExtensionDriveRoutes"
+          ]
+        }
+      ],
+      "sandbox_boundary": "routes/**",
+      "authority_owner": "Builder",
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "non_goals": [
+        "a full-file rewrite -- use patch mode only"
+      ],
+      "dependencies": []
+    },
+    {
+      "step_id": "ODMC-S02",
+      "phase_id": "P0",
+      "title": "Fix tiers array to use real member identifiers instead of abstract cheap/strong labels",
+      "target_file": "routes/extension-drive-routes.js",
+      "target_files": [
+        "routes/extension-drive-routes.js"
+      ],
+      "action_type": "author_then_write",
+      "patch_mode": true,
+      "task": "tiers: ['cheap','strong'] don't correspond to any real callCouncilMember member id -- replace with the same real, proven-working tier list already used by general-browser-agent-routes.js. Using PATCH MODE.",
+      "spec": "Output in PATCH MODE ONLY: the OLD block below must be copied EXACTLY character-for-character from the real current file. Exact text below, no other change.\n\nOLD:\n      const decideAction = makeDecider({ callModel: makeCallModel(callCouncilMember), tiers: ['cheap', 'strong'] });\n\nNEW:\n      const decideAction = makeDecider({ callModel: makeCallModel(callCouncilMember), tiers: ['groq_llama', 'gemini_flash', 'cerebras_llama', 'openai_gpt', 'claude_sonnet'] });",
+      "authoring": {
+        "tiers": [
+          "deepseek",
+          "groq_llama",
+          "mistral_free"
+        ]
+      },
+      "assertion_spec": {
+        "expected_exports": [],
+        "file_contains": [
+          "groq_llama', 'gemini_flash', 'cerebras_llama', 'openai_gpt', 'claude_sonnet"
+        ]
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "target": "routes/extension-drive-routes.js",
+          "exports": [
+            "createExtensionDriveRoutes"
+          ]
+        }
+      ],
+      "sandbox_boundary": "routes/**",
+      "authority_owner": "Builder",
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "non_goals": [
+        "a full-file rewrite -- use patch mode only"
+      ],
+      "dependencies": [
+        "ODMC-S01"
+      ]
+    }
+  ],
+  "blueprint_status": "handoff_ready"
+}

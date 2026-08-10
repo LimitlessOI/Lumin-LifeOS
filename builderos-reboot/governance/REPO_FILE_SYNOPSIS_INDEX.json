@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-10T03:35:29.817Z",
+  "generated_at": "2026-08-10T03:43:42.307Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13171,
+  "file_count": 13175,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -26956,6 +26956,37 @@
       "bytes": 1556,
       "mtime": "2026-08-10T02:14:53.606Z",
       "indexed_at": "2026-08-10T02:15:18.349Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/OVERLAY-DRIVE-MODEL-CALL-FIX-0001/BLUEPRINT.json",
+      "synopsis": "BuilderOS artifact — BLUEPRINT.",
+      "bytes": 5504,
+      "mtime": "2026-08-10T03:42:27.912Z",
+      "indexed_at": "2026-08-10T03:43:42.307Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/OVERLAY-DRIVE-MODEL-CALL-FIX-0001/DELIBERATION_GATE.json",
+      "synopsis": "BuilderOS artifact — DELIBERATION GATE.",
+      "bytes": 1145,
+      "mtime": "2026-08-10T03:43:33.794Z",
+      "indexed_at": "2026-08-10T03:43:42.307Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/OVERLAY-DRIVE-MODEL-CALL-FIX-0001/FOUNDER_PACKET.md",
+      "synopsis": "Founder Packet — fix the model-call bug found on the first real live-driven browser test.",
+      "bytes": 1418,
+      "mtime": "2026-08-10T03:42:51.690Z",
+      "indexed_at": "2026-08-10T03:43:42.307Z"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/OVERLAY-DRIVE-MODEL-CALL-FIX-0001/INTENT_BASELINE.json",
+      "synopsis": "BuilderOS artifact — INTENT BASELINE.",
+      "bytes": 1702,
+      "mtime": "2026-08-10T03:43:18.182Z",
+      "indexed_at": "2026-08-10T03:43:42.307Z",
       "synopsis_index_only": true
     },
     {
