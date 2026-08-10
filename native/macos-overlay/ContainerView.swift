@@ -1,6 +1,22 @@
 // SYNOPSIS: Root content view for the Taloa overlay window -- owns freeform
 // edge/corner resize (Phase 1) and the size-continuum swap from the native
 // BadgeView into a WKWebView loading the real /lifeos shell (Phase 2/4).
+//
+// Click-to-chat (2026-08-10): founder feedback, twice -- "it looks exactly
+// the same" (a badge-only visual pass) then, after the gesture-vocabulary
+// fix, "still not what we are looking for at least at this point... I do
+// like the look of her though." Correct: the gesture work made her REACT,
+// but she still couldn't DO anything real -- the actual real-chat capability
+// (chair/founder-interface, driven by public/overlay/lifeos-app.html's own
+// proven `luminSend()`) already exists the moment she's expanded, it was
+// just never reachable from her small resting form without a manual
+// resize-drag. A single click on her now (not a drag) grows the window to a
+// real chat size and, once the real page finishes loading, opens Lumin's
+// own chat drawer and focuses its input via the same `openLuminDrawer()`
+// the web app's own Cmd+L shortcut already calls -- no new auth, no new
+// chat UI, entirely the same already-live backend. Honest scope: this is
+// the real chat/AI surface, not a bespoke native chat embedded in the badge
+// itself (that would need a native auth story this pass doesn't build).
 // See docs/products/lifeos/communication/COMMUNICATION_SYSTEM_BLUEPRINT.md §21.1.
 import Cocoa
 import WebKit
@@ -29,6 +45,11 @@ final class ContainerView: NSView, WKNavigationDelegate {
     private var dragMode: DragMode = .none
     private var dragStartMouseScreen: NSPoint = .zero
     private var dragStartFrame: NSRect = .zero
+
+    // Click-to-chat -- see header comment.
+    private static let chatSize = NSSize(width: 420, height: 580)
+    private static let clickMoveThreshold: CGFloat = 4
+    private var pendingAutoOpenChat = false
 
     override init(frame frameRect: NSRect) {
         badgeView = TaloaImageCharacterView(frame: NSRect(origin: .zero, size: frameRect.size))
@@ -95,6 +116,17 @@ final class ContainerView: NSView, WKNavigationDelegate {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         badgeView.celebrate()
         flashBadgeIfExpanded()
+        if pendingAutoOpenChat {
+            pendingAutoOpenChat = false
+            // openLuminDrawer/#lumin-input are real globals in the already-live
+            // public/overlay/lifeos-app.html -- same call its own Cmd+L
+            // shortcut makes. Best-effort: if the page shape ever changes,
+            // this silently does nothing rather than throwing in the app.
+            webView.evaluateJavaScript(
+                "try { if (window.openLuminDrawer) { window.openLuminDrawer({expand:true}); " +
+                "var el = document.getElementById('lumin-input'); if (el) el.focus(); } } catch (e) {}"
+            )
+        }
     }
 
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
@@ -196,7 +228,27 @@ final class ContainerView: NSView, WKNavigationDelegate {
     }
 
     override func mouseUp(with event: NSEvent) {
+        // A "move" that barely moved is a click, not a drag -- click-to-chat.
+        if dragMode == .move, !isExpanded {
+            let cur = NSEvent.mouseLocation
+            let moved = hypot(cur.x - dragStartMouseScreen.x, cur.y - dragStartMouseScreen.y)
+            FileHandle.standardError.write("Taloa: mouseUp dragMode=move moved=\(moved)\n".data(using: .utf8)!)
+            if moved < Self.clickMoveThreshold {
+                expandToChat()
+            }
+        }
         dragMode = .none
+    }
+
+    /// Click-to-chat -- see header comment. Grows from the current bottom-left
+    /// anchor (matches how she's positioned/homed everywhere else) so this
+    /// never jumps off-screen.
+    private func expandToChat() {
+        guard let window = self.window, !isExpanded else { return }
+        pendingAutoOpenChat = true
+        var f = window.frame
+        f.size = Self.chatSize
+        window.setFrame(f, display: true, animate: true)
     }
 
     override func resetCursorRects() {

@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-10T23:26:21.416Z",
+  "generated_at": "2026-08-10T23:54:23.649Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13216,
   "files": [
@@ -44830,9 +44830,9 @@
     {
       "path": "docs/products/universal-overlay/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Universal Overlay",
-      "bytes": 79695,
-      "mtime": "2026-08-10T23:26:07.014Z",
-      "indexed_at": "2026-08-10T23:26:21.416Z"
+      "bytes": 82007,
+      "mtime": "2026-08-10T23:53:54.305Z",
+      "indexed_at": "2026-08-10T23:54:23.649Z"
     },
     {
       "path": "docs/products/UNIVERSALOVERLAY.md",
