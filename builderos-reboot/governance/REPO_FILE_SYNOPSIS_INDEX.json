@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-10T00:13:35.126Z",
+  "generated_at": "2026-08-10T02:15:18.349Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13163,
+  "file_count": 13167,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -26894,6 +26894,37 @@
       "bytes": 1023,
       "mtime": "2026-08-09T18:14:26.103Z",
       "indexed_at": "2026-08-09T18:14:44.802Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/OVERLAY-DRIVE-CORS-FIX-0001/BLUEPRINT.json",
+      "synopsis": "Exports createExtensionDriveRoutes — builderos-reboot/MISSIONS/OVERLAY-DRIVE-CORS-FIX-0001/BLUEPRINT.json.",
+      "bytes": 3274,
+      "mtime": "2026-08-10T01:58:01.875Z",
+      "indexed_at": "2026-08-10T02:15:18.349Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/OVERLAY-DRIVE-CORS-FIX-0001/DELIBERATION_GATE.json",
+      "synopsis": "BuilderOS artifact — DELIBERATION GATE.",
+      "bytes": 1079,
+      "mtime": "2026-08-10T02:15:07.803Z",
+      "indexed_at": "2026-08-10T02:15:18.349Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/OVERLAY-DRIVE-CORS-FIX-0001/FOUNDER_PACKET.md",
+      "synopsis": "Founder Packet — real CORS bug blocking the auto-pickup drive channel from working at all.",
+      "bytes": 1346,
+      "mtime": "2026-08-10T02:14:39.509Z",
+      "indexed_at": "2026-08-10T02:15:18.349Z"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/OVERLAY-DRIVE-CORS-FIX-0001/INTENT_BASELINE.json",
+      "synopsis": "BuilderOS artifact — INTENT BASELINE.",
+      "bytes": 1556,
+      "mtime": "2026-08-10T02:14:53.606Z",
+      "indexed_at": "2026-08-10T02:15:18.349Z",
       "synopsis_index_only": true
     },
     {

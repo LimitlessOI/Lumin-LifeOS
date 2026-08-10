@@ -1,0 +1,26 @@
+{
+  "schema": "intent_baseline_v1",
+  "intent_id": "OVERLAY-DRIVE-CORS-FIX-0001",
+  "mission_id": "OVERLAY-DRIVE-CORS-FIX-0001",
+  "tier": 1,
+  "status": "HANDOFF_READY",
+  "created_at": "2026-08-09",
+  "amendment_pack": "docs/constitution/AMENDMENT_PACK_V2.0A.md",
+  "proof_lap_only": false,
+  "outcome_statement": "extension-drive-routes.js sends CORS headers so content.js's cross-origin auto-pickup fetch is not silently blocked by the browser.",
+  "user": "Adam (founder)",
+  "pain": "Zero-click auto-pickup has failed every live test -- real root cause found live, urgent fix needed to make the overlay actually function.",
+  "value": "Unblocks the entire drive channel -- the mechanism this session's whole revenue plan depends on.",
+  "success_metrics": ["Cross-origin fetch to /pending-for-user returns a real response instead of being blocked"],
+  "failure_metrics": ["TECHNICAL_PASS without founder_usability_pass", "Any unrelated change"],
+  "constraints": ["BP_PRIORITY queue authority", "BuilderOS system path only", "Patch mode only"],
+  "scope_boundary": "Per FOUNDER_PACKET.md",
+  "unacceptable_result": "Any change beyond CORS headers on this file",
+  "ownership": "ARC emits machine twin; Builder executes; Adam owns founder usability verdict",
+  "priority_fit": "Urgent live bugfix -- rank 32, blocks the whole revenue plan",
+  "point_model": {
+    "A": "Vision -- Adam provides FP in development stage",
+    "B": "Chair locks handoff -- corridor protected; Adam done until Alpha",
+    "C": "Alpha -- Adam evaluates outcome only"
+  }
+}

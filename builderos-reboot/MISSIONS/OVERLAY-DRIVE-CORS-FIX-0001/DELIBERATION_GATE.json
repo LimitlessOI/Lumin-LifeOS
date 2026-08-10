@@ -1,0 +1,22 @@
+{
+  "session_id": "mission:OVERLAY-DRIVE-CORS-FIX-0001",
+  "mission_id": "OVERLAY-DRIVE-CORS-FIX-0001",
+  "authorities": ["BPB", "CDR", "SNT"],
+  "reps": [{ "name": "LifeOS" }, { "name": "Founder" }],
+  "models": [{ "id": "bpb-slot", "focus": "BPB" }, { "id": "cdr-slot", "focus": "CDR" }],
+  "partial": true,
+  "hist_case": {
+    "session_id": "mission:OVERLAY-DRIVE-CORS-FIX-0001",
+    "problem": "extension-drive-routes.js has no CORS headers, silently blocking content.js's cross-origin auto-pickup fetch calls -- the root cause of every failed live auto-pickup test tonight.",
+    "case_text": "Auto-seeded Historian case for mission OVERLAY-DRIVE-CORS-FIX-0001.",
+    "ideas": [],
+    "opportunity": "One CORS middleware block unblocks the whole drive channel.",
+    "uncertainty": "KNOW"
+  },
+  "cfo_receipt": {
+    "session_id": "mission:OVERLAY-DRIVE-CORS-FIX-0001",
+    "dept": "CFO", "role": "mission_execute", "model": "factory-local", "tokens": 0, "cost_usd": 0, "founder_priority_mode": false
+  },
+  "seeded_at": "2026-08-09T20:15:00.000Z",
+  "auto_seeded": true
+}
