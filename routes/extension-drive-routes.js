@@ -74,6 +74,19 @@ export function createExtensionDriveRoutes({ pool, requireKey, callCouncilMember
   const log = logger || console;
   let schemaReady = null;
 
+  // CORS: content.js's auto-pickup poll runs inside the HOST PAGE (e.g.
+  // fiverr.com), not the extension's own origin, so its fetch() calls are
+  // cross-origin. Every route here is protected by requireKey (a secret
+  // header a random page can't forge), so a permissive origin is safe.
+  router.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', req.headers.origin || '*');
+    res.setHeader('Vary', 'Origin');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, x-command-key, Authorization');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    if (req.method === 'OPTIONS') return res.sendStatus(204);
+    next();
+  });
+
   async function ready() {
     if (!schemaReady) schemaReady = ensureDriveSchema(pool);
     await schemaReady;
