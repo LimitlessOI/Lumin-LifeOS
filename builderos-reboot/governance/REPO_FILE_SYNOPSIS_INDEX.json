@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-10T03:46:24.451Z",
+  "generated_at": "2026-08-10T03:59:08.806Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13175,
   "files": [
@@ -64595,9 +64595,9 @@
     {
       "path": "extension/content.js",
       "synopsis": "extension/content.js — Lumin Universal Overlay",
-      "bytes": 18406,
-      "mtime": "2026-08-09T19:50:43.493Z",
-      "indexed_at": "2026-08-09T19:50:50.368Z",
+      "bytes": 18778,
+      "mtime": "2026-08-10T03:58:23.848Z",
+      "indexed_at": "2026-08-10T03:59:08.806Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]

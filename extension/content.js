@@ -187,7 +187,13 @@
         const el = findElement(msg.selector, msg.label);
         if (el) {
           el.click();
-          postToFrame({ type: 'CLICK_RESULT', selector: msg.selector, ok: true });
+          // Settle beat before reporting success -- a click that opens a modal,
+          // triggers a client-side route change, or starts an animation needs
+          // real time to render before the next observation looks at the page.
+          // Same lesson already learned for navigate(); never applied to clicks.
+          setTimeout(() => {
+            postToFrame({ type: 'CLICK_RESULT', selector: msg.selector, ok: true });
+          }, 900);
         } else {
           postToFrame({ type: 'CLICK_RESULT', selector: msg.selector, ok: false });
         }
