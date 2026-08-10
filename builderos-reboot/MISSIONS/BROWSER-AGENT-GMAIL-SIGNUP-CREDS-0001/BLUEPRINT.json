@@ -37,7 +37,7 @@
         {
           "type": "file_contains",
           "target": "routes/general-browser-agent-routes.js",
-          "substring": "envCreds GMAIL_SIGNUP injected"
+          "substring": "envCredKey === 'GMAIL_SIGNUP'"
         }
       ],
       "sandbox_boundary": "routes/**",
