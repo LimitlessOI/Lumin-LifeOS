@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="lifeos_accessibility_service_description">Lets LifeOS drive apps on your behalf for tasks you ask it to do -- filling forms, clicking buttons, checking on progress. It only acts while you have an active LifeOS task running, and you can turn it off anytime in Settings.</string>
+</resources>

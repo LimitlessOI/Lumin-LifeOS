@@ -1,0 +1,21 @@
+{
+  "name": "lifeos-accessibility-driver",
+  "version": "1.0.0",
+  "description": "Capacitor plugin bridging LifeOS to Android's AccessibilityService for background-safe UI driving -- Android equivalent of the macOS AXUIElement driving used by the desktop overlay.",
+  "main": "index.js",
+  "module": "index.js",
+  "files": [
+    "android",
+    "index.js"
+  ],
+  "capacitor": {
+    "android": {
+      "src": "android"
+    }
+  },
+  "peerDependencies": {
+    "@capacitor/core": "^7.0.0"
+  },
+  "license": "UNLICENSED",
+  "private": true
+}

@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-10T07:22:29.315Z",
+  "generated_at": "2026-08-10T07:24:49.006Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13179,
+  "file_count": 13184,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -44699,9 +44699,9 @@
     {
       "path": "docs/products/universal-overlay/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Universal Overlay",
-      "bytes": 38388,
-      "mtime": "2026-08-10T03:35:11.524Z",
-      "indexed_at": "2026-08-10T03:35:29.817Z"
+      "bytes": 41336,
+      "mtime": "2026-08-10T07:24:33.907Z",
+      "indexed_at": "2026-08-10T07:24:49.006Z"
     },
     {
       "path": "docs/products/UNIVERSALOVERLAY.md",
@@ -67237,6 +67237,42 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "mobile/plugins/lifeos-accessibility-driver/android/src/main/AndroidManifest.xml",
+      "synopsis": "xml — mobile/plugins/lifeos-accessibility-driver/android/src/main/AndroidManifest.xml.",
+      "bytes": 767,
+      "mtime": "2026-08-10T07:20:15.245Z",
+      "indexed_at": "2026-08-10T07:24:49.006Z"
+    },
+    {
+      "path": "mobile/plugins/lifeos-accessibility-driver/android/src/main/res/values/strings.xml",
+      "synopsis": "xml — mobile/plugins/lifeos-accessibility-driver/android/src/main/res/values/strings.xml.",
+      "bytes": 360,
+      "mtime": "2026-08-10T07:20:34.748Z",
+      "indexed_at": "2026-08-10T07:24:49.006Z"
+    },
+    {
+      "path": "mobile/plugins/lifeos-accessibility-driver/android/src/main/res/xml/lifeos_accessibility_service_config.xml",
+      "synopsis": "xml — mobile/plugins/lifeos-accessibility-driver/android/src/main/res/xml/lifeos_accessibility_service_config.xml.",
+      "bytes": 519,
+      "mtime": "2026-08-10T07:20:20.841Z",
+      "indexed_at": "2026-08-10T07:24:49.006Z"
+    },
+    {
+      "path": "mobile/plugins/lifeos-accessibility-driver/index.js",
+      "synopsis": "JS-side handle for the native LifeosAccessibility plugin.",
+      "bytes": 539,
+      "mtime": "2026-08-10T07:24:47.742Z",
+      "indexed_at": "2026-08-10T07:24:49.006Z"
+    },
+    {
+      "path": "mobile/plugins/lifeos-accessibility-driver/package.json",
+      "synopsis": "JSON data/config — mobile/plugins/lifeos-accessibility-driver/package.json.",
+      "bytes": 537,
+      "mtime": "2026-08-10T07:19:57.980Z",
+      "indexed_at": "2026-08-10T07:24:49.006Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "mobile/README.md",
       "synopsis": "Native Universal Overlay shell (Capacitor)",
       "bytes": 3072,
@@ -67424,17 +67460,17 @@
     {
       "path": "package-lock.json",
       "synopsis": "JSON data/config — package-lock.json.",
-      "bytes": 352428,
-      "mtime": "2026-07-13T08:26:43.239Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 352865,
+      "mtime": "2026-08-10T07:21:51.524Z",
+      "indexed_at": "2026-08-10T07:24:49.006Z",
       "synopsis_index_only": true
     },
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\", \"lifeos:file-synopsis:backfill\": \"node scripts/file-synopsis-enforce.mjs --all --auto-fix && node scripts/generate-file-synopsis-index.mjs\", \"lifeos:file-synopsis:index",
-      "bytes": 36468,
-      "mtime": "2026-08-09T18:14:13.837Z",
-      "indexed_at": "2026-08-09T18:14:44.802Z",
+      "bytes": 36550,
+      "mtime": "2026-08-10T07:21:09.906Z",
+      "indexed_at": "2026-08-10T07:24:49.006Z",
       "synopsis_index_only": true
     },
     {
@@ -70865,9 +70901,9 @@
     {
       "path": "public/shared/lifeos-native-shell.js",
       "synopsis": "Native Universal Overlay shell — Capacitor bridge; same platform as lifeos-app + extension overlay.",
-      "bytes": 5304,
-      "mtime": "2026-06-29T17:21:08.483Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 7632,
+      "mtime": "2026-08-10T07:21:25.231Z",
+      "indexed_at": "2026-08-10T07:24:49.006Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]

@@ -92,6 +92,68 @@
     }
   }
 
+  /**
+   * Android-only driving bridge (LifeosAccessibilityService). This is the
+   * Android equivalent of the desktop overlay's AXUIElement driving: reads
+   * and drives the foreground app's real UI tree, not screen-coordinate taps.
+   * No-op on iOS/web -- iOS has no comparable API and this stays unused there.
+   */
+  const ACCESSIBILITY_STEPS = [
+    'Tap "Enable" below -- this opens Android Settings > Accessibility.',
+    'Find "LifeOS Driving Assistant" in the list (may be under "Downloaded apps" or "Installed apps").',
+    'Tap it, then toggle it ON.',
+    'Confirm "Allow" on the warning dialog Android shows.',
+    'Return to LifeOS -- it will detect the permission automatically.',
+  ];
+
+  function getAccessibilityPlugin() {
+    return global.Capacitor?.Plugins?.LifeosAccessibility || null;
+  }
+
+  async function accessibilityIsEnabled() {
+    const plugin = getAccessibilityPlugin();
+    if (!plugin) return false;
+    try {
+      const res = await plugin.isEnabled();
+      return Boolean(res?.enabled);
+    } catch (_) {
+      return false;
+    }
+  }
+
+  async function accessibilityRequestEnable() {
+    const plugin = getAccessibilityPlugin();
+    if (!plugin) return { ok: false, reason: 'not_available', steps: [] };
+    try {
+      await plugin.openAccessibilitySettings();
+      return { ok: true, steps: ACCESSIBILITY_STEPS };
+    } catch (e) {
+      return { ok: false, reason: String(e?.message || e), steps: ACCESSIBILITY_STEPS };
+    }
+  }
+
+  global.LifeOSAccessibilityDriver = {
+    isAvailable: () => Boolean(getAccessibilityPlugin()),
+    isEnabled: accessibilityIsEnabled,
+    requestEnable: accessibilityRequestEnable,
+    steps: ACCESSIBILITY_STEPS,
+    clickByText: async (text, exact = false) => {
+      const plugin = getAccessibilityPlugin();
+      if (!plugin) return { ok: false, reason: 'not_available' };
+      return plugin.clickByText({ text, exact });
+    },
+    setTextByLabel: async (label, value) => {
+      const plugin = getAccessibilityPlugin();
+      if (!plugin) return { ok: false, reason: 'not_available' };
+      return plugin.setTextByLabel({ label, value });
+    },
+    dumpVisibleText: async () => {
+      const plugin = getAccessibilityPlugin();
+      if (!plugin) return { ok: false, reason: 'not_available' };
+      return plugin.dumpVisibleText();
+    },
+  };
+
   function routeDeepLink(url) {
     if (!url) return;
     try {
