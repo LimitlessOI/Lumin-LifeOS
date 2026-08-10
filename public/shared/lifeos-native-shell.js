@@ -186,6 +186,39 @@
     },
   };
 
+  /**
+   * Reads photos from the device gallery (Android MediaStore) so they can be
+   * uploaded to LifeOS -- e.g. for setting up card listings. Separate from
+   * LifeOSAccessibilityDriver, which only sees on-screen UI, not photo bytes.
+   */
+  function getGalleryPlugin() {
+    return global.Capacitor?.Plugins?.LifeosGalleryUpload || null;
+  }
+
+  global.LifeOSGalleryUpload = {
+    isAvailable: () => Boolean(getGalleryPlugin()),
+    hasAccess: async () => {
+      const plugin = getGalleryPlugin();
+      if (!plugin) return { granted: false };
+      try { return await plugin.hasAccess(); } catch (e) { return { granted: false, error: String(e?.message || e) }; }
+    },
+    requestAccess: async () => {
+      const plugin = getGalleryPlugin();
+      if (!plugin) return { granted: false, error: 'not_available' };
+      try { return await plugin.requestAccess(); } catch (e) { return { granted: false, error: String(e?.message || e) }; }
+    },
+    listPhotos: async (limit) => {
+      const plugin = getGalleryPlugin();
+      if (!plugin) return { photos: [] };
+      try { return await plugin.listPhotos({ limit: limit || 200 }); } catch (e) { return { photos: [], error: String(e?.message || e) }; }
+    },
+    readPhotoBase64: async (id) => {
+      const plugin = getGalleryPlugin();
+      if (!plugin) return { base64: null };
+      try { return await plugin.readPhotoBase64({ id }); } catch (e) { return { base64: null, error: String(e?.message || e) }; }
+    },
+  };
+
   function routeDeepLink(url) {
     if (!url) return;
     try {

@@ -13,3 +13,6 @@ project(':lifeos-accessibility-driver').projectDir = new File('../mobile/plugins
 
 include ':lifeos-biometric-gate'
 project(':lifeos-biometric-gate').projectDir = new File('../mobile/plugins/lifeos-biometric-gate/android')
+
+include ':lifeos-gallery-upload'
+project(':lifeos-gallery-upload').projectDir = new File('../mobile/plugins/lifeos-gallery-upload/android')

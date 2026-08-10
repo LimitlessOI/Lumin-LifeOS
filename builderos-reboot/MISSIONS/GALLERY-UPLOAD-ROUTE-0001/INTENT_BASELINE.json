@@ -1,0 +1,26 @@
+{
+  "schema": "intent_baseline_v1",
+  "intent_id": "GALLERY-UPLOAD-ROUTE-0001",
+  "mission_id": "GALLERY-UPLOAD-ROUTE-0001",
+  "tier": 1,
+  "status": "HANDOFF_READY",
+  "created_at": "2026-08-10",
+  "amendment_pack": "docs/constitution/AMENDMENT_PACK_V2.0A.md",
+  "proof_lap_only": false,
+  "outcome_statement": "A requireKey-gated route receives photo uploads from the Android gallery plugin and commits them into the repo via the existing commitManyToGitHub helper, so photos survive Railway's ephemeral filesystem.",
+  "user": "Adam (founder)",
+  "pain": "The gallery-read plugin can read photo bytes off the phone but has nowhere durable to send them -- a plain disk write on Railway vanishes on redeploy.",
+  "value": "Card photos taken on the phone land directly in the repo for setting up listings, no manual transfer step.",
+  "success_metrics": ["A real POST with a test image returns ok:true and a real commit sha", "The file is actually present in the repo at data/card-photos/<filename> afterward"],
+  "failure_metrics": ["TECHNICAL_PASS without founder_usability_pass", "Any unrelated change", "Photo bytes corrupted (non-binary-safe commit path used)"],
+  "constraints": ["BP_PRIORITY queue authority", "BuilderOS system path only", "New file only", "Must use commitManyToGitHub's existing binary-safe path, not a new commit mechanism"],
+  "scope_boundary": "Per FOUNDER_PACKET.md",
+  "unacceptable_result": "Any change beyond the single upload route",
+  "ownership": "ARC emits machine twin; Builder executes; Adam owns founder usability verdict",
+  "priority_fit": "Urgent live founder request -- rank 31",
+  "point_model": {
+    "A": "Vision -- Adam provides FP in development stage",
+    "B": "Chair locks handoff -- corridor protected; Adam done until Alpha",
+    "C": "Alpha -- Adam evaluates outcome only"
+  }
+}

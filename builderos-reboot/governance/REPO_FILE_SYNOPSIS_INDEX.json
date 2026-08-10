@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-10T10:55:19.760Z",
+  "generated_at": "2026-08-10T11:03:19.333Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13198,
+  "file_count": 13205,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21678,9 +21678,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 4002991,
-      "mtime": "2026-08-10T08:03:13.568Z",
-      "indexed_at": "2026-08-10T08:03:25.312Z"
+      "bytes": 4006425,
+      "mtime": "2026-08-10T11:03:03.569Z",
+      "indexed_at": "2026-08-10T11:03:19.333Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -26816,6 +26816,37 @@
       "bytes": 2800,
       "mtime": "2026-08-01T18:42:32.541Z",
       "indexed_at": "2026-08-01T18:43:00.323Z"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/GALLERY-UPLOAD-ROUTE-0001/BLUEPRINT.json",
+      "synopsis": "BuilderOS artifact — BLUEPRINT.",
+      "bytes": 3735,
+      "mtime": "2026-08-10T10:54:46.635Z",
+      "indexed_at": "2026-08-10T11:03:03.478Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/GALLERY-UPLOAD-ROUTE-0001/DELIBERATION_GATE.json",
+      "synopsis": "BuilderOS artifact — DELIBERATION GATE.",
+      "bytes": 1071,
+      "mtime": "2026-08-10T10:54:27.488Z",
+      "indexed_at": "2026-08-10T11:03:03.478Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/GALLERY-UPLOAD-ROUTE-0001/FOUNDER_PACKET.md",
+      "synopsis": "Founder Packet — server route to receive photo uploads from the Android gallery plugin and commit them into the repo.",
+      "bytes": 1223,
+      "mtime": "2026-08-10T10:54:06.416Z",
+      "indexed_at": "2026-08-10T11:03:03.478Z"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/GALLERY-UPLOAD-ROUTE-0001/INTENT_BASELINE.json",
+      "synopsis": "BuilderOS artifact — INTENT BASELINE.",
+      "bytes": 1833,
+      "mtime": "2026-08-10T10:54:19.097Z",
+      "indexed_at": "2026-08-10T11:03:03.478Z",
+      "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/GLOBAL-CORS-EXTENSION-FIX-0001/BLUEPRINT.json",
@@ -44761,9 +44792,9 @@
     {
       "path": "docs/products/universal-overlay/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Universal Overlay",
-      "bytes": 63025,
-      "mtime": "2026-08-10T10:03:58.161Z",
-      "indexed_at": "2026-08-10T10:04:45.235Z"
+      "bytes": 65704,
+      "mtime": "2026-08-10T11:01:36.043Z",
+      "indexed_at": "2026-08-10T11:03:03.478Z"
     },
     {
       "path": "docs/products/UNIVERSALOVERLAY.md",
@@ -67357,6 +67388,28 @@
       "synopsis_index_only": true
     },
     {
+      "path": "mobile/plugins/lifeos-gallery-upload/android/src/main/AndroidManifest.xml",
+      "synopsis": "xml — mobile/plugins/lifeos-gallery-upload/android/src/main/AndroidManifest.xml.",
+      "bytes": 304,
+      "mtime": "2026-08-10T10:52:26.227Z",
+      "indexed_at": "2026-08-10T11:03:03.478Z"
+    },
+    {
+      "path": "mobile/plugins/lifeos-gallery-upload/index.js",
+      "synopsis": "JS-side handle for the native LifeosGalleryUpload plugin. lifeos-app.html",
+      "bytes": 523,
+      "mtime": "2026-08-10T11:03:01.587Z",
+      "indexed_at": "2026-08-10T11:03:03.478Z"
+    },
+    {
+      "path": "mobile/plugins/lifeos-gallery-upload/package.json",
+      "synopsis": "JSON data/config — mobile/plugins/lifeos-gallery-upload/package.json.",
+      "bytes": 496,
+      "mtime": "2026-08-10T10:51:05.311Z",
+      "indexed_at": "2026-08-10T11:03:03.478Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "mobile/README.md",
       "synopsis": "Native Universal Overlay shell (Capacitor)",
       "bytes": 3072,
@@ -67544,17 +67597,17 @@
     {
       "path": "package-lock.json",
       "synopsis": "JSON data/config — package-lock.json.",
-      "bytes": 353272,
-      "mtime": "2026-08-10T09:46:43.034Z",
-      "indexed_at": "2026-08-10T09:48:15.498Z",
+      "bytes": 353679,
+      "mtime": "2026-08-10T10:57:22.224Z",
+      "indexed_at": "2026-08-10T11:03:03.478Z",
       "synopsis_index_only": true
     },
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\", \"lifeos:file-synopsis:backfill\": \"node scripts/file-synopsis-enforce.mjs --all --auto-fix && node scripts/generate-file-synopsis-index.mjs\", \"lifeos:file-synopsis:index",
-      "bytes": 36620,
-      "mtime": "2026-08-10T09:46:27.660Z",
-      "indexed_at": "2026-08-10T09:48:15.498Z",
+      "bytes": 36690,
+      "mtime": "2026-08-10T10:57:14.869Z",
+      "indexed_at": "2026-08-10T11:03:03.478Z",
       "synopsis_index_only": true
     },
     {
@@ -69898,9 +69951,9 @@
     {
       "path": "public/overlay/lifeos-app.html",
       "synopsis": "HTML page: LifeOS",
-      "bytes": 238432,
-      "mtime": "2026-08-10T10:03:14.343Z",
-      "indexed_at": "2026-08-10T10:04:45.235Z"
+      "bytes": 242059,
+      "mtime": "2026-08-10T11:00:59.779Z",
+      "indexed_at": "2026-08-10T11:03:03.478Z"
     },
     {
       "path": "public/overlay/lifeos-ask-your-life.html",
@@ -70985,9 +71038,9 @@
     {
       "path": "public/shared/lifeos-native-shell.js",
       "synopsis": "Native Universal Overlay shell — Capacitor bridge; same platform as lifeos-app + extension overlay.",
-      "bytes": 8795,
-      "mtime": "2026-08-10T09:47:10.754Z",
-      "indexed_at": "2026-08-10T09:48:15.498Z",
+      "bytes": 10277,
+      "mtime": "2026-08-10T10:59:32.240Z",
+      "indexed_at": "2026-08-10T11:03:03.478Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
@@ -101350,9 +101403,9 @@
     {
       "path": "startup/register-founder-runtime-routes.js",
       "synopsis": "Minimal founder-builder runtime route composition.",
-      "bytes": 25427,
-      "mtime": "2026-08-10T08:09:14.409Z",
-      "indexed_at": "2026-08-10T08:10:12.132Z",
+      "bytes": 26182,
+      "mtime": "2026-08-10T10:56:42.811Z",
+      "indexed_at": "2026-08-10T11:03:03.478Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

@@ -29,6 +29,7 @@ import { createMarketplaceOpportunityRoutes } from "../routes/marketplace-opport
 import { createLifeOSExtensionRoutes } from "../routes/lifeos-extension-routes.js";
 import { createExtensionDriveRoutes } from "../routes/extension-drive-routes.js";
 import { createSystemNotifyRoutes } from "../routes/system-notify-routes.js";
+import galleryUploadRoutes from "../routes/gallery-upload-routes.js";
 import { requireLifeOSAdmin } from "../middleware/lifeos-auth-middleware.js";
 import { createTCCoordinator } from "../services/tc-coordinator.js";
 import { createAccountManager } from "../services/account-manager.js";
@@ -352,6 +353,18 @@ export async function registerFounderRuntimeRoutes(app, deps) {
     logger.info("✅ [SYSTEM-NOTIFY] Founder-notify email route mounted at /api/v1/system-notify/email");
   } catch (err) {
     logger.warn?.({ err: err.message }, "[SYSTEM-NOTIFY] founder-lane mount failed (non-fatal)");
+  }
+
+  // GAP-FILL (GALLERY-UPLOAD-ROUTE-0001): same protected-path carve-out as the
+  // mounts above. Receives photo uploads from the Android gallery plugin and
+  // commits them into data/card-photos/ via the existing commitManyToGitHub
+  // (Railway's filesystem is ephemeral -- a plain disk write would vanish on
+  // the next redeploy).
+  try {
+    app.use("/api/v1/gallery", galleryUploadRoutes.createGalleryUploadRoutes({ requireKey, commitManyToGitHub, logger }));
+    logger.info("✅ [GALLERY-UPLOAD] Photo upload route mounted at /api/v1/gallery/upload");
+  } catch (err) {
+    logger.warn?.({ err: err.message }, "[GALLERY-UPLOAD] founder-lane mount failed (non-fatal)");
   }
 
   // ClientCare billing rescue must live on founder lane — production boots founder_builder.

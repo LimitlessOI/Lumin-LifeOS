@@ -1,0 +1,38 @@
+{
+  "mission_id": "GALLERY-UPLOAD-ROUTE-0001",
+  "blueprint_id": "GALLERY-UPLOAD-ROUTE-0001-BP1",
+  "scope": "New routes/gallery-upload-routes.js: a single requireKey-gated POST /upload route that receives a batch of base64-encoded photos and commits them into data/card-photos/ via the injected commitManyToGitHub function.",
+  "authority": "BPB",
+  "acceptance_command": "npm run gallery-upload-route:acceptance",
+  "allowed_action_types": ["author_then_write"],
+  "platform_gap_fill": true,
+  "platform_gap_fill_reason": "GAP-FILL: founder-directed live request (Adam, 2026-08-10) to durably receive photos from the new Android gallery plugin -- not a pre-planned BP_PRIORITY queue item.",
+  "steps": [
+    {
+      "step_id": "GUR-S01",
+      "phase_id": "P0",
+      "title": "Create routes/gallery-upload-routes.js",
+      "target_file": "routes/gallery-upload-routes.js",
+      "target_files": ["routes/gallery-upload-routes.js"],
+      "action_type": "author_then_write",
+      "patch_mode": false,
+      "task": "The file MUST begin with a JSDoc block comment containing a line exactly '@ssot docs/products/universal-overlay/PRODUCT_HOME.md' (mandatory, checked by a commit gate). Create a new Express route module exporting a function createGalleryUploadRoutes({ requireKey, commitManyToGitHub, logger }) that returns an express.Router(). The router has one route: router.post('/upload', requireKey, async (req, res) => {...}). Handler behavior: read { files } from req.body, where files is expected to be an array of objects each shaped { filename: string, base64: string }. If files is missing, not an array, or empty, respond 400 { ok:false, error:'files array is required' }. Validate each entry has a non-empty filename and non-empty base64 string; if any entry fails validation, respond 400 { ok:false, error:'each file needs filename and base64' } without calling commitManyToGitHub. Build a fileEntries array for commitManyToGitHub where each entry is { path: `data/card-photos/${filename}`, content: base64, encoding: 'base64' } (use the entry's own filename, sanitize it by stripping any '/' or '..' segments to prevent path traversal -- reject the whole request with 400 { ok:false, error:'invalid filename' } if any filename contains '/' or '..' after trimming). Call commitManyToGitHub(fileEntries, a commit message like `[gallery-upload] ${fileEntries.length} photo(s)`, 'main') inside a try/catch. On success, respond 200 { ok:true, count: fileEntries.length, paths: fileEntries.map(f => f.path) }. On failure (commitManyToGitHub throws), log via logger?.error?.({ err: err.message }, '[GALLERY-UPLOAD] commit failed') if logger is provided, then respond 500 { ok:false, error: err.message }. Default export an object { createGalleryUploadRoutes }. No other routes, no other files.",
+      "authoring": { "tiers": ["deepseek", "groq_llama", "mistral_free"] },
+      "assertion_spec": {
+        "expected_exports": ["createGalleryUploadRoutes"],
+        "file_contains": ["commitManyToGitHub", "data/card-photos/"]
+      },
+      "behavior_assertions": [
+        { "type": "exports_smoke", "target": "routes/gallery-upload-routes.js" },
+        { "type": "file_contains", "target": "routes/gallery-upload-routes.js", "substring": "data/card-photos/" },
+        { "type": "file_contains", "target": "routes/gallery-upload-routes.js", "substring": "requireKey" }
+      ],
+      "sandbox_boundary": "routes/**",
+      "authority_owner": "Builder",
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "non_goals": ["editing any other file", "mounting the route (handled separately)", "a new commit mechanism -- reuse commitManyToGitHub only"],
+      "dependencies": []
+    }
+  ],
+  "blueprint_status": "handoff_ready"
+}

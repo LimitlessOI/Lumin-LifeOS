@@ -2815,6 +2815,14 @@
       </div>
       <button type="button" class="settings-invite-btn" id="biometric-test-btn" onclick="testBiometricGate()">Test now</button>
       <div id="biometric-result-box" style="display:none; margin-top:8px; font-size:13px; opacity:0.85;"></div>
+      <div class="settings-divider" style="margin:14px 0;"></div>
+      <div class="settings-row">
+        <div class="settings-label">Photo upload (card listings)</div>
+        <div class="settings-value" id="st-gallery-status">Checking…</div>
+      </div>
+      <p class="settings-hint">Uploads your most recent photos into the repo so they're ready to use for listings. Needs a one-time photo-access permission.</p>
+      <button type="button" class="settings-invite-btn" id="gallery-upload-btn" onclick="uploadRecentPhotos()">Upload recent photos</button>
+      <div id="gallery-upload-box" style="display:none; margin-top:8px; font-size:13px; opacity:0.85;"></div>
     </div>
     <div class="settings-divider"></div>
     <div class="settings-section">
@@ -3643,6 +3651,18 @@ async function refreshDrivingSection() {
   } else if (bioStatus) {
     bioStatus.textContent = 'Not available on this build';
   }
+
+  const galleryStatus = document.getElementById('st-gallery-status');
+  if (window.LifeOSGalleryUpload?.isAvailable?.()) {
+    try {
+      const res = await LifeOSGalleryUpload.hasAccess();
+      if (galleryStatus) galleryStatus.textContent = res?.granted ? 'Access granted ✓' : 'Access needed';
+    } catch (_) {
+      if (galleryStatus) galleryStatus.textContent = 'Unknown';
+    }
+  } else if (galleryStatus) {
+    galleryStatus.textContent = 'Not available on this build';
+  }
 }
 
 async function enableAccessibilityDriving() {
@@ -3671,6 +3691,76 @@ async function testBiometricGate() {
       ? `✓ Confirmed via ${result.authType === 'device_credential' ? 'PIN/pattern' : 'biometric'}.`
       : `Not confirmed: ${result.error || 'cancelled'}`;
   }
+}
+
+function safeUploadFilename(name, id) {
+  const cleaned = String(name || '').replace(/[^A-Za-z0-9._-]/g, '_');
+  if (cleaned && !cleaned.includes('..')) return cleaned;
+  return `photo_${id}.jpg`;
+}
+
+async function uploadRecentPhotos() {
+  const box = document.getElementById('gallery-upload-box');
+  const btn = document.getElementById('gallery-upload-btn');
+  const setBox = (text) => { if (box) { box.style.display = ''; box.textContent = text; } };
+
+  if (!window.LifeOSGalleryUpload?.isAvailable?.()) {
+    setBox('Not available -- update the app to the latest version.');
+    return;
+  }
+
+  const access = await LifeOSGalleryUpload.hasAccess();
+  if (!access?.granted) {
+    setBox('Requesting photo access…');
+    const req = await LifeOSGalleryUpload.requestAccess();
+    if (!req?.granted) {
+      setBox('Photo access was not granted -- allow it in the permission prompt to upload.');
+      return;
+    }
+  }
+
+  if (btn) btn.disabled = true;
+  setBox('Finding recent photos…');
+  const listed = await LifeOSGalleryUpload.listPhotos(20);
+  const photos = listed?.photos || [];
+  if (!photos.length) {
+    setBox('No photos found.');
+    if (btn) btn.disabled = false;
+    return;
+  }
+
+  const token = localStorage.getItem('lifeos_access_token') || '';
+  let uploaded = 0;
+  const BATCH_SIZE = 5;
+  for (let i = 0; i < photos.length; i += BATCH_SIZE) {
+    const batch = photos.slice(i, i + BATCH_SIZE);
+    setBox(`Uploading ${uploaded + 1}-${Math.min(uploaded + batch.length, photos.length)} of ${photos.length}…`);
+    const files = [];
+    for (const p of batch) {
+      const read = await LifeOSGalleryUpload.readPhotoBase64(p.id);
+      if (read?.base64) {
+        files.push({ filename: safeUploadFilename(p.name, p.id), base64: read.base64 });
+      }
+    }
+    if (!files.length) continue;
+    try {
+      const res = await fetch('/api/v1/gallery/upload', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify({ files }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (data.ok) uploaded += files.length;
+      else { setBox(`Upload failed: ${data.error || res.status}`); if (btn) btn.disabled = false; return; }
+    } catch (e) {
+      setBox(`Upload failed: ${e.message || e}`);
+      if (btn) btn.disabled = false;
+      return;
+    }
+  }
+
+  setBox(`✓ Uploaded ${uploaded} photo(s).`);
+  if (btn) btn.disabled = false;
 }
 
 async function loadAdminInvites() {

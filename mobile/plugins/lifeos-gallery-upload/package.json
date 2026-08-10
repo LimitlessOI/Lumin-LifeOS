@@ -1,0 +1,21 @@
+{
+  "name": "lifeos-gallery-upload",
+  "version": "1.0.0",
+  "description": "Capacitor plugin: read photos from the Android device gallery (MediaStore) so they can be uploaded to LifeOS -- e.g. for setting up card listings.",
+  "main": "index.js",
+  "module": "index.js",
+  "files": [
+    "android",
+    "index.js"
+  ],
+  "capacitor": {
+    "android": {
+      "src": "android"
+    }
+  },
+  "peerDependencies": {
+    "@capacitor/core": "^7.0.0"
+  },
+  "license": "UNLICENSED",
+  "private": true
+}
