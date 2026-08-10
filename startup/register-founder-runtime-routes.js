@@ -28,6 +28,7 @@ import { createIdeaQueueRoutes } from "../routes/idea-queue-routes.js";
 import { createMarketplaceOpportunityRoutes } from "../routes/marketplace-opportunity-routes.js";
 import { createLifeOSExtensionRoutes } from "../routes/lifeos-extension-routes.js";
 import { createExtensionDriveRoutes } from "../routes/extension-drive-routes.js";
+import { createSystemNotifyRoutes } from "../routes/system-notify-routes.js";
 import { requireLifeOSAdmin } from "../middleware/lifeos-auth-middleware.js";
 import { createTCCoordinator } from "../services/tc-coordinator.js";
 import { createAccountManager } from "../services/account-manager.js";
@@ -336,6 +337,21 @@ export async function registerFounderRuntimeRoutes(app, deps) {
     logger.info("✅ [EXTENSION-DRIVE] Live driving channel mounted at /api/v1/extension/drive/{start,next,result,stop,status}");
   } catch (err) {
     logger.warn?.({ err: err.message }, "[EXTENSION-DRIVE] founder-lane mount failed (non-fatal)");
+  }
+
+  // GAP-FILL (SYSTEM-NOTIFY-EMAIL-0001): the factory's own auto-mount targeted
+  // startup/register-runtime-routes.js, which is only reachable via the "full"
+  // runtime lane -- found live, that whole lane silently fails to load in
+  // production (an unrelated pre-existing broken import in its dependency
+  // chain: routes/knowledge-routes.js does not export createKnowledgeRoutes,
+  // caught by mountRuntimeRoutes()'s own try/catch and degraded silently, no
+  // route in that file mounts). Same protected-path carve-out as the mount
+  // above -- hand-authored per the same GAP-FILL precedent.
+  try {
+    app.use("/api/v1/system-notify", createSystemNotifyRoutes({ requireKey, logger }));
+    logger.info("✅ [SYSTEM-NOTIFY] Founder-notify email route mounted at /api/v1/system-notify/email");
+  } catch (err) {
+    logger.warn?.({ err: err.message }, "[SYSTEM-NOTIFY] founder-lane mount failed (non-fatal)");
   }
 
   // ClientCare billing rescue must live on founder lane — production boots founder_builder.

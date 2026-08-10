@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-10T08:03:25.312Z",
+  "generated_at": "2026-08-10T08:10:12.132Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13194,
   "files": [
@@ -44761,9 +44761,9 @@
     {
       "path": "docs/products/universal-overlay/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Universal Overlay",
-      "bytes": 49838,
-      "mtime": "2026-08-10T08:03:01.843Z",
-      "indexed_at": "2026-08-10T08:03:13.490Z"
+      "bytes": 52370,
+      "mtime": "2026-08-10T08:10:01.111Z",
+      "indexed_at": "2026-08-10T08:10:12.132Z"
     },
     {
       "path": "docs/products/UNIVERSALOVERLAY.md",
@@ -101318,9 +101318,9 @@
     {
       "path": "startup/register-founder-runtime-routes.js",
       "synopsis": "Minimal founder-builder runtime route composition.",
-      "bytes": 24423,
-      "mtime": "2026-08-09T18:09:46.776Z",
-      "indexed_at": "2026-08-09T18:10:22.093Z",
+      "bytes": 25427,
+      "mtime": "2026-08-10T08:09:14.409Z",
+      "indexed_at": "2026-08-10T08:10:12.132Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
