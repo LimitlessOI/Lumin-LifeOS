@@ -1,0 +1,78 @@
+{
+  "mission_id": "EXTENSION-DRIVE-STUCK-HANDOFF-0001",
+  "blueprint_id": "EXTENSION-DRIVE-STUCK-HANDOFF-0001-BP1",
+  "scope": "Wire the existing onAfterStep hook into the drive channel's /start call so a genuinely stuck step (repeated click/type with zero page change) stops cleanly and surfaces a handoff{selector,label,url} instead of burning the step budget, persist it on the session, and add POST /handoff-resume to type the founder's value in and resume the loop.",
+  "authority": "BPB",
+  "acceptance_command": "npm run extension-drive-stuck-handoff:acceptance",
+  "allowed_action_types": ["author_then_write"],
+  "platform_gap_fill": true,
+  "platform_gap_fill_reason": "GAP-FILL: wires the existing, already-shipped onAfterStep hook in services/general-browser-agent.js into the drive channel that never used it -- founder-directed live fix (Adam, 2026-08-10), not a new BP_PRIORITY queue item.",
+  "steps": [
+    {
+      "step_id": "EDSH-S01",
+      "phase_id": "P0",
+      "title": "Add handoff JSONB column to extension_drive_sessions",
+      "target_file": "routes/extension-drive-routes.js",
+      "target_files": ["routes/extension-drive-routes.js"],
+      "action_type": "author_then_write",
+      "patch_mode": true,
+      "task": "Add a handoff JSONB column to the schema so a stuck-step handoff payload can be persisted on the session row. Using PATCH MODE.",
+      "spec": "Output in PATCH MODE ONLY: the OLD block below must be copied EXACTLY character-for-character from the real current file. Exact text below, no other change.\n\nOLD:\n  await pool.query(`ALTER TABLE extension_drive_sessions ADD COLUMN IF NOT EXISTS claimed_at TIMESTAMPTZ`);\n}\n\nNEW:\n  await pool.query(`ALTER TABLE extension_drive_sessions ADD COLUMN IF NOT EXISTS claimed_at TIMESTAMPTZ`);\n  await pool.query(`ALTER TABLE extension_drive_sessions ADD COLUMN IF NOT EXISTS handoff JSONB`);\n}",
+      "authoring": { "tiers": ["deepseek", "groq_llama", "mistral_free"] },
+      "assertion_spec": { "expected_exports": [], "file_contains": ["ADD COLUMN IF NOT EXISTS handoff JSONB"] },
+      "behavior_assertions": [
+        { "type": "file_contains", "target": "routes/extension-drive-routes.js", "substring": "ADD COLUMN IF NOT EXISTS handoff JSONB" }
+      ],
+      "sandbox_boundary": "routes/**",
+      "authority_owner": "Builder",
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "non_goals": ["a full-file rewrite -- use patch mode only"],
+      "dependencies": []
+    },
+    {
+      "step_id": "EDSH-S02",
+      "phase_id": "P0",
+      "title": "Wire onAfterStep handoff detection into POST /start",
+      "target_file": "routes/extension-drive-routes.js",
+      "target_files": ["routes/extension-drive-routes.js"],
+      "action_type": "author_then_write",
+      "patch_mode": true,
+      "task": "Add an onAfterStep function that detects a stuck click/type action (stuckCount >= 2) and returns a stop+handoff signal, pass it into runBrowserGoal, and persist result.handoff / status:'handoff' in the completion handler. Using PATCH MODE.",
+      "spec": "Output in PATCH MODE ONLY: the OLD block below must be copied EXACTLY character-for-character from the real current file. Exact text below, no other change.\n\nOLD:\n      const onStep = async (rec) => {\n        try {\n          await pool.query(\n            `UPDATE extension_drive_sessions SET steps = steps || $2::jsonb, updated_at = now() WHERE id = $1`,\n            [sessionId, JSON.stringify([rec])]\n          );\n        } catch (e) {\n          log.warn({ err: e.message }, '[EXT-DRIVE] onStep persist failed');\n        }\n      };\n\n      runBrowserGoal({\n        goal,\n        startUrl: url,\n        expectedContext: expectedSiteHost ? { site: expectedSiteHost } : null,\n        observe,\n        decideAction,\n        act,\n        verifyGoal,\n        confirmContext,\n        onStep,\n        maxSteps: Math.min(Number(maxSteps) || 20, 40),\n        allowRiskyActions: !!allowRiskyActions,\n      })\n        .then(async (result) => {\n          await pool.query(\n            `UPDATE extension_drive_sessions SET status = $2, result = $3::jsonb, updated_at = now() WHERE id = $1`,\n            [sessionId, result.ok ? 'done' : 'failed', JSON.stringify(result)]\n          );\n        })\n\nNEW:\n      const onStep = async (rec) => {\n        try {\n          await pool.query(\n            `UPDATE extension_drive_sessions SET steps = steps || $2::jsonb, updated_at = now() WHERE id = $1`,\n            [sessionId, JSON.stringify([rec])]\n          );\n        } catch (e) {\n          log.warn({ err: e.message }, '[EXT-DRIVE] onStep persist failed');\n        }\n      };\n\n      const onAfterStep = async ({ history, stuck, stuckCount, observation }) => {\n        if (!stuck || stuckCount < 2) return { stop: false };\n        const last = history[history.length - 1];\n        const action = last?.action;\n        if (!action || (action.type !== 'click' && action.type !== 'type')) return { stop: false };\n        const el = (observation?.elements || []).find((e) => e.selector === action.selector);\n        const label = (el && (el.text || el.label)) || action.reason || action.selector || 'this field';\n        return {\n          stop: true,\n          ok: false,\n          reason: 'handoff_needed',\n          handoff: { selector: action.selector, label: String(label), url: observation?.url || null },\n        };\n      };\n\n      runBrowserGoal({\n        goal,\n        startUrl: url,\n        expectedContext: expectedSiteHost ? { site: expectedSiteHost } : null,\n        observe,\n        decideAction,\n        act,\n        verifyGoal,\n        confirmContext,\n        onStep,\n        onAfterStep,\n        maxSteps: Math.min(Number(maxSteps) || 20, 40),\n        allowRiskyActions: !!allowRiskyActions,\n      })\n        .then(async (result) => {\n          const status = result.handoff ? 'handoff' : (result.ok ? 'done' : 'failed');\n          await pool.query(\n            `UPDATE extension_drive_sessions SET status = $2, result = $3::jsonb, handoff = $4::jsonb, updated_at = now() WHERE id = $1`,\n            [sessionId, status, JSON.stringify(result), result.handoff ? JSON.stringify(result.handoff) : null]\n          );\n        })",
+      "authoring": { "tiers": ["deepseek", "groq_llama", "mistral_free"] },
+      "assertion_spec": { "expected_exports": [], "file_contains": ["onAfterStep", "handoff_needed"] },
+      "behavior_assertions": [
+        { "type": "file_contains", "target": "routes/extension-drive-routes.js", "substring": "handoff_needed" },
+        { "type": "file_contains", "target": "routes/extension-drive-routes.js", "substring": "onAfterStep," }
+      ],
+      "sandbox_boundary": "routes/**",
+      "authority_owner": "Builder",
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "non_goals": ["a full-file rewrite -- use patch mode only", "changing services/general-browser-agent.js"],
+      "dependencies": ["EDSH-S01"]
+    },
+    {
+      "step_id": "EDSH-S03",
+      "phase_id": "P0",
+      "title": "Add POST /handoff-resume to type the founder's value and resume the loop",
+      "target_file": "routes/extension-drive-routes.js",
+      "target_files": ["routes/extension-drive-routes.js"],
+      "action_type": "author_then_write",
+      "patch_mode": true,
+      "task": "Add a new POST /handoff-resume route that types the submitted value into the exact field the handoff pointed at, clears the handoff, and resumes the goal loop from the resulting page state. Using PATCH MODE.",
+      "spec": "Output in PATCH MODE ONLY: the OLD block below must be copied EXACTLY character-for-character from the real current file. Exact text below, no other change.\n\nOLD:\n      if (!rows[0]) return res.json({ ok: true, session_id: null });\n      res.json({ ok: true, session_id: rows[0].id, goal: rows[0].goal });\n    } catch (err) {\n      res.status(500).json({ ok: false, error: err.message });\n    }\n  });\n\n  return router;\n}\n\nNEW:\n      if (!rows[0]) return res.json({ ok: true, session_id: null });\n      res.json({ ok: true, session_id: rows[0].id, goal: rows[0].goal });\n    } catch (err) {\n      res.status(500).json({ ok: false, error: err.message });\n    }\n  });\n\n  router.post('/handoff-resume', requireKey, async (req, res) => {\n    try {\n      await ready();\n      const { session_id, value } = req.body || {};\n      if (!session_id || value == null || String(value).trim() === '') {\n        return res.status(400).json({ ok: false, error: 'session_id and value required' });\n      }\n      const { rows } = await pool.query(`SELECT * FROM extension_drive_sessions WHERE id = $1`, [session_id]);\n      const session = rows[0];\n      if (!session) return res.status(404).json({ ok: false, error: 'not_found' });\n      if (session.status !== 'handoff' || !session.handoff) {\n        return res.status(409).json({ ok: false, error: 'no_pending_handoff' });\n      }\n\n      createDriveSession(session_id, { user: session.user_handle, goal: session.goal });\n      const observe = makeExtensionObserve(session_id);\n      const act = makeExtensionAct(session_id);\n      const verifyGoal = makeExtensionVerify(session_id);\n\n      await act({ type: 'type', selector: session.handoff.selector, text: String(value) });\n\n      await pool.query(\n        `UPDATE extension_drive_sessions SET status = 'running', handoff = NULL, updated_at = now() WHERE id = $1`,\n        [session_id]\n      );\n      res.json({ ok: true });\n\n      const decideAction = makeDecider({ callModel: makeCallModel(callCouncilMember), tiers: ['groq_llama', 'gemini_flash', 'cerebras_llama', 'openai_gpt', 'claude_sonnet'] });\n      const onStep = async (rec) => {\n        try {\n          await pool.query(\n            `UPDATE extension_drive_sessions SET steps = steps || $2::jsonb, updated_at = now() WHERE id = $1`,\n            [session_id, JSON.stringify([rec])]\n          );\n        } catch (e) {\n          log.warn({ err: e.message }, '[EXT-DRIVE] onStep persist failed');\n        }\n      };\n      const onAfterStep = async ({ history, stuck, stuckCount, observation }) => {\n        if (!stuck || stuckCount < 2) return { stop: false };\n        const last = history[history.length - 1];\n        const action = last?.action;\n        if (!action || (action.type !== 'click' && action.type !== 'type')) return { stop: false };\n        const el = (observation?.elements || []).find((e) => e.selector === action.selector);\n        const label = (el && (el.text || el.label)) || action.reason || action.selector || 'this field';\n        return {\n          stop: true,\n          ok: false,\n          reason: 'handoff_needed',\n          handoff: { selector: action.selector, label: String(label), url: observation?.url || null },\n        };\n      };\n\n      runBrowserGoal({\n        goal: session.goal,\n        startUrl: null,\n        expectedContext: null,\n        observe,\n        decideAction,\n        act,\n        verifyGoal,\n        confirmContext: null,\n        onStep,\n        onAfterStep,\n        maxSteps: 20,\n        allowRiskyActions: !!session.allow_risky,\n      })\n        .then(async (result) => {\n          const status = result.handoff ? 'handoff' : (result.ok ? 'done' : 'failed');\n          await pool.query(\n            `UPDATE extension_drive_sessions SET status = $2, result = $3::jsonb, handoff = $4::jsonb, updated_at = now() WHERE id = $1`,\n            [session_id, status, JSON.stringify(result), result.handoff ? JSON.stringify(result.handoff) : null]\n          );\n        })\n        .catch(async (err) => {\n          log.error({ err: err.message }, '[EXT-DRIVE] handoff-resume runBrowserGoal crashed');\n          await pool.query(\n            `UPDATE extension_drive_sessions SET status = 'failed', result = $2::jsonb, updated_at = now() WHERE id = $1`,\n            [session_id, JSON.stringify({ ok: false, reason: `crashed:${err.message}` })]\n          );\n        });\n    } catch (err) {\n      log.error({ err: err.message }, '[EXT-DRIVE] /handoff-resume failed');\n      res.status(500).json({ ok: false, error: err.message });\n    }\n  });\n\n  return router;\n}",
+      "authoring": { "tiers": ["deepseek", "groq_llama", "mistral_free"] },
+      "assertion_spec": { "expected_exports": [], "file_contains": ["/handoff-resume", "no_pending_handoff"] },
+      "behavior_assertions": [
+        { "type": "file_contains", "target": "routes/extension-drive-routes.js", "substring": "handoff-resume" },
+        { "type": "file_contains", "target": "routes/extension-drive-routes.js", "substring": "no_pending_handoff" }
+      ],
+      "sandbox_boundary": "routes/**",
+      "authority_owner": "Builder",
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "non_goals": ["a full-file rewrite -- use patch mode only"],
+      "dependencies": ["EDSH-S02"]
+    }
+  ],
+  "blueprint_status": "handoff_ready"
+}

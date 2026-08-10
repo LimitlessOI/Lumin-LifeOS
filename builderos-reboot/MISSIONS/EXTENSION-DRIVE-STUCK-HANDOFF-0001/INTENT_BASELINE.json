@@ -1,0 +1,26 @@
+{
+  "schema": "intent_baseline_v1",
+  "intent_id": "EXTENSION-DRIVE-STUCK-HANDOFF-0001",
+  "mission_id": "EXTENSION-DRIVE-STUCK-HANDOFF-0001",
+  "tier": 1,
+  "status": "HANDOFF_READY",
+  "created_at": "2026-08-10",
+  "amendment_pack": "docs/constitution/AMENDMENT_PACK_V2.0A.md",
+  "proof_lap_only": false,
+  "outcome_statement": "The drive channel surfaces a clean human handoff when it's genuinely stuck (needs a verification code, CAPTCHA answer, OTP) instead of re-clicking the same element for the whole step budget, and resumes automatically once the founder submits the value.",
+  "user": "Adam (founder)",
+  "pain": "Twice tonight the drive loop got stuck re-clicking the same email-verification field with no way for Adam to just supply the code and let it continue.",
+  "value": "Unblocks any future goal that needs a one-time human input (2FA codes, CAPTCHAs, OTPs) without falling back to fully manual driving.",
+  "success_metrics": ["A synthetic stuck fixture surfaces status:handoff with a real selector/label", "POST /handoff-resume types the value and resumes the loop"],
+  "failure_metrics": ["TECHNICAL_PASS without founder_usability_pass", "Any unrelated change to routes/extension-drive-routes.js", "Handoff triggers on a normal (non-stuck) step"],
+  "constraints": ["BP_PRIORITY queue authority", "BuilderOS system path only", "Patch mode only", "Reuses runBrowserGoal's existing onAfterStep hook -- no change to services/general-browser-agent.js"],
+  "scope_boundary": "Per FOUNDER_PACKET.md",
+  "unacceptable_result": "Any change beyond the handoff detection + /handoff-resume route",
+  "ownership": "ARC emits machine twin; Builder executes; Adam owns founder usability verdict",
+  "priority_fit": "Urgent live bugfix -- directly unblocks the in-progress Fiverr signup -- rank 34",
+  "point_model": {
+    "A": "Vision -- Adam provides FP in development stage",
+    "B": "Chair locks handoff -- corridor protected; Adam done until Alpha",
+    "C": "Alpha -- Adam evaluates outcome only"
+  }
+}

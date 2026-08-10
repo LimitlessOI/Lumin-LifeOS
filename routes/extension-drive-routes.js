@@ -53,6 +53,7 @@ async function ensureDriveSchema(pool) {
     )
   `);
   await pool.query(`ALTER TABLE extension_drive_sessions ADD COLUMN IF NOT EXISTS claimed_at TIMESTAMPTZ`);
+  await pool.query(`ALTER TABLE extension_drive_sessions ADD COLUMN IF NOT EXISTS handoff JSONB`);
 }
 
 function makeCallModel(callCouncilMember) {
@@ -117,6 +118,26 @@ export function createExtensionDriveRoutes({ pool, requireKey, callCouncilMember
         }
       };
 
+      // HANDOFF: when the same click/type action repeats with zero page change
+      // twice in a row, the AI is stuck on something only the real account
+      // owner can supply (a verification code, a CAPTCHA answer, an OTP) --
+      // stop cleanly and surface exactly which field needs a human value,
+      // instead of burning the rest of the step budget re-clicking it.
+      const onAfterStep = async ({ history, stuck, stuckCount, observation }) => {
+        if (!stuck || stuckCount < 2) return { stop: false };
+        const last = history[history.length - 1];
+        const action = last?.action;
+        if (!action || (action.type !== 'click' && action.type !== 'type')) return { stop: false };
+        const el = (observation?.elements || []).find((e) => e.selector === action.selector);
+        const label = (el && (el.text || el.label)) || action.reason || action.selector || 'this field';
+        return {
+          stop: true,
+          ok: false,
+          reason: 'handoff_needed',
+          handoff: { selector: action.selector, label: String(label), url: observation?.url || null },
+        };
+      };
+
       runBrowserGoal({
         goal,
         startUrl: url,
@@ -127,13 +148,15 @@ export function createExtensionDriveRoutes({ pool, requireKey, callCouncilMember
         verifyGoal,
         confirmContext,
         onStep,
+        onAfterStep,
         maxSteps: Math.min(Number(maxSteps) || 20, 40),
         allowRiskyActions: !!allowRiskyActions,
       })
         .then(async (result) => {
+          const status = result.handoff ? 'handoff' : (result.ok ? 'done' : 'failed');
           await pool.query(
-            `UPDATE extension_drive_sessions SET status = $2, result = $3::jsonb, updated_at = now() WHERE id = $1`,
-            [sessionId, result.ok ? 'done' : 'failed', JSON.stringify(result)]
+            `UPDATE extension_drive_sessions SET status = $2, result = $3::jsonb, handoff = $4::jsonb, updated_at = now() WHERE id = $1`,
+            [sessionId, status, JSON.stringify(result), result.handoff ? JSON.stringify(result.handoff) : null]
           );
         })
         .catch(async (err) => {
@@ -211,6 +234,97 @@ export function createExtensionDriveRoutes({ pool, requireKey, callCouncilMember
       if (!rows[0]) return res.json({ ok: true, session_id: null });
       res.json({ ok: true, session_id: rows[0].id, goal: rows[0].goal });
     } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // HANDOFF RESUME: Adam typed the value the stuck step needed (a verification
+  // code, a CAPTCHA answer). Type it into the exact field the handoff pointed
+  // at using the same extension act() adapter, then resume the goal loop from
+  // the resulting page state so the AI takes back over immediately.
+  router.post('/handoff-resume', requireKey, async (req, res) => {
+    try {
+      await ready();
+      const { session_id, value } = req.body || {};
+      if (!session_id || value == null || String(value).trim() === '') {
+        return res.status(400).json({ ok: false, error: 'session_id and value required' });
+      }
+      const { rows } = await pool.query(`SELECT * FROM extension_drive_sessions WHERE id = $1`, [session_id]);
+      const session = rows[0];
+      if (!session) return res.status(404).json({ ok: false, error: 'not_found' });
+      if (session.status !== 'handoff' || !session.handoff) {
+        return res.status(409).json({ ok: false, error: 'no_pending_handoff' });
+      }
+
+      createDriveSession(session_id, { user: session.user_handle, goal: session.goal });
+      const observe = makeExtensionObserve(session_id);
+      const act = makeExtensionAct(session_id);
+      const verifyGoal = makeExtensionVerify(session_id);
+
+      await act({ type: 'type', selector: session.handoff.selector, text: String(value) });
+
+      await pool.query(
+        `UPDATE extension_drive_sessions SET status = 'running', handoff = NULL, updated_at = now() WHERE id = $1`,
+        [session_id]
+      );
+      res.json({ ok: true });
+
+      const decideAction = makeDecider({ callModel: makeCallModel(callCouncilMember), tiers: ['groq_llama', 'gemini_flash', 'cerebras_llama', 'openai_gpt', 'claude_sonnet'] });
+      const onStep = async (rec) => {
+        try {
+          await pool.query(
+            `UPDATE extension_drive_sessions SET steps = steps || $2::jsonb, updated_at = now() WHERE id = $1`,
+            [session_id, JSON.stringify([rec])]
+          );
+        } catch (e) {
+          log.warn({ err: e.message }, '[EXT-DRIVE] onStep persist failed');
+        }
+      };
+      const onAfterStep = async ({ history, stuck, stuckCount, observation }) => {
+        if (!stuck || stuckCount < 2) return { stop: false };
+        const last = history[history.length - 1];
+        const action = last?.action;
+        if (!action || (action.type !== 'click' && action.type !== 'type')) return { stop: false };
+        const el = (observation?.elements || []).find((e) => e.selector === action.selector);
+        const label = (el && (el.text || el.label)) || action.reason || action.selector || 'this field';
+        return {
+          stop: true,
+          ok: false,
+          reason: 'handoff_needed',
+          handoff: { selector: action.selector, label: String(label), url: observation?.url || null },
+        };
+      };
+
+      runBrowserGoal({
+        goal: session.goal,
+        startUrl: null,
+        expectedContext: null,
+        observe,
+        decideAction,
+        act,
+        verifyGoal,
+        confirmContext: null,
+        onStep,
+        onAfterStep,
+        maxSteps: 20,
+        allowRiskyActions: !!session.allow_risky,
+      })
+        .then(async (result) => {
+          const status = result.handoff ? 'handoff' : (result.ok ? 'done' : 'failed');
+          await pool.query(
+            `UPDATE extension_drive_sessions SET status = $2, result = $3::jsonb, handoff = $4::jsonb, updated_at = now() WHERE id = $1`,
+            [session_id, status, JSON.stringify(result), result.handoff ? JSON.stringify(result.handoff) : null]
+          );
+        })
+        .catch(async (err) => {
+          log.error({ err: err.message }, '[EXT-DRIVE] handoff-resume runBrowserGoal crashed');
+          await pool.query(
+            `UPDATE extension_drive_sessions SET status = 'failed', result = $2::jsonb, updated_at = now() WHERE id = $1`,
+            [session_id, JSON.stringify({ ok: false, reason: `crashed:${err.message}` })]
+          );
+        });
+    } catch (err) {
+      log.error({ err: err.message }, '[EXT-DRIVE] /handoff-resume failed');
       res.status(500).json({ ok: false, error: err.message });
     }
   });

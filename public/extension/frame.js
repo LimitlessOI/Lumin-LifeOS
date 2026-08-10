@@ -31,6 +31,7 @@ const SERVER = location.origin; // same origin since frame is served from Railwa
 let driveSessionId   = null;
 let driveGoalText    = '';
 let driveAwaitingConfirm = false;
+let driveAwaitingHandoff = false;
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 function postParent(data) { PARENT.postMessage(data, '*'); }
@@ -472,6 +473,7 @@ function stopDrive() {
   postParent({ type: 'CLEAR_DRIVE_SESSION' });
   driveSessionId = null;
   driveAwaitingConfirm = false;
+  driveAwaitingHandoff = false;
   driveLog('Stopped.');
   exitDriveRunningUI();
 }
@@ -483,7 +485,9 @@ function enterDriveRunningUI(goal) {
   $('drive-goal-label').textContent = goal.length > 60 ? goal.slice(0, 60) + '…' : goal;
   $('drive-log').innerHTML = '';
   $('drive-confirm-slot').innerHTML = '';
+  $('drive-handoff-slot').innerHTML = '';
   $('drive-blocked-slot').innerHTML = '';
+  driveAwaitingHandoff = false;
 }
 
 function exitDriveRunningUI() {
@@ -517,10 +521,19 @@ async function drivePollLoop() {
       postParent({ type: 'CLEAR_DRIVE_SESSION' });
       driveSessionId = null;
       driveAwaitingConfirm = false;
+      driveAwaitingHandoff = false;
       return;
     }
 
-    if (!driveAwaitingConfirm) {
+    // HANDOFF: the loop is stuck on something only Adam can supply (a
+    // verification code, a CAPTCHA answer). Session stays 'running' server-side
+    // once he submits -- this is a pause, not a terminal state, so keep polling.
+    if (status === 'handoff' && !driveAwaitingHandoff) {
+      driveAwaitingHandoff = true;
+      showDriveHandoff(statusData.session.handoff || {});
+    }
+
+    if (!driveAwaitingConfirm && !driveAwaitingHandoff) {
       const r = await fetch(`${SERVER}/api/v1/extension/drive/next?session_id=${id}`, { headers: authHeaders() });
       const d = await r.json();
       if (d.ok && d.pending) await handleDrivePending(d.pending);
@@ -645,6 +658,40 @@ function confirmDriveDone(confirmed) {
   });
 }
 window.confirmDriveDone = confirmDriveDone;
+
+function showDriveHandoff(handoff) {
+  driveLog(`Stuck — needs you: ${handoff.label || 'a value'}. Type it in and I'll take back over.`, 'warn');
+  $('drive-handoff-slot').innerHTML = `
+    <div class="drive-handoff-box">
+      <div class="drive-handoff-text">I'm stuck on <strong>${escHtml(handoff.label || 'this field')}</strong> — type the value and I'll take back over.</div>
+      <div class="drive-handoff-row">
+        <input type="text" class="drive-handoff-input" id="drive-handoff-input" placeholder="Type here…" autocomplete="off" />
+        <button class="drive-handoff-submit" onclick="submitDriveHandoff()">Submit</button>
+      </div>
+    </div>`;
+  const input = $('drive-handoff-input');
+  if (input) {
+    input.focus();
+    input.addEventListener('keydown', (e) => { if (e.key === 'Enter') submitDriveHandoff(); });
+  }
+}
+
+function submitDriveHandoff() {
+  const input = $('drive-handoff-input');
+  const value = (input?.value || '').trim();
+  if (!value) return;
+  $('drive-handoff-slot').innerHTML = '';
+  driveAwaitingHandoff = false;
+  driveLog('Got it — continuing…');
+  fetch(`${SERVER}/api/v1/extension/drive/handoff-resume`, {
+    method: 'POST',
+    headers: authHeaders(),
+    body: JSON.stringify({ session_id: driveSessionId, value }),
+  }).catch(() => {
+    driveLog('Could not send that — retrying next cycle.', 'warn');
+  });
+}
+window.submitDriveHandoff = submitDriveHandoff;
 
 function showDriveBlocked(reason) {
   const slot = $('drive-blocked-slot');
