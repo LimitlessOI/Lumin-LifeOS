@@ -3024,7 +3024,64 @@ CTX.startSessionKeepAlive();
     await CTX.refreshIfNeeded();
   }
   syncAccountUiFromContext();
+  startAndroidCommandPoll();
 })().catch(() => {});
+
+/* ── Remote command poll (native Android only) ───────────────────
+ * Mirrors the browser extension's pending-for-user poll loop
+ * (public/extension/frame.js) so this session can trigger already-built
+ * app actions (e.g. upload_recent_photos) without a manual tap, once the
+ * one-time install + permission grants are done. */
+const ANDROID_COMMAND_HANDLERS = {
+  upload_recent_photos: async () => {
+    await uploadRecentPhotos();
+    return { ok: true };
+  },
+  click_by_text: async (params) => {
+    if (!window.LifeOSAccessibilityDriver?.isAvailable?.()) return { ok: false, error: 'not_available' };
+    return LifeOSAccessibilityDriver.clickByText(params?.text, params?.exact);
+  },
+  set_text_by_label: async (params) => {
+    if (!window.LifeOSAccessibilityDriver?.isAvailable?.()) return { ok: false, error: 'not_available' };
+    return LifeOSAccessibilityDriver.setTextByLabel(params?.label, params?.value);
+  },
+  dump_visible_text: async () => {
+    if (!window.LifeOSAccessibilityDriver?.isAvailable?.()) return { ok: false, error: 'not_available' };
+    const text = await LifeOSAccessibilityDriver.dumpVisibleText();
+    return { ok: true, text };
+  },
+};
+
+function startAndroidCommandPoll() {
+  const isNativeAndroid = Boolean(window.LifeOSNativeShell?.isCapacitor?.()) &&
+    window.LifeOSNativeShell.getState?.().platform === 'android';
+  if (!isNativeAndroid) return;
+
+  const poll = async () => {
+    try {
+      const token = localStorage.getItem('lifeos_access_token') || '';
+      const headers = { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` };
+      const res = await fetch('/api/v1/android/pending-for-user?user=' + encodeURIComponent(CTX.USER || 'adam'), { headers });
+      const data = await res.json().catch(() => ({}));
+      if (data.ok && data.command_id) {
+        const handler = ANDROID_COMMAND_HANDLERS[data.command];
+        let result;
+        if (handler) {
+          try { result = await handler(data.params || {}); }
+          catch (e) { result = { ok: false, error: String(e?.message || e) }; }
+        } else {
+          result = { ok: false, error: `unknown_command:${data.command}` };
+        }
+        await fetch('/api/v1/android/command-result', {
+          method: 'POST', headers,
+          body: JSON.stringify({ command_id: data.command_id, ok: result.ok !== false, result }),
+        }).catch(() => {});
+      }
+    } catch (_) { /* network hiccup -- next poll retries */ }
+    setTimeout(poll, 5000);
+  };
+  poll();
+}
 
 function syncAccountUiFromContext() {
   const ctx = window.LifeOSBootstrap.getLifeOSContext({ promptForKey: false });

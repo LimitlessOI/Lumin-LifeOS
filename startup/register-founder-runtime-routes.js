@@ -30,6 +30,7 @@ import { createLifeOSExtensionRoutes } from "../routes/lifeos-extension-routes.j
 import { createExtensionDriveRoutes } from "../routes/extension-drive-routes.js";
 import { createSystemNotifyRoutes } from "../routes/system-notify-routes.js";
 import galleryUploadRoutes from "../routes/gallery-upload-routes.js";
+import { createAndroidCommandRoutes } from "../routes/android-command-routes.js";
 import { requireLifeOSAdmin } from "../middleware/lifeos-auth-middleware.js";
 import { createTCCoordinator } from "../services/tc-coordinator.js";
 import { createAccountManager } from "../services/account-manager.js";
@@ -365,6 +366,17 @@ export async function registerFounderRuntimeRoutes(app, deps) {
     logger.info("✅ [GALLERY-UPLOAD] Photo upload route mounted at /api/v1/gallery/upload");
   } catch (err) {
     logger.warn?.({ err: err.message }, "[GALLERY-UPLOAD] founder-lane mount failed (non-fatal)");
+  }
+
+  // GAP-FILL (ANDROID-REMOTE-COMMAND-0001): same protected-path carve-out as
+  // the mounts above. Lets this session remotely trigger already-built app
+  // actions (e.g. upload_recent_photos) on the founder's phone while the app
+  // is running, closing the last manual-tap gap after one-time device setup.
+  try {
+    app.use("/api/v1/android", createAndroidCommandRoutes({ pool, requireKey, logger }));
+    logger.info("✅ [ANDROID-COMMAND] Remote command queue mounted at /api/v1/android/{command,pending-for-user,command-result}");
+  } catch (err) {
+    logger.warn?.({ err: err.message }, "[ANDROID-COMMAND] founder-lane mount failed (non-fatal)");
   }
 
   // ClientCare billing rescue must live on founder lane — production boots founder_builder.

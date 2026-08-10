@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-10T11:08:09.768Z",
+  "generated_at": "2026-08-10T11:22:03.299Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13205,
+  "file_count": 13210,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21881,6 +21881,37 @@
       "bytes": 4624,
       "mtime": "2026-06-11T08:17:13.860Z",
       "indexed_at": "2026-07-28T22:54:46.666Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/ANDROID-REMOTE-COMMAND-0001/BLUEPRINT.json",
+      "synopsis": "BuilderOS artifact — BLUEPRINT.",
+      "bytes": 4524,
+      "mtime": "2026-08-10T11:16:29.475Z",
+      "indexed_at": "2026-08-10T11:22:03.299Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/ANDROID-REMOTE-COMMAND-0001/DELIBERATION_GATE.json",
+      "synopsis": "BuilderOS artifact — DELIBERATION GATE.",
+      "bytes": 1126,
+      "mtime": "2026-08-10T11:16:07.940Z",
+      "indexed_at": "2026-08-10T11:22:03.299Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/ANDROID-REMOTE-COMMAND-0001/FOUNDER_PACKET.md",
+      "synopsis": "Founder Packet — remote command queue so the Android app can be driven from this session, not just by manual taps.",
+      "bytes": 1377,
+      "mtime": "2026-08-10T11:15:40.666Z",
+      "indexed_at": "2026-08-10T11:22:03.299Z"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/ANDROID-REMOTE-COMMAND-0001/INTENT_BASELINE.json",
+      "synopsis": "BuilderOS artifact — INTENT BASELINE.",
+      "bytes": 1887,
+      "mtime": "2026-08-10T11:15:54.016Z",
+      "indexed_at": "2026-08-10T11:22:03.299Z",
       "synopsis_index_only": true
     },
     {
@@ -44792,9 +44823,9 @@
     {
       "path": "docs/products/universal-overlay/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Universal Overlay",
-      "bytes": 66214,
-      "mtime": "2026-08-10T11:08:02.186Z",
-      "indexed_at": "2026-08-10T11:08:09.768Z"
+      "bytes": 68426,
+      "mtime": "2026-08-10T11:20:54.489Z",
+      "indexed_at": "2026-08-10T11:22:03.299Z"
     },
     {
       "path": "docs/products/UNIVERSALOVERLAY.md",
@@ -69951,9 +69982,9 @@
     {
       "path": "public/overlay/lifeos-app.html",
       "synopsis": "HTML page: LifeOS",
-      "bytes": 242059,
-      "mtime": "2026-08-10T11:00:59.779Z",
-      "indexed_at": "2026-08-10T11:03:03.478Z"
+      "bytes": 244636,
+      "mtime": "2026-08-10T11:19:40.766Z",
+      "indexed_at": "2026-08-10T11:22:03.299Z"
     },
     {
       "path": "public/overlay/lifeos-ask-your-life.html",
@@ -71381,6 +71412,16 @@
       "bytes": 2443,
       "mtime": "2026-07-31T10:15:41.373Z",
       "indexed_at": "2026-07-31T10:15:41.373Z"
+    },
+    {
+      "path": "routes/android-command-routes.js",
+      "synopsis": "routes/android-command-routes.js -- remote command queue so the",
+      "bytes": 4092,
+      "mtime": "2026-08-10T11:17:51.478Z",
+      "indexed_at": "2026-08-10T11:22:03.299Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/api-cost-savings-routes.js",
@@ -101403,9 +101444,9 @@
     {
       "path": "startup/register-founder-runtime-routes.js",
       "synopsis": "Minimal founder-builder runtime route composition.",
-      "bytes": 26182,
-      "mtime": "2026-08-10T10:56:42.811Z",
-      "indexed_at": "2026-08-10T11:03:03.478Z",
+      "bytes": 26927,
+      "mtime": "2026-08-10T11:18:15.415Z",
+      "indexed_at": "2026-08-10T11:22:03.299Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

@@ -1,0 +1,38 @@
+{
+  "mission_id": "ANDROID-REMOTE-COMMAND-0001",
+  "blueprint_id": "ANDROID-REMOTE-COMMAND-0001-BP1",
+  "scope": "New routes/android-command-routes.js: a self-bootstrapping android_commands table plus three requireKey-gated routes -- POST /command to enqueue, GET /pending-for-user to atomically claim the oldest pending command for a user, and POST /command-result to mark it done or failed.",
+  "authority": "BPB",
+  "acceptance_command": "npm run android-remote-command:acceptance",
+  "allowed_action_types": ["author_then_write"],
+  "platform_gap_fill": true,
+  "platform_gap_fill_reason": "GAP-FILL: founder-directed live request (Adam, 2026-08-10, \"why are you not doing it for me\") -- not a pre-planned BP_PRIORITY queue item.",
+  "steps": [
+    {
+      "step_id": "ARC-S01",
+      "phase_id": "P0",
+      "title": "Create routes/android-command-routes.js",
+      "target_file": "routes/android-command-routes.js",
+      "target_files": ["routes/android-command-routes.js"],
+      "action_type": "author_then_write",
+      "patch_mode": false,
+      "task": "The file MUST begin with a JSDoc block comment containing a line exactly '@ssot docs/products/universal-overlay/PRODUCT_HOME.md' (mandatory, checked by a commit gate). Create a new Express route module exporting a function createAndroidCommandRoutes({ pool, requireKey, logger }) that returns an express.Router(). Include an async function ensureAndroidCommandSchema(pool) that runs: CREATE TABLE IF NOT EXISTS android_commands (id TEXT PRIMARY KEY, user_handle TEXT NOT NULL, command TEXT NOT NULL, params JSONB NOT NULL DEFAULT '{}'::jsonb, status TEXT NOT NULL DEFAULT 'pending', result JSONB, claimed_at TIMESTAMPTZ, created_at TIMESTAMPTZ NOT NULL DEFAULT now(), updated_at TIMESTAMPTZ NOT NULL DEFAULT now()) -- call this once lazily (memoized promise, same pattern as ensureDriveSchema in routes/extension-drive-routes.js) before any route handler touches the table. Use crypto.randomUUID() (import crypto from 'node:crypto') for generating command ids. Three routes: (1) router.post('/command', requireKey, async...) reads { user, command, params } from req.body; if command is missing/empty respond 400 { ok:false, error:'command is required' }; otherwise INSERT a new row (user_handle defaulting to 'adam' if user is not provided, params defaulting to {}) and respond 200 { ok:true, command_id }. (2) router.get('/pending-for-user', requireKey, async...) reads user from req.query (default 'adam'), and atomically claims the OLDEST unclaimed pending command for that user using a single SQL UPDATE ... SET claimed_at = now() WHERE id = (SELECT id FROM android_commands WHERE user_handle = $1 AND status = 'pending' AND claimed_at IS NULL ORDER BY created_at ASC LIMIT 1) RETURNING id, command, params -- mirroring the exact claim pattern already used in routes/extension-drive-routes.js's /pending-for-user. If no row is claimed, respond 200 { ok:true, command_id:null }. Otherwise respond 200 { ok:true, command_id: id, command, params }. (3) router.post('/command-result', requireKey, async...) reads { command_id, ok, result } from req.body; if command_id is missing respond 400 { ok:false, error:'command_id is required' }; otherwise UPDATE android_commands SET status = $2, result = $3::jsonb, updated_at = now() WHERE id = $1 (status is 'done' if ok is truthy, else 'failed'), then respond 200 { ok:true }. Wrap every handler body in try/catch, responding 500 { ok:false, error: err.message } on unexpected errors. Default export an object { createAndroidCommandRoutes }. No other routes, no other files.",
+      "authoring": { "tiers": ["deepseek", "groq_llama", "mistral_free"] },
+      "assertion_spec": {
+        "expected_exports": ["createAndroidCommandRoutes"],
+        "file_contains": ["android_commands", "claimed_at", "pending-for-user"]
+      },
+      "behavior_assertions": [
+        { "type": "exports_smoke", "target": "routes/android-command-routes.js" },
+        { "type": "file_contains", "target": "routes/android-command-routes.js", "substring": "android_commands" },
+        { "type": "file_contains", "target": "routes/android-command-routes.js", "substring": "claimed_at" }
+      ],
+      "sandbox_boundary": "routes/**",
+      "authority_owner": "Builder",
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "non_goals": ["editing any other file", "mounting the route (handled separately)", "the client-side poll loop (handled separately)"],
+      "dependencies": []
+    }
+  ],
+  "blueprint_status": "handoff_ready"
+}
