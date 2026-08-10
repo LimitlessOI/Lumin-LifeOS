@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-10T08:17:37.876Z",
+  "generated_at": "2026-08-10T08:22:55.920Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13194,
   "files": [
@@ -42860,9 +42860,9 @@
     {
       "path": "docs/products/builderos/GAP_FILL_LEDGER.json",
       "synopsis": "Documentation — GAP FILL LEDGER.",
-      "bytes": 88507,
-      "mtime": "2026-08-10T07:49:34.901Z",
-      "indexed_at": "2026-08-10T07:51:21.196Z",
+      "bytes": 89386,
+      "mtime": "2026-08-10T08:17:38.342Z",
+      "indexed_at": "2026-08-10T08:22:55.920Z",
       "synopsis_index_only": true
     },
     {
@@ -44761,9 +44761,9 @@
     {
       "path": "docs/products/universal-overlay/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Universal Overlay",
-      "bytes": 54262,
-      "mtime": "2026-08-10T08:17:22.090Z",
-      "indexed_at": "2026-08-10T08:17:37.876Z"
+      "bytes": 54223,
+      "mtime": "2026-08-10T08:22:42.764Z",
+      "indexed_at": "2026-08-10T08:22:55.920Z"
     },
     {
       "path": "docs/products/UNIVERSALOVERLAY.md",
@@ -74082,9 +74082,9 @@
     {
       "path": "routes/system-notify-routes.js",
       "synopsis": "Exports createSystemNotifyRoutes — routes/system-notify-routes.js.",
-      "bytes": 3577,
-      "mtime": "2026-08-10T08:16:36.791Z",
-      "indexed_at": "2026-08-10T08:17:37.876Z",
+      "bytes": 3953,
+      "mtime": "2026-08-10T08:22:21.989Z",
+      "indexed_at": "2026-08-10T08:22:55.920Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]

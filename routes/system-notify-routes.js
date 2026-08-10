@@ -44,6 +44,13 @@ async function smtpSend({ to, subject, text, from }) {
     port: Number(process.env.SMTP_PORT || 465),
     secure: Number(process.env.SMTP_PORT || 465) === 465,
     auth: { user: smtpUser, pass: smtpPass },
+    // Many PaaS hosts block outbound SMTP ports at the network level (spam-relay
+    // abuse prevention) -- without these, a blocked port hangs the whole request
+    // instead of failing fast. Found live 2026-08-10: a real request hung past a
+    // 15s hard curl timeout with zero response.
+    connectionTimeout: 8000,
+    greetingTimeout: 8000,
+    socketTimeout: 8000,
   });
   const info = await transporter.sendMail({ from: from || smtpUser, to, subject, text });
   return { sent: true, message_id: info.messageId || null };

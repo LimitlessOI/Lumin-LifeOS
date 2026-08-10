@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/universal-overlay/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-08-10 — Stuck-field human handoff shipped for the drive channel (`onAfterStep` wired, new `/handoff-resume`) so a step needing a verification code/CAPTCHA surfaces to Adam and resumes on submit. Prior same day: Android `LifeosAccessibilityService` Capacitor plugin shipped (AX-equivalent driving for Android). Prior: 2026-08-09 OVERLAY-DRIVE-CHANNEL-0001 shipped, 15/15 acceptance PASS. |
+| **Last Updated** | 2026-08-10 — `system-notify-routes.js` email-send route shipped + hardened (Postmark→SMTP fallback, timeouts against a real hung-request bug found live). Prior same day: stuck-field human handoff for the drive channel; Android `LifeosAccessibilityService` Capacitor plugin. Prior: 2026-08-09 OVERLAY-DRIVE-CHANNEL-0001 shipped, 15/15 acceptance PASS. |
 
 ---
 ---
