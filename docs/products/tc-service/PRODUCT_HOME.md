@@ -988,6 +988,7 @@ Founder directive: review every revenue blueprint for gaps against real competit
 
 ## Change Receipts
 
+| 2026-08-09 | **GAP-FILL: `GMAIL_SIGNUP` envCreds branch added to `routes/general-browser-agent-routes.js`.** Matches the existing `ETSY`/`EBAY` pattern exactly — injects `GMAIL_SIGNUP_EMAIL`/`GMAIL_SIGNUP_APP_PASSWORD` server-side into a browser-agent goal so the real system signup inbox can be checked (e.g. for a verification code) without ever exposing the password to the caller. Hand-applied after a real, separate factory bug: `execute-step` reported `committed:true` with a `commit_sha` identical to the prior commit across 3 dispatch attempts — no new commit ever actually landed, despite the generated content being SENTRY-verified sound each time (only an exact-string `behavior_assertion` kept mismatching log-message phrasing). | Adam: "on railway has the systems email address and all login info so use that not mine" — needed to complete a real, in-progress Fiverr signup blocked on email verification. | `node --check` PASS. | The factory commit-verification false-positive is real and separate — worth investigating (why `commit_sha` echoes the parent instead of a new commit, or erroring), not yet root-caused. |
 | 2026-08-02 | **Creative Director review** — generated CREATIVE_BRIEF.md using the Creative Director lens. | TC Service reviewed through the BuilderOS creative responsibility; brief written to product home for founder review. | ✅ generated |
 | Date | What Changed | Why | Amendment | Manifest | Verified |
 |---|---|---|---|---|---|

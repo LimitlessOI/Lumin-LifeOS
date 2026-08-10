@@ -254,6 +254,24 @@ export function registerGeneralBrowserAgentRoutes(app, deps = {}) {
         logger.info?.('[BROWSER-AGENT] envCreds EBAY injected (email present, password redacted)');
       }
 
+      if (envCredKey === 'GMAIL_SIGNUP') {
+        const email = String(process.env.GMAIL_SIGNUP_EMAIL || '').trim();
+        const password = String(process.env.GMAIL_SIGNUP_APP_PASSWORD || '').trim();
+        if (!email || !password) {
+          return res.status(503).json({
+            ok: false,
+            error: 'GMAIL_SIGNUP_EMAIL / GMAIL_SIGNUP_APP_PASSWORD not set on tip',
+          });
+        }
+        effectiveGoal = [
+          `Log in to Gmail with email ${email} and password ${password}.`,
+          'If already logged in, continue.',
+          'Do not invent credentials. Stay on mail.google.com. Read-only unless the goal says otherwise -- never delete, archive, or reply.',
+          effectiveGoal,
+        ].join('\n');
+        logger.info?.('[BROWSER-AGENT] envCreds GMAIL_SIGNUP injected (email present, password redacted)');
+      }
+
       if (vaultService) {
         const accountManager = await getAccountManager();
         const acct = await resolveVaultAccount(accountManager, String(vaultService));
