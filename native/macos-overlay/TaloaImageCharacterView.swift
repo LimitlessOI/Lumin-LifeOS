@@ -1,16 +1,30 @@
 // SYNOPSIS: Native small-state character view for the Taloa overlay -- a
 // real generated character (image.pollinations.ai + local rembg for
-// transparency, see Assets/) that now cross-fades between three real frames
+// transparency, see Assets/) that cross-fades between three real frames
 // (idle / blink / speaking) instead of sitting as one frozen photo. Direct
 // founder correction 2026-08-10: "it made it look more real, but it's not a
 // character, it's an image." A still picture, however good, isn't alive --
 // this adds real periodic blinking and a speaking frame swapped in during
-// the same real cast-spell event as before, so something actually changes
-// over time and in response to events, not just glow/breathe on one image.
-// Known honest limit: blink timing is a local timer (like the earlier vector
-// version had), not driven by real perception/conversation state -- that
-// wiring still doesn't exist. Supersedes the single-image version of this
-// same file.
+// real gesture events, so something actually changes over time and in
+// response to events, not just glow/breathe on one image.
+//
+// Gesture vocabulary (2026-08-10, founder ask: spren/Way of Kings for
+// "reacts and means something" vs. aimless wandering; then narrowed to
+// Seons/Elantris -- a companion that forms a small shape to communicate --
+// as the honestly-scoped alpha version, not a public release, "the
+// animations and things we'll need" before a paid animation stack exists).
+// Previously every real event produced the identical cast-a-spell pulse,
+// which meant no event actually read as meaning anything distinct. This
+// splits that into three real, differently-drawn reactions -- cast (neutral,
+// "something is happening"), celebrate (bright, rising, traces a small
+// checkmark -- the literal Seons touch), concern (duller, sinking, no
+// trace) -- each still only ever triggered by a real event (ContainerView's
+// WKNavigationDelegate callbacks), never a timer/loop. Known honest limit:
+// blink timing is a local timer, not driven by real perception/conversation
+// state -- that wiring still doesn't exist. Full purposeful movement
+// (walking to a spot, sitting, pushing a button) needs scene assets that
+// don't exist anywhere in this repo yet (searched; not found, see
+// main.swift) -- deliberately not attempted in this pass.
 // See docs/products/lifeos/communication/COMMUNICATION_SYSTEM_BLUEPRINT.md §21.1.
 import Cocoa
 
@@ -23,6 +37,10 @@ enum TaloaMode: String {
 }
 
 private enum FrameKind { case idle, blink, speak }
+
+/// Real, distinct reactions to real events -- not decoration. Each one is
+/// only ever triggered from ContainerView's WKNavigationDelegate callbacks.
+private enum TaloaGestureKind { case none, cast, celebrate, concern }
 
 final class TaloaImageCharacterView: NSView {
     var expression: TaloaExpression = .neutral
@@ -44,10 +62,10 @@ final class TaloaImageCharacterView: NSView {
     private var nextBlinkAt: CGFloat = 0
     private var blinkUntil: CGFloat = 0
 
-    private var castActive = false
-    private var castStartedAt: CGFloat = 0
-    private let castDuration: CGFloat = 0.9
-    private var castParticles: [(angle: CGFloat, speed: CGFloat, size: CGFloat)] = []
+    private var gesture: TaloaGestureKind = .none
+    private var gestureStartedAt: CGFloat = 0
+    private var gestureDuration: CGFloat = 0.9
+    private var gestureParticles: [(angle: CGFloat, speed: CGFloat, size: CGFloat)] = []
 
     override init(frame frameRect: NSRect) {
         idleImage = TaloaImageCharacterView.loadImage(named: "TaloaCharacter")
@@ -76,13 +94,33 @@ final class TaloaImageCharacterView: NSView {
         return NSImage(contentsOfFile: devPath)
     }
 
-    /// Trigger the cast-a-spell flourish + speaking frame. Call this from a
-    /// real event (page navigation, layout change) -- never on a timer/loop.
+    /// Neutral "something is happening" pulse. Call this from a real event
+    /// (page navigation starting) -- never on a timer/loop.
     func castSpell() {
-        FileHandle.standardError.write("Taloa: casting (real navigation event)\n".data(using: .utf8)!)
-        castActive = true
-        castStartedAt = phase
-        castParticles = (0..<10).map { _ in
+        beginGesture(.cast, duration: 0.9)
+    }
+
+    /// Real event: something the founder was watching for just succeeded
+    /// (page finished loading). Brighter, rises, traces a small checkmark --
+    /// the concrete Seons (Elantris) touch: a companion that forms a shape
+    /// to communicate, not just glows. Deliberately drawn differently from
+    /// `concern()` so success and failure don't read identically.
+    func celebrate() {
+        beginGesture(.celebrate, duration: 1.1)
+    }
+
+    /// Real event: navigation failed. Duller, sinks instead of rising, no
+    /// trace -- reads as "something's wrong," not just "she's active."
+    func concern() {
+        beginGesture(.concern, duration: 1.1)
+    }
+
+    private func beginGesture(_ kind: TaloaGestureKind, duration: CGFloat) {
+        FileHandle.standardError.write("Taloa: gesture \(kind) (real event)\n".data(using: .utf8)!)
+        gesture = kind
+        gestureStartedAt = phase
+        gestureDuration = duration
+        gestureParticles = (0..<10).map { _ in
             (angle: CGFloat.random(in: 0..<(2 * .pi)), speed: CGFloat.random(in: 0.7...1.3), size: CGFloat.random(in: 2...4.5))
         }
     }
@@ -91,8 +129,8 @@ final class TaloaImageCharacterView: NSView {
         let dt: CGFloat = 1.0 / 30.0
         phase += dt
 
-        if castActive, phase - castStartedAt > castDuration {
-            castActive = false
+        if gesture != .none, phase - gestureStartedAt > gestureDuration {
+            gesture = .none
         }
 
         // Local idle-blink timer -- honest limitation: not driven by real
@@ -102,7 +140,7 @@ final class TaloaImageCharacterView: NSView {
         }
         if phase < blinkUntil {
             setFrame(.blink)
-        } else if castActive {
+        } else if gesture != .none {
             setFrame(.speak)
         } else {
             if currentFrame == .blink, phase >= blinkUntil {
@@ -158,10 +196,11 @@ final class TaloaImageCharacterView: NSView {
         }
 
         let color = coreColor()
-        let castT = castActive ? min(1.0, (phase - castStartedAt) / castDuration) : 0
-        let castPulse = castActive ? sin(castT * .pi) : 0
+        let gestureActive = gesture != .none
+        let gestureT = gestureActive ? min(1.0, (phase - gestureStartedAt) / gestureDuration) : 0
+        let gesturePulse = gestureActive ? sin(gestureT * .pi) : 0
 
-        let breathe = 1.0 + 0.02 * sin(phase * 1.0) + 0.08 * castPulse
+        let breathe = 1.0 + 0.02 * sin(phase * 1.0) + 0.08 * gesturePulse
         let hover = sin(phase * 1.1) * bounds.height * 0.02
 
         let baseSize = bounds.insetBy(dx: bounds.width * 0.06, dy: bounds.height * 0.06).size
@@ -171,8 +210,8 @@ final class TaloaImageCharacterView: NSView {
 
         NSGraphicsContext.saveGraphicsState()
         let glow = NSShadow()
-        glow.shadowColor = color.withAlphaComponent(0.65 + 0.3 * castPulse)
-        glow.shadowBlurRadius = min(bounds.width, bounds.height) * (0.18 + 0.12 * castPulse)
+        glow.shadowColor = color.withAlphaComponent(0.65 + 0.3 * gesturePulse)
+        glow.shadowBlurRadius = min(bounds.width, bounds.height) * (0.18 + 0.12 * gesturePulse)
         glow.shadowOffset = .zero
         glow.set()
 
@@ -184,33 +223,92 @@ final class TaloaImageCharacterView: NSView {
         }
         NSGraphicsContext.restoreGraphicsState()
 
-        if castActive {
-            drawCastBurst(center: NSPoint(x: bounds.midX, y: bounds.midY + hover), t: castT, color: color)
+        if gestureActive {
+            drawGestureEffect(gesture, center: NSPoint(x: bounds.midX, y: bounds.midY + hover), t: gestureT, baseColor: color)
         }
     }
 
-    /// Particles bursting outward and a ring pulse -- reads as "she just did
-    /// something," not ambient decoration, because it only ever plays for
-    /// ~0.9s tied to a real triggering event.
-    private func drawCastBurst(center: NSPoint, t: CGFloat, color: NSColor) {
-        let sparkleColor = color.blended(withFraction: 0.7, of: .white) ?? .white
-        let maxRadius = min(bounds.width, bounds.height) * 0.6
+    /// Dispatches to a per-gesture look -- each one only ever plays for
+    /// ~1s tied to a real triggering event, never ambient decoration.
+    private func drawGestureEffect(_ kind: TaloaGestureKind, center: NSPoint, t: CGFloat, baseColor: NSColor) {
         let fade = 1.0 - t
+        let maxRadius = min(bounds.width, bounds.height) * 0.6
 
-        let ringRadius = maxRadius * t
-        let ring = NSBezierPath(ovalIn: NSRect(x: center.x - ringRadius, y: center.y - ringRadius,
-                                                width: ringRadius * 2, height: ringRadius * 2))
-        ring.lineWidth = max(1.0, bounds.width * 0.015) * fade
-        sparkleColor.withAlphaComponent(0.7 * fade).setStroke()
+        switch kind {
+        case .none:
+            return
+
+        case .cast:
+            let sparkle = baseColor.blended(withFraction: 0.7, of: .white) ?? .white
+            drawRing(center: center, radius: maxRadius * t, fade: fade, color: sparkle, widthScale: 1.0)
+            drawParticles(center: center, t: t, maxRadius: maxRadius, fade: fade, color: sparkle, verticalBias: 0)
+
+        case .celebrate:
+            let sparkle = baseColor.blended(withFraction: 0.85, of: .white) ?? .white
+            drawRing(center: center, radius: maxRadius * t, fade: fade, color: sparkle, widthScale: 1.2)
+            drawParticles(center: center, t: t, maxRadius: maxRadius, fade: fade, color: sparkle, verticalBias: 0.6)
+            drawCheckTrace(center: center, t: t, color: sparkle)
+
+        case .concern:
+            // Deliberately duller/smaller/sinking, no trace -- the whole
+            // point of splitting this from `cast` is that a failure should
+            // not look like the same event as a success.
+            let dull = NSColor(calibratedRed: 0.85, green: 0.45, blue: 0.25, alpha: 1)
+            let sparkle = baseColor.blended(withFraction: 0.7, of: dull) ?? dull
+            drawRing(center: center, radius: maxRadius * t * 0.6, fade: fade * 0.7, color: sparkle, widthScale: 0.7)
+            drawParticles(center: center, t: t, maxRadius: maxRadius * 0.5, fade: fade * 0.7, color: sparkle, verticalBias: -0.5)
+        }
+    }
+
+    private func drawRing(center: NSPoint, radius: CGFloat, fade: CGFloat, color: NSColor, widthScale: CGFloat) {
+        guard radius > 0.5 else { return }
+        let ring = NSBezierPath(ovalIn: NSRect(x: center.x - radius, y: center.y - radius, width: radius * 2, height: radius * 2))
+        ring.lineWidth = max(1.0, bounds.width * 0.015) * widthScale * fade
+        color.withAlphaComponent(0.7 * fade).setStroke()
         ring.stroke()
+    }
 
-        for p in castParticles {
+    private func drawParticles(center: NSPoint, t: CGFloat, maxRadius: CGFloat, fade: CGFloat, color: NSColor, verticalBias: CGFloat) {
+        for p in gestureParticles {
             let dist = maxRadius * 0.8 * t * p.speed
             let x = center.x + cos(p.angle) * dist
-            let y = center.y + sin(p.angle) * dist
+            let y = center.y + sin(p.angle) * dist + maxRadius * verticalBias * t
             let dot = NSBezierPath(ovalIn: NSRect(x: x - p.size / 2, y: y - p.size / 2, width: p.size, height: p.size))
-            sparkleColor.withAlphaComponent(fade).setFill()
+            color.withAlphaComponent(fade).setFill()
             dot.fill()
         }
+    }
+
+    /// A small checkmark traced progressively in light near her -- the
+    /// literal Seons (Elantris) reference Adam asked for 2026-08-10: a
+    /// companion that forms a shape to communicate, not just pulses.
+    private func drawCheckTrace(center: NSPoint, t: CGFloat, color: NSColor) {
+        let size = min(bounds.width, bounds.height) * 0.22
+        let start = NSPoint(x: center.x - size * 0.35, y: center.y + size * 0.3)
+        let mid = NSPoint(x: center.x - size * 0.05, y: center.y + size * 0.05)
+        let top = NSPoint(x: center.x + size * 0.5, y: center.y + size * 0.55)
+
+        // Traces in the first ~60% of the gesture, then holds briefly before fading.
+        let revealT = min(1.0, t / 0.6)
+        let path = NSBezierPath()
+        path.lineWidth = max(1.5, bounds.width * 0.02)
+        path.lineCapStyle = .round
+        path.lineJoinStyle = .round
+
+        if revealT <= 0.5 {
+            path.move(to: start)
+            path.line(to: lerp(start, mid, revealT / 0.5))
+        } else {
+            path.move(to: start)
+            path.line(to: mid)
+            path.line(to: lerp(mid, top, (revealT - 0.5) / 0.5))
+        }
+
+        color.withAlphaComponent(0.9 * min(1.0, (1.0 - t) + 0.3)).setStroke()
+        path.stroke()
+    }
+
+    private func lerp(_ a: NSPoint, _ b: NSPoint, _ t: CGFloat) -> NSPoint {
+        NSPoint(x: a.x + (b.x - a.x) * t, y: a.y + (b.y - a.y) * t)
     }
 }

@@ -75,16 +75,43 @@ final class ContainerView: NSView, WKNavigationDelegate {
         wv.load(URLRequest(url: Self.lifeosURL))
     }
 
-    // MARK: - "Casting a spell" on real page/layout changes (2026-08-10)
+    // MARK: - Real reactions to real page/layout events (2026-08-10)
+    //
+    // Previously every navigation event -- start, success, failure -- played
+    // the identical cast-a-spell pulse, so no event actually read as meaning
+    // anything distinct (the gap Adam named: "reacts and means something,"
+    // spren/Way of Kings then Seons/Elantris for this alpha slice). Now
+    // start still reads as "something is happening"; finish and failure
+    // each get their own real, different reaction from
+    // TaloaImageCharacterView's gesture vocabulary.
 
     private static let castBadgeSize: CGFloat = 56
 
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
         badgeView.castSpell()
+        flashBadgeIfExpanded()
+    }
+
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        badgeView.celebrate()
+        flashBadgeIfExpanded()
+    }
+
+    func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+        badgeView.concern()
+        flashBadgeIfExpanded()
+    }
+
+    func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
+        badgeView.concern()
+        flashBadgeIfExpanded()
+    }
+
+    /// She's normally hidden while the real app is showing -- surface a
+    /// small corner version just long enough for the reaction to read, then
+    /// let her step back so she isn't in the way of the app content.
+    private func flashBadgeIfExpanded() {
         guard isExpanded else { return }
-        // She's normally hidden while the real app is showing -- surface a
-        // small corner version just long enough for the cast to read, then
-        // let her step back so she isn't in the way of the app content.
         badgeView.isHidden = false
         badgeView.frame = NSRect(x: 8, y: bounds.height - Self.castBadgeSize - Self.dragStripHeight - 8,
                                   width: Self.castBadgeSize, height: Self.castBadgeSize)
