@@ -56,16 +56,10 @@ async function ensureDriveSchema(pool) {
 }
 
 function makeCallModel(callCouncilMember) {
-  const TIER_MODELS = { cheap: 'claude-haiku-4-5-20251001', strong: 'claude-sonnet-5' };
+  const SYSTEM_PREFIX = 'You are a browser-automation planner driving a real browser tab on behalf of its owner. Given the current page observation, respond with ONLY a single JSON action object of the form {"type":"navigate|click|type|wait|done|give_up", ...fields}. Never invent a selector that was not listed in Elements.\n\n';
   return async function callModel(tier, prompt) {
-    const model = TIER_MODELS[tier] || TIER_MODELS.cheap;
-    const reply = await callCouncilMember('anthropic', {
-      model,
-      system: 'You are a browser-automation planner driving a real browser tab on behalf of its owner. Given the current page observation, respond with ONLY a single JSON action object of the form {"type":"navigate|click|type|wait|done|give_up", ...fields}. Never invent a selector that was not listed in Elements.',
-      messages: [{ role: 'user', content: prompt }],
-      max_tokens: 300,
-    });
-    return reply?.content?.[0]?.text || reply?.text || '';
+    const reply = await callCouncilMember(tier, SYSTEM_PREFIX + prompt, { taskType: 'browser_agent' });
+    return typeof reply === 'string' ? reply : (reply?.text || reply?.content || '');
   };
 }
 
