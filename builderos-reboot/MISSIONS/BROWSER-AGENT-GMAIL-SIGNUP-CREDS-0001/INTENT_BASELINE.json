@@ -1,0 +1,26 @@
+{
+  "schema": "intent_baseline_v1",
+  "intent_id": "BROWSER-AGENT-GMAIL-SIGNUP-CREDS-0001",
+  "mission_id": "BROWSER-AGENT-GMAIL-SIGNUP-CREDS-0001",
+  "tier": 1,
+  "status": "HANDOFF_READY",
+  "created_at": "2026-08-09",
+  "amendment_pack": "docs/constitution/AMENDMENT_PACK_V2.0A.md",
+  "proof_lap_only": false,
+  "outcome_statement": "GMAIL_SIGNUP envCreds branch lets the browser agent log into the real system email inbox using Railway-stored credentials, never exposed to the caller.",
+  "user": "Adam (founder)",
+  "pain": "The IMAP-based verification-code checker isn't finding the Fiverr email; need to check the real inbox directly using system credentials only.",
+  "value": "Unblocks completing the Fiverr signup and any future service requiring email verification via the system inbox.",
+  "success_metrics": ["A GMAIL_SIGNUP envCreds run logs in without exposing the password to the caller"],
+  "failure_metrics": ["TECHNICAL_PASS without founder_usability_pass", "Any unrelated change", "Password exposed in any response"],
+  "constraints": ["BP_PRIORITY queue authority", "BuilderOS system path only", "Patch mode only", "System credentials only, never personal"],
+  "scope_boundary": "Per FOUNDER_PACKET.md",
+  "unacceptable_result": "Any change beyond the GMAIL_SIGNUP envCreds branch",
+  "ownership": "ARC emits machine twin; Builder executes; Adam owns founder usability verdict",
+  "priority_fit": "Urgent live bugfix -- rank 35",
+  "point_model": {
+    "A": "Vision -- Adam provides FP in development stage",
+    "B": "Chair locks handoff -- corridor protected; Adam done until Alpha",
+    "C": "Alpha -- Adam evaluates outcome only"
+  }
+}

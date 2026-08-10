@@ -1,0 +1,53 @@
+{
+  "mission_id": "BROWSER-AGENT-GMAIL-SIGNUP-CREDS-0001",
+  "blueprint_id": "BROWSER-AGENT-GMAIL-SIGNUP-CREDS-0001-BP1",
+  "scope": "Add GMAIL_SIGNUP envCreds injection so the system's real signup email inbox can be checked for a verification code without ever exposing the raw password to the caller, matching the existing ETSY/EBAY pattern exactly.",
+  "authority": "BPB",
+  "acceptance_command": "npm run browser-agent-gmail-signup-creds:acceptance",
+  "allowed_action_types": [
+    "author_then_write"
+  ],
+  "steps": [
+    {
+      "step_id": "BAGS-S01",
+      "phase_id": "P0",
+      "title": "Add GMAIL_SIGNUP envCreds branch for reading the system signup inbox",
+      "target_file": "routes/general-browser-agent-routes.js",
+      "target_files": [
+        "routes/general-browser-agent-routes.js"
+      ],
+      "action_type": "author_then_write",
+      "patch_mode": true,
+      "task": "Add a GMAIL_SIGNUP envCreds branch matching the exact existing ETSY/EBAY pattern, so the system email inbox can be checked for verification codes using the real Railway-stored credentials, never exposed to the caller. Using PATCH MODE.",
+      "spec": "Output in PATCH MODE ONLY: the OLD block below must be copied EXACTLY character-for-character from the real current file. Exact text below, no other change.\n\nOLD:\n      if (envCredKey === 'EBAY') {\n        const email = String(process.env.EBAY_EMAIL || '').trim();\n        const password = String(process.env.EBAY_PASSWORD || '').trim();\n        if (!email || !password) {\n          return res.status(503).json({\n            ok: false,\n            error: 'EBAY_EMAIL / EBAY_PASSWORD not set on tip',\n          });\n        }\n        effectiveGoal = [\n          `Log in to eBay with email ${email} and password ${password}.`,\n          'If already logged in, continue.',\n          'Do not invent credentials. Stay on ebay.com.',\n          effectiveGoal,\n        ].join('\\n');\n        logger.info?.('[BROWSER-AGENT] envCreds EBAY injected (email present, password redacted)');\n      }\n\nNEW:\n      if (envCredKey === 'EBAY') {\n        const email = String(process.env.EBAY_EMAIL || '').trim();\n        const password = String(process.env.EBAY_PASSWORD || '').trim();\n        if (!email || !password) {\n          return res.status(503).json({\n            ok: false,\n            error: 'EBAY_EMAIL / EBAY_PASSWORD not set on tip',\n          });\n        }\n        effectiveGoal = [\n          `Log in to eBay with email ${email} and password ${password}.`,\n          'If already logged in, continue.',\n          'Do not invent credentials. Stay on ebay.com.',\n          effectiveGoal,\n        ].join('\\n');\n        logger.info?.('[BROWSER-AGENT] envCreds EBAY injected (email present, password redacted)');\n      }\n\n      if (envCredKey === 'GMAIL_SIGNUP') {\n        const email = String(process.env.GMAIL_SIGNUP_EMAIL || '').trim();\n        const password = String(process.env.GMAIL_SIGNUP_APP_PASSWORD || '').trim();\n        if (!email || !password) {\n          return res.status(503).json({\n            ok: false,\n            error: 'GMAIL_SIGNUP_EMAIL / GMAIL_SIGNUP_APP_PASSWORD not set on tip',\n          });\n        }\n        effectiveGoal = [\n          `Log in to Gmail with email ${email} and password ${password}.`,\n          'If already logged in, continue.',\n          'Do not invent credentials. Stay on mail.google.com. Read-only unless the goal says otherwise -- never delete, archive, or reply.',\n          effectiveGoal,\n        ].join('\\n');\n        logger.info?.('[BROWSER-AGENT] envCreds GMAIL_SIGNUP injected (email present, password redacted)');\n      }",
+      "authoring": {
+        "tiers": [
+          "deepseek",
+          "groq_llama",
+          "mistral_free"
+        ]
+      },
+      "assertion_spec": {
+        "expected_exports": [],
+        "file_contains": [
+          "GMAIL_SIGNUP_APP_PASSWORD"
+        ]
+      },
+      "behavior_assertions": [
+        {
+          "type": "file_contains",
+          "target": "routes/general-browser-agent-routes.js",
+          "substring": "envCreds GMAIL_SIGNUP injected"
+        }
+      ],
+      "sandbox_boundary": "routes/**",
+      "authority_owner": "Builder",
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "non_goals": [
+        "a full-file rewrite -- use patch mode only"
+      ],
+      "dependencies": []
+    }
+  ],
+  "blueprint_status": "handoff_ready"
+}

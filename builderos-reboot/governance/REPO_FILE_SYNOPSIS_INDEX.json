@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-10T03:59:08.806Z",
+  "generated_at": "2026-08-10T06:33:17.126Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13175,
+  "file_count": 13179,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21935,6 +21935,37 @@
       "bytes": 1657,
       "mtime": "2026-08-09T18:43:27.903Z",
       "indexed_at": "2026-08-09T18:43:45.658Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/BROWSER-AGENT-GMAIL-SIGNUP-CREDS-0001/BLUEPRINT.json",
+      "synopsis": "BuilderOS artifact — BLUEPRINT.",
+      "bytes": 4442,
+      "mtime": "2026-08-10T06:32:07.952Z",
+      "indexed_at": "2026-08-10T06:33:17.126Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/BROWSER-AGENT-GMAIL-SIGNUP-CREDS-0001/DELIBERATION_GATE.json",
+      "synopsis": "BuilderOS artifact — DELIBERATION GATE.",
+      "bytes": 1106,
+      "mtime": "2026-08-10T06:33:02.753Z",
+      "indexed_at": "2026-08-10T06:33:17.126Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/BROWSER-AGENT-GMAIL-SIGNUP-CREDS-0001/FOUNDER_PACKET.md",
+      "synopsis": "Founder Packet — GMAIL_SIGNUP envCreds branch for reading the system inbox.",
+      "bytes": 1081,
+      "mtime": "2026-08-10T06:32:25.181Z",
+      "indexed_at": "2026-08-10T06:33:17.126Z"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/BROWSER-AGENT-GMAIL-SIGNUP-CREDS-0001/INTENT_BASELINE.json",
+      "synopsis": "BuilderOS artifact — INTENT BASELINE.",
+      "bytes": 1661,
+      "mtime": "2026-08-10T06:32:42.588Z",
+      "indexed_at": "2026-08-10T06:33:17.126Z",
       "synopsis_index_only": true
     },
     {
