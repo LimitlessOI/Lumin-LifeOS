@@ -1,0 +1,26 @@
+{
+  "schema": "intent_baseline_v1",
+  "intent_id": "GLOBAL-CORS-EXTENSION-FIX-0001",
+  "mission_id": "GLOBAL-CORS-EXTENSION-FIX-0001",
+  "tier": 1,
+  "status": "HANDOFF_READY",
+  "created_at": "2026-08-09",
+  "amendment_pack": "docs/constitution/AMENDMENT_PACK_V2.0A.md",
+  "proof_lap_only": false,
+  "outcome_statement": "Extension content-script routes get Access-Control-Allow-Origin set for any origin, fixing the real root cause of every failed drive-channel auto-pickup test tonight.",
+  "user": "Adam (founder)",
+  "pain": "The global CORS middleware silently blocked every content-script request from a third-party host page while reporting 200 success -- found only by pulling real deployment logs after exhausting every other hypothesis.",
+  "value": "Unblocks the entire drive channel this session's revenue plan depends on.",
+  "success_metrics": ["OPTIONS preflight to an extension route with a third-party Origin returns that origin in Access-Control-Allow-Origin"],
+  "failure_metrics": ["TECHNICAL_PASS without founder_usability_pass", "Loosening CORS outside /api/v1/extension/*"],
+  "constraints": ["BP_PRIORITY queue authority", "BuilderOS system path only", "Patch mode only, scoped to extension routes"],
+  "scope_boundary": "Per FOUNDER_PACKET.md",
+  "unacceptable_result": "Any CORS loosening beyond /api/v1/extension/*",
+  "ownership": "ARC emits machine twin; Builder executes; Adam owns founder usability verdict",
+  "priority_fit": "Urgent live bugfix -- rank 33, the actual root cause of tonight's core blocker",
+  "point_model": {
+    "A": "Vision -- Adam provides FP in development stage",
+    "B": "Chair locks handoff -- corridor protected; Adam done until Alpha",
+    "C": "Alpha -- Adam evaluates outcome only"
+  }
+}

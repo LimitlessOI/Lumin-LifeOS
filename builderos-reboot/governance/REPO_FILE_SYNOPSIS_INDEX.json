@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-10T02:17:20.138Z",
+  "generated_at": "2026-08-10T03:30:58.504Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13167,
+  "file_count": 13171,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -26723,6 +26723,37 @@
       "bytes": 2800,
       "mtime": "2026-08-01T18:42:32.541Z",
       "indexed_at": "2026-08-01T18:43:00.323Z"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/GLOBAL-CORS-EXTENSION-FIX-0001/BLUEPRINT.json",
+      "synopsis": "BuilderOS artifact — BLUEPRINT.",
+      "bytes": 4029,
+      "mtime": "2026-08-10T03:29:29.586Z",
+      "indexed_at": "2026-08-10T03:30:58.504Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/GLOBAL-CORS-EXTENSION-FIX-0001/DELIBERATION_GATE.json",
+      "synopsis": "BuilderOS artifact — DELIBERATION GATE.",
+      "bytes": 1148,
+      "mtime": "2026-08-10T03:30:43.425Z",
+      "indexed_at": "2026-08-10T03:30:58.504Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/GLOBAL-CORS-EXTENSION-FIX-0001/FOUNDER_PACKET.md",
+      "synopsis": "Founder Packet — the real root cause blocking the drive channel all night, found via live deployment log inspection.",
+      "bytes": 1996,
+      "mtime": "2026-08-10T03:29:59.667Z",
+      "indexed_at": "2026-08-10T03:30:58.504Z"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/GLOBAL-CORS-EXTENSION-FIX-0001/INTENT_BASELINE.json",
+      "synopsis": "BuilderOS artifact — INTENT BASELINE.",
+      "bytes": 1751,
+      "mtime": "2026-08-10T03:30:21.348Z",
+      "indexed_at": "2026-08-10T03:30:58.504Z",
+      "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/liferepair-FVTGDL/receipts/BLOCKED_RETURN_TO_IDC.json",

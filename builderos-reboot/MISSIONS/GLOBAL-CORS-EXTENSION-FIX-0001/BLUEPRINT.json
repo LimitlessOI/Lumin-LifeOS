@@ -1,0 +1,61 @@
+{
+  "mission_id": "GLOBAL-CORS-EXTENSION-FIX-0001",
+  "blueprint_id": "GLOBAL-CORS-EXTENSION-FIX-0001-BP1",
+  "scope": "Fix a real, pre-existing global CORS bug found live via deployment log inspection: OPTIONS preflight always returns 200 but never sets Access-Control-Allow-Origin for non-allowlisted origins, silently blocking every content-script request from any third-party host page.",
+  "authority": "BPB",
+  "acceptance_command": "npm run global-cors-extension-fix:acceptance",
+  "allowed_action_types": [
+    "author_then_write"
+  ],
+  "steps": [
+    {
+      "step_id": "GCEF-S01",
+      "phase_id": "P0",
+      "title": "Fix global CORS middleware -- OPTIONS preflight was returning 200 without Access-Control-Allow-Origin for any non-allowlisted origin, silently blocking every extension content-script request",
+      "target_file": "middleware/apply-middleware.js",
+      "target_files": [
+        "middleware/apply-middleware.js"
+      ],
+      "action_type": "author_then_write",
+      "patch_mode": true,
+      "task": "Add a special case for /api/v1/extension/ paths so cross-origin content-script requests from arbitrary host pages get Access-Control-Allow-Origin set, using PATCH MODE.",
+      "spec": "Output in PATCH MODE ONLY: the OLD block below must be copied EXACTLY character-for-character from the real current file. Exact text below, no other change.\n\nOLD:\n    const origin = req.headers.origin;\n\n    if (isSameOrigin(req)) {\n      res.header(\"Access-Control-Allow-Origin\", origin || \"*\");\n      res.header(\"Access-Control-Allow-Credentials\", \"true\");\n    } else if (origin && ALLOWED_ORIGINS_LIST.includes(origin)) {\n      res.header(\"Access-Control-Allow-Origin\", origin);\n      res.header(\"Access-Control-Allow-Credentials\", \"true\");\n    } else if (!origin) {\n      res.header(\"Access-Control-Allow-Origin\", \"*\");\n    }\n\nNEW:\n    const origin = req.headers.origin;\n    // Extension content-script routes are deliberately called from arbitrary\n    // third-party host pages (that's the whole point of the overlay) and are\n    // protected by the requireKey secret header regardless of origin -- found\n    // live: this global handler was returning 200 for their OPTIONS preflight\n    // without ever setting Access-Control-Allow-Origin, so the browser silently\n    // refused to send the real follow-up request every single time.\n    const isExtensionRoute = req.path.startsWith(\"/api/v1/extension/\");\n\n    if (isSameOrigin(req)) {\n      res.header(\"Access-Control-Allow-Origin\", origin || \"*\");\n      res.header(\"Access-Control-Allow-Credentials\", \"true\");\n    } else if (origin && ALLOWED_ORIGINS_LIST.includes(origin)) {\n      res.header(\"Access-Control-Allow-Origin\", origin);\n      res.header(\"Access-Control-Allow-Credentials\", \"true\");\n    } else if (isExtensionRoute && origin) {\n      res.header(\"Access-Control-Allow-Origin\", origin);\n    } else if (!origin) {\n      res.header(\"Access-Control-Allow-Origin\", \"*\");\n    }",
+      "authoring": {
+        "tiers": [
+          "deepseek",
+          "groq_llama",
+          "mistral_free"
+        ]
+      },
+      "assertion_spec": {
+        "expected_exports": [],
+        "file_contains": [
+          "isExtensionRoute"
+        ]
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "target": "middleware/apply-middleware.js",
+          "exports": [
+            "applyMiddleware"
+          ]
+        },
+        {
+          "type": "file_contains",
+          "target": "middleware/apply-middleware.js",
+          "substring": "req.path.startsWith(\"/api/v1/extension/\")"
+        }
+      ],
+      "sandbox_boundary": "middleware/**",
+      "authority_owner": "Builder",
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "non_goals": [
+        "a full-file rewrite -- use patch mode only",
+        "loosening CORS for any non-extension route"
+      ],
+      "dependencies": []
+    }
+  ],
+  "blueprint_status": "handoff_ready"
+}
