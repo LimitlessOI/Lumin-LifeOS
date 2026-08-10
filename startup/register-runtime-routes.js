@@ -146,6 +146,7 @@ import { createBusinessCenterRoutes } from "../routes/business-center-routes.js"
 import { createSiteBuilderEditorRoutes } from "../routes/site-builder-editor-routes.js";
 import { registerLifeosConsentRoutes } from "../routes/lifeos-consent-routes.js";
 import { createUiDirectivesService } from "../routes/lifeos-ui-directives-routes.js";
+import { createSystemNotifyRoutes } from "../routes/system-notify-routes.js";
 export async function registerRuntimeRoutes(app, deps) {
   const runtimeProfile = getRuntimeProfile();
   const fullRuntimeProfile = isFullRuntimeProfile();
@@ -842,6 +843,9 @@ export async function registerRuntimeRoutes(app, deps) {
 
   app.use("/api/v1/lifeos/ui-directives", createUiDirectivesService({ pool, requireKey: requireUserOrKey, logger }));
   logger.info('✅ [UI_DIRECTIVES] Routes mounted at /api/v1/lifeos/ui-directives');
+
+  app.use("/api/v1/system-notify", createSystemNotifyRoutes({ pool, requireKey: requireUserOrKey, logger }));
+  logger.info('✅ [SYSTEM_NOTIFY] Routes mounted at /api/v1/system-notify');
 
   // Memory Intelligence — canonical BuilderOS evidence memory (AMENDMENT_39)
   app.use('/api/v1/memory/evidence', createMemoryIntelligenceRoutes({ pool, logger, requireKey }));
