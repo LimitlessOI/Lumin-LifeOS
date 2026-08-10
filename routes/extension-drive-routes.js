@@ -103,7 +103,7 @@ export function createExtensionDriveRoutes({ pool, requireKey, callCouncilMember
       const observe = makeExtensionObserve(sessionId);
       const act = makeExtensionAct(sessionId);
       const verifyGoal = makeExtensionVerify(sessionId);
-      const decideAction = makeDecider({ callModel: makeCallModel(callCouncilMember), tiers: ['cheap', 'strong'] });
+      const decideAction = makeDecider({ callModel: makeCallModel(callCouncilMember), tiers: ['groq_llama', 'gemini_flash', 'cerebras_llama', 'openai_gpt', 'claude_sonnet'] });
       const confirmContext = expectedSiteHost ? makeAccountConfirmer({ expectSiteHost: expectedSiteHost }) : null;
 
       const onStep = async (rec) => {
