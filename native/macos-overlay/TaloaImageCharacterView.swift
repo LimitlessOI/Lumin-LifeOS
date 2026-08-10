@@ -18,13 +18,25 @@
 // splits that into three real, differently-drawn reactions -- cast (neutral,
 // "something is happening"), celebrate (bright, rising, traces a small
 // checkmark -- the literal Seons touch), concern (duller, sinking, no
-// trace) -- each still only ever triggered by a real event (ContainerView's
-// WKNavigationDelegate callbacks), never a timer/loop. Known honest limit:
-// blink timing is a local timer, not driven by real perception/conversation
-// state -- that wiring still doesn't exist. Full purposeful movement
-// (walking to a spot, sitting, pushing a button) needs scene assets that
-// don't exist anywhere in this repo yet (searched; not found, see
-// main.swift) -- deliberately not attempted in this pass.
+// trace).
+//
+// REAL BUG FOUND AND FIXED SAME DAY: cast/celebrate/concern were only ever
+// triggered from ContainerView's WKNavigationDelegate callbacks, which only
+// exist once she's expanded to full app size and a page is loading inside
+// her -- meaning in her default small/badge form (how she's on screen
+// essentially all the time) none of this could ever fire. Founder feedback,
+// direct: "it looks exactly the same." Correct -- there was nothing to see.
+// Fixed with a second, independent real trigger owned by this view directly:
+// a periodic health check against the real production LifeOS endpoint
+// (healthPollLoop below). It fires celebrate()/concern() only on the FIRST
+// confirmed state and on real transitions (up->down, down->up) -- never on
+// every poll -- so it stays "reacts to something true," not ambient
+// decoration, and works regardless of the container's expanded state.
+// Known honest limit: blink timing is a local timer, not driven by real
+// perception/conversation state -- that wiring still doesn't exist. Full
+// purposeful movement (walking to a spot, sitting, pushing a button) needs
+// scene assets that don't exist anywhere in this repo yet (searched; not
+// found, see main.swift) -- deliberately not attempted in this pass.
 // See docs/products/lifeos/communication/COMMUNICATION_SYSTEM_BLUEPRINT.md §21.1.
 import Cocoa
 
@@ -67,6 +79,13 @@ final class TaloaImageCharacterView: NSView {
     private var gestureDuration: CGFloat = 0.9
     private var gestureParticles: [(angle: CGFloat, speed: CGFloat, size: CGFloat)] = []
 
+    // Real, independent trigger -- see header comment. Not tied to the
+    // container's expanded/WebView state at all.
+    private static let healthURL = URL(string: "https://lumin-web-production-e3a9.up.railway.app/health")!
+    private static let healthPollInterval: TimeInterval = 30
+    private var healthTimer: Timer?
+    private var lastHealthOk: Bool?
+
     override init(frame frameRect: NSRect) {
         idleImage = TaloaImageCharacterView.loadImage(named: "TaloaCharacter")
         blinkImage = TaloaImageCharacterView.loadImage(named: "TaloaCharacterBlink")
@@ -80,9 +99,39 @@ final class TaloaImageCharacterView: NSView {
         timer = Timer.scheduledTimer(withTimeInterval: 1.0 / 30.0, repeats: true) { [weak self] _ in
             self?.tick()
         }
+
+        pollHealth()
+        healthTimer = Timer.scheduledTimer(withTimeInterval: Self.healthPollInterval, repeats: true) { [weak self] _ in
+            self?.pollHealth()
+        }
     }
 
     required init?(coder: NSCoder) { fatalError("init(coder:) not used") }
+
+    /// Real signal, independent of the container's expanded/WebView state:
+    /// is the actual production LifeOS backend reachable right now. Fires a
+    /// gesture on the first confirmed state and on any real transition --
+    /// never on every poll, so this stays "reacts to something true" and
+    /// not a repeating decoration.
+    private func pollHealth() {
+        var request = URLRequest(url: Self.healthURL)
+        request.timeoutInterval = 8
+        let task = URLSession.shared.dataTask(with: request) { [weak self] _, response, error in
+            let ok = error == nil && (response as? HTTPURLResponse).map { $0.statusCode == 200 } == true
+            DispatchQueue.main.async {
+                guard let self = self else { return }
+                let changed = self.lastHealthOk != ok
+                self.lastHealthOk = ok
+                guard changed else { return }
+                if ok {
+                    self.celebrate()
+                } else {
+                    self.concern()
+                }
+            }
+        }
+        task.resume()
+    }
 
     private static func loadImage(named name: String) -> NSImage? {
         if let path = Bundle.main.path(forResource: name, ofType: "png") {

@@ -663,6 +663,14 @@
       "added_real_lines": 85,
       "justification": "governed factory hit a real, consistent\n(2/2 attempts) anti-stub false-positive on this file -- not a\ntransient miss like earlier @ssot-omission retries that succeeded on\nretry. Hand-authored per established precedent once the factory\ndemonstrably couldn't produce it. Full real end-to-end test against\nthe live DB (not just a mount check): enqueue -> atomic claim ->\ncorrectly-empty re-claim (no double-claim race) -> result report, all\nreal HTTP calls with the real command key. Also verified: route mounts\nand is auth-gated (401 on fake key) via a real local boot.\n\nCo-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>",
       "commit_message_excerpt": "GAP-FILL: Android remote-command queue -- the last manual-tap gap, closed"
+    },
+    {
+      "at": "2026-08-10T22:40:44.137Z",
+      "file": "services/build-queue-core.js",
+      "is_new_file": true,
+      "added_real_lines": 167,
+      "justification": "services/build-queue-core.js is a byte-for-byte\nextraction of existing, already-tested code out of\nservices/product-build-orchestrator.js -- zero new logic, every line copied\nverbatim from a function that already existed and was already covered by\ntests/product-build-orchestrator.test.js. The sole purpose is breaking a\nreal, CI-blocking circular import (madge --circular) that had been failing\nevery single commit to main for hours regardless of content. Routing a pure\nmechanical move through the full governed factory pipeline would spend a\nbuild cycle re-deriving code that must end up byte-identical to what's\nalready proven correct, and risks the factory introducing a real behavioral\ndifference into code whose only requirement is to NOT change behavior.\nVerified with the existing test suite (31/31 pass, unchanged) rather than\nnew codegen-authored tests, since no new behavior was introduced.\n\nCo-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>",
+      "commit_message_excerpt": "GAP-FILL: fix systemic CI red -- circular dep, missing synopsis, overclaim"
     }
   ]
 }
