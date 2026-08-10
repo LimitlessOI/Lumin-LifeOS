@@ -30,8 +30,13 @@ var wanderTargets: [NSPoint] = []
 var wanderNextChangeAt: [TimeInterval] = []
 
 func homeRect(for screen: NSScreen) -> NSRect {
+    // Bottom-left, not bottom-right: macOS stacks notification banners down
+    // from the top-right corner, and a long queue of them (real problem hit
+    // live tonight -- 11+ stacked "Login Item Added" banners from repeated
+    // dev relaunches) can reach far enough down to cover a bottom-right
+    // nook entirely. Bottom-left has no standard system UI that claims it.
     let sf = screen.visibleFrame
-    return NSRect(x: sf.maxX - homeNookSize - 20, y: sf.minY + 20, width: homeNookSize, height: homeNookSize)
+    return NSRect(x: sf.minX + 20, y: sf.minY + 20, width: homeNookSize, height: homeNookSize)
 }
 
 func pickWanderTarget(in home: NSRect, windowSize: NSSize) -> NSPoint {
@@ -46,7 +51,7 @@ func pickWanderTarget(in home: NSRect, windowSize: NSSize) -> NSPoint {
 func makeOverlayWindow(for screen: NSScreen) -> OverlayWindow {
     let screenFrame = screen.frame
     let windowRect = NSRect(
-        x: screenFrame.maxX - initialSize - 40,
+        x: screenFrame.minX + 40, // bottom-left, matches homeRect -- avoids the notification-stack corner
         y: screenFrame.minY + 100,
         width: initialSize,
         height: initialSize
