@@ -10,3 +10,6 @@ project(':capacitor-splash-screen').projectDir = new File('../node_modules/@capa
 
 include ':lifeos-accessibility-driver'
 project(':lifeos-accessibility-driver').projectDir = new File('../mobile/plugins/lifeos-accessibility-driver/android')
+
+include ':lifeos-biometric-gate'
+project(':lifeos-biometric-gate').projectDir = new File('../mobile/plugins/lifeos-biometric-gate/android')

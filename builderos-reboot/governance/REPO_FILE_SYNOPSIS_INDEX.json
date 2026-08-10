@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-10T09:23:47.010Z",
+  "generated_at": "2026-08-10T09:48:15.498Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13194,
+  "file_count": 13197,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -44761,9 +44761,9 @@
     {
       "path": "docs/products/universal-overlay/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Universal Overlay",
-      "bytes": 57209,
-      "mtime": "2026-08-10T09:17:55.998Z",
-      "indexed_at": "2026-08-10T09:18:12.118Z"
+      "bytes": 60044,
+      "mtime": "2026-08-10T09:47:56.602Z",
+      "indexed_at": "2026-08-10T09:48:15.498Z"
     },
     {
       "path": "docs/products/UNIVERSALOVERLAY.md",
@@ -67335,6 +67335,28 @@
       "synopsis_index_only": true
     },
     {
+      "path": "mobile/plugins/lifeos-biometric-gate/android/src/main/AndroidManifest.xml",
+      "synopsis": "xml — mobile/plugins/lifeos-biometric-gate/android/src/main/AndroidManifest.xml.",
+      "bytes": 193,
+      "mtime": "2026-08-10T09:45:57.393Z",
+      "indexed_at": "2026-08-10T09:48:15.498Z"
+    },
+    {
+      "path": "mobile/plugins/lifeos-biometric-gate/index.js",
+      "synopsis": "JS-side handle for the native LifeosBiometricGate plugin. lifeos-app.html is",
+      "bytes": 526,
+      "mtime": "2026-08-10T09:48:14.228Z",
+      "indexed_at": "2026-08-10T09:48:15.498Z"
+    },
+    {
+      "path": "mobile/plugins/lifeos-biometric-gate/package.json",
+      "synopsis": "JSON data/config — mobile/plugins/lifeos-biometric-gate/package.json.",
+      "bytes": 525,
+      "mtime": "2026-08-10T09:45:03.458Z",
+      "indexed_at": "2026-08-10T09:48:15.498Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "mobile/README.md",
       "synopsis": "Native Universal Overlay shell (Capacitor)",
       "bytes": 3072,
@@ -67522,17 +67544,17 @@
     {
       "path": "package-lock.json",
       "synopsis": "JSON data/config — package-lock.json.",
-      "bytes": 352865,
-      "mtime": "2026-08-10T07:21:51.524Z",
-      "indexed_at": "2026-08-10T07:24:49.006Z",
+      "bytes": 353272,
+      "mtime": "2026-08-10T09:46:43.034Z",
+      "indexed_at": "2026-08-10T09:48:15.498Z",
       "synopsis_index_only": true
     },
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\", \"lifeos:file-synopsis:backfill\": \"node scripts/file-synopsis-enforce.mjs --all --auto-fix && node scripts/generate-file-synopsis-index.mjs\", \"lifeos:file-synopsis:index",
-      "bytes": 36550,
-      "mtime": "2026-08-10T07:21:09.906Z",
-      "indexed_at": "2026-08-10T07:24:49.006Z",
+      "bytes": 36620,
+      "mtime": "2026-08-10T09:46:27.660Z",
+      "indexed_at": "2026-08-10T09:48:15.498Z",
       "synopsis_index_only": true
     },
     {
@@ -70963,9 +70985,9 @@
     {
       "path": "public/shared/lifeos-native-shell.js",
       "synopsis": "Native Universal Overlay shell — Capacitor bridge; same platform as lifeos-app + extension overlay.",
-      "bytes": 7632,
-      "mtime": "2026-08-10T07:21:25.231Z",
-      "indexed_at": "2026-08-10T07:24:49.006Z",
+      "bytes": 8795,
+      "mtime": "2026-08-10T09:47:10.754Z",
+      "indexed_at": "2026-08-10T09:48:15.498Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]

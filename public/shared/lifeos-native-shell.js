@@ -154,6 +154,38 @@
     },
   };
 
+  /**
+   * Confirms it's really the founder before the AI acts -- wraps Android's
+   * real BiometricPrompt (fingerprint/face + PIN/pattern/password fallback,
+   * unified by the OS, not three separate systems). Requires the device to
+   * have a screen-lock credential set (an Android platform requirement for
+   * enrolling any biometric).
+   */
+  function getBiometricPlugin() {
+    return global.Capacitor?.Plugins?.LifeosBiometricGate || null;
+  }
+
+  global.LifeOSBiometricGate = {
+    isAvailable: async () => {
+      const plugin = getBiometricPlugin();
+      if (!plugin) return { available: false, status: 'not_available' };
+      try {
+        return await plugin.isAvailable();
+      } catch (e) {
+        return { available: false, status: String(e?.message || e) };
+      }
+    },
+    authenticate: async (reason) => {
+      const plugin = getBiometricPlugin();
+      if (!plugin) return { ok: false, error: 'not_available' };
+      try {
+        return await plugin.authenticate({ reason: reason || "Confirm it's you before LifeOS continues" });
+      } catch (e) {
+        return { ok: false, error: String(e?.message || e) };
+      }
+    },
+  };
+
   function routeDeepLink(url) {
     if (!url) return;
     try {

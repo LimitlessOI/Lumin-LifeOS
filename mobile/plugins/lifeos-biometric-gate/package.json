@@ -1,0 +1,21 @@
+{
+  "name": "lifeos-biometric-gate",
+  "version": "1.0.0",
+  "description": "Capacitor plugin: real Android BiometricPrompt gate (fingerprint/face + PIN/pattern/password fallback) for confirming it's really the founder before the AI acts on the device.",
+  "main": "index.js",
+  "module": "index.js",
+  "files": [
+    "android",
+    "index.js"
+  ],
+  "capacitor": {
+    "android": {
+      "src": "android"
+    }
+  },
+  "peerDependencies": {
+    "@capacitor/core": "^7.0.0"
+  },
+  "license": "UNLICENSED",
+  "private": true
+}

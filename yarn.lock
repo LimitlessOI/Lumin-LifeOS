@@ -2674,6 +2674,10 @@ libqp@2.1.1:
   version "1.0.0"
   resolved "file:mobile/plugins/lifeos-accessibility-driver"
 
+"lifeos-biometric-gate@file:mobile/plugins/lifeos-biometric-gate":
+  version "1.0.0"
+  resolved "file:mobile/plugins/lifeos-biometric-gate"
+
 lines-and-columns@^1.1.6:
   version "1.2.4"
   resolved "https://registry.npmjs.org/lines-and-columns/-/lines-and-columns-1.2.4.tgz"
