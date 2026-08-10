@@ -80,6 +80,15 @@ export function makeEvidenceVerifier({ mustContain = [], mustHaveSelector = [] }
 }
 
 export function makeAccountConfirmer({ expectSiteHost = null, expectAccountText = null }) {
+    // Google's own login page (accounts.google.com) is a legitimate intermediate
+    // step for ANY google.com property's login flow (Gmail, Drive, etc.) -- found
+    // live 2026-08-10: a real GMAIL_SIGNUP run failed context_unconfirmed:
+    // context_mismatch the instant it hit Google's login redirect, before ever
+    // reaching the email/password fields, because only the single expected host
+    // was trusted.
+    const isGoogleHost = Boolean(expectSiteHost) && /(^|\.)google\.com$/.test(expectSiteHost);
+    const trustedHosts = expectSiteHost ? [expectSiteHost, ...(isGoogleHost ? ['accounts.google.com'] : [])] : [];
+
     return async function confirmContext({ observation, action = null }) {
         // Allow first navigate TO the expected host from about:blank / other pages.
         if (
@@ -90,8 +99,10 @@ export function makeAccountConfirmer({ expectSiteHost = null, expectAccountText 
         ) {
             return { ok: true };
         }
+        const url = String(observation?.url || '');
+        const hostOk = trustedHosts.length === 0 || trustedHosts.some((h) => url.includes(h));
         const ok =
-            (expectSiteHost === null || String(observation?.url || '').includes(expectSiteHost)) &&
+            hostOk &&
             (expectAccountText === null || String(observation?.text || '').includes(expectAccountText));
         return { ok, reason: ok ? undefined : 'context_mismatch' };
     };

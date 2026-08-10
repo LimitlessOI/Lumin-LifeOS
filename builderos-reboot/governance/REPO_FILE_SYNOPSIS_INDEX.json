@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-10T08:25:29.362Z",
+  "generated_at": "2026-08-10T08:34:17.094Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13194,
   "files": [
@@ -44667,9 +44667,9 @@
     {
       "path": "docs/products/tc-service/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — TC Service",
-      "bytes": 129667,
-      "mtime": "2026-08-10T06:42:22.229Z",
-      "indexed_at": "2026-08-10T06:42:44.627Z"
+      "bytes": 131664,
+      "mtime": "2026-08-10T08:34:01.700Z",
+      "indexed_at": "2026-08-10T08:34:17.094Z"
     },
     {
       "path": "docs/products/TCSERVICE.md",
@@ -94447,9 +94447,9 @@
     {
       "path": "services/general-browser-agent-runtime.js",
       "synopsis": "Exports observePage — services/general-browser-agent-runtime.js.",
-      "bytes": 6060,
-      "mtime": "2026-08-09T18:45:34.828Z",
-      "indexed_at": "2026-08-09T18:45:34.828Z",
+      "bytes": 6762,
+      "mtime": "2026-08-10T08:32:36.359Z",
+      "indexed_at": "2026-08-10T08:34:17.094Z",
       "ssot": [
         "docs/products/tc-service/PRODUCT_HOME.md"
       ]
