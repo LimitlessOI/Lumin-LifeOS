@@ -11,8 +11,8 @@ export function createSystemNotifyRoutes({ requireKey, logger }) {
   router.post('/email', requireKey, async (req, res) => {
     try {
       const { to, subject, text } = req.body;
-      const token = process.env.POSTMARK_SERVER_TOKEN;
-      const from = (process.env.EMAIL_FROM || process.env.POSTMARK_FROM).trim();
+      const token = String(process.env.POSTMARK_SERVER_TOKEN || '').trim();
+      const from = String(process.env.EMAIL_FROM || process.env.POSTMARK_FROM || '').trim();
 
       if (!token || !from) {
         res.status(503).json({ ok: false, error: 'email not configured' });
@@ -55,5 +55,7 @@ export function createSystemNotifyRoutes({ requireKey, logger }) {
     }
   });
 
-  return { createSystemNotifyRoutes };
+  return router;
 }
+
+export default { createSystemNotifyRoutes };

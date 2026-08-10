@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-10T08:01:26.251Z",
+  "generated_at": "2026-08-10T08:03:25.312Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13194,
   "files": [
@@ -21678,9 +21678,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 4001382,
-      "mtime": "2026-08-10T07:49:29.949Z",
-      "indexed_at": "2026-08-10T07:49:34.431Z"
+      "bytes": 4002991,
+      "mtime": "2026-08-10T08:03:13.568Z",
+      "indexed_at": "2026-08-10T08:03:25.312Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -44761,9 +44761,9 @@
     {
       "path": "docs/products/universal-overlay/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Universal Overlay",
-      "bytes": 48047,
-      "mtime": "2026-08-10T07:50:47.393Z",
-      "indexed_at": "2026-08-10T07:51:21.196Z"
+      "bytes": 49838,
+      "mtime": "2026-08-10T08:03:01.843Z",
+      "indexed_at": "2026-08-10T08:03:13.490Z"
     },
     {
       "path": "docs/products/UNIVERSALOVERLAY.md",
@@ -74082,9 +74082,9 @@
     {
       "path": "routes/system-notify-routes.js",
       "synopsis": "Exports createSystemNotifyRoutes — routes/system-notify-routes.js.",
-      "bytes": 1775,
-      "mtime": "2026-08-10T08:01:20.208Z",
-      "indexed_at": "2026-08-10T08:01:20.208Z",
+      "bytes": 1832,
+      "mtime": "2026-08-10T08:02:29.474Z",
+      "indexed_at": "2026-08-10T08:03:13.490Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
