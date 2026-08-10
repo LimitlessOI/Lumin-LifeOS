@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-10T21:04:05.351Z",
+  "generated_at": "2026-08-10T22:40:43.658Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13215,
+  "file_count": 13216,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21678,9 +21678,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 4009192,
-      "mtime": "2026-08-10T12:12:16.067Z",
-      "indexed_at": "2026-08-10T12:12:43.543Z"
+      "bytes": 4009931,
+      "mtime": "2026-08-10T22:40:09.907Z",
+      "indexed_at": "2026-08-10T22:40:24.574Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -31049,9 +31049,9 @@
     {
       "path": "builderos-reboot/PROJECT_CERTIFICATION.json",
       "synopsis": "BuilderOS artifact — PROJECT CERTIFICATION.",
-      "bytes": 3192,
-      "mtime": "2026-07-30T20:29:45.821Z",
-      "indexed_at": "2026-07-30T22:32:11.913Z",
+      "bytes": 3950,
+      "mtime": "2026-08-10T22:37:54.174Z",
+      "indexed_at": "2026-08-10T22:40:09.823Z",
       "synopsis_index_only": true
     },
     {
@@ -31197,9 +31197,9 @@
     {
       "path": "builderos-reboot/scripts/emit-project-certification.mjs",
       "synopsis": "Final certification v2 — includes Phase 11 full loop + Phase 12 salvage.",
-      "bytes": 8549,
-      "mtime": "2026-07-30T20:29:45.829Z",
-      "indexed_at": "2026-07-30T22:32:11.913Z"
+      "bytes": 9310,
+      "mtime": "2026-08-10T22:37:41.494Z",
+      "indexed_at": "2026-08-10T22:40:09.823Z"
     },
     {
       "path": "builderos-reboot/scripts/execute-mission-step.mjs",
@@ -42937,9 +42937,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 487417,
-      "mtime": "2026-08-09T01:40:46.935Z",
-      "indexed_at": "2026-08-09T01:41:04.130Z"
+      "bytes": 489375,
+      "mtime": "2026-08-10T22:39:54.342Z",
+      "indexed_at": "2026-08-10T22:40:09.823Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -75064,9 +75064,9 @@
     {
       "path": "scripts/build-queue-drift-repair.mjs",
       "synopsis": "Deterministic BUILD_QUEUE drift repair executor. Scans product queues,",
-      "bytes": 25477,
-      "mtime": "2026-08-01T20:04:05.828Z",
-      "indexed_at": "2026-08-01T20:04:05.828Z",
+      "bytes": 25467,
+      "mtime": "2026-08-10T22:34:21.576Z",
+      "indexed_at": "2026-08-10T22:40:09.823Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md",
         "${productHomePath(product)}\\n`;"
@@ -77560,10 +77560,10 @@
     },
     {
       "path": "scripts/prototype-avatar-widget.html",
-      "synopsis": "HTML page: LifeOS Avatar Widget — V0.5 Prototype",
-      "bytes": 12365,
-      "mtime": "2026-08-07T01:06:54.405Z",
-      "indexed_at": "2026-08-07T01:39:55.456Z"
+      "synopsis": "HTML page: early SVG-face prototype for the LifeOS avatar widget, superseded by native/macos-overlay/TaloaImageCharacterView.swift.",
+      "bytes": 12516,
+      "mtime": "2026-08-10T22:30:29.954Z",
+      "indexed_at": "2026-08-10T22:40:09.823Z"
     },
     {
       "path": "scripts/prototype-conversational-contracts-v1.mjs",
@@ -91440,6 +91440,16 @@
       ]
     },
     {
+      "path": "services/build-queue-core.js",
+      "synopsis": "Shared BUILD_QUEUE.json primitives (STEP_STATUS, loadBuildQueue,",
+      "bytes": 10367,
+      "mtime": "2026-08-10T22:32:52.738Z",
+      "indexed_at": "2026-08-10T22:40:09.823Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "services/build-queue-planner.js",
       "synopsis": "Build-queue planner — turns a product's PRODUCT_HOME backlog into a",
       "bytes": 26759,
@@ -98137,9 +98147,9 @@
     {
       "path": "services/product-build-orchestrator.js",
       "synopsis": "General product-build orchestrator — turns a product's structured",
-      "bytes": 37343,
-      "mtime": "2026-08-01T20:04:05.828Z",
-      "indexed_at": "2026-08-01T20:04:05.828Z",
+      "bytes": 28714,
+      "mtime": "2026-08-10T22:34:12.458Z",
+      "indexed_at": "2026-08-10T22:40:09.823Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

@@ -146,6 +146,8 @@ const cert = {
       'STAGING_READY and BOOTSTRAP_AND_STAGING_READY require SENTRY_MECHANICAL_PASS. Readiness alone cannot claim staging.',
     fully_machine_ready_formula:
       'FULLY_MACHINE_READY = live build/deploy+founder-ui PASS AND same-tier determinism (mechanical proxy sufficient for hand-built pack; cold-coder required when factory authors BP end-to-end). Autonomy-closure acceptance is re-run after emit (must not feed FMR — chicken-egg). Matches COMPLETION_VOCABULARY_SSOT fully_machine_ready_closure. Founder usability confirm is a separate product Point B ladder rung (LifeRE closed via machine-alpha protocol per POINT_B_TARGET).',
+    open_policy_conflict_2026_08_10:
+      'REAL, UNRESOLVED: this formula\'s "mechanical proxy sufficient for hand-built pack" exemption is not encoded in builderos-reboot/governance/COMPLETION_VOCABULARY_SSOT.json\'s fully_machine_ready_closure gate, which checks levels.SAME_TIER_CODER_DETERMINISM directly with no exemption path -- so this emitter and scripts/verify-completion-overclaim.mjs disagree on whether a hand-built pack without cold-coder proof may claim FULLY_MACHINE_READY. Until resolved, the checked-in value follows the stricter (SSOT) reading: false. Do not silently re-flip this to true by re-running this emitter without either (a) real cold-coder proof, or (b) the vocabulary SSOT gate being updated to encode the exemption explicitly.',
   },
 };
 
