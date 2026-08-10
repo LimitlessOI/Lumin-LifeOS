@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-10T03:46:17.019Z",
+  "generated_at": "2026-08-10T03:46:24.451Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13175,
   "files": [
@@ -71879,9 +71879,9 @@
     {
       "path": "routes/extension-drive-routes.js",
       "synopsis": "routes/extension-drive-routes.js -- Universal Overlay live driving",
-      "bytes": 9674,
-      "mtime": "2026-08-10T03:46:17.019Z",
-      "indexed_at": "2026-08-10T03:46:17.019Z",
+      "bytes": 9734,
+      "mtime": "2026-08-10T03:46:24.451Z",
+      "indexed_at": "2026-08-10T03:46:24.451Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
