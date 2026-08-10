@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-10T07:48:14.963Z",
+  "generated_at": "2026-08-10T07:49:34.431Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13185,
+  "file_count": 13189,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21678,9 +21678,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3998130,
-      "mtime": "2026-08-10T06:42:44.711Z",
-      "indexed_at": "2026-08-10T06:43:11.305Z"
+      "bytes": 4001382,
+      "mtime": "2026-08-10T07:49:29.949Z",
+      "indexed_at": "2026-08-10T07:49:34.431Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -22056,6 +22056,37 @@
       "bytes": 3344,
       "mtime": "2026-08-03T19:25:56.181Z",
       "indexed_at": "2026-08-03T19:25:56.181Z"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/EXTENSION-DRIVE-STUCK-HANDOFF-0001/BLUEPRINT.json",
+      "synopsis": "BuilderOS artifact — BLUEPRINT.",
+      "bytes": 12944,
+      "mtime": "2026-08-10T07:49:16.507Z",
+      "indexed_at": "2026-08-10T07:49:28.274Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/EXTENSION-DRIVE-STUCK-HANDOFF-0001/DELIBERATION_GATE.json",
+      "synopsis": "BuilderOS artifact — DELIBERATION GATE.",
+      "bytes": 1129,
+      "mtime": "2026-08-10T07:49:16.508Z",
+      "indexed_at": "2026-08-10T07:49:28.274Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/EXTENSION-DRIVE-STUCK-HANDOFF-0001/FOUNDER_PACKET.md",
+      "synopsis": "Founder Packet — stuck-field human handoff for the drive channel.",
+      "bytes": 1854,
+      "mtime": "2026-08-10T07:49:16.508Z",
+      "indexed_at": "2026-08-10T07:49:28.274Z"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/EXTENSION-DRIVE-STUCK-HANDOFF-0001/INTENT_BASELINE.json",
+      "synopsis": "BuilderOS artifact — INTENT BASELINE.",
+      "bytes": 2017,
+      "mtime": "2026-08-10T07:49:16.509Z",
+      "indexed_at": "2026-08-10T07:49:28.274Z",
+      "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-BLUEPRINT-AUTHORITY-0001/BUILDER_READINESS_AUDIT.md",
@@ -44699,9 +44730,9 @@
     {
       "path": "docs/products/universal-overlay/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Universal Overlay",
-      "bytes": 41336,
-      "mtime": "2026-08-10T07:24:33.907Z",
-      "indexed_at": "2026-08-10T07:24:49.006Z"
+      "bytes": 45045,
+      "mtime": "2026-08-10T07:49:16.513Z",
+      "indexed_at": "2026-08-10T07:49:28.274Z"
     },
     {
       "path": "docs/products/UNIVERSALOVERLAY.md",
@@ -69323,16 +69354,16 @@
     {
       "path": "public/extension/frame.html",
       "synopsis": "HTML page: Lumin Overlay",
-      "bytes": 20078,
-      "mtime": "2026-08-09T19:17:29.138Z",
-      "indexed_at": "2026-08-09T19:17:59.331Z"
+      "bytes": 20827,
+      "mtime": "2026-08-10T07:49:16.516Z",
+      "indexed_at": "2026-08-10T07:49:28.274Z"
     },
     {
       "path": "public/extension/frame.js",
       "synopsis": "public/extension/frame.js — Lumin Universal Overlay",
-      "bytes": 26020,
-      "mtime": "2026-08-09T19:50:43.494Z",
-      "indexed_at": "2026-08-09T19:50:50.368Z",
+      "bytes": 28035,
+      "mtime": "2026-08-10T07:49:16.516Z",
+      "indexed_at": "2026-08-10T07:49:28.274Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
@@ -69348,9 +69379,9 @@
     {
       "path": "public/extension/version.json",
       "synopsis": "JSON data/config — public/extension/version.json.",
-      "bytes": 210,
-      "mtime": "2026-04-25T03:53:03.008Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 213,
+      "mtime": "2026-08-10T07:49:16.517Z",
+      "indexed_at": "2026-08-10T07:49:28.274Z",
       "synopsis_index_only": true
     },
     {
@@ -71946,9 +71977,9 @@
     {
       "path": "routes/extension-drive-routes.js",
       "synopsis": "routes/extension-drive-routes.js -- Universal Overlay live driving",
-      "bytes": 9734,
-      "mtime": "2026-08-10T03:46:24.451Z",
-      "indexed_at": "2026-08-10T03:46:24.451Z",
+      "bytes": 15296,
+      "mtime": "2026-08-10T07:49:16.517Z",
+      "indexed_at": "2026-08-10T07:49:28.274Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
