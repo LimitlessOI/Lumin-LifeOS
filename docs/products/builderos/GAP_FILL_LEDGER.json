@@ -759,6 +759,14 @@
       "added_real_lines": 20,
       "justification": "one new read-only GET endpoint on an\nalready-justified route file, same shape as the two read endpoints already\nthere (batch/:id, batch/:id/summary) -- not new architecture.\n\nCo-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>",
       "commit_message_excerpt": "GAP-FILL: add GET /api/v1/mtg-cards/recent-activity -- logs alone can't answer \"is it uploading\""
+    },
+    {
+      "at": "2026-08-11T11:09:43.692Z",
+      "file": "routes/lifeos-auth-routes.js",
+      "is_new_file": false,
+      "added_real_lines": 56,
+      "justification": "security hotfix restoring already-proven tip auth/money gates from unmerged draft PRs #367-#375; surgical role-gate and binding checks on existing middleware/routes (not new product logic). Factory cannot ship this because the live tip is already compromised and prior factory/automation PRs never landed on main.",
+      "commit_message_excerpt": "GAP-FILL: tip still accepts member JWT as operator key after draft PRs #367-#375 never merged — restore requireKey role-gate, set-password/forgot-password operator proof, billing verify binding, and m"
     }
   ]
 }
