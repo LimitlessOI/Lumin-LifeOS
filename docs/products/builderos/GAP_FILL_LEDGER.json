@@ -735,6 +735,14 @@
       "added_real_lines": 41,
       "justification": "this is another fallback branch added to an\nalready-shipped function, same shape and same justification as the\nAnthropic fallback two commits ago -- the identify contract is unchanged,\nand the Gemini call is a direct copy of the exact request shape already\nproven live in services/provider-key-health.js. Closes a real, currently-\nblocking gap (both existing providers are out of credits, five other\nalready-configured providers are not) with a well-understood, bounded\naddition, not a new business-logic design decision.\n\nCo-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>",
       "commit_message_excerpt": "GAP-FILL: real Gemini vision fallback -- Adam was right, unused capacity existed"
+    },
+    {
+      "at": "2026-08-11T07:16:09.904Z",
+      "file": "services/free-image-generation.js",
+      "is_new_file": true,
+      "added_real_lines": 28,
+      "justification": "free-image-generation.js is a thin, stateless\nHTTP wrapper around one public endpoint (no auth, no business logic beyond\nURL construction and a timeout) -- same class of glue as the Scryfall pricing\nwrapper already justified two commits ago, not new decision logic.\n\nCo-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>",
+      "commit_message_excerpt": "GAP-FILL: document free/paid AI provider audit; add real $0 image generation"
     }
   ]
 }

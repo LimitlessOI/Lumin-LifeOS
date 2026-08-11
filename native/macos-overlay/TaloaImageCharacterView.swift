@@ -245,6 +245,9 @@ final class TaloaImageCharacterView: NSView {
 
         let breathe = 1.0 + 0.02 * sin(phase * 1.0) + 0.08 * gesturePulse
         let hover = sin(phase * 1.1) * bounds.height * 0.02
+        let center = NSPoint(x: bounds.midX, y: bounds.midY + hover)
+
+        drawAmbientAura(center: center, color: color, gesturePulse: gesturePulse)
 
         let baseSize = bounds.insetBy(dx: bounds.width * 0.06, dy: bounds.height * 0.06).size
         let w = baseSize.width * breathe
@@ -267,8 +270,53 @@ final class TaloaImageCharacterView: NSView {
         NSGraphicsContext.restoreGraphicsState()
 
         if gestureActive {
-            drawGestureEffect(gesture, center: NSPoint(x: bounds.midX, y: bounds.midY + hover), t: gestureT, baseColor: color)
+            drawGestureEffect(gesture, center: center, t: gestureT, baseColor: color)
         }
+    }
+
+    /// Real, continuous ambient pulsing + shape-shifting -- founder, direct,
+    /// after the ambient-blink removal: "the circle should be like the
+    /// Taloa for now and i want you to have kinda pulsate and move into
+    /// diferents shaps." Keeps her actual character art intact (his own
+    /// "should be like Taloa") rather than replacing it with an abstract
+    /// orb -- the full Seon-style redesign (simple/glowing/geometric,
+    /// replacing the illustrated PNG entirely) stays the separate, larger,
+    /// not-yet-attempted asset-direction change already named in
+    /// docs/products/lifeos/conversations/2026-08-10-taloa-fluid-ui-vision.md.
+    /// This is an organic, non-circular aura drawn behind her: several
+    /// sine waves at different frequencies/phases perturb the radius around
+    /// the circle so the outline continuously drifts into a new irregular
+    /// shape rather than staying a static disc, layered with a slow
+    /// independent breathing scale so it never looks like a fixed glow ring.
+    private func drawAmbientAura(center: NSPoint, color: NSColor, gesturePulse: CGFloat) {
+        let baseRadius = min(bounds.width, bounds.height) * 0.34
+        let breathe = 1.0 + 0.10 * sin(phase * 0.6) + 0.05 * gesturePulse
+        let radius = baseRadius * breathe
+
+        let path = NSBezierPath()
+        let segments = 48
+        for i in 0...segments {
+            let a = (CGFloat(i) / CGFloat(segments)) * 2 * .pi
+            let wobble =
+                1.0
+                + 0.10 * sin(a * 3 + phase * 0.8)
+                + 0.06 * sin(a * 5 - phase * 0.5)
+                + 0.04 * sin(a * 7 + phase * 1.3)
+            let r = radius * wobble
+            let pt = NSPoint(x: center.x + cos(a) * r, y: center.y + sin(a) * r)
+            if i == 0 { path.move(to: pt) } else { path.line(to: pt) }
+        }
+        path.close()
+
+        NSGraphicsContext.saveGraphicsState()
+        let glow = NSShadow()
+        glow.shadowColor = color.withAlphaComponent(0.5 + 0.2 * gesturePulse)
+        glow.shadowBlurRadius = min(bounds.width, bounds.height) * 0.14
+        glow.shadowOffset = .zero
+        glow.set()
+        color.withAlphaComponent(0.16 + 0.08 * gesturePulse).setFill()
+        path.fill()
+        NSGraphicsContext.restoreGraphicsState()
     }
 
     /// Dispatches to a per-gesture look -- each one only ever plays for

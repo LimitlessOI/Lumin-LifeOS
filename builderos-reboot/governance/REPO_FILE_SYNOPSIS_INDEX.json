@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-11T07:16:09.361Z",
+  "generated_at": "2026-08-11T07:21:19.151Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13225,
   "files": [
@@ -42936,9 +42936,9 @@
     {
       "path": "docs/products/builderos/GAP_FILL_LEDGER.json",
       "synopsis": "Documentation — GAP FILL LEDGER.",
-      "bytes": 100157,
-      "mtime": "2026-08-11T05:04:44.278Z",
-      "indexed_at": "2026-08-11T05:25:51.183Z",
+      "bytes": 100783,
+      "mtime": "2026-08-11T07:16:09.909Z",
+      "indexed_at": "2026-08-11T07:21:19.151Z",
       "synopsis_index_only": true
     },
     {
@@ -44851,9 +44851,9 @@
     {
       "path": "docs/products/universal-overlay/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Universal Overlay",
-      "bytes": 103106,
-      "mtime": "2026-08-11T06:42:20.386Z",
-      "indexed_at": "2026-08-11T06:42:35.101Z"
+      "bytes": 105052,
+      "mtime": "2026-08-11T07:21:11.166Z",
+      "indexed_at": "2026-08-11T07:21:19.151Z"
     },
     {
       "path": "docs/products/UNIVERSALOVERLAY.md",
