@@ -59,7 +59,17 @@
   // every selected file in one request regardless of count -- a 495-photo
   // selection would be rejected outright before any processing started.
   // Caught while actually watching a real 495-photo upload in progress.
-  const CHUNK_SIZE = 150;
+  //
+  // Lowered 150 -> 40 (2026-08-11), real live failure found: a 275-photo
+  // upload never reached the server at all (confirmed via GET
+  // /recent-activity showing zero new rows), while 110- and 15-photo
+  // batches minutes earlier both succeeded cleanly. The server buffers
+  // uploaded files in RAM before processing (multer memoryStorage, up to
+  // 10MB/file -- routes/mtg-cards-routes.js MAX_FILE_BYTES), so a 150-photo
+  // chunk of real full-size phone photos can mean hundreds of MB to
+  // upward of 1GB in a single request. 40 photos keeps any one request
+  // comfortably smaller regardless of individual photo size.
+  const CHUNK_SIZE = 40;
   let activeBatches = []; // [{ batchId, total, done, rows }]
 
   function authHeaders() {
