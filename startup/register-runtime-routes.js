@@ -13,6 +13,7 @@ import { createTwinRoutes } from "../routes/twin-routes.js";
 import { createAdfRoutes } from "../routes/adf-routes.js";
 import { createConversationHistoryRoutes } from "../routes/conversation-history-routes.js";
 import { createClientCareBillingRoutes } from "../routes/clientcare-billing-routes.js";
+import { createMtgCardsRoutes } from "../routes/mtg-cards-routes.js";
 import { registerWrmConsultRoutes } from "../routes/wrm-consult-routes.js";
 import { createWordKeeperRoutes } from "../routes/word-keeper-routes.js";
 import { createAutonomyRoutes } from "../routes/autonomy-routes.js";
@@ -289,6 +290,12 @@ export async function registerRuntimeRoutes(app, deps) {
   // Momma site (public/previews/wellrounded-momma). Self-mounts at /api/v1/wrm.
   // Mounted unconditionally: the live site's consult form 404s without it.
   registerWrmConsultRoutes(app, { pool, requireKey, logger });
+
+  // Batch MTG card cataloging (photo -> vision ID -> Scryfall price -> sell-tier
+  // routing). Mounted unconditionally -- personal-use tool, not gated behind
+  // the external-product-routes flag. See routes/mtg-cards-routes.js.
+  app.use("/api/v1/mtg-cards", createMtgCardsRoutes({ pool, requireKey, logger }));
+  logger.info("✅ [MTG-CARDS] Routes mounted at /api/v1/mtg-cards");
 
   if (externalProductRoutesEnabled) {
     app.use("/api/v1/clientcare-billing", createClientCareBillingRoutes({ pool, requireKey, logger, callCouncilMember, callCouncilWithFailover, notificationService, sendSMS }));
