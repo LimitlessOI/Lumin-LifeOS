@@ -6,7 +6,8 @@
 |---|---|
 | **Product** | `builderos` |
 | **SSOT** | `docs/products/builderos/PRODUCT_HOME.md` |
-| **Status** | **DESIGN FREEZE READY** — B1–B8 closed in §18; second triple audit in §19; **manufacturing missions blocked on §20 founder/Conductor answers + design-freeze receipt** |
+| **Version** | **v1.3.0** (2026-08-11) — adds §21 lifecycle truth audit + `M0` |
+| **Status** | **SCOPED FREEZE** — M1–M5 + C1 + C2 design-freeze ready; **`M0` added and ordered first**; end-to-end lifecycle **NOT** freeze-ready (C3/C4 unspecified). Manufacturing blocked on §20 founder/Conductor answers (now OPEN-1…OPEN-7) + design-freeze receipt |
 | **Incident source** | Overlay intake session `000146ae-7ed9-4e23-9477-5139603e32f7` + causal audit 2026-08-11 |
 | **Regression fixture** | `docs/products/builderos/fixtures/intake-regression-2026-08-11/` (**immutable exam — do not sanitize**) |
 | **Authority** | Founder-directed stop on analysis → blueprint before code; ChatGPT/Chair concurrence on scope + pre-implementation triple audit |
@@ -1064,5 +1065,47 @@ A1–A10 remain normative. New attacks found against the **closed** document:
 | OPEN-3 | Register `universal-overlay` in `SENTRY_PRODUCT_REGISTRY.json` | **Deliberately NOT done** (§0.2 forbids pre-cleaning the exam) | Product decision; and the fixture must stay unfair until after the repair proves itself |
 | OPEN-4 | Add `BLOCKED_GOVERNANCE_INTEGRITY` to the LOCKED `TYPED_BLOCKER_SSOT.json` | Interim conservative mapping to `BLOCKED_STRATEGIC` (§18.9.6) | The file is sealed under `LOCKED_WAVE_0_1 item 8`; unsealing is not this blueprint's authority |
 | OPEN-5 | Efficiency Officer interim | `efficiency_officer_deferred` + single factory (`INTAKE_CONCURRENCY_DEFAULT = 1`) | Confirm mapping to the existing `CFO` seat's hooks vs staying deferred |
+| OPEN-6 | **"Conductor" collides with existing Level-2 law.** §2.11b/§2.11c/§2.13 already use *Conductor* for the **session supervisor** role (dated 2026-04-25), while §2.0K names **Chair** as the runtime entry gate | **Bridge entry `office.conductor` is now BLOCKED** — not authored until resolved (§21.3) | Naming is founder jurisdiction (§18.2.3), and one option amends non-derogable Level-2 law via Article VII |
+| OPEN-7 | Disposition of the unwired, self-sealing `runChairConsensusGate` (zero callers; claimed `enforced` in a constitutional mapping doc) | **New mission `M0`, ordered first** (§21.2) | `C4_AUTHORITY_OR_SAFETY`. Choice between *wire it with real sealing* and *delete it + retract the enforcement claim* is authority-level, not mechanical |
 
 Until each is answered, implementers use the default and label it `DEFAULT_PENDING_FOUNDER` in receipts. **No manufacturing mission may be cut until a design-freeze receipt naming this document's version exists (§0.5).**
+
+---
+
+## 21. Lifecycle truth audit — consequences (2026-08-11, v1.3.0)
+
+Full evidence: **`docs/products/builderos/FACTORY_LIFECYCLE_TRUTH_AUDIT_2026-08-11.md`**. The founder/Conductor channel specified a 14-stage manufacturing lifecycle and directed inspection rather than further design. Result: **2 of 14 stages fully exist; the enforcement layer this blueprint builds upon is partly fictional.**
+
+### 21.1 What the audit changes about this document
+
+| Finding | Effect here |
+|---|---|
+| `runChairConsensusGate` has **zero callers** while §2.0K declares the Chair seal mandatory and a constitutional mapping doc says `enforced` | New **M0**, ordered before M1 (§21.2). M2/M3 typed gates would otherwise sit on top of a gate that never runs |
+| That gate **self-generates the plan, mints its own seal, fabricates `propagated_confidence = 0.75`, and fills the `unknowns`/`assumptions`/`risks` arrays it then validates** | Confirms attack **A6** (stub authority auto-approves) is *already live*, not hypothetical. Countermeasures in §18/§19 stay normative |
+| `run-step.js:136` honors caller-supplied `skip_intake_gate: true` | Same pattern as **R4**. §18.9.3 (enforce at the mutation boundary) is reinforced and now applies to `dispatchExecuteStep`, added to §13 touch targets |
+| `FACTORY_READY` is not a typed state anywhere | The M2 status migration (R1) must also carry the readiness state, or C3 cannot be built later |
+| Builder/Factory is **not** a consensus party (`pre-arc-enrichment.js:68` seats = `SNT/CHAIR/CFO/WISDOM`) | This blueprint treats Builder as a *recipient* of a Mission Pack. The founder requires Builder as a *consenting reviewer* before Factory Ready. Recorded as **C3**, deliberately unspecified here |
+| Trust ledger is real, ranked, and role-keyed (`services/model-capability-ledger.js`), but closes at dispatch and has no factory axis | Recorded as **C4**. Reinforces §18.8: `consequence_class`, not actor labels |
+
+### 21.2 M0 — resolve the self-sealing consensus gate (new, ordered first)
+
+**Not authorized to code.** Specified so it cannot be quietly skipped:
+
+1. **Detect:** a mechanical sweep asserting that every gate described as `enforced` in `docs/constitution/proposals/2026-08-02-CONSTITUTION-DIGITAL-TWIN-PLAN.md` and `builderos-reboot/governance/GATE_ENFORCEMENT_MATRIX.json` has **at least one real caller** on a live path. Finding 1 was found by grepping for callers — cheap, mechanical, repeatable, and it belongs in `builder:preflight`. **The sweep must be repo-wide, not scoped to this one gate:** independent inspection already found a second fully dormant subsystem (`services/self-repair-target-reputation.js` + `self-repair-quarantine.js`, no caller outside themselves) and two more governance JSONs that no code reads (`OB_EXECUTION_LADDER.json`; `DO_NOT_INVENT.json` per R5). Include a **config-with-no-reader** arm: `trust_adjustment.delta` and `REALITY_CHECK_RECEIPT` are named in `DEPARTMENT_ROLE_CONTRACT.json` and have no writer or reader at all.
+2. **Decide (founder, OPEN-7):** either wire the gate with sealing that is *not* self-minted, or delete it and retract the `enforced` claim. A third option — leave it — is a standing §2.6 exposure.
+3. **Forbidden in either case:** `autoGenerate` defaulting to `true`; a seal validated by string prefix; a confidence value written and then checked by the same function; `CHAIR_GATE_STRICT` that is read but does not change behavior.
+4. **Receipt:** `GOVERNANCE_ENFORCEMENT_TRUTH_RECEIPT` listing every claimed-enforced gate, its callers, and its verdict.
+
+### 21.3 C3 and C4 — named, deliberately unspecified
+
+Both are **one day old and contain founder-only decisions**; specifying them now would be the exact invention this blueprint exists to prevent.
+
+- **C3 — Manufacturing Plan stage + three-party Factory Readiness Review.** Covers stages 4-8 and 11 (repair loop, `FACTORY_READY` state, decomposition/assignment plan, Architect review of the plan, integration gate). Reuse candidates found: `services/goal-decomposition.js` (already computes `ready_sub_goals`/`blocked_sub_goals`; currently fed verification labels rather than build slices), `sortStepsByDependencies()`/`sortIntakeSteps()`, `BP_PRIORITY.json`, and the proven `claimed_at`-null claim pattern. **Three hard prerequisites, all found by inspection:** (i) factory identity does not exist (`factory_id` appears nowhere in the build path); (ii) one concept has three dependency vocabularies — `deps` (intake), `dependencies` (missions), `depends_on` (BUILD_QUEUE) — which must be reconciled or a graph will silently mis-order work; (iii) "what happens if one slice fails" currently has three different answers (mission fails fast, governed ship halts with `resume_from`, **intake continues past the failure**) and no full-mission rollback exists anywhere.
+- **C4 — Factory identity + trust/incentive architecture.** Extends the existing ledger rather than replacing it — `services/model-capability-ledger.js` already ranks per `(model_tier, role)` by trust-earned rate with a `theater_detected_count`, exposed at `GET /factory/model-rankings`, with 8 of 10 roles wired. Three prerequisites before any new dimension: (a) factories become addressable entities; (b) **one missing writer** — Reality is already scored on three lanes (`reality-score.js` → `PREDICTION_RECEIPT.post_build`/`TWIN_DRIFT_REPORT`; ADF ledger + its live scheduler; legacy `prediction-loop.jsonl`) but `trust_adjustment.delta` has no writer, so no reality outcome reaches the ledger; (c) the ranking must actually steer selection — `getBestModelForLens` computes the winner and has no production import. Constraints already ratified by the founder: no single gameable score; self-caught defects must score *higher* than concealment; concealment is a trust event, not a capability event; repeated identical failure across independent factories indicts the system, not the factory. Note the ADF corpus is presently unscored (all 36 sampled 2026-06 predictions `status: open`), so calibration has no history to learn from yet.
+
+### 21.4 Revised recommendation
+
+- **M1–M5 + C1 + C2 remain DESIGN FREEZE READY as scoped** — nothing found weakens them; the audit strengthens R4 and A6.
+- **M0 is added and ordered first.**
+- **The end-to-end lifecycle is NOT design-freeze ready** (C3/C4 unspecified, OPEN-6/OPEN-7 unanswered).
+- **Still no code.**
