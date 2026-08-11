@@ -10,6 +10,7 @@
 import 'dotenv/config';
 import fs from 'node:fs';
 import path from 'node:path';
+import { stepDependencies } from '../config/step-dependencies.js';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 
@@ -70,7 +71,7 @@ async function main() {
   const stepIds = new Set((blueprint.steps || []).map(s => s.id));
   const depErrors = [];
   for (const step of blueprint.steps || []) {
-    for (const dep of step.deps || []) {
+    for (const dep of stepDependencies(step)) {
       if (!stepIds.has(dep)) depErrors.push(`Step ${step.id} depends on unknown step: ${dep}`);
     }
   }

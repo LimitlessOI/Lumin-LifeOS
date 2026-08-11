@@ -10,6 +10,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { loadBuildQueue, evaluateStepExpectations, STEP_STATUS } from '../services/build-queue-core.js';
+import { stepDependencies } from '../config/step-dependencies.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const PRODUCTS_DIR = path.join(ROOT, 'docs/products');
@@ -472,7 +473,7 @@ async function attemptRepair(step, product, options = {}) {
 }
 
 function depsSatisfied(step, queue) {
-  const deps = Array.isArray(step?.depends_on) ? step.depends_on : [];
+  const deps = stepDependencies(step);
   if (deps.length === 0) return true;
   const doneIds = new Set((queue.steps || []).filter((s) => s.status === STEP_STATUS.DONE).map((s) => s.id));
   return deps.every((d) => doneIds.has(d));

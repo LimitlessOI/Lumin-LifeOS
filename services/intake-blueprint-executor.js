@@ -5,6 +5,8 @@
 
 import { isSafeTarget } from '../config/builder-safe-scope.js';
 import { scanCodebasePatterns } from './blueprint-codebase-scanner.js';
+import { detectInventions } from './blueprint-invention-detector.js';
+import { stepDependencies } from '../config/step-dependencies.js';
 import { spawnSync, spawn } from 'child_process';
 import { readFileSync, existsSync, writeFileSync, mkdirSync } from 'fs';
 import { dirname, resolve, join } from 'path';
@@ -28,7 +30,7 @@ export function sortIntakeSteps(steps = []) {
     if (!step || seen.has(step.id)) return;
     if (visiting.has(step.id)) return;
     visiting.add(step.id);
-    for (const dep of step.deps || []) {
+    for (const dep of stepDependencies(step)) {
       const parent = byId.get(dep);
       if (parent) visit(parent);
     }
@@ -231,7 +233,7 @@ function depsToContextFiles(step, blueprint) {
   const files = [];
   const byId = new Map((blueprint.steps || []).map((s) => [s.id, s]));
   const isRouteStep = step.type === 'esm' && /routes\//.test(String(stepTargetFile(step) || ''));
-  for (const depId of step.deps || []) {
+  for (const depId of stepDependencies(step)) {
     const dep = byId.get(depId);
     const f = dep && stepTargetFile(dep);
     if (!f || files.includes(f)) continue;
@@ -484,7 +486,25 @@ export async function executeIntakeBlueprint({
   onStep = null,
 }) {
   let resolvedBlueprint = blueprint;
-  if (!resolvedBlueprint) {
+  if (resolvedBlueprint) {
+    // R4: passing a blueprint inline used to skip the session status check, the
+    // ARC gate and the no-invention check in one step — authorization by
+    // argument shape. No production caller does this (verified 2026-08-11: every
+    // caller passes sessionId), so the affordance existed only as a bypass.
+    // A dry run commits nothing, so it stays free; real execution does not.
+    const inlineAllowed =
+      dryRun === true ||
+      String(process.env.FACTORY_ALLOW_INLINE_BLUEPRINT || '').trim().toLowerCase() === 'true';
+    if (!inlineAllowed) {
+      return {
+        ok: false,
+        error: 'inline_blueprint_not_authorized',
+        detail:
+          'A blueprint passed inline has no session, so its status, ARC report and no-invention check do not exist. Execute by sessionId, or pass dryRun:true, or set FACTORY_ALLOW_INLINE_BLUEPRINT=true.',
+        attempted_bypass: true,
+      };
+    }
+  } else {
     const session = await loadIntakeSession(sessionId, { pool, baseUrl, commandKey });
     if (!session) return { ok: false, error: 'intake_session_not_found' };
     if (session.status !== 'ready') {
@@ -492,6 +512,20 @@ export async function executeIntakeBlueprint({
     }
     if (!session.arc_report_json?.ready_to_execute) {
       return { ok: false, error: 'arc_not_ready' };
+    }
+    // ready_to_execute proves the graph is well-formed, nothing more. Re-check
+    // for invented architecture here as well as at the intake boundary: a
+    // session can be marked ready by an older code path, or edited after the
+    // fact, and execution is the last point where that is still cheap to catch.
+    const inventionReport = detectInventions(session);
+    if (!inventionReport.manufacturing_authorized) {
+      return {
+        ok: false,
+        error: 'blueprint_defects_present',
+        detail: `${inventionReport.defect_count} unauthorized-decision defect(s) must be resolved by the office with authority before execution`,
+        routing: inventionReport.routing,
+        invention_report: inventionReport,
+      };
     }
     resolvedBlueprint = session.blueprint_json;
   }

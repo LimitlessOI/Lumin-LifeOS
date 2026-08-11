@@ -27,6 +27,7 @@ export {
   evaluateStepExpectations,
 } from './build-queue-core.js';
 import { STEP_STATUS, queuePathForProduct, evaluateStepExpectations } from './build-queue-core.js';
+import { stepDependencies } from '../config/step-dependencies.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const TYPED_BLOCKERS_PATH = path.join(ROOT, 'builderos-reboot/governance/TYPED_BLOCKER_SSOT.json');
@@ -152,7 +153,7 @@ export function selectNextStep(queue) {
       const until = Date.parse(step.park_until);
       if (Number.isFinite(until) && until > Date.now()) return null;
     }
-    const deps = Array.isArray(step.depends_on) ? step.depends_on : [];
+    const deps = stepDependencies(step);
     if (!deps.every((d) => depSatisfiedForSelect(d, doneIds, queue, step))) return null;
 
     const autoRegErr = /auto-registered|not auto-registered|module-health|module_not_mounted/i.test(

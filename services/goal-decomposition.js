@@ -4,13 +4,14 @@
  * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
+import { stepDependencies } from '../config/step-dependencies.js';
 export function decomposeGoal({ id, title, description, steps = [], dependencies = [] }) {
   const subGoals = steps.map((step, idx) => ({
     id: `${id}-step-${idx + 1}`,
     title: typeof step === 'string' ? step : step.title,
     description: typeof step === 'string' ? '' : step.description,
     status: 'pending',
-    depends_on: (typeof step === 'string' ? [] : step.depends_on) || [],
+    depends_on: typeof step === 'string' ? [] : stepDependencies(step),
   }));
 
   return {

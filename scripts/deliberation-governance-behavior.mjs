@@ -372,7 +372,34 @@ assert('unknown REP rejected', !unknownRep.ok);
     'skip_intake_gate denial cites the bypass reason (not a coincidental failure)',
     blocked.body?.reason === 'skip_intake_gate_not_permitted' && blocked.body?.attempted_bypass === true
   );
-  if (prev !== undefined) process.env.FACTORY_ALLOW_SKIP_INTAKE_GATE = prev;
+  if (prev === undefined) delete process.env.FACTORY_ALLOW_SKIP_INTAKE_GATE;
+  else process.env.FACTORY_ALLOW_SKIP_INTAKE_GATE = prev;
+}
+
+// R4: an inline blueprint used to skip the session status check, the ARC gate and
+// the no-invention check at once — authorization by argument shape.
+{
+  const { executeIntakeBlueprint } = await import('../services/intake-blueprint-executor.js');
+  const prev = process.env.FACTORY_ALLOW_INLINE_BLUEPRINT;
+  delete process.env.FACTORY_ALLOW_INLINE_BLUEPRINT;
+  const inline = {
+    _meta: { product: 'anything', ssot_tag: 'docs/products/anything/PRODUCT_HOME.md' },
+    steps: [{ id: 'X-001', file: 'services/smuggled.js', type: 'esm', purpose: 'arrive without a session', deps: [] }],
+  };
+  const blockedInline = await executeIntakeBlueprint({
+    sessionId: 'no-such-session',
+    blueprint: inline,
+    baseUrl: 'http://127.0.0.1:1',
+    commandKey: 'x',
+    dryRun: false,
+  });
+  assert('inline blueprint cannot execute for real without authorization', blockedInline.ok === false);
+  assert(
+    'inline blueprint denial cites the bypass reason',
+    blockedInline.error === 'inline_blueprint_not_authorized' && blockedInline.attempted_bypass === true
+  );
+  if (prev === undefined) delete process.env.FACTORY_ALLOW_INLINE_BLUEPRINT;
+  else process.env.FACTORY_ALLOW_INLINE_BLUEPRINT = prev;
 }
 
 console.log(`\n=== Done (${failed} failures) ===`);

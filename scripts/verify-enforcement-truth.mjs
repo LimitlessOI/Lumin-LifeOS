@@ -11,6 +11,7 @@
  *
  * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
+import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import {
@@ -236,8 +237,12 @@ function checkSelfCertificationAndBypass(index) {
       const window = lines.slice(Math.max(0, i - 6), i + 7).join('\n');
       const envGated = /process\.env\.[A-Z0-9_]*(?:ALLOW|PERMIT|STRICT|ENABLE)[A-Z0-9_]*/.test(window);
       if (envGated) return;
+      // Identity is the matched code, not its line number: line-based ids churn
+      // whenever an unrelated import is added above, which reports a fixed
+      // finding plus a brand-new "regression" for a file nobody touched.
+      const fingerprint = crypto.createHash('sha256').update(line.trim(), 'utf8').digest('hex').slice(0, 10);
       findings.push({
-        id: `caller_bypass:${f.rel}:${i + 1}`,
+        id: `caller_bypass:${f.rel}:${fingerprint}`,
         class: 'caller_controlled_bypass',
         file: f.rel,
         line: i + 1,

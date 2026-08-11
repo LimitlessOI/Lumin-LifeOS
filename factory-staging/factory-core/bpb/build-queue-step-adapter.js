@@ -24,6 +24,7 @@ import { authorAssertionsFromSpec, normalizeCommonJsToEsm } from './author-asser
 import { depSatisfiedForSelect, STEP_STATUS } from '../../../services/product-build-orchestrator.js';
 import { authoringTiersForRetry } from '../../../services/builderos-model-escalation-gate.js';
 import { REPO_ROOT } from '../repo-paths.js';
+import { stepDependencies } from '../../../config/step-dependencies.js';
 
 const AUTO_REGISTER_TARGET = 'config/auto-registered-product-modules.json';
 
@@ -238,7 +239,7 @@ function buildAutoRegisterMerge(step, queue) {
 
   const seen = new Set(current.modules.map((m) => m.path));
   const newPaths = [];
-  const deps = Array.isArray(step?.depends_on) ? step.depends_on : [];
+  const deps = stepDependencies(step);
   const steps = Array.isArray(queue?.steps) ? queue.steps : [];
   for (const depId of deps) {
     const dep = steps.find((s) => s.id === depId);

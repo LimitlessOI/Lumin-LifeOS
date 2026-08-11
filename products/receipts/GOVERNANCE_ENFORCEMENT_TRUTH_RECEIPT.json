@@ -1,21 +1,21 @@
 {
   "schema": "governance_enforcement_truth_receipt_v1",
-  "generated_at": "2026-08-11T22:15:31.489Z",
+  "generated_at": "2026-08-11T22:24:23.701Z",
   "produced_by": "scripts/verify-enforcement-truth.mjs",
   "separation_collapsed": true,
   "separation_note": "No independent actor verified this run: the same script computes the findings and the verdict. Mitigation, not equivalence — the verdict is a pure function of repository bytes the script never writes, plus a ratchet baseline authored in an earlier commit, so any third party re-derives it byte-identically with `npm run builderos:enforcement:truth`. No model judgment is in the verdict path. The specific repairs this sweep reports are additionally proven by an independent executable mechanism (`node --test tests/chair-consensus-gate-sealing.test.js`).",
   "independent_reproduction_command": "npm run builderos:enforcement:truth",
   "independent_proof_of_repairs": "node --test tests/chair-consensus-gate-sealing.test.js",
-  "files_indexed": 4197,
-  "total_findings": 147,
+  "files_indexed": 4199,
+  "total_findings": 145,
   "by_class": {
     "module_not_reachable": 60,
     "test_only_export": 21,
     "dead_export": 54,
     "no_reader": 5,
-    "caller_controlled_bypass": 7
+    "caller_controlled_bypass": 5
   },
-  "baseline_count": 147,
+  "baseline_count": 145,
   "new_regressions": [],
   "fixed_since_baseline": [],
   "ok": true,
@@ -1214,52 +1214,38 @@
       "detail": "governance config referenced by no code file — it enforces nothing at runtime"
     },
     {
-      "id": "caller_bypass:services/browser-signup-orchestrator.js:173",
+      "id": "caller_bypass:services/browser-signup-orchestrator.js:07816c1dbd",
       "class": "caller_controlled_bypass",
       "file": "services/browser-signup-orchestrator.js",
       "line": 173,
       "detail": "gate can be skipped by the caller with no environment/authority check: skipEmailVerify = false,"
     },
     {
-      "id": "caller_bypass:services/browser-signup-orchestrator.js:303",
-      "class": "caller_controlled_bypass",
-      "file": "services/browser-signup-orchestrator.js",
-      "line": 303,
-      "detail": "gate can be skipped by the caller with no environment/authority check: skipEmailVerify = false,"
-    },
-    {
-      "id": "caller_bypass:services/browser-signup-orchestrator.js:507",
-      "class": "caller_controlled_bypass",
-      "file": "services/browser-signup-orchestrator.js",
-      "line": 507,
-      "detail": "gate can be skipped by the caller with no environment/authority check: skipEmailVerify = false,"
-    },
-    {
-      "id": "caller_bypass:services/lumin-chair-orchestrator.js:914",
+      "id": "caller_bypass:services/lumin-chair-orchestrator.js:a08429ccc9",
       "class": "caller_controlled_bypass",
       "file": "services/lumin-chair-orchestrator.js",
       "line": 914,
       "detail": "gate can be skipped by the caller with no environment/authority check: const skipIntentGate = force || forceExecute;"
     },
     {
-      "id": "caller_bypass:services/receipt-auditor.mjs:179",
+      "id": "caller_bypass:services/receipt-auditor.mjs:0384926f2a",
       "class": "caller_controlled_bypass",
       "file": "services/receipt-auditor.mjs",
       "line": 179,
       "detail": "gate can be skipped by the caller with no environment/authority check: const skipGitCheckout = Boolean(opts.skip_git_checkout || receipt.skip_git_checkout);"
     },
     {
-      "id": "caller_bypass:routes/general-browser-agent-routes.js:627",
+      "id": "caller_bypass:routes/general-browser-agent-routes.js:aaea40ff0b",
       "class": "caller_controlled_bypass",
       "file": "routes/general-browser-agent-routes.js",
       "line": 627,
       "detail": "gate can be skipped by the caller with no environment/authority check: if (!process.env.GMAIL_SIGNUP_APP_PASSWORD && !body.dryRun && !body.skipEmailVerify) {"
     },
     {
-      "id": "caller_bypass:factory-staging/factory-core/builder/run-mission.js:74",
+      "id": "caller_bypass:factory-staging/factory-core/builder/run-mission.js:844da460df",
       "class": "caller_controlled_bypass",
       "file": "factory-staging/factory-core/builder/run-mission.js",
-      "line": 74,
+      "line": 75,
       "detail": "gate can be skipped by the caller with no environment/authority check: skip_intake_gate: body?.skip_intake_gate === true,"
     }
   ]

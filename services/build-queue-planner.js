@@ -11,6 +11,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { STEP_STATUS } from './product-build-orchestrator.js';
 import { parseRouteDeclaration } from '../factory-staging/factory-core/bpb/build-queue-step-adapter.js';
+import { stepDependencies } from '../config/step-dependencies.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -371,7 +372,7 @@ export function validatePlannedQueue(queue) {
     if (!s.task) errors.push(`step ${s.id || '?'} missing task`);
   }
   for (const s of steps) {
-    for (const dep of s.depends_on || []) {
+    for (const dep of stepDependencies(s)) {
       if (!ids.has(dep)) errors.push(`step ${s.id} depends on unknown step ${dep}`);
     }
   }

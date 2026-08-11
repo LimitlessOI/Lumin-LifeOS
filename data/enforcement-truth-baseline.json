@@ -1,23 +1,21 @@
 {
   "schema": "enforcement_truth_baseline_v1",
-  "written_at": "2026-08-11T22:10:58.673Z",
+  "written_at": "2026-08-11T22:24:20.813Z",
   "note": "Known dormant-enforcement debt. This list may only shrink. New ids fail the gate.",
-  "count": 147,
+  "count": 145,
   "by_class": {
     "module_not_reachable": 60,
     "test_only_export": 21,
     "dead_export": 54,
     "no_reader": 5,
-    "caller_controlled_bypass": 7
+    "caller_controlled_bypass": 5
   },
   "allowed_ids": [
-    "caller_bypass:factory-staging/factory-core/builder/run-mission.js:74",
-    "caller_bypass:routes/general-browser-agent-routes.js:627",
-    "caller_bypass:services/browser-signup-orchestrator.js:173",
-    "caller_bypass:services/browser-signup-orchestrator.js:303",
-    "caller_bypass:services/browser-signup-orchestrator.js:507",
-    "caller_bypass:services/lumin-chair-orchestrator.js:914",
-    "caller_bypass:services/receipt-auditor.mjs:179",
+    "caller_bypass:factory-staging/factory-core/builder/run-mission.js:844da460df",
+    "caller_bypass:routes/general-browser-agent-routes.js:aaea40ff0b",
+    "caller_bypass:services/browser-signup-orchestrator.js:07816c1dbd",
+    "caller_bypass:services/lumin-chair-orchestrator.js:a08429ccc9",
+    "caller_bypass:services/receipt-auditor.mjs:0384926f2a",
     "dead_export:factory-staging/factory-core/arc/bootstrap-product-mission.js:bootstrapPreArcReceipts",
     "dead_export:factory-staging/factory-core/arc/department-simulations.js:isStubDepartmentReceipt",
     "dead_export:factory-staging/factory-core/arc/foundation/builder-entry-gate.js:evaluatePostArcBundleGate",

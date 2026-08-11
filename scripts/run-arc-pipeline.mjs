@@ -12,6 +12,7 @@
 import { execSync, spawnSync } from 'node:child_process';
 import path from 'node:path';
 import fs from 'node:fs';
+import { stepDependencies } from '../config/step-dependencies.js';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const blueprintArg = process.argv[2];
@@ -68,7 +69,7 @@ console.log('\n[ARC PIPELINE] Step 3: Dependency order check...');
 const stepIds = new Set(steps.map(s => s.id));
 const depErrors = [];
 for (const step of steps) {
-  for (const dep of (step.deps || [])) {
+  for (const dep of stepDependencies(step)) {
     if (!stepIds.has(dep)) {
       depErrors.push(`Step ${step.id} depends on unknown step: ${dep}`);
     }

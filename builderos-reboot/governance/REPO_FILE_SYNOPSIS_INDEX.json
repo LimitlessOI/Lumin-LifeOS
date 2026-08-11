@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-11T22:17:58.772Z",
+  "generated_at": "2026-08-11T22:25:25.951Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13247,
+  "file_count": 13249,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -32634,6 +32634,16 @@
       ]
     },
     {
+      "path": "config/step-dependencies.js",
+      "synopsis": "Canonical step-dependency contract. Three different key names for",
+      "bytes": 4222,
+      "mtime": "2026-08-11T22:21:52.800Z",
+      "indexed_at": "2026-08-11T22:25:25.951Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "config/supplychain-networks.json",
       "synopsis": "Configuration — Supplychain Networks.",
       "bytes": 280,
@@ -34066,9 +34076,9 @@
     {
       "path": "data/enforcement-truth-baseline.json",
       "synopsis": "JSON data/config — data/enforcement-truth-baseline.json.",
-      "bytes": 11112,
-      "mtime": "2026-08-11T22:12:01.823Z",
-      "indexed_at": "2026-08-11T22:15:50.764Z",
+      "bytes": 11018,
+      "mtime": "2026-08-11T22:24:20.816Z",
+      "indexed_at": "2026-08-11T22:25:25.951Z",
       "synopsis_index_only": true
     },
     {
@@ -42966,9 +42976,9 @@
     {
       "path": "docs/products/builderos/GAP_FILL_LEDGER.json",
       "synopsis": "Documentation — GAP FILL LEDGER.",
-      "bytes": 102510,
-      "mtime": "2026-08-11T17:10:23.091Z",
-      "indexed_at": "2026-08-11T17:12:22.963Z",
+      "bytes": 107192,
+      "mtime": "2026-08-11T22:17:59.332Z",
+      "indexed_at": "2026-08-11T22:25:25.951Z",
       "synopsis_index_only": true
     },
     {
@@ -42981,9 +42991,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 515876,
-      "mtime": "2026-08-11T22:15:48.300Z",
-      "indexed_at": "2026-08-11T22:15:50.764Z"
+      "bytes": 518805,
+      "mtime": "2026-08-11T22:24:49.361Z",
+      "indexed_at": "2026-08-11T22:25:25.951Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -65260,9 +65270,9 @@
     {
       "path": "factory-staging/factory-core/bpb/build-queue-step-adapter.js",
       "synopsis": "STEP 5e — adapt a per-product docs/products/<id>/BUILD_QUEUE.json step",
-      "bytes": 16929,
-      "mtime": "2026-07-24T18:36:41.697Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 16970,
+      "mtime": "2026-08-11T22:22:10.304Z",
+      "indexed_at": "2026-08-11T22:25:25.951Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -65378,9 +65388,9 @@
     {
       "path": "factory-staging/factory-core/builder/run-mission.js",
       "synopsis": "Exports loadBlueprintFromRepo — builderos-reboot/MISSIONS/FACTORY-REBOOT-0006/CONTENT/run-mission.js.",
-      "bytes": 2936,
-      "mtime": "2026-08-11T22:12:18.857Z",
-      "indexed_at": "2026-08-11T22:15:50.764Z"
+      "bytes": 3008,
+      "mtime": "2026-08-11T22:22:10.302Z",
+      "indexed_at": "2026-08-11T22:25:25.951Z"
     },
     {
       "path": "factory-staging/factory-core/builder/run-step.js",
@@ -68381,9 +68391,9 @@
     {
       "path": "products/receipts/GOVERNANCE_ENFORCEMENT_TRUTH_RECEIPT.json",
       "synopsis": "Product receipt — GOVERNANCE ENFORCEMENT TRUTH RECEIPT.",
-      "bytes": 54239,
-      "mtime": "2026-08-11T22:15:31.491Z",
-      "indexed_at": "2026-08-11T22:15:50.764Z",
+      "bytes": 53637,
+      "mtime": "2026-08-11T22:24:23.703Z",
+      "indexed_at": "2026-08-11T22:25:25.951Z",
       "synopsis_index_only": true
     },
     {
@@ -75216,9 +75226,9 @@
     {
       "path": "scripts/build-queue-drift-repair.mjs",
       "synopsis": "Deterministic BUILD_QUEUE drift repair executor. Scans product queues,",
-      "bytes": 25467,
-      "mtime": "2026-08-10T22:34:21.576Z",
-      "indexed_at": "2026-08-10T22:40:09.823Z",
+      "bytes": 25502,
+      "mtime": "2026-08-11T22:22:10.306Z",
+      "indexed_at": "2026-08-11T22:25:25.951Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md",
         "${productHomePath(product)}\\n`;"
@@ -75895,9 +75905,9 @@
     {
       "path": "scripts/deliberation-governance-behavior.mjs",
       "synopsis": "Behavioral fail-closed tests for deliberation governance v2.7 (mock pool — no DATABASE_URL).",
-      "bytes": 15010,
-      "mtime": "2026-08-11T21:55:59.064Z",
-      "indexed_at": "2026-08-11T22:01:29.323Z",
+      "bytes": 16273,
+      "mtime": "2026-08-11T22:23:19.089Z",
+      "indexed_at": "2026-08-11T22:25:25.951Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -77899,9 +77909,9 @@
     {
       "path": "scripts/run-arc-entry-gate.mjs",
       "synopsis": "ARC entry gate — structural + GAP_FLAG validation of a blueprint file.",
-      "bytes": 4055,
-      "mtime": "2026-07-24T18:36:41.703Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 4129,
+      "mtime": "2026-08-11T22:22:10.308Z",
+      "indexed_at": "2026-08-11T22:25:25.951Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -77909,9 +77919,9 @@
     {
       "path": "scripts/run-arc-pipeline.mjs",
       "synopsis": "Full ARC pipeline — entry gate → AI review → write blueprint → signal executor.",
-      "bytes": 5073,
-      "mtime": "2026-06-29T17:21:08.643Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 5145,
+      "mtime": "2026-08-11T22:22:10.309Z",
+      "indexed_at": "2026-08-11T22:25:25.951Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -79887,9 +79897,9 @@
     {
       "path": "scripts/verify-enforcement-truth.mjs",
       "synopsis": "M0 enforcement-truth sweep — finds mechanisms that CLAIM operational",
-      "bytes": 16627,
-      "mtime": "2026-08-11T22:15:14.461Z",
-      "indexed_at": "2026-08-11T22:15:50.764Z",
+      "bytes": 17008,
+      "mtime": "2026-08-11T22:24:11.754Z",
+      "indexed_at": "2026-08-11T22:25:25.951Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -91654,9 +91664,9 @@
     {
       "path": "services/build-queue-planner.js",
       "synopsis": "Build-queue planner — turns a product's PRODUCT_HOME backlog into a",
-      "bytes": 26759,
-      "mtime": "2026-07-24T18:36:41.691Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 26827,
+      "mtime": "2026-08-11T22:22:10.303Z",
+      "indexed_at": "2026-08-11T22:25:25.951Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -94908,9 +94918,9 @@
     {
       "path": "services/goal-decomposition.js",
       "synopsis": "Break a mission into sub-goals and track dependencies.",
-      "bytes": 1396,
-      "mtime": "2026-08-01T20:04:05.828Z",
-      "indexed_at": "2026-08-01T20:04:05.828Z",
+      "bytes": 1462,
+      "mtime": "2026-08-11T22:22:10.307Z",
+      "indexed_at": "2026-08-11T22:25:25.951Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -95346,9 +95356,9 @@
     {
       "path": "services/intake-blueprint-executor.js",
       "synopsis": "Execute ARC-ready intake skeleton blueprints step-by-step via POST /lifeos/builder/build.",
-      "bytes": 32410,
-      "mtime": "2026-07-30T18:09:12.929Z",
-      "indexed_at": "2026-07-30T22:32:11.913Z",
+      "bytes": 34235,
+      "mtime": "2026-08-11T22:22:10.297Z",
+      "indexed_at": "2026-08-11T22:25:25.951Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -98379,9 +98389,9 @@
     {
       "path": "services/product-build-orchestrator.js",
       "synopsis": "General product-build orchestrator — turns a product's structured",
-      "bytes": 28714,
-      "mtime": "2026-08-10T22:34:12.458Z",
-      "indexed_at": "2026-08-10T22:40:09.823Z",
+      "bytes": 28750,
+      "mtime": "2026-08-11T22:22:10.305Z",
+      "indexed_at": "2026-08-11T22:25:25.951Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -103951,6 +103961,13 @@
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "tests/step-dependencies.test.js",
+      "synopsis": "Locks the canonical step-dependency contract. The failure being",
+      "bytes": 2979,
+      "mtime": "2026-08-11T22:22:37.991Z",
+      "indexed_at": "2026-08-11T22:25:25.951Z"
     },
     {
       "path": "tests/studio-simulation.test.js",
