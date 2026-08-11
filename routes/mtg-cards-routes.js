@@ -388,6 +388,35 @@ export function createMtgCardsRoutes({ pool, requireKey, logger = console }) {
     }
   });
 
+  // Real diagnostic need found live 2026-08-11: "is it uploading?" asked
+  // twice, and Railway's deploymentLogs GraphQL query only returns the most
+  // recent ~101 lines (a hard cap on Railway's side, not something this repo
+  // controls), which gets flooded out by extension-drive polling traffic
+  // within about 2 minutes -- too short a window to reliably answer from
+  // logs alone. This queries the real database directly instead, so "is
+  // anything happening" has a fast, definitive answer without needing a
+  // specific batch_id.
+  router.get('/recent-activity', requireKey, async (req, res) => {
+    try {
+      await ready();
+      const limit = Math.min(parseInt(req.query.limit, 10) || 20, 100);
+      const { rows } = await pool.query(
+        `SELECT batch_id, COUNT(*)::int AS card_count,
+                MIN(created_at) AS started_at, MAX(created_at) AS last_row_at,
+                COUNT(*) FILTER (WHERE status = 'done')::int AS done_count,
+                COUNT(*) FILTER (WHERE status LIKE '%failed%')::int AS failed_count
+         FROM mtg_card_collection
+         GROUP BY batch_id
+         ORDER BY MAX(created_at) DESC
+         LIMIT $1`,
+        [limit]
+      );
+      res.json({ ok: true, batches: rows, server_now: new Date().toISOString() });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
   return router;
 }
 

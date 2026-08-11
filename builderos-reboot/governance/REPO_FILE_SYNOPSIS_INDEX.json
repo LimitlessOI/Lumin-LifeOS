@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-11T08:25:12.853Z",
+  "generated_at": "2026-08-11T08:27:37.753Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13226,
   "files": [
@@ -44065,9 +44065,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 833759,
-      "mtime": "2026-08-11T07:28:26.350Z",
-      "indexed_at": "2026-08-11T07:28:51.887Z"
+      "bytes": 833785,
+      "mtime": "2026-08-11T08:27:14.170Z",
+      "indexed_at": "2026-08-11T08:27:37.753Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -73502,9 +73502,9 @@
     {
       "path": "routes/mtg-cards-routes.js",
       "synopsis": "Magic: The Gathering card cataloging, two intake paths sharing one",
-      "bytes": 16292,
-      "mtime": "2026-08-11T02:25:55.596Z",
-      "indexed_at": "2026-08-11T02:27:33.623Z",
+      "bytes": 17668,
+      "mtime": "2026-08-11T08:26:51.233Z",
+      "indexed_at": "2026-08-11T08:27:37.753Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
