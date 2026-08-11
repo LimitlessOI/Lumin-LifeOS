@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-11T09:20:47.341Z",
+  "generated_at": "2026-08-11T11:09:43.346Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13226,
+  "file_count": 13230,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21678,9 +21678,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 4012945,
-      "mtime": "2026-08-11T08:58:27.148Z",
-      "indexed_at": "2026-08-11T08:58:33.426Z"
+      "bytes": 4014346,
+      "mtime": "2026-08-11T11:09:29.128Z",
+      "indexed_at": "2026-08-11T11:09:36.594Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -40514,9 +40514,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 160255,
-      "mtime": "2026-08-10T14:23:27.162Z",
-      "indexed_at": "2026-08-10T14:24:48.769Z"
+      "bytes": 161136,
+      "mtime": "2026-08-11T11:08:33.297Z",
+      "indexed_at": "2026-08-11T11:09:29.061Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -43347,9 +43347,9 @@
     {
       "path": "docs/products/command-center/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Command Center",
-      "bytes": 109723,
-      "mtime": "2026-08-01T08:48:17.387Z",
-      "indexed_at": "2026-08-01T08:48:17.387Z"
+      "bytes": 110157,
+      "mtime": "2026-08-11T11:08:25.440Z",
+      "indexed_at": "2026-08-11T11:09:29.061Z"
     },
     {
       "path": "docs/products/COMMANDCENTER.md",
@@ -44065,9 +44065,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 834809,
-      "mtime": "2026-08-11T08:57:04.795Z",
-      "indexed_at": "2026-08-11T08:58:25.205Z"
+      "bytes": 835910,
+      "mtime": "2026-08-11T11:08:25.436Z",
+      "indexed_at": "2026-08-11T11:09:29.061Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -44188,9 +44188,9 @@
     {
       "path": "docs/products/lumin-university/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Lumin University",
-      "bytes": 25092,
-      "mtime": "2026-08-01T13:44:55.356Z",
-      "indexed_at": "2026-08-01T13:45:12.395Z"
+      "bytes": 25507,
+      "mtime": "2026-08-11T11:08:25.440Z",
+      "indexed_at": "2026-08-11T11:09:29.061Z"
     },
     {
       "path": "docs/products/LUMINUNIVERSITY.md",
@@ -44311,9 +44311,9 @@
     {
       "path": "docs/products/memory-system/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Memory System",
-      "bytes": 24386,
-      "mtime": "2026-08-01T10:40:16.036Z",
-      "indexed_at": "2026-08-01T10:40:30.035Z"
+      "bytes": 24753,
+      "mtime": "2026-08-11T11:08:25.440Z",
+      "indexed_at": "2026-08-11T11:09:29.061Z"
     },
     {
       "path": "docs/products/MEMORYINTELLIGENCE.md",
@@ -67707,9 +67707,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\", \"lifeos:file-synopsis:backfill\": \"node scripts/file-synopsis-enforce.mjs --all --auto-fix && node scripts/generate-file-synopsis-index.mjs\", \"lifeos:file-synopsis:index",
-      "bytes": 36764,
-      "mtime": "2026-08-10T11:47:30.804Z",
-      "indexed_at": "2026-08-10T11:50:25.442Z",
+      "bytes": 36929,
+      "mtime": "2026-08-11T11:08:08.245Z",
+      "indexed_at": "2026-08-11T11:09:29.061Z",
       "synopsis_index_only": true
     },
     {
@@ -72598,9 +72598,9 @@
     {
       "path": "routes/lifeos-auth-routes.js",
       "synopsis": "routes/lifeos-auth-routes.js",
-      "bytes": 47023,
-      "mtime": "2026-08-08T10:53:41.905Z",
-      "indexed_at": "2026-08-08T10:56:44.360Z",
+      "bytes": 49086,
+      "mtime": "2026-08-11T11:07:55.439Z",
+      "indexed_at": "2026-08-11T11:09:29.061Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -73397,9 +73397,12 @@
     {
       "path": "routes/memory_routes.js",
       "synopsis": "Registers MemoryRoutes routes/handlers (routes/memory_routes.js).",
-      "bytes": 14517,
-      "mtime": "2026-07-14T04:07:15.505Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 14630,
+      "mtime": "2026-08-11T11:08:09.017Z",
+      "indexed_at": "2026-08-11T11:09:29.061Z",
+      "ssot": [
+        "docs/products/memory-system/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/memory-capsule-routes.js",
@@ -74252,9 +74255,9 @@
     {
       "path": "routes/studentInterviewAnalyticsRoutes.js",
       "synopsis": "Registers StudentInterviewAnalyticsRoutes routes/handlers (routes/studentInterviewAnalyticsRoutes.js).",
-      "bytes": 960,
-      "mtime": "2026-08-01T01:33:18.724Z",
-      "indexed_at": "2026-08-01T01:33:18.724Z",
+      "bytes": 1120,
+      "mtime": "2026-08-11T11:08:08.249Z",
+      "indexed_at": "2026-08-11T11:09:29.061Z",
       "ssot": [
         "docs/products/lumin-university/PRODUCT_HOME.md"
       ]
@@ -95517,9 +95520,9 @@
     {
       "path": "services/lifeos-auth.js",
       "synopsis": "services/lifeos-auth.js",
-      "bytes": 17759,
-      "mtime": "2026-07-24T18:36:41.697Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 17969,
+      "mtime": "2026-08-11T11:08:08.233Z",
+      "indexed_at": "2026-08-11T11:09:29.061Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -103032,6 +103035,26 @@
       "indexed_at": "2026-07-31T23:01:43.086Z"
     },
     {
+      "path": "tests/lifeos-auth-password-security.test.js",
+      "synopsis": "tests/lifeos-auth-password-security.test.js",
+      "bytes": 6851,
+      "mtime": "2026-08-11T11:08:08.229Z",
+      "indexed_at": "2026-08-11T11:09:29.061Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "tests/lifeos-billing-verify-security.test.js",
+      "synopsis": "tests/lifeos-billing-verify-security.test.js",
+      "bytes": 3237,
+      "mtime": "2026-08-11T11:08:08.225Z",
+      "indexed_at": "2026-08-11T11:09:29.061Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "tests/lifeos-capture-pipeline.test.js",
       "synopsis": "LifeOS Capture Pipeline v2 — unit tests (no production required).",
       "bytes": 2759,
@@ -103208,6 +103231,16 @@
       "bytes": 9344,
       "mtime": "2026-07-28T17:44:20.129Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "tests/memory-routes-security.test.js",
+      "synopsis": "Security regressions for auto-registered memory routes.",
+      "bytes": 2472,
+      "mtime": "2026-08-11T11:08:08.229Z",
+      "indexed_at": "2026-08-11T11:09:29.061Z",
+      "ssot": [
+        "docs/products/memory-system/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "tests/mental-health-integration.test.js",
@@ -103545,6 +103578,16 @@
       "indexed_at": "2026-07-28T22:54:46.666Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "tests/require-key-operator-jwt.test.js",
+      "synopsis": "Regression tests for operator-only requireKey JWT fallback.",
+      "bytes": 3630,
+      "mtime": "2026-08-11T11:08:08.225Z",
+      "indexed_at": "2026-08-11T11:09:29.061Z",
+      "ssot": [
+        "docs/products/command-center/PRODUCT_HOME.md"
       ]
     },
     {
