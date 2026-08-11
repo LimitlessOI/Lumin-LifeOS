@@ -5745,10 +5745,103 @@ function luminHandleFiles(files) {
   luminRenderAttachChips();
 }
 
+/**
+ * More than the normal chat-attachment cap (LUMIN_MAX_ATTACH=5, sized for
+ * "discuss these 2 screenshots") is a real, different intent -- a bulk
+ * catalog upload, not conversational context. Adam, direct, 2026-08-10:
+ * "I already have pictures of all the cards... I just need to put them in
+ * the folder and click on the plus button and add it. That plus button
+ * should be where the... Communication box... Taloa." Routes straight to
+ * the real MTG batch pipeline (routes/mtg-cards-routes.js) instead of the
+ * small-scale base64/attachment-chip path, which would be both slow and
+ * memory-heavy for hundreds of photos.
+ */
+const MTG_BATCH_TRIGGER_COUNT = LUMIN_MAX_ATTACH; // more than this many images at once = bulk catalog, not chat context
+
 function luminOnFilePick(event) {
   const files = Array.from(event.target?.files || []);
   event.target.value = '';
+  const images = files.filter((f) => (f.type || '').startsWith('image/'));
+  if (images.length > MTG_BATCH_TRIGGER_COUNT) {
+    luminStartMtgCardBatchUpload(images);
+    return;
+  }
   luminHandleFiles(files);
+}
+
+async function luminStartMtgCardBatchUpload(files) {
+  toast(`Uploading ${files.length} card photos…`);
+  const form = new FormData();
+  files.forEach((f) => form.append('cards', f, f.name));
+  try {
+    const H = await directSystemHeaders();
+    delete H['Content-Type']; // browser must set its own multipart boundary
+    const res = await fetch('/api/v1/mtg-cards/batch-upload', {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: H,
+      body: form,
+    });
+    const data = await res.json().catch(() => null);
+    if (!res.ok || !data?.ok) {
+      toast(`Card upload failed: ${data?.error || res.status}`);
+      return;
+    }
+    _appendLuminMsgRaw(null, 'assistant',
+      `Got ${data.file_count} card photos — identifying and pricing them now. I'll post the results here when it's done.`);
+    luminPollMtgCardBatch(data.batch_id, data.file_count);
+  } catch (err) {
+    toast(`Card upload failed: ${err.message}`);
+  }
+}
+
+/**
+ * Polls until every row in the batch has left the initial "identified"
+ * placeholder status, then posts a real, honest summary into the chat --
+ * including calling out identification failures plainly (e.g. an AI
+ * provider out of credits) rather than reporting a silent/generic "done"
+ * that would hide a real, actionable blocker.
+ */
+async function luminPollMtgCardBatch(batchId, expectedTotal) {
+  const H = await directSystemHeaders();
+  const deadline = Date.now() + 20 * 60 * 1000; // large batches (hundreds of cards) take real time
+  while (Date.now() < deadline) {
+    await new Promise((r) => setTimeout(r, 4000));
+    let data;
+    try {
+      const res = await fetch(`/api/v1/mtg-cards/batch/${batchId}`, { credentials: 'same-origin', headers: H });
+      data = await res.json();
+    } catch {
+      continue; // transient network hiccup -- keep polling, don't abandon a long-running batch
+    }
+    if (!data?.ok) continue;
+    if (data.done < data.total) continue;
+
+    const failed = (data.rows || []).filter((r) => r.status !== 'done');
+    const failReasons = new Set(failed.map((r) => (r.identify_error || '').split(':')[0] || 'unknown'));
+    let summaryRes, summary;
+    try {
+      summaryRes = await fetch(`/api/v1/mtg-cards/batch/${batchId}/summary`, { credentials: 'same-origin', headers: H });
+      summary = await summaryRes.json();
+    } catch {
+      summary = null;
+    }
+
+    const lines = [`Done — ${data.total} card${data.total === 1 ? '' : 's'} processed.`];
+    if (summary?.ok) {
+      for (const tier of ['high', 'mid', 'low', 'unknown']) {
+        const t = summary.by_tier?.[tier];
+        if (t?.count) lines.push(`  ${tier}: ${t.count} card${t.count === 1 ? '' : 's'}, ~$${t.subtotal_usd.toFixed(2)}`);
+      }
+      lines.push(`Estimated total: ~$${Number(summary.total_estimated_usd || 0).toFixed(2)}`);
+    }
+    if (failed.length) {
+      lines.push(`${failed.length} card${failed.length === 1 ? '' : 's'} could not be identified — real error(s): ${[...failReasons].join('; ')}.`);
+    }
+    _appendLuminMsgRaw(null, 'assistant', lines.join('\n'));
+    return;
+  }
+  _appendLuminMsgRaw(null, 'assistant', `Still processing after 20 minutes — batch ${batchId} may need a manual check.`);
 }
 
 function luminRenderAttachChips() {

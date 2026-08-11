@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-11T02:32:15.343Z",
+  "generated_at": "2026-08-11T02:39:15.954Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13220,
   "files": [
@@ -44051,9 +44051,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 827062,
-      "mtime": "2026-08-11T02:31:59.642Z",
-      "indexed_at": "2026-08-11T02:32:15.343Z"
+      "bytes": 829419,
+      "mtime": "2026-08-11T02:38:54.500Z",
+      "indexed_at": "2026-08-11T02:39:15.954Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -70025,9 +70025,9 @@
     {
       "path": "public/overlay/lifeos-app.html",
       "synopsis": "HTML page: LifeOS",
-      "bytes": 246089,
-      "mtime": "2026-08-10T11:49:17.851Z",
-      "indexed_at": "2026-08-10T11:50:25.442Z"
+      "bytes": 250237,
+      "mtime": "2026-08-11T02:37:18.192Z",
+      "indexed_at": "2026-08-11T02:39:15.954Z"
     },
     {
       "path": "public/overlay/lifeos-ask-your-life.html",
