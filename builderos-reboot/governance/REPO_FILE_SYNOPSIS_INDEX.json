@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-11T07:21:19.151Z",
+  "generated_at": "2026-08-11T07:28:51.887Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13225,
   "files": [
@@ -44065,9 +44065,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 833737,
-      "mtime": "2026-08-11T05:43:41.412Z",
-      "indexed_at": "2026-08-11T05:43:59.798Z"
+      "bytes": 833759,
+      "mtime": "2026-08-11T07:28:26.350Z",
+      "indexed_at": "2026-08-11T07:28:51.887Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -96868,9 +96868,9 @@
     {
       "path": "services/lumin-strategic-intelligence.js",
       "synopsis": "Lumin Chair strategic intelligence — ideas, gaps, competitors, future simulations.",
-      "bytes": 8550,
-      "mtime": "2026-07-16T19:42:53.460Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 8711,
+      "mtime": "2026-08-11T07:26:51.943Z",
+      "indexed_at": "2026-08-11T07:28:51.887Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -101106,9 +101106,9 @@
     {
       "path": "services/web-search-service.js",
       "synopsis": "services/web-search-service.js",
-      "bytes": 10740,
-      "mtime": "2026-07-29T05:14:32.886Z",
-      "indexed_at": "2026-07-29T05:18:22.632Z",
+      "bytes": 13459,
+      "mtime": "2026-08-11T07:26:25.773Z",
+      "indexed_at": "2026-08-11T07:28:51.887Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

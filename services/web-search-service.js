@@ -16,6 +16,15 @@ import { recordModelOutcome } from './model-capability-ledger.js';
 
 const BRAVE_API = 'https://api.search.brave.com/res/v1/web/search';
 const PERPLEXITY_API = 'https://api.perplexity.ai/chat/completions';
+// Founder ask 2026-08-11 ("why can't we build what Brave Search does"):
+// a real, free, no-key online search tier, not a paid API. DuckDuckGo's
+// lightweight HTML-only endpoint (no JS required) returns real, current web
+// results -- confirmed live before wiring this in, not assumed. This is
+// scraping a results page, not an official API: no rate-limit guarantee, and
+// it breaks if DDG changes their markup -- a real tradeoff, stated plainly,
+// not hidden. Sits between the paid APIs and the AI-training-knowledge
+// fallback below, because unlike that fallback this one is genuinely live.
+const DUCKDUCKGO_HTML = 'https://html.duckduckgo.com/html/';
 
 // Fire-and-forget wrapper: never let ledger recording delay or fail a real
 // search response. Safe no-op when pool is undefined (most callers today).
@@ -35,6 +44,44 @@ function withTimeout(promise, ms, label) {
     timer = setTimeout(() => reject(new Error(label || 'web_search_timeout')), ms);
   });
   return Promise.race([promise, timeout]).finally(() => clearTimeout(timer));
+}
+
+// Decodes DuckDuckGo's redirect-wrapper href (//duckduckgo.com/l/?uddg=<encoded-real-url>&rut=...)
+// back to the real target URL. Falls back to the raw href if the shape ever changes.
+function decodeDuckDuckGoHref(href) {
+  try {
+    const match = href.match(/[?&]uddg=([^&]+)/);
+    return match ? decodeURIComponent(match[1]) : href;
+  } catch {
+    return href;
+  }
+}
+
+function stripHtmlTags(html) {
+  return String(html || '').replace(/<[^>]*>/g, '').replace(/&amp;/g, '&').replace(/&#x27;/g, "'").replace(/&quot;/g, '"').trim();
+}
+
+async function searchDuckDuckGoFree(query, count) {
+  const res = await fetch(`${DUCKDUCKGO_HTML}?q=${encodeURIComponent(query)}`, {
+    headers: { 'User-Agent': 'Mozilla/5.0 (compatible; LifeOS-Research/1.0)' },
+    signal: AbortSignal.timeout(WEB_SEARCH_FETCH_TIMEOUT_MS),
+  });
+  if (!res.ok) throw new Error(`duckduckgo_${res.status}`);
+  const html = await res.text();
+
+  const results = [];
+  const linkRe = /<a[^>]*class="result__a"[^>]*href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/g;
+  const snippetRe = /<a[^>]*class="result__snippet"[^>]*>([\s\S]*?)<\/a>/g;
+  const links = [...html.matchAll(linkRe)];
+  const snippets = [...html.matchAll(snippetRe)];
+  for (let i = 0; i < links.length && results.length < count; i++) {
+    results.push({
+      title: stripHtmlTags(links[i][2]),
+      url: decodeDuckDuckGoHref(links[i][1]),
+      description: stripHtmlTags(snippets[i]?.[1] || ''),
+    });
+  }
+  return results;
 }
 
 export function createWebSearchService({ BRAVE_SEARCH_API_KEY, PERPLEXITY_API_KEY, callAI, pool = undefined }) {
@@ -104,6 +151,19 @@ export function createWebSearchService({ BRAVE_SEARCH_API_KEY, PERPLEXITY_API_KE
         console.warn(`[WEB-SEARCH] Perplexity failed: ${err.message}`);
         recordModelOutcomeSafe(pool, { model_tier: 'perplexity_sonar', role: 'external_research', ok: false });
       }
+    }
+
+    // Free, real, no-key online search (see DUCKDUCKGO_HTML comment above) --
+    // tried before the AI-knowledge fallback because unlike that fallback
+    // this one is genuinely live web data, not stale training recall.
+    try {
+      const results = await searchDuckDuckGoFree(query, count);
+      if (results.length) {
+        console.log(`🔍 [WEB-SEARCH] DuckDuckGo (free): "${query}" → ${results.length} results`);
+        return { source: 'duckduckgo_free', results };
+      }
+    } catch (err) {
+      console.warn(`[WEB-SEARCH] DuckDuckGo free search failed: ${err.message}`);
     }
 
     // AI fallback — use training knowledge (bounded: council calls can otherwise

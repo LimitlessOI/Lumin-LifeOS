@@ -157,9 +157,11 @@ export async function gatherStrategicBriefForChair({
   const topic = String(cleanedInput || '').slice(0, 200);
   const local = buildLocalStrategicNotes(cleanedInput, pointBTarget);
   const horizonCache = await loadLatestHorizonFindings(pool);
-  const competitive = (process.env.BRAVE_SEARCH_API_KEY || process.env.PERPLEXITY_API_KEY)
-    ? await fetchCompetitiveSnippet(topic.slice(0, 80), callAI)
-    : { ok: false, skipped: true, reason: 'no_search_keys' };
+  // No longer gated on a paid search key -- services/web-search-service.js
+  // now has a free, real, no-key DuckDuckGo tier (2026-08-11), so this ran
+  // dormant for no real reason before. Always attempt it; fetchCompetitiveSnippet
+  // itself already handles a failed/empty search gracefully.
+  const competitive = await fetchCompetitiveSnippet(topic.slice(0, 80), callAI);
 
   const futureHorizons = buildFutureLookBackPrompts(topic, pointBTarget?.label || 'LifeRE Alpha');
 
