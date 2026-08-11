@@ -18,6 +18,8 @@ import { evaluateIdcExitGate } from '../../factory-staging/factory-core/arc/foun
 import { appendMissionLedger } from '../../factory-staging/factory-core/arc/foundation/mission-ledger.js';
 import { founderStopActive, isHardGate } from '../../factory-staging/factory-core/arc/gate-enforcement.js';
 import { scoreRealityAgainstSimulations } from '../../factory-staging/factory-core/arc/foundation/reality-score.js';
+import { recordRealityOutcome, DEFAULT_FACTORY_ID } from '../../services/model-capability-ledger.js';
+import { computeTrustDelta } from '../../config/trust-scoring.js';
 import { evaluateMissionDoctrine, doctrineBlocksAdvance } from '../../factory-staging/factory-core/arc/foundation/doctrine-enforcement.js';
 import { writeResultScoreboard } from '../../factory-staging/factory-core/arc/foundation/result-scoreboard.js';
 import {
@@ -397,10 +399,58 @@ runReceipt.machine_path_complete = pointB.machine_path_complete;
 runReceipt.alpha_reached = pointB.alpha_reached;
 runReceipt.awaiting_founder_alpha = pointB.machine_path_complete && !pointB.alpha_reached;
 
-scoreRealityAgainstSimulations(missionFolder);
+const realityScore = scoreRealityAgainstSimulations(missionFolder);
 writeResultScoreboard(missionFolder);
 const doctrine = evaluateMissionDoctrine(missionFolder, { blueprint });
 runReceipt.doctrine = { pass: doctrine.pass, violations: doctrine.violations };
+
+// §2.0L write-back. The ledger used to close at dispatch: it recorded that a
+// model was asked to build something and never learned whether it worked, so
+// `trust_adjustment.delta` had no writer and calibration changed no future
+// decision. Reality is scored two lines above; this is where that result reaches
+// the row that produced the work. The computed outcome goes into the run receipt
+// unconditionally so the evidence survives even with no database reachable —
+// no parallel store is introduced.
+try {
+  const outcome = {
+    factory_id: process.env.FACTORY_ID || DEFAULT_FACTORY_ID,
+    model_tier: runReceipt.model_tier || process.env.BUILDER_MODEL_TIER || null,
+    role: 'builderos_execution',
+    reality_scored: true,
+    reality_verified: runReceipt.verdict === 'PASS',
+    blueprint_fidelity_ok: doctrine.pass === true,
+    blueprint_fidelity_violation: doctrine.pass === false,
+    // A doctrine violation the mission reported about itself before any
+    // downstream gate saw it is self-detection, which must score better than one
+    // that escapes. Concealment is not inferred here — it requires real evidence
+    // from a verifier, so it is deliberately left unset rather than guessed.
+    self_caught_defect: doctrine.pass === false && runReceipt.verdict === 'FAIL',
+    escaped_defect: false,
+    verification_evidence_provided: Boolean(runReceipt.acceptance?.command),
+    failure_signature:
+      runReceipt.verdict === 'FAIL' ? (doctrine.violations?.[0] || 'acceptance_failed') : null,
+  };
+  const scored = computeTrustDelta(outcome);
+  runReceipt.trust_adjustment = { ...scored, outcome, persisted: false };
+
+  if (process.env.DATABASE_URL) {
+    const { default: pg } = await import('pg');
+    const pool = new pg.Pool({
+      connectionString: process.env.DATABASE_URL,
+      ssl: process.env.DATABASE_URL.includes('neon.tech') ? { rejectUnauthorized: false } : undefined,
+    });
+    try {
+      const applied = await recordRealityOutcome(pool, outcome);
+      runReceipt.trust_adjustment.persisted = applied.persisted === true;
+    } finally {
+      await pool.end().catch(() => {});
+    }
+  }
+} catch (trustErr) {
+  // Never fail a mission because trust bookkeeping failed, but never claim it
+  // happened either — record the real error.
+  runReceipt.trust_adjustment = { persisted: false, error: trustErr.message };
+}
 if (!doctrine.pass && doctrine.enforcement === 'HARD') {
   runReceipt.verdict = 'FAIL';
   console.error('DOCTRINE_VIOLATION — result truth or artifact policy failed:');

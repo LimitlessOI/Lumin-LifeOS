@@ -20,7 +20,8 @@ import { extractContent } from '../factory-staging/factory-core/builder/authorin
 import { runGovernedShippingQueue } from '../services/governed-shipping-runner.js';
 import { GRADE_ESCALATION_TIERS } from '../services/builderos-model-escalation-gate.js';
 import { runGovernedAutonomousShipOnce } from '../services/governed-autonomous-shipping-loop.js';
-import { getModelRankings, KNOWN_ROLES } from '../services/model-capability-ledger.js';
+import { getModelRankings, getCapabilityProfiles, KNOWN_ROLES } from '../services/model-capability-ledger.js';
+import { detectSystemicPattern } from '../config/trust-scoring.js';
 import { runGovernanceReview } from '../services/governance-law-review.js';
 import { recordFounderDecision, getFounderDecisionHistory, findFounderDecisions } from '../services/founder-intent-model.js';
 import { recordModelOutcome } from '../services/model-capability-ledger.js';
@@ -349,12 +350,30 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
   // makes that ledger actually visible, not just written to a silent table.
   router.get('/factory/model-rankings', guard, async (req, res) => {
     try {
-      const rankings = await getModelRankings(pool, { role: req.query.role || null });
+      const filter = { role: req.query.role || null, factory_id: req.query.factory_id || null };
+      const rankings = await getModelRankings(pool, { role: filter.role });
+      // Profiles sit alongside the ranking on purpose. A rank is one number and
+      // a single number is what a system learns to game, so the per-dimension
+      // capability profile is served with it rather than behind it.
+      const profiles = await getCapabilityProfiles(pool, filter);
+      // A failure reproducing across independent factories indicts the design,
+      // not the factory. Surfacing it here means the evidence is read rather
+      // than merely recorded.
+      const systemic = detectSystemicPattern(
+        profiles
+          .filter((p) => p.dimensions.reality_performance !== null && p.dimensions.reality_performance < 1)
+          .map((p) => ({ failure_signature: `low_reality:${p.role}`, factory_id: p.factory_id }))
+      );
       res.json({
         ok: true,
         rankings,
+        capability_profiles: profiles,
+        systemic_patterns: systemic,
         known_roles: KNOWN_ROLES,
         note: rankings.length === 0 ? 'no outcomes recorded yet for this filter' : undefined,
+        unscored_warning: profiles.some((p) => p.reality_unscored > 0)
+          ? 'some attempts have no Reality outcome yet — unscored work is not success'
+          : undefined,
       });
     } catch (err) {
       res.status(503).json({ ok: false, error: err?.message || String(err) });

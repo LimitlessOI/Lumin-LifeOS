@@ -1,12 +1,12 @@
 {
   "schema": "governance_enforcement_truth_receipt_v1",
-  "generated_at": "2026-08-11T22:24:23.701Z",
+  "generated_at": "2026-08-11T22:30:34.041Z",
   "produced_by": "scripts/verify-enforcement-truth.mjs",
   "separation_collapsed": true,
   "separation_note": "No independent actor verified this run: the same script computes the findings and the verdict. Mitigation, not equivalence — the verdict is a pure function of repository bytes the script never writes, plus a ratchet baseline authored in an earlier commit, so any third party re-derives it byte-identically with `npm run builderos:enforcement:truth`. No model judgment is in the verdict path. The specific repairs this sweep reports are additionally proven by an independent executable mechanism (`node --test tests/chair-consensus-gate-sealing.test.js`).",
   "independent_reproduction_command": "npm run builderos:enforcement:truth",
   "independent_proof_of_repairs": "node --test tests/chair-consensus-gate-sealing.test.js",
-  "files_indexed": 4199,
+  "files_indexed": 4201,
   "total_findings": 145,
   "by_class": {
     "module_not_reachable": 60,

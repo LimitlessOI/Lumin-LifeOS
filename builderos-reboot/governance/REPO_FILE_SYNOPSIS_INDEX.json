@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-11T22:25:25.951Z",
+  "generated_at": "2026-08-11T22:31:31.033Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13249,
+  "file_count": 13251,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -31219,9 +31219,9 @@
     {
       "path": "builderos-reboot/scripts/execute-mission.mjs",
       "synopsis": "Execute all steps in a mission blueprint, then run acceptance tests.",
-      "bytes": 15145,
-      "mtime": "2026-06-30T04:06:25.114Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 17705,
+      "mtime": "2026-08-11T22:29:41.587Z",
+      "indexed_at": "2026-08-11T22:31:31.033Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -32669,6 +32669,16 @@
       "indexed_at": "2026-07-28T23:44:15.529Z",
       "ssot": [
         "docs/products/ai-council/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "config/trust-scoring.js",
+      "synopsis": "Founder-ratified trust-scoring policy — pure functions, no I/O, no DB.",
+      "bytes": 9555,
+      "mtime": "2026-08-11T22:27:02.094Z",
+      "indexed_at": "2026-08-11T22:31:31.033Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
       ]
     },
     {
@@ -42976,9 +42986,9 @@
     {
       "path": "docs/products/builderos/GAP_FILL_LEDGER.json",
       "synopsis": "Documentation — GAP FILL LEDGER.",
-      "bytes": 107192,
-      "mtime": "2026-08-11T22:17:59.332Z",
-      "indexed_at": "2026-08-11T22:25:25.951Z",
+      "bytes": 109535,
+      "mtime": "2026-08-11T22:25:26.555Z",
+      "indexed_at": "2026-08-11T22:31:31.033Z",
       "synopsis_index_only": true
     },
     {
@@ -42991,9 +43001,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 518805,
-      "mtime": "2026-08-11T22:24:49.361Z",
-      "indexed_at": "2026-08-11T22:25:25.951Z"
+      "bytes": 521593,
+      "mtime": "2026-08-11T22:31:18.798Z",
+      "indexed_at": "2026-08-11T22:31:31.033Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -72322,9 +72332,9 @@
     {
       "path": "routes/factory-mount-routes.js",
       "synopsis": "Pure: should the codegen prompt inline this file's existing content?",
-      "bytes": 43077,
-      "mtime": "2026-08-08T23:55:41.430Z",
-      "indexed_at": "2026-08-08T23:56:26.999Z",
+      "bytes": 44275,
+      "mtime": "2026-08-11T22:30:30.584Z",
+      "indexed_at": "2026-08-11T22:31:31.033Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -97740,9 +97750,9 @@
     {
       "path": "services/model-capability-ledger.js",
       "synopsis": "services/model-capability-ledger.js",
-      "bytes": 6283,
-      "mtime": "2026-07-28T17:47:22.565Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 12751,
+      "mtime": "2026-08-11T22:28:02.289Z",
+      "indexed_at": "2026-08-11T22:31:31.033Z",
       "ssot": [
         "docs/products/ai-council/PRODUCT_HOME.md"
       ]
@@ -104016,6 +104026,13 @@
       "ssot": [
         "docs/products/ai-council/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "tests/trust-scoring.test.js",
+      "synopsis": "Proves the trust-scoring policy actually implements the founder's",
+      "bytes": 6330,
+      "mtime": "2026-08-11T22:28:42.394Z",
+      "indexed_at": "2026-08-11T22:31:31.033Z"
     },
     {
       "path": "tests/truth-gap-closure.test.js",

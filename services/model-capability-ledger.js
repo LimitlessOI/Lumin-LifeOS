@@ -25,6 +25,7 @@
  * retrofitted speculatively just to claim full coverage.
  * @ssot docs/products/ai-council/PRODUCT_HOME.md
  */
+import { computeTrustDelta, buildCapabilityProfile } from '../config/trust-scoring.js';
 
 export const KNOWN_ROLES = {
   builderos_execution: 'BuilderOS codegen execution (governed factory dispatch)',
@@ -61,7 +62,41 @@ async function ensureTable(pool) {
   // confirmed empty before this change, but ensureTable must stay safe to
   // run against any prior state, not just the one observed).
   await pool.query(`ALTER TABLE model_capability_ledger ADD COLUMN IF NOT EXISTS role TEXT NOT NULL DEFAULT 'builderos_execution'`).catch(() => {});
+
+  // Reality write-back columns. The ledger previously CLOSED AT DISPATCH: it
+  // recorded that a model was asked to do something and whether the dispatch
+  // looked fine, then never learned whether the thing actually worked. These are
+  // the counters that let a Reality outcome reach the row that predicted it.
+  // Additive and idempotent — same pattern as the `role` backfill above.
+  for (const col of REALITY_COLUMNS) {
+    await pool.query(`ALTER TABLE model_capability_ledger ADD COLUMN IF NOT EXISTS ${col.name} ${col.type}`).catch(() => {});
+  }
 }
+
+/**
+ * `factory_id` exists so trust can attach to a FACTORY, not only a model tier.
+ * Two factories on the same tier are different actors with different records;
+ * without an identity there is nothing to hold capable. Defaults to factory-1 so
+ * every historical row keeps a truthful owner rather than becoming anonymous.
+ */
+export const DEFAULT_FACTORY_ID = 'factory-1';
+
+const REALITY_COLUMNS = [
+  { name: 'factory_id', type: `TEXT NOT NULL DEFAULT '${DEFAULT_FACTORY_ID}'` },
+  { name: 'reality_verified_count', type: 'INTEGER NOT NULL DEFAULT 0' },
+  { name: 'reality_failed_count', type: 'INTEGER NOT NULL DEFAULT 0' },
+  { name: 'blueprint_fidelity_ok_count', type: 'INTEGER NOT NULL DEFAULT 0' },
+  { name: 'blueprint_fidelity_violation_count', type: 'INTEGER NOT NULL DEFAULT 0' },
+  { name: 'self_caught_count', type: 'INTEGER NOT NULL DEFAULT 0' },
+  { name: 'escaped_defect_count', type: 'INTEGER NOT NULL DEFAULT 0' },
+  { name: 'peer_defect_found_count', type: 'INTEGER NOT NULL DEFAULT 0' },
+  { name: 'reuse_count', type: 'INTEGER NOT NULL DEFAULT 0' },
+  { name: 'unnecessary_invention_count', type: 'INTEGER NOT NULL DEFAULT 0' },
+  { name: 'lesson_verified_count', type: 'INTEGER NOT NULL DEFAULT 0' },
+  { name: 'concealment_count', type: 'INTEGER NOT NULL DEFAULT 0' },
+  { name: 'trust_delta_total', type: 'INTEGER NOT NULL DEFAULT 0' },
+  { name: 'reality_last_scored_at', type: 'TIMESTAMPTZ' },
+];
 
 /**
  * Record one real outcome for a (model_tier, role) pair. Called from real
@@ -95,6 +130,101 @@ export async function recordModelOutcome(pool, {
        updated_at = now()`,
     [tier, roleKey, ok ? 1 : 0, trust_earned ? 1 : 0, theater_detected ? 1 : 0, escalated ? 1 : 0, effective_grade]
   );
+}
+
+/**
+ * THE MISSING WRITER (§2.0L). Applies a real Reality outcome to the ledger row
+ * that produced the work, so a prediction that was scored actually changes who
+ * gets the next job. Before this, `trust_adjustment.delta` was named in the
+ * department role contract with no writer and no reader.
+ *
+ * Scoring policy lives in config/trust-scoring.js and is pure — this function
+ * only persists what that policy computed. It never decides what to reward,
+ * which keeps "what counts as good" a founder decision rather than a side effect
+ * of persistence code.
+ */
+export async function recordRealityOutcome(pool, outcome = {}) {
+  const tier = String(outcome.model_tier || '').trim();
+  const roleKey = String(outcome.role || 'builderos_execution').trim() || 'builderos_execution';
+  const factoryId = String(outcome.factory_id || DEFAULT_FACTORY_ID).trim() || DEFAULT_FACTORY_ID;
+  const scored = computeTrustDelta(outcome);
+  if (!pool || !tier) return { persisted: false, ...scored };
+
+  await ensureTable(pool);
+  const inc = (v) => (v === true ? 1 : 0);
+  const realityFailed = outcome.reality_verified === false && outcome.reality_scored === true;
+
+  await pool.query(
+    `INSERT INTO model_capability_ledger
+       (model_tier, role, factory_id, attempts, shipped_ok,
+        reality_verified_count, reality_failed_count,
+        blueprint_fidelity_ok_count, blueprint_fidelity_violation_count,
+        self_caught_count, escaped_defect_count, peer_defect_found_count,
+        reuse_count, unnecessary_invention_count, lesson_verified_count,
+        concealment_count, trust_delta_total, reality_last_scored_at,
+        last_seen_at, updated_at)
+     VALUES ($1, $2, $3, 0, 0, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, now(), now(), now())
+     ON CONFLICT (model_tier, role) DO UPDATE SET
+       reality_verified_count = model_capability_ledger.reality_verified_count + $4,
+       reality_failed_count = model_capability_ledger.reality_failed_count + $5,
+       blueprint_fidelity_ok_count = model_capability_ledger.blueprint_fidelity_ok_count + $6,
+       blueprint_fidelity_violation_count = model_capability_ledger.blueprint_fidelity_violation_count + $7,
+       self_caught_count = model_capability_ledger.self_caught_count + $8,
+       escaped_defect_count = model_capability_ledger.escaped_defect_count + $9,
+       peer_defect_found_count = model_capability_ledger.peer_defect_found_count + $10,
+       reuse_count = model_capability_ledger.reuse_count + $11,
+       unnecessary_invention_count = model_capability_ledger.unnecessary_invention_count + $12,
+       lesson_verified_count = model_capability_ledger.lesson_verified_count + $13,
+       concealment_count = model_capability_ledger.concealment_count + $14,
+       trust_delta_total = model_capability_ledger.trust_delta_total + $15,
+       reality_last_scored_at = now(),
+       updated_at = now()`,
+    [
+      tier,
+      roleKey,
+      factoryId,
+      inc(outcome.reality_verified === true),
+      inc(realityFailed),
+      inc(outcome.blueprint_fidelity_ok === true),
+      inc(outcome.blueprint_fidelity_violation === true),
+      inc(outcome.self_caught_defect === true),
+      inc(outcome.escaped_defect === true),
+      inc(outcome.peer_defect_found === true),
+      inc(outcome.reused_existing === true),
+      inc(outcome.unnecessary_invention === true),
+      inc(outcome.lesson_verified === true),
+      inc(scored.concealment === true),
+      scored.delta,
+    ]
+  );
+  return { persisted: true, factory_id: factoryId, ...scored };
+}
+
+/**
+ * Multi-dimensional capability profiles. A rank may be presented on top, but the
+ * dimensions stay separate: once one number is the target, the system learns to
+ * maximize the number instead of doing the work.
+ */
+export async function getCapabilityProfiles(pool, { role = null, factory_id = null } = {}) {
+  if (!pool) return [];
+  await ensureTable(pool);
+  const where = [];
+  const params = [];
+  if (role) {
+    params.push(role);
+    where.push(`role = $${params.length}`);
+  }
+  if (factory_id) {
+    params.push(factory_id);
+    where.push(`factory_id = $${params.length}`);
+  }
+  const { rows } = await pool.query(
+    `SELECT * FROM model_capability_ledger
+     ${where.length ? `WHERE ${where.join(' AND ')}` : ''}
+     ORDER BY trust_delta_total DESC, attempts DESC`,
+    params
+  );
+  return rows.map(buildCapabilityProfile);
 }
 
 /**
