@@ -27,6 +27,22 @@
 // while expanded) that collapses straight back to badge size. Repositioning
 // out of the way without closing was already possible (drag the same top
 // strip) -- not a new gap, just unlabeled.
+//
+// Real founder auto-login (2026-08-10): the WKWebView here has its own
+// cookie/localStorage jar, entirely separate from Chrome -- expanding
+// showed the real LifeOS sign-in screen, not the founder's actual chat.
+// Founder, direct: "you login for me[,] dont make me do it" -- and no
+// password is ever typed, stored, or seen by this app or by me. Uses the
+// real, already-built, purpose-documented `POST /api/v1/lifeos/auth/
+// operator/mint-browser-session` (its own response note: "Password never
+// returned") -- the server reads the founder's vaulted Railway credentials,
+// logs in server-side, and returns only a real session access_token. This
+// app reads COMMAND_CENTER_KEY from the local, git-ignored .env file on
+// disk (never hardcoded in source, never committed) to call that endpoint,
+// then injects the returned token into the page's own localStorage and
+// reloads -- the same storage key (`lifeos_access_token`) every other
+// LifeOS surface already uses, so the app treats it exactly like a real
+// login, because it is one.
 // See docs/products/lifeos/communication/COMMUNICATION_SYSTEM_BLUEPRINT.md §21.1.
 import Cocoa
 import WebKit
@@ -60,6 +76,11 @@ final class ContainerView: NSView, WKNavigationDelegate {
     private static let chatSize = NSSize(width: 420, height: 580)
     private static let clickMoveThreshold: CGFloat = 4
     private var pendingAutoOpenChat = false
+
+    // Real founder auto-login -- see header comment.
+    private static let mintSessionURL = URL(string: "https://lumin-web-production-e3a9.up.railway.app/api/v1/lifeos/auth/operator/mint-browser-session")!
+    private static let localEnvPath = "/Users/adamhopkins/Projects/Lumin-LifeOS/.env"
+    private var didAttemptAutoLogin = false
 
     // Shrink-back-to-circle -- see header comment.
     private static let badgeSize: CGFloat = 120 // matches main.swift's initialSize
@@ -150,6 +171,16 @@ final class ContainerView: NSView, WKNavigationDelegate {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         badgeView.celebrate()
         flashBadgeIfExpanded()
+
+        // Auto-login always runs first, exactly once per launch, and this
+        // load's result (likely the sign-in screen, pre-auth) is treated as
+        // provisional -- a real reload follows once the founder session
+        // token lands, and THAT load is the one that should open the chat.
+        if !didAttemptAutoLogin {
+            attemptAutoLogin(on: webView)
+            return
+        }
+
         if pendingAutoOpenChat {
             pendingAutoOpenChat = false
             // openLuminDrawer/#lumin-input are real globals in the already-live
@@ -161,6 +192,73 @@ final class ContainerView: NSView, WKNavigationDelegate {
                 "var el = document.getElementById('lumin-input'); if (el) el.focus(); } } catch (e) {}"
             )
         }
+    }
+
+    /// Real founder auto-login -- see header comment. Never touches a
+    /// password; reads only the operator command key from the local,
+    /// git-ignored .env file to mint a real session server-side.
+    private func attemptAutoLogin(on webView: WKWebView) {
+        didAttemptAutoLogin = true
+        guard let commandKey = Self.readLocalCommandKey() else {
+            FileHandle.standardError.write("Taloa: auto-login skipped -- no COMMAND_CENTER_KEY found in local .env\n".data(using: .utf8)!)
+            return
+        }
+        var request = URLRequest(url: Self.mintSessionURL)
+        request.httpMethod = "POST"
+        request.setValue(commandKey, forHTTPHeaderField: "x-command-key")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
+            guard let data = data,
+                  let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+                  json["ok"] as? Bool == true,
+                  let token = json["access_token"] as? String, !token.isEmpty else {
+                let status = (response as? HTTPURLResponse)?.statusCode ?? -1
+                FileHandle.standardError.write("Taloa: auto-login mint-browser-session failed (http \(status), err=\(error?.localizedDescription ?? "none"))\n".data(using: .utf8)!)
+                return
+            }
+            // Real bug found on the first attempt: lifeos-login.html's own
+            // self-redirect-if-already-authenticated check reads
+            // lifeos_refresh_token FIRST and returns immediately if it's
+            // missing -- `if (!refresh) return;` -- before it ever looks at
+            // whether the access token is valid. Injecting only the access
+            // token left it silently stuck on the sign-in screen even
+            // though the token itself was real and good. Both must be set.
+            let refreshToken = json["refresh_token"] as? String
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self, self.webView === webView else { return }
+                FileHandle.standardError.write("Taloa: auto-login token acquired, injecting real session\n".data(using: .utf8)!)
+                // JSON-encode each token so it's safely quoted for injection
+                // regardless of exact character content -- never string-
+                // interpolated raw into the JS literal.
+                func jsLiteral(_ s: String) -> String? {
+                    guard let d = try? JSONSerialization.data(withJSONObject: [s]),
+                          let str = String(data: d, encoding: .utf8) else { return nil }
+                    return String(str.dropFirst().dropLast()) // unwrap the [ ] JSONSerialization needs for a bare string
+                }
+                guard let accessLiteral = jsLiteral(token) else { return }
+                var js = "localStorage.setItem('lifeos_access_token', \(accessLiteral));"
+                if let refreshToken = refreshToken, let refreshLiteral = jsLiteral(refreshToken) {
+                    js += " localStorage.setItem('lifeos_refresh_token', \(refreshLiteral));"
+                }
+                js += " location.reload();"
+                webView.evaluateJavaScript(js)
+            }
+        }.resume()
+    }
+
+    /// Reads COMMAND_CENTER_KEY from the local, git-ignored .env file on
+    /// disk -- never hardcoded in source, never committed. This app only
+    /// runs on the founder's own machine, where that file already lives.
+    private static func readLocalCommandKey() -> String? {
+        guard let content = try? String(contentsOfFile: localEnvPath, encoding: .utf8) else { return nil }
+        for line in content.split(separator: "\n") {
+            let trimmed = line.trimmingCharacters(in: .whitespaces)
+            if trimmed.hasPrefix("COMMAND_CENTER_KEY=") {
+                let value = trimmed.dropFirst("COMMAND_CENTER_KEY=".count).trimmingCharacters(in: .whitespaces)
+                return value.isEmpty ? nil : value
+            }
+        }
+        return nil
     }
 
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
