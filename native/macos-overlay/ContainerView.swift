@@ -95,16 +95,28 @@ final class ContainerView: NSView, WKNavigationDelegate, WKUIDelegate {
     // is accurate but not as instantly readable as "close this" as a
     // literal X. Same button, same handler, same proven mechanism -- icon
     // only.
+    //
+    // Made much bigger + given a real dark backing pill (2026-08-11),
+    // founder direct, frustrated: "i need a button to turn it back to the
+    // avitar" -- the whole strip is now click-to-shrink too (separate fix,
+    // same session), but "I need A BUTTON" means a real, obviously visible
+    // one, not just a bigger invisible hit-target. 18pt with no background
+    // could disappear against light web content behind it; 30pt plus a
+    // solid dark circle makes it read as an actual button regardless of
+    // what's loaded in the WKWebView underneath.
     private static let badgeSize: CGFloat = 120 // matches main.swift's initialSize
-    private static let shrinkButtonSize: CGFloat = 18
+    private static let shrinkButtonSize: CGFloat = 30
     private lazy var shrinkButton: NSButton = {
         let img = NSImage(systemSymbolName: "xmark.circle.fill", accessibilityDescription: "Close")
         let b = NSButton(image: img ?? NSImage(), target: self, action: #selector(handleShrinkTapped))
         b.isBordered = false
         b.imageScaling = .scaleProportionallyUpOrDown
         b.contentTintColor = .white
-        b.alphaValue = 0.85
+        b.alphaValue = 0.95
         b.isHidden = true
+        b.wantsLayer = true
+        b.layer?.backgroundColor = NSColor.black.withAlphaComponent(0.55).cgColor
+        b.layer?.cornerRadius = Self.shrinkButtonSize / 2
         return b
     }()
 
