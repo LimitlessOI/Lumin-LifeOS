@@ -21,8 +21,16 @@ const DASHBOARD_KEYPRESS_BLOCK = `chatInput.addEventListener('keypress', e => {
 if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
 });`;
 
+// Same class of bug found live 2026-08-11 in builder-instruction-target.js's
+// isCssOnlyUiFeedback -- "enter" and "message" are common words in any
+// conversation about the system; a real multi-paragraph spec could
+// false-positive here too. This wiring order is always short and direct
+// by design, so length alone is a safe, honest guard.
+const ENTER_SEND_WIRE_ORDER_MAX_LENGTH = 300;
+
 export function isEnterKeySendWireOrder(task = '') {
   const t = String(task || '');
+  if (t.length > ENTER_SEND_WIRE_ORDER_MAX_LENGTH) return false;
   if (isFounderUiBehaviorChangeRequest(t)) return true;
   if (/\b(enter|return key)\b/i.test(t) && /\b(send|post|submit|message|chat)\b/i.test(t)) {
     const explicit = extractTargetFileFromInstruction(t);

@@ -66,10 +66,21 @@ export function isFounderRepairOrderIntent(text = '') {
   return false;
 }
 
+// Real bug found live 2026-08-11, same class as builder-instruction-target.js's
+// isCssOnlyUiFeedback: a real multi-paragraph technical spec (chat/message/
+// input are all common words in ANY conversation about the system) could
+// false-positive here just as easily as it did there, and get silently
+// treated as a tiny "wire Enter-to-send" mechanical patch instead of the
+// real request. These wiring orders are always short, direct instructions
+// by design ("make Enter send messages in the drawer") -- a real spec is
+// inherently longer than that, so length alone is a safe, honest guard.
+const WIRING_ORDER_MAX_LENGTH = 300;
+
 /** Natural-language UI behavior change — infer surface and auto-execute (no repair-order HALT). */
 export function isFounderUiBehaviorChangeRequest(text = '') {
   const t = String(text || '').trim();
   if (!t) return null;
+  if (t.length > WIRING_ORDER_MAX_LENGTH) return null;
   const enterSend = /\b(enter|return key|hit enter|press enter|newline|line break)\b/i.test(t)
     && /\b(send|post|submit|message|chat|box|field|textarea|input|typing|type out|response)\b/i.test(t);
   const shiftEnter = /\bshift\+enter|shift enter\b/i.test(t) && /\b(newline|line break|next line)\b/i.test(t);

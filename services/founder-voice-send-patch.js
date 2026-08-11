@@ -70,8 +70,17 @@ document.addEventListener('DOMContentLoaded', () => { initLuminDrawerVoiceSend()
 ${MARKER_END}
 `;
 
+// Same class of bug found live 2026-08-11 in builder-instruction-target.js's
+// isCssOnlyUiFeedback: "voice" and "message" are common words in any
+// conversation about this system's own capabilities -- a real multi-
+// paragraph spec could false-positive here too. This wiring order is
+// always a short, direct instruction by design; a real spec is inherently
+// longer, so length alone is a safe, honest guard.
+const VOICE_WIRE_ORDER_MAX_LENGTH = 300;
+
 export function isVoiceSendWireOrder(task = '') {
   const t = String(task || '');
+  if (t.length > VOICE_WIRE_ORDER_MAX_LENGTH) return false;
   if (!/\b(voice|dictat|mic|send it|speech)\b/i.test(t)) return false;
   if (!/\b(send|post|submit|message|click send)\b/i.test(t)) return false;
   const explicit = extractTargetFileFromInstruction(t);

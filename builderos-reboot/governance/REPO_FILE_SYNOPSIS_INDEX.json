@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-11T08:58:33.426Z",
+  "generated_at": "2026-08-11T09:20:47.341Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13226,
   "files": [
@@ -42951,9 +42951,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 495254,
-      "mtime": "2026-08-11T08:55:07.248Z",
-      "indexed_at": "2026-08-11T08:58:25.205Z"
+      "bytes": 497824,
+      "mtime": "2026-08-11T09:20:34.408Z",
+      "indexed_at": "2026-08-11T09:20:47.341Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -92177,9 +92177,9 @@
     {
       "path": "services/chair-intent-signals.js",
       "synopsis": "Chair intent signal helpers — shared by orchestrator and context classifier.",
-      "bytes": 7725,
-      "mtime": "2026-07-24T18:36:41.704Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 8418,
+      "mtime": "2026-08-11T09:19:36.793Z",
+      "indexed_at": "2026-08-11T09:20:47.341Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -94341,9 +94341,9 @@
     {
       "path": "services/founder-enter-send-patch.js",
       "synopsis": "Mechanical Enter-to-send for dashboard + Lumin drawer chat inputs.",
-      "bytes": 5247,
-      "mtime": "2026-06-29T17:44:54.523Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 5705,
+      "mtime": "2026-08-11T09:20:00.274Z",
+      "indexed_at": "2026-08-11T09:20:47.341Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -94563,9 +94563,9 @@
     {
       "path": "services/founder-voice-send-patch.js",
       "synopsis": "Mechanical voice \"send it\" wire for Lumin drawer — no whole-file HTML rewrite.",
-      "bytes": 7168,
-      "mtime": "2026-06-29T17:44:54.525Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 7685,
+      "mtime": "2026-08-11T09:19:48.703Z",
+      "indexed_at": "2026-08-11T09:20:47.341Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
