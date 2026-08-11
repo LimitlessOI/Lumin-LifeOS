@@ -115,29 +115,54 @@ export function createLifeosExtensionRoutes(app, ctx) {
     };
   }
 
-  async function chat(ownerId, body) {
+  /**
+   * Routes through the SAME real chair/founder-interface pipeline the main
+   * LifeOS app uses (public/overlay/lifeos-app.html's luminSend()) -- this
+   * used to call callCouncilMember('openai', ...) directly, a separate,
+   * shallow, bare single-model path with no chair/council reasoning, no
+   * memory, none of "the full communications system." Direct founder
+   * correction, 2026-08-10: "this is not connected to our system and the
+   * full communications system we have worked on." Also fixes a real,
+   * separate field-name bug: this previously returned `{ok:true, response}`
+   * while public/extension/frame.js's sendChat() reads `d.reply` -- so even
+   * a successful call would have rendered as blank/undefined, never
+   * surfaced because the callCouncilMember path was erroring first.
+   */
+  async function chat(ownerId, body, authHeader) {
     const userMessage = normalizeText(body?.message || body?.text || body?.prompt);
-    const [userContextRow, interactions] = await Promise.all([
-      getLatestUserContext(ownerId),
-      getRecentInteractions(ownerId, 10),
-    ]);
+    if (!userMessage) {
+      return { ok: false, error: 'message_required' };
+    }
 
-    const pageContext = {
-      userContext: userContextRow?.context || null,
-      recentInteractions: interactions.map((row) => row.interaction_data),
-      userMessage: userMessage || null,
-    };
+    const baseUrl = process.env.RAILWAY_PUBLIC_DOMAIN
+      ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}`
+      : `http://localhost:${process.env.PORT || 8080}`;
 
-    const response = await callCouncilMember('openai', {
-      taskType: 'general',
-      pageContext,
-      prompt: userMessage || 'Respond using the provided overlay context.',
-    }, { taskType: 'general' });
-
-    return {
-      ok: true,
-      response: response?.response || response || null,
-    };
+    const res = await fetch(`${baseUrl}/api/v1/lifeos/builderos/command-control/founder-interface/message`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(authHeader ? { Authorization: authHeader } : {}),
+      },
+      body: JSON.stringify({
+        text: userMessage,
+        action: 'auto',
+        stage: 'system',
+        source_mode: 'text',
+        conversational_mode: true,
+        async: false,
+        ui_context: {
+          surface: 'chrome-extension',
+          page: body?.page_context?.url || body?.page_context?.pageUrl || null,
+        },
+      }),
+    });
+    const data = await res.json().catch(() => null);
+    if (!data) {
+      return { ok: false, error: 'founder_interface_no_response' };
+    }
+    const reply = data.human_summary || data.reason || data.error || 'No response from system.';
+    return { ok: true, reply, raw: data };
   }
 
   app.get('/api/v1/extension/status', async (req, res) => {
@@ -177,7 +202,9 @@ export function createLifeosExtensionRoutes(app, ctx) {
     try {
       const ownerId = extractOwnerId(req);
       if (!ownerId) return toJson(res, 401, { error: 'jwt_required' });
-      return toJson(res, 200, await chat(ownerId, req.body || {}));
+      const authHeader = req.headers.authorization
+        || (req.headers['x-lifeos-token'] ? `Bearer ${req.headers['x-lifeos-token']}` : null);
+      return toJson(res, 200, await chat(ownerId, req.body || {}, authHeader));
     } catch (error) {
       logger?.error?.({ error }, 'extension_chat_failed');
       return toJson(res, error?.status || 500, { error: error?.message || 'internal_error' });
