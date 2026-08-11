@@ -118,3 +118,6 @@ public/downloads/lifeos-ios.plist
 # Generated factory bundle (regenerate: npm run factory:bundle). Untracked 2026-07-02 to cut sprawl.
 lumin-factory/
 products/receipts/SITE_BUILDER_PREALPHA_LAYER_A.json
+
+# Test-generated consensus seals (real seals are committed intentionally, not these)
+data/tmp/test-seals/

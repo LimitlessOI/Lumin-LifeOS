@@ -7,9 +7,9 @@
     "role": "Mission pack index — generated from MISSION_QUEUE.json",
     "canonical_work_queue": "builderos-reboot/BP_PRIORITY.json"
   },
-  "generated_at": "2026-07-30T18:10:57.572Z",
+  "generated_at": "2026-08-10T22:44:12.588Z",
   "source_of_truth": "builderos-reboot/MISSION_QUEUE.json",
-  "mission_count": 57,
+  "mission_count": 89,
   "missions_complete": 37,
   "missions": [
     {
@@ -276,6 +276,27 @@
       "status": "complete"
     },
     {
+      "mission_id": "ANDROID-REMOTE-COMMAND-0001",
+      "blueprint_id": "ANDROID-REMOTE-COMMAND-0001-BP1",
+      "scope": "New routes/android-command-routes.js: a self-bootstrapping android_commands table plus three requireKey-gated routes -- POST /command to enqueue, GET /pending-for-user to atomically claim the oldest pending command for a user, and POST /command-result to mark it done or failed.",
+      "steps": 1,
+      "status": "unknown"
+    },
+    {
+      "mission_id": "BROWSER-AGENT-ERROR-VISIBILITY-0001",
+      "blueprint_id": "BROWSER-AGENT-ERROR-VISIBILITY-0001-BP1",
+      "scope": "Fix a real bug where executeAction's catch block returns a raw Error object that silently serializes to {} in every JSON API response, hiding real failure reasons from every browser-agent caller.",
+      "steps": 1,
+      "status": "unknown"
+    },
+    {
+      "mission_id": "BROWSER-AGENT-GMAIL-SIGNUP-CREDS-0001",
+      "blueprint_id": "BROWSER-AGENT-GMAIL-SIGNUP-CREDS-0001-BP1",
+      "scope": "Add GMAIL_SIGNUP envCreds injection so the system's real signup email inbox can be checked for a verification code without ever exposing the raw password to the caller, matching the existing ETSY/EBAY pattern exactly.",
+      "steps": 1,
+      "status": "unknown"
+    },
+    {
       "mission_id": "BUILDEROS-HARNESS-PROOF-0001",
       "blueprint_id": "BUILDEROS-HARNESS-PROOF-0001-v1",
       "scope": "builderos_operational_harness_mechanical",
@@ -295,10 +316,67 @@
       "error": "no_blueprint"
     },
     {
+      "mission_id": "CONSTITUTIONAL-ACTIVE-REALITY-CONSOLIDATION-0001",
+      "steps": 5,
+      "status": "unknown"
+    },
+    {
+      "mission_id": "DRIVE-SENSITIVE-CONTENT-FILTER-0001",
+      "blueprint_id": "DRIVE-SENSITIVE-CONTENT-FILTER-0001-BP1",
+      "scope": "New services/drive-sensitive-content-filter.js: redacts explicit-content signals and PII-shaped patterns (SSN, credit card, password fields) from observation text/elements, tagging each redaction with a category (never the original value) so the UI can show a labeled placeholder without ever storing or displaying the sensitive value itself.",
+      "steps": 1,
+      "status": "unknown"
+    },
+    {
+      "mission_id": "EXTENSION-DRIVE-STUCK-HANDOFF-0001",
+      "blueprint_id": "EXTENSION-DRIVE-STUCK-HANDOFF-0001-BP1",
+      "scope": "Wire the existing onAfterStep hook into the drive channel's /start call so a genuinely stuck step (repeated click/type with zero page change) stops cleanly and surfaces a handoff{selector,label,url} instead of burning the step budget, persist it on the session, and add POST /handoff-resume to type the founder's value in and resume the loop.",
+      "steps": 3,
+      "status": "unknown"
+    },
+    {
+      "mission_id": "FACTORY-BLUEPRINT-AUTHORITY-0001",
+      "steps": 0,
+      "status": "unknown",
+      "error": "no_blueprint"
+    },
+    {
       "mission_id": "FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001",
       "blueprint_id": "FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001-v1",
       "scope": "builderos_autonomy_closure",
       "steps": 14,
+      "status": "unknown"
+    },
+    {
+      "mission_id": "FACTORY-BUILDEROS-CONVERGENCE-0001",
+      "blueprint_id": "FACTORY-BUILDEROS-CONVERGENCE-0001-v2",
+      "scope": "builderos_convergence",
+      "steps": 14,
+      "status": "unknown"
+    },
+    {
+      "mission_id": "FACTORY-COGNITIVE-ARCHITECTURE-0001",
+      "steps": 11,
+      "status": "unknown"
+    },
+    {
+      "mission_id": "FACTORY-CONSTITUTIONAL-ARCHITECTURE-0001",
+      "blueprint_id": "FACTORY-CONSTITUTIONAL-ARCHITECTURE-0001-v1",
+      "scope": "constitutional_architecture_and_registry",
+      "steps": 6,
+      "status": "unknown"
+    },
+    {
+      "mission_id": "FACTORY-CONSTITUTIONAL-LEARNING-ARCHITECTURE-0001",
+      "blueprint_id": "FACTORY-CONSTITUTIONAL-LEARNING-ARCHITECTURE-0001-v1",
+      "scope": "constitutional_learning_architecture_phase_1",
+      "steps": 9,
+      "status": "unknown"
+    },
+    {
+      "mission_id": "FACTORY-DEMO-SAMPLE-0001",
+      "blueprint_id": "FACTORY-DEMO-SAMPLE-0001",
+      "steps": 1,
       "status": "unknown"
     },
     {
@@ -309,10 +387,132 @@
       "status": "unknown"
     },
     {
+      "mission_id": "FACTORY-MASTER-A-TO-Z-0001",
+      "steps": 21,
+      "status": "unknown"
+    },
+    {
+      "mission_id": "FACTORY-PATH-TO-TEN-0001",
+      "steps": 18,
+      "status": "unknown"
+    },
+    {
+      "mission_id": "FACTORY-REPAIR-AND-AUTONOMY-0001",
+      "blueprint_id": "FACTORY-REPAIR-AND-AUTONOMY-0001-v1",
+      "scope": "builderos_repair_autonomy_and_constitutional_runtime",
+      "steps": 13,
+      "status": "unknown"
+    },
+    {
+      "mission_id": "GALLERY-UPLOAD-ROUTE-0001",
+      "blueprint_id": "GALLERY-UPLOAD-ROUTE-0001-BP1",
+      "scope": "New routes/gallery-upload-routes.js: a single requireKey-gated POST /upload route that receives a batch of base64-encoded photos and commits them into data/card-photos/ via the injected commitManyToGitHub function.",
+      "steps": 1,
+      "status": "unknown"
+    },
+    {
+      "mission_id": "GLOBAL-CORS-EXTENSION-FIX-0001",
+      "blueprint_id": "GLOBAL-CORS-EXTENSION-FIX-0001-BP1",
+      "scope": "Fix a real, pre-existing global CORS bug found live via deployment log inspection: OPTIONS preflight always returns 200 but never sets Access-Control-Allow-Origin for non-allowlisted origins, silently blocking every content-script request from any third-party host page.",
+      "steps": 1,
+      "status": "unknown"
+    },
+    {
+      "mission_id": "MARKETPLACE-AUTHENTICATED-RESEARCH-0001",
+      "blueprint_id": "MARKETPLACE-AUTHENTICATED-RESEARCH-2026-08-08",
+      "scope": "marketplace_authenticated_research_envcreds",
+      "steps": 1,
+      "status": "unknown"
+    },
+    {
+      "mission_id": "MARKETPLACE-OPPORTUNITY-SCANNER-0001",
+      "blueprint_id": "MARKETPLACE-OPPORTUNITY-SCANNER-2026-08-08",
+      "scope": "marketplace_opportunity_scanner_scoring_and_persistence",
+      "steps": 4,
+      "status": "unknown"
+    },
+    {
+      "mission_id": "OVERLAY-DRIVE-AUTOPICKUP-0001",
+      "blueprint_id": "OVERLAY-DRIVE-AUTOPICKUP-0001-BP1",
+      "scope": "Add a GET /pending-for-user endpoint so an already-open browser tab can auto-claim and auto-drive a session the server starts, with zero clicks required from the founder.",
+      "steps": 3,
+      "status": "unknown"
+    },
+    {
+      "mission_id": "OVERLAY-DRIVE-CHANNEL-0001",
+      "blueprint_id": "OVERLAY-DRIVE-CHANNEL-0001-BP1",
+      "scope": "Generic poll/post bridge + route so the proven generic browser-agent loop can drive Adam's real browser through the Universal Overlay extension. No site-specific code. No change to the existing loop.",
+      "steps": 4,
+      "status": "unknown"
+    },
+    {
+      "mission_id": "OVERLAY-DRIVE-CORS-FIX-0001",
+      "blueprint_id": "OVERLAY-DRIVE-CORS-FIX-0001-BP1",
+      "scope": "Fix a real bug: extension-drive-routes.js has no CORS headers, silently blocking content.js's cross-origin auto-pickup fetch calls from any host page.",
+      "steps": 1,
+      "status": "unknown"
+    },
+    {
+      "mission_id": "OVERLAY-DRIVE-MODEL-CALL-FIX-0001",
+      "blueprint_id": "OVERLAY-DRIVE-MODEL-CALL-FIX-0001-BP1",
+      "scope": "Fix a real bug: extension-drive-routes.js called callCouncilMember with the wrong argument shape and invalid member ids, causing every model tier to fail (all_tiers_failed) on the first real live-driven browser test.",
+      "steps": 2,
+      "status": "unknown"
+    },
+    {
+      "mission_id": "OVERLAY-ENGINE-RISK-GATE-0001",
+      "blueprint_id": "OVERLAY-ENGINE-RISK-GATE-2026-08-08",
+      "scope": "overlay_engine_risk_authorization_gate",
+      "steps": 6,
+      "status": "unknown"
+    },
+    {
+      "mission_id": "OVERLAY-STUCK-LOOP-RECOVERY-0001",
+      "blueprint_id": "OVERLAY-STUCK-LOOP-RECOVERY-2026-08-08",
+      "scope": "overlay_stuck_loop_detection_and_recovery",
+      "steps": 4,
+      "status": "unknown"
+    },
+    {
       "mission_id": "PRODUCT-ACTION-INBOX-V1-0001",
       "blueprint_id": "ACTION-INBOX-V1-2026-06-12",
       "scope": "action_inbox_v1_middle_layer",
       "steps": 5,
+      "status": "unknown"
+    },
+    {
+      "mission_id": "PRODUCT-COMMUNICATION-V1-VOICE-PRESENCE-0001",
+      "blueprint_id": "COMMUNICATION-V1-VOICE-PRESENCE-2026-08-06",
+      "scope": "voice_presence_turn_completion_and_interruption_decay",
+      "steps": 7,
+      "status": "unknown"
+    },
+    {
+      "mission_id": "PRODUCT-COMMUNICATION-V2-EVIDENCE-FUSION-0001",
+      "blueprint_id": "COMMUNICATION-V2-EVIDENCE-FUSION-2026-08-08",
+      "scope": "evidence_fusion_engine_and_cognitive_dynamics",
+      "steps": 4,
+      "status": "unknown"
+    },
+    {
+      "mission_id": "PRODUCT-COMMUNICATION-V3-PERCEPTION-0001",
+      "blueprint_id": "COMMUNICATION-V3-PERCEPTION-2026-08-08",
+      "scope": "perception_layer_face_body_biometric",
+      "steps": 2,
+      "status": "unknown"
+    },
+    {
+      "mission_id": "PRODUCT-COMMUNICATION-V4-OVERLAY-ACTION-0001",
+      "blueprint_id": "COMMUNICATION-V4-OVERLAY-ACTION-2026-08-08",
+      "scope": "verbal_ai_director_and_overlay_action",
+      "steps": 2,
+      "status": "unknown"
+    },
+    {
+      "mission_id": "PRODUCT-COMMUNICATION-V5-CROSS-DOMAIN-0001",
+      "blueprint_id": "COMMUNICATION-V5-CROSS-DOMAIN-2026-08-08",
+      "scope": "cross_domain_personal_intelligence",
+      "steps": 2,
       "status": "unknown"
     },
     {
@@ -363,6 +563,11 @@
       "status": "unknown"
     },
     {
+      "mission_id": "PRODUCT-SALESOS-THERAPIST-MEETING-KIT-V1-0001",
+      "steps": 27,
+      "status": "unknown"
+    },
+    {
       "mission_id": "PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001",
       "blueprint_id": "PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001-v1",
       "scope": "socialmediaos_session_mvp",
@@ -381,6 +586,13 @@
       "steps": 0,
       "status": "unknown",
       "error": "no_blueprint"
+    },
+    {
+      "mission_id": "SYSTEM-NOTIFY-EMAIL-0001",
+      "blueprint_id": "SYSTEM-NOTIFY-EMAIL-0001-BP1",
+      "scope": "New routes/system-notify-routes.js: a single requireKey-gated POST /email route that sends a plain-text email via Postmark using process.env.POSTMARK_SERVER_TOKEN and process.env.EMAIL_FROM (falling back to POSTMARK_FROM), never logging or returning the raw token.",
+      "steps": 1,
+      "status": "unknown"
     },
     {
       "mission_id": "liferepair-FVTGDL",

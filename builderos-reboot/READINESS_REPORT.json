@@ -1,17 +1,17 @@
 {
-  "generated_at": "2026-07-30T18:10:57.487Z",
+  "generated_at": "2026-08-10T22:44:12.409Z",
   "version": 3,
   "layout": "monorepo_legacy",
-  "verdict": "STAGING_READY_EXTENDED",
+  "verdict": "STAGING_NOT_READY",
   "checks": {
     "layout": "monorepo_legacy",
-    "acceptance": true,
-    "integration_step": true,
+    "acceptance": false,
+    "integration_step": false,
     "integration_mission": true,
-    "integration_greenfield": true,
+    "integration_greenfield": false,
     "determinism_mechanical": true,
     "greenfield_3x": true,
-    "duplication_rematerialize": true,
+    "duplication_rematerialize": false,
     "queue_dry_run": true,
     "cutover_verify": true
   },

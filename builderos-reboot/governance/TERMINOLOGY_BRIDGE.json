@@ -1,0 +1,54 @@
+{
+  "schema": "terminology_bridge_v1",
+  "updated_at": "2026-08-11",
+  "purpose": "Machine-readable ratified-rename source. Closes B5: a rename cannot rely on a model reading prose. A generated artifact that requires a deprecated term in founder-facing intent text is a defect, detected deterministically — never by asking a model whether the wording 'seems current'.",
+  "authority": "Founder ratification, captured in docs/products/lifeos/conversations/2026-08-11-taloa-blueprint-consensus-and-live-intake-test.md",
+  "enforcement": {
+    "detector": "services/blueprint-invention-detector.js",
+    "defect_id": "STALE_RATIFIED_TERMINOLOGY",
+    "scope_note": "Only `prose_scopes` are checked. Code identifiers are deliberately NOT checked here — renaming a live identifier is a separate governed migration, and flagging it at intake would block manufacturing on work outside the mission's scope."
+  },
+  "terms": [
+    {
+      "canonical": "Conductor",
+      "former": ["Presiding Steward"],
+      "effective_from": "2026-08-11",
+      "migration_state": "ratified_target",
+      "prose_scopes": ["acceptance_criteria", "product_purpose", "non_goals"],
+      "code_migration_state": "not_started",
+      "note": "The constitutional office. OPEN-6 resolved 2026-08-11: the office keeps this name; the unrelated session-supervisor role that also used 'Conductor' is renamed instead.",
+      "prohibited_in_new_artifacts": true
+    },
+    {
+      "canonical": "Digital Imprint",
+      "former": ["Digital Twin"],
+      "effective_from": "2026-08-11",
+      "migration_state": "ratified_target",
+      "prose_scopes": ["acceptance_criteria", "product_purpose", "non_goals"],
+      "code_migration_state": "not_started",
+      "note": "~685 live code references still say Digital Twin. Ratified as target name, not yet migrated — the repo state is not evidence against the decision.",
+      "prohibited_in_new_artifacts": true
+    },
+    {
+      "canonical": "Efficiency Officer",
+      "former": ["CFO", "Office of Efficiency"],
+      "effective_from": "2026-08-11",
+      "migration_state": "ratified_target",
+      "prose_scopes": ["acceptance_criteria", "product_purpose"],
+      "code_migration_state": "partial",
+      "note": "DEPARTMENT_ROLE_CONTRACT.json already carries `Efficiency Officer` with `legacy_name: CFO`. Founder: 'I like efficiency officer better. It just gets better than a CFO.'",
+      "prohibited_in_new_artifacts": true,
+      "match_mode": "word_boundary_case_sensitive_for_acronyms"
+    },
+    {
+      "canonical": "Operational Capsule",
+      "former": [],
+      "effective_from": "2026-08-11",
+      "migration_state": "disambiguation_only",
+      "prose_scopes": [],
+      "code_migration_state": "n_a",
+      "note": "Deliberately NOT a rename. 'Capsule' stays the parent conceptual class because two other live, unrelated Capsules exist (Memory Capsule, REP Capsule). Recorded here so a future agent does not 'helpfully' rename it.",
+      "prohibited_in_new_artifacts": false
+    }
+  ]
+}

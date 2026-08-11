@@ -25,6 +25,11 @@ function completePlan(mission = 'sealing test mission') {
   return plan;
 }
 
+/** Test seals go to a scratch path so a test run never leaves a real governance receipt. */
+function sealForTest(plan, issuer = 'conductor') {
+  return sealPlan({ plan, issuer, outRel: `data/tmp/test-seals/${plan.id}.json` });
+}
+
 test('gate does not mint seals: no mint export exists on the gate module', async () => {
   const mod = await import('../factory-staging/factory-core/builder/chair-consensus-gate.mjs');
   const minters = Object.keys(mod).filter((k) => /^(create|mint|make|generate|issue)\w*Seal$/i.test(k));
@@ -44,7 +49,7 @@ test('strict mode refuses an unsealed plan', () => {
 
 test('strict mode approves a plan sealed by the external authority', () => {
   const plan = completePlan();
-  const { receipt } = sealPlan({ plan, issuer: 'conductor' });
+  const { receipt } = sealForTest(plan);
   const r = runChairConsensusGate({ step: { step_id: 'T1' }, reasoning_plan: plan, seal: receipt, mode: 'strict' });
   assert.equal(r.ok, true);
   assert.equal(r.enforced, true);
@@ -54,7 +59,7 @@ test('strict mode approves a plan sealed by the external authority', () => {
 
 test('a seal claiming an unauthorized issuer is refused', () => {
   const plan = completePlan();
-  const { receipt } = sealPlan({ plan, issuer: 'conductor' });
+  const { receipt } = sealForTest(plan);
   const r = runChairConsensusGate({
     step: { step_id: 'T1' },
     reasoning_plan: plan,
@@ -67,7 +72,7 @@ test('a seal claiming an unauthorized issuer is refused', () => {
 
 test('a seal does not transfer to tampered plan bytes', () => {
   const plan = completePlan();
-  const { receipt } = sealPlan({ plan, issuer: 'conductor' });
+  const { receipt } = sealForTest(plan);
   const tampered = { ...plan, intent: `${plan.intent} AND ALSO delete production data` };
   const r = runChairConsensusGate({ step: { step_id: 'T1' }, reasoning_plan: tampered, seal: receipt, mode: 'strict' });
   assert.equal(r.ok, false);

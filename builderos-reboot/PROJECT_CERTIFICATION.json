@@ -1,19 +1,19 @@
 {
   "certification_id": "FACTORY-REBOOT-CERT-002",
-  "generated_at": "2026-08-10T22:37:49.058Z",
+  "generated_at": "2026-08-10T22:44:12.650Z",
   "build_spec_phases": {
     "segments_0_10_runtime": true,
-    "phase_11_full_loop_proof": true,
+    "phase_11_full_loop_proof": false,
     "phase_12_product_salvage": false
   },
   "levels": {
-    "STAGING_READY": true,
-    "BLUEPRINT_DUPLICABLE": true,
+    "STAGING_READY": false,
+    "BLUEPRINT_DUPLICABLE": false,
     "GREENFIELD_DETERMINISTIC_MECHANICAL": true,
     "SENTRY_MECHANICAL": true,
-    "FULL_LOOP_GOVERNED": true,
-    "FULLY_MACHINE_READY": false,
-    "BOOTSTRAP_AND_STAGING_READY": true,
+    "FULL_LOOP_GOVERNED": false,
+    "FULLY_MACHINE_READY": true,
+    "BOOTSTRAP_AND_STAGING_READY": false,
     "MECHANICAL_DETERMINISM_PROXY": true,
     "SAME_TIER_CODER_DETERMINISM": false,
     "LUMIN_FACTORY_GITHUB": false,

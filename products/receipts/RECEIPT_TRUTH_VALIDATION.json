@@ -1,8 +1,8 @@
 {
   "schema": "receipt_truth_validation_v1",
-  "at": "2026-08-06T08:21:56.661Z",
+  "at": "2026-08-11T22:11:07.671Z",
   "ok": true,
-  "checked": 148,
+  "checked": 160,
   "failures": [],
   "known_debt": [
     "SITE_BUILDER_PREALPHA_LAYER_A.json:ACCEPTANCE_PASS_WITHOUT_SHA_OR_BASE|PASS_WITHOUT_NAMED_VERIFIER"
@@ -15,15 +15,24 @@
     "CAPTURE_PIPELINE_V2_ACCEPTANCE.json:GRANDFATHERED:PASS_WITHOUT_NAMED_VERIFIER",
     "COGNITIVE_CORE_ERA34_TIP_AUDIT.json:GRANDFATHERED:PASS_WITHOUT_NAMED_VERIFIER",
     "COMMITMENT_ROUTE_V2_ACCEPTANCE.json:GRANDFATHERED:PASS_WITHOUT_NAMED_VERIFIER",
+    "COMMUNICATION_V1_VOICE_PRESENCE_ACCEPTANCE.json:GRANDFATHERED:PASS_WITHOUT_NAMED_VERIFIER",
+    "COMMUNICATION_V2_EVIDENCE_FUSION_ACCEPTANCE.json:GRANDFATHERED:PASS_WITHOUT_NAMED_VERIFIER",
+    "COMMUNICATION_V3_PERCEPTION_ACCEPTANCE.json:GRANDFATHERED:PASS_WITHOUT_NAMED_VERIFIER",
+    "COMMUNICATION_V4_OVERLAY_ACTION_ACCEPTANCE.json:GRANDFATHERED:PASS_WITHOUT_NAMED_VERIFIER",
+    "COMMUNICATION_V5_CROSS_DOMAIN_ACCEPTANCE.json:GRANDFATHERED:PASS_WITHOUT_NAMED_VERIFIER",
     "CONVERSATION_COMMITMENTS_V1_ACCEPTANCE.json:GRANDFATHERED:PASS_WITHOUT_NAMED_VERIFIER",
-    "FOUNDER_CHAT_ALPHA_BATTERY.json:GRANDFATHERED:PASS_WITHOUT_NAMED_VERIFIER",
     "FOUNDER_MEMORY_V1_SENTRY.json:GRANDFATHERED:PASS_WITHOUT_NAMED_VERIFIER",
     "LIFEOS_COMMS_PRESENCE_LOCK_PROOF.json:GRANDFATHERED:PASS_WITHOUT_NAMED_VERIFIER",
     "LIFEOS_LABS_PERSIST_PROOF.json:GRANDFATHERED:PASS_WITHOUT_NAMED_VERIFIER",
     "LIFEOS_USER_AUTH_V1_ACCEPTANCE.json:GRANDFATHERED:PASS_WITHOUT_NAMED_VERIFIER",
     "LIFERE_SALES_COACHING_V1_ACCEPTANCE.json:GRANDFATHERED:PASS_WITHOUT_NAMED_VERIFIER",
     "LUMIN_CHAIR_DIRECT_CONNECTION_PARITY.json:GRANDFATHERED:PASS_WITHOUT_NAMED_VERIFIER",
+    "MARKETPLACE_AUTHENTICATED_RESEARCH_ACCEPTANCE.json:GRANDFATHERED:PASS_WITHOUT_NAMED_VERIFIER",
+    "MARKETPLACE_OPPORTUNITY_SCANNER_ACCEPTANCE.json:GRANDFATHERED:PASS_WITHOUT_NAMED_VERIFIER",
     "MASTER_A_TO_Z_ACCEPTANCE.json:GRANDFATHERED:PASS_WITHOUT_NAMED_VERIFIER",
+    "OVERLAY_DRIVE_CHANNEL_ACCEPTANCE.json:GRANDFATHERED:PASS_WITHOUT_NAMED_VERIFIER",
+    "OVERLAY_ENGINE_RISK_GATE_ACCEPTANCE.json:GRANDFATHERED:PASS_WITHOUT_NAMED_VERIFIER",
+    "OVERLAY_STUCK_LOOP_RECOVERY_ACCEPTANCE.json:GRANDFATHERED:PASS_WITHOUT_NAMED_VERIFIER",
     "PATH_TO_10_T05_FOUNDER_MEMORY.json:GRANDFATHERED:PASS_WITHOUT_NAMED_VERIFIER",
     "PATH_TO_TEN_ACCEPTANCE.json:GRANDFATHERED:PASS_WITHOUT_NAMED_VERIFIER",
     "SOCIALMEDIAOS_SESSION_MVP_ACCEPTANCE.json:GRANDFATHERED:PASS_WITHOUT_NAMED_VERIFIER",
@@ -185,6 +194,41 @@
       "proposed_solutions": []
     },
     {
+      "file": "COMMUNICATION_V1_VOICE_PRESENCE_ACCEPTANCE.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": true,
+      "proposed_solutions": []
+    },
+    {
+      "file": "COMMUNICATION_V2_EVIDENCE_FUSION_ACCEPTANCE.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": true,
+      "proposed_solutions": []
+    },
+    {
+      "file": "COMMUNICATION_V3_PERCEPTION_ACCEPTANCE.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": true,
+      "proposed_solutions": []
+    },
+    {
+      "file": "COMMUNICATION_V4_OVERLAY_ACTION_ACCEPTANCE.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": true,
+      "proposed_solutions": []
+    },
+    {
+      "file": "COMMUNICATION_V5_CROSS_DOMAIN_ACCEPTANCE.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": true,
+      "proposed_solutions": []
+    },
+    {
       "file": "CONSTITUTIONAL_ARCHITECTURE_V1_ACCEPTANCE.json",
       "ok": true,
       "violations": [],
@@ -321,7 +365,7 @@
       "file": "FOUNDER_CHAT_ALPHA_BATTERY.json",
       "ok": true,
       "violations": [],
-      "claims_pass": true,
+      "claims_pass": false,
       "proposed_solutions": []
     },
     {
@@ -371,6 +415,13 @@
       "ok": true,
       "violations": [],
       "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "GOVERNANCE_ENFORCEMENT_TRUTH_RECEIPT.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": true,
       "proposed_solutions": []
     },
     {
@@ -794,6 +845,20 @@
       "proposed_solutions": []
     },
     {
+      "file": "MARKETPLACE_AUTHENTICATED_RESEARCH_ACCEPTANCE.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": true,
+      "proposed_solutions": []
+    },
+    {
+      "file": "MARKETPLACE_OPPORTUNITY_SCANNER_ACCEPTANCE.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": true,
+      "proposed_solutions": []
+    },
+    {
       "file": "MASTER_A_TO_Z_ACCEPTANCE.json",
       "ok": true,
       "violations": [],
@@ -812,6 +877,34 @@
       "ok": true,
       "violations": [],
       "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "OVERLAY_DRIVE_CHANNEL_ACCEPTANCE.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": true,
+      "proposed_solutions": []
+    },
+    {
+      "file": "OVERLAY_ENGINE_RISK_GATE_ACCEPTANCE.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": true,
+      "proposed_solutions": []
+    },
+    {
+      "file": "OVERLAY_REGRESSION_EXAM_RECEIPT.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": true,
+      "proposed_solutions": []
+    },
+    {
+      "file": "OVERLAY_STUCK_LOOP_RECOVERY_ACCEPTANCE.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": true,
       "proposed_solutions": []
     },
     {

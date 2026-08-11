@@ -1,27 +1,25 @@
 {
   "schema": "governance_enforcement_truth_receipt_v1",
-  "generated_at": "2026-08-11T22:00:31.331Z",
+  "generated_at": "2026-08-11T22:15:31.489Z",
   "produced_by": "scripts/verify-enforcement-truth.mjs",
   "separation_collapsed": true,
   "separation_note": "No independent actor verified this run: the same script computes the findings and the verdict. Mitigation, not equivalence — the verdict is a pure function of repository bytes the script never writes, plus a ratchet baseline authored in an earlier commit, so any third party re-derives it byte-identically with `npm run builderos:enforcement:truth`. No model judgment is in the verdict path. The specific repairs this sweep reports are additionally proven by an independent executable mechanism (`node --test tests/chair-consensus-gate-sealing.test.js`).",
   "independent_reproduction_command": "npm run builderos:enforcement:truth",
   "independent_proof_of_repairs": "node --test tests/chair-consensus-gate-sealing.test.js",
-  "files_indexed": 4194,
-  "total_findings": 149,
+  "files_indexed": 4197,
+  "total_findings": 147,
   "by_class": {
     "module_not_reachable": 60,
     "test_only_export": 21,
     "dead_export": 54,
     "no_reader": 5,
-    "claim_without_implementation": 2,
     "caller_controlled_bypass": 7
   },
-  "baseline_count": 148,
-  "new_regressions": [
-    "claim_missing_file:docs/constitution/proposals/2026-08-02-CONSTITUTION-DIGITAL-TWIN-PLAN.md:GOVERNANCE_ENFORCEMENT_TRUTH_RECEIPT.js"
-  ],
+  "baseline_count": 147,
+  "new_regressions": [],
   "fixed_since_baseline": [],
-  "verdict": "FAIL",
+  "ok": true,
+  "verdict": "CLEAN",
   "findings": [
     {
       "id": "unreachable_module:services/agriculture/iot-gateway.js",
@@ -1214,20 +1212,6 @@
       "class": "no_reader",
       "file": "builderos-reboot/governance/OB_EXECUTION_LADDER.json",
       "detail": "governance config referenced by no code file — it enforces nothing at runtime"
-    },
-    {
-      "id": "claim_missing_file:docs/constitution/ENFORCEMENT_AND_LEGACY_AUDIT_2026-08-06.md:GAP_FILL_LEDGER.js",
-      "class": "claim_without_implementation",
-      "claim_source": "docs/constitution/ENFORCEMENT_AND_LEGACY_AUDIT_2026-08-06.md",
-      "named_file": "GAP_FILL_LEDGER.js",
-      "detail": "doc claims enforcement by a file that does not exist in the code index"
-    },
-    {
-      "id": "claim_missing_file:docs/constitution/proposals/2026-08-02-CONSTITUTION-DIGITAL-TWIN-PLAN.md:GOVERNANCE_ENFORCEMENT_TRUTH_RECEIPT.js",
-      "class": "claim_without_implementation",
-      "claim_source": "docs/constitution/proposals/2026-08-02-CONSTITUTION-DIGITAL-TWIN-PLAN.md",
-      "named_file": "GOVERNANCE_ENFORCEMENT_TRUTH_RECEIPT.js",
-      "detail": "doc claims enforcement by a file that does not exist in the code index"
     },
     {
       "id": "caller_bypass:services/browser-signup-orchestrator.js:173",

@@ -10,6 +10,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { scanCodebasePatterns } from './blueprint-codebase-scanner.js';
 import { recordModelOutcome } from './model-capability-ledger.js';
+import { detectInventions } from './blueprint-invention-detector.js';
 import { COUNCIL_ALIAS_MAP } from '../config/council-members.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -66,7 +67,38 @@ Required shape:
 If a section is unclear or missing from the amendment: use the string "UNKNOWN" for that field's value.
 Do NOT invent requirements. Only extract what is stated or clearly implied.`;
 
-const BLUEPRINT_GEN_SYSTEM = (patterns) => {
+/**
+ * Grounding selection, not blind truncation. `slice(0, 15)` against 200+ real
+ * tables was a root cause of invention: a generator that cannot see a table will
+ * invent it, then a later step tries to CREATE what already exists. Names the
+ * intent actually mentions are always included; the remaining budget is filled
+ * deterministically (sorted) so the same input yields the same prompt.
+ */
+export function selectGrounding(items, { mentioned = [], budget = 40 } = {}) {
+  const all = [...new Set((items || []).map(String))];
+  const needles = mentioned.map((m) => String(m).toLowerCase());
+  const relevant = all.filter((t) => {
+    const low = t.toLowerCase();
+    return needles.some((n) => n && (low.includes(n) || n.includes(low)));
+  });
+  const rest = all.filter((t) => !relevant.includes(t)).sort();
+  const selected = [...relevant.sort(), ...rest].slice(0, budget);
+  return {
+    selected,
+    total: all.length,
+    truncated: all.length > selected.length,
+    relevant_included: relevant.length,
+  };
+}
+
+const BLUEPRINT_GEN_SYSTEM = (patterns, intent = null) => {
+  const mentionedTables = (intent?.db_tables_needed || []).map((t) => t?.name).filter(Boolean);
+  const mentionedServices = (intent?.services_needed || [])
+    .map((s) => (typeof s === 'string' ? s : s?.path || s?.name))
+    .filter(Boolean);
+  const tables = selectGrounding(patterns.existing_tables, { mentioned: mentionedTables, budget: 60 });
+  const services = selectGrounding(patterns.existing_services, { mentioned: mentionedServices, budget: 40 });
+  const routes = selectGrounding(patterns.existing_routes, { mentioned: mentionedServices, budget: 25 });
   const slim = {
     installed_packages: patterns.installed_packages,
     not_installed: patterns.not_installed,
@@ -75,14 +107,33 @@ const BLUEPRINT_GEN_SYSTEM = (patterns) => {
     ai_call_pattern: patterns.ai_call_pattern,
     db_pattern: patterns.db_pattern,
     registration_pattern: patterns.registration_pattern,
-    existing_tables: (patterns.existing_tables || []).slice(0, 15),
-    existing_services: (patterns.existing_services || []).slice(0, 15),
-    existing_routes: (patterns.existing_routes || []).slice(0, 10),
+    existing_tables: tables.selected,
+    existing_tables_total: tables.total,
+    existing_tables_list_is_partial: tables.truncated,
+    existing_services: services.selected,
+    existing_services_total: services.total,
+    existing_routes: routes.selected,
+    existing_routes_total: routes.total,
     scanned_at: patterns.scanned_at,
   };
   return `You are BuilderOS ARC generating an EXECUTABLE blueprint JSON.
 
-Each step must contain enough contract detail that execution is MECHANICAL — no design decisions left for the coder.
+Every step must be a slice of the source blueprint — never an addition to it.
+
+NO-INVENTION LAW (enforced deterministically after you answer, by
+services/blueprint-invention-detector.js — you cannot talk your way past it):
+- If the source did not specify a table's columns, you may NOT design them.
+  Emit the table with "columns": [] and add the gap to "_gaps". A fabricated
+  schema fails the check and sends the whole blueprint back.
+- Do NOT create a table, service, route, or product name that the extracted
+  intent does not name.
+- Use the product identity and SSOT path exactly as given. Never derive either
+  from a document title.
+- The existing_* lists below may be PARTIAL (see *_total). An absent name is NOT
+  evidence the thing does not exist — if you need to know, that is a gap, not a
+  licence to invent.
+- "Mechanical" means no decision is left for the coder. Where the source leaves a
+  decision, the correct output is a recorded gap, not your best guess.
 
 CODEBASE PATTERNS:
 ${JSON.stringify(slim)}
@@ -455,10 +506,13 @@ function extractIntentDeterministic(amendmentText, productName) {
     product_name: productName,
     product_purpose: purposeText.slice(0, 200),
     phase: 1,
-    routes_needed: routes.slice(0, 20),
-    services_needed: services.slice(0, 15),
-    db_tables_needed: tables.slice(0, 15),
-    env_vars_needed: envVars.slice(0, 20),
+    // Caps are generous on purpose: silently dropping a table the founder DID
+    // specify turns a real requirement into an invisible one, and the generator
+    // then invents it back with columns nobody approved.
+    routes_needed: routes.slice(0, 60),
+    services_needed: services.slice(0, 60),
+    db_tables_needed: tables.slice(0, 60),
+    env_vars_needed: envVars.slice(0, 40),
     ai_operations: [],
     acceptance_criteria: [`${productName} server starts`, `${productName} routes respond 200`],
     non_goals: [],
@@ -468,13 +522,60 @@ function extractIntentDeterministic(amendmentText, productName) {
   };
 }
 
+/**
+ * No-invention enforcement sits at the mutation boundary, not in the callers.
+ * `ready` is reached from three different branches in runArcReview, and a fourth
+ * will be added by someone eventually; guarding each one invites exactly the
+ * bypass this repair exists to close. Any path that tries to mark a session
+ * `ready` while the generated blueprint asserts architecture the intent never
+ * specified is downgraded to `gap_collection` with the routed defect set stored.
+ */
+async function assertNoInventionBeforeReady(pool, id, updates) {
+  if (updates.status !== 'ready') return updates;
+
+  const { rows } = await pool.query(
+    'SELECT id, product_name, extracted_intent_json, blueprint_json, arc_report_json FROM blueprint_intake_sessions WHERE id = $1',
+    [id]
+  );
+  const stored = rows[0];
+  if (!stored) return updates;
+
+  // Grade the values being written, falling back to what is already stored.
+  const candidate = {
+    id: stored.id,
+    product_name: stored.product_name,
+    extracted_intent_json: updates.extracted_intent_json ?? stored.extracted_intent_json,
+    blueprint_json: updates.blueprint_json ?? stored.blueprint_json,
+    arc_report_json: updates.arc_report_json ?? stored.arc_report_json,
+  };
+  if (!candidate.blueprint_json) return updates;
+
+  const report = detectInventions(candidate);
+  if (report.manufacturing_authorized) return updates;
+
+  console.error(
+    `[NO-INVENTION] session ${id} blocked from ready: ${report.defect_count} defect(s) — ${Object.keys(report.by_id).join(', ')}`
+  );
+  return {
+    ...updates,
+    status: 'gap_collection',
+    error_message: `BLUEPRINT_DEFECTS_PRESENT: ${report.defect_count} unauthorized-decision defect(s) must be resolved by the office with authority (${Object.entries(report.routing).map(([k, v]) => `${k}:${v}`).join(', ')}). See gaps_json.invention_report.`,
+    gaps_json: {
+      ...(stored.gaps_json && typeof stored.gaps_json === 'object' ? stored.gaps_json : {}),
+      invention_report: report,
+    },
+  };
+}
+
 async function updateSession(pool, id, updates) {
-  const sets = Object.entries(updates).map(([k, v], i) => `${k} = $${i + 2}`);
-  const vals = Object.values(updates).map(v => typeof v === 'object' ? JSON.stringify(v) : v);
+  const guarded = await assertNoInventionBeforeReady(pool, id, updates);
+  const sets = Object.entries(guarded).map(([k, v], i) => `${k} = $${i + 2}`);
+  const vals = Object.values(guarded).map(v => typeof v === 'object' ? JSON.stringify(v) : v);
   await pool.query(
     `UPDATE blueprint_intake_sessions SET ${sets.join(', ')}, updated_at = NOW() WHERE id = $1`,
     [id, ...vals]
   );
+  return guarded;
 }
 
 // ── Factory ───────────────────────────────────────────────────────────────────
@@ -578,7 +679,7 @@ Phase 1 code infrastructure (migration, service, routes, verify script) belongs 
 
       const blueprintRaw = await callCouncilMember('openai',
         regeneratePrompt,
-        { systemPromptOverride: BLUEPRINT_GEN_SYSTEM(codebaseScan), maxOutputTokens: 3000, taskType: 'codegen', product_lane: 'builderos', allowModelDowngrade: false }
+        { systemPromptOverride: BLUEPRINT_GEN_SYSTEM(codebaseScan, intent), maxOutputTokens: 3000, taskType: 'codegen', product_lane: 'builderos', allowModelDowngrade: false }
       );
       let blueprint = parseBlueprintFromAiResponse(blueprintRaw);
       const { blueprint: finalized, gaps } = finalizeBlueprint(blueprint, {
@@ -675,7 +776,7 @@ Phase 1 code infrastructure (migration, service, routes, verify script) belongs 
         const maxTokens = attempt < 2 ? 6000 : 4000;
         const blueprintRaw = await _withTimeout(
           callCouncilMember('openai', bpPrompt,
-            { systemPromptOverride: BLUEPRINT_GEN_SYSTEM(codebaseScan), maxOutputTokens: maxTokens, taskType: 'codegen', product_lane: 'builderos', allowModelDowngrade: false, responseFormat: 'json' }
+            { systemPromptOverride: BLUEPRINT_GEN_SYSTEM(codebaseScan, intent), maxOutputTokens: maxTokens, taskType: 'codegen', product_lane: 'builderos', allowModelDowngrade: false, responseFormat: 'json' }
           ), 90000, 'blueprint_generation'
         );
         _blog(`blueprint_raw_type=${typeof blueprintRaw} len=${String(blueprintRaw).length}`);
@@ -788,7 +889,7 @@ Ask ONE question at a time. Be brief.`;
         const intent = parseBlueprintFromAiResponse(jsonMatch[0]);
         const blueprintRaw = await callCouncilMember('openai',
           `PRODUCT INTENT:\n${JSON.stringify(intent, null, 2)}\n\nGenerate the complete blueprint JSON now.`,
-          { systemPromptOverride: BLUEPRINT_GEN_SYSTEM(codebaseScan), maxOutputTokens: 3000, taskType: 'codegen', product_lane: 'builderos', allowModelDowngrade: false }
+          { systemPromptOverride: BLUEPRINT_GEN_SYSTEM(codebaseScan, intent), maxOutputTokens: 3000, taskType: 'codegen', product_lane: 'builderos', allowModelDowngrade: false }
         );
         const blueprint = parseBlueprintFromAiResponse(blueprintRaw);
         const gaps = detectGaps(blueprint);

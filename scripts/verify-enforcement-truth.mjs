@@ -174,7 +174,9 @@ function checkClaimedEnforcedWithoutCaller(index, entrypoints) {
   const findings = [];
   const seenIds = new Set();
   const claims = buildClaimIndex();
-  const fileRe = /([a-z0-9][\w.-]*\.(?:mjs|js))/gi;
+  // Lookahead matters: without it, `FOO_RECEIPT.json` matched as `FOO_RECEIPT.js`
+  // and the sweep reported a missing implementation for a file that never existed.
+  const fileRe = /([a-z0-9][\w.-]*\.(?:mjs|js))(?![\w])/gi;
   for (const c of claims) {
     if (!c.rel.endsWith('.md')) continue;
     for (const rawLine of c.content.split('\n')) {
@@ -360,7 +362,10 @@ function main() {
     baseline_count: allowed.size,
     new_regressions: regressions,
     fixed_since_baseline: fixed,
-    verdict: regressions.length === 0 ? 'PASS' : 'FAIL',
+    ok: regressions.length === 0,
+    // Deliberately NOT 'PASS': in this repo verdict:'PASS' means mission acceptance
+    // registered in BP_PRIORITY (§2.18). This is a verifier result, not a mission.
+    verdict: regressions.length === 0 ? 'CLEAN' : 'REGRESSIONS_PRESENT',
     findings: sweep.findings,
   };
   writeJson(RECEIPT_REL, receipt);

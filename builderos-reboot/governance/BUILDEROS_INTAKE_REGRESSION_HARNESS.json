@@ -1,7 +1,7 @@
 {
   "schema": "builderos_intake_regression_harness_v1",
   "updated_at": "2026-06-26",
-  "purpose": "Golden intake blueprint sessions — acceptance-only regression catches builder/platform drift without re-spending council tokens on full rebuilds.",
+  "purpose": "Golden intake blueprint sessions \u2014 acceptance-only regression catches builder/platform drift without re-spending council tokens on full rebuilds.",
   "audit_command": "npm run builderos:intake:regression:acceptance",
   "sessions": [
     {
@@ -9,9 +9,14 @@
       "session_id": "3e6105c4-f5e9-4037-bb57-5451acc2ea59",
       "product": "SocialMediaOS",
       "acceptance_cmd": "node scripts/verify-socialmediaos.mjs",
-      "purpose": "Intake → /build → wire → acceptance golden path (MOS-P1-001..005)",
+      "purpose": "Intake \u2192 /build \u2192 wire \u2192 acceptance golden path (MOS-P1-001..005)",
       "last_known_pass": "2026-06-26",
-      "tags": ["intake", "route-wire", "codebook-normalize", "zone3"]
+      "tags": [
+        "intake",
+        "route-wire",
+        "codebook-normalize",
+        "zone3"
+      ]
     }
   ],
   "frozen_defect_fixtures": [
@@ -27,9 +32,23 @@
       "immutable": true,
       "do_not_sanitize": true,
       "acceptance_criterion": "Overlay reaches execution without human nested-JSON rescue.",
-      "audit_command": "npm run builderos:intake:regression:acceptance",
+      "audit_command": "npm run builderos:overlay:exam",
       "registered_at": "2026-08-11",
-      "registered_because": "M0 sweep finding `fixture_unregistered:intake-regression-2026-08-11` — the fixture was declared required while nothing ran it."
+      "registered_because": "M0 sweep finding `fixture_unregistered:intake-regression-2026-08-11` \u2014 the fixture was declared required while nothing ran it.",
+      "exam_runner": "scripts/run-overlay-regression-exam.mjs",
+      "detector": "services/blueprint-invention-detector.js",
+      "receipt": "products/receipts/OVERLAY_REGRESSION_EXAM_RECEIPT.json",
+      "wired_into": "builder:preflight",
+      "stage_proven": "DETECT -> CLASSIFY -> ROUTE",
+      "stages_not_yet_proven": [
+        "RESOLVE",
+        "AMEND",
+        "INVALIDATE",
+        "REVALIDATE",
+        "AUTHORIZE",
+        "EXECUTE"
+      ],
+      "last_known_pass": "2026-08-11"
     }
   ]
 }

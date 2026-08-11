@@ -1,8 +1,8 @@
 {
   "test_id": "BLUEPRINT-DUPLICATION-REMATERIALIZE",
-  "run_at": "2026-07-30T18:10:56.388Z",
+  "run_at": "2026-08-10T22:44:09.502Z",
   "layout": "monorepo_legacy",
-  "pass": true,
+  "pass": false,
   "steps_rerun": [
     {
       "mission": "FACTORY-REBOOT-0029",
@@ -20,15 +20,15 @@
   "probes": [
     {
       "path": "factory-staging/factory-core/builder/run-step.js",
-      "before": "6ceffbb56111229cab7478dd1cc0df5a8e8f487a723c4c4c66f61d7bbe57919c",
+      "before": "9a52b78436dd5fd6dc3fbef6fcc6eaa8c3733af460a871952f80b7b6187ca5c0",
       "after": "6ceffbb56111229cab7478dd1cc0df5a8e8f487a723c4c4c66f61d7bbe57919c",
-      "match": true
+      "match": false
     },
     {
       "path": "factory-staging/factory-core/builder/run-mission.js",
-      "before": "25eb2aec76aa0eb8de9b29143d508fc8ffc2957518c559f0232021ffccfa814f",
+      "before": "965b8377612e642ac4f82d4b1428a327cf43e15d975684ad7102a86eee88a6fe",
       "after": "25eb2aec76aa0eb8de9b29143d508fc8ffc2957518c559f0232021ffccfa814f",
-      "match": true
+      "match": false
     },
     {
       "path": "factory-staging/startup/register-routes.js",

@@ -1,9 +1,9 @@
 {
   "proof_id": "FULL-LOOP-PROOF-0001",
-  "run_at": "2026-07-30T18:10:57.526Z",
+  "run_at": "2026-08-10T22:44:12.475Z",
   "mission_id": "FACTORY-PROOF-LOOP-0001",
-  "pass": true,
-  "c2_pass": true,
+  "pass": false,
+  "c2_pass": false,
   "phases": {
     "product_development": {
       "status": "PASS",
@@ -24,7 +24,7 @@
       "steps": 1
     },
     "coder_execution": {
-      "httpStatus": 200,
+      "httpStatus": 409,
       "builder_status": "DONE",
       "input_mode": "greenfield"
     },
@@ -35,7 +35,7 @@
         "failures": []
       },
       "verify": {
-        "implementation_status": "PASS",
+        "implementation_status": "FAIL",
         "stepId": "FL001",
         "resultStatus": "DONE",
         "verifyAgainst": [
@@ -90,14 +90,19 @@
           "status": "PASS"
         },
         "proof_freshness": {
-          "pass": true,
+          "pass": false,
           "checked": [
             "builderos-reboot/DETERMINISM_RECEIPT.json",
             "builderos-reboot/DUPLICATION_RECEIPT.json",
             "builderos-reboot/FULL_LOOP_PROOF_RECEIPT.json",
             "builderos-reboot/READINESS_REPORT.json"
           ],
-          "stale": [],
+          "stale": [
+            {
+              "file": "builderos-reboot/DUPLICATION_RECEIPT.json",
+              "reason": "pass_false"
+            }
+          ],
           "authority_note": "Stale receipts must not raise maturity — adapted from oil-proof-freshness doctrine"
         },
         "behavior_proof": {
@@ -108,8 +113,10 @@
           "findings": [],
           "results": []
         },
-        "blocking_findings": [],
-        "pass": true
+        "blocking_findings": [
+          "proof_freshness"
+        ],
+        "pass": false
       }
     },
     "historian": {
@@ -124,7 +131,7 @@
       },
       "lesson": {
         "type": "lesson",
-        "lesson": "Full loop executed without coder judgment"
+        "lesson": "Loop blocked or failed verification"
       }
     },
     "tsos": {
@@ -133,16 +140,15 @@
       "metrics": {
         "step_id": "FL001",
         "token_cost": 0,
-        "latency_ms": 17,
+        "latency_ms": 12,
         "retries": 0,
         "waste": false
       }
     },
     "c2": {
-      "status": "STRUCTURAL_PASS",
+      "status": "NOT_READY",
       "failClosed": true,
-      "requiresGovernedProof": true,
-      "humanReviewRequired": true
+      "requiresGovernedProof": true
     }
   },
   "founder_touches_strategy": 1,

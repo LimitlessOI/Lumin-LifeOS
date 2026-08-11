@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-11T22:01:58.020Z",
+  "generated_at": "2026-08-11T22:17:58.772Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13242,
+  "file_count": 13247,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21442,9 +21442,9 @@
     {
       "path": "builderos-reboot/DUPLICATION_RECEIPT.json",
       "synopsis": "BuilderOS artifact — DUPLICATION RECEIPT.",
-      "bytes": 1208,
-      "mtime": "2026-07-18T22:36:35.768Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 1211,
+      "mtime": "2026-08-11T22:12:18.850Z",
+      "indexed_at": "2026-08-11T22:15:50.764Z",
       "synopsis_index_only": true
     },
     {
@@ -21486,9 +21486,9 @@
     {
       "path": "builderos-reboot/FULL_LOOP_PROOF_RECEIPT.json",
       "synopsis": "BuilderOS artifact — FULL LOOP PROOF RECEIPT.",
-      "bytes": 3893,
-      "mtime": "2026-07-18T22:36:38.592Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 4030,
+      "mtime": "2026-08-11T22:12:18.851Z",
+      "indexed_at": "2026-08-11T22:15:50.764Z",
       "synopsis_index_only": true
     },
     {
@@ -21526,9 +21526,9 @@
     {
       "path": "builderos-reboot/governance/BUILDEROS_INTAKE_REGRESSION_HARNESS.json",
       "synopsis": "BuilderOS artifact — BUILDEROS INTAKE REGRESSION HARNESS.",
-      "bytes": 1980,
-      "mtime": "2026-08-11T21:55:08.557Z",
-      "indexed_at": "2026-08-11T22:01:29.323Z",
+      "bytes": 2514,
+      "mtime": "2026-08-11T22:12:01.822Z",
+      "indexed_at": "2026-08-11T22:15:50.764Z",
       "synopsis_index_only": true
     },
     {
@@ -21678,9 +21678,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 4012945,
-      "mtime": "2026-08-11T08:58:27.148Z",
-      "indexed_at": "2026-08-11T08:58:33.426Z"
+      "bytes": 4019680,
+      "mtime": "2026-08-11T22:15:50.859Z",
+      "indexed_at": "2026-08-11T22:16:03.727Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -21749,9 +21749,9 @@
     {
       "path": "builderos-reboot/governance/SENTRY_FINDINGS_QUEUE.json",
       "synopsis": "BuilderOS artifact — SENTRY FINDINGS QUEUE.",
-      "bytes": 14233,
-      "mtime": "2026-07-28T22:54:32.571Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 26293,
+      "mtime": "2026-08-11T22:12:18.855Z",
+      "indexed_at": "2026-08-11T22:15:50.764Z",
       "synopsis_index_only": true
     },
     {
@@ -21768,6 +21768,14 @@
       "bytes": 5192,
       "mtime": "2026-07-09T01:03:41.485Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "builderos-reboot/governance/TERMINOLOGY_BRIDGE.json",
+      "synopsis": "BuilderOS artifact — TERMINOLOGY BRIDGE.",
+      "bytes": 3027,
+      "mtime": "2026-08-11T22:11:28.415Z",
+      "indexed_at": "2026-08-11T22:15:50.764Z",
+      "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/governance/TYPED_BLOCKER_SSOT.json",
@@ -21855,9 +21863,9 @@
     {
       "path": "builderos-reboot/MISSION_PACK_INDEX.json",
       "synopsis": "BuilderOS artifact — MISSION PACK INDEX.",
-      "bytes": 11388,
-      "mtime": "2026-07-28T23:42:55.035Z",
-      "indexed_at": "2026-07-28T23:44:15.529Z",
+      "bytes": 20632,
+      "mtime": "2026-08-11T22:12:18.851Z",
+      "indexed_at": "2026-08-11T22:15:50.764Z",
       "synopsis_index_only": true
     },
     {
@@ -31049,9 +31057,9 @@
     {
       "path": "builderos-reboot/PROJECT_CERTIFICATION.json",
       "synopsis": "BuilderOS artifact — PROJECT CERTIFICATION.",
-      "bytes": 3950,
-      "mtime": "2026-08-10T22:37:54.174Z",
-      "indexed_at": "2026-08-10T22:40:09.823Z",
+      "bytes": 3954,
+      "mtime": "2026-08-11T22:12:18.852Z",
+      "indexed_at": "2026-08-11T22:15:50.764Z",
       "synopsis_index_only": true
     },
     {
@@ -31072,9 +31080,9 @@
     {
       "path": "builderos-reboot/READINESS_REPORT.json",
       "synopsis": "BuilderOS artifact — READINESS REPORT.",
-      "bytes": 567,
-      "mtime": "2026-07-18T22:36:38.527Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 566,
+      "mtime": "2026-08-11T22:12:18.853Z",
+      "indexed_at": "2026-08-11T22:15:50.764Z",
       "synopsis_index_only": true
     },
     {
@@ -33898,9 +33906,9 @@
     {
       "path": "data/builderos-compound-improvement-state.json",
       "synopsis": "JSON data/config — data/builderos-compound-improvement-state.json.",
-      "bytes": 1609,
-      "mtime": "2026-07-30T18:09:12.929Z",
-      "indexed_at": "2026-07-30T22:32:11.913Z",
+      "bytes": 2209,
+      "mtime": "2026-08-11T22:12:18.856Z",
+      "indexed_at": "2026-08-11T22:15:50.764Z",
       "synopsis_index_only": true
     },
     {
@@ -33938,9 +33946,9 @@
     {
       "path": "data/chair-competitive-research-cursor.json",
       "synopsis": "JSON data/config — data/chair-competitive-research-cursor.json.",
-      "bytes": 272,
-      "mtime": "2026-07-27T23:52:21.429Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 327,
+      "mtime": "2026-08-11T22:12:18.856Z",
+      "indexed_at": "2026-08-11T22:15:50.764Z",
       "synopsis_index_only": true
     },
     {
@@ -34058,9 +34066,9 @@
     {
       "path": "data/enforcement-truth-baseline.json",
       "synopsis": "JSON data/config — data/enforcement-truth-baseline.json.",
-      "bytes": 11257,
-      "mtime": "2026-08-11T21:58:26.353Z",
-      "indexed_at": "2026-08-11T22:01:29.323Z",
+      "bytes": 11112,
+      "mtime": "2026-08-11T22:12:01.823Z",
+      "indexed_at": "2026-08-11T22:15:50.764Z",
       "synopsis_index_only": true
     },
     {
@@ -40522,9 +40530,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 169617,
-      "mtime": "2026-08-11T22:01:05.831Z",
-      "indexed_at": "2026-08-11T22:01:29.323Z"
+      "bytes": 171840,
+      "mtime": "2026-08-11T22:13:18.505Z",
+      "indexed_at": "2026-08-11T22:15:50.764Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -42973,9 +42981,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 512021,
-      "mtime": "2026-08-11T21:59:50.942Z",
-      "indexed_at": "2026-08-11T22:01:29.323Z"
+      "bytes": 515876,
+      "mtime": "2026-08-11T22:15:48.300Z",
+      "indexed_at": "2026-08-11T22:15:50.764Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -65370,12 +65378,9 @@
     {
       "path": "factory-staging/factory-core/builder/run-mission.js",
       "synopsis": "Exports loadBlueprintFromRepo — builderos-reboot/MISSIONS/FACTORY-REBOOT-0006/CONTENT/run-mission.js.",
-      "bytes": 3020,
-      "mtime": "2026-07-31T20:28:20.228Z",
-      "indexed_at": "2026-07-31T20:28:20.228Z",
-      "ssot": [
-        "docs/products/builderos/PRODUCT_HOME.md"
-      ]
+      "bytes": 2936,
+      "mtime": "2026-08-11T22:12:18.857Z",
+      "indexed_at": "2026-08-11T22:15:50.764Z"
     },
     {
       "path": "factory-staging/factory-core/builder/run-step.js",
@@ -67754,9 +67759,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\", \"lifeos:file-synopsis:backfill\": \"node scripts/file-synopsis-enforce.mjs --all --auto-fix && node scripts/generate-file-synopsis-index.mjs\", \"lifeos:file-synopsis:index",
-      "bytes": 37202,
-      "mtime": "2026-08-11T21:58:40.280Z",
-      "indexed_at": "2026-08-11T22:01:29.323Z",
+      "bytes": 37367,
+      "mtime": "2026-08-11T22:12:01.824Z",
+      "indexed_at": "2026-08-11T22:15:50.764Z",
       "synopsis_index_only": true
     },
     {
@@ -68288,9 +68293,9 @@
     {
       "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
       "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
-      "bytes": 5666,
-      "mtime": "2026-08-08T10:04:29.019Z",
-      "indexed_at": "2026-08-08T10:56:44.360Z",
+      "bytes": 6213,
+      "mtime": "2026-08-11T22:12:18.858Z",
+      "indexed_at": "2026-08-11T22:15:50.764Z",
       "synopsis_index_only": true
     },
     {
@@ -68376,9 +68381,9 @@
     {
       "path": "products/receipts/GOVERNANCE_ENFORCEMENT_TRUTH_RECEIPT.json",
       "synopsis": "Product receipt — GOVERNANCE ENFORCEMENT TRUTH RECEIPT.",
-      "bytes": 55252,
-      "mtime": "2026-08-11T22:00:31.334Z",
-      "indexed_at": "2026-08-11T22:01:29.323Z",
+      "bytes": 54239,
+      "mtime": "2026-08-11T22:15:31.491Z",
+      "indexed_at": "2026-08-11T22:15:50.764Z",
       "synopsis_index_only": true
     },
     {
@@ -68918,6 +68923,14 @@
       "synopsis_index_only": true
     },
     {
+      "path": "products/receipts/OVERLAY_REGRESSION_EXAM_RECEIPT.json",
+      "synopsis": "Product receipt — OVERLAY REGRESSION EXAM RECEIPT.",
+      "bytes": 12224,
+      "mtime": "2026-08-11T22:15:27.993Z",
+      "indexed_at": "2026-08-11T22:15:50.764Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "products/receipts/OVERLAY_STUCK_LOOP_RECOVERY_ACCEPTANCE.json",
       "synopsis": "Product receipt — OVERLAY STUCK LOOP RECOVERY ACCEPTANCE.",
       "bytes": 6308,
@@ -68976,9 +68989,9 @@
     {
       "path": "products/receipts/RECEIPT_TRUTH_VALIDATION.json",
       "synopsis": "Product receipt — RECEIPT TRUTH VALIDATION.",
-      "bytes": 27110,
-      "mtime": "2026-08-06T08:24:03.101Z",
-      "indexed_at": "2026-08-06T08:26:04.243Z",
+      "bytes": 30073,
+      "mtime": "2026-08-11T22:12:18.858Z",
+      "indexed_at": "2026-08-11T22:15:50.764Z",
       "synopsis_index_only": true
     },
     {
@@ -69176,9 +69189,9 @@
     {
       "path": "products/receipts/TRUTH_ENFORCEMENT_AUDIT.json",
       "synopsis": "Product receipt — TRUTH ENFORCEMENT AUDIT.",
-      "bytes": 833,
-      "mtime": "2026-08-06T08:24:03.101Z",
-      "indexed_at": "2026-08-06T08:26:04.243Z",
+      "bytes": 888,
+      "mtime": "2026-08-11T22:12:18.859Z",
+      "indexed_at": "2026-08-11T22:15:50.764Z",
       "synopsis_index_only": true
     },
     {
@@ -78527,6 +78540,16 @@
       ]
     },
     {
+      "path": "scripts/run-overlay-regression-exam.mjs",
+      "synopsis": "Runs the frozen Overlay intake as an EXAM against the repaired",
+      "bytes": 5623,
+      "mtime": "2026-08-11T22:15:22.322Z",
+      "indexed_at": "2026-08-11T22:15:50.764Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "scripts/run-overlay-stuck-loop-recovery-acceptance.mjs",
       "synopsis": "Overlay Stuck-Loop Recovery acceptance.",
       "bytes": 8126,
@@ -79864,9 +79887,9 @@
     {
       "path": "scripts/verify-enforcement-truth.mjs",
       "synopsis": "M0 enforcement-truth sweep — finds mechanisms that CLAIM operational",
-      "bytes": 16232,
-      "mtime": "2026-08-11T22:00:22.951Z",
-      "indexed_at": "2026-08-11T22:01:29.323Z",
+      "bytes": 16627,
+      "mtime": "2026-08-11T22:15:14.461Z",
+      "indexed_at": "2026-08-11T22:15:50.764Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -91473,9 +91496,19 @@
     {
       "path": "services/blueprint-intake.js",
       "synopsis": "Blueprint Intake Service — three flows: backfill existing amendment, greenfield",
-      "bytes": 58721,
-      "mtime": "2026-07-29T00:35:45.175Z",
-      "indexed_at": "2026-07-29T00:44:25.890Z",
+      "bytes": 63696,
+      "mtime": "2026-08-11T22:12:01.826Z",
+      "indexed_at": "2026-08-11T22:15:50.764Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/blueprint-invention-detector.js",
+      "synopsis": "Deterministic no-invention detector for generated blueprints (M1).",
+      "bytes": 13502,
+      "mtime": "2026-08-11T22:11:28.416Z",
+      "indexed_at": "2026-08-11T22:15:50.764Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -102066,6 +102099,13 @@
       ]
     },
     {
+      "path": "tests/blueprint-invention-detector.test.js",
+      "synopsis": "Locks the deterministic no-invention detector (M1) against the frozen",
+      "bytes": 5974,
+      "mtime": "2026-08-11T22:11:28.416Z",
+      "indexed_at": "2026-08-11T22:15:50.764Z"
+    },
+    {
       "path": "tests/bp-priority-completion.test.js",
       "synopsis": "js — tests/bp-priority-completion.test.js.",
       "bytes": 2787,
@@ -102423,9 +102463,9 @@
     {
       "path": "tests/chair-consensus-gate-sealing.test.js",
       "synopsis": "Proves the Conductor consensus gate (§2.0K) cannot manufacture the",
-      "bytes": 5075,
-      "mtime": "2026-08-11T21:58:04.173Z",
-      "indexed_at": "2026-08-11T22:01:29.323Z"
+      "bytes": 5240,
+      "mtime": "2026-08-11T22:12:18.860Z",
+      "indexed_at": "2026-08-11T22:15:50.764Z"
     },
     {
       "path": "tests/chair-context-classifier.test.js",

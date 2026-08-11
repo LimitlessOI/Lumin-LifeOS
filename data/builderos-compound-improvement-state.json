@@ -4,22 +4,22 @@
       "lever": "inner_review_syntax_gate",
       "playbook": "SYNTAX_FAIL",
       "first_at": "2026-06-24T18:43:19.963Z",
-      "count": 9,
-      "last_at": "2026-07-30T18:01:58.312Z"
+      "count": 12,
+      "last_at": "2026-08-10T11:16:41.770Z"
     },
     "DONE_GATE_BLOCKED::kernel_wrap_build_ledger": {
       "lever": "kernel_wrap_build_ledger",
       "playbook": "DONE_GATE_BLOCKED",
       "first_at": "2026-06-24T18:48:23.949Z",
-      "count": 8,
-      "last_at": "2026-08-07T23:13:56.017Z"
+      "count": 17,
+      "last_at": "2026-08-10T07:47:20.886Z"
     },
     "UNKNOWN::builder_gaps_pattern_review": {
       "lever": "builder_gaps_pattern_review",
       "playbook": "UNKNOWN",
       "first_at": "2026-06-24T18:48:35.817Z",
-      "count": 1,
-      "last_at": "2026-06-24T18:48:35.817Z"
+      "count": 2,
+      "last_at": "2026-08-10T07:36:38.621Z"
     },
     "SAFE_SCOPE_BLOCKED::safe_scope_prefix_or_retry": {
       "lever": "safe_scope_prefix_or_retry",
@@ -34,14 +34,30 @@
       "first_at": "2026-06-24T18:52:13.033Z",
       "count": 5,
       "last_at": "2026-07-30T18:08:22.142Z"
+    },
+    "COMMIT_TRANSPORT::builder_gaps_pattern_review": {
+      "lever": "builder_gaps_pattern_review",
+      "playbook": "COMMIT_TRANSPORT",
+      "first_at": "2026-08-10T07:47:47.388Z",
+      "count": 2,
+      "last_at": "2026-08-10T10:55:03.265Z"
+    },
+    "ZONE3_PATCH::zone3_patch_spec_routing": {
+      "lever": "zone3_patch_spec_routing",
+      "playbook": "ZONE3_PATCH",
+      "first_at": "2026-08-10T11:16:49.512Z",
+      "count": 2,
+      "last_at": "2026-08-10T11:17:31.779Z"
     }
   },
   "failure_counts": {
-    "SYNTAX_FAIL::inner_review_syntax_gate": 9,
-    "DONE_GATE_BLOCKED::kernel_wrap_build_ledger": 8,
-    "UNKNOWN::builder_gaps_pattern_review": 3,
+    "SYNTAX_FAIL::inner_review_syntax_gate": 12,
+    "DONE_GATE_BLOCKED::kernel_wrap_build_ledger": 17,
+    "UNKNOWN::builder_gaps_pattern_review": 7,
     "SAFE_SCOPE_BLOCKED::safe_scope_prefix_or_retry": 10,
-    "MISSING_TARGET::blueprint_target_file_required": 5
+    "MISSING_TARGET::blueprint_target_file_required": 5,
+    "COMMIT_TRANSPORT::builder_gaps_pattern_review": 2,
+    "ZONE3_PATCH::zone3_patch_spec_routing": 2
   },
-  "last_improvement_at": "2026-08-07T23:13:56.017Z"
+  "last_improvement_at": "2026-08-10T11:17:31.779Z"
 }

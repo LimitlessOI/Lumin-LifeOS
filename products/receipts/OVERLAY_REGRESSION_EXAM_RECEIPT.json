@@ -1,0 +1,288 @@
+{
+  "schema": "overlay_regression_exam_receipt_v1",
+  "generated_at": "2026-08-11T22:15:27.990Z",
+  "produced_by": "scripts/run-overlay-regression-exam.mjs",
+  "separation_collapsed": true,
+  "separation_note": "The same script detects and grades. Mitigation: the graded input is a byte-pinned fixture this script never writes, its sha256 is verified before grading, and every check is a pure function of those bytes — reproducible byte-identically by any third party via `npm run builderos:overlay:exam`. No model judgment is in the verdict path.",
+  "independent_reproduction_command": "npm run builderos:overlay:exam",
+  "ok": true,
+  "verdict": "EXAM_PASS",
+  "failure_reason": null,
+  "acceptance_criterion": "Overlay reaches execution without human nested-JSON rescue.",
+  "stage_proven": "DETECT -> CLASSIFY -> ROUTE",
+  "stages_not_yet_proven": [
+    "RESOLVE",
+    "AMEND",
+    "INVALIDATE",
+    "REVALIDATE",
+    "AUTHORIZE",
+    "EXECUTE"
+  ],
+  "integrity": {
+    "expected_sha256": "13fc9b1876d0d3945192ea84909f1dfe712471f2322d9e8bcd7da2f47e44fdb0",
+    "actual_sha256": "13fc9b1876d0d3945192ea84909f1dfe712471f2322d9e8bcd7da2f47e44fdb0",
+    "expected_bytes": 69669,
+    "actual_bytes": 69669,
+    "intact": true
+  },
+  "checks": [
+    {
+      "id": "fixture_bytes_intact",
+      "pass": true
+    },
+    {
+      "id": "all_required_defects_detected",
+      "pass": true,
+      "missed": []
+    },
+    {
+      "id": "fail_closed_not_authorized",
+      "pass": true
+    },
+    {
+      "id": "every_defect_cites_evidence",
+      "pass": true,
+      "uncited": []
+    },
+    {
+      "id": "every_defect_routed_to_an_authority",
+      "pass": true
+    },
+    {
+      "id": "every_defect_states_required_resolution",
+      "pass": true
+    },
+    {
+      "id": "no_human_rescue_required",
+      "pass": true,
+      "note": "detection path is a pure function of fixture bytes; no operator input is read"
+    }
+  ],
+  "required_defect_ids": [
+    "INVENTED_SQL_SCHEMA",
+    "SSOT_IDENTITY_MISMATCH",
+    "STALE_RATIFIED_TERMINOLOGY",
+    "OVERLOADED_READY_FLAG",
+    "MISSING_PRODUCT_SENTRY_AUTH"
+  ],
+  "detected_defect_ids": [
+    "INVENTED_SQL_SCHEMA",
+    "SSOT_IDENTITY_MISMATCH",
+    "STALE_RATIFIED_TERMINOLOGY",
+    "OVERLOADED_READY_FLAG",
+    "MISSING_PRODUCT_SENTRY_AUTH"
+  ],
+  "additional_defect_ids": [],
+  "report": {
+    "schema": "blueprint_invention_report_v1",
+    "session_id": "000146ae-7ed9-4e23-9477-5139603e32f7",
+    "product_name": "universal-overlay",
+    "verdict": "BLUEPRINT_DEFECTS_PRESENT",
+    "manufacturing_authorized": false,
+    "defect_count": 14,
+    "by_id": {
+      "INVENTED_SQL_SCHEMA": 7,
+      "SSOT_IDENTITY_MISMATCH": 3,
+      "STALE_RATIFIED_TERMINOLOGY": 2,
+      "OVERLOADED_READY_FLAG": 1,
+      "MISSING_PRODUCT_SENTRY_AUTH": 1
+    },
+    "routing": {
+      "architect": 7,
+      "deterministic_repair": 5,
+      "conductor": 2
+    },
+    "defects": [
+      {
+        "id": "INVENTED_SQL_SCHEMA",
+        "authority": "architect",
+        "step_id": "TALOA-P1-001",
+        "table": "TaskStore",
+        "invented_columns": [
+          "id",
+          "owner_id",
+          "task_type",
+          "status",
+          "current_step_id",
+          "context",
+          "created_at",
+          "updated_at"
+        ],
+        "detail": "intent specifies table \"TaskStore\" with NO columns (unspecified); blueprint invented 8: id, owner_id, task_type, status, current_step_id, context, created_at, updated_at",
+        "resolution_required": "add explicit column specifications for \"TaskStore\" to the authoritative blueprint before manufacturing"
+      },
+      {
+        "id": "INVENTED_SQL_SCHEMA",
+        "authority": "architect",
+        "step_id": "TALOA-P1-002",
+        "table": "AuthorityLedger",
+        "invented_columns": [
+          "id",
+          "owner_id",
+          "entity_id",
+          "entity_type",
+          "permission",
+          "granted_by",
+          "granted_at",
+          "expires_at"
+        ],
+        "detail": "intent specifies table \"AuthorityLedger\" with NO columns (unspecified); blueprint invented 8: id, owner_id, entity_id, entity_type, permission, granted_by, granted_at, expires_at",
+        "resolution_required": "add explicit column specifications for \"AuthorityLedger\" to the authoritative blueprint before manufacturing"
+      },
+      {
+        "id": "INVENTED_SQL_SCHEMA",
+        "authority": "architect",
+        "step_id": "TALOA-P1-003",
+        "table": "ReceiptLedger",
+        "invented_columns": [
+          "id",
+          "owner_id",
+          "operation_id",
+          "operation_type",
+          "timestamp",
+          "details",
+          "status"
+        ],
+        "detail": "intent specifies table \"ReceiptLedger\" with NO columns (unspecified); blueprint invented 7: id, owner_id, operation_id, operation_type, timestamp, details, status",
+        "resolution_required": "add explicit column specifications for \"ReceiptLedger\" to the authoritative blueprint before manufacturing"
+      },
+      {
+        "id": "INVENTED_SQL_SCHEMA",
+        "authority": "architect",
+        "step_id": "TALOA-P1-004",
+        "table": "CapsuleStore",
+        "invented_columns": [
+          "id",
+          "owner_id",
+          "capsule_name",
+          "version",
+          "compiled_logic",
+          "metadata",
+          "created_at"
+        ],
+        "detail": "intent specifies table \"CapsuleStore\" with NO columns (unspecified); blueprint invented 7: id, owner_id, capsule_name, version, compiled_logic, metadata, created_at",
+        "resolution_required": "add explicit column specifications for \"CapsuleStore\" to the authoritative blueprint before manufacturing"
+      },
+      {
+        "id": "INVENTED_SQL_SCHEMA",
+        "authority": "architect",
+        "step_id": "TALOA-P1-005",
+        "table": "TemplateStore",
+        "invented_columns": [
+          "id",
+          "owner_id",
+          "template_name",
+          "template_content",
+          "version",
+          "created_at"
+        ],
+        "detail": "intent specifies table \"TemplateStore\" with NO columns (unspecified); blueprint invented 6: id, owner_id, template_name, template_content, version, created_at",
+        "resolution_required": "add explicit column specifications for \"TemplateStore\" to the authoritative blueprint before manufacturing"
+      },
+      {
+        "id": "INVENTED_SQL_SCHEMA",
+        "authority": "architect",
+        "step_id": "TALOA-P1-006",
+        "table": "DeviceRegistry",
+        "invented_columns": [
+          "id",
+          "owner_id",
+          "device_name",
+          "device_type",
+          "capabilities",
+          "last_seen",
+          "created_at"
+        ],
+        "detail": "intent specifies table \"DeviceRegistry\" with NO columns (unspecified); blueprint invented 7: id, owner_id, device_name, device_type, capabilities, last_seen, created_at",
+        "resolution_required": "add explicit column specifications for \"DeviceRegistry\" to the authoritative blueprint before manufacturing"
+      },
+      {
+        "id": "INVENTED_SQL_SCHEMA",
+        "authority": "architect",
+        "step_id": "TALOA-P1-007",
+        "table": "PreferenceStore",
+        "invented_columns": [
+          "id",
+          "owner_id",
+          "preference_key",
+          "preference_value",
+          "created_at",
+          "updated_at"
+        ],
+        "detail": "intent specifies table \"PreferenceStore\" with NO columns (unspecified); blueprint invented 6: id, owner_id, preference_key, preference_value, created_at, updated_at",
+        "resolution_required": "add explicit column specifications for \"PreferenceStore\" to the authoritative blueprint before manufacturing"
+      },
+      {
+        "id": "SSOT_IDENTITY_MISMATCH",
+        "authority": "deterministic_repair",
+        "field": "_meta.product",
+        "expected": "universal-overlay",
+        "found": "TALOA Universal Overlay & Fluid UI",
+        "registered_product": false,
+        "detail": "authoritative product identity is \"universal-overlay\" but the blueprint asserts \"TALOA Universal Overlay & Fluid UI\" — a derived identity would create a competing product home",
+        "resolution_required": "rewrite _meta.product to \"universal-overlay\" (mechanical: the authoritative value was supplied, not inferred)"
+      },
+      {
+        "id": "SSOT_IDENTITY_MISMATCH",
+        "authority": "deterministic_repair",
+        "field": "_meta.ssot_tag",
+        "expected": "docs/products/universal-overlay/PRODUCT_HOME.md",
+        "found": "docs/products/TALOA Universal Overlay & Fluid UI/TALOA_Universal_Overlay_Fluid_UI_HOME.md",
+        "detail": "SSOT path does not resolve under the authoritative product \"universal-overlay\" (and contains spaces, which is not a valid product-home path)",
+        "resolution_required": "bind _meta.ssot_tag to the registered product home for \"universal-overlay\""
+      },
+      {
+        "id": "SSOT_IDENTITY_MISMATCH",
+        "authority": "deterministic_repair",
+        "field": "_meta.parent_ssot",
+        "expected": "docs/products/universal-overlay/PRODUCT_HOME.md",
+        "found": "docs/products/TALOA Universal Overlay & Fluid UI/TALOA_Universal_Overlay_Fluid_UI_HOME.md",
+        "detail": "SSOT path does not resolve under the authoritative product \"universal-overlay\" (and contains spaces, which is not a valid product-home path)",
+        "resolution_required": "bind _meta.parent_ssot to the registered product home for \"universal-overlay\""
+      },
+      {
+        "id": "STALE_RATIFIED_TERMINOLOGY",
+        "authority": "deterministic_repair",
+        "scope": "acceptance_criteria",
+        "former_term": "Presiding Steward",
+        "canonical_term": "Conductor",
+        "effective_from": "2026-08-11",
+        "excerpt": "The system correctly renames 'Chair' to 'Presiding Steward' throughout relevant user-facing elements and internal references.",
+        "detail": "\"Presiding Steward\" was superseded by \"Conductor\" on 2026-08-11; manufacturing against it would build the wrong name into acceptance criteria",
+        "resolution_required": "replace \"Presiding Steward\" with \"Conductor\" in acceptance_criteria, then revalidate"
+      },
+      {
+        "id": "STALE_RATIFIED_TERMINOLOGY",
+        "authority": "deterministic_repair",
+        "scope": "acceptance_criteria",
+        "former_term": "Digital Twin",
+        "canonical_term": "Digital Imprint",
+        "effective_from": "2026-08-11",
+        "excerpt": "The system correctly renames 'Digital Twin' to 'Digital Imprint' throughout relevant user-facing elements and internal references.",
+        "detail": "\"Digital Twin\" was superseded by \"Digital Imprint\" on 2026-08-11; manufacturing against it would build the wrong name into acceptance criteria",
+        "resolution_required": "replace \"Digital Twin\" with \"Digital Imprint\" in acceptance_criteria, then revalidate"
+      },
+      {
+        "id": "OVERLOADED_READY_FLAG",
+        "authority": "conductor",
+        "field": "arc_report.ready_to_execute",
+        "found": true,
+        "basis": "deterministic_structural_check",
+        "missing": [
+          "ARCHITECT_INTENT_VALIDATED",
+          "EXECUTION_AUTHORIZED"
+        ],
+        "detail": "ready_to_execute=true is carrying authority it never earned: it proves graph validity only — no intent validation and no positive execution authorization exist",
+        "resolution_required": "split the flag into typed gate statuses; execution requires a current EXECUTION_AUTHORIZED, not the absence of a structural failure"
+      },
+      {
+        "id": "MISSING_PRODUCT_SENTRY_AUTH",
+        "authority": "conductor",
+        "product": "universal-overlay",
+        "registry": "builderos-reboot/governance/SENTRY_PRODUCT_REGISTRY.json",
+        "detail": "\"universal-overlay\" is not registered for an SO-002 product-completion gate, so no authority can certify it complete — \"endpoint 200\" would be the only evidence available",
+        "resolution_required": "register \"universal-overlay\" in builderos-reboot/governance/SENTRY_PRODUCT_REGISTRY.json with its Layer A/B gates before manufacturing"
+      }
+    ]
+  }
+}
