@@ -26,7 +26,7 @@
 </head>
 <body>
   <h1>MTG Card Batch Upload</h1>
-  <p>Select up to 150 card photos. Each is identified (vision AI), priced (Scryfall), and routed to a sell tier.</p>
+  <p>Select any number of card photos — larger selections are uploaded in groups of 150 automatically. Each is identified (vision AI), priced (Scryfall), and routed to a sell tier.</p>
 
   <div class="drop" id="drop">
     <div id="dropLabel">Click to choose photos, or drag them here</div>
@@ -52,6 +52,13 @@
   const resultsBody = document.getElementById('resultsBody');
   let chosenFiles = [];
   let pollTimer = null;
+  // Real bug found live (2026-08-10): the server hard-caps each batch at
+  // 150 files (routes/mtg-cards-routes.js MAX_FILES), but this page sent
+  // every selected file in one request regardless of count -- a 495-photo
+  // selection would be rejected outright before any processing started.
+  // Caught while actually watching a real 495-photo upload in progress.
+  const CHUNK_SIZE = 150;
+  let activeBatches = []; // [{ batchId, total, done, rows }]
 
   function authHeaders() {
     const token = localStorage.getItem('lifeos_access_token') || '';
@@ -74,33 +81,50 @@
     drop.addEventListener(evt, (e) => { e.preventDefault(); drop.classList.remove('drag'); }));
   drop.addEventListener('drop', (e) => setFiles(e.dataTransfer.files));
 
+  function chunk(arr, size) {
+    const out = [];
+    for (let i = 0; i < arr.length; i += size) out.push(arr.slice(i, i + size));
+    return out;
+  }
+
   uploadBtn.addEventListener('click', async () => {
     if (!chosenFiles.length) return;
     uploadBtn.disabled = true;
-    statusEl.textContent = `Uploading ${chosenFiles.length} photo(s)...`;
+    activeBatches = [];
+    resultsTable.style.display = '';
 
-    const form = new FormData();
-    chosenFiles.forEach((f) => form.append('cards', f));
+    const chunks = chunk(chosenFiles, CHUNK_SIZE);
+    for (let i = 0; i < chunks.length; i++) {
+      statusEl.textContent = chunks.length > 1
+        ? `Uploading group ${i + 1}/${chunks.length} (${chunks[i].length} photo(s))...`
+        : `Uploading ${chunks[i].length} photo(s))...`;
 
-    try {
-      const res = await fetch('/api/v1/mtg-cards/batch-upload', {
-        method: 'POST',
-        headers: authHeaders(),
-        body: form,
-      });
-      const json = await res.json();
-      if (!json.ok) {
-        statusEl.textContent = `Upload failed: ${json.error || 'unknown error'}`;
-        uploadBtn.disabled = false;
-        return;
+      const form = new FormData();
+      chunks[i].forEach((f) => form.append('cards', f));
+
+      try {
+        const res = await fetch('/api/v1/mtg-cards/batch-upload', {
+          method: 'POST',
+          headers: authHeaders(),
+          body: form,
+        });
+        const json = await res.json();
+        if (!json.ok) {
+          statusEl.textContent = `Group ${i + 1}/${chunks.length} failed: ${json.error || 'unknown error'} — ${activeBatches.length} earlier group(s) still processing.`;
+          continue; // don't let one bad group abandon the rest
+        }
+        activeBatches.push({ batchId: json.batch_id, total: json.file_count, done: 0, rows: [] });
+      } catch (err) {
+        statusEl.textContent = `Group ${i + 1}/${chunks.length} failed: ${err.message} — ${activeBatches.length} earlier group(s) still processing.`;
       }
-      statusEl.textContent = `Batch ${json.batch_id} — processing ${json.file_count} card(s)...`;
-      resultsTable.style.display = '';
-      pollBatch(json.batch_id);
-    } catch (err) {
-      statusEl.textContent = `Upload failed: ${err.message}`;
-      uploadBtn.disabled = false;
     }
+
+    if (!activeBatches.length) {
+      statusEl.textContent = 'All groups failed to start. Nothing is processing.';
+      uploadBtn.disabled = false;
+      return;
+    }
+    pollAllBatches();
   });
 
   function tierClass(tier) {
@@ -130,23 +154,52 @@
     }).join('') + `<div><strong>Total estimated:</strong> $${Number(totalUsd || 0).toFixed(2)}</div>`;
   }
 
-  async function pollBatch(batchId) {
+  /// Polls every batch a chunked upload created and merges them into one
+  /// combined table + summary, so a 495-photo upload (4 real groups behind
+  /// the scenes) reads as one job, not four disconnected ones.
+  async function pollAllBatches() {
     clearTimeout(pollTimer);
     try {
-      const res = await fetch(`/api/v1/mtg-cards/batch/${batchId}`, { headers: authHeaders() });
-      const json = await res.json();
-      if (json.ok) {
-        renderRows(json.rows);
-        statusEl.textContent = `Batch ${batchId} — ${json.done}/${json.total} processed`;
-        if (json.done < json.total) {
-          pollTimer = setTimeout(() => pollBatch(batchId), 2000);
-          return;
+      await Promise.all(activeBatches.map(async (b) => {
+        const res = await fetch(`/api/v1/mtg-cards/batch/${b.batchId}`, { headers: authHeaders() });
+        const json = await res.json();
+        if (json.ok) {
+          b.done = json.done;
+          b.total = json.total;
+          b.rows = json.rows;
         }
-        const sumRes = await fetch(`/api/v1/mtg-cards/batch/${batchId}/summary`, { headers: authHeaders() });
-        const sumJson = await sumRes.json();
-        if (sumJson.ok) renderSummary(sumJson.by_tier, sumJson.total_estimated_usd);
-        statusEl.textContent = `Batch ${batchId} — done (${json.total} card(s))`;
+      }));
+
+      const allRows = activeBatches.flatMap((b) => b.rows);
+      const totalDone = activeBatches.reduce((s, b) => s + b.done, 0);
+      const totalCount = activeBatches.reduce((s, b) => s + b.total, 0);
+      renderRows(allRows);
+      const groupNote = activeBatches.length > 1 ? ` across ${activeBatches.length} group(s)` : '';
+      statusEl.textContent = `${totalDone}/${totalCount} processed${groupNote}`;
+
+      if (totalDone < totalCount) {
+        pollTimer = setTimeout(pollAllBatches, 2000);
+        return;
       }
+
+      // All groups done -- merge per-group summaries into one real total.
+      const summaries = await Promise.all(activeBatches.map(async (b) => {
+        const res = await fetch(`/api/v1/mtg-cards/batch/${b.batchId}/summary`, { headers: authHeaders() });
+        return res.json();
+      }));
+      const byTier = {};
+      let totalUsd = 0;
+      for (const s of summaries) {
+        if (!s.ok) continue;
+        for (const [tier, d] of Object.entries(s.by_tier || {})) {
+          byTier[tier] = byTier[tier] || { count: 0, subtotal_usd: 0 };
+          byTier[tier].count += d.count;
+          byTier[tier].subtotal_usd += d.subtotal_usd;
+        }
+        totalUsd += Number(s.total_estimated_usd || 0);
+      }
+      renderSummary(byTier, totalUsd);
+      statusEl.textContent = `Done — ${totalCount} card(s)${groupNote}`;
     } catch (err) {
       statusEl.textContent = `Status check failed: ${err.message}`;
     }

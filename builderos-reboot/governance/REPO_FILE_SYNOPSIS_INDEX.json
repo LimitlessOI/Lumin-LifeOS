@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-11T05:04:43.804Z",
+  "generated_at": "2026-08-11T05:25:51.183Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13223,
   "files": [
@@ -42936,9 +42936,9 @@
     {
       "path": "docs/products/builderos/GAP_FILL_LEDGER.json",
       "synopsis": "Documentation — GAP FILL LEDGER.",
-      "bytes": 99272,
-      "mtime": "2026-08-11T02:27:34.171Z",
-      "indexed_at": "2026-08-11T02:27:51.363Z",
+      "bytes": 100157,
+      "mtime": "2026-08-11T05:04:44.278Z",
+      "indexed_at": "2026-08-11T05:25:51.183Z",
       "synopsis_index_only": true
     },
     {
@@ -44065,9 +44065,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 831315,
-      "mtime": "2026-08-11T05:04:05.530Z",
-      "indexed_at": "2026-08-11T05:04:28.856Z"
+      "bytes": 833690,
+      "mtime": "2026-08-11T05:25:31.980Z",
+      "indexed_at": "2026-08-11T05:25:51.183Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -69638,9 +69638,9 @@
     {
       "path": "public/mtg-cards-upload.html",
       "synopsis": "Batch MTG card upload UI -- founder-facing page for routes/mtg-cards-routes.js.",
-      "bytes": 6691,
-      "mtime": "2026-08-11T04:41:13.041Z",
-      "indexed_at": "2026-08-11T04:43:17.189Z"
+      "bytes": 9120,
+      "mtime": "2026-08-11T05:24:07.231Z",
+      "indexed_at": "2026-08-11T05:25:51.183Z"
     },
     {
       "path": "public/onboarding.html",
@@ -97613,9 +97613,9 @@
     {
       "path": "services/mtg-card-vision.js",
       "synopsis": "Identifies a Magic: The Gathering card (name, set, foil, condition",
-      "bytes": 7340,
-      "mtime": "2026-08-11T05:02:54.926Z",
-      "indexed_at": "2026-08-11T05:04:28.856Z",
+      "bytes": 7907,
+      "mtime": "2026-08-11T05:08:34.213Z",
+      "indexed_at": "2026-08-11T05:25:51.183Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

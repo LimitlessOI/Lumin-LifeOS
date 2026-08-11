@@ -140,7 +140,16 @@ async function identifyViaGemini(photo) {
   }
   const text = String(json?.candidates?.[0]?.content?.parts?.[0]?.text || '').trim();
   const parsed = parseModelJson(text);
-  if (!parsed) return { ok: false, error: 'unparseable_model_output', ...EMPTY_RESULT };
+  if (!parsed) {
+    // Real debugging need, not decoration: an empty/unparseable response
+    // could be a genuinely different reason each time (safety block, hit
+    // maxOutputTokens before finishing the JSON, markdown-fenced text a
+    // stricter regex would miss) -- surfacing WHICH one actually happened
+    // beats a bare "unparseable_model_output" that hides the real cause.
+    const finishReason = json?.candidates?.[0]?.finishReason || 'unknown';
+    const snippet = text ? text.slice(0, 200) : '(empty response text)';
+    return { ok: false, error: `unparseable_model_output finish=${finishReason} text=${snippet}`, ...EMPTY_RESULT };
+  }
   return toResult(parsed);
 }
 

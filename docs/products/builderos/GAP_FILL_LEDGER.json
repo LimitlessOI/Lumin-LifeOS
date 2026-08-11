@@ -727,6 +727,14 @@
       "added_real_lines": 19,
       "justification": "this reuses the existing photo-batch pipeline's\npricing/tiering/storage logic almost entirely unchanged (same functions,\nsame schema, same async-batch shape as the already-shipped and already-\ngoverned-factory-adjacent photo path from two commits ago) -- the new\nsurface area is a CSV parser (a well-understood, bounded parsing problem,\nnot a business-logic design decision) and a header-alias map sourced\ndirectly from ManaBox's own documented export format. Adam has real,\nphysical inventory (hundreds to thousands of cards) blocked on exactly this\npath right now (\"asap\" energy carried through this whole session) and the\nphoto-vision alternative is confirmed dead on both providers -- this is the\nonly currently-working intake path for his stated need.\n\nCo-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>",
       "commit_message_excerpt": "GAP-FILL: MTG card CSV import -- handles thousands of cards, no AI credits needed"
+    },
+    {
+      "at": "2026-08-11T05:04:44.274Z",
+      "file": "services/mtg-card-vision.js",
+      "is_new_file": false,
+      "added_real_lines": 41,
+      "justification": "this is another fallback branch added to an\nalready-shipped function, same shape and same justification as the\nAnthropic fallback two commits ago -- the identify contract is unchanged,\nand the Gemini call is a direct copy of the exact request shape already\nproven live in services/provider-key-health.js. Closes a real, currently-\nblocking gap (both existing providers are out of credits, five other\nalready-configured providers are not) with a well-understood, bounded\naddition, not a new business-logic design decision.\n\nCo-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>",
+      "commit_message_excerpt": "GAP-FILL: real Gemini vision fallback -- Adam was right, unused capacity existed"
     }
   ]
 }
