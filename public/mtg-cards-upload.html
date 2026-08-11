@@ -34,6 +34,7 @@
   </div>
 
   <button id="uploadBtn" disabled>Upload batch</button>
+  <div id="received" style="display:none; font-weight:600; color:#1a7a3a; margin:8px 0;"></div>
   <div id="status"></div>
   <div class="summary" id="summary"></div>
   <table id="results" style="display:none">
@@ -47,6 +48,7 @@
   const fileInput = document.getElementById('fileInput');
   const uploadBtn = document.getElementById('uploadBtn');
   const statusEl = document.getElementById('status');
+  const receivedEl = document.getElementById('received');
   const summaryEl = document.getElementById('summary');
   const resultsTable = document.getElementById('results');
   const resultsBody = document.getElementById('resultsBody');
@@ -114,6 +116,15 @@
           continue; // don't let one bad group abandon the rest
         }
         activeBatches.push({ batchId: json.batch_id, total: json.file_count, done: 0, rows: [] });
+        // Real, immediate confirmation the server actually received these
+        // files -- founder, direct: "we can have a show that it received
+        // the hundred and ten. That way I know I can go onto the next."
+        // Separate from the live done/total polling below (which updates
+        // every 2s as identification completes) -- this fires the instant
+        // the upload itself succeeds, before any AI/pricing work has run.
+        const receivedSoFar = activeBatches.reduce((s, b) => s + b.total, 0);
+        receivedEl.textContent = `Received ${receivedSoFar} photo(s) so far.`;
+        receivedEl.style.display = '';
       } catch (err) {
         statusEl.textContent = `Group ${i + 1}/${chunks.length} failed: ${err.message} — ${activeBatches.length} earlier group(s) still processing.`;
       }
@@ -124,6 +135,8 @@
       uploadBtn.disabled = false;
       return;
     }
+    const totalReceived = activeBatches.reduce((s, b) => s + b.total, 0);
+    receivedEl.textContent = `Received all ${totalReceived} photo(s) — safe to start your next batch of cards. Now identifying each one below.`;
     pollAllBatches();
   });
 
