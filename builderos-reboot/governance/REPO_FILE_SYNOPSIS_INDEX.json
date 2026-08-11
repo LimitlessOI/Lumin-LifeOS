@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-11T17:42:35.231Z",
+  "generated_at": "2026-08-11T18:04:46.734Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13228,
+  "file_count": 13232,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -40729,6 +40729,20 @@
       "indexed_at": "2026-08-11T07:00:03.217Z"
     },
     {
+      "path": "docs/conversation_dumps/2026-08-11-mtg-upload-automation-and-the-real-drive-channel.md",
+      "synopsis": "Founder capture -- MTG card upload automation attempt, the AppleScript permission wall, and the pivot to the real drive-channel, 2026-08-11.",
+      "bytes": 4124,
+      "mtime": "2026-08-11T18:04:29.796Z",
+      "indexed_at": "2026-08-11T18:04:46.734Z"
+    },
+    {
+      "path": "docs/conversation_dumps/2026-08-11-taloa-blueprint-consensus-and-live-intake-test.md",
+      "synopsis": "Founder capture -- Taloa Universal Overlay blueprint independent-draft consensus process and live BuilderOS intake test, 2026-08-11.",
+      "bytes": 11917,
+      "mtime": "2026-08-11T18:04:20.084Z",
+      "indexed_at": "2026-08-11T18:04:46.734Z"
+    },
+    {
       "path": "docs/conversation_dumps/by-product/sessions/2a4739f2/BUILDEROS-AUTONOMOUS.md",
       "synopsis": "BuilderOS / TSOS / autonomous / alpha",
       "bytes": 85566,
@@ -44034,6 +44048,20 @@
       "indexed_at": "2026-08-11T07:00:03.217Z"
     },
     {
+      "path": "docs/products/lifeos/conversations/2026-08-11-mtg-upload-automation-and-the-real-drive-channel.md",
+      "synopsis": "Founder capture -- MTG card upload automation attempt, the AppleScript permission wall, and the pivot to the real drive-channel, 2026-08-11.",
+      "bytes": 4124,
+      "mtime": "2026-08-11T18:03:43.891Z",
+      "indexed_at": "2026-08-11T18:04:46.734Z"
+    },
+    {
+      "path": "docs/products/lifeos/conversations/2026-08-11-taloa-blueprint-consensus-and-live-intake-test.md",
+      "synopsis": "Founder capture -- Taloa Universal Overlay blueprint independent-draft consensus process and live BuilderOS intake test, 2026-08-11.",
+      "bytes": 11917,
+      "mtime": "2026-08-11T18:04:20.082Z",
+      "indexed_at": "2026-08-11T18:04:46.734Z"
+    },
+    {
       "path": "docs/products/lifeos/CREATIVE_BRIEF.md",
       "synopsis": "Creative Brief — LifeOS (lifeos)",
       "bytes": 4211,
@@ -44865,9 +44893,9 @@
     {
       "path": "docs/products/universal-overlay/TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md",
       "synopsis": "TALOA UNIVERSAL OVERLAY &amp; FLUID UI — COMPLETE BLUEPRINT",
-      "bytes": 126671,
-      "mtime": "2026-08-11T17:01:21.813Z",
-      "indexed_at": "2026-08-11T17:01:56.885Z"
+      "bytes": 129335,
+      "mtime": "2026-08-11T18:04:20.079Z",
+      "indexed_at": "2026-08-11T18:04:46.734Z"
     },
     {
       "path": "docs/products/UNIVERSALOVERLAY.md",
