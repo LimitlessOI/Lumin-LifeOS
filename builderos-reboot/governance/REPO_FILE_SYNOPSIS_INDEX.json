@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-11T15:19:18.144Z",
+  "generated_at": "2026-08-11T15:28:21.533Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13227,
+  "file_count": 13228,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -44856,11 +44856,18 @@
       "indexed_at": "2026-08-11T08:06:28.034Z"
     },
     {
+      "path": "docs/products/universal-overlay/TALOA_BLUEPRINT_COMPARISON_CLAUDE_VS_CHATGPT_2026-08-11.md",
+      "synopsis": "Taloa Universal Overlay Blueprint — Comparison Audit",
+      "bytes": 12417,
+      "mtime": "2026-08-11T15:28:20.346Z",
+      "indexed_at": "2026-08-11T15:28:21.533Z"
+    },
+    {
       "path": "docs/products/universal-overlay/TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md",
       "synopsis": "TALOA UNIVERSAL OVERLAY &amp; FLUID UI — COMPLETE BLUEPRINT",
-      "bytes": 83910,
-      "mtime": "2026-08-11T15:19:16.964Z",
-      "indexed_at": "2026-08-11T15:19:18.144Z"
+      "bytes": 105425,
+      "mtime": "2026-08-11T15:26:59.783Z",
+      "indexed_at": "2026-08-11T15:28:21.533Z"
     },
     {
       "path": "docs/products/UNIVERSALOVERLAY.md",

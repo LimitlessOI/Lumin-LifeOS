@@ -12,6 +12,29 @@ This document does not ask permission to disagree with existing code, and does n
 
 ---
 
+## CHANGELOG — Revised After Auditing the Independent ChatGPT Draft (2026-08-11, same day)
+
+Per founder instruction, this document was audited against the second, independently-produced blueprint (`TALOA_UNIVERSAL_OVERLAY_FLUID_UI_COMPLETE_BLUEPRINT_MANUFACTURING_SPEC_v1_0`, produced without repository access) the same way a code review audits for bugs and gaps — line by line, not impressionistically. Full comparison receipts live in the companion document `TALOA_BLUEPRINT_COMPARISON_CLAUDE_VS_CHATGPT_2026-08-11.md`. This changelog states only what actually changed in *this* file and why.
+
+**Adopted from the ChatGPT draft (real gaps in this document, closed below):**
+- Explicit runtime component ownership (`OverlayHost`/`BodyAdapter`/`PerceptionFusion`/`TaskOrchestrator`/`StrategyRouter`/`CapsuleRuntime`/`VerificationService`/`ReceiptLedger`) — §14a, new.
+- Canonical Task and Step state machines with forbidden unofficial completion states — §14b, new.
+- A typed cross-component message envelope — §14c, new.
+- The explicit "Builder MUST NOT decide / MAY decide" authority boundary — §64a, new. This is a genuinely better enforcement mechanism than this document's original prose-only framing of the same idea; it converts "don't let existing code dictate the architecture" into a checkable build-time gate.
+- A 5-gate deterministic Strategy Router algorithm with an explicit utility formula, replacing this document's flatter 5-tier list — §13, revised in place.
+- Declarative Fluid UI primitives (`ViewIntent` + approved component families + input-ownership zones: `PASSTHROUGH`/`TALOA_INTERACTIVE`/`SHARED_GUIDED`/`MODAL_HUMAN_STEP`) — §8, revised in place. This closes a real gap: this document's original §8 named Fluid UI as "governed," not "generated," but never specified the mechanism stopping a model from emitting arbitrary executable UI. The ChatGPT draft's mechanism is the correct one and is adopted directly.
+- Consequence classes C0–C4, replacing this document's looser `risk_level: 0-10` field — §14d, new, referenced from §14c's `Action` schema.
+- `ResourceHandle` for cross-device transport (metadata-only reference, not content-in-context) — §22, extended.
+- A named canonical persistence map (`TaskStore`/`AuthorityLedger`/`ReceiptLedger`/`CapsuleStore`/`TemplateStore`/`DeviceRegistry`/`PreferenceStore`) — §44a, new, cross-referenced against the real, already-fragmented stores this repo actually has today (this repo-grounding is *not* in the ChatGPT draft, since it had no way to know these tables' real names).
+
+**Not adopted — real disagreements, resolved by repository evidence the other draft could not have had:**
+- The ChatGPT draft writes "Digital Imprint (formerly Digital Twin)" throughout, as though the rename were settled. Direct repo research this session (`builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json:43996`) confirms the rename was proposed 2026-08-04 and **explicitly not adopted** — "Digital Twin" is still used in 100% of live code. This document keeps "Digital Twin" as primary, unchanged from the original draft, and treats the other draft's terminology as the thing that needs correcting, not the other way around.
+- The ChatGPT draft uses "Capsule" unqualified throughout §17. This repo already has two other real, live, load-bearing systems using that exact word (`services/memory-capsule.js` — a fact/trust record system, live in production; and the constitutionally-ratified REP Capsule governance-context bundle). Reusing "Capsule" unqualified for a third meaning would collide with both. This document's disambiguated **"Operational Capsule"** name (§28) is kept, unchanged — this is a case where repository access catches a real naming conflict a first-principles draft structurally could not see.
+
+**Independently converged, unchanged, now higher-confidence:** native shell as canonical Display Plane over the browser extension; one Mind, many Bodies; task-level (not per-click) authorization; the minimum-human-interruption handoff pattern; a four-lane latency model; "compile toward cheap" as the template design goal; iOS as a constrained Body via Shortcuts/App Intents rather than forced parity; verification independent of the acting Body. Two independently-produced drafts reaching the same answer from different evidence (repo access vs. founder-conversation reconstruction) is real signal, not coincidence — nothing needed to change in these sections, they're recorded as converged in the comparison document instead of re-litigated here.
+
+---
+
 ## 1. Executive Product Definition
 
 Taloa is not a browser extension, a chat window, an avatar, or a desktop widget. It is **a screen over the screen** — an adaptive interactive Display Plane that sits above the ordinary computing environment, renders what's relevant to the moment, and has real hands and eyes into whatever platform it's running on. The human's primary relationship is with Taloa; applications become capability providers underneath her.
@@ -197,7 +220,25 @@ Nothing in this diagram is invented for this document except the **Execution Str
 
 **Concrete, buildable-now mechanism (the real fix for the currently-blocked build-queue step):** `BUILD_QUEUE.json` step `5` (`public/overlay/moduleRouter.js`, "fluid UI context router") is formally blocked with `failure_signature: STEP_STATUS_FORBIDDEN`, `revive_count: 5`. Two sibling steps targeting the same file (`universal-overlay-step7`, `universal-overlay-step8`) were independently demoted after real `SENTRY_FAILED` behavior-proof failures on missing substrings like `/install` and "URL pattern." **Diagnosis:** this is very likely the same root cause already identified and worked around for the drive-channel files — the governed factory's Zone-3 additive-patch system has a documented 150-line failure mode (`docs/products/universal-overlay/PRODUCT_HOME.md`, 2026-08-10 receipt: `"Zone 3 additive-patch failed — empty additive snippet"` on `extension-drive-routes.js`, a 220-line file). **Recommendation:** re-scope the router into several files under the working threshold (a `routeRegistry.js` mapping table + a thin `moduleRouter.js` dispatcher + per-context small modules) rather than re-escalating the same monolithic target for a sixth revive.
 
-**Rendering surfaces the Fluid UI composes from** (per founder's explicit list): widgets, cards, comparisons, graphs, spreadgets, images, video, teaching arrows, confidence indicators, evidence, notifications, and full reconstructed application fragments (§56 covers legacy-app decomposition specifically).
+**The mechanism that keeps "governed adaptive composition" from silently becoming "arbitrary model-generated UI"** — a real gap in this document's original draft, closed after cross-review: the Cognitive Mind never emits renderable UI directly. It emits a typed `ViewIntent`:
+
+```
+ViewIntent { purpose, primary_object, information_depth, urgency, interaction_mode,
+             attention_constraints, required_actions, evidence_refs, confidence_refs,
+             comparison_items, modality_preferences }
+```
+
+A deterministic `FluidUIComposer` maps that `ViewIntent` into a closed set of approved primitives — `Text`, `Metric`, `ConfidenceBadge`, `EvidenceNode`, `ActionButton`, `ChoiceGroup`, `FormField`, `Comparison`, `Timeline`, `Progress`, `Media`, `AppSurface`, `Highlight`, `Tooltip`, `SplitPane`, `Workspace`, `AvatarAnchor`, `HandoffPrompt` — never raw HTML/JS/Swift/Kotlin emitted by a model into the trusted Overlay surface. This is the direct, mechanical answer to "adaptive" vs. "arbitrary": adaptation happens in *which* primitives get selected and how they're arranged, never in what a primitive is allowed to be.
+
+**Input ownership per rendered region** must be one of four explicit states, never ambiguous or dynamically reinterpreted mid-frame:
+- `PASSTHROUGH` — input reaches the underlying application untouched.
+- `TALOA_INTERACTIVE` — input belongs to the Overlay.
+- `SHARED_GUIDED` — Overlay observes/annotates; the underlying app still receives the input.
+- `MODAL_HUMAN_STEP` — a temporary human-only surface (matches §27's minimum-human-interruption handoff).
+
+This closes a real, currently-live risk: today's Display Plane (both the extension iframe and the native shell) has no formal region-ownership model — a transparent overlay without one is exactly the kind of surface that can accidentally intercept a click meant for the app underneath it, or vice versa.
+
+**Rendering surfaces the Fluid UI composes from** (per founder's explicit list): widgets, cards, comparisons, graphs, spreadgets, images, video, teaching arrows, confidence indicators, evidence, notifications, and full reconstructed application fragments (§56 covers legacy-app decomposition specifically) — each backed by one of the primitives above.
 
 ---
 
@@ -249,7 +290,7 @@ Already real, already general, already proven — **this section is "keep this,"
 
 ## 13. Execution Strategy Router (§17)
 
-Selects execution method **per step, not per task**, exactly as specified. Formalizes the fallback hierarchy already implicit in the codebase (the drive-channel's tiered decider is an instance of the same idea, one level up — model tier, not execution method):
+Selects execution method **per step, not per task**, exactly as specified. Revised after cross-review against the independent ChatGPT draft, whose deterministic gate algorithm is more rigorous than this document's original flat tier list — adopted here, with the tier vocabulary kept because it's the plainer name for the same five methods:
 
 ```
 Tier 1 — API              fastest, most reliable, cheapest, most reversible-by-design
@@ -259,9 +300,30 @@ Tier 4 — Visual automation  screenshot + vision model — used only when Tiers
 Tier 5 — Human handoff      OTP/CAPTCHA/biometric-class steps only — never a silent fallback for convenience
 ```
 
+**Selection is a 5-gate deterministic pipeline, not a preference ranking ("always try API first" is not a rule — it's usually, not always, the outcome of this pipeline):**
+
+```
+Gate 1 — Validity        drop any tier lacking current capability, authority, or privacy clearance,
+                          or blocked by current platform/quarantined-template state
+Gate 2 — Verification     drop any tier whose result can't be independently verified to the
+           sufficiency     consequence-appropriate standard (§14d) when a stronger tier can
+Gate 3 — Reliability      drop any tier below the minimum reliability floor for this consequence class
+           floor
+Gate 4 — Optimize          utility = reliability_weight   * predicted_success
+           remaining               + verification_weight  * verification_strength
+           tiers                   + latency_weight        * normalized_speed
+                                    + cost_weight           * normalized_low_cost
+                                    + privacy_weight        * normalized_data_minimization
+                                    + stability_weight      * historical_environment_stability
+                                    - interruption_weight   * expected_human_interruptions
+Gate 5 — Fallback chain    store at least one alternate tier before acting, not only the winner
+```
+
+Weights are governed configuration, versioned by consequence class — not a Builder choice (§64a). **Until real weights are calibrated from production evidence, use explicit lexicographic priority** (meets required reliability → meets required verification → least privacy exposure → least expected human interruption → lowest latency → lowest cost) rather than guessing at weight values with no data behind them — an honest Alpha-stage fallback, not a permanent design.
+
 **Router inputs per step** (already partially real — `isRiskyClick()` and the stuck-detection `onAfterStep` handoff are working instances of exactly this kind of per-step judgment, just not yet generalized into one named router): reliability history for this step+site+Body combination (from Operational Capsule performance data, §36), current platform capability inventory (§19), estimated cost, reversibility, and confidence of the available `PerceivedObject`s.
 
-**One task, mixed tiers — concretely, using an already-real example:** the drive channel today mixes Tier 3 (DOM click) automatically for ordinary steps and Tier 5 (human handoff) for a detected stuck field — it already does exactly what §17 of the task instructions describe, just without formal tier numbering or without Tier 1/2/4 as live options yet on that specific Body.
+**One task, mixed tiers — concretely, using an already-real example:** the drive channel today mixes Tier 3 (DOM click) automatically for ordinary steps and Tier 5 (human handoff) for a detected stuck field — it already does exactly what this pipeline describes, just without formal gate structure or without Tier 1/2/4 as live options yet on that specific Body.
 
 ---
 
@@ -293,6 +355,75 @@ Body {
 ```
 
 Critically: **`decide` is not part of the Body.** The Brain (Chair + decision loop, already real via `general-browser-agent-runtime.js`'s `makeDecider`) stays shared and platform-agnostic. A Body that tried to also decide would be exactly the "separate independent brain per platform" anti-pattern the founder explicitly ruled out. Today only the browser Body actually plugs into this contract (`extension-drive-bridge.js` supplies `observe`/`act`/`verify`). Android has the raw pieces (§23) but no adapter written. macOS has `act` only, no `observe`, no adapter (§21).
+
+---
+
+## 14a. Runtime Component Ownership
+
+Added after cross-review against the independent ChatGPT draft, which named these roles with more precision than this document's original diagram (§6) did. Each role below maps against what this repo already has, real gaps stated plainly rather than smoothed over:
+
+| Role | Owns | What already exists in this repo | Gap |
+|---|---|---|---|
+| `OverlayHost` | Local Display Plane rendering, local input observation, presence, local Body adapter lifecycle | `native/macos-overlay/main.swift`/`ContainerView.swift`, `extension/content.js` | Neither talks to a `TaskOrchestrator` yet — each is its own island |
+| `BodyAdapter` | Translates typed commands to platform primitives; never re-plans, never expands authority, never self-certifies completion | `extension-drive-bridge.js` (browser only) | No Android or macOS adapter exists (§21, §23) |
+| `PerceptionFusion` | Normalizes + reconciles observations across Bodies into one `WorldSnapshot`; preserves contradiction rather than silently picking a "winner" between disagreeing sources | Nothing today — each Body's `observe()` output is consumed in isolation | Net-new; sequence after at least 2 real Body adapters exist (§9) |
+| `TaskOrchestrator` | The one authoritative task-state owner; all Bodies/workers/receipts reference the same `task_id` | `extension_drive_sessions` table (Postgres, real) is a rough, single-Body instance of this | Needs generalizing beyond the browser Body; state machine is coarser than §14b requires today (`running`/`handoff`/`done`/`failed`/`stopped` only) |
+| `StrategyRouter` | The 5-gate pipeline in §13 | The tiered decider in `general-browser-agent-runtime.js` is a real, narrower instance (model-tier routing, not execution-method routing) | Needs generalizing from "which model" to "which execution tier" |
+| `CapsuleRuntime` | Capsule lookup, activation state, template retrieval/versioning, environment-signature checking | Nothing — confirmed absent (§28) | Net-new |
+| `VerificationService` | Independent success/failure judgment; the actor that acted cannot also certify | `verifyGoal`'s independent-evidence requirement (browser Body only) | Needs generalizing to every Body (§47) |
+| `ReceiptLedger` | Append-only, immutable-original, correction-via-addendum evidence record | `products/receipts/` + `services/receipt-truth-validator.js` (real, validates 161+ files) | Already close to this role's spirit; needs one canonical write path instead of many ad hoc producers (§49) |
+
+## 14b. Canonical Task and Step State Machines
+
+The ChatGPT draft's state machines are more rigorous than anything in this document's original draft — adopted directly, compared here against what the drive channel actually implements today so the gap is explicit rather than assumed closed:
+
+```
+RECEIVED → INTERPRETING → AUTHORITY_RESOLVED → PLANNING → READY → EXECUTING
+  → WAITING_EXTERNAL | WAITING_HUMAN → RECOVERING → VERIFYING
+  → VERIFIED_SUCCESS | VERIFIED_FAILURE | CANCELLED | BLOCKED
+```
+
+`DONE`, `COMPLETE`, `SUCCESS`, or any equivalent unofficial state are forbidden — `VERIFYING → VERIFIED_SUCCESS` may only be produced by `VerificationService`, never by the acting Body (directly enforces §47's existing "never a self-reported model claim" doctrine, now as a state-machine rule instead of only a code-review convention).
+
+**Today's real state machine is materially coarser**, confirmed by direct read of `routes/extension-drive-routes.js`: `running` → `handoff` → `done`/`failed`/`stopped`. There is no `AUTHORITY_RESOLVED` state distinct from `PLANNING` (today's `founder_authority` boolean is checked once, not tracked as a lifecycle stage — see §23's critique of that exact pattern), and no `RECOVERING` state (today's stuck-detection goes straight from stuck to `handoff`, with no attempted-recovery step recorded in between). Closing this gap is sequenced with the `TaskOrchestrator` generalization in §14a, not before.
+
+Each step additionally carries: `step_id`, `task_id`, `intent`, `target`, `preconditions`, `expected_postcondition`, `authority_scope_ref` (§23's envelope id), `consequence_class` (§14d), `selected_strategy`, `fallback_chain`, `retry_policy`, `verification_method`. A step with no postcondition is not consequentially executable — it cannot leave `PENDING`.
+
+## 14c. Typed Message Envelope
+
+All cross-component runtime communication uses one envelope shape — free-form natural language is not a control protocol (natural language may still populate typed fields like `user_utterance` or `evidence_excerpt` inside the payload):
+
+```json
+{
+  "schema_version": "taloa-runtime-v1",
+  "message_id": "uuid",
+  "message_type": "WORLD_SNAPSHOT | ACTION_REQUEST | ACTION_RESULT | ...",
+  "task_id": "uuid | null",
+  "user_id_ref": "opaque-id | null",
+  "body_id": "opaque-id | null",
+  "created_at": "RFC3339",
+  "correlation_id": "uuid",
+  "causation_id": "uuid | null",
+  "privacy_class": "PUBLIC | PERSONAL | SENSITIVE | EPHEMERAL",
+  "payload": {}
+}
+```
+
+Messages carrying an unknown `schema_version` fail closed for any consequential (C2+, §14d) execution — an unrecognized message never gets the benefit of the doubt on an action that costs money, sends something externally, or can't be undone.
+
+## 14d. Consequence Classes
+
+Every `Action` (§14's `act()` parameter) maps to exactly one class before execution — replaces this document's original free-floating `risk_level: 0-10` field with named, concrete bands that are easier to reason about and easier to set policy against:
+
+| Class | Meaning | Examples |
+|---|---|---|
+| C0 | UI-only, no external state | Expand a card, move the avatar, local highlight |
+| C1 | Reversible personal state | Open an app, draft text, fill a form without submitting |
+| C2 | Durable but normally reversible | Save a file, change a preference, schedule an editable reminder |
+| C3 | External commitment — money or communication | Send a message, submit an order, create an account, purchase under a delegated limit |
+| C4 | High-impact, difficult to reverse | Large financial action, destructive deletion, binding contract, broad production deploy |
+
+**Unknown is not a permissive default.** An action that hasn't been classified defaults to the higher of its plausible classes until a real classification exists — the opposite of today's implicit behavior, where `general-browser-agent-routes.js`'s `founder_authority` boolean (§45's flagged anti-pattern) treats every action as the same single yes/no regardless of which of these five bands it actually falls in.
 
 ---
 
@@ -346,6 +477,15 @@ This is the honest architecture for Apple's sandbox, not a workaround — per th
 ## 22. Cross-Device Orchestration (§26)
 
 **UK — does not exist.** No code path today lets Taloa pull a photo/OTP/contact from Adam's phone because his laptop needs it. Design: a `capability fabric` request — the Brain asks "which connected Body currently has X" (photo, OTP, GPS, mic) via the Capability Registry (§15, extended with a `data_capabilities` field per Body: `{camera_roll: true, otp_relay: true}`), routes the sub-request to that Body's Universal Body Contract, and treats the result like any other `observe()` return. This is a real, medium-effort build once §14–15 exist — not a separate subsystem.
+
+**Transport contract, adopted from the independent ChatGPT draft (a real gap this document's original version left unspecified — "orchestrate it" without saying how a file crosses devices safely):** a cross-device file or payload is never copied wholesale into model context. It's referenced by a `ResourceHandle`:
+
+```
+ResourceHandle { resource_id, owner_ref, origin_body, media_type, size, content_hash,
+                  privacy_class, retention_class, authorized_task_refs, encrypted_location }
+```
+
+The Brain reasons over the handle's metadata unless the task genuinely needs the content itself — this is the direct enforcement point for §43's ephemeral-perception principle applied to cross-device data specifically, not just single-Body `observe()` calls. Requires the same device-enrollment/mutual-authentication properties §45's security section already demands for any Body — this is not a new trust boundary, it's the existing one extended to a second device.
 
 ---
 
@@ -522,6 +662,22 @@ Four modes on one operational substrate (per founder's own framing: "the same op
 
 Real and live for single-user founder reads (traced end-to-end, §11 of truth table). The multi-user unified adapter does not exist (§12 of truth table — 3 fragmented mechanisms, one dead stub behind an orphaned route). **Recommendation:** before any new Body reads the Twin, consolidate to one read adapter — adding a 4th fragmented path (a native-macOS-specific Twin reader) would make an already-documented problem worse, not better. The user-owned-data vs. Taloa-proprietary-intelligence ownership split the founder is exploring **does not exist anywhere today, formally or informally** — flagged as an explicit open governance question (§65), not decided here.
 
+## 44a. Canonical Persistence Map
+
+Adopted from the independent ChatGPT draft, whose named canonical-store list is a real improvement over this document leaving "where does this live" implicit per section. No subsystem may create a shadow copy of a domain already owned below; a new store needs a name added to this table, not a silent parallel table three sections later (exactly the kind of drift §3's Solomon-file contradiction shows already happens in this repo when it isn't enforced).
+
+| Canonical store | Owns | Real table/file today | Status |
+|---|---|---|---|
+| `TaskStore` | Active/recent task state | `extension_drive_sessions` (browser only) | Needs generalizing (§14a) |
+| `AuthorityLedger` | Task authority + revocation | Does not exist — today's `founder_authority` boolean has no ledger at all | Net-new, high priority (§64, position 4) |
+| `ReceiptLedger` | Append-only verified receipts | `products/receipts/` + `receipt-truth-validator.js` | Real, needs one canonical write path (§14a) |
+| `CapsuleStore` | Operational Capsule metadata | Does not exist (§28) | Net-new |
+| `TemplateStore` | Validated templates + performance evidence | Does not exist — capture-only, no persistence (§30–32) | Net-new, but the capture half is already shipping |
+| `DeviceRegistry` | Bodies, enrollment, capabilities | Does not exist — no `device_id`/`trusted_devices` table found anywhere (§45) | Net-new, security-critical |
+| `PreferenceStore` | User presentation/interaction preferences | `data/twins/default/adam/*.json` (real, live) | Already real — extend rather than duplicate (§39's presence-preference recommendation already points here) |
+
+Digital Twin data itself is explicitly **not** re-owned by this table — per §44, the Overlay is a consumer of the existing Twin read path, never a second source of truth for it.
+
 ---
 
 ## 45. Security (§49)
@@ -666,6 +822,27 @@ Every item below routes through `/factory/ship-queue` `author_then_write` per SO
 8. **Sentry registry entry + real Layer A/B pass** (§52) — required before any of the above is presented to the founder as "done," per SO-002.
 9. Everything else in this document, prioritized by the founder once §65's open decisions are resolved.
 
+## 64a. Builder Authority Boundary
+
+Adopted from the independent ChatGPT draft — a real, mechanical improvement over this document's original approach of scattering "don't let the builder decide this" warnings through prose. This converts that instinct into a checkable gate any BuilderOS factory pass can be graded against.
+
+**Builder MUST NOT decide**, and must instead emit a `BLUEPRINT_DECISION_REQUIRED` defect (naming the unresolved decision, the affected component, why the existing contract is insufficient, the real implementation alternatives, and the behavioral difference between them) and stop only that branch:
+- whether the browser or native Overlay is canonical (already resolved, §7 — but a Builder pass touching `PRODUCT_HOME.md`'s still-contradicting language should not re-litigate it, only apply it);
+- whether a Body gets its own independent reasoning loop (already resolved, §5 principle 1 — never);
+- whether an action can bypass the governed Mind or `VerificationService` (§14a, §47);
+- whether authorization is task-scoped or click-scoped (already resolved, §23 — task-scoped, always);
+- whether a Body may self-certify its own success (already resolved, §47 — never);
+- whether confidence/unknown state is omitted because it's inconvenient to compute (§41, §45's `truth-ladder.js` connection);
+- whether sensitive content may be logged for debugging (§43, §47);
+- whether a template keeps executing after its `environment_signature` stops matching (§32);
+- whether user input or Taloa input wins during a cursor/keyboard conflict (already resolved, §39 — the user, always);
+- whether external observed text can become instructions (already resolved, §46 — never);
+- whether an execution tier is picked by arbitrary model preference instead of the §13 gate pipeline;
+- whether a new persistent data store is created outside §44a's canonical map;
+- whether a new `COMMAND_CENTER_KEY`-shaped flat credential is introduced instead of a scoped, device-bound one (§45).
+
+**Builder MAY decide**, freely, without escalation, as long as the choice is replaceable without changing observable product behavior: exact source-file decomposition, internal naming, library choice within the stated constraints, database index strategy, test framework, internal queue/cache implementation, serialization library (provided the wire schema in §14c stays canonical), build tooling, and any other detail two different implementations of this document could reasonably differ on without either team being wrong.
+
 ## 65. Definition of Done (§69)
 
 Not "the code compiles" and not "a unit test passes in isolation" — per this repo's own already-ratified standard (`CLAUDE.md`'s "Acceptance Must Prove Reachability, Not Just Existence"): a component in this blueprint is Done when (a) it has a real caller in a live path, not just an export, (b) it has passed a real SENTRY gate registered for this specific product area (§52 — which does not exist yet, making this a real current blocker for calling *anything* here "done" in the founder-facing sense), and (c) its receipt is auditable by `receipt-truth-validator.js` without a schema exception.
@@ -673,6 +850,9 @@ Not "the code compiles" and not "a unit test passes in isolation" — per this r
 ---
 
 ## 66. Source Appendix (§70)
+
+**Independent draft reviewed for this revision:** `TALOA_UNIVERSAL_OVERLAY_FLUID_UI_COMPLETE_BLUEPRINT_MANUFACTURING_SPEC_v1_0_2026-08-11.md` (ChatGPT, produced without repository access, per the founder's own independent-drafts-then-consensus process — see the Changelog at the top of this document for exactly what was adopted, what was not, and why). Full section-by-section comparison receipts: `TALOA_BLUEPRINT_COMPARISON_CLAUDE_VS_CHATGPT_2026-08-11.md`.
+
 
 Primary files read directly by the author (not summarized secondhand) this session:
 `extension/content.js` · `public/extension/frame.js` · `routes/extension-drive-routes.js` · `services/general-browser-agent.js` · `services/general-browser-agent-runtime.js` · `services/extension-drive-bridge.js` · `native/macos-overlay/ScreenControl.swift` · `native/macos-overlay/main.swift` · `native/macos-overlay/ContainerView.swift` (partial) · `mobile/plugins/lifeos-accessibility-driver/android/src/main/java/org/hopkinsgroup/lifeos/accessibility/LifeosAccessibilityService.java` · `routes/android-command-routes.js` · `docs/constitution/LUMIN_COMMUNICATION_DNA.md` · `docs/products/lifeos/communication/COMMUNICATION_SYSTEM_BLUEPRINT.md` · `docs/products/universal-overlay/PRODUCT_HOME.md` · `docs/products/universal-overlay/INTELLIGENT_OVERLAY_BLUEPRINT.md` · `docs/products/universal-overlay/BUILD_QUEUE.json` · `docs/products/universal-overlay/FILE_MANIFEST.json`.
@@ -686,7 +866,7 @@ Research-agent-sourced, cross-verified against file paths (not taken on faith �
 
 *"If this blueprint were independently handed to two excellent Builder teams, where could they still produce materially different products while both claiming they followed it?"*
 
-Ambiguities identified and resolved above, not left open: Display Plane vs. Body split (§7, resolved), Capsule naming collision (§28, resolved with an explicit new name), template replay algorithm (§30-32, resolved — the repo's own code comment already specifies it), execution-tier ordering (§13, resolved as a fixed 5-tier list).
+Ambiguities identified and resolved above, not left open: Display Plane vs. Body split (§7, resolved), Capsule naming collision (§28, resolved with an explicit new name, re-confirmed after cross-review against a second draft that didn't have the repo evidence to see the collision), template replay algorithm (§30-32, resolved — the repo's own code comment already specifies it), execution-tier selection (§13, resolved as a deterministic 5-gate pipeline with an explicit utility formula), runtime component ownership and task/step lifecycle (§14a-§14d, resolved after cross-review — a real gap in this document's first draft, closed rather than left implicit), Fluid UI's generation mechanism (§8, resolved — a typed `ViewIntent` mapped to a closed primitive set, never raw model-emitted code), canonical persistence ownership (§44a, resolved — one named store per domain, no shadow copies permitted).
 
 Ambiguities genuinely left open, correctly, because only Adam can resolve them without this document guessing on his behalf: all six items in §61 (Open Founder Decisions). Two Builder teams following this document to the letter would still build materially different products if one assumed "Digital Imprint" was ratified and the other didn't, or if one reused the bare word "Capsule" and the other used "Operational Capsule" — these are the genuine remaining forks, and this document declines to resolve them because resolving them is not an engineering question.
 
