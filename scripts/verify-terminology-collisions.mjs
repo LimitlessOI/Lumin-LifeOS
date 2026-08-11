@@ -40,6 +40,9 @@ const SKIP = [
   'data/terminology-collision-baseline.json',
   'products/receipts/TERMINOLOGY_COLLISION_RECEIPT.json',
   'scripts/verify-terminology-collisions.mjs',
+  // The bridge is the registry OF this collision. It has to be able to name the
+  // terms it resolves, exactly like the baseline file above.
+  'builderos-reboot/governance/TERMINOLOGY_BRIDGE.json',
   'REPO_FILE_SYNOPSIS_INDEX.json',
 ];
 

@@ -1,8 +1,8 @@
 {
   "schema": "receipt_truth_validation_v1",
-  "at": "2026-08-11T22:11:07.671Z",
+  "at": "2026-08-11T22:53:54.558Z",
   "ok": true,
-  "checked": 160,
+  "checked": 163,
   "failures": [],
   "known_debt": [
     "SITE_BUILDER_PREALPHA_LAYER_A.json:ACCEPTANCE_PASS_WITHOUT_SHA_OR_BASE|PASS_WITHOUT_NAMED_VERIFIER"
@@ -421,7 +421,7 @@
       "file": "GOVERNANCE_ENFORCEMENT_TRUTH_RECEIPT.json",
       "ok": true,
       "violations": [],
-      "claims_pass": true,
+      "claims_pass": false,
       "proposed_solutions": []
     },
     {
@@ -894,10 +894,17 @@
       "proposed_solutions": []
     },
     {
+      "file": "OVERLAY_LIFECYCLE_EXAM_RECEIPT.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
       "file": "OVERLAY_REGRESSION_EXAM_RECEIPT.json",
       "ok": true,
       "violations": [],
-      "claims_pass": true,
+      "claims_pass": false,
       "proposed_solutions": []
     },
     {
@@ -954,6 +961,13 @@
       "ok": true,
       "violations": [],
       "claims_pass": true,
+      "proposed_solutions": []
+    },
+    {
+      "file": "SELF_ATTACK_RECEIPT.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
       "proposed_solutions": []
     },
     {
@@ -1127,6 +1141,13 @@
       "ok": true,
       "violations": [],
       "claims_pass": true,
+      "proposed_solutions": []
+    },
+    {
+      "file": "TERMINOLOGY_COLLISION_RECEIPT.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
       "proposed_solutions": []
     },
     {

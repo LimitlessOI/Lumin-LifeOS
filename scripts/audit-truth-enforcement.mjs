@@ -29,6 +29,13 @@ const ALLOW_DIRECT_LLM = new Set([
   'services/voice-rail-stt.js',
   'services/voice-rail-tts.js',
   'services/word-keeper-transcriber.js',
+  // Vision transcription with a provider failover chain. Same class as the STT and
+  // transcriber entries above: it converts an image to structured data and makes no
+  // assertion about the system, so there is no founder-facing claim for the truth
+  // spine to gate. Allowlisted 2026-08-11 as a missing classification, not a
+  // loosened rule — it had been failing builder:preflight since the Groq fallback
+  // landed, which blocked the canonical gate for every unrelated change.
+  'services/mtg-card-vision.js',
   'services/builder-audit-before-done.js',
   'services/capability-map.js',
   'services/creative-engine/transcribe-edit.js',

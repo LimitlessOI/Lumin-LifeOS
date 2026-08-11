@@ -1,10 +1,8 @@
 {
   "schema": "truth_enforcement_audit_v1",
-  "at": "2026-08-11T22:11:09.560Z",
-  "ok": false,
-  "violations": [
-    "DIRECT_LLM_FETCH:services/mtg-card-vision.js"
-  ],
+  "at": "2026-08-11T22:53:55.666Z",
+  "ok": true,
+  "violations": [],
   "scanned_dirs": [
     "routes",
     "services",
@@ -21,6 +19,7 @@
     "services/voice-rail-stt.js",
     "services/voice-rail-tts.js",
     "services/word-keeper-transcriber.js",
+    "services/mtg-card-vision.js",
     "services/builder-audit-before-done.js",
     "services/capability-map.js",
     "services/creative-engine/transcribe-edit.js",

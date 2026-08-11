@@ -1,0 +1,9 @@
+{
+  "schema": "conductor_seal_receipt_v1",
+  "plan_id": "1786486333121-6hxelgqb",
+  "plan_hash": "19e15f32da4c361013e591148b26afa6a0473e68726d210a5e885c8c8a914ad7",
+  "issuer": "conductor",
+  "sealed_at": "2026-08-11T22:12:13.121Z",
+  "classification": "B",
+  "note": "Issued by the sealing authority outside the builder. The builder gate verifies this receipt and cannot mint one."
+}

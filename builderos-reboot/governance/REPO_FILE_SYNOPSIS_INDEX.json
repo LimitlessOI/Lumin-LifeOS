@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-11T22:52:15.869Z",
+  "generated_at": "2026-08-11T22:54:32.565Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13265,
+  "file_count": 13269,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -34082,9 +34082,9 @@
     {
       "path": "data/constitutional-framework/reports/CONSTITUTIONAL_OBSERVABILITY_REPORT.json",
       "synopsis": "JSON data/config — data/constitutional-framework/reports/CONSTITUTIONAL_OBSERVABILITY_REPORT.json.",
-      "bytes": 12106,
-      "mtime": "2026-08-06T08:24:03.101Z",
-      "indexed_at": "2026-08-06T08:26:04.243Z",
+      "bytes": 12116,
+      "mtime": "2026-08-11T22:54:04.825Z",
+      "indexed_at": "2026-08-11T22:54:32.565Z",
       "synopsis_index_only": true
     },
     {
@@ -34500,6 +34500,14 @@
       "bytes": 1227,
       "mtime": "2026-08-02T15:39:47.568Z",
       "indexed_at": "2026-08-02T15:39:47.568Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "data/prod-health-watchdog-state.json",
+      "synopsis": "JSON data/config — data/prod-health-watchdog-state.json.",
+      "bytes": 28,
+      "mtime": "2026-08-11T22:54:06.905Z",
+      "indexed_at": "2026-08-11T22:54:32.565Z",
       "synopsis_index_only": true
     },
     {
@@ -43029,9 +43037,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 533348,
-      "mtime": "2026-08-11T22:52:13.946Z",
-      "indexed_at": "2026-08-11T22:52:15.869Z"
+      "bytes": 534718,
+      "mtime": "2026-08-11T22:54:30.562Z",
+      "indexed_at": "2026-08-11T22:54:32.565Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -68211,6 +68219,30 @@
       "synopsis_index_only": true
     },
     {
+      "path": "products/receipts/conductor-seals/1786486333120-8mya9oem.json",
+      "synopsis": "Product receipt — 1786486333120 8mya9oem.",
+      "bytes": 385,
+      "mtime": "2026-08-11T22:12:13.121Z",
+      "indexed_at": "2026-08-11T22:54:32.565Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/conductor-seals/1786486333121-6hxelgqb.json",
+      "synopsis": "Product receipt — 1786486333121 6hxelgqb.",
+      "bytes": 385,
+      "mtime": "2026-08-11T22:12:13.122Z",
+      "indexed_at": "2026-08-11T22:54:32.565Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/conductor-seals/1786486333122-e4a5azxp.json",
+      "synopsis": "Product receipt — 1786486333122 E4a5azxp.",
+      "bytes": 385,
+      "mtime": "2026-08-11T22:12:13.123Z",
+      "indexed_at": "2026-08-11T22:54:32.565Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "products/receipts/CONSTITUTIONAL_ARCHITECTURE_V1_ACCEPTANCE.json",
       "synopsis": "Product receipt — CONSTITUTIONAL ARCHITECTURE V1 ACCEPTANCE.",
       "bytes": 1426,
@@ -69045,9 +69077,9 @@
     {
       "path": "products/receipts/RECEIPT_TRUTH_VALIDATION.json",
       "synopsis": "Product receipt — RECEIPT TRUTH VALIDATION.",
-      "bytes": 30073,
-      "mtime": "2026-08-11T22:12:18.858Z",
-      "indexed_at": "2026-08-11T22:15:50.764Z",
+      "bytes": 30564,
+      "mtime": "2026-08-11T22:53:54.560Z",
+      "indexed_at": "2026-08-11T22:54:32.565Z",
       "synopsis_index_only": true
     },
     {
@@ -69261,9 +69293,9 @@
     {
       "path": "products/receipts/TRUTH_ENFORCEMENT_AUDIT.json",
       "synopsis": "Product receipt — TRUTH ENFORCEMENT AUDIT.",
-      "bytes": 888,
-      "mtime": "2026-08-11T22:12:18.859Z",
-      "indexed_at": "2026-08-11T22:15:50.764Z",
+      "bytes": 868,
+      "mtime": "2026-08-11T22:53:55.667Z",
+      "indexed_at": "2026-08-11T22:54:32.565Z",
       "synopsis_index_only": true
     },
     {
@@ -75063,9 +75095,9 @@
     {
       "path": "scripts/audit-truth-enforcement.mjs",
       "synopsis": "Audit entire repo for truth enforcement bypass paths — fail-closed in preflight.",
-      "bytes": 4943,
-      "mtime": "2026-07-30T03:57:08.487Z",
-      "indexed_at": "2026-07-30T22:32:11.913Z",
+      "bytes": 5465,
+      "mtime": "2026-08-11T22:53:06.198Z",
+      "indexed_at": "2026-08-11T22:54:32.565Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -90851,9 +90883,9 @@
     {
       "path": "scripts/verify-terminology-collisions.mjs",
       "synopsis": "Deterministic guard for OPEN-6. \"Conductor\" named two unrelated",
-      "bytes": 5070,
-      "mtime": "2026-08-11T22:44:35.585Z",
-      "indexed_at": "2026-08-11T22:45:26.446Z",
+      "bytes": 5270,
+      "mtime": "2026-08-11T22:53:29.733Z",
+      "indexed_at": "2026-08-11T22:54:32.565Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

@@ -1,8 +1,8 @@
 {
   "schema": "constitutional_observability_report_v1",
   "version": "2026-08-02",
-  "generated_at": "2026-08-06T08:22:04.418Z",
-  "source_map": "/home/ubuntu/repos/Lumin-LifeOS/data/constitutional-framework/PRINCIPLE_RUNTIME_MAP.json",
+  "generated_at": "2026-08-11T22:54:04.824Z",
+  "source_map": "/Users/adamhopkins/Projects/Lumin-LifeOS/data/constitutional-framework/PRINCIPLE_RUNTIME_MAP.json",
   "summary": {
     "total": 14,
     "pass": 1,
@@ -22,7 +22,7 @@
         "runtime_artifact": "docs/constitution/NORTH_STAR_SSOT.md",
         "measurement": "The North Star mission text is present in the canonical framework and the runtime identity endpoint returns it",
         "pass_criteria": "framework contains the mission phrase",
-        "duration_ms": 1
+        "duration_ms": 0
       },
       "error": null
     },
@@ -36,7 +36,7 @@
         "runtime_artifact": "services/reality-alignment.js",
         "measurement": "Reality Alignment Engine returns a score reconciling intent, predicted, observed, experienced, remembered, and shared realities",
         "pass_criteria": "alignment_score is a number between 0 and 1 and drift_report is non-null",
-        "duration_ms": 3,
+        "duration_ms": 1,
         "runtime_reachable": false,
         "runtime_importers": []
       },
@@ -52,7 +52,7 @@
         "runtime_artifact": "services/lifeos-coaching-protocol.js",
         "measurement": "Coaching protocol runs Observe -> Curious -> Understood -> Expand -> Verify -> Ready -> Explore without forcing advice",
         "pass_criteria": "each coaching step returns a non-empty, non-directive output",
-        "duration_ms": 2,
+        "duration_ms": 1,
         "runtime_reachable": false,
         "runtime_importers": []
       },
@@ -100,7 +100,7 @@
         "runtime_artifact": "services/solomon-wisdom-lab.js",
         "measurement": "Evidence package contains findings, models, assumptions, uncertainties, tensions, and a recommendation; recommendation is advisory and gated",
         "pass_criteria": "createEvidencePackage returns findings[], models[], constitutionalTensions[], confidence{}, and a nullable recommendation",
-        "duration_ms": 1,
+        "duration_ms": 0,
         "runtime_reachable": false,
         "runtime_importers": []
       },
@@ -196,7 +196,7 @@
         "runtime_artifact": "services/perspective-expansion.js",
         "measurement": "Perspective Expansion generates a better question from a Human Constellation",
         "pass_criteria": "askBetterQuestion returns a non-empty string given a populated constellation",
-        "duration_ms": 1,
+        "duration_ms": 0,
         "runtime_reachable": false,
         "runtime_importers": []
       },
@@ -212,7 +212,7 @@
         "runtime_artifact": "services/institutional-constellation.js",
         "measurement": "Institutional Constellation uses the same graph, confidence, causality, and calibration machinery as the Human Constellation",
         "pass_criteria": "createInstitutionalConstellation, addBelief, addOffice, recordPrediction, recordOutcome, and getCalibrationReport all return expected structures",
-        "duration_ms": 2,
+        "duration_ms": 1,
         "runtime_reachable": false,
         "runtime_importers": []
       },
@@ -228,7 +228,7 @@
         "runtime_artifact": "scripts/verify-constitutional-parity.mjs",
         "measurement": "Constitutional parity gate passes and every registry item has a matrix entry",
         "pass_criteria": "verify-constitutional-parity exits 0 and reports registry and matrix counts match",
-        "duration_ms": 85,
+        "duration_ms": 139,
         "runtime_reachable": true,
         "runtime_wiring": "invoked from builder:preflight (CI gate), not a routes/ import"
       },
