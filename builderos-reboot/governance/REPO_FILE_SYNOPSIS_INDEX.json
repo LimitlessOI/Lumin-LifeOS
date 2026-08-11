@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-11T09:20:47.341Z",
+  "generated_at": "2026-08-11T15:19:18.144Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13226,
+  "file_count": 13227,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -44854,6 +44854,13 @@
       "bytes": 107879,
       "mtime": "2026-08-11T08:06:15.686Z",
       "indexed_at": "2026-08-11T08:06:28.034Z"
+    },
+    {
+      "path": "docs/products/universal-overlay/TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md",
+      "synopsis": "TALOA UNIVERSAL OVERLAY &amp; FLUID UI — COMPLETE BLUEPRINT",
+      "bytes": 83910,
+      "mtime": "2026-08-11T15:19:16.964Z",
+      "indexed_at": "2026-08-11T15:19:18.144Z"
     },
     {
       "path": "docs/products/UNIVERSALOVERLAY.md",
