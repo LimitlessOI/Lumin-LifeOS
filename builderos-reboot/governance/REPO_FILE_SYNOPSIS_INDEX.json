@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-11T07:00:03.217Z",
+  "generated_at": "2026-08-11T07:16:09.361Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13224,
+  "file_count": 13225,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -42951,9 +42951,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 489375,
-      "mtime": "2026-08-10T22:39:54.342Z",
-      "indexed_at": "2026-08-10T22:40:09.823Z"
+      "bytes": 491848,
+      "mtime": "2026-08-11T07:15:28.079Z",
+      "indexed_at": "2026-08-11T07:16:09.361Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -94579,6 +94579,16 @@
       "bytes": 19315,
       "mtime": "2026-07-31T04:37:32.211Z",
       "indexed_at": "2026-07-31T04:37:34.626Z"
+    },
+    {
+      "path": "services/free-image-generation.js",
+      "synopsis": "Zero-cost image generation via image.pollinations.ai -- no API",
+      "bytes": 2189,
+      "mtime": "2026-08-11T07:14:40.462Z",
+      "indexed_at": "2026-08-11T07:16:09.361Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/free-tier-governor.js",
