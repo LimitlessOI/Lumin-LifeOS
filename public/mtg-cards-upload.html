@@ -1,0 +1,157 @@
+<!doctype html>
+<!-- SYNOPSIS: Batch MTG card upload UI -- founder-facing page for routes/mtg-cards-routes.js. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>MTG Card Batch Upload</title>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 900px; margin: 2rem auto; padding: 0 1rem; background: #0f1115; color: #e6e6e6; }
+  h1 { font-size: 1.4rem; }
+  .drop { border: 2px dashed #444; border-radius: 12px; padding: 2.5rem; text-align: center; cursor: pointer; margin: 1rem 0; }
+  .drop.drag { border-color: #6ea8fe; background: #151a24; }
+  .drop input { display: none; }
+  button { background: #6ea8fe; color: #0f1115; border: none; border-radius: 8px; padding: 0.6rem 1.2rem; font-weight: 600; cursor: pointer; }
+  button:disabled { opacity: 0.5; cursor: default; }
+  #status { margin: 1rem 0; color: #9fb3c8; }
+  table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.85rem; }
+  th, td { text-align: left; padding: 0.4rem 0.6rem; border-bottom: 1px solid #262b36; }
+  th { color: #9fb3c8; font-weight: 600; }
+  .tier-high { color: #4ade80; }
+  .tier-mid { color: #facc15; }
+  .tier-low { color: #94a3b8; }
+  .tier-unknown, .err { color: #f87171; }
+  .summary { display: flex; gap: 1.5rem; margin: 1rem 0; flex-wrap: wrap; }
+  .summary div { background: #151a24; border-radius: 8px; padding: 0.6rem 1rem; }
+</style>
+</head>
+<body>
+  <h1>MTG Card Batch Upload</h1>
+  <p>Select up to 150 card photos. Each is identified (vision AI), priced (Scryfall), and routed to a sell tier.</p>
+
+  <div class="drop" id="drop">
+    <div id="dropLabel">Click to choose photos, or drag them here</div>
+    <input type="file" id="fileInput" accept="image/*" multiple>
+  </div>
+
+  <button id="uploadBtn" disabled>Upload batch</button>
+  <div id="status"></div>
+  <div class="summary" id="summary"></div>
+  <table id="results" style="display:none">
+    <thead><tr><th>Photo</th><th>Card</th><th>Set</th><th>Foil</th><th>Price</th><th>Tier</th><th>Venue</th><th>Status</th></tr></thead>
+    <tbody id="resultsBody"></tbody>
+  </table>
+
+<script>
+  const drop = document.getElementById('drop');
+  const dropLabel = document.getElementById('dropLabel');
+  const fileInput = document.getElementById('fileInput');
+  const uploadBtn = document.getElementById('uploadBtn');
+  const statusEl = document.getElementById('status');
+  const summaryEl = document.getElementById('summary');
+  const resultsTable = document.getElementById('results');
+  const resultsBody = document.getElementById('resultsBody');
+  let chosenFiles = [];
+  let pollTimer = null;
+
+  function authHeaders() {
+    const token = localStorage.getItem('lifeos_access_token') || '';
+    return { 'Authorization': `Bearer ${token}` };
+  }
+
+  function setFiles(files) {
+    chosenFiles = Array.from(files || []).filter((f) => f.type.startsWith('image/'));
+    dropLabel.textContent = chosenFiles.length
+      ? `${chosenFiles.length} photo(s) selected`
+      : 'Click to choose photos, or drag them here';
+    uploadBtn.disabled = chosenFiles.length === 0;
+  }
+
+  drop.addEventListener('click', () => fileInput.click());
+  fileInput.addEventListener('change', (e) => setFiles(e.target.files));
+  ['dragenter', 'dragover'].forEach((evt) =>
+    drop.addEventListener(evt, (e) => { e.preventDefault(); drop.classList.add('drag'); }));
+  ['dragleave', 'drop'].forEach((evt) =>
+    drop.addEventListener(evt, (e) => { e.preventDefault(); drop.classList.remove('drag'); }));
+  drop.addEventListener('drop', (e) => setFiles(e.dataTransfer.files));
+
+  uploadBtn.addEventListener('click', async () => {
+    if (!chosenFiles.length) return;
+    uploadBtn.disabled = true;
+    statusEl.textContent = `Uploading ${chosenFiles.length} photo(s)...`;
+
+    const form = new FormData();
+    chosenFiles.forEach((f) => form.append('cards', f));
+
+    try {
+      const res = await fetch('/api/v1/mtg-cards/batch-upload', {
+        method: 'POST',
+        headers: authHeaders(),
+        body: form,
+      });
+      const json = await res.json();
+      if (!json.ok) {
+        statusEl.textContent = `Upload failed: ${json.error || 'unknown error'}`;
+        uploadBtn.disabled = false;
+        return;
+      }
+      statusEl.textContent = `Batch ${json.batch_id} — processing ${json.file_count} card(s)...`;
+      resultsTable.style.display = '';
+      pollBatch(json.batch_id);
+    } catch (err) {
+      statusEl.textContent = `Upload failed: ${err.message}`;
+      uploadBtn.disabled = false;
+    }
+  });
+
+  function tierClass(tier) {
+    return { high: 'tier-high', mid: 'tier-mid', low: 'tier-low' }[tier] || 'tier-unknown';
+  }
+
+  function renderRows(rows) {
+    resultsBody.innerHTML = rows.map((r) => `
+      <tr>
+        <td>${r.photo_name || ''}</td>
+        <td>${r.identified_name || (r.identify_error ? `<span class="err">${r.identify_error}</span>` : '…')}</td>
+        <td>${r.identified_set || ''}</td>
+        <td>${r.is_foil === true ? 'Foil' : r.is_foil === false ? '' : ''}</td>
+        <td>${r.price_used != null ? '$' + Number(r.price_used).toFixed(2) : ''}</td>
+        <td class="${tierClass(r.value_tier)}">${r.value_tier}</td>
+        <td>${r.recommended_venue || ''}</td>
+        <td>${r.status}</td>
+      </tr>
+    `).join('');
+  }
+
+  function renderSummary(byTier, totalUsd) {
+    const tiers = ['high', 'mid', 'low', 'unknown'];
+    summaryEl.innerHTML = tiers.map((t) => {
+      const d = byTier[t] || { count: 0, subtotal_usd: 0 };
+      return `<div><strong class="${tierClass(t)}">${t}</strong>: ${d.count} card(s), $${Number(d.subtotal_usd || 0).toFixed(2)}</div>`;
+    }).join('') + `<div><strong>Total estimated:</strong> $${Number(totalUsd || 0).toFixed(2)}</div>`;
+  }
+
+  async function pollBatch(batchId) {
+    clearTimeout(pollTimer);
+    try {
+      const res = await fetch(`/api/v1/mtg-cards/batch/${batchId}`, { headers: authHeaders() });
+      const json = await res.json();
+      if (json.ok) {
+        renderRows(json.rows);
+        statusEl.textContent = `Batch ${batchId} — ${json.done}/${json.total} processed`;
+        if (json.done < json.total) {
+          pollTimer = setTimeout(() => pollBatch(batchId), 2000);
+          return;
+        }
+        const sumRes = await fetch(`/api/v1/mtg-cards/batch/${batchId}/summary`, { headers: authHeaders() });
+        const sumJson = await sumRes.json();
+        if (sumJson.ok) renderSummary(sumJson.by_tier, sumJson.total_estimated_usd);
+        statusEl.textContent = `Batch ${batchId} — done (${json.total} card(s))`;
+      }
+    } catch (err) {
+      statusEl.textContent = `Status check failed: ${err.message}`;
+    }
+    uploadBtn.disabled = false;
+  }
+</script>
+</body>
+</html>
