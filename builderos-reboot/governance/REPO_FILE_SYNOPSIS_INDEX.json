@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-11T05:30:21.787Z",
+  "generated_at": "2026-08-11T05:43:59.798Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13223,
   "files": [
@@ -32198,9 +32198,9 @@
     {
       "path": "config/council-members.js",
       "synopsis": "Exports createCouncilMembers — config/council-members.js.",
-      "bytes": 9098,
-      "mtime": "2026-08-03T17:55:58.334Z",
-      "indexed_at": "2026-08-03T17:58:13.452Z",
+      "bytes": 9376,
+      "mtime": "2026-08-11T05:42:30.777Z",
+      "indexed_at": "2026-08-11T05:43:59.798Z",
       "ssot": [
         "docs/products/ai-council/PRODUCT_HOME.md"
       ]
@@ -44065,9 +44065,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 833714,
-      "mtime": "2026-08-11T05:30:00.463Z",
-      "indexed_at": "2026-08-11T05:30:21.787Z"
+      "bytes": 833737,
+      "mtime": "2026-08-11T05:43:41.412Z",
+      "indexed_at": "2026-08-11T05:43:59.798Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -98281,9 +98281,9 @@
     {
       "path": "services/provider-key-health.js",
       "synopsis": "Provider API-key health — enumerate the AI/LLM/tool keys Railway",
-      "bytes": 9851,
-      "mtime": "2026-07-28T17:47:22.567Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 10002,
+      "mtime": "2026-08-11T05:43:03.152Z",
+      "indexed_at": "2026-08-11T05:43:59.798Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

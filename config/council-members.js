@@ -179,8 +179,12 @@ export function createCouncilMembers({ DEEPSEEK_BRIDGE_ENABLED }) {
       isLocal: false,
     },
     cerebras_llama: {
-      name: "Cerebras Llama (Free)",
-      model: process.env.CEREBRAS_MODEL || "llama3.1-8b",
+      // Real live bug found 2026-08-11: llama3.1-8b no longer exists on
+      // Cerebras (404 model_not_found via provider-key-health). Confirmed
+      // current production model directly from Cerebras' own docs
+      // (inference-docs.cerebras.ai/models/overview), not guessed.
+      name: "Cerebras (Free)",
+      model: process.env.CEREBRAS_MODEL || "gpt-oss-120b",
       provider: "cerebras",
       role: "High-Speed Cloud Reasoning",
       focus: "fast generation, routing, throughput-heavy tasks",

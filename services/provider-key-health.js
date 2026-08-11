@@ -120,7 +120,9 @@ export const PROVIDERS = [
   {
     id: 'cerebras', label: 'Cerebras', envVars: ['CEREBRAS_API_KEY'],
     billingUrl: 'https://cloud.cerebras.ai/',
-    probe: openAiCompatibleProbe('https://api.cerebras.ai/v1', 'llama3.1-8b'),
+    // llama3.1-8b no longer exists on Cerebras (real 404 found live);
+    // gpt-oss-120b confirmed current production model via Cerebras' own docs.
+    probe: openAiCompatibleProbe('https://api.cerebras.ai/v1', 'gpt-oss-120b'),
   },
   {
     id: 'perplexity', label: 'Perplexity', envVars: ['PERPLEXITY_API_KEY'],
