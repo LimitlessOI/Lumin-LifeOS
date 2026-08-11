@@ -15,17 +15,17 @@ let initialSize: CGFloat = 120 // bumped again 2026-08-10 after live confirmatio
 var overlayWindows: [OverlayWindow] = []
 var clickThrough = false
 
-// Autonomous wandering (2026-08-10, founder ask: "can you make it walk
-// around?"), corrected same session: "don't have her interrupt where we're
-// at" -- free-roaming across the whole screen could drift over whatever the
-// founder is actively working on. Bounded to a small "home" nook per screen
-// (near the same corner it originally spawned in) so she has a little
-// territory to putter around in without crossing active work content.
+// Homing, not wandering (2026-08-10). History: started as free-roam
+// ("can you make it walk around?"), corrected same session to a bounded
+// home-nook wander ("don't have her interrupt where we're at"), then
+// stopped entirely per direct founder ask: "have her in a set place not
+// floting around please." She now eases to and stays at one fixed point
+// (the center of her home corner) -- the timer/easing machinery below is
+// unchanged (still real, still used for the settle-after-drag-snap
+// animation), only the target is now constant instead of re-randomized.
 // Founder also referenced a fuller concept -- a little house, a chair, a
 // campfire, a bed -- that isn't captured in this repo anywhere (searched;
-// not found). This bounded-nook version is a real step toward that ("a
-// place she belongs" rather than free-roam) but is not that full scene --
-// named honestly, not presented as the same thing.
+// not found). Still an honest gap, independent of this simplification.
 let homeNookSize: CGFloat = 320
 var wanderTargets: [NSPoint] = []
 var wanderNextChangeAt: [TimeInterval] = []
@@ -35,19 +35,40 @@ var wanderNextChangeAt: [TimeInterval] = []
 // can stay in some standard places... one of the four corners maybe...
 // somewhere out of the way"). Persisted so the choice sticks across
 // relaunches, not just for this run.
+//
+// Per-screen, not global (2026-08-10, real gap found -- founder: "I am on
+// my laptop only [right now], I often work in my office with 2 other
+// monitors connected, you are going to have to solve that one"). A single
+// global HomeCorner would mean snapping her to a corner on one monitor
+// silently retargets her on every OTHER monitor too the next time each one
+// re-homes -- wrong for a 3-screen office setup where each display likely
+// wants its own corner. Keyed on NSScreen.localizedName, which macOS keeps
+// stable for the same physical display across reconnects/power cycles
+// (unlike screen INDEX, which can reshuffle depending on connect order) --
+// so the office setup remembers per-monitor even though only the laptop
+// panel is connected and testable right now.
 enum HomeCorner: String, CaseIterable {
     case bottomLeft, bottomRight, topLeft, topRight
 
-    private static let defaultsKey = "taloa_home_corner"
+    private static let defaultsKeyPrefix = "taloa_home_corner_"
+    private static let legacyGlobalKey = "taloa_home_corner" // pre-per-screen value; honored once as a migration fallback
 
-    static var current: HomeCorner {
-        get {
-            if let raw = UserDefaults.standard.string(forKey: defaultsKey), let c = HomeCorner(rawValue: raw) {
-                return c
-            }
-            return .bottomLeft // known-good default: not the notification-stack corner (see below)
+    private static func defaultsKey(for screen: NSScreen) -> String {
+        defaultsKeyPrefix + screen.localizedName.replacingOccurrences(of: " ", with: "_")
+    }
+
+    static func current(for screen: NSScreen) -> HomeCorner {
+        if let raw = UserDefaults.standard.string(forKey: defaultsKey(for: screen)), let c = HomeCorner(rawValue: raw) {
+            return c
         }
-        set { UserDefaults.standard.set(newValue.rawValue, forKey: defaultsKey) }
+        if let raw = UserDefaults.standard.string(forKey: legacyGlobalKey), let c = HomeCorner(rawValue: raw) {
+            return c
+        }
+        return .bottomLeft // known-good default: not the notification-stack corner (see below)
+    }
+
+    static func setCurrent(_ corner: HomeCorner, for screen: NSScreen) {
+        UserDefaults.standard.set(corner.rawValue, forKey: defaultsKey(for: screen))
     }
 
     /// Nearest corner to a window's current center, for real drag-to-snap.
@@ -82,7 +103,7 @@ func homeRect(for screen: NSScreen) -> NSRect {
     // far enough down to cover a bottom-right nook entirely. All four
     // corners are real, available choices (HomeCorner) -- bottom-left is
     // just the safe starting default, not the only option.
-    let origin = HomeCorner.current.origin(in: screen, size: homeNookSize, margin: 20)
+    let origin = HomeCorner.current(for: screen).origin(in: screen, size: homeNookSize, margin: 20)
     return NSRect(origin: origin, size: NSSize(width: homeNookSize, height: homeNookSize))
 }
 
@@ -95,7 +116,7 @@ func snapToNearestCorner(window: OverlayWindow) {
     let frame = window.frame
     let center = NSPoint(x: frame.midX, y: frame.midY)
     let corner = HomeCorner.nearest(to: center, on: screen)
-    HomeCorner.current = corner
+    HomeCorner.setCurrent(corner, for: screen)
     let target = corner.origin(in: screen, size: frame.width, margin: 20)
     window.setFrame(NSRect(origin: target, size: frame.size), display: true, animate: true)
     if let idx = overlayWindows.firstIndex(where: { $0 === window }) {
@@ -105,13 +126,15 @@ func snapToNearestCorner(window: OverlayWindow) {
     FileHandle.standardError.write("Taloa: snapped home to \(corner)\n".data(using: .utf8)!)
 }
 
+/// Real simplification, founder direct (2026-08-10): "have her in a set
+/// place not floting around please." Random wandering-within-the-nook is
+/// removed -- she now always settles at (and stays at) the exact center of
+/// her home corner. Kept as a function (not inlined) because the smooth
+/// ease-toward-target animation in the timer below, and the settle-after-
+/// drag-snap follow-up, both still legitimately need a target point to
+/// converge on; only the RANDOMNESS is gone, not the underlying mechanism.
 func pickWanderTarget(in home: NSRect, windowSize: NSSize) -> NSPoint {
-    let usable = home.insetBy(dx: windowSize.width / 2, dy: windowSize.height / 2)
-    guard usable.width > 0, usable.height > 0 else {
-        return NSPoint(x: home.midX, y: home.midY)
-    }
-    return NSPoint(x: CGFloat.random(in: usable.minX...usable.maxX),
-                    y: CGFloat.random(in: usable.minY...usable.maxY))
+    NSPoint(x: home.midX, y: home.midY)
 }
 
 func makeOverlayWindow(for screen: NSScreen) -> OverlayWindow {

@@ -4,9 +4,11 @@
 // (idle / blink / speaking) instead of sitting as one frozen photo. Direct
 // founder correction 2026-08-10: "it made it look more real, but it's not a
 // character, it's an image." A still picture, however good, isn't alive --
-// this adds real periodic blinking and a speaking frame swapped in during
-// real gesture events, so something actually changes over time and in
-// response to events, not just glow/breathe on one image.
+// this originally added periodic ambient blinking; later the same day,
+// direct founder ask, opposite direction: "stop her at least switching to
+// a different image for a second" -- the ambient blink timer is gone, she
+// only ever changes frame (to speak) for a real gesture event now, same
+// standard already held for every other reaction in this file.
 //
 // Gesture vocabulary (2026-08-10, founder ask: spren/Way of Kings for
 // "reacts and means something" vs. aimless wandering; then narrowed to
@@ -71,9 +73,6 @@ final class TaloaImageCharacterView: NSView {
     private var blendProgress: CGFloat = 1.0
     private let blendSpeed: CGFloat = 1.0 / 0.12 // ~120ms cross-fade
 
-    private var nextBlinkAt: CGFloat = 0
-    private var blinkUntil: CGFloat = 0
-
     private var gesture: TaloaGestureKind = .none
     private var gestureStartedAt: CGFloat = 0
     private var gestureDuration: CGFloat = 0.9
@@ -94,7 +93,6 @@ final class TaloaImageCharacterView: NSView {
         currentImage = idleImage
         wantsLayer = true
         layer?.masksToBounds = false
-        nextBlinkAt = CGFloat.random(in: 2.5...5)
 
         timer = Timer.scheduledTimer(withTimeInterval: 1.0 / 30.0, repeats: true) { [weak self] _ in
             self?.tick()
@@ -182,19 +180,15 @@ final class TaloaImageCharacterView: NSView {
             gesture = .none
         }
 
-        // Local idle-blink timer -- honest limitation: not driven by real
-        // perception/conversation state, same as the vector version before it.
-        if currentFrame != .blink, phase >= nextBlinkAt {
-            blinkUntil = phase + 0.18
-        }
-        if phase < blinkUntil {
-            setFrame(.blink)
-        } else if gesture != .none {
+        // Ambient blink-on-a-timer removed (2026-08-10), founder direct:
+        // "stop her at least switching to a different image for a second."
+        // The blink frame/asset and setFrame(.blink) mechanism stay --
+        // only the automatic periodic triggering is gone. She now only
+        // ever changes frame for a real gesture event (speak), same
+        // standard this file already holds every other reaction to.
+        if gesture != .none {
             setFrame(.speak)
         } else {
-            if currentFrame == .blink, phase >= blinkUntil {
-                nextBlinkAt = phase + CGFloat.random(in: 3...7)
-            }
             setFrame(.idle)
         }
 
