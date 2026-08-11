@@ -132,9 +132,18 @@ async function identifyViaGemini(photo) {
         ],
         // 300 was too tight -- real live failure found 2026-08-10:
         // gemini-2.5-flash hit finish=MAX_TOKENS before completing the JSON
-        // output (confirmed via the finishReason/snippet surfaced below, not
-        // guessed). Raised with headroom.
-        generationConfig: { maxOutputTokens: 1000 },
+        // output. Raised to 1000 -- STILL hit MAX_TOKENS on real production
+        // traffic checked live 2026-08-11 (Adam: "audit the tool... its not
+        // working"), confirmed via GET /recent-activity + a real failed
+        // batch row: finish=MAX_TOKENS on a response that should only ever
+        // be a ~80-character JSON object. Root cause: gemini-2.5-flash
+        // defaults to an internal "thinking" pass whose tokens count against
+        // the same maxOutputTokens budget -- the model was spending its
+        // whole budget reasoning before ever writing the actual JSON.
+        // thinkingBudget: 0 turns that off (not needed for a fixed-shape
+        // extraction task); maxOutputTokens raised further too as a real
+        // safety margin, not just relying on the thinking-budget fix alone.
+        generationConfig: { maxOutputTokens: 2000, thinkingConfig: { thinkingBudget: 0 } },
       }),
     },
   );

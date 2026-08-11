@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-11T17:01:56.885Z",
+  "generated_at": "2026-08-11T17:06:01.727Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13228,
   "files": [
@@ -44065,9 +44065,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 834809,
-      "mtime": "2026-08-11T08:57:04.795Z",
-      "indexed_at": "2026-08-11T08:58:25.205Z"
+      "bytes": 837624,
+      "mtime": "2026-08-11T17:05:46.189Z",
+      "indexed_at": "2026-08-11T17:06:01.727Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -73516,9 +73516,9 @@
     {
       "path": "routes/mtg-cards-routes.js",
       "synopsis": "Magic: The Gathering card cataloging, two intake paths sharing one",
-      "bytes": 17668,
-      "mtime": "2026-08-11T08:26:51.233Z",
-      "indexed_at": "2026-08-11T08:27:37.753Z",
+      "bytes": 18410,
+      "mtime": "2026-08-11T17:04:06.710Z",
+      "indexed_at": "2026-08-11T17:06:01.727Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -97651,9 +97651,9 @@
     {
       "path": "services/mtg-card-vision.js",
       "synopsis": "Identifies a Magic: The Gathering card (name, set, foil, condition",
-      "bytes": 8174,
-      "mtime": "2026-08-11T05:28:43.314Z",
-      "indexed_at": "2026-08-11T05:30:21.787Z",
+      "bytes": 8914,
+      "mtime": "2026-08-11T17:05:20.065Z",
+      "indexed_at": "2026-08-11T17:06:01.727Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

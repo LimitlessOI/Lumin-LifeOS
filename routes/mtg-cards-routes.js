@@ -187,7 +187,20 @@ async function processBatch({ pool, logger, userId, batchId, files }) {
       row.is_foil = id.foil;
       row.condition_guess = id.condition_guess;
       row.identify_confidence = id.confidence;
-      if (!id.ok) row.identify_error = id.error;
+      if (!id.ok) {
+        row.identify_error = id.error;
+      } else if (!id.name) {
+        // Real bug found live 2026-08-11 checking Adam's actual failed
+        // uploads: identifyMtgCardFromPhoto can legitimately return
+        // {ok:true, name:null} -- the model responded fine but couldn't
+        // clearly see a single Magic card in the photo (mtg-card-vision.js's
+        // EMPTY_RESULT shape). The old code only ever set identify_error
+        // when id.ok was false, so this case fell through to
+        // status:'identify_failed' with identify_error left null --
+        // Adam had zero way to know WHY a photo failed. Confirmed via
+        // GET /recent-activity + a real failed batch row.
+        row.identify_error = 'no_card_clearly_identified_in_photo';
+      }
 
       if (id.ok && id.name) {
         await sleep(SCRYFALL_DELAY_MS);
