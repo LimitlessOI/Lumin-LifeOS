@@ -7,10 +7,15 @@
  * production's OpenAI account had zero credits ("You have no credits
  * remaining") -- a real billing block, not a code bug, but SO-003
  * (CLAUDE.md: "never idle on tokens... auto-failover, never idle") says a
- * single exhausted provider must not stall the whole pipeline. Added a real
- * Anthropic vision fallback (same request shape services/founder-direct-
- * provider.js already uses live) -- tried automatically when OpenAI fails for
- * any reason, not just credits, as long as ANTHROPIC_API_KEY is present.
+ * single exhausted provider must not stall the whole pipeline. Added an
+ * Anthropic fallback first; that was ALSO out of credits on the same live
+ * test. Founder pushed back directly ("we have free tokens... our system is
+ * not without AI") -- checked the real, already-built
+ * /api/v1/lifeos/provider-key-health endpoint (not assumed) and found Gemini,
+ * Groq, Mistral, DeepSeek, and Replicate all genuinely `working` on
+ * production right now. Gemini is natively multimodal (same real request
+ * shape already proven live in services/provider-key-health.js's own probe)
+ * and is the real third fallback added here.
  * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
@@ -106,6 +111,39 @@ async function identifyViaAnthropic(photo) {
   return toResult(parsed);
 }
 
+async function identifyViaGemini(photo) {
+  const apiKey = (process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY)?.trim();
+  if (!apiKey) return { ok: false, error: 'gemini_not_configured', ...EMPTY_RESULT };
+  const model = process.env.MTG_VISION_MODEL_GEMINI || 'gemini-2.5-flash';
+
+  const res = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [
+          {
+            parts: [
+              { text: IDENTIFY_PROMPT },
+              { inline_data: { mime_type: photo.mime, data: photo.data } },
+            ],
+          },
+        ],
+        generationConfig: { maxOutputTokens: 300 },
+      }),
+    },
+  );
+  const json = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    return { ok: false, error: json?.error?.message || `gemini_vision_${res.status}`, ...EMPTY_RESULT };
+  }
+  const text = String(json?.candidates?.[0]?.content?.parts?.[0]?.text || '').trim();
+  const parsed = parseModelJson(text);
+  if (!parsed) return { ok: false, error: 'unparseable_model_output', ...EMPTY_RESULT };
+  return toResult(parsed);
+}
+
 /**
  * @param {{ name: string, mime: string, data: string }} photo base64 image, no data: prefix
  * @returns {Promise<{ ok: boolean, name: string|null, set: string|null, foil: boolean|null, condition_guess: string|null, confidence: string, error?: string }>}
@@ -114,12 +152,20 @@ export async function identifyMtgCardFromPhoto(photo, { logger } = {}) {
   try {
     const primary = await identifyViaOpenAI(photo);
     if (primary.ok) return primary;
-
     logger?.warn?.({ err: primary.error, name: photo.name }, 'mtg card vision: openai failed, trying anthropic fallback (SO-003)');
-    const fallback = await identifyViaAnthropic(photo);
-    if (fallback.ok) return fallback;
 
-    return { ok: false, error: `openai:${primary.error} | anthropic:${fallback.error}`, ...EMPTY_RESULT };
+    const anthropic = await identifyViaAnthropic(photo);
+    if (anthropic.ok) return anthropic;
+    logger?.warn?.({ err: anthropic.error, name: photo.name }, 'mtg card vision: anthropic failed, trying gemini fallback (SO-003)');
+
+    const gemini = await identifyViaGemini(photo);
+    if (gemini.ok) return gemini;
+
+    return {
+      ok: false,
+      error: `openai:${primary.error} | anthropic:${anthropic.error} | gemini:${gemini.error}`,
+      ...EMPTY_RESULT,
+    };
   } catch (err) {
     logger?.warn?.({ err: err.message, name: photo.name }, 'mtg card vision identify failed');
     return { ok: false, error: err.message, ...EMPTY_RESULT };
