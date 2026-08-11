@@ -37,9 +37,31 @@ const STRUCTURAL_UI_RE = /\b(add|remove|create|delete|new page|new screen|route|
 export const CANONICAL_FOUNDER_UI_TARGET = 'public/overlay/lifeos-app.html';
 export const CANONICAL_FOUNDER_CSS_TARGET = 'public/overlay/lifeos-theme-overrides.css';
 
+const HAS_COLOR_OR_STYLE_WORD_RE =
+  /\b(color|colour|background|font|yellow|blue|red|green|purple|orange|pink|white|black|style|faint|lighter|darker)\b/i;
+
+// Real bug found live 2026-08-11, founder direct: talking to Chair with a
+// long, substantive technical request ("build a screen-agent decision
+// endpoint...") got silently misrouted into a CSS patch instead of the
+// real Chair -> Architect -> blueprint -> Builder pipeline he described.
+// Root cause: the message happened to contain "chat reply" (matches
+// RESPONSE_UI_RE) and the word "make" elsewhere in an unrelated sentence
+// (matches the change-verb check) -- the old fallback branch returned true
+// on that combination ALONE, with no color/style word required at all,
+// despite this function's own docstring saying "Color/style-only." A
+// one-line "make the response bubble yellow" should stay a fast CSS patch
+// (that's a real, legitimate shortcut) -- a multi-paragraph spec for a new
+// backend capability should never be silently treated as a color tweak.
+// Fixed two ways: (1) every return path now requires an actual color/style
+// word, no exceptions: (2) messages long enough to be a real spec, not a
+// one-line style note, never qualify as CSS-only regardless of keyword hits.
+const CSS_ONLY_MAX_LENGTH = 300;
+
 /** Color/style-only founder feedback — must not rewrite lifeos-app.html. */
 export function isCssOnlyUiFeedback(instruction = '') {
   const t = String(instruction || '');
+  if (t.length > CSS_ONLY_MAX_LENGTH) return false;
+  if (!HAS_COLOR_OR_STYLE_WORD_RE.test(t)) return false;
   if (/\b(add|set|make|change|update)\s+(a\s+)?(yellow|blue|red|green|purple|orange|pink|white|black)\b/i.test(t)
     && /\b(color|background|style|response|reply|bubble|message|assistant)\b/i.test(t)) {
     return true;
