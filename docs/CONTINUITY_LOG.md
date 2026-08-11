@@ -1,3 +1,23 @@
+## 2026-08-11 — BuilderOS governance repair: stages 3–10 shipped, preflight green, deployed 0a4724e1507c
+
+Continuation of the M0/M1 work. Eight further stages, each committed and pushed, ending with `builder:preflight` exit 0 and Railway serving the tip.
+
+**Bypasses closed.** Passing a blueprint inline to `executeIntakeBlueprint` used to skip the session-status check, the ARC gate and the no-invention check in one move — authorization by argument shape. Every production caller passes `sessionId`, so the inline path existed only as a bypass; it now needs `dryRun:true` or an explicit env grant. The session path also re-checks for invented architecture at the execution boundary, because `ready_to_execute` only ever proved graph validity.
+
+**A silent graph bug.** `deps`, `depends_on` and `dependencies` were all live for the same concept, each subsystem self-consistent and disagreeing across the boundary. A step authored with `deps` and scheduled by the queue (which read `depends_on`) resolved to zero dependencies and built in the wrong order with nothing reporting an error. `config/step-dependencies.js` makes `depends_on` canonical, reads all three as a union, and reports genuine contradictions.
+
+**Reality→Trust closed.** The ledger closed at dispatch: it recorded that a model was asked to build something and never learned whether it worked, which is why `trust_adjustment.delta` had no writer. Reality was already scored; the result now reaches the row that produced the work. Policy is pure functions in `config/trust-scoring.js` — self-caught defects outscore escaped ones, concealment is a trustworthiness event of a different class, efficiency only counts after correctness, and `bugs_fixed`/`lines_of_code`/`missions_completed` are recorded as forbidden signals that change the delta by zero.
+
+**The missing stage exists.** Manufacturing Plan + three-party consensus (Conductor, Architect, Builder), each sealing for its own jurisdiction. The verifier decides and exports no minter; the sealing module mints and never decides. Waves are re-derived rather than trusted, so a mislabelled plan cannot hide a parallel-write collision.
+
+**The frozen fixture ran the whole loop.** 11 stages, 14 defects → 9, zero human edits, fixture hash unchanged. The remaining 9 are correctly refused: every step transitively depends on one of 7 stores whose columns the source never specifies. The pipeline also found a real dependency cycle (SL-012 → SL-014 → SL-013) in a blueprint ARC had passed with `ready_to_execute: true`.
+
+**Self-attack found a real gap in my own work.** 16 executable attacks; first run 14/16. `detectSchemaInvention` only read `step.contract.tables`, so a generator emitting raw `CREATE TABLE` into a sql step's content could invent a schema unobserved — the detector was fitted to the shape the fixture happened to use. Fixed and locked with 4 regression tests; second run 16/16.
+
+**Also:** OPEN-6 resolved (the office keeps "Conductor"; the session-supervisor role renamed, with a guard pinning the 19 as-is occurrences), and factory identity plus two-factory allocation in both parallel and redundant modes.
+
+**Honest limits.** The acceptance criterion "Overlay reaches execution without human nested-JSON rescue" is **NOT met** — execution is withheld because the blueprint genuinely does not say what to build. `factory-2` is `registered_not_provisioned`: identity and allocation are tested, runtime does not exist. 145 dormant-enforcement findings remain baselined and ratcheted.
+
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
 ## 2026-08-11 — BuilderOS governance repair blueprinted; Overlay intake frozen as regression fixture
