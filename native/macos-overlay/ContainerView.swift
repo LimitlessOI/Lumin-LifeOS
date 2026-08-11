@@ -304,4 +304,34 @@ final class ContainerView: NSView, WKNavigationDelegate {
         addCursorRect(NSRect(x: 0, y: 0, width: bounds.width, height: m), cursor: .resizeUpDown)
         addCursorRect(NSRect(x: 0, y: bounds.height - m, width: bounds.width, height: m), cursor: .resizeUpDown)
     }
+
+    // MARK: - Real Accessibility conformance (2026-08-10)
+    //
+    // Real, root-caused finding, not a permission issue: `osascript -e 'tell
+    // application "System Events" to tell process "Taloa" to get entire
+    // contents of window 1'` came back completely empty -- this custom,
+    // hand-drawn UI exposed ZERO elements to the Accessibility tree at all.
+    // That's a real gap in the app itself (also means a VoiceOver user
+    // couldn't use this window either, not just an automation tool), not an
+    // unavoidable OS wall. Exposing the container as one real, actionable
+    // AX button closes both gaps with the same fix: a real assistive
+    // technology can now identify and press it, and so can System Events'
+    // `click` action, routed through the exact same expand/shrink methods a
+    // real mouse click already uses.
+    override func isAccessibilityElement() -> Bool { true }
+
+    override func accessibilityRole() -> NSAccessibility.Role? { .button }
+
+    override func accessibilityLabel() -> String? {
+        isExpanded ? "Shrink Taloa back to circle" : "Expand Taloa chat"
+    }
+
+    override func accessibilityPerformPress() -> Bool {
+        if isExpanded {
+            handleShrinkTapped()
+        } else {
+            expandToChat()
+        }
+        return true
+    }
 }
