@@ -47,6 +47,13 @@
 import Cocoa
 import WebKit
 
+extension Notification.Name {
+    /// Posted when a real drag (not a click) finishes on the un-expanded
+    /// badge -- main.swift listens and snaps her home to whichever of the
+    /// four corners she's now closest to. See HomeCorner in main.swift.
+    static let taloaDidFinishDrag = Notification.Name("taloaDidFinishDrag")
+}
+
 final class ContainerView: NSView, WKNavigationDelegate {
     static let expandThreshold: CGFloat = 160
     static let resizeMargin: CGFloat = 10
@@ -361,12 +368,18 @@ final class ContainerView: NSView, WKNavigationDelegate {
 
     override func mouseUp(with event: NSEvent) {
         // A "move" that barely moved is a click, not a drag -- click-to-chat.
+        // A real move (not a click), on the un-expanded badge, is corner-
+        // snap territory instead -- founder, direct: "you can move it
+        // around any way you want to. It can stay in some standard
+        // places... one of the four corners."
         if dragMode == .move, !isExpanded {
             let cur = NSEvent.mouseLocation
             let moved = hypot(cur.x - dragStartMouseScreen.x, cur.y - dragStartMouseScreen.y)
             FileHandle.standardError.write("Taloa: mouseUp dragMode=move moved=\(moved)\n".data(using: .utf8)!)
             if moved < Self.clickMoveThreshold {
                 expandToChat()
+            } else if let window = self.window {
+                NotificationCenter.default.post(name: .taloaDidFinishDrag, object: window)
             }
         }
         dragMode = .none

@@ -30,14 +30,79 @@ let homeNookSize: CGFloat = 320
 var wanderTargets: [NSPoint] = []
 var wanderNextChangeAt: [TimeInterval] = []
 
+// Corner-snap home positions (2026-08-10, founder's own description of the
+// interaction he wants: "you can move it around any way you want to. It
+// can stay in some standard places... one of the four corners maybe...
+// somewhere out of the way"). Persisted so the choice sticks across
+// relaunches, not just for this run.
+enum HomeCorner: String, CaseIterable {
+    case bottomLeft, bottomRight, topLeft, topRight
+
+    private static let defaultsKey = "taloa_home_corner"
+
+    static var current: HomeCorner {
+        get {
+            if let raw = UserDefaults.standard.string(forKey: defaultsKey), let c = HomeCorner(rawValue: raw) {
+                return c
+            }
+            return .bottomLeft // known-good default: not the notification-stack corner (see below)
+        }
+        set { UserDefaults.standard.set(newValue.rawValue, forKey: defaultsKey) }
+    }
+
+    /// Nearest corner to a window's current center, for real drag-to-snap.
+    static func nearest(to windowCenter: NSPoint, on screen: NSScreen) -> HomeCorner {
+        let sf = screen.visibleFrame
+        let right = windowCenter.x >= sf.midX
+        let top = windowCenter.y >= sf.midY
+        switch (right, top) {
+        case (false, false): return .bottomLeft
+        case (true, false): return .bottomRight
+        case (false, true): return .topLeft
+        case (true, true): return .topRight
+        }
+    }
+
+    func origin(in screen: NSScreen, size: CGFloat, margin: CGFloat) -> NSPoint {
+        let sf = screen.visibleFrame
+        switch self {
+        case .bottomLeft: return NSPoint(x: sf.minX + margin, y: sf.minY + margin)
+        case .bottomRight: return NSPoint(x: sf.maxX - margin - size, y: sf.minY + margin)
+        case .topLeft: return NSPoint(x: sf.minX + margin, y: sf.maxY - margin - size)
+        case .topRight: return NSPoint(x: sf.maxX - margin - size, y: sf.maxY - margin - size)
+        }
+    }
+}
+
 func homeRect(for screen: NSScreen) -> NSRect {
-    // Bottom-left, not bottom-right: macOS stacks notification banners down
-    // from the top-right corner, and a long queue of them (real problem hit
-    // live tonight -- 11+ stacked "Login Item Added" banners from repeated
-    // dev relaunches) can reach far enough down to cover a bottom-right
-    // nook entirely. Bottom-left has no standard system UI that claims it.
-    let sf = screen.visibleFrame
-    return NSRect(x: sf.minX + 20, y: sf.minY + 20, width: homeNookSize, height: homeNookSize)
+    // Default corner is bottom-left, not bottom-right: macOS stacks
+    // notification banners down from the top-right corner, and a long
+    // queue of them (real problem hit live earlier tonight -- 11+ stacked
+    // "Login Item Added" banners from repeated dev relaunches) can reach
+    // far enough down to cover a bottom-right nook entirely. All four
+    // corners are real, available choices (HomeCorner) -- bottom-left is
+    // just the safe starting default, not the only option.
+    let origin = HomeCorner.current.origin(in: screen, size: homeNookSize, margin: 20)
+    return NSRect(origin: origin, size: NSSize(width: homeNookSize, height: homeNookSize))
+}
+
+/// Real drag-to-snap: called when the founder finishes dragging her (not a
+/// click) -- picks whichever of the four corners she's now closest to as
+/// the new, persisted home, and animates a real snap there rather than
+/// waiting for the slow wander drift to catch up.
+func snapToNearestCorner(window: OverlayWindow) {
+    guard let screen = window.screen ?? NSScreen.screens.first else { return }
+    let frame = window.frame
+    let center = NSPoint(x: frame.midX, y: frame.midY)
+    let corner = HomeCorner.nearest(to: center, on: screen)
+    HomeCorner.current = corner
+    let target = corner.origin(in: screen, size: frame.width, margin: 20)
+    window.setFrame(NSRect(origin: target, size: frame.size), display: true, animate: true)
+    if let idx = overlayWindows.firstIndex(where: { $0 === window }) {
+        wanderTargets[idx] = pickWanderTarget(in: homeRect(for: screen), windowSize: frame.size)
+        wanderNextChangeAt[idx] = ProcessInfo.processInfo.systemUptime + Double.random(in: 4...9)
+    }
+    FileHandle.standardError.write("Taloa: snapped home to \(corner)\n".data(using: .utf8)!)
 }
 
 func pickWanderTarget(in home: NSRect, windowSize: NSSize) -> NSPoint {
@@ -139,6 +204,16 @@ NotificationCenter.default.addObserver(
     queue: .main
 ) { _ in
     rebuildOverlaysForAllScreens()
+}
+
+// Corner-snap on real drag-end -- see snapToNearestCorner above.
+NotificationCenter.default.addObserver(
+    forName: .taloaDidFinishDrag,
+    object: nil,
+    queue: .main
+) { note in
+    guard let window = note.object as? OverlayWindow else { return }
+    snapToNearestCorner(window: window)
 }
 
 // Phase 5: click-through toggle (Cmd+Shift+T) so the overlay can be made
