@@ -274,4 +274,17 @@ if #available(macOS 13.0, *), Bundle.main.bundleURL.pathExtension == "app" {
     FileHandle.standardError.write("launch-at-login: skipped (not running from a .app bundle)\n".data(using: .utf8)!)
 }
 
+// Real cursor control + full-screen vision (2026-08-10) -- see
+// ScreenControl.swift header for the founder quotes and the two real
+// permission boundaries this depends on. Requesting trust here (not lazily
+// on first use) so the System Settings entry exists immediately at launch,
+// not only after some future feature first tries to use it.
+ScreenControl.requestAccessibilityTrust()
+ScreenControl.startDebugTriggerPolling()
+if !ScreenControl.isAccessibilityTrusted() {
+    FileHandle.standardError.write(
+        "Taloa: Accessibility NOT yet trusted -- real cursor control needs it checked in System Settings > Privacy & Security > Accessibility.\n".data(using: .utf8)!
+    )
+}
+
 app.run()

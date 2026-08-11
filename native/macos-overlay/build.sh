@@ -13,7 +13,7 @@ rm -rf "$APP_BUNDLE"
 mkdir -p "$APP_BUNDLE/Contents/MacOS"
 mkdir -p "$APP_BUNDLE/Contents/Resources"
 
-swiftc -O OverlayWindow.swift TaloaImageCharacterView.swift ContainerView.swift main.swift \
+swiftc -O OverlayWindow.swift TaloaImageCharacterView.swift ContainerView.swift ScreenControl.swift main.swift \
     -o "$APP_BUNDLE/Contents/MacOS/$APP_NAME"
 
 cp Info.plist "$APP_BUNDLE/Contents/Info.plist"
