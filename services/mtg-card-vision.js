@@ -167,6 +167,51 @@ async function identifyViaGemini(photo) {
 }
 
 /**
+ * Real fourth fallback, added 2026-08-11 after Adam pointed out Gemini
+ * shouldn't be a single point of failure ("i dont know why gemini is our
+ * first choice... maybe we look for one of the other free options").
+ * Groq's own key is already confirmed `working` on production
+ * (provider-key-health.js), but that probe only exercises a text-only
+ * model (llama-3.1-8b-instant) -- it does NOT prove vision works, so this
+ * is genuinely new capability, not just reusing an already-proven call
+ * shape. Groq mirrors the OpenAI chat-completions API (same pattern
+ * council-service.js already uses for Groq text calls), so this reuses
+ * identifyViaOpenAI's exact request/response shape against Groq's
+ * endpoint with a real vision-capable model.
+ */
+async function identifyViaGroq(photo) {
+  const apiKey = process.env.GROQ_API_KEY?.trim();
+  if (!apiKey) return { ok: false, error: 'groq_not_configured', ...EMPTY_RESULT };
+  const model = process.env.MTG_VISION_MODEL_GROQ || 'llama-3.2-11b-vision-preview';
+
+  const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model,
+      max_tokens: 300,
+      messages: [
+        {
+          role: 'user',
+          content: [
+            { type: 'text', text: IDENTIFY_PROMPT },
+            { type: 'image_url', image_url: { url: `data:${photo.mime};base64,${photo.data}` } },
+          ],
+        },
+      ],
+    }),
+  });
+  const json = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    return { ok: false, error: json?.error?.message || `groq_vision_${res.status}`, ...EMPTY_RESULT };
+  }
+  const text = String(json?.choices?.[0]?.message?.content || '').trim();
+  const parsed = parseModelJson(text);
+  if (!parsed) return { ok: false, error: 'unparseable_model_output', ...EMPTY_RESULT };
+  return toResult(parsed);
+}
+
+/**
  * @param {{ name: string, mime: string, data: string }} photo base64 image, no data: prefix
  * @returns {Promise<{ ok: boolean, name: string|null, set: string|null, foil: boolean|null, condition_guess: string|null, confidence: string, error?: string }>}
  */
@@ -182,10 +227,14 @@ export async function identifyMtgCardFromPhoto(photo, { logger } = {}) {
 
     const gemini = await identifyViaGemini(photo);
     if (gemini.ok) return gemini;
+    logger?.warn?.({ err: gemini.error, name: photo.name }, 'mtg card vision: gemini failed, trying groq fallback (SO-003)');
+
+    const groq = await identifyViaGroq(photo);
+    if (groq.ok) return groq;
 
     return {
       ok: false,
-      error: `openai:${primary.error} | anthropic:${anthropic.error} | gemini:${gemini.error}`,
+      error: `openai:${primary.error} | anthropic:${anthropic.error} | gemini:${gemini.error} | groq:${groq.error}`,
       ...EMPTY_RESULT,
     };
   } catch (err) {

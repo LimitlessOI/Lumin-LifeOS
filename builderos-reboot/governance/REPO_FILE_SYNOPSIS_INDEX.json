@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-11T17:06:01.727Z",
+  "generated_at": "2026-08-11T17:10:22.563Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13228,
   "files": [
@@ -44065,9 +44065,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 837624,
-      "mtime": "2026-08-11T17:05:46.189Z",
-      "indexed_at": "2026-08-11T17:06:01.727Z"
+      "bytes": 839105,
+      "mtime": "2026-08-11T17:10:12.058Z",
+      "indexed_at": "2026-08-11T17:10:22.563Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -97651,9 +97651,9 @@
     {
       "path": "services/mtg-card-vision.js",
       "synopsis": "Identifies a Magic: The Gathering card (name, set, foil, condition",
-      "bytes": 8914,
-      "mtime": "2026-08-11T17:05:20.065Z",
-      "indexed_at": "2026-08-11T17:06:01.727Z",
+      "bytes": 11087,
+      "mtime": "2026-08-11T17:09:42.050Z",
+      "indexed_at": "2026-08-11T17:10:22.563Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
