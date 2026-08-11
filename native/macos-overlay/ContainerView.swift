@@ -17,6 +17,16 @@
 // chat UI, entirely the same already-live backend. Honest scope: this is
 // the real chat/AI surface, not a bespoke native chat embedded in the badge
 // itself (that would need a native auth story this pass doesn't build).
+//
+// Shrink-back-to-circle (2026-08-10): founder's own description of the
+// intended interaction model, direct quote -- "I should be able to move it
+// over [to] not have it be front and center or I can shrink it when it
+// goes back to the circle that always stays." Expanding already worked;
+// there was no explicit way back except dragging the window's edge by hand.
+// Added a real, visible shrink button in the drag strip (top-right, only
+// while expanded) that collapses straight back to badge size. Repositioning
+// out of the way without closing was already possible (drag the same top
+// strip) -- not a new gap, just unlabeled.
 // See docs/products/lifeos/communication/COMMUNICATION_SYSTEM_BLUEPRINT.md §21.1.
 import Cocoa
 import WebKit
@@ -51,11 +61,27 @@ final class ContainerView: NSView, WKNavigationDelegate {
     private static let clickMoveThreshold: CGFloat = 4
     private var pendingAutoOpenChat = false
 
+    // Shrink-back-to-circle -- see header comment.
+    private static let badgeSize: CGFloat = 120 // matches main.swift's initialSize
+    private static let shrinkButtonSize: CGFloat = 18
+    private lazy var shrinkButton: NSButton = {
+        let img = NSImage(systemSymbolName: "arrow.down.right.and.arrow.up.left.circle.fill",
+                           accessibilityDescription: "Shrink back to circle")
+        let b = NSButton(image: img ?? NSImage(), target: self, action: #selector(handleShrinkTapped))
+        b.isBordered = false
+        b.imageScaling = .scaleProportionallyUpOrDown
+        b.contentTintColor = .white
+        b.alphaValue = 0.85
+        b.isHidden = true
+        return b
+    }()
+
     override init(frame frameRect: NSRect) {
         badgeView = TaloaImageCharacterView(frame: NSRect(origin: .zero, size: frameRect.size))
         super.init(frame: frameRect)
         wantsLayer = true
         addSubview(badgeView)
+        addSubview(shrinkButton)
         layoutChildren()
     }
 
@@ -82,6 +108,14 @@ final class ContainerView: NSView, WKNavigationDelegate {
         badgeView.frame = bounds
         if let wv = webView {
             wv.frame = NSRect(x: 0, y: 0, width: bounds.width, height: max(0, bounds.height - Self.dragStripHeight))
+        }
+        shrinkButton.isHidden = !isExpanded
+        if isExpanded {
+            shrinkButton.frame = NSRect(
+                x: bounds.width - Self.shrinkButtonSize - 6,
+                y: bounds.height - Self.shrinkButtonSize - (Self.dragStripHeight - Self.shrinkButtonSize) / 2 - 2,
+                width: Self.shrinkButtonSize, height: Self.shrinkButtonSize
+            )
         }
         window?.invalidateCursorRects(for: self)
     }
@@ -248,6 +282,18 @@ final class ContainerView: NSView, WKNavigationDelegate {
         pendingAutoOpenChat = true
         var f = window.frame
         f.size = Self.chatSize
+        window.setFrame(f, display: true, animate: true)
+    }
+
+    /// Shrink-back-to-circle -- see header comment. Keeps the same top-left
+    /// corner anchored (rather than bottom-left) so shrinking doesn't make
+    /// the window jump upward past wherever the founder actually dragged it.
+    @objc private func handleShrinkTapped() {
+        guard let window = self.window, isExpanded else { return }
+        var f = window.frame
+        let newSize = Self.badgeSize
+        f.origin.y += f.size.height - newSize
+        f.size = NSSize(width: newSize, height: newSize)
         window.setFrame(f, display: true, animate: true)
     }
 
