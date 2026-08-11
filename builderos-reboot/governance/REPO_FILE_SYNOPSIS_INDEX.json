@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-11T22:37:29.742Z",
+  "generated_at": "2026-08-11T22:42:45.187Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13255,
+  "file_count": 13257,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -43011,9 +43011,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 524139,
-      "mtime": "2026-08-11T22:37:13.107Z",
-      "indexed_at": "2026-08-11T22:37:29.742Z"
+      "bytes": 526487,
+      "mtime": "2026-08-11T22:42:28.267Z",
+      "indexed_at": "2026-08-11T22:42:45.187Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -67789,9 +67789,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 39384,
-      "mtime": "2026-08-11T22:36:36.243Z",
-      "indexed_at": "2026-08-11T22:37:29.742Z",
+      "bytes": 39513,
+      "mtime": "2026-08-11T22:42:05.431Z",
+      "indexed_at": "2026-08-11T22:42:45.187Z",
       "synopsis_index_only": true
     },
     {
@@ -68950,6 +68950,14 @@
       "bytes": 6342,
       "mtime": "2026-08-09T00:06:39.031Z",
       "indexed_at": "2026-08-09T00:07:27.839Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/OVERLAY_LIFECYCLE_EXAM_RECEIPT.json",
+      "synopsis": "Product receipt — OVERLAY LIFECYCLE EXAM RECEIPT.",
+      "bytes": 20541,
+      "mtime": "2026-08-11T22:41:54.264Z",
+      "indexed_at": "2026-08-11T22:42:45.187Z",
       "synopsis_index_only": true
     },
     {
@@ -78575,6 +78583,16 @@
       "bytes": 7895,
       "mtime": "2026-08-09T00:06:33.895Z",
       "indexed_at": "2026-08-09T00:07:27.839Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/run-overlay-lifecycle-exam.mjs",
+      "synopsis": "Drives the frozen Overlay fixture through the whole governed loop —",
+      "bytes": 19649,
+      "mtime": "2026-08-11T22:41:47.597Z",
+      "indexed_at": "2026-08-11T22:42:45.187Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
