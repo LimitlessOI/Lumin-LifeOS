@@ -62,6 +62,83 @@ function contractColumnNames(table) {
 }
 
 /**
+ * Tables and columns asserted as raw DDL in a step's body rather than in its
+ * structured contract. Found by the self-attack suite 2026-08-11: the check below
+ * only inspected `step.contract.tables`, so a generator that emitted
+ * `CREATE TABLE ... (...)` directly into a sql step's content invented a complete
+ * schema with nothing looking at it. A `type: 'sql'` step is precisely the shape
+ * that carries raw DDL, which made the gap likely rather than theoretical.
+ */
+function ddlTablesFromContent(step) {
+  const text = [step?.content, step?.body, step?.sql].filter((v) => typeof v === 'string').join('\n');
+  if (!text) return [];
+  const out = [];
+  const re = /CREATE\s+TABLE\s+(?:IF\s+NOT\s+EXISTS\s+)?["`]?([A-Za-z0-9_.]+)["`]?\s*\(([\s\S]*?)\)\s*;/gi;
+  let m;
+  while ((m = re.exec(text)) !== null) {
+    const [, rawName, body] = m;
+    const name = rawName.split('.').pop();
+    const columns = body
+      .split(/,(?![^(]*\))/)
+      .map((line) => line.trim().split(/\s+/)[0])
+      .filter((c) => c && !/^(primary|foreign|unique|constraint|check|key|index)$/i.test(c))
+      .map((c) => c.replace(/["`]/g, '').toLowerCase());
+    if (columns.length > 0) out.push({ name, columns });
+  }
+  return out;
+}
+
+/**
+ * Every table a blueprint step asserts, from both evidence sources. Structured
+ * contract and raw DDL are merged rather than either-or: a step may carry both,
+ * and checking only one is how the gap above existed.
+ */
+function assertedTables(step) {
+  const merged = new Map();
+  for (const t of step?.contract?.tables || []) {
+    if (!t?.name) continue;
+    merged.set(String(t.name).toLowerCase(), { name: t.name, columns: contractColumnNames(t), source: 'contract' });
+  }
+  for (const t of ddlTablesFromContent(step)) {
+    const key = String(t.name).toLowerCase();
+    const existing = merged.get(key);
+    if (existing) {
+      existing.columns = [...new Set([...existing.columns, ...t.columns])];
+      existing.source = 'contract+ddl';
+    } else {
+      merged.set(key, { name: t.name, columns: t.columns, source: 'ddl' });
+    }
+  }
+  return [...merged.values()];
+}
+
+/**
+ * Table names the intent specified, in every shape the extractor has used.
+ * `db_tables_needed` is the current key; `data_stores` and `tables` appear in
+ * real intent artifacts, and reading only one silently empties the comparison.
+ */
+function intentTableList(intent) {
+  const lists = [intent?.db_tables_needed, intent?.data_stores, intent?.tables, intent?.canonical_stores];
+  const out = [];
+  for (const list of lists) {
+    if (Array.isArray(list)) out.push(...list.filter((t) => t?.name));
+  }
+  return out;
+}
+
+/**
+ * A store named in prose as "TaskStore" becomes table `task_store`. Comparing the
+ * two literally would report every real table as invented, so identity is checked
+ * on a normalized key.
+ */
+function tableKey(name) {
+  return String(name || '')
+    .replace(/([a-z0-9])([A-Z])/g, '$1_$2')
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, '');
+}
+
+/**
  * CHECK 1 — schema invention.
  * A generated contract may only assert columns the intent specified. An intent
  * table with `columns: []` means "unspecified", which is a blueprint defect to
@@ -70,16 +147,16 @@ function contractColumnNames(table) {
 export function detectSchemaInvention({ intent, blueprint }) {
   const defects = [];
   const intentTables = new Map();
-  for (const t of intent?.db_tables_needed || []) {
-    if (t?.name) intentTables.set(String(t.name).toLowerCase(), t);
+  for (const t of intentTableList(intent)) {
+    intentTables.set(tableKey(t.name), t);
   }
 
   for (const step of blueprint?.steps || []) {
-    for (const table of step?.contract?.tables || []) {
+    for (const table of assertedTables(step)) {
       const name = table?.name;
       if (!name) continue;
-      const key = String(name).toLowerCase();
-      const generated = contractColumnNames(table);
+      const key = tableKey(name);
+      const generated = table.columns || [];
       if (generated.length === 0) continue;
 
       if (!intentTables.has(key)) {

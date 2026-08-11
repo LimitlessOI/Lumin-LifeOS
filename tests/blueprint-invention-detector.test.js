@@ -135,3 +135,79 @@ test('grounding selection always includes tables the intent mentions, even beyon
   assert.equal(g.total, 201);
   assert.equal(g.truncated, true);
 });
+
+// ── Raw-DDL evidence source (found by the self-attack suite, 2026-08-11) ──────
+
+test('a schema invented as raw CREATE TABLE in step content is caught', () => {
+  // The check originally read only step.contract.tables, so a generator emitting
+  // DDL straight into a sql step's content invented a full schema unobserved --
+  // and `type: 'sql'` is exactly the shape that carries raw DDL.
+  const report = detectInventions({
+    session: {
+      product_name: 'p',
+      extracted_intent_json: { db_tables_needed: [{ name: 'GhostStore', columns: [] }] },
+      blueprint_json: {
+        _meta: { product: 'p' },
+        steps: [
+          {
+            id: 'S1',
+            type: 'sql',
+            file: 'db/migrations/1_create_ghost_store.sql',
+            content: 'CREATE TABLE ghost_store (id UUID PRIMARY KEY, invented_col TEXT, another_one INTEGER);',
+          },
+        ],
+      },
+    },
+  });
+  const schema = report.defects.filter((d) => d.id === 'INVENTED_SQL_SCHEMA');
+  assert.equal(schema.length, 1);
+  assert.equal(report.manufacturing_authorized, false);
+});
+
+test('a table invented in raw DDL that the intent never names is caught', () => {
+  const report = detectInventions({
+    session: {
+      product_name: 'p',
+      extracted_intent_json: { db_tables_needed: [] },
+      blueprint_json: {
+        _meta: { product: 'p' },
+        steps: [{ id: 'S1', type: 'sql', content: 'CREATE TABLE IF NOT EXISTS nobody_asked (id UUID, x TEXT);' }],
+      },
+    },
+  });
+  assert.ok(report.defects.some((d) => d.id === 'INVENTED_TABLE' && /nobody_asked/i.test(d.table)));
+});
+
+test('store names in prose match their snake_case tables instead of reading as invented', () => {
+  // "TaskStore" in intent vs task_store in DDL is the same thing. Comparing
+  // literally would report every real table as invented.
+  const report = detectInventions({
+    session: {
+      product_name: 'p',
+      extracted_intent_json: { db_tables_needed: [{ name: 'TaskStore', columns: ['id UUID', 'title TEXT'] }] },
+      blueprint_json: {
+        _meta: { product: 'p' },
+        steps: [{ id: 'S1', type: 'sql', content: 'CREATE TABLE task_store (id UUID PRIMARY KEY, title TEXT);' }],
+      },
+    },
+  });
+  assert.deepEqual(
+    report.defects.filter((d) => d.id === 'INVENTED_TABLE' || d.id === 'INVENTED_SQL_SCHEMA'),
+    [],
+    'a specified table must not be reported as invented merely because of naming style'
+  );
+});
+
+test('DDL constraint clauses are not mistaken for columns', () => {
+  const report = detectInventions({
+    session: {
+      product_name: 'p',
+      extracted_intent_json: { db_tables_needed: [{ name: 'thing', columns: ['id UUID'] }] },
+      blueprint_json: {
+        _meta: { product: 'p' },
+        steps: [{ id: 'S1', type: 'sql', content: 'CREATE TABLE thing (id UUID, PRIMARY KEY (id), UNIQUE (id));' }],
+      },
+    },
+  });
+  assert.deepEqual(report.defects.filter((d) => d.id === 'INVENTED_SQL_SCHEMA'), []);
+});

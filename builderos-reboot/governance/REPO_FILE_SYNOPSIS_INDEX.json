@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-11T22:45:26.446Z",
+  "generated_at": "2026-08-11T22:48:59.770Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13260,
+  "file_count": 13262,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -43019,9 +43019,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 528437,
-      "mtime": "2026-08-11T22:45:19.556Z",
-      "indexed_at": "2026-08-11T22:45:26.446Z"
+      "bytes": 530735,
+      "mtime": "2026-08-11T22:48:57.081Z",
+      "indexed_at": "2026-08-11T22:48:59.770Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -67797,9 +67797,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 39768,
-      "mtime": "2026-08-11T22:44:45.188Z",
-      "indexed_at": "2026-08-11T22:45:26.446Z",
+      "bytes": 39883,
+      "mtime": "2026-08-11T22:48:57.062Z",
+      "indexed_at": "2026-08-11T22:48:59.770Z",
       "synopsis_index_only": true
     },
     {
@@ -69046,6 +69046,14 @@
       "bytes": 1461,
       "mtime": "2026-08-01T20:09:43.922Z",
       "indexed_at": "2026-08-01T20:09:43.922Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/SELF_ATTACK_RECEIPT.json",
+      "synopsis": "Product receipt — SELF ATTACK RECEIPT.",
+      "bytes": 4866,
+      "mtime": "2026-08-11T22:48:09.508Z",
+      "indexed_at": "2026-08-11T22:48:59.770Z",
       "synopsis_index_only": true
     },
     {
@@ -78849,6 +78857,16 @@
       "indexed_at": "2026-07-28T22:54:46.666Z",
       "ssot": [
         "docs/products/project-governance/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/self-attack-governance.mjs",
+      "synopsis": "Attacks the governance repair with the specific moves the founder",
+      "bytes": 13701,
+      "mtime": "2026-08-11T22:48:08.974Z",
+      "indexed_at": "2026-08-11T22:48:59.770Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
       ]
     },
     {
@@ -91600,9 +91618,9 @@
     {
       "path": "services/blueprint-invention-detector.js",
       "synopsis": "Deterministic no-invention detector for generated blueprints (M1).",
-      "bytes": 13502,
-      "mtime": "2026-08-11T22:11:28.416Z",
-      "indexed_at": "2026-08-11T22:15:50.764Z",
+      "bytes": 16431,
+      "mtime": "2026-08-11T22:48:02.328Z",
+      "indexed_at": "2026-08-11T22:48:59.770Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -102195,9 +102213,9 @@
     {
       "path": "tests/blueprint-invention-detector.test.js",
       "synopsis": "Locks the deterministic no-invention detector (M1) against the frozen",
-      "bytes": 5974,
-      "mtime": "2026-08-11T22:11:28.416Z",
-      "indexed_at": "2026-08-11T22:15:50.764Z"
+      "bytes": 8947,
+      "mtime": "2026-08-11T22:48:28.895Z",
+      "indexed_at": "2026-08-11T22:48:59.770Z"
     },
     {
       "path": "tests/bp-priority-completion.test.js",
