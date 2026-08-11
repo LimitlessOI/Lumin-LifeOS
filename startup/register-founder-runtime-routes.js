@@ -3,6 +3,7 @@
  * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import { createLifeOSAuthRoutes } from "../routes/lifeos-auth-routes.js";
+import { createMtgCardsRoutes } from "../routes/mtg-cards-routes.js";
 import { createLifeOSFounderRuntimeRoutes } from "../routes/lifeos-founder-runtime-routes.js";
 import { createLifeOSDirectActionRoutes } from "../routes/lifeos-direct-action-routes.js";
 import { createLifeOSChatRoutes } from "../routes/lifeos-chat-routes.js";
@@ -377,6 +378,19 @@ export async function registerFounderRuntimeRoutes(app, deps) {
     logger.info("✅ [ANDROID-COMMAND] Remote command queue mounted at /api/v1/android/{command,pending-for-user,command-result}");
   } catch (err) {
     logger.warn?.({ err: err.message }, "[ANDROID-COMMAND] founder-lane mount failed (non-fatal)");
+  }
+
+  // GAP-FILL (MTG-CARDS-ROUTE-0001): same founder-lane rescue as ClientCare
+  // billing below -- production boots founder_builder, so the mount in
+  // startup/register-runtime-routes.js (full-runtime-only) never actually
+  // ran; confirmed live via GET /ready showing runtime_profile:"founder_builder"
+  // and a 404 on the batch-upload endpoint despite a clean deploy. Same
+  // protected-path carve-out as the mounts above.
+  try {
+    app.use("/api/v1/mtg-cards", createMtgCardsRoutes({ pool, requireKey, logger }));
+    logger.info("✅ [MTG-CARDS] Founder-lane route mounted at /api/v1/mtg-cards");
+  } catch (err) {
+    logger.warn?.({ err: err.message }, "[MTG-CARDS] founder-lane mount failed (non-fatal)");
   }
 
   // ClientCare billing rescue must live on founder lane — production boots founder_builder.
