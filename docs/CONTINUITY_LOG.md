@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-08-11 — BuilderOS governance repair blueprinted; Overlay intake frozen as regression fixture
+
+Adam + ChatGPT/Chair concurrence after Overlay intake invented SQL/SSOT while ARC said `ready_to_execute`: **stop analyzing; do not ship a narrow `columns: []` patch; blueprint the factory repair first.** Landed `docs/products/builderos/BUILDEROS_GOVERNANCE_REPAIR_BLUEPRINT_2026-08-11.md` (M1–M5 + Sentry taxonomy + Conductor–Architect–Efficiency coordination) and froze session `000146ae-…` under `docs/products/builderos/fixtures/intake-regression-2026-08-11/`. **Do not pre-clean Overlay to help the factory.** Coding not started. Overlay manufacture waits on regression PASS. Capture: `docs/products/builderos/conversations/2026-08-11-governance-repair-blueprint-mandate.md`.
+
 ## 2026-08-10 — Taloa floating desktop character: real native macOS overlay built end-to-end, session handoff before founder sleep
 
 Adam directed building the "canonical interface direction" from `COMMUNICATION_SYSTEM_BLUEPRINT.md` §21.1 into something real, iterating live through the whole session rather than stopping between phases ("don't stop until you're done with every phase"). Built `native/macos-overlay/` — a real, running, ad-hoc-signed `Taloa.app` (Swift/AppKit, not a browser overlay): borderless/transparent/always-on-top window, one per physical monitor (a real bug — `canJoinAllSpaces` only covers virtual Spaces on one screen, not multi-monitor — found live via founder report "I don't see it," fixed and reverified with real screenshots), freeform edge/corner resize, expands past ~160pt into the real production `/lifeos` shell in a `WKWebView` (verified with a real network round-trip, not assumed), launch-at-login via `SMAppService`, and a click-through toggle (Cmd+Shift+T).
