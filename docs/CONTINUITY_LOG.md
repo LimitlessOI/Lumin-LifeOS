@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-08-11 — Critical tip auth/money/memory holes re-fixed (9th rediscovery)
+
+Daily critical-bug sweep re-confirmed tip still accepts any member JWT as an operator key (`src/server/auth/requireKey.js`), amplifying into free paid-tier grants via `POST .../billing/operator-mark-paid`, plus public passwordless `set-password` takeover, fake `x-command-key` reset-token disclosure, unbound Stripe `/verify` tier upgrades, and unauthenticated memory/interview analytics dumps. Draft PRs #367–#375 never merged. Re-applied the high-confidence fix set on `cursor/critical-bug-investigation-2d55` with regression tests wired into `npm test`. Remaining known open (not fixed this pass): Site Builder Stripe product binding, `x-forwarded-host` checkout URLs, MarketingOS `owner_id` IDOR, tcBilling webhook/status, founder-build Promise.race false FAIL, voice-rail `body.user` IDOR.
+
 ## 2026-08-10 — Taloa floating desktop character: real native macOS overlay built end-to-end, session handoff before founder sleep
 
 Adam directed building the "canonical interface direction" from `COMMUNICATION_SYSTEM_BLUEPRINT.md` §21.1 into something real, iterating live through the whole session rather than stopping between phases ("don't stop until you're done with every phase"). Built `native/macos-overlay/` — a real, running, ad-hoc-signed `Taloa.app` (Swift/AppKit, not a browser overlay): borderless/transparent/always-on-top window, one per physical monitor (a real bug — `canJoinAllSpaces` only covers virtual Spaces on one screen, not multi-monitor — found live via founder report "I don't see it," fixed and reverified with real screenshots), freeform edge/corner resize, expands past ~160pt into the real production `/lifeos` shell in a `WKWebView` (verified with a real network round-trip, not assumed), launch-at-login via `SMAppService`, and a click-through toggle (Cmd+Shift+T).

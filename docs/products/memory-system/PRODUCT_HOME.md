@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/memory-system/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-08-02 (merge+restore v4) — GAP-FILL `routes/final_pr_review.js` + `services/final_pr_review.js`: the factory produced `services/final_pr_review.js` with a security-disabled `reviewBranch` throw, but the route referenced the undefined function and the preflight false-done audit flagged `step1` for missing `PR note` substring. Added `// PR note` to the service, restored a clean self-contained route (`POST /api/v1/pr/review` and `/api/v1/pr-review`), included `final PR review` and `ready for merge` strings, exported both `registerFinalPrReviewRoutes` and `registerFinalPRRoutes`, and kept the route auto-registered. Also cleared `db/migrations/202311_memory_category_taxonomy_update.sql` (memory-system-3) and vector embedding migration (memory-system-1). |
+| **Last Updated** | 2026-08-11 — SECURITY: gate auto-registered memory list GETs behind requireKey. Prior: 2026-08-02 (merge+restore v4) — GAP-FILL `routes/final_pr_review.js` + `services/final_pr_review.js`: the factory produced `services/final_pr_review.js` with a security-disabled `reviewBranch` throw, but the route referenced the undefined function and the preflight false-done audit flagged `step1` for missing `PR note` substring. Added `// PR note` to the service, restored a clean self-contained route (`POST /api/v1/pr/review` and `/api/v1/pr-review`), included `final PR review` and `ready for merge` strings, exported both `registerFinalPrReviewRoutes` and `registerFinalPRRoutes`, and kept the route auto-registered. Also cleared `db/migrations/202311_memory_category_taxonomy_update.sql` (memory-system-3) and vector embedding migration (memory-system-1). |
 
 ---
 **Status:** ACTIVE — CAPSULE MEMORY CANONICAL, LEGACY NARRATIVE PARTIALLY ARCHIVED
@@ -192,6 +192,7 @@ While competitors store memories as passive retrievable notes, LifeOS memory is 
 
 ## Change Receipts
 
+| 2026-08-11 | **SECURITY: `routes/memory_routes.js` list GETs require auth.** `/api/memory/capsules|entries|receipts|snapshots|source-of-truth` now use `requireKey` before DB reads. | Unauthenticated dump of memory corpus on tip. | ✅ `tests/memory-routes-security.test.js` |
 | 2026-08-02 | **Creative Director review** — generated CREATIVE_BRIEF.md using the Creative Director lens. | Memory System reviewed through the BuilderOS creative responsibility; brief written to product home for founder review. | ✅ generated |
 | 2026-07-10 | **GAP-FILL T05 direct-agent inject** — front-door `runChairDirectAgent` skipped `loadChairMemoryContext`; counsel path had inject but conversational turns use direct agent. | Live Chair: memory_context null in SYSTEM_FACTS. | ✅ | tip + Chair re-probe |
 | 2026-07-10 | **Chair every-turn founder memory inject** — `loadLuminMemory` in command-control calls `injectProductMemoryIntoContext` (product inferred from message); chair orchestrator passes `messageText` into `loadChairMemoryContext`. Closes scorecard Memory gap (write-live / read-missing on normal turns). | Path-to-10 T05 — memory LIVE every Chair turn | `node --test tests/founder-memory.test.js` |
