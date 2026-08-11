@@ -120,3 +120,63 @@ even if reachability weren't a problem.
 Corner-snap positioning (pick a standard home corner instead of being
 fixed to bottom-left only) — see Change Receipts, same date, universal-overlay
 PRODUCT_HOME.md.
+
+## Continuation — real screen control + the "one AI agent" framing (same night, later)
+
+After watching a pasted description of the Chrome extension's DOM-based
+drive and correctly rejecting it as not matching what he'd asked for, Adam
+pushed for and got real, self-granted OS-level screen vision + system
+cursor control on the native macOS overlay (see universal-overlay
+PRODUCT_HOME.md same-date receipt: `ScreenControl.swift`,
+`grant_accessibility.py`). Immediately after, he extended the vision
+further, near-verbatim (cleaned of dictation noise):
+
+"What we need is to have an overlay that can see what's under it and read
+all the backend stuff that you already have access to now, and that window
+we can control what is seen on the screen — like we have Taloa represented
+as an avatar we can talk to at any time and ask it to do whatever we want
+to ask, unless unethical or illegal, or we are blocked as we are on Apple
+phones for the most part. There will be times where they will want to see
+what is being done, and other times where they will want it done in the
+background — but without the ability to actually push a button, then we
+are way too limited in our abilities, and without being able to really
+know what's there we are even more hindered. And we need to be able to use
+the entire screen to have multiple apps up at the same time, and you can
+be working multiple things at once."
+
+**What this actually names, distinct from the earlier vision capture
+above:**
+- **Vision + backend fusion.** Not just screen pixels — Taloa should
+  reason with both what's visibly on screen *and* whatever backend/DB
+  context the system already has access to (chair/founder-interface,
+  memory, product data), as one combined picture, not two separate
+  sources the user has to bridge themselves.
+- **Foreground vs. background execution as an explicit, switchable mode**
+  — sometimes the user wants to watch it happen (the real cursor moving,
+  per the immediately-prior work), sometimes they want it silently done
+  off-screen. Both are named as real, wanted modes, not just the
+  visible one.
+- **Multi-app, multi-task parallelism** — Taloa operating several apps
+  across the full screen at once, not one modal action at a time.
+- **Explicit ethical/legal ceiling, self-imposed by the founder** — "unless
+  unethical or illegal" is his own stated boundary on what the agent
+  should do on his behalf, independent of any technical limit.
+- **Named, accepted platform constraint, not a gap to solve around**: "or
+  we are blocked as we are on Apple phones for the most part" — Adam is
+  already aware iOS's sandboxing forbids the kind of arbitrary
+  screen-capture/synthetic-input control just proven on macOS; this is a
+  real Apple platform restriction (no public API equivalent to macOS's
+  Accessibility/CGEvent path for controlling arbitrary third-party app UI
+  system-wide), not something buildable around on iOS today. The existing
+  Android accessibility-driver + background-command-queue work (shipped
+  earlier this same session) is the closer mobile analogue, since
+  Android's platform permissions actually allow it.
+
+**Honest scoping, not attempted blind tonight:** the perceive→decide→act
+loop that actually connects the newly-shipped screen capture and cursor
+control into one intelligent action (something has to look at the
+captured pixels, reason about them alongside backend context, and decide
+where to click) is real, substantial, next-priority work — the vision +
+backend fusion, foreground/background mode switch, and multi-app
+orchestration described above are each their own real slices on top of
+that, not implied for free once the base loop exists.

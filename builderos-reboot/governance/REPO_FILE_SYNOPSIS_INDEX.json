@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-11T06:42:35.101Z",
+  "generated_at": "2026-08-11T07:00:03.217Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13224,
   "files": [
@@ -40724,9 +40724,9 @@
     {
       "path": "docs/conversation_dumps/2026-08-10-taloa-fluid-ui-vision.md",
       "synopsis": "Conversation dump -- Taloa fluid-UI product vision, 2026-08-10, for Digital Twin ingest.",
-      "bytes": 5427,
-      "mtime": "2026-08-11T04:52:07.007Z",
-      "indexed_at": "2026-08-11T04:52:36.298Z"
+      "bytes": 7278,
+      "mtime": "2026-08-11T06:59:25.840Z",
+      "indexed_at": "2026-08-11T07:00:03.217Z"
     },
     {
       "path": "docs/conversation_dumps/by-product/sessions/2a4739f2/BUILDEROS-AUTONOMOUS.md",
@@ -44029,9 +44029,9 @@
     {
       "path": "docs/products/lifeos/conversations/2026-08-10-taloa-fluid-ui-vision.md",
       "synopsis": "Founder capture -- Taloa/overlay fluid-UI product vision, 2026-08-10.",
-      "bytes": 6954,
-      "mtime": "2026-08-11T04:51:26.272Z",
-      "indexed_at": "2026-08-11T04:52:36.298Z"
+      "bytes": 10656,
+      "mtime": "2026-08-11T06:59:13.948Z",
+      "indexed_at": "2026-08-11T07:00:03.217Z"
     },
     {
       "path": "docs/products/lifeos/CREATIVE_BRIEF.md",

@@ -90,3 +90,34 @@ thinking if it's needed. Our system is not without AI."
   from this Mac (not Railway, where production request-handling actually
   runs) and none of the three models are vision-capable — did not unblock
   the MTG card photo-identification credits issue.
+
+## Continuation — "one agent, sees the screen and the backend, full control" (same night, later)
+
+After real OS-level screen capture + system cursor control shipped on the
+native macOS overlay (self-granted via the Accessibility API, no manual
+click from Adam — see universal-overlay PRODUCT_HOME.md same-date
+receipt), Adam extended the vision further, near-verbatim:
+
+"What we need is to have an overlay that can see what's under it and read
+all the backend stuff that you already have access to now, and that
+window we can control what is seen on the screen — like we have Taloa
+represented as an avatar we can talk to at any time and ask it to do
+whatever we want to ask, unless unethical or illegal, or we are blocked as
+we are on Apple phones for the most part. There will be times where they
+will want to see what is being done, and other times where they will want
+it done in the background — but without the ability to actually push a
+button, then we are way too limited in our abilities, and without being
+able to really know what's there we are even more hindered. And we need
+to be able to use the entire screen to have multiple apps up at the same
+time, and you can be working multiple things at once."
+
+**What this names:** fusing real screen vision with existing backend/DB
+context into one reasoning picture (not two things the user bridges
+manually); an explicit foreground-watchable vs. background-silent
+execution mode; multi-app parallelism across the full screen; a
+self-imposed ethical/legal ceiling on what the agent will do; and an
+explicit, accepted acknowledgment that iOS's sandbox blocks the
+macOS-style Accessibility/CGEvent approach almost entirely — a real
+platform limit, not a solvable gap, with Android's existing
+accessibility-driver work (shipped earlier the same session) as the
+closer mobile analogue.
