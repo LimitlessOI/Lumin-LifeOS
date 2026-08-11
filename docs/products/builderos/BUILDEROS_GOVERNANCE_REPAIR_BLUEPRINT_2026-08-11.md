@@ -6,10 +6,11 @@
 |---|---|
 | **Product** | `builderos` |
 | **SSOT** | `docs/products/builderos/PRODUCT_HOME.md` |
-| **Status** | DESIGN CONSENSUS — **not authorized for partial coding** |
+| **Status** | DESIGN CONSENSUS — triple-audited; **manufacturing missions blocked until §17 closures** |
 | **Incident source** | Overlay intake session `000146ae-7ed9-4e23-9477-5139603e32f7` + causal audit 2026-08-11 |
-| **Regression fixture** | `docs/products/builderos/fixtures/intake-regression-2026-08-11/` |
-| **Authority** | Founder-directed stop on analysis → blueprint before code; ChatGPT/Chair concurrence on scope |
+| **Regression fixture** | `docs/products/builderos/fixtures/intake-regression-2026-08-11/` (**immutable exam — do not sanitize**) |
+| **Authority** | Founder-directed stop on analysis → blueprint before code; ChatGPT/Chair concurrence on scope + pre-implementation triple audit |
+| **Redeploy** | **Do not redeploy Railway for docs/fixture-only commits** (runtime unchanged; redeploy adds risk without testing the repair) |
 
 ---
 
@@ -17,11 +18,21 @@
 
 1. **No narrow patch.** Do not ship only a `columns: []` guard. The defect class is broader than SQL.
 2. **No pre-cleaning Overlay to make the factory look good.** The Overlay blueprint and frozen intake remain ambiguous on purpose until the repaired factory fails closed on them.
-3. **No Builder invention of office interaction.** Conductor / Architect / Efficiency Officer / Sentry / Queue relationships are specified here. Builder executes slices only after this document authorizes them.
-4. **Code only after this document reaches typed `EXECUTION_AUTHORIZED` under its own rules** (or an explicit founder override naming this file).
-5. **Milestone definition (GPT/Chair, adopted):**
+3. **Fixture immutability.** Do not gradually sanitize `000146ae-…` (or its on-disk freeze) as fixes land. It must stay unfair in the ways the real world is unfair: missing specificity, stale terminology, identity mismatch opportunities, and misleading-but-structurally-valid material. Updates to the fixture directory are forbidden except (a) adding *additional* expected-defect ids without altering the session bytes, or (b) explicit founder+Conductor written exception naming this section.
+4. **No Builder invention of office interaction.** Conductor / Architect / Efficiency Officer / Sentry / Queue relationships are specified here. Builder executes slices only after this document authorizes them.
+5. **No manufacturing missions until §17 audit closures are written into this document** and a Conductor (or founder) receipt marks the design freeze. Unit-green without that freeze is not authority.
+6. **Code only after this document reaches typed `EXECUTION_AUTHORIZED` under its own rules** (or an explicit founder override naming this file).
+7. **Primary acceptance criterion (preserve verbatim — hard to game):**
+
+> **Overlay reaches execution without human nested-JSON rescue.**
+
+8. **Supporting milestone (system capability framing):**
 
 > Can the system receive a mature blueprint, preserve product identity and ratified terminology, refuse to invent unspecified architecture, decompose only under authorized governance, pass correctly typed Architect and Sentry gates, produce no unauthorized decisions, and reach executable slices without Adam having to notice or repair governance drift?
+
+### Architectural transition (do not lose)
+
+**The Overlay is no longer the thing we are trying to get through BuilderOS. The broken Overlay intake is the instrument we use to prove BuilderOS deserves to build the Overlay.**
 
 ---
 
@@ -59,9 +70,20 @@ When architectural specificity is unresolved:
 3. **Route upward** to the office with jurisdiction (see §8).
 4. **Resolve** by that office (or founder when jurisdiction requires it).
 5. **Write back** into the authoritative blueprint / intent record.
-6. **Only then** allow the slice downstream.
+6. **Invalidate** every affected downstream receipt (generated blueprint hashes, ARC statuses, Sentry prebuild, `EXECUTION_AUTHORIZED`).
+7. **Revalidate** from the amended authoritative spec (no carrying forward stale greens).
+8. **Authorize** only if typed gates are present and current (M2/M3).
+9. **Execute** only authorized slices.
 
 Builder never fills the blank. Autofix never invents domain schema, SSOT identity, naming, ownership, or acceptance criteria.
+
+### Full governed manufacturing loop (normative)
+
+Regression / repair harness **passing** means more than detecting the known fixture defects. It must demonstrate the loop — and that resolving known defects does **not** manufacture a fifth (or Nth) unauthorized architectural decision:
+
+> **Detect → classify → route → resolve under proper authority → amend authoritative specification → invalidate affected downstream receipts → revalidate → authorize → execute.**
+
+Every transition leaves a typed receipt (`governance_transition_receipt_v1` — see §17.4). A harness that only asserts `EXPECTED_DEFECTS` fired is **incomplete**.
 
 ---
 
@@ -352,23 +374,29 @@ Queue must not invent splits. Queue must not decide “we have spare compute, pa
 
 `docs/products/builderos/fixtures/intake-regression-2026-08-11/`
 
-- Frozen session that already invented architecture
+- Frozen session that already invented architecture (`SESSION_000146ae_ready_invented_architecture.json` bytes are the exam)
 - `EXPECTED_DEFECTS.json` required detections
 - `do_not_execute: true`
+- `sha256` in `EXPECTED_DEFECTS.json` must continue to match the session file; CI/harness fails if someone “helps” by editing the session
 
 ### 11.2 Rules
 
 1. Do **not** fix Overlay §44a columns / terminology / Sentry registration **for the purpose of** making this regression pass.
-2. After M1–M5 (+ minimum C1 typing) ship, run:
+2. Do **not** sanitize the fixture as mechanisms land (§0.3).
+3. After M1–M5 (+ minimum C1 typing) ship, run:
 
    - Static analysis of the frozen session → must raise required defect ids  
-   - Optional: re-submit the **same amendment file** and same `product_name: universal-overlay` through repaired intake → must end in `spec_incomplete` / typed halt, **not** `execution_authorized`
+   - Re-submit the **same amendment file** and same `product_name: universal-overlay` through repaired intake → must end in `spec_incomplete` / typed halt, **not** `execution_authorized`
+   - Prove the full loop (§2) on at least one controlled resolve path that **does not invent** a replacement schema (e.g. resolve by writing an explicit non-goal / “reuse existing table X only” amendment — not by generating columns)
+   - Assert **no fifth defect**: after resolve+amend+invalidate+revalidate, artifact diff against allowlisted amendment fields must be empty of new architectural specificity (schemas, SSOT paths, office renames, endpoints) except what the authoritative amendment explicitly added
 
-3. Only after regression PASS may Overlay be hardened and re-entered for real manufacture.
+4. Only after regression PASS may Overlay be hardened and re-entered for real manufacture.
 
-### 11.3 Milestone after Overlay re-entry
+### 11.3 Acceptance criterion after Overlay re-entry (verbatim)
 
-If Overlay reaches execution without human rescue on nested invention — **that is the BuilderOS factory milestone.**
+> **Overlay reaches execution without human nested-JSON rescue.**
+
+That is the BuilderOS governance-repair acceptance criterion. Individual unit greens are evidence, not the criterion.
 
 ---
 
@@ -418,10 +446,10 @@ Exact step files belong in a later mission `BLUEPRINT.json` derived from **this*
 ## 15. Open questions requiring founder/Chair (not Builder)
 
 1. Default recovery policy for interrupted intake: **fail closed + restart** (recommended here) vs checkpoint resume mid-model-call.
-2. Whether internal scaffold slices may receive `EXECUTION_AUTHORIZED` with `internal_factory_only` without product Sentry registration.
-3. Interim Efficiency Officer: map to existing CFO deliberation hooks vs Conductor-held `efficiency_officer_deferred` until a service exists.
+2. Whether internal scaffold slices may receive `EXECUTION_AUTHORIZED` with `internal_factory_only` without product Sentry registration. **Triple audit recommendation: default NO** — forbid `internal_factory_only` until founder explicitly ratifies a allowlist of file path prefixes; otherwise it is a Sentry bypass.
+3. Interim Efficiency Officer: map to existing CFO deliberation hooks vs Conductor-held `efficiency_officer_deferred` until a service exists. **Triple audit recommendation: `efficiency_officer_deferred` + single-factory only** until a real service or explicit founder map exists.
 
-Until answered, implementers must use the defaults marked in this document and label them `DEFAULT_PENDING_FOUNDER` in receipts.
+Until answered, implementers must use the defaults marked in this document and label them `DEFAULT_PENDING_FOUNDER` in receipts. Manufacturing missions remain blocked on §17 regardless.
 
 ---
 
@@ -430,5 +458,91 @@ Until answered, implementers must use the defaults marked in this document and l
 | Version | Date | Note |
 |---|---|---|
 | 1.0.0 | 2026-08-11 | Initial governance repair blueprint; analysis stop; fixture frozen; no code |
+| 1.1.0 | 2026-08-11 | Chair/GPT concurrence: no Railway redeploy; fixture immutability; full receipted loop + no-fifth-defect; verbatim acceptance criterion; independent triple audit (§17); manufacturing missions blocked until closures |
 
-Independent draft partners (Cursor causal audit + ChatGPT/Chair concurrence) agree: **blueprint the repair before coding; keep the broken Overlay intake as the exam.**
+Independent draft partners agree: **freeze the exam, don't redeploy, attack the blueprint before implementation; broken Overlay intake is the exam; no code until mechanisms exist and §17 is closed.**
+
+---
+
+## 17. Independent triple audit (pre-implementation) — 2026-08-11
+
+Performed against this document before any M1–M5 manufacturing mission. **Verdict: NOT YET CLEAN for manufacturing.** Closures below must be written into this blueprint (this section’s “Closure required” rows) and acknowledged by Conductor/founder before missions are cut.
+
+### 17.1 Builder-view audit — *Where would Builder still have to decide something?*
+
+| # | Decision still forced on Builder / codegen | Severity | Closure required (must be specified here before coding) |
+|---|---|---|---|
+| B1 | §4.2 list is “at minimum” — Builder decides whether a novel blank field is incomplete | High | Replace with **closed completeness schema**: every contract kind (sql/esm/route/html/script) has a required-field checklist; anything outside the checklist that appears in a generated contract is `ARCHITECTURE_INVENTION_DETECTED` |
+| B2 | “Architect proposes write-back” for missing columns can become **invention laundering** (resolve incomplete by drafting schema) | Critical | Write-back allowlist only: (a) cite existing table/columns already in repo scan, (b) mark phase non-goal, (c) ask founder structured gap question. **Forbidden write-back:** inventing new columns/types |
+| B3 | `GAP_FLAG` vs omit step — two options | Med | Normative: **omit executable step** + emit defect; `GAP_FLAG` only inside gap records, never inside a step that still carries a filled contract |
+| B4 | Mission slicing of M1–M5 (which files, order, how many steps) | High | This blueprint must grow an explicit **mission pack table** (one mission per mechanism or named pairing) with `target_file` list — no “slice as you go” |
+| B5 | Terminology stale detection without a machine bridge file | High | Require `docs/products/builderos/RATIFIED_TERMINOLOGY_BRIDGE.json` (or path named here) as the only synonym source; no model-invented synonym lists |
+| B6 | File-set overlap algorithm undefined | Med | Overlap = exact `target_file` string equality across concurrent authorized slices; globs forbidden unless expanded to concrete paths in the consensus receipt |
+| B7 | Autofix “toward” SSOT binding — how much rewrite | Med | Autofix may only set `ssot_tag`/`parent_ssot`/`_meta.product` to the **exact** session `canonical_ssot` / `product_id` strings; no slug invention |
+| B8 | `internal_factory_only` (open Q2) | Critical | Default **forbidden** until founder allowlist exists (§15) |
+
+### 17.2 Technical feasibility — *Can every mechanism be implemented deterministically?*
+
+| Mechanism | Deterministic core? | Notes |
+|---|---|---|
+| M1 invent detect (empty columns vs filled contract) | **Yes** | Pure JSON compare |
+| M1 purpose-only stores | **Only if structured** | Require intent field `persistence_disposition: reuse_existing \| net_new_spec_complete \| deferred_non_goal`; free prose insufficient |
+| M4 identity bind | **Yes** | Session columns + equality checks |
+| M2 status enum | **Yes** | DB check constraints / app enum |
+| M3 hash authorization | **Yes** | sha256 over canonical JSON bytes |
+| M5 lease/stale | **Yes** | Timestamps + watchdog; **N = 10 minutes** named constant `GOVERNANCE_JOB_LEASE_STALE_MS = 600000` unless founder changes |
+| `ARCHITECT_INTENT_VALIDATED` | **Partial today** | Must split: deterministic fidelity gates are mandatory; any AI fidelity review is advisory and **cannot alone** mint the status |
+| C1 `sentry_scope` on receipts | **Yes** | Schema validation |
+| C2 office consensus | **Yes if receipt-shaped** | Fail-closed stub returns `coordination_not_built` without auto-approve |
+
+**Feasibility verdict:** M1/M4/M2/M3/M5 cores are implementable deterministically once B1–B8 closures exist. Do not depend on model judgment for authorization.
+
+### 17.3 Adversarial governance audit — *How to comply while smuggling architecture?*
+
+| # | Smuggle path | Required countermeasure |
+|---|---|---|
+| A1 | Put schema in `purpose`, comments, or `test_assertions` strings | Scan step text fields for SQL-ish column patterns when intent columns empty → `ARCHITECTURE_INVENTION_DETECTED` |
+| A2 | `GAP_FLAG` + still-filled `contract.tables` | Any non-empty invented contract with incomplete intent → defect; GAP cannot coexist with filled architectural contract |
+| A3 | “Reuse table X” then migration invents new columns under alter | Reuse disposition requires column list ⊆ live `information_schema` / scan snapshot; extras = invention |
+| A4 | Split invention across many tiny steps | `assertNoInvention` runs on **whole blueprint**, not per-step isolation |
+| A5 | `internal_factory_only` then ship UI under overlay paths | Path allowlist; `public/overlay/**` never internal_factory_only |
+| A6 | Stub Conductor auto-approves every route-up | Conductor resolve receipt must cite defect id + allowlisted resolve action; auto-approve stub **forbidden** |
+| A7 | Sanitize fixture / weaken EXPECTED_DEFECTS | sha256 pin + §0.3; harness fails on session byte drift |
+| A8 | Resolve incomplete by Architect-authored schema (“fifth defect”) | B2 allowlist; harness asserts no new architectural specificity beyond amendment |
+| A9 | Keep legacy `ready_to_execute` true from structural path | Alias computed only from `EXECUTION_AUTHORIZED`; structural path cannot write the legacy field |
+| A10 | Re-authorize after invalidate without revalidate | M3 mint requires re-running fidelity+sentry gates in-process; no “reissue with same hashes after amend” |
+
+### 17.4 Receipt schema (minimum) — `governance_transition_receipt_v1`
+
+Every loop transition persists:
+
+```json
+{
+  "receipt_type": "governance_transition_receipt_v1",
+  "transition": "detect|classify|route|resolve|amend|invalidate|revalidate|authorize|execute",
+  "session_id": "uuid",
+  "defect_ids": ["ARCHITECTURE_INVENTION_DETECTED"],
+  "jurisdiction": "conductor|architect|efficiency_officer|sentry|system",
+  "resolve_action": null,
+  "amendment_ref": null,
+  "invalidated_receipt_ids": [],
+  "artifact_sha256_before": "...",
+  "artifact_sha256_after": "...",
+  "sentry_scope": null,
+  "created_at": "ISO-8601"
+}
+```
+
+`resolve_action` when present must be one of: `reuse_existing_cite`, `mark_deferred_non_goal`, `founder_gap_answer_applied`, `excise_invented_contract`, `bind_ssot_to_session`, `terminology_bridge_apply`. **Not permitted:** `invent_schema`, `invent_ssot`, `auto_approve`.
+
+### 17.5 Gate to manufacturing missions
+
+| Check | Status after this audit |
+|---|---|
+| Builder-view clean (no residual Builder decisions) | **FAIL** until B1–B8 closures are edited into §§4–10 |
+| Deterministic feasibility | **PASS with conditions** (AI fidelity advisory-only; structured persistence_disposition) |
+| Adversarial counters specified | **PASS as design** once A1–A10 are treated as normative requirements (they are, via this section) |
+| Fixture frozen + sha256 pinned | **PASS** (do not redeploy; do not sanitize) |
+| M1–M5 manufacturing missions authorized | **NO** |
+
+**Next step (still not code):** close B1–B8 in-document (explicit checklists, write-back allowlist, mission pack table, terminology bridge path, constants). Then Conductor/founder design-freeze receipt. Only then cut missions.

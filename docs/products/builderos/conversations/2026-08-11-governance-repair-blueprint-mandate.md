@@ -61,3 +61,16 @@ decisions in nested JSON, **that's the milestone.**"*
 Implement only after the governance repair blueprint authorizes missions —
 starting with generalized no-invention + identity bind, not a SQL-only guard.
 Overlay manufacture waits on regression PASS.
+
+## Addendum — Chair/GPT concurrence + triple audit (same day)
+
+Agreed: **no Railway redeploy** (docs/fixture only). Agreed: fixture stays
+unfair/immutable. Agreed: harness must prove full
+Detect→classify→route→resolve→amend→invalidate→revalidate→authorize→execute
+with receipts, and must not manufacture an Nth defect while resolving.
+Acceptance criterion locked verbatim: *Overlay reaches execution without
+human nested-JSON rescue.*
+
+Independent triple audit landed in blueprint §17. **Manufacturing missions
+still blocked** until B1–B8 closures are written into the blueprint and a
+design-freeze receipt exists. Blueprint version **1.1.0**.
