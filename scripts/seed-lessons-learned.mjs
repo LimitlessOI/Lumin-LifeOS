@@ -43,6 +43,24 @@ const pool = new Pool({
 
 const LESSONS = [
   {
+    domain: 'build-governance',
+    impact_class: 'large',
+    problem: 'Static name/reference searches are insufficient evidence of runtime reachability. An enforcement-truth sweep built on "does a caller-shaped reference exist?" reported 257 findings, most false: modules invoked via package.json scripts (e.g. builderos-reboot/scripts/execute-mission.mjs) looked dead, and generated indexes/JSONL logs made dead code look alive.',
+    solution: 'Prove reachability with a transitive import graph rooted at REAL entrypoints — server.js, startup/, routes/, middleware/, plus every file named by a package.json script — and exclude generated synopsis/catalog indexes and .jsonl streams from counting as evidence. Tests alone are NOT reachability: the 2026-08-08 zero-caller services passed their own unit tests. Implemented in scripts/lib/reference-index.mjs (buildImportGraph/entrypointRoots/reachableModules) and consumed by scripts/verify-enforcement-truth.mjs; findings dropped 257 -> 152 with the false class removed.',
+    how_novel: 'first known solution',
+    surfaced_by: 'Founder-named Lesson Discovered, 2026-08-11, during M0 after runChairConsensusGate was found with zero callers while a constitutional mapping doc listed §2.0K as `enforced`. Evidence: products/receipts/GOVERNANCE_ENFORCEMENT_TRUTH_RECEIPT.json',
+    tags: ['m0', 'enforcement-truth', 'reachability', 'import-graph', 'dormant-enforcement', 'lesson-discovered', 'confidence:medium'],
+  },
+  {
+    domain: 'build-governance',
+    impact_class: 'large',
+    problem: 'A governance gate can pass while proving nothing, in two distinct ways found live: (1) it manufactures the evidence of its own compliance — authors the plan it reviews, mints the seal it then validates by string prefix, defaults propagated_confidence then range-checks the default, fills unknowns/assumptions/risks then type-checks them; (2) a test appears to cover the protection but passes for the wrong reason — deliberation-governance-behavior.mjs asserted skip_intake_gate returns 422, and it did, because the fixture step also failed BPB for missing content, so the env-gate regression it was meant to catch went unnoticed.',
+    solution: 'Separate minting from verifying across module boundaries: the gate verifies a detached seal receipt bound to a sha256 plan hash issued by an authorized office and has no mint function at all. Never default a field the same function later validates. For tests, assert on the SPECIFIC reason (reason === skip_intake_gate_not_permitted), not just the status code, so a coincidental failure cannot satisfy the assertion.',
+    how_novel: 'rare',
+    surfaced_by: 'M0 self-certification check, 2026-08-11 — findings self_seal + fabricated_field on factory-staging/factory-core/builder/chair-consensus-gate.mjs; AMENDMENT_48 (2026-06-10) had already env-gated skip_intake_gate and the protection later regressed away (§2.13 violation).',
+    tags: ['m0', 'self-certification', 'fail-open', 'vacuous-test', 'regression', 'lesson-discovered', 'confidence:medium'],
+  },
+  {
     domain: 'platform',
     impact_class: 'medium',
     problem: 'isLocked() returned null (not false) when no lock file exists; strict === false checks fail.',

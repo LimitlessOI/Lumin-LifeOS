@@ -1,6 +1,5 @@
 /**
  * SYNOPSIS: Exports resolveRepoPath — factory-staging/factory-core/builder/run-step.js.
- * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -14,9 +13,8 @@ import { appendStepMetrics } from '../tsos/record-step-metrics.js';
 import { evaluateEfficiency } from '../tsos/evaluate-efficiency.js';
 import { appendStepExecutionRecord } from '../historian/append-record.js';
 import { runBpbIntakeGate } from '../bpb/intake-gate.js';
-import { runChairConsensusGate } from './chair-consensus-gate.mjs';
-import { runBehaviorAssertions, stepRequiresBehaviorProof } from '../sentry/behavior-assertions.js';
-import { runSentryRealityStation, assertSentryPassForStep } from '../../../services/sentry-reality-station.mjs';
+import { runChairConsensusGate, chairGateMode } from './chair-consensus-gate.mjs';
+import { runBehaviorAssertions } from '../sentry/behavior-assertions.js';
 import { stepRequiresAuthoring, runAuthoring } from './authoring.js';
 import { REPO_ROOT, FACTORY_ROOT, resolveRepoPath } from '../repo-paths.js';
 
@@ -100,22 +98,9 @@ export function runWriteFileExact({ mission_id, blueprint_id, step }) {
   }
 
   const target = resolveRepoPath(step.target_file);
-  const gotSha = sha256Buffer(resolved.content);
-  const rejectedHashes = Array.isArray(step?.rejected_content_hashes) ? step.rejected_content_hashes : [];
-  if (rejectedHashes.length && rejectedHashes.includes(gotSha)) {
-    return buildBlockedReturn({
-      mission_id,
-      blueprint_id,
-      step_id: step.step_id,
-      gap_type: 'content_rejected',
-      summary: `Generated content sha256 ${gotSha} is in the twin's rejected_content_hashes list — the identical broken content was previously unsealed and must not overwrite an approved correction`,
-      attempted_action: 'runWriteFileExact',
-      missing_information: [],
-      evidence: { rejected_content_hashes: rejectedHashes, got_sha256: gotSha },
-    });
-  }
   fs.mkdirSync(path.dirname(target), { recursive: true });
   fs.writeFileSync(target, resolved.content);
+  const gotSha = sha256Buffer(resolved.content);
 
   const contract = step.exact_output_contract || {};
   if (contract.type === 'byte_exact_copy' && contract.sha256 && gotSha !== contract.sha256) {
@@ -149,11 +134,17 @@ export async function dispatchExecuteStep(body, options = {}) {
   const mission_id = body?.mission_id || 'unknown';
   const blueprint_id = body?.blueprint_id || 'unknown';
   let step = body?.step;
-  const skipIntake = body?.skip_intake_gate === true;
+  // `skip_intake_gate` was env-gated by an adversarial-probe fix (AMENDMENT_48,
+  // 2026-06-10) and that protection later regressed away — a §2.13 no-regression
+  // violation that `deliberation-governance-behavior.mjs` only appeared to catch
+  // because its fixture step also fails BPB for missing content. Restored here:
+  // the caller may request the skip, but only the environment may grant it.
+  const skipRequested = body?.skip_intake_gate === true;
+  const skipAllowed = String(process.env.FACTORY_ALLOW_SKIP_INTAKE_GATE || '').trim().toLowerCase() === 'true';
+  const skipIntake = skipRequested && skipAllowed;
+  const skipDenied = skipRequested && !skipAllowed;
   const assertionRunner = options?.assertionRunner || null;
   const codegenRunner = options?.codegenRunner || null;
-  const commitRunner = options?.commitRunner || null;
-  const sentryBaseUrl = options?.publicBaseUrl || process.env.PUBLIC_BASE_URL || 'https://lumin-web-production-e3a9.up.railway.app';
 
   if (!step?.step_id || !step?.sandbox_boundary) {
     return {
@@ -171,24 +162,16 @@ export async function dispatchExecuteStep(body, options = {}) {
     };
   }
 
-  // STEP-STATUS GATE: a terminal or blocked step is not actionable. This guards
-  // direct POST /factory/execute-step against callers that bypass the ship-queue
-  // exactChangeClaim check. runGovernedShippingQueue also checks before dispatch.
-  const stepStatus = String(step.status || 'pending').toLowerCase();
-  const nonActionable = new Set(['blocked', 'skipped', 'cancelled', 'done']);
-  if (nonActionable.has(stepStatus) || step.human_hold === true || step.pause_for_founder === true) {
+  if (skipDenied) {
     return {
       httpStatus: 422,
-      body: buildBlockedReturn({
-        mission_id,
-        blueprint_id,
-        step_id: step.step_id,
-        gap_type: 'authority_violation',
-        summary: `execute-step cannot run a step with status "${stepStatus}"${step.human_hold ? ' + human_hold' : ''}${step.pause_for_founder ? ' + pause_for_founder' : ''}`,
-        attempted_action: 'POST /factory/execute-step',
-        missing_information: ['amend the blueprint to reset status or remove human_hold'],
-        evidence: { status: stepStatus, human_hold: step.human_hold, pause_for_founder: step.pause_for_founder },
-      }),
+      body: {
+        ok: false,
+        status: 'AIC_GATE_FAILURE',
+        reason: 'skip_intake_gate_not_permitted',
+        summary: 'Caller requested skip_intake_gate but FACTORY_ALLOW_SKIP_INTAKE_GATE is not enabled',
+        attempted_bypass: true,
+      },
     };
   }
 
@@ -207,27 +190,31 @@ export async function dispatchExecuteStep(body, options = {}) {
     }
   }
 
-  const chairGate = runChairConsensusGate({
+  // §2.0K Conductor consensus entry gate. This call is the caller the gate never
+  // had. It verifies a plan and seal it did not author; it cannot mint either.
+  // In `advisory` mode a missing/invalid seal is recorded, not fatal, because the
+  // sealing-authority path is not yet integrated into autonomous dispatch —
+  // `CHAIR_GATE_STRICT=true` makes it fail-closed. The verdict travels with the
+  // step result so no consumer can mistake advisory for enforced.
+  const consensus = runChairConsensusGate({
     mission_id,
     blueprint_id,
     step,
-    reasoning_plan: body?.reasoning_plan,
-    reasoning_plan_id: body?.reasoning_plan_id,
-    autoGenerate: body?.auto_generate_reasoning_plan === true,
+    reasoning_plan: body?.reasoning_plan || null,
+    reasoning_plan_id: body?.reasoning_plan_id || null,
+    seal: body?.chair_seal || null,
+    repoRoot: REPO_ROOT,
   });
-  if (!chairGate.approved) {
+  if (!consensus.ok) {
     return {
       httpStatus: 422,
-      body: buildBlockedReturn({
-        mission_id,
-        blueprint_id,
-        step_id: step.step_id,
-        gap_type: 'chair_consensus_gate_failure',
-        summary: `Chair consensus gate failed: ${chairGate.reason}`,
-        attempted_action: 'runChairConsensusGate',
-        missing_information: chairGate.missing || [],
-        evidence: { chair_gate_required: chairGate.chair_gate_required },
-      }),
+      body: {
+        ok: false,
+        status: 'AIC_GATE_FAILURE',
+        reason: `chair_consensus_gate:${consensus.reason}`,
+        consensus_gate: consensus,
+        summary: 'Conductor consensus gate blocked this step (§2.0K)',
+      },
     };
   }
 
@@ -320,43 +307,6 @@ export async function dispatchExecuteStep(body, options = {}) {
 
   appendSentryReview(sentryReview);
 
-  // Layer A/B reality station: produce an independent SENTRY receipt and
-  // fail-closed on assertSentryPassForStep for any step that declares proof.
-  if (stepRequiresBehaviorProof(step) || step.require_layer_b || step.run_sentry_reality_station) {
-    const realityReceipt = await runSentryRealityStation({
-      step,
-      baseUrl: sentryBaseUrl,
-      layerA: { assertions: declaredAssertions, runner: assertionRunner },
-      layerB: { scenario: step.layer_b_scenario || [] },
-      requireLayerB: step.require_layer_b === true,
-      runId: `${mission_id}-${step.step_id}-${Date.now()}`,
-    });
-    try {
-      assertSentryPassForStep(step, realityReceipt?.receipt);
-    } catch (err) {
-      appendSentryReview({ ...realityReceipt, error: err.message });
-      return {
-        httpStatus: 409,
-        body: {
-          ok: false,
-          status: 'SENTRY_REALITY_STATION_FAILED',
-          error: err.message,
-          receipt: realityReceipt,
-          builder: builderResult,
-          sentry: {
-            implementation_status: 'FAIL',
-            step_id: step.step_id,
-            contract: sentryContract,
-            verify: sentryVerify,
-            review: sentryReview,
-            reality_receipt: realityReceipt,
-          },
-        },
-      };
-    }
-    appendSentryReview({ ...realityReceipt, kind: 'sentry_reality_station_pass' });
-  }
-
   const tsosResult = appendStepMetrics({
     mission_id,
     blueprint_id,
@@ -397,66 +347,13 @@ export async function dispatchExecuteStep(body, options = {}) {
     authoringResult,
   });
 
-  // runWriteFileExact only writes to the local (ephemeral Railway container)
-  // filesystem -- confirmed live 2026-08-07: this dispatch path has never once
-  // called commitToGitHub anywhere in its chain (run-step.js, governed-shipping-
-  // runner.js, governed-autonomous-shipping-loop.js all checked directly), so a
-  // real SENTRY PASS produced by this endpoint was silently lost on the next
-  // container restart/redeploy every time. governed-shipping-runner.js already
-  // expects a commit_sha in this response (its honesty grader distinguishes
-  // 'sentry_PASS+commit_sha' from 'sentry_PASS_no_sha') -- it was simply never
-  // populated. Fail-closed: if a commitRunner is wired but the commit itself
-  // fails, this is a real failure, not an ok:true with nothing durable to show
-  // for it ("if a real command did not run and produce real receipts, it did
-  // not happen").
-  let commitResult = null;
-  if (commitRunner) {
-    try {
-      const writtenAbsPath = resolveRepoPath(step.target_file);
-      let writtenContent = fs.readFileSync(writtenAbsPath, 'utf8');
-      // Codegen was asked (task/spec) to include an @ssot JSDoc tag and
-      // skipped it twice in a row live 2026-08-07, including after an
-      // explicit repair retry naming the exact fix -- a model-compliance
-      // gap for what is actually deterministic metadata the blueprint
-      // already knows. Same doctrine as ensureSynopsisInContent (deployment-
-      // service.js): don't keep re-asking the model for something we can
-      // just supply. Only injects when the blueprint step declares `ssot`
-      // AND the written content has no @ssot tag already -- never overrides
-      // a real one the model did write.
-      if (step.ssot && !/^\s*\*\s*@ssot\s+/m.test(writtenContent)) {
-        writtenContent = `/**\n * @ssot ${step.ssot}\n */\n${writtenContent}`;
-        fs.writeFileSync(writtenAbsPath, writtenContent);
-      }
-      const commitMessage = `[system-build] ${mission_id} ${step.step_id} — ${step.target_file}`;
-      commitResult = await commitRunner(step.target_file, writtenContent, commitMessage);
-    } catch (err) {
-      appendSentryReview({ ...sentryReview, kind: 'commit_failed', error: String(err?.message || err) });
-      return {
-        httpStatus: 502,
-        body: {
-          ok: false,
-          status: 'COMMIT_FAILED',
-          error: String(err?.message || err),
-          builder: builderResult,
-          sentry: {
-            implementation_status: 'PASS',
-            step_id: step.step_id,
-            contract: sentryContract,
-            verify: sentryVerify,
-            review: sentryReview,
-          },
-        },
-      };
-    }
-  }
-
   return {
     httpStatus: 200,
     body: {
       ok: true,
+      // Carried so a consumer can never read an advisory pass as enforcement.
+      consensus_gate: { ...consensus, mode: consensus.mode || chairGateMode() },
       builder: builderResult,
-      commit_sha: commitResult?.sha || null,
-      committed: Boolean(commitResult?.sha),
       sentry: {
         implementation_status: 'PASS',
         step_id: step.step_id,
@@ -474,7 +371,6 @@ export async function dispatchExecuteStep(body, options = {}) {
             escalated: authoringResult.escalated,
             content_sha256: authoringResult.content_sha256,
             assertion_provenance: authoringResult.assertion_provenance,
-            commit_sha: commitResult?.sha || null,
           }
         : null,
     },

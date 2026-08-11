@@ -1,0 +1,1282 @@
+{
+  "schema": "governance_enforcement_truth_receipt_v1",
+  "generated_at": "2026-08-11T22:00:31.331Z",
+  "produced_by": "scripts/verify-enforcement-truth.mjs",
+  "separation_collapsed": true,
+  "separation_note": "No independent actor verified this run: the same script computes the findings and the verdict. Mitigation, not equivalence — the verdict is a pure function of repository bytes the script never writes, plus a ratchet baseline authored in an earlier commit, so any third party re-derives it byte-identically with `npm run builderos:enforcement:truth`. No model judgment is in the verdict path. The specific repairs this sweep reports are additionally proven by an independent executable mechanism (`node --test tests/chair-consensus-gate-sealing.test.js`).",
+  "independent_reproduction_command": "npm run builderos:enforcement:truth",
+  "independent_proof_of_repairs": "node --test tests/chair-consensus-gate-sealing.test.js",
+  "files_indexed": 4194,
+  "total_findings": 149,
+  "by_class": {
+    "module_not_reachable": 60,
+    "test_only_export": 21,
+    "dead_export": 54,
+    "no_reader": 5,
+    "claim_without_implementation": 2,
+    "caller_controlled_bypass": 7
+  },
+  "baseline_count": 148,
+  "new_regressions": [
+    "claim_missing_file:docs/constitution/proposals/2026-08-02-CONSTITUTION-DIGITAL-TWIN-PLAN.md:GOVERNANCE_ENFORCEMENT_TRUTH_RECEIPT.js"
+  ],
+  "fixed_since_baseline": [],
+  "verdict": "FAIL",
+  "findings": [
+    {
+      "id": "unreachable_module:services/agriculture/iot-gateway.js",
+      "class": "module_not_reachable",
+      "file": "services/agriculture/iot-gateway.js",
+      "exports": [],
+      "detail": "enforcement module is not transitively imported from any entrypoint — it cannot enforce anything at runtime"
+    },
+    {
+      "id": "unreachable_module:services/ai-guard.js",
+      "class": "module_not_reachable",
+      "file": "services/ai-guard.js",
+      "exports": [
+        "configureAiGuard",
+        "getAiStatus",
+        "setAiEnabled",
+        "getActorLabel",
+        "checkHumanAttentionBudget",
+        "validateProofBundle",
+        "generateRealitySnapshot",
+        "setExpectedRealityHash",
+        "ensureExpectedRealityHash",
+        "getExpectedRealityState",
+        "shouldGuardRoute",
+        "aiSafetyGate"
+      ],
+      "detail": "enforcement module is not transitively imported from any entrypoint — it cannot enforce anything at runtime"
+    },
+    {
+      "id": "unreachable_module:services/apiSpecification.js",
+      "class": "module_not_reachable",
+      "file": "services/apiSpecification.js",
+      "exports": [
+        "validateApiSpecification"
+      ],
+      "detail": "enforcement module is not transitively imported from any entrypoint — it cannot enforce anything at runtime"
+    },
+    {
+      "id": "dead_export:services/build-queue-planner.js:shouldFounderGate",
+      "class": "test_only_export",
+      "file": "services/build-queue-planner.js",
+      "symbol": "shouldFounderGate",
+      "detail": "exported enforcement symbol referenced only by tests — unit-green is not reachability"
+    },
+    {
+      "id": "dead_export:services/builder-phase14-ledger.js:dbFallbackReceipt",
+      "class": "dead_export",
+      "file": "services/builder-phase14-ledger.js",
+      "symbol": "dbFallbackReceipt",
+      "detail": "exported enforcement symbol has no reference outside its own file"
+    },
+    {
+      "id": "dead_export:services/builder-phase14-ledger.js:phase7ProofReceipt",
+      "class": "dead_export",
+      "file": "services/builder-phase14-ledger.js",
+      "symbol": "phase7ProofReceipt",
+      "detail": "exported enforcement symbol has no reference outside its own file"
+    },
+    {
+      "id": "dead_export:services/builder-runtime-mode-service.js:getReceipts",
+      "class": "dead_export",
+      "file": "services/builder-runtime-mode-service.js",
+      "symbol": "getReceipts",
+      "detail": "exported enforcement symbol has no reference outside its own file"
+    },
+    {
+      "id": "dead_export:services/builderos-build-done-gate-helper.js:resolveDoneGateEvidence",
+      "class": "dead_export",
+      "file": "services/builderos-build-done-gate-helper.js",
+      "symbol": "resolveDoneGateEvidence",
+      "detail": "exported enforcement symbol has no reference outside its own file"
+    },
+    {
+      "id": "dead_export:services/builderos-dispatch-gate.js:runDispatchGateSync",
+      "class": "dead_export",
+      "file": "services/builderos-dispatch-gate.js",
+      "symbol": "runDispatchGateSync",
+      "detail": "exported enforcement symbol has no reference outside its own file"
+    },
+    {
+      "id": "unreachable_module:services/builderos-live-enforcement-pass.js",
+      "class": "module_not_reachable",
+      "file": "services/builderos-live-enforcement-pass.js",
+      "exports": [
+        "summarizeBuilderEvidence"
+      ],
+      "detail": "enforcement module is not transitively imported from any entrypoint — it cannot enforce anything at runtime"
+    },
+    {
+      "id": "dead_export:services/builderos-model-escalation-gate.js:isInfraBlockerFailure",
+      "class": "dead_export",
+      "file": "services/builderos-model-escalation-gate.js",
+      "symbol": "isInfraBlockerFailure",
+      "detail": "exported enforcement symbol has no reference outside its own file"
+    },
+    {
+      "id": "dead_export:services/builderos-model-escalation-gate.js:INFRA_BLOCKER_PATTERNS",
+      "class": "dead_export",
+      "file": "services/builderos-model-escalation-gate.js",
+      "symbol": "INFRA_BLOCKER_PATTERNS",
+      "detail": "exported enforcement symbol has no reference outside its own file"
+    },
+    {
+      "id": "dead_export:services/builderos-patch-mode-policy.js:validateOutputSafety",
+      "class": "dead_export",
+      "file": "services/builderos-patch-mode-policy.js",
+      "symbol": "validateOutputSafety",
+      "detail": "exported enforcement symbol has no reference outside its own file"
+    },
+    {
+      "id": "unreachable_module:services/canaryTokenService.js",
+      "class": "module_not_reachable",
+      "file": "services/canaryTokenService.js",
+      "exports": [
+        "generateCanaryToken",
+        "validateToken",
+        "createCanaryToken",
+        "plantCanaryRailway"
+      ],
+      "detail": "enforcement module is not transitively imported from any entrypoint — it cannot enforce anything at runtime"
+    },
+    {
+      "id": "dead_export:services/chair-founder-packet-v2-enforcement.js:writeChairForecastSimulationReceipt",
+      "class": "test_only_export",
+      "file": "services/chair-founder-packet-v2-enforcement.js",
+      "symbol": "writeChairForecastSimulationReceipt",
+      "detail": "exported enforcement symbol referenced only by tests — unit-green is not reachability"
+    },
+    {
+      "id": "unreachable_module:services/ciGuard.js",
+      "class": "module_not_reachable",
+      "file": "services/ciGuard.js",
+      "exports": [
+        "checkCiGuard",
+        "ciGuardService"
+      ],
+      "detail": "enforcement module is not transitively imported from any entrypoint — it cannot enforce anything at runtime"
+    },
+    {
+      "id": "dead_export:services/completion-overclaim-guard.js:cumulativeGates",
+      "class": "test_only_export",
+      "file": "services/completion-overclaim-guard.js",
+      "symbol": "cumulativeGates",
+      "detail": "exported enforcement symbol referenced only by tests — unit-green is not reachability"
+    },
+    {
+      "id": "unreachable_module:services/consensus-service.js",
+      "class": "module_not_reachable",
+      "file": "services/consensus-service.js",
+      "exports": [
+        "createConsensusService",
+        "compareResponses",
+        "selectBestResponse",
+        "createGetCouncilConsensus"
+      ],
+      "detail": "enforcement module is not transitively imported from any entrypoint — it cannot enforce anything at runtime"
+    },
+    {
+      "id": "unreachable_module:services/cronVerificationService.js",
+      "class": "module_not_reachable",
+      "file": "services/cronVerificationService.js",
+      "exports": [
+        "verifyTranscriptPurgeCron",
+        "verifyTranscriptPurge"
+      ],
+      "detail": "enforcement module is not transitively imported from any entrypoint — it cannot enforce anything at runtime"
+    },
+    {
+      "id": "dead_export:services/duration-truth.js:gateDurationClaim",
+      "class": "test_only_export",
+      "file": "services/duration-truth.js",
+      "symbol": "gateDurationClaim",
+      "detail": "exported enforcement symbol referenced only by tests — unit-green is not reachability"
+    },
+    {
+      "id": "unreachable_module:services/energy/iot-gateway.js",
+      "class": "module_not_reachable",
+      "file": "services/energy/iot-gateway.js",
+      "exports": [],
+      "detail": "enforcement module is not transitively imported from any entrypoint — it cannot enforce anything at runtime"
+    },
+    {
+      "id": "unreachable_module:services/entitlementsGatewayService.js",
+      "class": "module_not_reachable",
+      "file": "services/entitlementsGatewayService.js",
+      "exports": [
+        "checkEntitlements"
+      ],
+      "detail": "enforcement module is not transitively imported from any entrypoint — it cannot enforce anything at runtime"
+    },
+    {
+      "id": "unreachable_module:services/env-validator.js",
+      "class": "module_not_reachable",
+      "file": "services/env-validator.js",
+      "exports": [
+        "validateEnv"
+      ],
+      "detail": "enforcement module is not transitively imported from any entrypoint — it cannot enforce anything at runtime"
+    },
+    {
+      "id": "unreachable_module:services/envDiffService.js",
+      "class": "module_not_reachable",
+      "file": "services/envDiffService.js",
+      "exports": [
+        "generateEnvDiffReceipt"
+      ],
+      "detail": "enforcement module is not transitively imported from any entrypoint — it cannot enforce anything at runtime"
+    },
+    {
+      "id": "unreachable_module:services/findingLifecycleService.js",
+      "class": "module_not_reachable",
+      "file": "services/findingLifecycleService.js",
+      "exports": [
+        "openFinding",
+        "listFindings",
+        "assignFinding",
+        "closeFinding",
+        "verifyFinding"
+      ],
+      "detail": "enforcement module is not transitively imported from any entrypoint — it cannot enforce anything at runtime"
+    },
+    {
+      "id": "dead_export:services/founder-build-quorum-escalation.js:runCfoEscalationGate",
+      "class": "test_only_export",
+      "file": "services/founder-build-quorum-escalation.js",
+      "symbol": "runCfoEscalationGate",
+      "detail": "exported enforcement symbol referenced only by tests — unit-green is not reachability"
+    },
+    {
+      "id": "dead_export:services/founder-build-self-repair.js:isTruncationBlocker",
+      "class": "test_only_export",
+      "file": "services/founder-build-self-repair.js",
+      "symbol": "isTruncationBlocker",
+      "detail": "exported enforcement symbol referenced only by tests — unit-green is not reachability"
+    },
+    {
+      "id": "dead_export:services/founder-build-success-gate.js:verifyInlineCssInHtml",
+      "class": "test_only_export",
+      "file": "services/founder-build-success-gate.js",
+      "symbol": "verifyInlineCssInHtml",
+      "detail": "exported enforcement symbol referenced only by tests — unit-green is not reachability"
+    },
+    {
+      "id": "dead_export:services/founder-build-success-gate.js:verifyCssPatchLocal",
+      "class": "test_only_export",
+      "file": "services/founder-build-success-gate.js",
+      "symbol": "verifyCssPatchLocal",
+      "detail": "exported enforcement symbol referenced only by tests — unit-green is not reachability"
+    },
+    {
+      "id": "dead_export:services/founder-build-success-gate.js:verifyCssPatchLive",
+      "class": "dead_export",
+      "file": "services/founder-build-success-gate.js",
+      "symbol": "verifyCssPatchLive",
+      "detail": "exported enforcement symbol has no reference outside its own file"
+    },
+    {
+      "id": "dead_export:services/founder-memory-claim-gate.js:downgradeClaimWithoutReceipt",
+      "class": "test_only_export",
+      "file": "services/founder-memory-claim-gate.js",
+      "symbol": "downgradeClaimWithoutReceipt",
+      "detail": "exported enforcement symbol referenced only by tests — unit-green is not reachability"
+    },
+    {
+      "id": "dead_export:services/founder-packet-v2-unified-gate.js:assessUnderstandingForGate",
+      "class": "dead_export",
+      "file": "services/founder-packet-v2-unified-gate.js",
+      "symbol": "assessUnderstandingForGate",
+      "detail": "exported enforcement symbol has no reference outside its own file"
+    },
+    {
+      "id": "dead_export:services/governed-autonomous-shipping-loop.js:verifyModuleResolves",
+      "class": "test_only_export",
+      "file": "services/governed-autonomous-shipping-loop.js",
+      "symbol": "verifyModuleResolves",
+      "detail": "exported enforcement symbol referenced only by tests — unit-green is not reachability"
+    },
+    {
+      "id": "dead_export:services/governed-autonomous-shipping-loop.js:verifyShippedModulesResolve",
+      "class": "test_only_export",
+      "file": "services/governed-autonomous-shipping-loop.js",
+      "symbol": "verifyShippedModulesResolve",
+      "detail": "exported enforcement symbol referenced only by tests — unit-green is not reachability"
+    },
+    {
+      "id": "unreachable_module:services/habLimit.js",
+      "class": "module_not_reachable",
+      "file": "services/habLimit.js",
+      "exports": [
+        "enforceHABLimit"
+      ],
+      "detail": "enforcement module is not transitively imported from any entrypoint — it cannot enforce anything at runtime"
+    },
+    {
+      "id": "unreachable_module:services/honeypotProbeService.js",
+      "class": "module_not_reachable",
+      "file": "services/honeypotProbeService.js",
+      "exports": [
+        "createProbeRoute",
+        "writeProbeReceipt",
+        "addHoneypotProbeRoute",
+        "getProbeRoutes",
+        "app"
+      ],
+      "detail": "enforcement module is not transitively imported from any entrypoint — it cannot enforce anything at runtime"
+    },
+    {
+      "id": "dead_export:services/intake-blueprint-executor.js:buildVerifyFileHints",
+      "class": "dead_export",
+      "file": "services/intake-blueprint-executor.js",
+      "symbol": "buildVerifyFileHints",
+      "detail": "exported enforcement symbol has no reference outside its own file"
+    },
+    {
+      "id": "unreachable_module:services/kingsman-gate.js",
+      "class": "module_not_reachable",
+      "file": "services/kingsman-gate.js",
+      "exports": [
+        "kingsmanAudit"
+      ],
+      "detail": "enforcement module is not transitively imported from any entrypoint — it cannot enforce anything at runtime"
+    },
+    {
+      "id": "dead_export:services/lifeos-founder-system-action.js:createHarmlessSystemReceipt",
+      "class": "dead_export",
+      "file": "services/lifeos-founder-system-action.js",
+      "symbol": "createHarmlessSystemReceipt",
+      "detail": "exported enforcement symbol has no reference outside its own file"
+    },
+    {
+      "id": "dead_export:services/lifeos-gate-change-council-run.js:summarizeConsensus",
+      "class": "dead_export",
+      "file": "services/lifeos-gate-change-council-run.js",
+      "symbol": "summarizeConsensus",
+      "detail": "exported enforcement symbol has no reference outside its own file"
+    },
+    {
+      "id": "unreachable_module:services/lifeos-natural-build-router.js",
+      "class": "module_not_reachable",
+      "file": "services/lifeos-natural-build-router.js",
+      "exports": [
+        "parseBuildRequest",
+        "buildBuildPayload",
+        "submitToBuilder",
+        "replyFromReceipt"
+      ],
+      "detail": "enforcement module is not transitively imported from any entrypoint — it cannot enforce anything at runtime"
+    },
+    {
+      "id": "unreachable_module:services/lifeos-trusted-contact.js",
+      "class": "module_not_reachable",
+      "file": "services/lifeos-trusted-contact.js",
+      "exports": [
+        "manageTrustedContacts",
+        "scheduleLegacyDeliveries"
+      ],
+      "detail": "enforcement module is not transitively imported from any entrypoint — it cannot enforce anything at runtime"
+    },
+    {
+      "id": "dead_export:services/lifere-boldtrail-bridge.js:buildBlockerScanFromBoldTrail",
+      "class": "dead_export",
+      "file": "services/lifere-boldtrail-bridge.js",
+      "symbol": "buildBlockerScanFromBoldTrail",
+      "detail": "exported enforcement symbol has no reference outside its own file"
+    },
+    {
+      "id": "dead_export:services/lumin-communication-guard.js:buildCommunicationLawReceipt",
+      "class": "dead_export",
+      "file": "services/lumin-communication-guard.js",
+      "symbol": "buildCommunicationLawReceipt",
+      "detail": "exported enforcement symbol has no reference outside its own file"
+    },
+    {
+      "id": "dead_export:services/lumin-context-loader.js:isFounderTwinHardGated",
+      "class": "test_only_export",
+      "file": "services/lumin-context-loader.js",
+      "symbol": "isFounderTwinHardGated",
+      "detail": "exported enforcement symbol referenced only by tests — unit-green is not reachability"
+    },
+    {
+      "id": "dead_export:services/lumin-context-loader.js:evaluateTwinGate",
+      "class": "test_only_export",
+      "file": "services/lumin-context-loader.js",
+      "symbol": "evaluateTwinGate",
+      "detail": "exported enforcement symbol referenced only by tests — unit-green is not reachability"
+    },
+    {
+      "id": "unreachable_module:services/memory-adversarial-gates.js",
+      "class": "module_not_reachable",
+      "file": "services/memory-adversarial-gates.js",
+      "exports": [
+        "adversarialPromotion"
+      ],
+      "detail": "enforcement module is not transitively imported from any entrypoint — it cannot enforce anything at runtime"
+    },
+    {
+      "id": "dead_export:services/memory-capsule.js:validateRealityAnchor",
+      "class": "dead_export",
+      "file": "services/memory-capsule.js",
+      "symbol": "validateRealityAnchor",
+      "detail": "exported enforcement symbol has no reference outside its own file"
+    },
+    {
+      "id": "dead_export:services/memory-health.js:getQuarantinedCapsules",
+      "class": "dead_export",
+      "file": "services/memory-health.js",
+      "symbol": "getQuarantinedCapsules",
+      "detail": "exported enforcement symbol has no reference outside its own file"
+    },
+    {
+      "id": "unreachable_module:services/memory-legacy-bridge.js",
+      "class": "module_not_reachable",
+      "file": "services/memory-legacy-bridge.js",
+      "exports": [
+        "importLegacyRow",
+        "batchImportLegacy",
+        "isLegacyImport",
+        "enforceLegacyLaneCeiling"
+      ],
+      "detail": "enforcement module is not transitively imported from any entrypoint — it cannot enforce anything at runtime"
+    },
+    {
+      "id": "unreachable_module:services/memory-oil-bridge.js",
+      "class": "module_not_reachable",
+      "file": "services/memory-oil-bridge.js",
+      "exports": [
+        "OIL_TRUST_MAP",
+        "validateOILMemoryAlignment",
+        "enforceRetrievalCeiling",
+        "getRetrievalCeiling"
+      ],
+      "detail": "enforcement module is not transitively imported from any entrypoint — it cannot enforce anything at runtime"
+    },
+    {
+      "id": "dead_export:services/memory-provenance.js:validateProvenance",
+      "class": "dead_export",
+      "file": "services/memory-provenance.js",
+      "symbol": "validateProvenance",
+      "detail": "exported enforcement symbol has no reference outside its own file"
+    },
+    {
+      "id": "dead_export:services/memory-receipts.js:getReceiptsForDecision",
+      "class": "dead_export",
+      "file": "services/memory-receipts.js",
+      "symbol": "getReceiptsForDecision",
+      "detail": "exported enforcement symbol has no reference outside its own file"
+    },
+    {
+      "id": "dead_export:services/memory-receipts.js:getReceiptsForCapsule",
+      "class": "dead_export",
+      "file": "services/memory-receipts.js",
+      "symbol": "getReceiptsForCapsule",
+      "detail": "exported enforcement symbol has no reference outside its own file"
+    },
+    {
+      "id": "dead_export:services/memory-receipts.js:isReceiptWritten",
+      "class": "dead_export",
+      "file": "services/memory-receipts.js",
+      "symbol": "isReceiptWritten",
+      "detail": "exported enforcement symbol has no reference outside its own file"
+    },
+    {
+      "id": "unreachable_module:services/memory-relationship.js",
+      "class": "module_not_reachable",
+      "file": "services/memory-relationship.js",
+      "exports": [
+        "isRelationshipCapsule",
+        "requireFounderConfirmation",
+        "validateRelationshipSource",
+        "enforceRelationshipLane"
+      ],
+      "detail": "enforcement module is not transitively imported from any entrypoint — it cannot enforce anything at runtime"
+    },
+    {
+      "id": "dead_export:services/memory-retrieval.js:enforceLaneCeiling",
+      "class": "test_only_export",
+      "file": "services/memory-retrieval.js",
+      "symbol": "enforceLaneCeiling",
+      "detail": "exported enforcement symbol referenced only by tests — unit-green is not reachability"
+    },
+    {
+      "id": "unreachable_module:services/memory-trust-bridge.js",
+      "class": "module_not_reachable",
+      "file": "services/memory-trust-bridge.js",
+      "exports": [
+        "TRUST_MAP",
+        "EVIDENCE_LEVELS",
+        "evidenceLevelSatisfiesFloor",
+        "assignTrust"
+      ],
+      "detail": "enforcement module is not transitively imported from any entrypoint — it cannot enforce anything at runtime"
+    },
+    {
+      "id": "unreachable_module:services/memory-validation.js",
+      "class": "module_not_reachable",
+      "file": "services/memory-validation.js",
+      "exports": [
+        "validateHTMLStructure",
+        "someOtherFunction"
+      ],
+      "detail": "enforcement module is not transitively imported from any entrypoint — it cannot enforce anything at runtime"
+    },
+    {
+      "id": "unreachable_module:services/memory-zombie.js",
+      "class": "module_not_reachable",
+      "file": "services/memory-zombie.js",
+      "exports": [
+        "isZombie",
+        "quarantineCapsule",
+        "runZombieCheck",
+        "delayQuarantine",
+        "checkZombieForAction"
+      ],
+      "detail": "enforcement module is not transitively imported from any entrypoint — it cannot enforce anything at runtime"
+    },
+    {
+      "id": "unreachable_module:services/mental-health/therapist-gateway.js",
+      "class": "module_not_reachable",
+      "file": "services/mental-health/therapist-gateway.js",
+      "exports": [],
+      "detail": "enforcement module is not transitively imported from any entrypoint — it cannot enforce anything at runtime"
+    },
+    {
+      "id": "dead_export:services/never-stop-product-factory.js:persistSentryUnplannableStamp",
+      "class": "dead_export",
+      "file": "services/never-stop-product-factory.js",
+      "symbol": "persistSentryUnplannableStamp",
+      "detail": "exported enforcement symbol has no reference outside its own file"
+    },
+    {
+      "id": "dead_export:services/never-stop-product-factory.js:isSentryUnplannableStamped",
+      "class": "dead_export",
+      "file": "services/never-stop-product-factory.js",
+      "symbol": "isSentryUnplannableStamped",
+      "detail": "exported enforcement symbol has no reference outside its own file"
+    },
+    {
+      "id": "dead_export:services/office-trust-ledger.js:updateTrust",
+      "class": "test_only_export",
+      "file": "services/office-trust-ledger.js",
+      "symbol": "updateTrust",
+      "detail": "exported enforcement symbol referenced only by tests — unit-green is not reachability"
+    },
+    {
+      "id": "dead_export:services/office-trust-ledger.js:TRUST_DIMENSIONS",
+      "class": "test_only_export",
+      "file": "services/office-trust-ledger.js",
+      "symbol": "TRUST_DIMENSIONS",
+      "detail": "exported enforcement symbol referenced only by tests — unit-green is not reachability"
+    },
+    {
+      "id": "dead_export:services/oil-proof-freshness.js:evaluateProofFreshness",
+      "class": "test_only_export",
+      "file": "services/oil-proof-freshness.js",
+      "symbol": "evaluateProofFreshness",
+      "detail": "exported enforcement symbol referenced only by tests — unit-green is not reachability"
+    },
+    {
+      "id": "dead_export:services/oil-proof-freshness.js:gatherProofFreshnessContext",
+      "class": "dead_export",
+      "file": "services/oil-proof-freshness.js",
+      "symbol": "gatherProofFreshnessContext",
+      "detail": "exported enforcement symbol has no reference outside its own file"
+    },
+    {
+      "id": "dead_export:services/oil-security-receipts.js:SECURITY_RECEIPT_CATEGORIES",
+      "class": "dead_export",
+      "file": "services/oil-security-receipts.js",
+      "symbol": "SECURITY_RECEIPT_CATEGORIES",
+      "detail": "exported enforcement symbol has no reference outside its own file"
+    },
+    {
+      "id": "dead_export:services/oil-security-receipts.js:createAuditVerificationReceipt",
+      "class": "dead_export",
+      "file": "services/oil-security-receipts.js",
+      "symbol": "createAuditVerificationReceipt",
+      "detail": "exported enforcement symbol has no reference outside its own file"
+    },
+    {
+      "id": "dead_export:services/oil-security-receipts.js:buildCanonicalReceiptPayload",
+      "class": "dead_export",
+      "file": "services/oil-security-receipts.js",
+      "symbol": "buildCanonicalReceiptPayload",
+      "detail": "exported enforcement symbol has no reference outside its own file"
+    },
+    {
+      "id": "dead_export:services/oil-self-repair-detector.js:validateOilMissedIssuePayload",
+      "class": "dead_export",
+      "file": "services/oil-self-repair-detector.js",
+      "symbol": "validateOilMissedIssuePayload",
+      "detail": "exported enforcement symbol has no reference outside its own file"
+    },
+    {
+      "id": "unreachable_module:services/ollamaInvestigate.js",
+      "class": "module_not_reachable",
+      "file": "services/ollamaInvestigate.js",
+      "exports": [
+        "analyzeTokenUsage"
+      ],
+      "detail": "enforcement module is not transitively imported from any entrypoint — it cannot enforce anything at runtime"
+    },
+    {
+      "id": "unreachable_module:services/ollamaInvestigation.js",
+      "class": "module_not_reachable",
+      "file": "services/ollamaInvestigation.js",
+      "exports": [
+        "investigateOllamaPrompts",
+        "investigateTokenUsage"
+      ],
+      "detail": "enforcement module is not transitively imported from any entrypoint — it cannot enforce anything at runtime"
+    },
+    {
+      "id": "unreachable_module:services/ollamaInvestigator.js",
+      "class": "module_not_reachable",
+      "file": "services/ollamaInvestigator.js",
+      "exports": [
+        "investigateOllamaSystemPrompts"
+      ],
+      "detail": "enforcement module is not transitively imported from any entrypoint — it cannot enforce anything at runtime"
+    },
+    {
+      "id": "unreachable_module:services/orchestrator/privacy/gateway.js",
+      "class": "module_not_reachable",
+      "file": "services/orchestrator/privacy/gateway.js",
+      "exports": [],
+      "detail": "enforcement module is not transitively imported from any entrypoint — it cannot enforce anything at runtime"
+    },
+    {
+      "id": "dead_export:services/pb-execution-authority.js:SYSTEM_AUTHORIZED_UNDER_PB_CODES",
+      "class": "dead_export",
+      "file": "services/pb-execution-authority.js",
+      "symbol": "SYSTEM_AUTHORIZED_UNDER_PB_CODES",
+      "detail": "exported enforcement symbol has no reference outside its own file"
+    },
+    {
+      "id": "unreachable_module:services/pricingValidation.js",
+      "class": "module_not_reachable",
+      "file": "services/pricingValidation.js",
+      "exports": [
+        "validatePricing",
+        "validateBasePrice",
+        "validateDiscount",
+        "validatePricingStrategies"
+      ],
+      "detail": "enforcement module is not transitively imported from any entrypoint — it cannot enforce anything at runtime"
+    },
+    {
+      "id": "unreachable_module:services/pricingValidationEnhancement.js",
+      "class": "module_not_reachable",
+      "file": "services/pricingValidationEnhancement.js",
+      "exports": [
+        "validatePricing"
+      ],
+      "detail": "enforcement module is not transitively imported from any entrypoint — it cannot enforce anything at runtime"
+    },
+    {
+      "id": "unreachable_module:services/pricingValidationProcess.js",
+      "class": "module_not_reachable",
+      "file": "services/pricingValidationProcess.js",
+      "exports": [
+        "validatePricing",
+        "updatePricingStrategy"
+      ],
+      "detail": "enforcement module is not transitively imported from any entrypoint — it cannot enforce anything at runtime"
+    },
+    {
+      "id": "unreachable_module:services/pricingValidationService.js",
+      "class": "module_not_reachable",
+      "file": "services/pricingValidationService.js",
+      "exports": [
+        "validatePricing"
+      ],
+      "detail": "enforcement module is not transitively imported from any entrypoint — it cannot enforce anything at runtime"
+    },
+    {
+      "id": "unreachable_module:services/pricingValidationVerification.js",
+      "class": "module_not_reachable",
+      "file": "services/pricingValidationVerification.js",
+      "exports": [
+        "calculateDiscount",
+        "applyTax",
+        "isValidPrice",
+        "validatePricing",
+        "confirmPricingValidation",
+        "MINIMUM_PRICE"
+      ],
+      "detail": "enforcement module is not transitively imported from any entrypoint — it cannot enforce anything at runtime"
+    },
+    {
+      "id": "dead_export:services/product-build-orchestrator.js:resolveTypedBlockerClass",
+      "class": "dead_export",
+      "file": "services/product-build-orchestrator.js",
+      "symbol": "resolveTypedBlockerClass",
+      "detail": "exported enforcement symbol has no reference outside its own file"
+    },
+    {
+      "id": "unreachable_module:services/reality-alignment-gate.js",
+      "class": "module_not_reachable",
+      "file": "services/reality-alignment-gate.js",
+      "exports": [
+        "runRealityAlignmentGate",
+        "checkAssetEvolution",
+        "recordAmendment",
+        "reconcileRealitySources",
+        "shouldEscalateToChair"
+      ],
+      "detail": "enforcement module is not transitively imported from any entrypoint — it cannot enforce anything at runtime"
+    },
+    {
+      "id": "unreachable_module:services/receipt-auditor.mjs",
+      "class": "module_not_reachable",
+      "file": "services/receipt-auditor.mjs",
+      "exports": [
+        "createReceiptAuditor",
+        "auditReceipt",
+        "replaySample"
+      ],
+      "detail": "enforcement module is not transitively imported from any entrypoint — it cannot enforce anything at runtime"
+    },
+    {
+      "id": "dead_export:services/receipt-truth-validator.js:validateReceiptFile",
+      "class": "dead_export",
+      "file": "services/receipt-truth-validator.js",
+      "symbol": "validateReceiptFile",
+      "detail": "exported enforcement symbol has no reference outside its own file"
+    },
+    {
+      "id": "dead_export:services/receipt-truth-validator.js:validateReceiptWithLiveProbe",
+      "class": "dead_export",
+      "file": "services/receipt-truth-validator.js",
+      "symbol": "validateReceiptWithLiveProbe",
+      "detail": "exported enforcement symbol has no reference outside its own file"
+    },
+    {
+      "id": "unreachable_module:services/reverence-guard.js",
+      "class": "module_not_reachable",
+      "file": "services/reverence-guard.js",
+      "exports": [
+        "createReverenceGuard"
+      ],
+      "detail": "enforcement module is not transitively imported from any entrypoint — it cannot enforce anything at runtime"
+    },
+    {
+      "id": "unreachable_module:services/reverenceGuardService.js",
+      "class": "module_not_reachable",
+      "file": "services/reverenceGuardService.js",
+      "exports": [
+        "applyLabelGuard",
+        "checkReverence",
+        "applyLabels",
+        "applyReverenceGuard"
+      ],
+      "detail": "enforcement module is not transitively imported from any entrypoint — it cannot enforce anything at runtime"
+    },
+    {
+      "id": "unreachable_module:services/sacredContentReviewService.js",
+      "class": "module_not_reachable",
+      "file": "services/sacredContentReviewService.js",
+      "exports": [
+        "sacredContentRevise",
+        "sacredContentValidate",
+        "sacredContentAssessImpact",
+        "sacredContentAuditTrail",
+        "sacredContentEscalate",
+        "sacredContentPreserveIntent",
+        "sacredContentMonitorTrends"
+      ],
+      "detail": "enforcement module is not transitively imported from any entrypoint — it cannot enforce anything at runtime"
+    },
+    {
+      "id": "unreachable_module:services/securityReceiptService.js",
+      "class": "module_not_reachable",
+      "file": "services/securityReceiptService.js",
+      "exports": [
+        "securityReceiptSpine",
+        "processNewReceiptType",
+        "createReceipt",
+        "getReceipt"
+      ],
+      "detail": "enforcement module is not transitively imported from any entrypoint — it cannot enforce anything at runtime"
+    },
+    {
+      "id": "unreachable_module:services/security_receipts.js",
+      "class": "module_not_reachable",
+      "file": "services/security_receipts.js",
+      "exports": [
+        "createSecurityReceiptsService"
+      ],
+      "detail": "enforcement module is not transitively imported from any entrypoint — it cannot enforce anything at runtime"
+    },
+    {
+      "id": "unreachable_module:services/self-repair-contract-gate.js",
+      "class": "module_not_reachable",
+      "file": "services/self-repair-contract-gate.js",
+      "exports": [
+        "computeExportsSignatureHash",
+        "detectSharedContractChange",
+        "recordContractVersion",
+        "checkContractCompatibility"
+      ],
+      "detail": "enforcement module is not transitively imported from any entrypoint — it cannot enforce anything at runtime"
+    },
+    {
+      "id": "dead_export:services/self-repair-execution-log.js:readLatestExecutorReceiptFromPool",
+      "class": "dead_export",
+      "file": "services/self-repair-execution-log.js",
+      "symbol": "readLatestExecutorReceiptFromPool",
+      "detail": "exported enforcement symbol has no reference outside its own file"
+    },
+    {
+      "id": "unreachable_module:services/self-repair-pattern-propagation.js",
+      "class": "module_not_reachable",
+      "file": "services/self-repair-pattern-propagation.js",
+      "exports": [
+        "findSimilarTargets",
+        "propagateFix",
+        "getPendingPropagationCandidates"
+      ],
+      "detail": "enforcement module is not transitively imported from any entrypoint — it cannot enforce anything at runtime"
+    },
+    {
+      "id": "unreachable_module:services/self-repair-predisk-gate.js",
+      "class": "module_not_reachable",
+      "file": "services/self-repair-predisk-gate.js",
+      "exports": [
+        "checkImportResolution",
+        "checkFounderLaneMount"
+      ],
+      "detail": "enforcement module is not transitively imported from any entrypoint — it cannot enforce anything at runtime"
+    },
+    {
+      "id": "unreachable_module:services/self-repair-provenance-ledger.js",
+      "class": "module_not_reachable",
+      "file": "services/self-repair-provenance-ledger.js",
+      "exports": [
+        "recordProvenanceClaim",
+        "verifyProvenanceClaim",
+        "getProvenanceLedger"
+      ],
+      "detail": "enforcement module is not transitively imported from any entrypoint — it cannot enforce anything at runtime"
+    },
+    {
+      "id": "unreachable_module:services/self-repair-quarantine.js",
+      "class": "module_not_reachable",
+      "file": "services/self-repair-quarantine.js",
+      "exports": [
+        "shouldQuarantineTarget",
+        "evaluateQuarantine",
+        "isTargetQuarantined",
+        "releaseQuarantine"
+      ],
+      "detail": "enforcement module is not transitively imported from any entrypoint — it cannot enforce anything at runtime"
+    },
+    {
+      "id": "unreachable_module:services/self-repair-secret-deploy-gate.js",
+      "class": "module_not_reachable",
+      "file": "services/self-repair-secret-deploy-gate.js",
+      "exports": [
+        "detectSecretOrDeployChange",
+        "recordSecretDeployEvent",
+        "getRecentSecretDeployEvents"
+      ],
+      "detail": "enforcement module is not transitively imported from any entrypoint — it cannot enforce anything at runtime"
+    },
+    {
+      "id": "unreachable_module:services/self-repair-sentry-canary.js",
+      "class": "module_not_reachable",
+      "file": "services/self-repair-sentry-canary.js",
+      "exports": [
+        "runSentryCanary"
+      ],
+      "detail": "enforcement module is not transitively imported from any entrypoint — it cannot enforce anything at runtime"
+    },
+    {
+      "id": "unreachable_module:services/self-repair-target-reputation.js",
+      "class": "module_not_reachable",
+      "file": "services/self-repair-target-reputation.js",
+      "exports": [
+        "recordAttempt",
+        "getTargetReputation"
+      ],
+      "detail": "enforcement module is not transitively imported from any entrypoint — it cannot enforce anything at runtime"
+    },
+    {
+      "id": "unreachable_module:services/self-repair-trust-dashboard.js",
+      "class": "module_not_reachable",
+      "file": "services/self-repair-trust-dashboard.js",
+      "exports": [
+        "getTopHardestTargets",
+        "getTrustDashboardSnapshot"
+      ],
+      "detail": "enforcement module is not transitively imported from any entrypoint — it cannot enforce anything at runtime"
+    },
+    {
+      "id": "dead_export:services/sentry-reality-station.mjs:assertSentryPassForStep",
+      "class": "test_only_export",
+      "file": "services/sentry-reality-station.mjs",
+      "symbol": "assertSentryPassForStep",
+      "detail": "exported enforcement symbol referenced only by tests — unit-green is not reachability"
+    },
+    {
+      "id": "unreachable_module:services/stripe-billing.js",
+      "class": "module_not_reachable",
+      "file": "services/stripe-billing.js",
+      "exports": [
+        "createCheckoutSession",
+        "enrollAgent",
+        "validatePostmarkWebhookSignature",
+        "validateTwilioWebhookSignature"
+      ],
+      "detail": "enforcement module is not transitively imported from any entrypoint — it cannot enforce anything at runtime"
+    },
+    {
+      "id": "unreachable_module:services/tokenReceipt.js",
+      "class": "module_not_reachable",
+      "file": "services/tokenReceipt.js",
+      "exports": [
+        "recordTokenReceipt"
+      ],
+      "detail": "enforcement module is not transitively imported from any entrypoint — it cannot enforce anything at runtime"
+    },
+    {
+      "id": "dead_export:services/truth-enforcement-spine.js:assertReceiptTruth",
+      "class": "dead_export",
+      "file": "services/truth-enforcement-spine.js",
+      "symbol": "assertReceiptTruth",
+      "detail": "exported enforcement symbol has no reference outside its own file"
+    },
+    {
+      "id": "unreachable_module:services/wisdom-reality-update.mjs",
+      "class": "module_not_reachable",
+      "file": "services/wisdom-reality-update.mjs",
+      "exports": [
+        "computeTrustUpdate",
+        "readOutcomesFromLedger",
+        "readOutcomesFromSentryReceipts",
+        "readOutcomesFromReceiptAuditor",
+        "updateLensRegistryFromOutcomes",
+        "DEFAULT_REGISTRY_PATH",
+        "DEFAULT_RECEIPT_DIR",
+        "DEFAULT_LEDGER_PATH"
+      ],
+      "detail": "enforcement module is not transitively imported from any entrypoint — it cannot enforce anything at runtime"
+    },
+    {
+      "id": "dead_export:services/wisdom-truth-auditor.js:scanTruthEnforcementGaps",
+      "class": "dead_export",
+      "file": "services/wisdom-truth-auditor.js",
+      "symbol": "scanTruthEnforcementGaps",
+      "detail": "exported enforcement symbol has no reference outside its own file"
+    },
+    {
+      "id": "dead_export:routes/builderOSTokenReceipt.js:registerBuilderOSTokenReceiptRoutes",
+      "class": "dead_export",
+      "file": "routes/builderOSTokenReceipt.js",
+      "symbol": "registerBuilderOSTokenReceiptRoutes",
+      "detail": "exported enforcement symbol has no reference outside its own file"
+    },
+    {
+      "id": "dead_export:routes/ciGuard.js:registerCiGuardRoutes",
+      "class": "dead_export",
+      "file": "routes/ciGuard.js",
+      "symbol": "registerCiGuardRoutes",
+      "detail": "exported enforcement symbol has no reference outside its own file"
+    },
+    {
+      "id": "dead_export:routes/ciGuardBypass.js:registerCIGuardBypassRoutes",
+      "class": "dead_export",
+      "file": "routes/ciGuardBypass.js",
+      "symbol": "registerCIGuardBypassRoutes",
+      "detail": "exported enforcement symbol has no reference outside its own file"
+    },
+    {
+      "id": "dead_export:routes/lifeos-council-builder-routes.js:evaluateBuildDoneGateForBuildResponse",
+      "class": "test_only_export",
+      "file": "routes/lifeos-council-builder-routes.js",
+      "symbol": "evaluateBuildDoneGateForBuildResponse",
+      "detail": "exported enforcement symbol referenced only by tests — unit-green is not reachability"
+    },
+    {
+      "id": "dead_export:routes/lifeos-council-builder-routes.js:validateHtmlFragmentComplete",
+      "class": "test_only_export",
+      "file": "routes/lifeos-council-builder-routes.js",
+      "symbol": "validateHtmlFragmentComplete",
+      "detail": "exported enforcement symbol referenced only by tests — unit-green is not reachability"
+    },
+    {
+      "id": "dead_export:routes/opsTcBlockerCardsRoutes.js:registerOpsTcBlockerCardsRoutes",
+      "class": "dead_export",
+      "file": "routes/opsTcBlockerCardsRoutes.js",
+      "symbol": "registerOpsTcBlockerCardsRoutes",
+      "detail": "exported enforcement symbol has no reference outside its own file"
+    },
+    {
+      "id": "dead_export:routes/security_receipts_routes.js:createSecurityReceiptsRoutes",
+      "class": "dead_export",
+      "file": "routes/security_receipts_routes.js",
+      "symbol": "createSecurityReceiptsRoutes",
+      "detail": "exported enforcement symbol has no reference outside its own file"
+    },
+    {
+      "id": "dead_export:routes/testing-response.js:verifyApiReadiness",
+      "class": "dead_export",
+      "file": "routes/testing-response.js",
+      "symbol": "verifyApiReadiness",
+      "detail": "exported enforcement symbol has no reference outside its own file"
+    },
+    {
+      "id": "dead_export:routes/tokenReceipt.js:registerTokenReceiptRoutes",
+      "class": "dead_export",
+      "file": "routes/tokenReceipt.js",
+      "symbol": "registerTokenReceiptRoutes",
+      "detail": "exported enforcement symbol has no reference outside its own file"
+    },
+    {
+      "id": "dead_export:factory-staging/factory-core/arc/bootstrap-product-mission.js:bootstrapPreArcReceipts",
+      "class": "dead_export",
+      "file": "factory-staging/factory-core/arc/bootstrap-product-mission.js",
+      "symbol": "bootstrapPreArcReceipts",
+      "detail": "exported enforcement symbol has no reference outside its own file"
+    },
+    {
+      "id": "dead_export:factory-staging/factory-core/arc/department-simulations.js:isStubDepartmentReceipt",
+      "class": "test_only_export",
+      "file": "factory-staging/factory-core/arc/department-simulations.js",
+      "symbol": "isStubDepartmentReceipt",
+      "detail": "exported enforcement symbol referenced only by tests — unit-green is not reachability"
+    },
+    {
+      "id": "dead_export:factory-staging/factory-core/arc/foundation/builder-entry-gate.js:evaluatePostArcBundleGate",
+      "class": "dead_export",
+      "file": "factory-staging/factory-core/arc/foundation/builder-entry-gate.js",
+      "symbol": "evaluatePostArcBundleGate",
+      "detail": "exported enforcement symbol has no reference outside its own file"
+    },
+    {
+      "id": "dead_export:factory-staging/factory-core/arc/foundation/phase-repair.js:repairFinalGate",
+      "class": "dead_export",
+      "file": "factory-staging/factory-core/arc/foundation/phase-repair.js",
+      "symbol": "repairFinalGate",
+      "detail": "exported enforcement symbol has no reference outside its own file"
+    },
+    {
+      "id": "dead_export:factory-staging/factory-core/arc/gate-enforcement.js:loadGateMatrix",
+      "class": "dead_export",
+      "file": "factory-staging/factory-core/arc/gate-enforcement.js",
+      "symbol": "loadGateMatrix",
+      "detail": "exported enforcement symbol has no reference outside its own file"
+    },
+    {
+      "id": "dead_export:factory-staging/factory-core/arc/gate-enforcement.js:gateEnforcementLevel",
+      "class": "dead_export",
+      "file": "factory-staging/factory-core/arc/gate-enforcement.js",
+      "symbol": "gateEnforcementLevel",
+      "detail": "exported enforcement symbol has no reference outside its own file"
+    },
+    {
+      "id": "dead_export:factory-staging/factory-core/arc/gate-enforcement.js:isGateRequiredForTier",
+      "class": "dead_export",
+      "file": "factory-staging/factory-core/arc/gate-enforcement.js",
+      "symbol": "isGateRequiredForTier",
+      "detail": "exported enforcement symbol has no reference outside its own file"
+    },
+    {
+      "id": "dead_export:factory-staging/factory-core/arc/point-b-gate.js:evaluateMachinePathGate",
+      "class": "dead_export",
+      "file": "factory-staging/factory-core/arc/point-b-gate.js",
+      "symbol": "evaluateMachinePathGate",
+      "detail": "exported enforcement symbol has no reference outside its own file"
+    },
+    {
+      "id": "dead_export:factory-staging/factory-core/arc/point-b-gate.js:evaluateAlphaGate",
+      "class": "dead_export",
+      "file": "factory-staging/factory-core/arc/point-b-gate.js",
+      "symbol": "evaluateAlphaGate",
+      "detail": "exported enforcement symbol has no reference outside its own file"
+    },
+    {
+      "id": "dead_export:factory-staging/factory-core/arc/point-b-gate.js:PRE_ARC_RECEIPT_PATHS",
+      "class": "dead_export",
+      "file": "factory-staging/factory-core/arc/point-b-gate.js",
+      "symbol": "PRE_ARC_RECEIPT_PATHS",
+      "detail": "exported enforcement symbol has no reference outside its own file"
+    },
+    {
+      "id": "dead_export:factory-staging/factory-core/bpb/intake-gate.js:validateBlueprintSteps",
+      "class": "dead_export",
+      "file": "factory-staging/factory-core/bpb/intake-gate.js",
+      "symbol": "validateBlueprintSteps",
+      "detail": "exported enforcement symbol has no reference outside its own file"
+    },
+    {
+      "id": "dead_export:factory-staging/factory-core/builder/chair-consensus-gate.mjs:CHAIR_GATE_MODES",
+      "class": "dead_export",
+      "file": "factory-staging/factory-core/builder/chair-consensus-gate.mjs",
+      "symbol": "CHAIR_GATE_MODES",
+      "detail": "exported enforcement symbol has no reference outside its own file"
+    },
+    {
+      "id": "unreachable_module:factory-staging/factory-core/builder/receipt-auditor-gate.mjs",
+      "class": "module_not_reachable",
+      "file": "factory-staging/factory-core/builder/receipt-auditor-gate.mjs",
+      "exports": [
+        "auditStepReceipt",
+        "resetStepIfReceiptFails",
+        "auditReceipt"
+      ],
+      "detail": "enforcement module is not transitively imported from any entrypoint — it cannot enforce anything at runtime"
+    },
+    {
+      "id": "unreachable_module:factory-staging/factory-core/canon/services/council-adapter.js",
+      "class": "module_not_reachable",
+      "file": "factory-staging/factory-core/canon/services/council-adapter.js",
+      "exports": [
+        "getCouncilAdapterStatus",
+        "assertCouncilQuarantine"
+      ],
+      "detail": "enforcement module is not transitively imported from any entrypoint — it cannot enforce anything at runtime"
+    },
+    {
+      "id": "dead_export:factory-staging/factory-core/deliberation/mission-deliberation-file.js:missionGatePath",
+      "class": "dead_export",
+      "file": "factory-staging/factory-core/deliberation/mission-deliberation-file.js",
+      "symbol": "missionGatePath",
+      "detail": "exported enforcement symbol has no reference outside its own file"
+    },
+    {
+      "id": "unreachable_module:factory-staging/factory-core/layout/legacy-write-quarantine.js",
+      "class": "module_not_reachable",
+      "file": "factory-staging/factory-core/layout/legacy-write-quarantine.js",
+      "exports": [
+        "isLifeosMonorepoHost",
+        "isLegacyWriteTarget"
+      ],
+      "detail": "enforcement module is not transitively imported from any entrypoint — it cannot enforce anything at runtime"
+    },
+    {
+      "id": "unreachable_module:factory-staging/factory-core/readiness/legacy-quarantine.js",
+      "class": "module_not_reachable",
+      "file": "factory-staging/factory-core/readiness/legacy-quarantine.js",
+      "exports": [
+        "legacyQuarantine"
+      ],
+      "detail": "enforcement module is not transitively imported from any entrypoint — it cannot enforce anything at runtime"
+    },
+    {
+      "id": "unreachable_module:factory-staging/factory-core/readiness/proof-freshness.js",
+      "class": "module_not_reachable",
+      "file": "factory-staging/factory-core/readiness/proof-freshness.js",
+      "exports": [
+        "readinessProofFreshness"
+      ],
+      "detail": "enforcement module is not transitively imported from any entrypoint — it cannot enforce anything at runtime"
+    },
+    {
+      "id": "unreachable_module:factory-staging/factory-core/readiness/structural-proof-freshness.js",
+      "class": "module_not_reachable",
+      "file": "factory-staging/factory-core/readiness/structural-proof-freshness.js",
+      "exports": [
+        "structuralProofFreshness"
+      ],
+      "detail": "enforcement module is not transitively imported from any entrypoint — it cannot enforce anything at runtime"
+    },
+    {
+      "id": "unread_config:builderos-reboot/governance/ARTIFACT_ALIAS_REGISTRY.json",
+      "class": "no_reader",
+      "file": "builderos-reboot/governance/ARTIFACT_ALIAS_REGISTRY.json",
+      "detail": "governance config referenced by no code file — it enforces nothing at runtime"
+    },
+    {
+      "id": "unread_config:builderos-reboot/governance/CHAIR_STRATEGIC_INTELLIGENCE.json",
+      "class": "no_reader",
+      "file": "builderos-reboot/governance/CHAIR_STRATEGIC_INTELLIGENCE.json",
+      "detail": "governance config referenced by no code file — it enforces nothing at runtime"
+    },
+    {
+      "id": "unread_config:builderos-reboot/governance/COMPLETION_VOCABULARY_SSOT.schema.json",
+      "class": "no_reader",
+      "file": "builderos-reboot/governance/COMPLETION_VOCABULARY_SSOT.schema.json",
+      "detail": "governance config referenced by no code file — it enforces nothing at runtime"
+    },
+    {
+      "id": "unread_config:builderos-reboot/governance/DEVIN_EXECUTION_PACKET.json",
+      "class": "no_reader",
+      "file": "builderos-reboot/governance/DEVIN_EXECUTION_PACKET.json",
+      "detail": "governance config referenced by no code file — it enforces nothing at runtime"
+    },
+    {
+      "id": "unread_config:builderos-reboot/governance/OB_EXECUTION_LADDER.json",
+      "class": "no_reader",
+      "file": "builderos-reboot/governance/OB_EXECUTION_LADDER.json",
+      "detail": "governance config referenced by no code file — it enforces nothing at runtime"
+    },
+    {
+      "id": "claim_missing_file:docs/constitution/ENFORCEMENT_AND_LEGACY_AUDIT_2026-08-06.md:GAP_FILL_LEDGER.js",
+      "class": "claim_without_implementation",
+      "claim_source": "docs/constitution/ENFORCEMENT_AND_LEGACY_AUDIT_2026-08-06.md",
+      "named_file": "GAP_FILL_LEDGER.js",
+      "detail": "doc claims enforcement by a file that does not exist in the code index"
+    },
+    {
+      "id": "claim_missing_file:docs/constitution/proposals/2026-08-02-CONSTITUTION-DIGITAL-TWIN-PLAN.md:GOVERNANCE_ENFORCEMENT_TRUTH_RECEIPT.js",
+      "class": "claim_without_implementation",
+      "claim_source": "docs/constitution/proposals/2026-08-02-CONSTITUTION-DIGITAL-TWIN-PLAN.md",
+      "named_file": "GOVERNANCE_ENFORCEMENT_TRUTH_RECEIPT.js",
+      "detail": "doc claims enforcement by a file that does not exist in the code index"
+    },
+    {
+      "id": "caller_bypass:services/browser-signup-orchestrator.js:173",
+      "class": "caller_controlled_bypass",
+      "file": "services/browser-signup-orchestrator.js",
+      "line": 173,
+      "detail": "gate can be skipped by the caller with no environment/authority check: skipEmailVerify = false,"
+    },
+    {
+      "id": "caller_bypass:services/browser-signup-orchestrator.js:303",
+      "class": "caller_controlled_bypass",
+      "file": "services/browser-signup-orchestrator.js",
+      "line": 303,
+      "detail": "gate can be skipped by the caller with no environment/authority check: skipEmailVerify = false,"
+    },
+    {
+      "id": "caller_bypass:services/browser-signup-orchestrator.js:507",
+      "class": "caller_controlled_bypass",
+      "file": "services/browser-signup-orchestrator.js",
+      "line": 507,
+      "detail": "gate can be skipped by the caller with no environment/authority check: skipEmailVerify = false,"
+    },
+    {
+      "id": "caller_bypass:services/lumin-chair-orchestrator.js:914",
+      "class": "caller_controlled_bypass",
+      "file": "services/lumin-chair-orchestrator.js",
+      "line": 914,
+      "detail": "gate can be skipped by the caller with no environment/authority check: const skipIntentGate = force || forceExecute;"
+    },
+    {
+      "id": "caller_bypass:services/receipt-auditor.mjs:179",
+      "class": "caller_controlled_bypass",
+      "file": "services/receipt-auditor.mjs",
+      "line": 179,
+      "detail": "gate can be skipped by the caller with no environment/authority check: const skipGitCheckout = Boolean(opts.skip_git_checkout || receipt.skip_git_checkout);"
+    },
+    {
+      "id": "caller_bypass:routes/general-browser-agent-routes.js:627",
+      "class": "caller_controlled_bypass",
+      "file": "routes/general-browser-agent-routes.js",
+      "line": 627,
+      "detail": "gate can be skipped by the caller with no environment/authority check: if (!process.env.GMAIL_SIGNUP_APP_PASSWORD && !body.dryRun && !body.skipEmailVerify) {"
+    },
+    {
+      "id": "caller_bypass:factory-staging/factory-core/builder/run-mission.js:74",
+      "class": "caller_controlled_bypass",
+      "file": "factory-staging/factory-core/builder/run-mission.js",
+      "line": 74,
+      "detail": "gate can be skipped by the caller with no environment/authority check: skip_intake_gate: body?.skip_intake_gate === true,"
+    }
+  ]
+}

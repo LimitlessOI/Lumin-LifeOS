@@ -112,12 +112,12 @@ A living table, stored in `data/constitutional-framework/ENFORCEMENT_MATRIX.json
 | §2.6 Epistemic Oath | `NORTH_STAR_SSOT.md` §2.6 | `truth-lockdown.js`, `wisdom-truth-auditor.js` | enforced | CI logs, council truth labels |
 | §2.10 Observe → Grade → Fix | `NORTH_STAR_SSOT.md` §2.10 | `builder:preflight`, SENTRY | enforced | Test counts, PASS/FAIL receipts |
 | §2.11 System builds product | `NORTH_STAR_SSOT.md` §2.11 | `ssot-check.js --all`, pre-commit hooks | enforced | `@ssot` tags, product-home receipts |
-| §2.12 Council for load-bearing forks | `NORTH_STAR_SSOT.md` §2.12 | `chair-consensus-gate.mjs`, `council-service.js` | enforced | Chair seal records, council vote logs |
+| §2.12 Council for load-bearing forks | `NORTH_STAR_SSOT.md` §2.12 | `chair-consensus-gate.mjs`, `council-service.js` | **advisory (corrected 2026-08-11)** | Gate is now wired into `dispatchExecuteStep` and verifies an externally-minted seal, but runs advisory unless `CHAIR_GATE_STRICT=true`; sealing-authority integration into autonomous dispatch is incomplete. Prior `enforced` claim was false: the gate had **zero callers** and minted the seal it validated. Evidence: `products/receipts/GOVERNANCE_ENFORCEMENT_TRUTH_RECEIPT.json`, `tests/chair-consensus-gate-sealing.test.js` |
 | §2.15 Operator instruction supremacy | `NORTH_STAR_SSOT.md` §2.15 | `wisdom-truth-auditor.js` (HALT detection) | enforced | Session logs, named blocker records |
 | §2.17 Completion bar | `NORTH_STAR_SSOT.md` §2.17 | `receipt-truth-validator.js` | enforced | Acceptance receipts with SHA/base/verifier |
 | §2.18 Compound Drift Law | `NORTH_STAR_SSOT.md` §2.18 | `audit-false-done-steps.mjs`, drift repair | enforced | Drift lesson logs |
-| §2.0K Blueprint Integrity and Constitutional Manufacturing Pipeline | `NORTH_STAR_SSOT.md` §2.0K | `chair-consensus-gate.mjs`, `verify-blueprint-authority.mjs` | enforced | Blueprint validation logs |
-| §2.0L Prediction → Reality → Calibration | `NORTH_STAR_SSOT.md` §2.0L | `verify-prediction-reality-loop.mjs` | enforced | Prediction receipts vs. outcome receipts |
+| §2.0K Blueprint Integrity and Constitutional Manufacturing Pipeline | `NORTH_STAR_SSOT.md` §2.0K | `verify-blueprint-authority.mjs` (enforced via `builder:preflight`); `chair-consensus-gate.mjs` (advisory) | **partial (corrected 2026-08-11)** | Blueprint-authority validation is genuinely enforced. The Chair/Conductor seal requirement is **not** yet enforced end-to-end: no manufacturing-plan stage exists and sealing authority is not integrated into autonomous dispatch. See `docs/products/builderos/FACTORY_LIFECYCLE_TRUTH_AUDIT_2026-08-11.md` |
+| §2.0L Prediction → Reality → Calibration | `NORTH_STAR_SSOT.md` §2.0L | `verify-prediction-reality-loop.mjs`, `adf-prediction-ledger.js`, `reality-score.js` | **partial (corrected 2026-08-11)** | Prediction and reality scoring both run, but the delta never reaches earned trust: `trust_adjustment.delta` has no writer and `getBestModelForLens` has no importer, so calibration changes no future decision |
 | §3.1 Human veto power | `NORTH_STAR_SSOT.md` §3.1 | Manual process + `gate-change-presets.js` | enforced | Gate records, high-risk audit log |
 | **Proposed new: Constitutional Minimalism** | `CONSTITUTIONAL_FRAMEWORK_v1.md` §2.x | `constitutional-framework.mjs` duplication scanner | aspirational | TBD |
 | **Proposed new: Reality Alignment Scale** | `CONSTITUTIONAL_FRAMEWORK_v1.md` §5 | Confidence-vector schema in `REGISTRY.json` | aspirational | TBD |
@@ -128,7 +128,7 @@ A living table, stored in `data/constitutional-framework/ENFORCEMENT_MATRIX.json
 1. `npm run builder:preflight` — single canonical green/red gate.
 2. `npm run lifeos:bp-priority:verify` — BP priority alignment and Hist boundary checks.
 3. Branch-divergence guard (`verify-branch-divergence.mjs`) — current branch is `main` and up to date.
-4. Chair consensus gate (`chair-consensus-gate.mjs`) — load-bearing execute steps require a validated reasoning plan + Chair seal.
+4. Chair/Conductor consensus gate (`chair-consensus-gate.mjs`) — wired into `dispatchExecuteStep` 2026-08-11 and verifies an externally-minted seal it cannot forge (`scripts/conductor-seal-plan.mjs` issues; the gate only verifies). **Honest status: advisory by default**, fail-closed only with `CHAIR_GATE_STRICT=true`, because sealing authority is not yet integrated into autonomous dispatch. Every step result carries `consensus_gate.mode` so advisory can never be read as enforced.
 5. Prediction → Reality → Calibration loop — major decisions must predict, record, and calibrate.
 6. SENTRY Layer A/B — real-client walkthrough before anything is "done".
 7. Product-home receipt truth — every file change must update the owning product home.

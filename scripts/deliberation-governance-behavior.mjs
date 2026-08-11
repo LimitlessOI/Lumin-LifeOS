@@ -364,7 +364,14 @@ assert('unknown REP rejected', !unknownRep.ok);
     mission_id: 'M1',
     step: { step_id: 'S1', sandbox_boundary: 'test' },
   });
+  // Assert the SPECIFIC reason, not just the status: this test previously passed
+  // for the wrong reason (the fixture step also fails BPB for missing content),
+  // which is why the env-gate regression went unnoticed. 2026-08-11.
   assert('skip_intake_gate denied without env flag', blocked.httpStatus === 422);
+  assert(
+    'skip_intake_gate denial cites the bypass reason (not a coincidental failure)',
+    blocked.body?.reason === 'skip_intake_gate_not_permitted' && blocked.body?.attempted_bypass === true
+  );
   if (prev !== undefined) process.env.FACTORY_ALLOW_SKIP_INTAKE_GATE = prev;
 }
 

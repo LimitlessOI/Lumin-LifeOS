@@ -13,5 +13,23 @@
       "last_known_pass": "2026-06-26",
       "tags": ["intake", "route-wire", "codebook-normalize", "zone3"]
     }
+  ],
+  "frozen_defect_fixtures": [
+    {
+      "id": "BUILDEROS-INTAKE-REGRESSION-2026-08-11-OVERLAY",
+      "dir": "docs/products/builderos/fixtures/intake-regression-2026-08-11",
+      "session_snapshot": "docs/products/builderos/fixtures/intake-regression-2026-08-11/SESSION_000146ae_ready_invented_architecture.json",
+      "expected_defects": "docs/products/builderos/fixtures/intake-regression-2026-08-11/EXPECTED_DEFECTS.json",
+      "sha256_of_fixture": "13fc9b1876d0d3945192ea84909f1dfe712471f2322d9e8bcd7da2f47e44fdb0",
+      "bytes": 69669,
+      "expectation": "FAIL_CLOSED",
+      "semantics": "This is an EXAM, not a golden path. Passing means the system DETECTS every required defect and fails closed. A run that executes this session cleanly is a FAILURE of the harness, not a success.",
+      "immutable": true,
+      "do_not_sanitize": true,
+      "acceptance_criterion": "Overlay reaches execution without human nested-JSON rescue.",
+      "audit_command": "npm run builderos:intake:regression:acceptance",
+      "registered_at": "2026-08-11",
+      "registered_because": "M0 sweep finding `fixture_unregistered:intake-regression-2026-08-11` — the fixture was declared required while nothing ran it."
+    }
   ]
 }
