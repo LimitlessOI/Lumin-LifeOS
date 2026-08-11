@@ -52,6 +52,20 @@ quiet — right, it can be just text. So probably the default is it speaks
 the words, because you might not always be able to talk to the computer —
 could be in a classroom, and now we gotta type."
 
+**Follow-up correction, direct, after the above:** "Why would we have these
+tied to the inside of the chat? We have an overlay that covers the entire
+screen. We use the entire screen. Has our interactive UI. We can pull up
+any app that's [operated] for them. We can pull up a report. We can have
+the app... if we're videoing... because our app we can control, we could
+set up the lighting preferences for the camera, like exposure, frame
+rates, make sure sound quality is good, make sure video quality is good.
+Help them set up the whole thing."
+
+**Also same conversation, on why AI-provider credit limits shouldn't block
+progress:** "we have free tokens to be used in the system that shouldn't
+stop us from doing everything, and you could provide the higher level of
+thinking if it's needed. Our system is not without AI."
+
 ## What this actually names (analysis, not founder's words)
 
 - Corner-snap resting positions (buildable now, shipped same session).
@@ -60,12 +74,19 @@ could be in a classroom, and now we gotta type."
   fully-illustrated character.
 - Voice-reactive pulse + emotion-color, tied to something real (not a
   timer) — not built yet.
-- Dynamic contextual widget/page surfacing inside the chat — overlaps
+- Dynamic contextual widget/page/app surfacing across the FULL SCREEN, not
+  boxed inside the chat panel (corrected per his own follow-up) — overlaps
   existing doctrine already written in `COMMUNICATION_SYSTEM_BLUEPRINT.md`
   §6-§7 (Conversation Composer, cognitive modes); gap is wiring, not
-  invention.
+  invention. A first-party recording app with real camera/audio hardware
+  controls is its own, separate, substantial build.
 - Active walkthrough/narrated UI automation (Taloa demonstrating and
   clicking, not just answering) — closest existing relative is the
   Chrome-extension browser-drive system, a different surface.
 - Default-on spoken responses, toggleable to quiet/text-only — accessibility-
   motivated (his own example: a classroom where voice input isn't viable).
+- Checked live, real: a local Ollama server is running (localhost:11434,
+  three real models). Real capacity for text tasks, but reachable only
+  from this Mac (not Railway, where production request-handling actually
+  runs) and none of the three models are vision-capable — did not unblock
+  the MTG card photo-identification credits issue.

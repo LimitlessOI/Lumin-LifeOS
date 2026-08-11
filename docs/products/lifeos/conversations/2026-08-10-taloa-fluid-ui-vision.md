@@ -58,6 +58,21 @@ there are real contexts (his example: a classroom) where typing isn't
 practical and voice is the only option, so voice-out should be the
 fallback-safe default, not an opt-in.
 
+**Explicit correction: this is NOT chat-box-scoped.** Follow-up, direct,
+after the above was captured: "why would we have these tied to the inside
+of the chat? We have an overlay that covers the entire screen. We use the
+entire screen. Has our interactive UI. We can pull up any app that's
+[operated] for them. We can pull up a report. We can have the app... if
+we're videoing... because our app we can control, we could set up the
+lighting preferences for the camera, like exposure, frame rates, make sure
+sound quality is good, make sure video quality is good. Help them set up
+the whole thing." Real, important correction to the "dynamic widget
+surfacing inside the expanded chat" framing above — the actual vision is a
+full-screen control layer (arbitrary app control, reports, and Taloa's
+*own* first-party apps — his example: a recording app with real
+hardware-level camera/audio controls), not content boxed inside a chat
+panel. The chat is one entry point into that layer, not its container.
+
 ## Honest scoping — what's real tonight vs. real future work
 
 Already shipped, real, this same session: click-to-expand, shrink button,
@@ -76,15 +91,29 @@ hour, not silently dropped either:**
   direction change, not a parameter tweak.
 - Voice-reactive pulsing tied to real audio amplitude (TTS output or mic
   input), not a timer-driven animation.
-- Dynamic, contextual widget/page surfacing inside the expanded chat —
-  this is close to the "Conversation Composer" / cognitive-mode concepts
-  already specified in `COMMUNICATION_SYSTEM_BLUEPRINT.md` §6-§7; the gap
-  is wiring, not doctrine (doctrine already exists, per this file's own
-  §6.2/§11 already reviewed earlier this session).
+- Dynamic, contextual widget/page/app surfacing across the FULL SCREEN
+  (corrected scope, see below — not confined inside the expanded chat
+  panel) — this is close to the "Conversation Composer" / cognitive-mode
+  concepts already specified in `COMMUNICATION_SYSTEM_BLUEPRINT.md` §6-§7;
+  the gap is wiring, not doctrine (doctrine already exists, per this
+  file's own §6.2/§11 already reviewed earlier this session). A real
+  first-party app (his example: video recording with real camera/audio
+  hardware controls) is its own, separate, substantial build.
 - Active walkthrough/narrated UI automation — closest existing relative is
   the browser-drive/extension-drive system built earlier this session, but
   that's a different surface (Chrome extension observing a web page), not
   the native overlay narrating and driving arbitrary app UI.
+
+**Real infrastructure fact, checked live, relevant to "free tokens"/AI
+availability:** a local Ollama server is genuinely running (`localhost:11434`,
+three real models: `gemma2:27b-instruct`, `deepseek-coder-v2`, `qwen2.5:32b`)
+— real, free capacity for text/reasoning tasks. Two real limits, checked,
+not assumed: (1) it's reachable only from this Mac, not from Railway where
+the actual production request-handling code runs, so it can't directly
+replace a blocked backend AI call without a real bridging mechanism; (2)
+none of the three installed models are vision-capable, so it would not
+have unblocked the MTG card photo-identification credits issue specifically
+even if reachability weren't a problem.
 
 ## What shipped concretely from this same conversation
 
