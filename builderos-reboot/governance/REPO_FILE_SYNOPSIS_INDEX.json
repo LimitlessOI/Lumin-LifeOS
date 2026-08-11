@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-11T22:31:31.033Z",
+  "generated_at": "2026-08-11T22:37:29.742Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13251,
+  "file_count": 13255,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -32481,6 +32481,16 @@
       "synopsis_index_only": true
     },
     {
+      "path": "config/manufacturing-plan-schema.js",
+      "synopsis": "Typed contract for the Manufacturing Plan and the FACTORY_READY",
+      "bytes": 5354,
+      "mtime": "2026-08-11T22:32:30.489Z",
+      "indexed_at": "2026-08-11T22:37:29.742Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "config/memory-truth-classes.js",
       "synopsis": "config/memory-truth-classes.js",
       "bytes": 3490,
@@ -42986,9 +42996,9 @@
     {
       "path": "docs/products/builderos/GAP_FILL_LEDGER.json",
       "synopsis": "Documentation — GAP FILL LEDGER.",
-      "bytes": 109535,
-      "mtime": "2026-08-11T22:25:26.555Z",
-      "indexed_at": "2026-08-11T22:31:31.033Z",
+      "bytes": 111882,
+      "mtime": "2026-08-11T22:31:31.619Z",
+      "indexed_at": "2026-08-11T22:37:29.742Z",
       "synopsis_index_only": true
     },
     {
@@ -43001,9 +43011,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 521593,
-      "mtime": "2026-08-11T22:31:18.798Z",
-      "indexed_at": "2026-08-11T22:31:31.033Z"
+      "bytes": 524139,
+      "mtime": "2026-08-11T22:37:13.107Z",
+      "indexed_at": "2026-08-11T22:37:29.742Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -67778,10 +67788,10 @@
     },
     {
       "path": "package.json",
-      "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\", \"lifeos:file-synopsis:backfill\": \"node scripts/file-synopsis-enforce.mjs --all --auto-fix && node scripts/generate-file-synopsis-index.mjs\", \"lifeos:file-synopsis:index",
-      "bytes": 37367,
-      "mtime": "2026-08-11T22:12:01.824Z",
-      "indexed_at": "2026-08-11T22:15:50.764Z",
+      "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
+      "bytes": 39384,
+      "mtime": "2026-08-11T22:36:36.243Z",
+      "indexed_at": "2026-08-11T22:37:29.742Z",
       "synopsis_index_only": true
     },
     {
@@ -77331,6 +77341,16 @@
       ]
     },
     {
+      "path": "scripts/manufacturing-plan.mjs",
+      "synopsis": "Compiles and verifies the Manufacturing Plan, and decides",
+      "bytes": 19089,
+      "mtime": "2026-08-11T22:34:28.578Z",
+      "indexed_at": "2026-08-11T22:37:29.742Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "scripts/map-live-site.mjs",
       "synopsis": "Static site surface mapper — generates a template catalog of public overlays and API routes.",
       "bytes": 6922,
@@ -78715,6 +78735,16 @@
       "indexed_at": "2026-08-06T05:07:10.590Z",
       "ssot": [
         "docs/products/ideavault/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/seal-manufacturing-plan.mjs",
+      "synopsis": "Sealing authority for the three-party manufacturing consensus.",
+      "bytes": 4463,
+      "mtime": "2026-08-11T22:36:13.381Z",
+      "indexed_at": "2026-08-11T22:37:29.742Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
       ]
     },
     {
@@ -103364,6 +103394,13 @@
       "bytes": 1339,
       "mtime": "2026-06-22T22:46:53.363Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "tests/manufacturing-plan.test.js",
+      "synopsis": "Proves FACTORY_READY / MANUFACTURING_AUTHORIZED is a machine-verifiable",
+      "bytes": 12957,
+      "mtime": "2026-08-11T22:36:28.445Z",
+      "indexed_at": "2026-08-11T22:37:29.742Z"
     },
     {
       "path": "tests/marketing-social-publish.test.js",
