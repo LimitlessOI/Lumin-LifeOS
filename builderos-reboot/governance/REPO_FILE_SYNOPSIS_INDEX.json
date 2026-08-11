@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-11T02:16:05.282Z",
+  "generated_at": "2026-08-11T02:27:33.623Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13220,
   "files": [
@@ -42929,9 +42929,9 @@
     {
       "path": "docs/products/builderos/GAP_FILL_LEDGER.json",
       "synopsis": "Documentation — GAP FILL LEDGER.",
-      "bytes": 91581,
-      "mtime": "2026-08-10T22:40:44.141Z",
-      "indexed_at": "2026-08-10T23:26:21.416Z",
+      "bytes": 97019,
+      "mtime": "2026-08-11T02:16:05.810Z",
+      "indexed_at": "2026-08-11T02:27:33.623Z",
       "synopsis_index_only": true
     },
     {
@@ -44051,9 +44051,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 824382,
-      "mtime": "2026-08-11T02:15:45.021Z",
-      "indexed_at": "2026-08-11T02:16:05.282Z"
+      "bytes": 826498,
+      "mtime": "2026-08-11T02:26:55.408Z",
+      "indexed_at": "2026-08-11T02:27:33.623Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -73466,10 +73466,10 @@
     },
     {
       "path": "routes/mtg-cards-routes.js",
-      "synopsis": "Batch Magic: The Gathering card cataloging -- upload up to 150",
-      "bytes": 7425,
-      "mtime": "2026-08-11T00:38:53.553Z",
-      "indexed_at": "2026-08-11T00:45:18.913Z",
+      "synopsis": "Magic: The Gathering card cataloging, two intake paths sharing one",
+      "bytes": 16292,
+      "mtime": "2026-08-11T02:25:55.596Z",
+      "indexed_at": "2026-08-11T02:27:33.623Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -97582,9 +97582,9 @@
     {
       "path": "services/mtg-card-pricing.js",
       "synopsis": "Looks up real market pricing for a Magic: The Gathering card via",
-      "bytes": 2849,
-      "mtime": "2026-08-11T00:38:53.554Z",
-      "indexed_at": "2026-08-11T00:45:18.913Z",
+      "bytes": 4094,
+      "mtime": "2026-08-11T02:24:37.267Z",
+      "indexed_at": "2026-08-11T02:27:33.623Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

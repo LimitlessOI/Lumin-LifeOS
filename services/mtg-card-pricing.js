@@ -49,6 +49,33 @@ export async function lookupMtgCardPrice(name, set, { logger } = {}) {
 }
 
 /**
+ * Exact-match price lookup by Scryfall's own card ID -- more reliable than
+ * fuzzy name matching when the caller already has it (e.g. a ManaBox CSV
+ * export already includes a Scryfall ID per row; see routes/mtg-cards-routes.js
+ * POST /import-csv).
+ * @returns {Promise<{ ok: boolean, scryfall_id?: string, price_usd: number|null, price_usd_foil: number|null, error?: string }>}
+ */
+export async function lookupMtgCardById(scryfallId, { logger } = {}) {
+  if (!scryfallId) return { ok: false, error: 'no_id', price_usd: null, price_usd_foil: null };
+  try {
+    const res = await fetch(`${SCRYFALL_BASE}/cards/${encodeURIComponent(scryfallId)}`, { headers: HEADERS });
+    if (!res.ok) {
+      return { ok: false, error: `scryfall_${res.status}`, price_usd: null, price_usd_foil: null };
+    }
+    const card = await res.json();
+    return {
+      ok: true,
+      scryfall_id: card.id,
+      price_usd: card.prices?.usd ? Number(card.prices.usd) : null,
+      price_usd_foil: card.prices?.usd_foil ? Number(card.prices.usd_foil) : null,
+    };
+  } catch (err) {
+    logger?.warn?.({ err: err.message, scryfallId }, 'scryfall id lookup failed');
+    return { ok: false, error: err.message, price_usd: null, price_usd_foil: null };
+  }
+}
+
+/**
  * Value-tier -> venue routing, matching the tiers already documented in
  * ~/Documents/MTG-Card-Sale/README.md from the manual-triage pass earlier.
  */
