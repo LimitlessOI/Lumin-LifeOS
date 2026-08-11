@@ -130,7 +130,11 @@ async function identifyViaGemini(photo) {
             ],
           },
         ],
-        generationConfig: { maxOutputTokens: 300 },
+        // 300 was too tight -- real live failure found 2026-08-10:
+        // gemini-2.5-flash hit finish=MAX_TOKENS before completing the JSON
+        // output (confirmed via the finishReason/snippet surfaced below, not
+        // guessed). Raised with headroom.
+        generationConfig: { maxOutputTokens: 1000 },
       }),
     },
   );
