@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-11T07:28:51.887Z",
+  "generated_at": "2026-08-11T07:41:33.375Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13225,
+  "file_count": 13226,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -67639,6 +67639,13 @@
       "mtime": "2025-12-22T18:15:07.166Z",
       "indexed_at": "2026-07-28T22:54:46.666Z",
       "synopsis_index_only": true
+    },
+    {
+      "path": "native/macos-overlay/AutomationBrowser/install.sh",
+      "synopsis": "Shell script — Install.",
+      "bytes": 738,
+      "mtime": "2026-08-11T07:41:32.136Z",
+      "indexed_at": "2026-08-11T07:41:33.375Z"
     },
     {
       "path": "native/macos-overlay/build.sh",
