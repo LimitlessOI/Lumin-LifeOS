@@ -416,6 +416,26 @@ final class ContainerView: NSView, WKNavigationDelegate, WKUIDelegate {
             } else if let window = self.window {
                 NotificationCenter.default.post(name: .taloaDidFinishDrag, object: window)
             }
+        } else if dragMode == .move, isExpanded {
+            // REAL BUG FOUND LIVE (2026-08-11), founder direct: "i still
+            // cant close the or how to turn that chat into the avitoar."
+            // mouseDown assigns the ENTIRE top drag strip to dragMode=.move
+            // when expanded (so the strip is draggable), consuming the event
+            // before it can reach the tiny 18x18 shrinkButton subview
+            // underneath -- but mouseUp only ever checked the click-vs-drag
+            // distinction for the un-expanded badge case, so a plain click
+            // anywhere on the strip while expanded did nothing at all unless
+            // it landed pixel-perfectly on that one small icon. Same
+            // click-vs-drag pattern as above, applied to the strip: a real
+            // click (not a drag) anywhere in the strip now shrinks back to
+            // the circle -- a much larger, more forgiving target than one
+            // tiny button, while real drags still move the window exactly
+            // as before.
+            let cur = NSEvent.mouseLocation
+            let moved = hypot(cur.x - dragStartMouseScreen.x, cur.y - dragStartMouseScreen.y)
+            if moved < Self.clickMoveThreshold {
+                handleShrinkTapped()
+            }
         }
         dragMode = .none
     }

@@ -66,6 +66,44 @@ enum ScreenControl {
         CGEvent(source: nil)?.location
     }
 
+    /// Real synthetic typing -- found necessary live (2026-08-11) while
+    /// verifying the chat drawer end to end: setting a WKWebView-hosted
+    /// textarea's AXValue directly via the Accessibility API (the same
+    /// technique used to check System Settings' Accessibility checkbox)
+    /// silently does NOT update the page's own JS-observed state -- native
+    /// AppKit controls and JS-framework-driven WKWebView text fields behave
+    /// differently under accessibility automation. Sending a message that
+    /// way appeared to succeed (no error) but never actually reached the
+    /// chat. Real keyboard events via CGEventKeyboardSetUnicodeString fire
+    /// the same input/keyup events a real keystroke would, so the page's
+    /// own JS sees it exactly like the founder's own typing -- this is also
+    /// exactly the `type` action the screen-agent decision endpoint (see
+    /// docs/products/universal-overlay/PRODUCT_HOME.md 2026-08-10 receipt,
+    /// BuilderOS handoff) will need, not just a test-only helper.
+    static func typeText(_ text: String) {
+        for scalar in text.utf16 {
+            var chars: [UniChar] = [scalar]
+            guard let down = CGEvent(keyboardEventSource: nil, virtualKey: 0, keyDown: true) else { continue }
+            down.keyboardSetUnicodeString(stringLength: chars.count, unicodeString: &chars)
+            down.post(tap: .cghidEventTap)
+            guard let up = CGEvent(keyboardEventSource: nil, virtualKey: 0, keyDown: false) else { continue }
+            up.keyboardSetUnicodeString(stringLength: chars.count, unicodeString: &chars)
+            up.post(tap: .cghidEventTap)
+            usleep(12_000)
+        }
+    }
+
+    /// Real Return keypress -- separate from typeText since Return isn't a
+    /// Unicode character event in the same sense; uses the real virtual
+    /// keycode (36 on macOS) so it's indistinguishable from a real keypress.
+    static func pressReturn() {
+        guard let down = CGEvent(keyboardEventSource: nil, virtualKey: 36, keyDown: true) else { return }
+        down.post(tap: .cghidEventTap)
+        usleep(30_000)
+        guard let up = CGEvent(keyboardEventSource: nil, virtualKey: 36, keyDown: false) else { return }
+        up.post(tap: .cghidEventTap)
+    }
+
     /// Full-screen capture (not scoped to Taloa's own window) -- reuses the
     /// same `screencapture` binary already proven reliable this session for
     /// window-ID captures, so Screen Recording permission behavior is
@@ -94,6 +132,8 @@ enum ScreenControl {
     private static let resultPath = "/tmp/taloa-test-click-result"
     private static let captureTriggerPath = "/tmp/taloa-test-capture"
     private static let captureResultPath = "/tmp/taloa-test-capture-result"
+    private static let typeTriggerPath = "/tmp/taloa-test-type"
+    private static let typeResultPath = "/tmp/taloa-test-type-result"
 
     static func startDebugTriggerPolling() {
         Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { _ in
@@ -117,6 +157,22 @@ enum ScreenControl {
                 let ok = captureFullScreen(to: dest)
                 let result = "ok=\(ok) dest=\(dest)\n"
                 try? result.write(toFile: captureResultPath, atomically: true, encoding: .utf8)
+            }
+
+            if let raw = try? String(contentsOfFile: typeTriggerPath, encoding: .utf8) {
+                try? FileManager.default.removeItem(atPath: typeTriggerPath)
+                // Format: "x,y|text to type|press_return(0 or 1)"
+                let parts = raw.trimmingCharacters(in: .newlines).split(separator: "|", maxSplits: 2, omittingEmptySubsequences: false)
+                if parts.count == 3, let x = Double(parts[0].split(separator: ",")[0]), let y = Double(parts[0].split(separator: ",")[1]) {
+                    moveMouseAndClick(to: CGPoint(x: x, y: y))
+                    usleep(200_000)
+                    typeText(String(parts[1]))
+                    usleep(150_000)
+                    if parts[2].trimmingCharacters(in: .whitespaces) == "1" {
+                        pressReturn()
+                    }
+                    try? "done\n".write(toFile: typeResultPath, atomically: true, encoding: .utf8)
+                }
             }
         }
     }
