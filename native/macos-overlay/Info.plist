@@ -22,5 +22,9 @@
     <string>13.0</string>
     <key>NSHighResolutionCapable</key>
     <true/>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>Taloa uses your microphone so you can talk to her instead of typing.</string>
+    <key>NSSpeechRecognitionUsageDescription</key>
+    <string>Taloa uses speech recognition to turn what you say into text.</string>
 </dict>
 </plist>

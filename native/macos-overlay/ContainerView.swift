@@ -54,7 +54,7 @@ extension Notification.Name {
     static let taloaDidFinishDrag = Notification.Name("taloaDidFinishDrag")
 }
 
-final class ContainerView: NSView, WKNavigationDelegate {
+final class ContainerView: NSView, WKNavigationDelegate, WKUIDelegate {
     static let expandThreshold: CGFloat = 160
     static let resizeMargin: CGFloat = 10
     static let dragStripHeight: CGFloat = 22
@@ -89,12 +89,16 @@ final class ContainerView: NSView, WKNavigationDelegate {
     private static let localEnvPath = "/Users/adamhopkins/Projects/Lumin-LifeOS/.env"
     private var didAttemptAutoLogin = false
 
-    // Shrink-back-to-circle -- see header comment.
+    // Shrink-back-to-circle -- see header comment. Icon changed to a plain
+    // "X" (2026-08-10, founder direct after his first real click: "I can
+    // click on the x to get ra[e]dy") -- the inward-arrows "shrink" glyph
+    // is accurate but not as instantly readable as "close this" as a
+    // literal X. Same button, same handler, same proven mechanism -- icon
+    // only.
     private static let badgeSize: CGFloat = 120 // matches main.swift's initialSize
     private static let shrinkButtonSize: CGFloat = 18
     private lazy var shrinkButton: NSButton = {
-        let img = NSImage(systemSymbolName: "arrow.down.right.and.arrow.up.left.circle.fill",
-                           accessibilityDescription: "Shrink back to circle")
+        let img = NSImage(systemSymbolName: "xmark.circle.fill", accessibilityDescription: "Close")
         let b = NSButton(image: img ?? NSImage(), target: self, action: #selector(handleShrinkTapped))
         b.isBordered = false
         b.imageScaling = .scaleProportionallyUpOrDown
@@ -153,9 +157,40 @@ final class ContainerView: NSView, WKNavigationDelegate {
         let wv = WKWebView(frame: .zero, configuration: WKWebViewConfiguration())
         wv.autoresizingMask = [.width, .height]
         wv.navigationDelegate = self
+        wv.uiDelegate = self
         addSubview(wv, positioned: .below, relativeTo: badgeView)
         webView = wv
         wv.load(URLRequest(url: Self.lifeosURL))
+    }
+
+    // MARK: - Mic permission (2026-08-10)
+    //
+    // Founder, direct: "I don't want to see those notifications. They
+    // shouldn't pop up all the time... I should never have to push the
+    // allow button but once." Root-caused live: this WKWebView had no
+    // uiDelegate at all, so every navigator.mediaDevices.getUserMedia /
+    // SpeechRecognition call inside the real /lifeos page (the mic button
+    // in lifeos-ambient-listener.js, voice input elsewhere) fell through to
+    // WebKit's own default per-origin permission bubble -- a small,
+    // separate borderless window, distinct from the app's own UI, that
+    // reappeared on every reload during this session's rapid dev rebuilds.
+    // Since the page loaded here is always our own first-party /lifeos
+    // content (Self.lifeosURL, not arbitrary web content), auto-granting is
+    // correct: there is no untrusted third-party origin to gate here. This
+    // removes WebKit's bubble entirely; the one-time OS-level "Taloa would
+    // like to access the microphone" TCC alert still shows once (that one
+    // is enforced by macOS itself and can't be bypassed), which is exactly
+    // the "but once" the founder asked for -- NSMicrophoneUsageDescription /
+    // NSSpeechRecognitionUsageDescription (Info.plist) let macOS remember
+    // that grant durably instead of re-asking.
+    func webView(
+        _ webView: WKWebView,
+        requestMediaCapturePermissionFor origin: WKSecurityOrigin,
+        initiatedByFrame frame: WKFrameInfo,
+        type: WKMediaCaptureType,
+        decisionHandler: @escaping (WKPermissionDecision) -> Void
+    ) {
+        decisionHandler(.grant)
     }
 
     // MARK: - Real reactions to real page/layout events (2026-08-10)
@@ -434,7 +469,7 @@ final class ContainerView: NSView, WKNavigationDelegate {
     override func accessibilityRole() -> NSAccessibility.Role? { .button }
 
     override func accessibilityLabel() -> String? {
-        isExpanded ? "Shrink Taloa back to circle" : "Expand Taloa chat"
+        isExpanded ? "Close" : "Expand Taloa chat"
     }
 
     override func accessibilityPerformPress() -> Bool {
