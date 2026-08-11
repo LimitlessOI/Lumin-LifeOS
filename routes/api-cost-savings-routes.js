@@ -347,10 +347,10 @@ app.post("/api/v1/cost-savings/create-subscription", requireKey, async (req, res
         return res.status(400).json({ ok: false, error: 'compact_tokens and full_tokens are required' });
       }
       const ledger = ctx.savingsLedger;
-      if (!ledger?.conductorSession) {
+      if (!ledger?.sessionSupervisorSession) {
         return res.status(503).json({ ok: false, error: 'savingsLedger not initialised' });
       }
-      await ledger.conductorSession({
+      await ledger.sessionSupervisorSession({
         compactTokens: Number(compact_tokens),
         fullTokens:    Number(full_tokens),
         source:        source || 'cold_start',

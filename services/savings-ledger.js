@@ -8,7 +8,7 @@
  * This is the sellable moat: verified proof of savings per request.
  * No claim is made without a DB record backing it.
  *
- * Exports: createSavingsLedger(pool) → { record, getReport, getDashboard, getReceipt, conductorSession, getSavingsReport }
+ * Exports: createSavingsLedger(pool) → { record, getReport, getDashboard, getReceipt, sessionSupervisorSession, getSavingsReport }
  *
  * @ssot docs/products/ai-council/PRODUCT_HOME.md
  */
@@ -325,12 +325,15 @@ export function createSavingsLedger(pool) {
   }
 
   // ---------------------------------------------------------------------------
-  // conductorSession — log one Conductor cold-start savings event.
+  // sessionSupervisorSession — log one Session Supervisor cold-start savings event.
+  // OPEN-6: this role was called "Conductor", which collided with the
+  // constitutional office of that name. The office kept the word; this
+  // mechanical session-supervisor role was renamed instead.
   // Called by the cold-start script or manually at session start.
   // compact_tokens: what was actually read (AGENT_RULES.compact.md)
   // full_tokens:    what would have been read without compression (full stack)
   // ---------------------------------------------------------------------------
-  async function conductorSession({
+  async function sessionSupervisorSession({
     compactTokens,
     fullTokens,
     source = 'cold_start',
@@ -346,7 +349,7 @@ export function createSavingsLedger(pool) {
         [compactTokens, fullTokens, source, agentHint, sessionId, notes],
       );
     } catch (err) {
-      console.warn('[LEDGER] conductorSession insert failed:', err.message);
+      console.warn('[LEDGER] sessionSupervisorSession insert failed:', err.message);
     }
   }
 
@@ -440,5 +443,16 @@ export function createSavingsLedger(pool) {
     }
   }
 
-  return { record, getReceipt, getDashboard, getReport, conductorSession, getSavingsReport };
+  return {
+    record,
+    getReceipt,
+    getDashboard,
+    getReport,
+    sessionSupervisorSession,
+    // intentional alias: OPEN-6 rename kept backward-compatible for existing
+    // callers; the physical table name stays conductor_session_savings until a
+    // governed migration renames it.
+    conductorSession: sessionSupervisorSession,
+    getSavingsReport,
+  };
 }

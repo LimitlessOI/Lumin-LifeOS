@@ -11,30 +11,48 @@
   "terms": [
     {
       "canonical": "Conductor",
-      "former": ["Presiding Steward"],
+      "former": [
+        "Presiding Steward"
+      ],
       "effective_from": "2026-08-11",
       "migration_state": "ratified_target",
-      "prose_scopes": ["acceptance_criteria", "product_purpose", "non_goals"],
+      "prose_scopes": [
+        "acceptance_criteria",
+        "product_purpose",
+        "non_goals"
+      ],
       "code_migration_state": "not_started",
       "note": "The constitutional office. OPEN-6 resolved 2026-08-11: the office keeps this name; the unrelated session-supervisor role that also used 'Conductor' is renamed instead.",
       "prohibited_in_new_artifacts": true
     },
     {
       "canonical": "Digital Imprint",
-      "former": ["Digital Twin"],
+      "former": [
+        "Digital Twin"
+      ],
       "effective_from": "2026-08-11",
       "migration_state": "ratified_target",
-      "prose_scopes": ["acceptance_criteria", "product_purpose", "non_goals"],
+      "prose_scopes": [
+        "acceptance_criteria",
+        "product_purpose",
+        "non_goals"
+      ],
       "code_migration_state": "not_started",
       "note": "~685 live code references still say Digital Twin. Ratified as target name, not yet migrated — the repo state is not evidence against the decision.",
       "prohibited_in_new_artifacts": true
     },
     {
       "canonical": "Efficiency Officer",
-      "former": ["CFO", "Office of Efficiency"],
+      "former": [
+        "CFO",
+        "Office of Efficiency"
+      ],
       "effective_from": "2026-08-11",
       "migration_state": "ratified_target",
-      "prose_scopes": ["acceptance_criteria", "product_purpose"],
+      "prose_scopes": [
+        "acceptance_criteria",
+        "product_purpose"
+      ],
       "code_migration_state": "partial",
       "note": "DEPARTMENT_ROLE_CONTRACT.json already carries `Efficiency Officer` with `legacy_name: CFO`. Founder: 'I like efficiency officer better. It just gets better than a CFO.'",
       "prohibited_in_new_artifacts": true,
@@ -49,6 +67,35 @@
       "code_migration_state": "n_a",
       "note": "Deliberately NOT a rename. 'Capsule' stays the parent conceptual class because two other live, unrelated Capsules exist (Memory Capsule, REP Capsule). Recorded here so a future agent does not 'helpfully' rename it.",
       "prohibited_in_new_artifacts": false
+    }
+  ],
+  "collisions": [
+    {
+      "word": "Conductor",
+      "resolved_at": "2026-08-11",
+      "resolution": "OPEN-6, founder-ratified: the constitutional office keeps the name. The unrelated mechanical session-supervisor/IDE-agent role that also used it is renamed to Session Supervisor.",
+      "senses": [
+        {
+          "sense": "constitutional_office",
+          "canonical": "Conductor",
+          "note": "Sequencing, decomposition, dependencies, assignment. Seals the manufacturing plan. This sense wins the word."
+        },
+        {
+          "sense": "session_supervisor",
+          "canonical": "Session Supervisor",
+          "former": [
+            "Conductor"
+          ],
+          "note": "The cold-start/session-supervision role measured in savings tracking. Renamed because a governance document saying \"the Conductor must seal this\" was ambiguous between two unrelated things."
+        }
+      ],
+      "code_migration_state": "identifiers_renamed_tables_pending",
+      "as_is_reality": "Physical names conductor_session_savings and conductor_builder_audit remain in the live schema. services/savings-ledger.js exports sessionSupervisorSession with an intentional conductorSession alias so no caller breaks.",
+      "migration_bridge": "Renaming a live table requires a governed migration and coordinated deploy, so it is deliberately NOT done as a side effect of a naming fix. data/terminology-collision-baseline.json pins the 19 as-is occurrences and scripts/verify-terminology-collisions.mjs fails builder:preflight on any NEW one, so silence cannot make them permanent.",
+      "enforcement": {
+        "detector": "scripts/verify-terminology-collisions.mjs",
+        "command": "npm run builderos:terminology:collisions"
+      }
     }
   ]
 }

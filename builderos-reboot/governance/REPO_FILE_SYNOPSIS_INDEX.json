@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-11T22:42:45.187Z",
+  "generated_at": "2026-08-11T22:45:26.446Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13257,
+  "file_count": 13260,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21772,9 +21772,9 @@
     {
       "path": "builderos-reboot/governance/TERMINOLOGY_BRIDGE.json",
       "synopsis": "BuilderOS artifact — TERMINOLOGY BRIDGE.",
-      "bytes": 3027,
-      "mtime": "2026-08-11T22:11:28.415Z",
-      "indexed_at": "2026-08-11T22:15:50.764Z",
+      "bytes": 4942,
+      "mtime": "2026-08-11T22:44:58.445Z",
+      "indexed_at": "2026-08-11T22:45:26.446Z",
       "synopsis_index_only": true
     },
     {
@@ -34533,6 +34533,14 @@
       "synopsis_index_only": true
     },
     {
+      "path": "data/terminology-collision-baseline.json",
+      "synopsis": "JSON data/config — data/terminology-collision-baseline.json.",
+      "bytes": 1814,
+      "mtime": "2026-08-11T22:44:36.798Z",
+      "indexed_at": "2026-08-11T22:45:26.446Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "data/twins/_template/_meta.json",
       "synopsis": "JSON data/config — data/twins/_template/_meta.json.",
       "bytes": 356,
@@ -43011,9 +43019,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 526487,
-      "mtime": "2026-08-11T22:42:28.267Z",
-      "indexed_at": "2026-08-11T22:42:45.187Z"
+      "bytes": 528437,
+      "mtime": "2026-08-11T22:45:19.556Z",
+      "indexed_at": "2026-08-11T22:45:26.446Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -67789,9 +67797,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 39513,
-      "mtime": "2026-08-11T22:42:05.431Z",
-      "indexed_at": "2026-08-11T22:42:45.187Z",
+      "bytes": 39768,
+      "mtime": "2026-08-11T22:44:45.188Z",
+      "indexed_at": "2026-08-11T22:45:26.446Z",
       "synopsis_index_only": true
     },
     {
@@ -69222,6 +69230,14 @@
       "bytes": 1525,
       "mtime": "2026-06-30T04:09:55.833Z",
       "indexed_at": "2026-07-28T22:54:46.666Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/TERMINOLOGY_COLLISION_RECEIPT.json",
+      "synopsis": "Product receipt — TERMINOLOGY COLLISION RECEIPT.",
+      "bytes": 5039,
+      "mtime": "2026-08-11T22:44:45.131Z",
+      "indexed_at": "2026-08-11T22:45:26.446Z",
       "synopsis_index_only": true
     },
     {
@@ -71642,9 +71658,9 @@
     {
       "path": "routes/api-cost-savings-routes.js",
       "synopsis": "API Cost Savings Routes",
-      "bytes": 13623,
-      "mtime": "2026-06-29T17:21:08.496Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 13639,
+      "mtime": "2026-08-11T22:43:35.434Z",
+      "indexed_at": "2026-08-11T22:45:26.446Z",
       "ssot": [
         "docs/products/api-cost-savings/PRODUCT_HOME.md"
       ]
@@ -90795,6 +90811,16 @@
       ]
     },
     {
+      "path": "scripts/verify-terminology-collisions.mjs",
+      "synopsis": "Deterministic guard for OPEN-6. \"Conductor\" named two unrelated",
+      "bytes": 5070,
+      "mtime": "2026-08-11T22:44:35.585Z",
+      "indexed_at": "2026-08-11T22:45:26.446Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "scripts/verify-token-accounting-current-state.mjs",
       "synopsis": "Read-only verification: current Token Accounting OS production state.",
       "bytes": 5422,
@@ -98911,9 +98937,9 @@
     {
       "path": "services/savings-ledger.js",
       "synopsis": "services/savings-ledger.js — TCO-E01",
-      "bytes": 20061,
-      "mtime": "2026-06-29T17:21:08.969Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 20585,
+      "mtime": "2026-08-11T22:43:41.019Z",
+      "indexed_at": "2026-08-11T22:45:26.446Z",
       "ssot": [
         "docs/products/ai-council/PRODUCT_HOME.md"
       ]

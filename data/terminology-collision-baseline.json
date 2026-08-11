@@ -1,0 +1,27 @@
+{
+  "schema": "terminology_collision_baseline_v1",
+  "purpose": "As-is occurrences of the collided \"Conductor\" sense (OPEN-6). Physical table names stay until a governed migration renames them; this file keeps them visible rather than letting them become permanent by silence.",
+  "updated_at": "2026-08-11",
+  "count": 19,
+  "ids": [
+    "conductor_builder_audit_table:db/migrations/20260420_handoff_governance.sql",
+    "conductor_builder_audit_table:routes/lifeos-council-builder-routes.js",
+    "conductor_builder_audit_table:services/audit-data-sources.js",
+    "conductor_builder_audit_table:services/employerInterviewProcess.js",
+    "conductor_builder_audit_table:services/lifeos-communication-os-service.js",
+    "conductor_builder_audit_table:services/securityAuditService.js",
+    "conductor_cold_start_prose:db/migrations/20260423_tsos_savings_ledger.sql",
+    "conductor_cold_start_prose:routes/api-cost-savings-routes.js",
+    "conductor_session_table:config/migration-preflight-collision-allowlist.json",
+    "conductor_session_table:db/migrations/20260423_tsos_savings_ledger.sql",
+    "conductor_session_table:db/migrations/20260424_tsos_monetization_view.sql",
+    "conductor_session_table:db/migrations/20260532_unified_token_accounting_view.sql",
+    "conductor_session_table:db/migrations/20260602_token_accounting_schema_repair.sql",
+    "conductor_session_table:db/migrations/20260603_unified_token_accounting_view_v2.sql",
+    "conductor_session_table:db/migrations/20260704_create_conductor_session_savings.sql",
+    "conductor_session_table:scripts/verify-token-accounting-current-state.mjs",
+    "conductor_session_table:services/savings-ledger.js",
+    "conductor_session_table:services/token-accounting-service.js",
+    "conductorSession_identifier:services/savings-ledger.js"
+  ]
+}

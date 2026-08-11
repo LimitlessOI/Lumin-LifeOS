@@ -1,0 +1,127 @@
+{
+  "schema": "terminology_collision_receipt_v1",
+  "generated_at": "2026-08-11T22:44:45.129Z",
+  "produced_by": "scripts/verify-terminology-collisions.mjs",
+  "resolution": "OPEN-6: the constitutional office keeps the name Conductor; the mechanical session-supervisor role was renamed to Session Supervisor.",
+  "verdict": "NO_NEW_COLLISIONS",
+  "total_occurrences": 19,
+  "new_collisions": [],
+  "resolved_since_baseline": [],
+  "remaining": [
+    {
+      "id": "conductor_builder_audit_table:db/migrations/20260420_handoff_governance.sql",
+      "pattern": "conductor_builder_audit_table",
+      "file": "db/migrations/20260420_handoff_governance.sql",
+      "occurrences": 2
+    },
+    {
+      "id": "conductor_builder_audit_table:routes/lifeos-council-builder-routes.js",
+      "pattern": "conductor_builder_audit_table",
+      "file": "routes/lifeos-council-builder-routes.js",
+      "occurrences": 4
+    },
+    {
+      "id": "conductor_builder_audit_table:services/audit-data-sources.js",
+      "pattern": "conductor_builder_audit_table",
+      "file": "services/audit-data-sources.js",
+      "occurrences": 2
+    },
+    {
+      "id": "conductor_builder_audit_table:services/employerInterviewProcess.js",
+      "pattern": "conductor_builder_audit_table",
+      "file": "services/employerInterviewProcess.js",
+      "occurrences": 1
+    },
+    {
+      "id": "conductor_builder_audit_table:services/lifeos-communication-os-service.js",
+      "pattern": "conductor_builder_audit_table",
+      "file": "services/lifeos-communication-os-service.js",
+      "occurrences": 1
+    },
+    {
+      "id": "conductor_builder_audit_table:services/securityAuditService.js",
+      "pattern": "conductor_builder_audit_table",
+      "file": "services/securityAuditService.js",
+      "occurrences": 3
+    },
+    {
+      "id": "conductor_cold_start_prose:db/migrations/20260423_tsos_savings_ledger.sql",
+      "pattern": "conductor_cold_start_prose",
+      "file": "db/migrations/20260423_tsos_savings_ledger.sql",
+      "occurrences": 2
+    },
+    {
+      "id": "conductor_cold_start_prose:routes/api-cost-savings-routes.js",
+      "pattern": "conductor_cold_start_prose",
+      "file": "routes/api-cost-savings-routes.js",
+      "occurrences": 1
+    },
+    {
+      "id": "conductor_session_table:config/migration-preflight-collision-allowlist.json",
+      "pattern": "conductor_session_table",
+      "file": "config/migration-preflight-collision-allowlist.json",
+      "occurrences": 1
+    },
+    {
+      "id": "conductor_session_table:db/migrations/20260423_tsos_savings_ledger.sql",
+      "pattern": "conductor_session_table",
+      "file": "db/migrations/20260423_tsos_savings_ledger.sql",
+      "occurrences": 5
+    },
+    {
+      "id": "conductor_session_table:db/migrations/20260424_tsos_monetization_view.sql",
+      "pattern": "conductor_session_table",
+      "file": "db/migrations/20260424_tsos_monetization_view.sql",
+      "occurrences": 1
+    },
+    {
+      "id": "conductor_session_table:db/migrations/20260532_unified_token_accounting_view.sql",
+      "pattern": "conductor_session_table",
+      "file": "db/migrations/20260532_unified_token_accounting_view.sql",
+      "occurrences": 2
+    },
+    {
+      "id": "conductor_session_table:db/migrations/20260602_token_accounting_schema_repair.sql",
+      "pattern": "conductor_session_table",
+      "file": "db/migrations/20260602_token_accounting_schema_repair.sql",
+      "occurrences": 2
+    },
+    {
+      "id": "conductor_session_table:db/migrations/20260603_unified_token_accounting_view_v2.sql",
+      "pattern": "conductor_session_table",
+      "file": "db/migrations/20260603_unified_token_accounting_view_v2.sql",
+      "occurrences": 2
+    },
+    {
+      "id": "conductor_session_table:db/migrations/20260704_create_conductor_session_savings.sql",
+      "pattern": "conductor_session_table",
+      "file": "db/migrations/20260704_create_conductor_session_savings.sql",
+      "occurrences": 3
+    },
+    {
+      "id": "conductor_session_table:scripts/verify-token-accounting-current-state.mjs",
+      "pattern": "conductor_session_table",
+      "file": "scripts/verify-token-accounting-current-state.mjs",
+      "occurrences": 5
+    },
+    {
+      "id": "conductor_session_table:services/savings-ledger.js",
+      "pattern": "conductor_session_table",
+      "file": "services/savings-ledger.js",
+      "occurrences": 2
+    },
+    {
+      "id": "conductor_session_table:services/token-accounting-service.js",
+      "pattern": "conductor_session_table",
+      "file": "services/token-accounting-service.js",
+      "occurrences": 1
+    },
+    {
+      "id": "conductorSession_identifier:services/savings-ledger.js",
+      "pattern": "conductorSession_identifier",
+      "file": "services/savings-ledger.js",
+      "occurrences": 1
+    }
+  ],
+  "remaining_note": "Remaining entries are physical names (DB tables) and historical receipts. Renaming a live table requires a governed migration and coordinated deploy, which is deliberately not done as a side effect of a naming fix."
+}
