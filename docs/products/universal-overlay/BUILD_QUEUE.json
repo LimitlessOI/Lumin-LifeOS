@@ -3308,17 +3308,22 @@
     },
     {
       "id": "step-1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/holdToTalkService.js",
       "task": "Create service to manage hold-to-talk audio streams and integrate with Taloa perception.",
       "spec": "Implement a service that buffers incoming audio from the client-side 'hold-to-talk' interaction, coordinates with Taloa's perception-fusion-service and task-orchestrator-service for processing upon release, and handles streaming state.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "handleAudioStream",
         "initHoldToTalkService"
-      ]
+      ],
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-08-12T22:55:06.841Z",
+      "last_error": "NOT_ON_BLUEPRINT"
     },
     {
       "id": "step-2",
