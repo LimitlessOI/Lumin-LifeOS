@@ -6487,13 +6487,13 @@
     },
     {
       "id": "step-2",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/founder-intent-clarify.js",
       "task": "Implement founder intent clarification service",
       "spec": "Create a service that exports a `clarifyIntent` function. This function should accept a founder message and a proposed intent, using `callCouncilMember('intent_clarifier', prompt)` to refine or confirm the intent, particularly when initial classification might be ambiguous or require further context.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "clarifyIntent"
       ],
@@ -6503,7 +6503,7 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-08-12T22:13:58.157Z",
       "last_error": "AIC_GATE_FAILURE",
       "last_attempt": null,
       "revive_count": 2,
