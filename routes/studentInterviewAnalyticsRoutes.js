@@ -5,9 +5,12 @@
 import { getInterviewAnalysis } from '../services/studentInterviewAnalytics.js';
 
 export function registerStudentInterviewAnalyticsRoutes(app, deps) {
-  const { logger } = deps;
+  const { logger, requireKey } = deps;
+  if (typeof requireKey !== 'function') {
+    throw new Error('registerStudentInterviewAnalyticsRoutes requires deps.requireKey');
+  }
 
-  app.get('/student-interview-analytics/:id', async (req, res) => {
+  app.get('/student-interview-analytics/:id', requireKey, async (req, res) => {
     const { id } = req.params;
     logger.info({ id }, 'Fetching student interview analytics');
     try {

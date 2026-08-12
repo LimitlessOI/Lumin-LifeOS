@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-12T09:19:55.865Z",
+  "generated_at": "2026-08-12T11:10:11.164Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13365,
+  "file_count": 13373,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21443,8 +21443,8 @@
       "path": "builderos-reboot/DUPLICATION_RECEIPT.json",
       "synopsis": "BuilderOS artifact — DUPLICATION RECEIPT.",
       "bytes": 1211,
-      "mtime": "2026-08-11T22:12:18.850Z",
-      "indexed_at": "2026-08-11T22:15:50.764Z",
+      "mtime": "2026-08-12T11:08:34.685Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
@@ -21487,8 +21487,8 @@
       "path": "builderos-reboot/FULL_LOOP_PROOF_RECEIPT.json",
       "synopsis": "BuilderOS artifact — FULL LOOP PROOF RECEIPT.",
       "bytes": 4030,
-      "mtime": "2026-08-11T22:12:18.851Z",
-      "indexed_at": "2026-08-11T22:15:50.764Z",
+      "mtime": "2026-08-12T11:08:34.685Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
@@ -21527,8 +21527,8 @@
       "path": "builderos-reboot/governance/BUILDEROS_INTAKE_REGRESSION_HARNESS.json",
       "synopsis": "BuilderOS artifact — BUILDEROS INTAKE REGRESSION HARNESS.",
       "bytes": 2514,
-      "mtime": "2026-08-11T22:12:01.822Z",
-      "indexed_at": "2026-08-11T22:15:50.764Z",
+      "mtime": "2026-08-12T11:08:34.805Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
@@ -21678,9 +21678,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 4019680,
-      "mtime": "2026-08-11T22:15:50.859Z",
-      "indexed_at": "2026-08-11T22:16:03.727Z"
+      "bytes": 4014346,
+      "mtime": "2026-08-11T11:09:29.128Z",
+      "indexed_at": "2026-08-11T11:09:36.594Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -21750,16 +21750,16 @@
       "path": "builderos-reboot/governance/SENTRY_FINDINGS_QUEUE.json",
       "synopsis": "BuilderOS artifact — SENTRY FINDINGS QUEUE.",
       "bytes": 26293,
-      "mtime": "2026-08-11T22:12:18.855Z",
-      "indexed_at": "2026-08-11T22:15:50.764Z",
+      "mtime": "2026-08-12T11:08:34.817Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/governance/SENTRY_PRODUCT_REGISTRY.json",
       "synopsis": "BuilderOS artifact — SENTRY PRODUCT REGISTRY.",
       "bytes": 4507,
-      "mtime": "2026-08-12T04:41:47.841Z",
-      "indexed_at": "2026-08-12T04:41:47.841Z",
+      "mtime": "2026-08-12T11:08:34.817Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
@@ -21773,8 +21773,8 @@
       "path": "builderos-reboot/governance/TERMINOLOGY_BRIDGE.json",
       "synopsis": "BuilderOS artifact — TERMINOLOGY BRIDGE.",
       "bytes": 4942,
-      "mtime": "2026-08-11T22:44:58.445Z",
-      "indexed_at": "2026-08-11T22:45:26.446Z",
+      "mtime": "2026-08-12T11:08:34.817Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
@@ -21864,8 +21864,8 @@
       "path": "builderos-reboot/MISSION_PACK_INDEX.json",
       "synopsis": "BuilderOS artifact — MISSION PACK INDEX.",
       "bytes": 20632,
-      "mtime": "2026-08-11T22:12:18.851Z",
-      "indexed_at": "2026-08-11T22:15:50.764Z",
+      "mtime": "2026-08-12T11:08:34.785Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
@@ -22011,135 +22011,135 @@
       "path": "builderos-reboot/MISSIONS/BUILDEROS-DIRECT-INTAKE-SOCIALMEDIAOS-20260811071706/DO_NOT_INVENT.json",
       "synopsis": "BuilderOS artifact — DO NOT INVENT.",
       "bytes": 320,
-      "mtime": "2026-08-11T22:11:28.409Z",
-      "indexed_at": "2026-08-12T03:14:49.513Z",
+      "mtime": "2026-08-12T11:08:34.685Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/BUILDEROS-DIRECT-INTAKE-SOCIALMEDIAOS-20260811071706/FOUNDER_PACKET.md",
       "synopsis": "Raw Founder Notes Intake — BUILDEROS-DIRECT-INTAKE-SOCIALMEDIAOS-20260811071706",
       "bytes": 3295,
-      "mtime": "2026-08-12T03:14:47.286Z",
-      "indexed_at": "2026-08-12T03:14:49.513Z"
+      "mtime": "2026-08-12T11:08:34.685Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/BUILDEROS-DIRECT-INTAKE-SOCIALMEDIAOS-20260811071706/IDC_CONSENSUS_RECEIPT.json",
       "synopsis": "BuilderOS artifact — IDC CONSENSUS RECEIPT.",
       "bytes": 827,
-      "mtime": "2026-08-11T22:11:28.409Z",
-      "indexed_at": "2026-08-12T03:14:49.513Z",
+      "mtime": "2026-08-12T11:08:34.685Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/BUILDEROS-DIRECT-INTAKE-SOCIALMEDIAOS-20260811071706/INTENT_COVERAGE_MAP.json",
       "synopsis": "BuilderOS artifact — INTENT COVERAGE MAP.",
       "bytes": 6138,
-      "mtime": "2026-08-11T22:11:28.410Z",
-      "indexed_at": "2026-08-12T03:14:49.513Z",
+      "mtime": "2026-08-12T11:08:34.685Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/BUILDEROS-DIRECT-INTAKE-SOCIALMEDIAOS-20260811071706/KNOWN_ASSUMPTIONS.json",
       "synopsis": "BuilderOS artifact — KNOWN ASSUMPTIONS.",
       "bytes": 468,
-      "mtime": "2026-08-11T22:11:28.410Z",
-      "indexed_at": "2026-08-12T03:14:49.513Z",
+      "mtime": "2026-08-12T11:08:34.685Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/BUILDEROS-DIRECT-INTAKE-SOCIALMEDIAOS-20260811071706/KNOWN_CONTRADICTIONS.json",
       "synopsis": "BuilderOS artifact — KNOWN CONTRADICTIONS.",
       "bytes": 176,
-      "mtime": "2026-08-11T22:11:28.410Z",
-      "indexed_at": "2026-08-12T03:14:49.513Z",
+      "mtime": "2026-08-12T11:08:34.689Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/BUILDEROS-DIRECT-INTAKE-SOCIALMEDIAOS-20260811071706/KNOWN_RISKS.json",
       "synopsis": "BuilderOS artifact — KNOWN RISKS.",
       "bytes": 164,
-      "mtime": "2026-08-11T22:11:28.410Z",
-      "indexed_at": "2026-08-12T03:14:49.513Z",
+      "mtime": "2026-08-12T11:08:34.689Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/BUILDEROS-DIRECT-INTAKE-SOCIALMEDIAOS-20260811071706/MODE_A_TO_B_TRANSITION_RECEIPT.json",
       "synopsis": "BuilderOS artifact — MODE A TO B TRANSITION RECEIPT.",
       "bytes": 359,
-      "mtime": "2026-08-11T22:11:28.410Z",
-      "indexed_at": "2026-08-12T03:14:49.513Z",
+      "mtime": "2026-08-12T11:08:34.689Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/BUILDEROS-DIRECT-INTAKE-SOCIALMEDIAOS-20260811071706/PREDICTION_RECEIPT.json",
       "synopsis": "BuilderOS artifact — PREDICTION RECEIPT.",
       "bytes": 709,
-      "mtime": "2026-08-11T22:11:28.410Z",
-      "indexed_at": "2026-08-12T03:14:49.513Z",
+      "mtime": "2026-08-12T11:08:34.689Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/BUILDEROS-DIRECT-INTAKE-SOCIALMEDIAOS-20260811071706/receipts/CFO_RESOURCE_SIMULATION_RECEIPT.json",
       "synopsis": "BuilderOS artifact — CFO RESOURCE SIMULATION RECEIPT.",
       "bytes": 1539,
-      "mtime": "2026-08-11T22:11:28.411Z",
-      "indexed_at": "2026-08-12T03:14:49.513Z",
+      "mtime": "2026-08-12T11:08:34.689Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/BUILDEROS-DIRECT-INTAKE-SOCIALMEDIAOS-20260811071706/receipts/CHAIR_FORECAST_SIMULATION_RECEIPT.json",
       "synopsis": "BuilderOS artifact — CHAIR FORECAST SIMULATION RECEIPT.",
       "bytes": 3464,
-      "mtime": "2026-08-11T22:11:28.411Z",
-      "indexed_at": "2026-08-12T03:14:49.513Z",
+      "mtime": "2026-08-12T11:08:34.689Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/BUILDEROS-DIRECT-INTAKE-SOCIALMEDIAOS-20260811071706/receipts/CHAIR_HANDOFF_FAILURE.json",
       "synopsis": "BuilderOS artifact — CHAIR HANDOFF FAILURE.",
       "bytes": 1169,
-      "mtime": "2026-08-11T22:11:28.411Z",
-      "indexed_at": "2026-08-12T03:14:49.513Z",
+      "mtime": "2026-08-12T11:08:34.689Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/BUILDEROS-DIRECT-INTAKE-SOCIALMEDIAOS-20260811071706/receipts/DIRECT_TERMINAL_INTAKE_RECEIPT.json",
       "synopsis": "BuilderOS artifact — DIRECT TERMINAL INTAKE RECEIPT.",
       "bytes": 415,
-      "mtime": "2026-08-11T22:11:28.411Z",
-      "indexed_at": "2026-08-12T03:14:49.513Z",
+      "mtime": "2026-08-12T11:08:34.689Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/BUILDEROS-DIRECT-INTAKE-SOCIALMEDIAOS-20260811071706/receipts/PRE_HANDOFF_INTENT_GATE_REPORT.json",
       "synopsis": "BuilderOS artifact — PRE HANDOFF INTENT GATE REPORT.",
       "bytes": 3713,
-      "mtime": "2026-08-11T22:11:28.411Z",
-      "indexed_at": "2026-08-12T03:14:49.513Z",
+      "mtime": "2026-08-12T11:08:34.689Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/BUILDEROS-DIRECT-INTAKE-SOCIALMEDIAOS-20260811071706/receipts/SNT_INTENT_ATTACK_RECEIPT.json",
       "synopsis": "BuilderOS artifact — SNT INTENT ATTACK RECEIPT.",
       "bytes": 2691,
-      "mtime": "2026-08-11T22:11:28.411Z",
-      "indexed_at": "2026-08-12T03:14:49.513Z",
+      "mtime": "2026-08-12T11:08:34.689Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/BUILDEROS-DIRECT-INTAKE-SOCIALMEDIAOS-20260811071706/receipts/UPSTREAM_ROUTE_REPORT.json",
       "synopsis": "BuilderOS artifact — UPSTREAM ROUTE REPORT.",
       "bytes": 1200,
-      "mtime": "2026-08-11T22:11:28.412Z",
-      "indexed_at": "2026-08-12T03:14:49.513Z",
+      "mtime": "2026-08-12T11:08:34.689Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/BUILDEROS-DIRECT-INTAKE-SOCIALMEDIAOS-20260811071706/receipts/WISDOM_REVIEW_RECEIPT.json",
       "synopsis": "BuilderOS artifact — WISDOM REVIEW RECEIPT.",
       "bytes": 1177,
-      "mtime": "2026-08-11T22:11:28.412Z",
-      "indexed_at": "2026-08-12T03:14:49.513Z",
+      "mtime": "2026-08-12T11:08:34.689Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
@@ -23751,8 +23751,8 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
       "bytes": 10945,
-      "mtime": "2026-08-12T05:40:42.202Z",
-      "indexed_at": "2026-08-12T05:40:42.202Z",
+      "mtime": "2026-08-12T11:08:34.701Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
@@ -31131,166 +31131,166 @@
       "path": "builderos-reboot/MISSIONS/SYSTEM-NOTIFY-EMAIL-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
       "bytes": 3663,
-      "mtime": "2026-08-11T22:11:28.412Z",
-      "indexed_at": "2026-08-12T03:14:49.513Z",
+      "mtime": "2026-08-12T11:08:34.785Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/SYSTEM-NOTIFY-EMAIL-0001/DELIBERATION_GATE.json",
       "synopsis": "BuilderOS artifact — DELIBERATION GATE.",
       "bytes": 1075,
-      "mtime": "2026-08-11T22:11:28.412Z",
-      "indexed_at": "2026-08-12T03:14:49.513Z",
+      "mtime": "2026-08-12T11:08:34.785Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/SYSTEM-NOTIFY-EMAIL-0001/FOUNDER_PACKET.md",
       "synopsis": "Founder Packet — minimal system-to-founder email notify route.",
       "bytes": 1267,
-      "mtime": "2026-08-11T22:11:28.412Z",
-      "indexed_at": "2026-08-12T03:14:49.513Z"
+      "mtime": "2026-08-12T11:08:34.785Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/SYSTEM-NOTIFY-EMAIL-0001/INTENT_BASELINE.json",
       "synopsis": "BuilderOS artifact — INTENT BASELINE.",
       "bytes": 1674,
-      "mtime": "2026-08-11T22:11:28.412Z",
-      "indexed_at": "2026-08-12T03:14:49.513Z",
+      "mtime": "2026-08-12T11:08:34.785Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/TALOA-SCREEN-AGENT-DECIDE-0001/DO_NOT_INVENT.json",
       "synopsis": "BuilderOS artifact — DO NOT INVENT.",
       "bytes": 298,
-      "mtime": "2026-08-11T22:11:28.413Z",
-      "indexed_at": "2026-08-12T03:14:49.513Z",
+      "mtime": "2026-08-12T11:08:34.785Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/TALOA-SCREEN-AGENT-DECIDE-0001/FOUNDER_PACKET.md",
       "synopsis": "Raw Founder Notes Intake — TALOA-SCREEN-AGENT-DECIDE-0001",
       "bytes": 3609,
-      "mtime": "2026-08-12T03:14:47.310Z",
-      "indexed_at": "2026-08-12T03:14:49.513Z"
+      "mtime": "2026-08-12T11:08:34.785Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/TALOA-SCREEN-AGENT-DECIDE-0001/IDC_CONSENSUS_RECEIPT.json",
       "synopsis": "BuilderOS artifact — IDC CONSENSUS RECEIPT.",
       "bytes": 805,
-      "mtime": "2026-08-11T22:11:28.413Z",
-      "indexed_at": "2026-08-12T03:14:49.513Z",
+      "mtime": "2026-08-12T11:08:34.785Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/TALOA-SCREEN-AGENT-DECIDE-0001/INTENT_COVERAGE_MAP.json",
       "synopsis": "BuilderOS artifact — INTENT COVERAGE MAP.",
       "bytes": 5971,
-      "mtime": "2026-08-11T22:11:28.413Z",
-      "indexed_at": "2026-08-12T03:14:49.513Z",
+      "mtime": "2026-08-12T11:08:34.785Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/TALOA-SCREEN-AGENT-DECIDE-0001/KNOWN_ASSUMPTIONS.json",
       "synopsis": "BuilderOS artifact — KNOWN ASSUMPTIONS.",
       "bytes": 446,
-      "mtime": "2026-08-11T22:11:28.413Z",
-      "indexed_at": "2026-08-12T03:14:49.513Z",
+      "mtime": "2026-08-12T11:08:34.785Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/TALOA-SCREEN-AGENT-DECIDE-0001/KNOWN_CONTRADICTIONS.json",
       "synopsis": "BuilderOS artifact — KNOWN CONTRADICTIONS.",
       "bytes": 154,
-      "mtime": "2026-08-11T22:11:28.413Z",
-      "indexed_at": "2026-08-12T03:14:49.513Z",
+      "mtime": "2026-08-12T11:08:34.785Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/TALOA-SCREEN-AGENT-DECIDE-0001/KNOWN_RISKS.json",
       "synopsis": "BuilderOS artifact — KNOWN RISKS.",
       "bytes": 142,
-      "mtime": "2026-08-11T22:11:28.413Z",
-      "indexed_at": "2026-08-12T03:14:49.513Z",
+      "mtime": "2026-08-12T11:08:34.785Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/TALOA-SCREEN-AGENT-DECIDE-0001/MODE_A_TO_B_TRANSITION_RECEIPT.json",
       "synopsis": "BuilderOS artifact — MODE A TO B TRANSITION RECEIPT.",
       "bytes": 337,
-      "mtime": "2026-08-11T22:11:28.414Z",
-      "indexed_at": "2026-08-12T03:14:49.513Z",
+      "mtime": "2026-08-12T11:08:34.785Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/TALOA-SCREEN-AGENT-DECIDE-0001/PREDICTION_RECEIPT.json",
       "synopsis": "BuilderOS artifact — PREDICTION RECEIPT.",
       "bytes": 687,
-      "mtime": "2026-08-11T22:11:28.414Z",
-      "indexed_at": "2026-08-12T03:14:49.513Z",
+      "mtime": "2026-08-12T11:08:34.785Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/TALOA-SCREEN-AGENT-DECIDE-0001/receipts/CFO_RESOURCE_SIMULATION_RECEIPT.json",
       "synopsis": "BuilderOS artifact — CFO RESOURCE SIMULATION RECEIPT.",
       "bytes": 1517,
-      "mtime": "2026-08-11T22:11:28.414Z",
-      "indexed_at": "2026-08-12T03:14:49.513Z",
+      "mtime": "2026-08-12T11:08:34.785Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/TALOA-SCREEN-AGENT-DECIDE-0001/receipts/CHAIR_FORECAST_SIMULATION_RECEIPT.json",
       "synopsis": "BuilderOS artifact — CHAIR FORECAST SIMULATION RECEIPT.",
       "bytes": 3354,
-      "mtime": "2026-08-11T22:11:28.414Z",
-      "indexed_at": "2026-08-12T03:14:49.513Z",
+      "mtime": "2026-08-12T11:08:34.785Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/TALOA-SCREEN-AGENT-DECIDE-0001/receipts/CHAIR_HANDOFF_FAILURE.json",
       "synopsis": "BuilderOS artifact — CHAIR HANDOFF FAILURE.",
       "bytes": 864,
-      "mtime": "2026-08-11T22:11:28.414Z",
-      "indexed_at": "2026-08-12T03:14:49.513Z",
+      "mtime": "2026-08-12T11:08:34.785Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/TALOA-SCREEN-AGENT-DECIDE-0001/receipts/DIRECT_TERMINAL_INTAKE_RECEIPT.json",
       "synopsis": "BuilderOS artifact — DIRECT TERMINAL INTAKE RECEIPT.",
       "bytes": 371,
-      "mtime": "2026-08-11T22:11:28.414Z",
-      "indexed_at": "2026-08-12T03:14:49.513Z",
+      "mtime": "2026-08-12T11:08:34.785Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/TALOA-SCREEN-AGENT-DECIDE-0001/receipts/PRE_HANDOFF_INTENT_GATE_REPORT.json",
       "synopsis": "BuilderOS artifact — PRE HANDOFF INTENT GATE REPORT.",
       "bytes": 2915,
-      "mtime": "2026-08-11T22:11:28.414Z",
-      "indexed_at": "2026-08-12T03:14:49.513Z",
+      "mtime": "2026-08-12T11:08:34.785Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/TALOA-SCREEN-AGENT-DECIDE-0001/receipts/SNT_INTENT_ATTACK_RECEIPT.json",
       "synopsis": "BuilderOS artifact — SNT INTENT ATTACK RECEIPT.",
       "bytes": 2645,
-      "mtime": "2026-08-11T22:11:28.415Z",
-      "indexed_at": "2026-08-12T03:14:49.513Z",
+      "mtime": "2026-08-12T11:08:34.785Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/TALOA-SCREEN-AGENT-DECIDE-0001/receipts/UPSTREAM_ROUTE_REPORT.json",
       "synopsis": "BuilderOS artifact — UPSTREAM ROUTE REPORT.",
       "bytes": 895,
-      "mtime": "2026-08-11T22:11:28.415Z",
-      "indexed_at": "2026-08-12T03:14:49.513Z",
+      "mtime": "2026-08-12T11:08:34.785Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/TALOA-SCREEN-AGENT-DECIDE-0001/receipts/WISDOM_REVIEW_RECEIPT.json",
       "synopsis": "BuilderOS artifact — WISDOM REVIEW RECEIPT.",
       "bytes": 1155,
-      "mtime": "2026-08-11T22:11:28.415Z",
-      "indexed_at": "2026-08-12T03:14:49.513Z",
+      "mtime": "2026-08-12T11:08:34.785Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
@@ -31359,8 +31359,8 @@
       "path": "builderos-reboot/PROJECT_CERTIFICATION.json",
       "synopsis": "BuilderOS artifact — PROJECT CERTIFICATION.",
       "bytes": 3954,
-      "mtime": "2026-08-11T22:12:18.852Z",
-      "indexed_at": "2026-08-11T22:15:50.764Z",
+      "mtime": "2026-08-12T11:08:34.785Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
@@ -31382,8 +31382,8 @@
       "path": "builderos-reboot/READINESS_REPORT.json",
       "synopsis": "BuilderOS artifact — READINESS REPORT.",
       "bytes": 566,
-      "mtime": "2026-08-11T22:12:18.853Z",
-      "indexed_at": "2026-08-11T22:15:50.764Z",
+      "mtime": "2026-08-12T11:08:34.785Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
@@ -31521,8 +31521,8 @@
       "path": "builderos-reboot/scripts/execute-mission.mjs",
       "synopsis": "Execute all steps in a mission blueprint, then run acceptance tests.",
       "bytes": 17705,
-      "mtime": "2026-08-11T22:29:41.587Z",
-      "indexed_at": "2026-08-11T22:31:31.033Z",
+      "mtime": "2026-08-12T11:08:34.817Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -32379,8 +32379,8 @@
       "path": "config/architect-writeback-allowlist.js",
       "synopsis": "The Architect write-back allowlist (blueprint §18, B2). This is the",
       "bytes": 2991,
-      "mtime": "2026-08-12T01:45:21.051Z",
-      "indexed_at": "2026-08-12T01:54:20.424Z",
+      "mtime": "2026-08-12T11:08:34.825Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -32612,8 +32612,8 @@
       "path": "config/factory-registry.js",
       "synopsis": "Factory identity and allocation policy. Factories are PEERS: neither",
       "bytes": 4141,
-      "mtime": "2026-08-12T02:31:59.207Z",
-      "indexed_at": "2026-08-12T02:34:28.525Z",
+      "mtime": "2026-08-12T11:08:34.829Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -32622,8 +32622,8 @@
       "path": "config/factory-workspace.js",
       "synopsis": "Workspace isolation for parallel factories. Two factories writing",
       "bytes": 4094,
-      "mtime": "2026-08-12T02:30:39.241Z",
-      "indexed_at": "2026-08-12T02:34:28.525Z",
+      "mtime": "2026-08-12T11:08:34.829Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -32640,8 +32640,8 @@
       "path": "config/founder-escalation-threshold.js",
       "synopsis": "The Founder Escalation Threshold — the closed set of conditions under",
       "bytes": 7928,
-      "mtime": "2026-08-12T04:41:47.841Z",
-      "indexed_at": "2026-08-12T04:41:47.841Z",
+      "mtime": "2026-08-12T11:08:34.829Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -32727,8 +32727,8 @@
       "path": "config/independence-factors.js",
       "synopsis": "Effective independence between agents — how many genuinely distinct",
       "bytes": 5914,
-      "mtime": "2026-08-12T03:06:16.528Z",
-      "indexed_at": "2026-08-12T03:14:49.513Z",
+      "mtime": "2026-08-12T11:08:34.829Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -32835,8 +32835,8 @@
       "path": "config/manufacturing-plan-schema.js",
       "synopsis": "Typed contract for the Manufacturing Plan and the FACTORY_READY",
       "bytes": 6316,
-      "mtime": "2026-08-12T03:00:38.281Z",
-      "indexed_at": "2026-08-12T03:14:49.513Z",
+      "mtime": "2026-08-12T11:08:34.829Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -32871,8 +32871,8 @@
       "path": "config/officer-staff.js",
       "synopsis": "Officer staffing — every office gets cheap assistants, and the",
       "bytes": 9091,
-      "mtime": "2026-08-12T02:37:20.710Z",
-      "indexed_at": "2026-08-12T02:39:23.517Z",
+      "mtime": "2026-08-12T11:08:34.829Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -33008,8 +33008,8 @@
       "path": "config/step-dependencies.js",
       "synopsis": "Canonical step-dependency contract. Three different key names for",
       "bytes": 4222,
-      "mtime": "2026-08-11T22:21:52.800Z",
-      "indexed_at": "2026-08-11T22:25:25.951Z",
+      "mtime": "2026-08-12T11:08:34.829Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -33046,8 +33046,8 @@
       "path": "config/trust-scoring.js",
       "synopsis": "Founder-ratified trust-scoring policy — pure functions, no I/O, no DB.",
       "bytes": 9555,
-      "mtime": "2026-08-11T22:27:02.094Z",
-      "indexed_at": "2026-08-11T22:31:31.033Z",
+      "mtime": "2026-08-12T11:08:34.829Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -34298,8 +34298,8 @@
       "path": "data/builderos-compound-improvement-state.json",
       "synopsis": "JSON data/config — data/builderos-compound-improvement-state.json.",
       "bytes": 2209,
-      "mtime": "2026-08-11T22:12:18.856Z",
-      "indexed_at": "2026-08-11T22:15:50.764Z",
+      "mtime": "2026-08-12T11:08:34.853Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
@@ -34338,8 +34338,8 @@
       "path": "data/chair-competitive-research-cursor.json",
       "synopsis": "JSON data/config — data/chair-competitive-research-cursor.json.",
       "bytes": 347,
-      "mtime": "2026-08-12T00:42:18.256Z",
-      "indexed_at": "2026-08-12T03:14:49.513Z",
+      "mtime": "2026-08-12T11:08:34.853Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
@@ -34434,8 +34434,8 @@
       "path": "data/constitutional-framework/reports/CONSTITUTIONAL_OBSERVABILITY_REPORT.json",
       "synopsis": "JSON data/config — data/constitutional-framework/reports/CONSTITUTIONAL_OBSERVABILITY_REPORT.json.",
       "bytes": 12116,
-      "mtime": "2026-08-11T22:54:04.825Z",
-      "indexed_at": "2026-08-11T22:54:32.565Z",
+      "mtime": "2026-08-12T11:08:34.853Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
@@ -34458,8 +34458,8 @@
       "path": "data/enforcement-truth-baseline.json",
       "synopsis": "JSON data/config — data/enforcement-truth-baseline.json.",
       "bytes": 11018,
-      "mtime": "2026-08-11T22:24:20.816Z",
-      "indexed_at": "2026-08-11T22:25:25.951Z",
+      "mtime": "2026-08-12T11:08:34.853Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
@@ -34857,8 +34857,8 @@
       "path": "data/prod-health-watchdog-state.json",
       "synopsis": "JSON data/config — data/prod-health-watchdog-state.json.",
       "bytes": 28,
-      "mtime": "2026-08-11T22:54:06.905Z",
-      "indexed_at": "2026-08-11T22:54:32.565Z",
+      "mtime": "2026-08-12T11:08:34.861Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
@@ -34905,8 +34905,8 @@
       "path": "data/terminology-collision-baseline.json",
       "synopsis": "JSON data/config — data/terminology-collision-baseline.json.",
       "bytes": 1814,
-      "mtime": "2026-08-11T22:44:36.798Z",
-      "indexed_at": "2026-08-11T22:45:26.446Z",
+      "mtime": "2026-08-12T11:08:34.861Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
@@ -39149,8 +39149,8 @@
       "path": "db/migrations/20260811_mtg_card_pricing_provenance.sql",
       "synopsis": "Pricing provenance for mtg_card_collection -- records WHICH paper",
       "bytes": 1908,
-      "mtime": "2026-08-12T04:18:33.436Z",
-      "indexed_at": "2026-08-12T04:18:33.436Z"
+      "mtime": "2026-08-12T11:08:34.897Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z"
     },
     {
       "path": "db/migrations/20261101_habit_tables.sql",
@@ -40847,8 +40847,8 @@
       "path": "docs/constitution/proposals/2026-08-02-CONSTITUTION-DIGITAL-TWIN-PLAN.md",
       "synopsis": "Complete picture — constitutional arrangement, enforcement, digital twin, and phased implementation plan (PROPOSAL).",
       "bytes": 22758,
-      "mtime": "2026-08-11T21:59:03.792Z",
-      "indexed_at": "2026-08-11T22:01:29.323Z"
+      "mtime": "2026-08-12T11:08:34.949Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z"
     },
     {
       "path": "docs/constitution/proposals/2026-08-02-CONSTITUTIONAL-CANDIDATES-v1.1.md",
@@ -40944,9 +40944,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 186454,
-      "mtime": "2026-08-12T05:12:20.805Z",
-      "indexed_at": "2026-08-12T05:12:20.805Z"
+      "bytes": 187001,
+      "mtime": "2026-08-12T11:10:11.061Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -41162,50 +41162,64 @@
       "path": "docs/conversation_dumps/2026-08-11-fluid-ui-prior-art-research.md",
       "synopsis": "Founder capture — prior-art research on fluid/generative UI and OS-level AI overlays, and what to copy for the Taloa Universal Overlay, 2026-08-11.",
       "bytes": 5566,
-      "mtime": "2026-08-12T02:22:42.426Z",
-      "indexed_at": "2026-08-12T02:22:43.609Z"
+      "mtime": "2026-08-12T11:08:34.961Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z"
     },
     {
       "path": "docs/conversation_dumps/2026-08-11-founder-escalation-threshold-and-decision-compression.md",
       "synopsis": "Conversation capture (SO-004) — the Chair's correction that produced the Founder Escalation Threshold.",
       "bytes": 4063,
-      "mtime": "2026-08-12T04:41:47.841Z",
-      "indexed_at": "2026-08-12T04:41:47.841Z"
+      "mtime": "2026-08-12T11:08:34.961Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z"
+    },
+    {
+      "path": "docs/conversation_dumps/2026-08-11-governance-repair-blueprint-mandate.md",
+      "synopsis": "Founder capture — stop analyzing Overlay intake failure; blueprint BuilderOS governance repair; keep broken intake as regression fixture, 2026-08-11.",
+      "bytes": 6718,
+      "mtime": "2026-08-12T11:08:34.961Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z"
+    },
+    {
+      "path": "docs/conversation_dumps/2026-08-11-manufacturing-lifecycle-and-factory-competition.md",
+      "synopsis": "Founder capture — manufacturing-plan stage, three-party Factory Ready consensus, peer factories, and reality-scored trust leaderboard; plus the repository truth audit it triggered. 2026-08-11.",
+      "bytes": 13523,
+      "mtime": "2026-08-12T11:08:34.961Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z"
     },
     {
       "path": "docs/conversation_dumps/2026-08-11-mtg-cataloger-mispricing-root-cause.md",
       "synopsis": "Founder capture -- picking the MTG cataloger back up cold, finding that the catalogue was mispriced rather than merely incomplete, 2026-08-11.",
       "bytes": 4279,
-      "mtime": "2026-08-12T05:12:20.805Z",
-      "indexed_at": "2026-08-12T05:12:20.805Z"
+      "mtime": "2026-08-12T11:08:34.961Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z"
     },
     {
       "path": "docs/conversation_dumps/2026-08-11-mtg-upload-automation-and-the-real-drive-channel.md",
       "synopsis": "Founder capture -- MTG card upload automation attempt, the AppleScript permission wall, and the pivot to the real drive-channel, 2026-08-11.",
       "bytes": 4124,
-      "mtime": "2026-08-11T18:04:29.796Z",
-      "indexed_at": "2026-08-11T18:04:46.734Z"
+      "mtime": "2026-08-12T11:08:34.961Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z"
     },
     {
       "path": "docs/conversation_dumps/2026-08-11-overlay-layer-b-uat.md",
       "synopsis": "Layer B human-sim UAT of the Taloa overlay + founder interface, 2026-08-11. 9 live tests, 7 defects, 1 fixed.",
       "bytes": 10912,
-      "mtime": "2026-08-12T05:17:41.563Z",
-      "indexed_at": "2026-08-12T05:17:41.563Z"
+      "mtime": "2026-08-12T11:08:34.961Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z"
     },
     {
       "path": "docs/conversation_dumps/2026-08-11-taloa-blueprint-consensus-and-live-intake-test.md",
       "synopsis": "Founder capture -- Taloa Universal Overlay blueprint independent-draft consensus process and live BuilderOS intake test, 2026-08-11.",
       "bytes": 11917,
-      "mtime": "2026-08-11T18:04:20.084Z",
-      "indexed_at": "2026-08-11T18:04:46.734Z"
+      "mtime": "2026-08-12T11:08:34.961Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z"
     },
     {
       "path": "docs/conversation_dumps/2026-08-11-two-factory-findings-and-chair-research-packet.md",
       "synopsis": "Conversation capture — Chair research packet + two-factory run findings, 2026-08-11.",
       "bytes": 5824,
-      "mtime": "2026-08-12T03:11:53.214Z",
-      "indexed_at": "2026-08-12T03:14:49.513Z"
+      "mtime": "2026-08-12T11:08:34.961Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z"
     },
     {
       "path": "docs/conversation_dumps/by-product/sessions/2a4739f2/BUILDEROS-AUTONOMOUS.md",
@@ -41954,16 +41968,16 @@
       "path": "docs/ENV_LIVE_INVENTORY.json",
       "synopsis": "Documentation — ENV LIVE INVENTORY.",
       "bytes": 5320,
-      "mtime": "2026-08-11T17:10:46.453Z",
-      "indexed_at": "2026-08-11T17:12:22.963Z",
+      "mtime": "2026-08-12T11:08:34.913Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/ENV_REGISTRY.md",
       "synopsis": "Environment Registry Documentation",
       "bytes": 3879,
-      "mtime": "2026-08-11T17:12:07.086Z",
-      "indexed_at": "2026-08-11T17:12:22.963Z"
+      "mtime": "2026-08-12T11:08:34.913Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z"
     },
     {
       "path": "docs/ENVIRONMENT_SETUP.md",
@@ -43373,15 +43387,15 @@
       "path": "docs/products/builderos/BUILDEROS_GOVERNANCE_REPAIR_BLUEPRINT_2026-08-11.md",
       "synopsis": "BuilderOS governance repair blueprint — no-invention, typed gates, durable jobs, Sentry taxonomy, office coordination.",
       "bytes": 100594,
-      "mtime": "2026-08-12T04:41:47.841Z",
-      "indexed_at": "2026-08-12T04:41:47.841Z"
+      "mtime": "2026-08-12T11:08:34.781Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z"
     },
     {
       "path": "docs/products/builderos/CHAIR_RESEARCH_DIRECTIVES_2026-08-11.md",
       "synopsis": "Chair research packet + two-factory run directives, 2026-08-11, with honest build status per item.",
       "bytes": 20331,
-      "mtime": "2026-08-12T03:11:19.630Z",
-      "indexed_at": "2026-08-12T03:14:49.513Z"
+      "mtime": "2026-08-12T11:08:34.781Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z"
     },
     {
       "path": "docs/products/builderos/conversations/2026-07-31-path-to-10-governance.md",
@@ -43401,15 +43415,29 @@
       "path": "docs/products/builderos/conversations/2026-08-11-founder-escalation-threshold-and-decision-compression.md",
       "synopsis": "Conversation capture (SO-004) — the Chair's correction that produced the Founder Escalation Threshold.",
       "bytes": 4063,
-      "mtime": "2026-08-12T04:41:47.841Z",
-      "indexed_at": "2026-08-12T04:41:47.841Z"
+      "mtime": "2026-08-12T11:08:34.785Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z"
+    },
+    {
+      "path": "docs/products/builderos/conversations/2026-08-11-governance-repair-blueprint-mandate.md",
+      "synopsis": "Founder capture — stop analyzing Overlay intake failure; blueprint BuilderOS governance repair; keep broken intake as regression fixture, 2026-08-11.",
+      "bytes": 6718,
+      "mtime": "2026-08-12T11:08:34.785Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z"
+    },
+    {
+      "path": "docs/products/builderos/conversations/2026-08-11-manufacturing-lifecycle-and-factory-competition.md",
+      "synopsis": "Founder capture — manufacturing-plan stage, three-party Factory Ready consensus, peer factories, and reality-scored trust leaderboard; plus the repository truth audit it triggered. 2026-08-11.",
+      "bytes": 13523,
+      "mtime": "2026-08-12T11:08:34.785Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z"
     },
     {
       "path": "docs/products/builderos/conversations/2026-08-11-two-factory-findings-and-chair-research-packet.md",
       "synopsis": "Conversation capture — Chair research packet + two-factory run findings, 2026-08-11.",
       "bytes": 5824,
-      "mtime": "2026-08-12T03:11:53.213Z",
-      "indexed_at": "2026-08-12T03:14:49.513Z"
+      "mtime": "2026-08-12T11:08:34.785Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z"
     },
     {
       "path": "docs/products/builderos/CREATIVE_BRIEF.md",
@@ -43433,6 +43461,13 @@
       "indexed_at": "2026-08-03T09:41:38.588Z"
     },
     {
+      "path": "docs/products/builderos/FACTORY_LIFECYCLE_TRUTH_AUDIT_2026-08-11.md",
+      "synopsis": "Truth audit — does BuilderOS actually enforce the constitutional manufacturing lifecycle end-to-end? Repository evidence per stage.",
+      "bytes": 28922,
+      "mtime": "2026-08-12T11:08:34.781Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z"
+    },
+    {
       "path": "docs/products/builderos/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
       "bytes": 3119,
@@ -43441,33 +43476,56 @@
       "synopsis_index_only": true
     },
     {
+      "path": "docs/products/builderos/fixtures/intake-regression-2026-08-11/EXPECTED_DEFECTS.json",
+      "synopsis": "Documentation — EXPECTED DEFECTS.",
+      "bytes": 1868,
+      "mtime": "2026-08-12T11:08:34.785Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "docs/products/builderos/fixtures/intake-regression-2026-08-11/GOVERNANCE_SNAPSHOT_AT_CAPTURE.json",
       "synopsis": "Documentation — GOVERNANCE SNAPSHOT AT CAPTURE.",
       "bytes": 719,
-      "mtime": "2026-08-12T04:41:47.841Z",
-      "indexed_at": "2026-08-12T04:41:47.841Z",
+      "mtime": "2026-08-12T11:08:34.785Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "docs/products/builderos/fixtures/intake-regression-2026-08-11/README.md",
+      "synopsis": "Regression fixture for BuilderOS governance repair — frozen Overlay intake that invented architecture.",
+      "bytes": 1963,
+      "mtime": "2026-08-12T11:08:34.785Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z"
+    },
+    {
+      "path": "docs/products/builderos/fixtures/intake-regression-2026-08-11/SESSION_000146ae_ready_invented_architecture.json",
+      "synopsis": "Exports createVideoRoutes — docs/products/builderos/fixtures/intake-regression-2026-08-11/SESSION_000146ae_ready_invented_architecture.json.",
+      "bytes": 69669,
+      "mtime": "2026-08-12T11:08:34.785Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/products/builderos/FOUNDER_DECISION_SET_OVERLAY.md",
       "synopsis": "Generated by scripts/run-overlay-lifecycle-exam.mjs. Do not hand-edit.",
       "bytes": 2116,
-      "mtime": "2026-08-12T04:41:47.841Z",
-      "indexed_at": "2026-08-12T04:41:47.841Z"
+      "mtime": "2026-08-12T11:08:34.781Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z"
     },
     {
       "path": "docs/products/builderos/FOUNDER_SCHEMA_OPTIONS_OVERLAY.md",
       "synopsis": "Generated by scripts/propose-founder-decisions.mjs. PROPOSALS ONLY — nothing here is a decision.",
       "bytes": 11845,
-      "mtime": "2026-08-12T04:05:04.695Z",
-      "indexed_at": "2026-08-12T04:05:36.111Z"
+      "mtime": "2026-08-12T11:08:34.781Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z"
     },
     {
       "path": "docs/products/builderos/GAP_FILL_LEDGER.json",
       "synopsis": "Documentation — GAP FILL LEDGER.",
       "bytes": 111882,
-      "mtime": "2026-08-11T22:31:31.619Z",
-      "indexed_at": "2026-08-11T22:37:29.742Z",
+      "mtime": "2026-08-12T11:08:34.781Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
@@ -43481,8 +43539,8 @@
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
       "bytes": 554351,
-      "mtime": "2026-08-12T05:40:42.202Z",
-      "indexed_at": "2026-08-12T05:40:42.202Z"
+      "mtime": "2026-08-12T11:08:34.785Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -43495,8 +43553,8 @@
       "path": "docs/products/builderos/SCHEMA_DECISION_ARTIFACT.json",
       "synopsis": "Documentation — SCHEMA DECISION ARTIFACT.",
       "bytes": 5653,
-      "mtime": "2026-08-12T04:41:47.841Z",
-      "indexed_at": "2026-08-12T04:41:47.841Z",
+      "mtime": "2026-08-12T11:08:34.785Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
@@ -43884,9 +43942,9 @@
     {
       "path": "docs/products/command-center/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Command Center",
-      "bytes": 109723,
-      "mtime": "2026-08-01T08:48:17.387Z",
-      "indexed_at": "2026-08-01T08:48:17.387Z"
+      "bytes": 110157,
+      "mtime": "2026-08-11T11:08:25.440Z",
+      "indexed_at": "2026-08-11T11:09:29.061Z"
     },
     {
       "path": "docs/products/COMMANDCENTER.md",
@@ -44574,36 +44632,36 @@
       "path": "docs/products/lifeos/conversations/2026-08-11-fluid-ui-prior-art-research.md",
       "synopsis": "Founder capture — prior-art research on fluid/generative UI and OS-level AI overlays, and what to copy for the Taloa Universal Overlay, 2026-08-11.",
       "bytes": 5566,
-      "mtime": "2026-08-12T02:22:27.640Z",
-      "indexed_at": "2026-08-12T02:22:43.609Z"
+      "mtime": "2026-08-12T11:08:34.809Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z"
     },
     {
       "path": "docs/products/lifeos/conversations/2026-08-11-mtg-cataloger-mispricing-root-cause.md",
       "synopsis": "Founder capture -- picking the MTG cataloger back up cold, finding that the catalogue was mispriced rather than merely incomplete, 2026-08-11.",
       "bytes": 4279,
-      "mtime": "2026-08-12T05:12:20.805Z",
-      "indexed_at": "2026-08-12T05:12:20.805Z"
+      "mtime": "2026-08-12T11:08:34.809Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z"
     },
     {
       "path": "docs/products/lifeos/conversations/2026-08-11-mtg-upload-automation-and-the-real-drive-channel.md",
       "synopsis": "Founder capture -- MTG card upload automation attempt, the AppleScript permission wall, and the pivot to the real drive-channel, 2026-08-11.",
       "bytes": 4124,
-      "mtime": "2026-08-11T18:03:43.891Z",
-      "indexed_at": "2026-08-11T18:04:46.734Z"
+      "mtime": "2026-08-12T11:08:34.809Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z"
     },
     {
       "path": "docs/products/lifeos/conversations/2026-08-11-overlay-layer-b-uat.md",
       "synopsis": "Layer B human-sim UAT of the Taloa overlay + founder interface, 2026-08-11. 9 live tests, 7 defects, 1 fixed.",
       "bytes": 10912,
-      "mtime": "2026-08-12T05:17:41.563Z",
-      "indexed_at": "2026-08-12T05:17:41.563Z"
+      "mtime": "2026-08-12T11:08:34.809Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z"
     },
     {
       "path": "docs/products/lifeos/conversations/2026-08-11-taloa-blueprint-consensus-and-live-intake-test.md",
       "synopsis": "Founder capture -- Taloa Universal Overlay blueprint independent-draft consensus process and live BuilderOS intake test, 2026-08-11.",
       "bytes": 11917,
-      "mtime": "2026-08-11T18:04:20.082Z",
-      "indexed_at": "2026-08-11T18:04:46.734Z"
+      "mtime": "2026-08-12T11:08:34.809Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z"
     },
     {
       "path": "docs/products/lifeos/CREATIVE_BRIEF.md",
@@ -44636,10 +44694,10 @@
     },
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
-      "synopsis": "Canonical product home — LifeOS",
-      "bytes": 856411,
-      "mtime": "2026-08-12T09:19:55.865Z",
-      "indexed_at": "2026-08-12T09:19:55.865Z"
+      "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
+      "bytes": 856968,
+      "mtime": "2026-08-12T11:10:11.077Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -44760,9 +44818,9 @@
     {
       "path": "docs/products/lumin-university/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Lumin University",
-      "bytes": 25092,
-      "mtime": "2026-08-01T13:44:55.356Z",
-      "indexed_at": "2026-08-01T13:45:12.395Z"
+      "bytes": 25507,
+      "mtime": "2026-08-11T11:08:25.440Z",
+      "indexed_at": "2026-08-11T11:09:29.061Z"
     },
     {
       "path": "docs/products/LUMINUNIVERSITY.md",
@@ -44883,9 +44941,9 @@
     {
       "path": "docs/products/memory-system/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Memory System",
-      "bytes": 24386,
-      "mtime": "2026-08-01T10:40:16.036Z",
-      "indexed_at": "2026-08-01T10:40:30.035Z"
+      "bytes": 24753,
+      "mtime": "2026-08-11T11:08:25.440Z",
+      "indexed_at": "2026-08-11T11:09:29.061Z"
     },
     {
       "path": "docs/products/MEMORYINTELLIGENCE.md",
@@ -45431,29 +45489,29 @@
       "path": "docs/products/universal-overlay/SEND_PACKET_FLUID_UI_AND_TWO_FACTORIES_2026-08-11.md",
       "synopsis": "Sendable founder brief — fluid UI field lessons adopted into the Taloa blueprint, and the two-factory competition model as actually built, 2026-08-11.",
       "bytes": 7510,
-      "mtime": "2026-08-12T02:33:27.315Z",
-      "indexed_at": "2026-08-12T02:34:28.525Z"
+      "mtime": "2026-08-12T11:08:34.837Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z"
     },
     {
       "path": "docs/products/universal-overlay/TALOA_BLUEPRINT_COMPARISON_CLAUDE_VS_CHATGPT_2026-08-11.md",
       "synopsis": "Taloa Universal Overlay Blueprint — Comparison Audit",
       "bytes": 12417,
-      "mtime": "2026-08-11T15:28:20.346Z",
-      "indexed_at": "2026-08-11T15:28:21.533Z"
+      "mtime": "2026-08-12T11:08:34.837Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z"
     },
     {
       "path": "docs/products/universal-overlay/TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md",
       "synopsis": "TALOA UNIVERSAL OVERLAY &amp; FLUID UI — COMPLETE BLUEPRINT",
       "bytes": 144703,
-      "mtime": "2026-08-12T03:58:38.155Z",
-      "indexed_at": "2026-08-12T04:05:36.111Z"
+      "mtime": "2026-08-12T11:08:34.837Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z"
     },
     {
       "path": "docs/products/universal-overlay/TWO_FACTORY_BUILD_PLAN.md",
       "synopsis": "Generated by scripts/plan-two-factory-build.mjs. Do not hand-edit.",
       "bytes": 2772,
-      "mtime": "2026-08-12T04:41:47.841Z",
-      "indexed_at": "2026-08-12T04:41:47.841Z"
+      "mtime": "2026-08-12T11:08:34.837Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z"
     },
     {
       "path": "docs/products/UNIVERSALOVERLAY.md",
@@ -65803,8 +65861,8 @@
       "path": "factory-staging/factory-core/bpb/build-queue-step-adapter.js",
       "synopsis": "STEP 5e — adapt a per-product docs/products/<id>/BUILD_QUEUE.json step",
       "bytes": 16970,
-      "mtime": "2026-08-11T22:22:10.304Z",
-      "indexed_at": "2026-08-11T22:25:25.951Z",
+      "mtime": "2026-08-12T11:08:35.129Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -65874,8 +65932,8 @@
       "path": "factory-staging/factory-core/builder/chair-consensus-gate.mjs",
       "synopsis": "Conductor consensus runtime entry gate (§2.0K) — VERIFY ONLY.",
       "bytes": 7289,
-      "mtime": "2026-08-11T21:52:25.665Z",
-      "indexed_at": "2026-08-11T22:01:29.323Z",
+      "mtime": "2026-08-12T11:08:35.129Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -65921,15 +65979,15 @@
       "path": "factory-staging/factory-core/builder/run-mission.js",
       "synopsis": "Exports loadBlueprintFromRepo — builderos-reboot/MISSIONS/FACTORY-REBOOT-0006/CONTENT/run-mission.js.",
       "bytes": 3008,
-      "mtime": "2026-08-11T22:22:10.302Z",
-      "indexed_at": "2026-08-11T22:25:25.951Z"
+      "mtime": "2026-08-12T11:08:35.129Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z"
     },
     {
       "path": "factory-staging/factory-core/builder/run-step.js",
       "synopsis": "Exports resolveRepoPath — factory-staging/factory-core/builder/run-step.js.",
       "bytes": 13423,
-      "mtime": "2026-08-11T21:54:41.477Z",
-      "indexed_at": "2026-08-11T22:01:29.323Z"
+      "mtime": "2026-08-12T11:08:35.129Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z"
     },
     {
       "path": "factory-staging/factory-core/builder/sandbox.js",
@@ -68245,15 +68303,15 @@
       "path": "native/macos-overlay/build.sh",
       "synopsis": "Shell script — Build.",
       "bytes": 1225,
-      "mtime": "2026-08-12T05:30:41.713Z",
-      "indexed_at": "2026-08-12T05:30:41.713Z"
+      "mtime": "2026-08-12T11:08:35.153Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z"
     },
     {
       "path": "native/macos-overlay/demos/capability-tour.json",
       "synopsis": "JSON data/config — native/macos-overlay/demos/capability-tour.json.",
       "bytes": 867,
-      "mtime": "2026-08-12T09:19:55.865Z",
-      "indexed_at": "2026-08-12T09:19:55.865Z",
+      "mtime": "2026-08-12T11:08:35.153Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
@@ -68308,10 +68366,10 @@
     },
     {
       "path": "package.json",
-      "synopsis": "enforce\":\"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",\"lifeos:file-synopsis:backfill\":\"node scripts/file-synopsis-enforce.mjs --all --auto-fix && node scripts/generate-file-synopsis-index.mjs\",\"lifeos:file-synopsis:index\":\"n",
-      "bytes": 38752,
-      "mtime": "2026-08-12T05:40:42.202Z",
-      "indexed_at": "2026-08-12T05:40:42.202Z",
+      "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\", \"lifeos:file-synopsis:backfill\": \"node scripts/file-synopsis-enforce.mjs --all --auto-fix && node scripts/generate-file-synopsis-index.mjs\", \"lifeos:file-synopsis:index",
+      "bytes": 39808,
+      "mtime": "2026-08-12T11:10:11.057Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
@@ -68461,16 +68519,16 @@
       "path": "products/artifacts/OVERLAY_AMENDED_BLUEPRINT.json",
       "synopsis": "Exports createOverlayHostService — products/artifacts/OVERLAY_AMENDED_BLUEPRINT.json.",
       "bytes": 10848,
-      "mtime": "2026-08-12T04:42:08.912Z",
-      "indexed_at": "2026-08-12T04:42:08.912Z",
+      "mtime": "2026-08-12T11:08:35.157Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/artifacts/OVERLAY_AMENDED_SESSION.json",
       "synopsis": "Exports createVideoRoutes — products/artifacts/OVERLAY_AMENDED_SESSION.json.",
       "bytes": 68560,
-      "mtime": "2026-08-12T04:42:08.912Z",
-      "indexed_at": "2026-08-12T04:42:08.912Z",
+      "mtime": "2026-08-12T11:08:35.157Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
@@ -68485,16 +68543,16 @@
       "path": "products/receipts/ARCHITECT_CYCLE_RESOLUTION_RECEIPT.json",
       "synopsis": "Exports createStrategyRouterService — products/receipts/ARCHITECT_CYCLE_RESOLUTION_RECEIPT.json.",
       "bytes": 4457,
-      "mtime": "2026-08-12T04:42:08.912Z",
-      "indexed_at": "2026-08-12T04:42:08.912Z",
+      "mtime": "2026-08-12T11:08:35.157Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/ARCHITECT_STORE_RESOLUTION_RECEIPT.json",
       "synopsis": "Product receipt — ARCHITECT STORE RESOLUTION RECEIPT.",
       "bytes": 9826,
-      "mtime": "2026-08-12T04:42:08.912Z",
-      "indexed_at": "2026-08-12T04:42:08.912Z",
+      "mtime": "2026-08-12T11:08:35.157Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
@@ -68713,59 +68771,27 @@
       "synopsis_index_only": true
     },
     {
-      "path": "products/receipts/conductor-seals/1786485446469-e02sm60a.json",
-      "synopsis": "Product receipt — 1786485446469 E02sm60a.",
-      "bytes": 385,
-      "mtime": "2026-08-11T21:57:26.476Z",
-      "indexed_at": "2026-08-11T22:01:29.323Z",
-      "synopsis_index_only": true
-    },
-    {
-      "path": "products/receipts/conductor-seals/1786485489927-bvvqoje1.json",
-      "synopsis": "Product receipt — 1786485489927 Bvvqoje1.",
-      "bytes": 385,
-      "mtime": "2026-08-11T21:58:09.928Z",
-      "indexed_at": "2026-08-11T22:01:29.323Z",
-      "synopsis_index_only": true
-    },
-    {
-      "path": "products/receipts/conductor-seals/1786485489928-02g6o2jy.json",
-      "synopsis": "Product receipt — 1786485489928 02g6o2jy.",
-      "bytes": 385,
-      "mtime": "2026-08-11T21:58:09.929Z",
-      "indexed_at": "2026-08-11T22:01:29.323Z",
-      "synopsis_index_only": true
-    },
-    {
-      "path": "products/receipts/conductor-seals/1786485489929-9kbakog4.json",
-      "synopsis": "Product receipt — 1786485489929 9kbakog4.",
-      "bytes": 385,
-      "mtime": "2026-08-11T21:58:09.929Z",
-      "indexed_at": "2026-08-11T22:01:29.323Z",
-      "synopsis_index_only": true
-    },
-    {
       "path": "products/receipts/conductor-seals/1786486333120-8mya9oem.json",
       "synopsis": "Product receipt — 1786486333120 8mya9oem.",
       "bytes": 385,
-      "mtime": "2026-08-11T22:12:13.121Z",
-      "indexed_at": "2026-08-11T22:54:32.565Z",
+      "mtime": "2026-08-12T11:08:35.161Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/conductor-seals/1786486333121-6hxelgqb.json",
       "synopsis": "Product receipt — 1786486333121 6hxelgqb.",
       "bytes": 385,
-      "mtime": "2026-08-11T22:12:13.122Z",
-      "indexed_at": "2026-08-11T22:54:32.565Z",
+      "mtime": "2026-08-12T11:08:35.161Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/conductor-seals/1786486333122-e4a5azxp.json",
       "synopsis": "Product receipt — 1786486333122 E4a5azxp.",
       "bytes": 385,
-      "mtime": "2026-08-11T22:12:13.123Z",
-      "indexed_at": "2026-08-11T22:54:32.565Z",
+      "mtime": "2026-08-12T11:08:35.161Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
@@ -68900,8 +68926,8 @@
       "path": "products/receipts/DEPLOY_DRIFT_AUDIT.json",
       "synopsis": "Product receipt — DEPLOY DRIFT AUDIT.",
       "bytes": 6213,
-      "mtime": "2026-08-11T22:12:18.858Z",
-      "indexed_at": "2026-08-11T22:15:50.764Z",
+      "mtime": "2026-08-12T11:08:35.157Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
@@ -68916,24 +68942,24 @@
       "path": "products/receipts/ESCALATION_GATE_RECEIPT.json",
       "synopsis": "Product receipt — ESCALATION GATE RECEIPT.",
       "bytes": 4997,
-      "mtime": "2026-08-12T04:42:08.912Z",
-      "indexed_at": "2026-08-12T04:42:08.912Z",
+      "mtime": "2026-08-12T11:08:35.157Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/FACTORY_HEALTH_RECEIPT.json",
       "synopsis": "Product receipt — FACTORY HEALTH RECEIPT.",
       "bytes": 3840,
-      "mtime": "2026-08-12T03:14:04.487Z",
-      "indexed_at": "2026-08-12T03:14:49.513Z",
+      "mtime": "2026-08-12T11:08:35.157Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/FACTORY_PROVISIONING_RECEIPT.json",
       "synopsis": "Product receipt — FACTORY PROVISIONING RECEIPT.",
       "bytes": 1194,
-      "mtime": "2026-08-12T02:31:27.912Z",
-      "indexed_at": "2026-08-12T02:34:28.525Z",
+      "mtime": "2026-08-12T11:08:35.157Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
@@ -68956,8 +68982,8 @@
       "path": "products/receipts/FOUNDER_DECISION_PROPOSALS_RECEIPT.json",
       "synopsis": "Product receipt — FOUNDER DECISION PROPOSALS RECEIPT.",
       "bytes": 20320,
-      "mtime": "2026-08-12T04:05:04.695Z",
-      "indexed_at": "2026-08-12T04:05:36.111Z",
+      "mtime": "2026-08-12T11:08:35.157Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
@@ -69020,8 +69046,8 @@
       "path": "products/receipts/GOVERNANCE_ENFORCEMENT_TRUTH_RECEIPT.json",
       "synopsis": "Product receipt — GOVERNANCE ENFORCEMENT TRUTH RECEIPT.",
       "bytes": 53637,
-      "mtime": "2026-08-11T22:24:23.703Z",
-      "indexed_at": "2026-08-11T22:25:25.951Z",
+      "mtime": "2026-08-12T11:08:35.157Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
@@ -69036,8 +69062,8 @@
       "path": "products/receipts/INTERNAL_RESOLUTION_APPLICATION_RECEIPT.json",
       "synopsis": "Product receipt — INTERNAL RESOLUTION APPLICATION RECEIPT.",
       "bytes": 4758,
-      "mtime": "2026-08-12T04:42:08.912Z",
-      "indexed_at": "2026-08-12T04:42:08.912Z",
+      "mtime": "2026-08-12T11:08:35.157Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
@@ -69548,8 +69574,8 @@
       "path": "products/receipts/OFFICER_STAFFING_RECEIPT.json",
       "synopsis": "Product receipt — OFFICER STAFFING RECEIPT.",
       "bytes": 751,
-      "mtime": "2026-08-12T02:38:59.352Z",
-      "indexed_at": "2026-08-12T02:39:23.517Z",
+      "mtime": "2026-08-12T11:08:35.161Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
@@ -69580,16 +69606,16 @@
       "path": "products/receipts/OVERLAY_LIFECYCLE_EXAM_RECEIPT.json",
       "synopsis": "Exports createStrategyRouterService — products/receipts/OVERLAY_LIFECYCLE_EXAM_RECEIPT.json.",
       "bytes": 36424,
-      "mtime": "2026-08-12T04:42:08.912Z",
-      "indexed_at": "2026-08-12T04:42:08.912Z",
+      "mtime": "2026-08-12T11:08:35.161Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/OVERLAY_REGRESSION_EXAM_RECEIPT.json",
       "synopsis": "Product receipt — OVERLAY REGRESSION EXAM RECEIPT.",
       "bytes": 9824,
-      "mtime": "2026-08-12T04:42:08.912Z",
-      "indexed_at": "2026-08-12T04:42:08.912Z",
+      "mtime": "2026-08-12T11:08:35.161Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
@@ -69652,8 +69678,8 @@
       "path": "products/receipts/RECEIPT_TRUTH_VALIDATION.json",
       "synopsis": "Product receipt — RECEIPT TRUTH VALIDATION.",
       "bytes": 31381,
-      "mtime": "2026-08-12T04:05:05.979Z",
-      "indexed_at": "2026-08-12T04:05:36.111Z",
+      "mtime": "2026-08-12T11:08:35.161Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
@@ -69668,8 +69694,8 @@
       "path": "products/receipts/SELF_ATTACK_RECEIPT.json",
       "synopsis": "Product receipt — SELF ATTACK RECEIPT.",
       "bytes": 5898,
-      "mtime": "2026-08-12T01:53:08.305Z",
-      "indexed_at": "2026-08-12T01:54:20.424Z",
+      "mtime": "2026-08-12T11:08:35.161Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
@@ -69860,16 +69886,16 @@
       "path": "products/receipts/TERMINOLOGY_COLLISION_RECEIPT.json",
       "synopsis": "Product receipt — TERMINOLOGY COLLISION RECEIPT.",
       "bytes": 5039,
-      "mtime": "2026-08-11T22:44:45.131Z",
-      "indexed_at": "2026-08-11T22:45:26.446Z",
+      "mtime": "2026-08-12T11:08:35.161Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/TRUTH_ENFORCEMENT_AUDIT.json",
       "synopsis": "Product receipt — TRUTH ENFORCEMENT AUDIT.",
       "bytes": 868,
-      "mtime": "2026-08-11T22:53:55.667Z",
-      "indexed_at": "2026-08-11T22:54:32.565Z",
+      "mtime": "2026-08-12T11:08:35.161Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
@@ -69884,8 +69910,8 @@
       "path": "products/receipts/TWO_FACTORY_PLAN_RECEIPT.json",
       "synopsis": "Product receipt — TWO FACTORY PLAN RECEIPT.",
       "bytes": 14007,
-      "mtime": "2026-08-12T04:42:08.912Z",
-      "indexed_at": "2026-08-12T04:42:08.912Z",
+      "mtime": "2026-08-12T11:08:35.161Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "synopsis_index_only": true
     },
     {
@@ -70439,8 +70465,8 @@
       "path": "public/mtg-cards-upload.html",
       "synopsis": "Batch MTG card upload UI -- founder-facing page for routes/mtg-cards-routes.js.",
       "bytes": 19111,
-      "mtime": "2026-08-12T04:18:33.436Z",
-      "indexed_at": "2026-08-12T04:18:33.436Z"
+      "mtime": "2026-08-12T11:08:35.209Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z"
     },
     {
       "path": "public/onboarding.html",
@@ -72291,8 +72317,8 @@
       "path": "routes/api-cost-savings-routes.js",
       "synopsis": "API Cost Savings Routes",
       "bytes": 13639,
-      "mtime": "2026-08-11T22:43:35.434Z",
-      "indexed_at": "2026-08-11T22:45:26.446Z",
+      "mtime": "2026-08-12T11:08:34.765Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "ssot": [
         "docs/products/api-cost-savings/PRODUCT_HOME.md"
       ]
@@ -72999,8 +73025,8 @@
       "path": "routes/factory-mount-routes.js",
       "synopsis": "Pure: should the codegen prompt inline this file's existing content?",
       "bytes": 44275,
-      "mtime": "2026-08-11T22:30:30.584Z",
-      "indexed_at": "2026-08-11T22:31:31.033Z",
+      "mtime": "2026-08-12T11:08:34.769Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -73384,9 +73410,9 @@
     {
       "path": "routes/lifeos-auth-routes.js",
       "synopsis": "routes/lifeos-auth-routes.js",
-      "bytes": 47023,
-      "mtime": "2026-08-08T10:53:41.905Z",
-      "indexed_at": "2026-08-08T10:56:44.360Z",
+      "bytes": 49086,
+      "mtime": "2026-08-11T11:07:55.439Z",
+      "indexed_at": "2026-08-11T11:09:29.061Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -74183,9 +74209,12 @@
     {
       "path": "routes/memory_routes.js",
       "synopsis": "Registers MemoryRoutes routes/handlers (routes/memory_routes.js).",
-      "bytes": 14517,
-      "mtime": "2026-07-14T04:07:15.505Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 14630,
+      "mtime": "2026-08-11T11:08:09.017Z",
+      "indexed_at": "2026-08-11T11:09:29.061Z",
+      "ssot": [
+        "docs/products/memory-system/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/memory-capsule-routes.js",
@@ -74289,8 +74318,8 @@
       "path": "routes/mtg-cards-routes.js",
       "synopsis": "Magic: The Gathering card cataloging, two intake paths sharing one",
       "bytes": 31890,
-      "mtime": "2026-08-12T04:43:04.622Z",
-      "indexed_at": "2026-08-12T04:43:04.622Z",
+      "mtime": "2026-08-12T11:08:34.785Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -75038,9 +75067,9 @@
     {
       "path": "routes/studentInterviewAnalyticsRoutes.js",
       "synopsis": "Registers StudentInterviewAnalyticsRoutes routes/handlers (routes/studentInterviewAnalyticsRoutes.js).",
-      "bytes": 960,
-      "mtime": "2026-08-01T01:33:18.724Z",
-      "indexed_at": "2026-08-01T01:33:18.724Z",
+      "bytes": 1120,
+      "mtime": "2026-08-11T11:08:08.249Z",
+      "indexed_at": "2026-08-11T11:09:29.061Z",
       "ssot": [
         "docs/products/lumin-university/PRODUCT_HOME.md"
       ]
@@ -75618,8 +75647,8 @@
       "path": "scripts/apply-internal-resolutions.mjs",
       "synopsis": "Turns the Offices' internal resolutions into artifacts a builder can",
       "bytes": 18284,
-      "mtime": "2026-08-12T04:41:47.841Z",
-      "indexed_at": "2026-08-12T04:41:47.841Z",
+      "mtime": "2026-08-12T11:08:34.797Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -75628,8 +75657,8 @@
       "path": "scripts/architect-resolve-cycle.mjs",
       "synopsis": "The Architect resolves a dependency cycle from evidence in the",
       "bytes": 8264,
-      "mtime": "2026-08-12T04:41:47.841Z",
-      "indexed_at": "2026-08-12T04:41:47.841Z",
+      "mtime": "2026-08-12T11:08:34.797Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -75638,8 +75667,8 @@
       "path": "scripts/architect-resolve-requests.mjs",
       "synopsis": "The Architect resolution pass. Takes the specification requests the",
       "bytes": 9766,
-      "mtime": "2026-08-12T01:46:39.175Z",
-      "indexed_at": "2026-08-12T01:54:20.424Z",
+      "mtime": "2026-08-12T11:08:34.797Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -75648,8 +75677,8 @@
       "path": "scripts/architect-resolve-stores.mjs",
       "synopsis": "The Architect resolves unspecified store contracts — reuse an existing",
       "bytes": 10448,
-      "mtime": "2026-08-12T04:41:47.841Z",
-      "indexed_at": "2026-08-12T04:41:47.841Z",
+      "mtime": "2026-08-12T11:08:34.797Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -75698,8 +75727,8 @@
       "path": "scripts/audit-blueprint-queue.mjs",
       "synopsis": "Audits every blueprint in the BP_PRIORITY scheduler queue for",
       "bytes": 11638,
-      "mtime": "2026-08-12T05:40:42.202Z",
-      "indexed_at": "2026-08-12T05:40:42.202Z",
+      "mtime": "2026-08-12T11:08:34.797Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -75728,8 +75757,8 @@
       "path": "scripts/audit-truth-enforcement.mjs",
       "synopsis": "Audit entire repo for truth enforcement bypass paths — fail-closed in preflight.",
       "bytes": 5465,
-      "mtime": "2026-08-11T22:53:06.198Z",
-      "indexed_at": "2026-08-11T22:54:32.565Z",
+      "mtime": "2026-08-12T11:08:34.797Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -75953,8 +75982,8 @@
       "path": "scripts/build-queue-drift-repair.mjs",
       "synopsis": "Deterministic BUILD_QUEUE drift repair executor. Scans product queues,",
       "bytes": 25502,
-      "mtime": "2026-08-11T22:22:10.306Z",
-      "indexed_at": "2026-08-11T22:25:25.951Z",
+      "mtime": "2026-08-12T11:08:34.801Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md",
         "${productHomePath(product)}\\n`;"
@@ -76459,8 +76488,8 @@
       "path": "scripts/conductor-resolve-requests.mjs",
       "synopsis": "The Conductor resolution pass — the second half of \"why can't it fix",
       "bytes": 6966,
-      "mtime": "2026-08-12T01:50:43.584Z",
-      "indexed_at": "2026-08-12T01:54:20.424Z",
+      "mtime": "2026-08-12T11:08:34.801Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -76469,8 +76498,8 @@
       "path": "scripts/conductor-seal-plan.mjs",
       "synopsis": "Conductor sealing authority — mints the detached consensus seal that",
       "bytes": 3300,
-      "mtime": "2026-08-11T21:57:11.021Z",
-      "indexed_at": "2026-08-11T22:01:29.323Z",
+      "mtime": "2026-08-12T11:08:34.801Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -76642,8 +76671,8 @@
       "path": "scripts/deliberation-governance-behavior.mjs",
       "synopsis": "Behavioral fail-closed tests for deliberation governance v2.7 (mock pool — no DATABASE_URL).",
       "bytes": 16273,
-      "mtime": "2026-08-11T22:23:19.089Z",
-      "indexed_at": "2026-08-11T22:25:25.951Z",
+      "mtime": "2026-08-12T11:08:34.805Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -76743,8 +76772,8 @@
       "path": "scripts/deterministic-repair.mjs",
       "synopsis": "The deterministic repair pass, extracted so both the lifecycle exam and",
       "bytes": 3918,
-      "mtime": "2026-08-12T04:41:47.841Z",
-      "indexed_at": "2026-08-12T04:41:47.841Z",
+      "mtime": "2026-08-12T11:08:34.805Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -76821,8 +76850,8 @@
       "path": "scripts/escalation-gate.mjs",
       "synopsis": "The gate every founder-facing question must pass. Questions that do",
       "bytes": 4150,
-      "mtime": "2026-08-12T04:41:47.841Z",
-      "indexed_at": "2026-08-12T04:41:47.841Z",
+      "mtime": "2026-08-12T11:08:34.805Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -76882,8 +76911,8 @@
       "path": "scripts/factory-allocation.mjs",
       "synopsis": "Deterministic slice→factory allocation over an authorized manufacturing",
       "bytes": 14172,
-      "mtime": "2026-08-12T03:13:43.411Z",
-      "indexed_at": "2026-08-12T03:14:49.513Z",
+      "mtime": "2026-08-12T11:08:34.805Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -76902,8 +76931,8 @@
       "path": "scripts/factory-health-audit.mjs",
       "synopsis": "Health audit for a factory lane. Answers one question per check —",
       "bytes": 7079,
-      "mtime": "2026-08-12T03:13:14.454Z",
-      "indexed_at": "2026-08-12T03:14:49.513Z",
+      "mtime": "2026-08-12T11:08:34.805Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -77467,8 +77496,8 @@
       "path": "scripts/lib/reference-index.mjs",
       "synopsis": "Deterministic repo reference/caller index — the shared mechanical",
       "bytes": 9146,
-      "mtime": "2026-08-11T21:49:15.079Z",
-      "indexed_at": "2026-08-11T22:01:29.323Z",
+      "mtime": "2026-08-12T11:08:34.809Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -78100,8 +78129,8 @@
       "path": "scripts/manufacturing-plan.mjs",
       "synopsis": "Compiles and verifies the Manufacturing Plan, and decides",
       "bytes": 22560,
-      "mtime": "2026-08-12T03:01:43.235Z",
-      "indexed_at": "2026-08-12T03:14:49.513Z",
+      "mtime": "2026-08-12T11:08:34.817Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -78462,8 +78491,8 @@
       "path": "scripts/plan-topology.mjs",
       "synopsis": "Topology truth for manufacturing plans — strongly connected",
       "bytes": 9423,
-      "mtime": "2026-08-12T03:00:19.237Z",
-      "indexed_at": "2026-08-12T03:14:49.513Z",
+      "mtime": "2026-08-12T11:08:34.817Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -78472,8 +78501,8 @@
       "path": "scripts/plan-two-factory-build.mjs",
       "synopsis": "Produces the two-factory manufacturing plan — how the project is",
       "bytes": 16173,
-      "mtime": "2026-08-12T04:41:47.841Z",
-      "indexed_at": "2026-08-12T04:41:47.841Z",
+      "mtime": "2026-08-12T11:08:34.817Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -78550,8 +78579,8 @@
       "path": "scripts/propose-founder-decisions.mjs",
       "synopsis": "Turns the founder decision set from homework into a set of choices —",
       "bytes": 13658,
-      "mtime": "2026-08-12T04:04:56.756Z",
-      "indexed_at": "2026-08-12T04:05:36.111Z",
+      "mtime": "2026-08-12T11:08:34.817Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -78637,8 +78666,8 @@
       "path": "scripts/provision-factory.mjs",
       "synopsis": "Provisions a factory as a REAL execution lane by creating its own",
       "bytes": 5138,
-      "mtime": "2026-08-12T02:31:19.398Z",
-      "indexed_at": "2026-08-12T02:34:28.525Z",
+      "mtime": "2026-08-12T11:08:34.821Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -78736,8 +78765,8 @@
       "path": "scripts/run-arc-entry-gate.mjs",
       "synopsis": "ARC entry gate — structural + GAP_FLAG validation of a blueprint file.",
       "bytes": 4129,
-      "mtime": "2026-08-11T22:22:10.308Z",
-      "indexed_at": "2026-08-11T22:25:25.951Z",
+      "mtime": "2026-08-12T11:08:34.821Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -78746,8 +78775,8 @@
       "path": "scripts/run-arc-pipeline.mjs",
       "synopsis": "Full ARC pipeline — entry gate → AI review → write blueprint → signal executor.",
       "bytes": 5145,
-      "mtime": "2026-08-11T22:22:10.309Z",
-      "indexed_at": "2026-08-11T22:25:25.951Z",
+      "mtime": "2026-08-12T11:08:34.821Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -79379,8 +79408,8 @@
       "path": "scripts/run-overlay-lifecycle-exam.mjs",
       "synopsis": "Drives the frozen Overlay fixture through the whole governed loop —",
       "bytes": 31039,
-      "mtime": "2026-08-12T04:41:47.841Z",
-      "indexed_at": "2026-08-12T04:41:47.841Z",
+      "mtime": "2026-08-12T11:08:34.825Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -79389,8 +79418,8 @@
       "path": "scripts/run-overlay-regression-exam.mjs",
       "synopsis": "Runs the frozen Overlay intake as an EXAM against the repaired",
       "bytes": 6143,
-      "mtime": "2026-08-12T04:41:47.841Z",
-      "indexed_at": "2026-08-12T04:41:47.841Z",
+      "mtime": "2026-08-12T11:08:34.825Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -79547,8 +79576,8 @@
       "path": "scripts/schema-decision-artifact.mjs",
       "synopsis": "The Schema Decision Artifact — founder answers to missing store",
       "bytes": 9228,
-      "mtime": "2026-08-12T04:41:47.841Z",
-      "indexed_at": "2026-08-12T04:41:47.841Z",
+      "mtime": "2026-08-12T11:08:34.825Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -79557,8 +79586,8 @@
       "path": "scripts/seal-manufacturing-plan.mjs",
       "synopsis": "Sealing authority for the three-party manufacturing consensus.",
       "bytes": 4463,
-      "mtime": "2026-08-11T22:36:13.381Z",
-      "indexed_at": "2026-08-11T22:37:29.742Z",
+      "mtime": "2026-08-12T11:08:34.825Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -79607,8 +79636,8 @@
       "path": "scripts/seed-lessons-learned.mjs",
       "synopsis": "seed-lessons-learned.mjs",
       "bytes": 16178,
-      "mtime": "2026-08-11T21:55:50.934Z",
-      "indexed_at": "2026-08-11T22:01:29.323Z",
+      "mtime": "2026-08-12T11:08:34.825Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "ssot": [
         "docs/products/memory-intelligence/PRODUCT_HOME.md"
       ]
@@ -79637,8 +79666,8 @@
       "path": "scripts/self-attack-governance.mjs",
       "synopsis": "Attacks the governance repair with the specific moves the founder",
       "bytes": 16724,
-      "mtime": "2026-08-12T01:51:56.847Z",
-      "indexed_at": "2026-08-12T01:54:20.424Z",
+      "mtime": "2026-08-12T11:08:34.829Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -80027,8 +80056,8 @@
       "path": "scripts/taloa.mjs",
       "synopsis": "CLI for the Taloa overlay command channel (native macOS app).",
       "bytes": 4558,
-      "mtime": "2026-08-12T09:19:55.865Z",
-      "indexed_at": "2026-08-12T09:19:55.865Z",
+      "mtime": "2026-08-12T11:08:34.829Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -80774,8 +80803,8 @@
       "path": "scripts/verify-enforcement-truth.mjs",
       "synopsis": "M0 enforcement-truth sweep — finds mechanisms that CLAIM operational",
       "bytes": 17008,
-      "mtime": "2026-08-11T22:24:11.754Z",
-      "indexed_at": "2026-08-11T22:25:25.951Z",
+      "mtime": "2026-08-12T11:08:34.837Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -81478,8 +81507,8 @@
       "path": "scripts/verify-officer-staffing.mjs",
       "synopsis": "Deterministic guard that SO-003's floor is real. Reads the live",
       "bytes": 4924,
-      "mtime": "2026-08-12T02:37:54.581Z",
-      "indexed_at": "2026-08-12T02:39:23.517Z",
+      "mtime": "2026-08-12T11:08:34.841Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -91626,8 +91655,8 @@
       "path": "scripts/verify-terminology-collisions.mjs",
       "synopsis": "Deterministic guard for OPEN-6. \"Conductor\" named two unrelated",
       "bytes": 5270,
-      "mtime": "2026-08-11T22:53:29.733Z",
-      "indexed_at": "2026-08-11T22:54:32.565Z",
+      "mtime": "2026-08-12T11:08:34.905Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -92403,8 +92432,8 @@
       "path": "services/blueprint-intake.js",
       "synopsis": "Blueprint Intake Service — three flows: backfill existing amendment, greenfield",
       "bytes": 63696,
-      "mtime": "2026-08-11T22:12:01.826Z",
-      "indexed_at": "2026-08-11T22:15:50.764Z",
+      "mtime": "2026-08-12T11:08:34.913Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -92413,8 +92442,8 @@
       "path": "services/blueprint-invention-detector.js",
       "synopsis": "Deterministic no-invention detector for generated blueprints (M1).",
       "bytes": 18788,
-      "mtime": "2026-08-12T04:41:47.841Z",
-      "indexed_at": "2026-08-12T04:41:47.841Z",
+      "mtime": "2026-08-12T11:08:34.913Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -92561,8 +92590,8 @@
       "path": "services/build-queue-planner.js",
       "synopsis": "Build-queue planner — turns a product's PRODUCT_HOME backlog into a",
       "bytes": 26827,
-      "mtime": "2026-08-11T22:22:10.303Z",
-      "indexed_at": "2026-08-11T22:25:25.951Z",
+      "mtime": "2026-08-12T11:08:34.913Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -95815,8 +95844,8 @@
       "path": "services/goal-decomposition.js",
       "synopsis": "Break a mission into sub-goals and track dependencies.",
       "bytes": 1462,
-      "mtime": "2026-08-11T22:22:10.307Z",
-      "indexed_at": "2026-08-11T22:25:25.951Z",
+      "mtime": "2026-08-12T11:08:34.953Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -96253,8 +96282,8 @@
       "path": "services/intake-blueprint-executor.js",
       "synopsis": "Execute ARC-ready intake skeleton blueprints step-by-step via POST /lifeos/builder/build.",
       "bytes": 34235,
-      "mtime": "2026-08-11T22:22:10.297Z",
-      "indexed_at": "2026-08-11T22:25:25.951Z",
+      "mtime": "2026-08-12T11:08:34.961Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -96573,9 +96602,9 @@
     {
       "path": "services/lifeos-auth.js",
       "synopsis": "services/lifeos-auth.js",
-      "bytes": 17759,
-      "mtime": "2026-07-24T18:36:41.697Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 17969,
+      "mtime": "2026-08-11T11:08:08.233Z",
+      "indexed_at": "2026-08-11T11:09:29.061Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -98637,8 +98666,8 @@
       "path": "services/model-capability-ledger.js",
       "synopsis": "services/model-capability-ledger.js",
       "bytes": 12751,
-      "mtime": "2026-08-11T22:28:02.289Z",
-      "indexed_at": "2026-08-11T22:31:31.033Z",
+      "mtime": "2026-08-12T11:08:34.977Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "ssot": [
         "docs/products/ai-council/PRODUCT_HOME.md"
       ]
@@ -98684,8 +98713,8 @@
       "path": "services/mtg-card-pricing.js",
       "synopsis": "Looks up real market pricing for a Magic: The Gathering card via",
       "bytes": 16487,
-      "mtime": "2026-08-12T04:43:04.622Z",
-      "indexed_at": "2026-08-12T04:43:04.622Z",
+      "mtime": "2026-08-12T11:08:34.977Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -98694,8 +98723,8 @@
       "path": "services/mtg-card-vision.js",
       "synopsis": "Identifies a Magic: The Gathering card (name, set, foil, condition",
       "bytes": 11087,
-      "mtime": "2026-08-11T17:09:42.050Z",
-      "indexed_at": "2026-08-11T17:10:22.563Z",
+      "mtime": "2026-08-12T11:08:34.977Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -99286,8 +99315,8 @@
       "path": "services/product-build-orchestrator.js",
       "synopsis": "General product-build orchestrator — turns a product's structured",
       "bytes": 28750,
-      "mtime": "2026-08-11T22:22:10.305Z",
-      "indexed_at": "2026-08-11T22:25:25.951Z",
+      "mtime": "2026-08-12T11:08:34.981Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -99750,8 +99779,8 @@
       "path": "services/savings-ledger.js",
       "synopsis": "services/savings-ledger.js — TCO-E01",
       "bytes": 20585,
-      "mtime": "2026-08-11T22:43:41.019Z",
-      "indexed_at": "2026-08-11T22:45:26.446Z",
+      "mtime": "2026-08-12T11:08:34.985Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "ssot": [
         "docs/products/ai-council/PRODUCT_HOME.md"
       ]
@@ -102947,8 +102976,8 @@
       "path": "tests/architect-resolution.test.js",
       "synopsis": "Proves the Architect can actually ANSWER routed requests — the",
       "bytes": 14619,
-      "mtime": "2026-08-12T01:51:23.586Z",
-      "indexed_at": "2026-08-12T01:54:20.424Z"
+      "mtime": "2026-08-12T11:08:35.013Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z"
     },
     {
       "path": "tests/audit-taloa-runtime-reachability.test.mjs",
@@ -103015,8 +103044,8 @@
       "path": "tests/blueprint-invention-detector.test.js",
       "synopsis": "Locks the deterministic no-invention detector (M1) against the frozen",
       "bytes": 9568,
-      "mtime": "2026-08-12T04:41:47.841Z",
-      "indexed_at": "2026-08-12T04:41:47.841Z"
+      "mtime": "2026-08-12T11:08:35.013Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z"
     },
     {
       "path": "tests/bp-priority-completion.test.js",
@@ -103377,8 +103406,8 @@
       "path": "tests/chair-consensus-gate-sealing.test.js",
       "synopsis": "Proves the Conductor consensus gate (§2.0K) cannot manufacture the",
       "bytes": 5240,
-      "mtime": "2026-08-11T22:12:18.860Z",
-      "indexed_at": "2026-08-11T22:15:50.764Z"
+      "mtime": "2026-08-12T11:08:35.013Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z"
     },
     {
       "path": "tests/chair-context-classifier.test.js",
@@ -103776,8 +103805,8 @@
       "path": "tests/factory-allocation.test.js",
       "synopsis": "Proves two-factory operation in both modes the founder asked for —",
       "bytes": 15687,
-      "mtime": "2026-08-12T03:13:51.574Z",
-      "indexed_at": "2026-08-12T03:14:49.513Z"
+      "mtime": "2026-08-12T11:08:35.017Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z"
     },
     {
       "path": "tests/factory-authoring-model-rotation.test.js",
@@ -103893,8 +103922,8 @@
       "path": "tests/founder-escalation-threshold.test.js",
       "synopsis": "Proves the Founder Escalation Threshold — that implementation questions",
       "bytes": 9530,
-      "mtime": "2026-08-12T04:41:47.841Z",
-      "indexed_at": "2026-08-12T04:41:47.841Z",
+      "mtime": "2026-08-12T11:08:35.017Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -104126,6 +104155,26 @@
       "indexed_at": "2026-07-31T23:01:43.086Z"
     },
     {
+      "path": "tests/lifeos-auth-password-security.test.js",
+      "synopsis": "tests/lifeos-auth-password-security.test.js",
+      "bytes": 6851,
+      "mtime": "2026-08-11T11:08:08.229Z",
+      "indexed_at": "2026-08-11T11:09:29.061Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "tests/lifeos-billing-verify-security.test.js",
+      "synopsis": "tests/lifeos-billing-verify-security.test.js",
+      "bytes": 3237,
+      "mtime": "2026-08-11T11:08:08.225Z",
+      "indexed_at": "2026-08-11T11:09:29.061Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "tests/lifeos-capture-pipeline.test.js",
       "synopsis": "LifeOS Capture Pipeline v2 — unit tests (no production required).",
       "bytes": 2759,
@@ -104279,8 +104328,8 @@
       "path": "tests/manufacturing-plan.test.js",
       "synopsis": "Proves FACTORY_READY / MANUFACTURING_AUTHORIZED is a machine-verifiable",
       "bytes": 12957,
-      "mtime": "2026-08-11T22:36:28.445Z",
-      "indexed_at": "2026-08-11T22:37:29.742Z"
+      "mtime": "2026-08-12T11:08:35.021Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z"
     },
     {
       "path": "tests/marketing-social-publish.test.js",
@@ -104309,6 +104358,16 @@
       "bytes": 9344,
       "mtime": "2026-07-28T17:44:20.129Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "tests/memory-routes-security.test.js",
+      "synopsis": "Security regressions for auto-registered memory routes.",
+      "bytes": 2472,
+      "mtime": "2026-08-11T11:08:08.229Z",
+      "indexed_at": "2026-08-11T11:09:29.061Z",
+      "ssot": [
+        "docs/products/memory-system/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "tests/mental-health-integration.test.js",
@@ -104385,8 +104444,8 @@
       "path": "tests/mtg-card-pricing.test.js",
       "synopsis": "Covers the MTG cataloger's money decisions -- which printing's",
       "bytes": 10024,
-      "mtime": "2026-08-12T04:18:33.436Z",
-      "indexed_at": "2026-08-12T04:18:33.436Z",
+      "mtime": "2026-08-12T11:08:35.021Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -104467,8 +104526,8 @@
       "path": "tests/officer-staff.test.js",
       "synopsis": "Proves the staffing ladder actually constrains something — that the",
       "bytes": 4841,
-      "mtime": "2026-08-12T02:38:35.089Z",
-      "indexed_at": "2026-08-12T02:39:23.517Z"
+      "mtime": "2026-08-12T11:08:35.021Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z"
     },
     {
       "path": "tests/oil-proof-freshness.test.js",
@@ -104532,8 +104591,8 @@
       "path": "tests/plan-topology.test.js",
       "synopsis": "Proves the topology gates that the two-factory run showed were",
       "bytes": 8100,
-      "mtime": "2026-08-12T03:02:39.585Z",
-      "indexed_at": "2026-08-12T03:14:49.513Z",
+      "mtime": "2026-08-12T11:08:35.021Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -104676,6 +104735,16 @@
       ]
     },
     {
+      "path": "tests/require-key-operator-jwt.test.js",
+      "synopsis": "Regression tests for operator-only requireKey JWT fallback.",
+      "bytes": 3630,
+      "mtime": "2026-08-11T11:08:08.225Z",
+      "indexed_at": "2026-08-11T11:09:29.061Z",
+      "ssot": [
+        "docs/products/command-center/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "tests/revive-thrash.test.js",
       "synopsis": "Revive-thrash and same_signature_count escalation tests.",
       "bytes": 3819,
@@ -104720,8 +104789,8 @@
       "path": "tests/schema-decision-artifact.test.js",
       "synopsis": "Proves the Schema Decision Artifact gate — one frozen, hashed answer",
       "bytes": 6058,
-      "mtime": "2026-08-12T03:59:10.380Z",
-      "indexed_at": "2026-08-12T04:05:36.111Z",
+      "mtime": "2026-08-12T11:08:35.025Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -104930,8 +104999,8 @@
       "path": "tests/step-dependencies.test.js",
       "synopsis": "Locks the canonical step-dependency contract. The failure being",
       "bytes": 2979,
-      "mtime": "2026-08-11T22:22:37.991Z",
-      "indexed_at": "2026-08-11T22:25:25.951Z"
+      "mtime": "2026-08-12T11:08:35.025Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z"
     },
     {
       "path": "tests/studio-simulation.test.js",
@@ -104985,8 +105054,8 @@
       "path": "tests/trust-scoring.test.js",
       "synopsis": "Proves the trust-scoring policy actually implements the founder's",
       "bytes": 6330,
-      "mtime": "2026-08-11T22:28:42.394Z",
-      "indexed_at": "2026-08-11T22:31:31.033Z"
+      "mtime": "2026-08-12T11:08:35.025Z",
+      "indexed_at": "2026-08-12T11:10:11.164Z"
     },
     {
       "path": "tests/truth-gap-closure.test.js",
