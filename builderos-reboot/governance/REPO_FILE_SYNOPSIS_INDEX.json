@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-12T19:55:38.116Z",
+  "generated_at": "2026-08-12T19:57:56.004Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13406,
+  "file_count": 13407,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -101252,6 +101252,16 @@
       "indexed_at": "2026-07-28T22:54:46.666Z",
       "ssot": [
         "docs/products/token-accounting-os/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/taloa/body-adapter-service.js",
+      "synopsis": "Adapts content and interactions to various display planes and contexts for fluid UI.",
+      "bytes": 2572,
+      "mtime": "2026-08-12T19:57:56.004Z",
+      "indexed_at": "2026-08-12T19:57:56.004Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
     },
     {
