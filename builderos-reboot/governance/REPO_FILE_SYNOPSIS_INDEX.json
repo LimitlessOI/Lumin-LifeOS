@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-12T19:07:49.272Z",
+  "generated_at": "2026-08-12T19:17:52.138Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13368,
+  "file_count": 13393,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21307,9 +21307,9 @@
     {
       "path": "builderos-reboot/BP_PRIORITY.json",
       "synopsis": "BuilderOS artifact — BP PRIORITY.",
-      "bytes": 46729,
-      "mtime": "2026-08-09T18:14:26.100Z",
-      "indexed_at": "2026-08-09T18:14:44.802Z",
+      "bytes": 41175,
+      "mtime": "2026-08-12T19:17:52.138Z",
+      "indexed_at": "2026-08-12T19:17:52.138Z",
       "synopsis_index_only": true
     },
     {
@@ -31156,6 +31156,197 @@
       "bytes": 1674,
       "mtime": "2026-08-11T22:11:28.412Z",
       "indexed_at": "2026-08-12T03:14:49.513Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/TALOA-OVERLAY-P1-0001/ASSET_REUSE_DECISION.json",
+      "synopsis": "BuilderOS artifact — ASSET REUSE DECISION.",
+      "bytes": 3253,
+      "mtime": "2026-08-12T19:17:52.138Z",
+      "indexed_at": "2026-08-12T19:17:52.138Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/TALOA-OVERLAY-P1-0001/BLUEPRINT.json",
+      "synopsis": "BuilderOS artifact — BLUEPRINT.",
+      "bytes": 34847,
+      "mtime": "2026-08-12T19:17:52.138Z",
+      "indexed_at": "2026-08-12T19:17:52.138Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/TALOA-OVERLAY-P1-0001/CHAIR_HANDOFF_RECEIPT.json",
+      "synopsis": "BuilderOS artifact — CHAIR HANDOFF RECEIPT.",
+      "bytes": 496,
+      "mtime": "2026-08-12T19:17:52.138Z",
+      "indexed_at": "2026-08-12T19:17:52.138Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/TALOA-OVERLAY-P1-0001/DELIBERATION_GATE.json",
+      "synopsis": "BuilderOS artifact — DELIBERATION GATE.",
+      "bytes": 2011,
+      "mtime": "2026-08-12T19:17:52.138Z",
+      "indexed_at": "2026-08-12T19:17:52.138Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/TALOA-OVERLAY-P1-0001/DO_NOT_INVENT.json",
+      "synopsis": "BuilderOS artifact — DO NOT INVENT.",
+      "bytes": 257,
+      "mtime": "2026-08-12T19:17:52.138Z",
+      "indexed_at": "2026-08-12T19:17:52.138Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/TALOA-OVERLAY-P1-0001/FOUNDER_PACKET.json",
+      "synopsis": "BuilderOS artifact — FOUNDER PACKET.",
+      "bytes": 5836,
+      "mtime": "2026-08-12T19:17:52.138Z",
+      "indexed_at": "2026-08-12T19:17:52.138Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/TALOA-OVERLAY-P1-0001/FOUNDER_PACKET.md",
+      "synopsis": "Founder Packet — Taloa Overlay Phase 1 foundation layer: seven store bindings and eight services from the sealed blueprint.",
+      "bytes": 2861,
+      "mtime": "2026-08-12T19:17:52.138Z",
+      "indexed_at": "2026-08-12T19:17:52.138Z"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/TALOA-OVERLAY-P1-0001/IDC_CONSENSUS_RECEIPT.json",
+      "synopsis": "BuilderOS artifact — IDC CONSENSUS RECEIPT.",
+      "bytes": 523,
+      "mtime": "2026-08-12T19:17:52.138Z",
+      "indexed_at": "2026-08-12T19:17:52.138Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/TALOA-OVERLAY-P1-0001/INTENT_BASELINE.json",
+      "synopsis": "BuilderOS artifact — INTENT BASELINE.",
+      "bytes": 2922,
+      "mtime": "2026-08-12T19:17:52.138Z",
+      "indexed_at": "2026-08-12T19:17:52.138Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/TALOA-OVERLAY-P1-0001/INTENT_COVERAGE_MAP.json",
+      "synopsis": "BuilderOS artifact — INTENT COVERAGE MAP.",
+      "bytes": 3948,
+      "mtime": "2026-08-12T19:17:52.138Z",
+      "indexed_at": "2026-08-12T19:17:52.138Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/TALOA-OVERLAY-P1-0001/KNOWN_ASSUMPTIONS.json",
+      "synopsis": "BuilderOS artifact — KNOWN ASSUMPTIONS.",
+      "bytes": 616,
+      "mtime": "2026-08-12T19:17:52.138Z",
+      "indexed_at": "2026-08-12T19:17:52.138Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/TALOA-OVERLAY-P1-0001/KNOWN_CONTRADICTIONS.json",
+      "synopsis": "BuilderOS artifact — KNOWN CONTRADICTIONS.",
+      "bytes": 127,
+      "mtime": "2026-08-12T19:17:52.138Z",
+      "indexed_at": "2026-08-12T19:17:52.138Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/TALOA-OVERLAY-P1-0001/KNOWN_RISKS.json",
+      "synopsis": "BuilderOS artifact — KNOWN RISKS.",
+      "bytes": 115,
+      "mtime": "2026-08-12T19:17:52.138Z",
+      "indexed_at": "2026-08-12T19:17:52.138Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/TALOA-OVERLAY-P1-0001/MODE_A_TO_B_TRANSITION_RECEIPT.json",
+      "synopsis": "BuilderOS artifact — MODE A TO B TRANSITION RECEIPT.",
+      "bytes": 298,
+      "mtime": "2026-08-12T19:17:52.138Z",
+      "indexed_at": "2026-08-12T19:17:52.138Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/TALOA-OVERLAY-P1-0001/PRE_ARC_INPUT_PACKET.json",
+      "synopsis": "BuilderOS artifact — PRE ARC INPUT PACKET.",
+      "bytes": 2145,
+      "mtime": "2026-08-12T19:17:52.138Z",
+      "indexed_at": "2026-08-12T19:17:52.138Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/TALOA-OVERLAY-P1-0001/PREDICTION_RECEIPT.json",
+      "synopsis": "BuilderOS artifact — PREDICTION RECEIPT.",
+      "bytes": 860,
+      "mtime": "2026-08-12T19:17:52.138Z",
+      "indexed_at": "2026-08-12T19:17:52.138Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/TALOA-OVERLAY-P1-0001/receipts/CFO_RESOURCE_SIMULATION_RECEIPT.json",
+      "synopsis": "BuilderOS artifact — CFO RESOURCE SIMULATION RECEIPT.",
+      "bytes": 1500,
+      "mtime": "2026-08-12T19:17:52.138Z",
+      "indexed_at": "2026-08-12T19:17:52.138Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/TALOA-OVERLAY-P1-0001/receipts/CHAIR_FORECAST_SIMULATION_RECEIPT.json",
+      "synopsis": "BuilderOS artifact — CHAIR FORECAST SIMULATION RECEIPT.",
+      "bytes": 2639,
+      "mtime": "2026-08-12T19:17:52.138Z",
+      "indexed_at": "2026-08-12T19:17:52.138Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/TALOA-OVERLAY-P1-0001/receipts/CHAIR_HANDOFF_FAILURE.json",
+      "synopsis": "BuilderOS artifact — CHAIR HANDOFF FAILURE.",
+      "bytes": 758,
+      "mtime": "2026-08-12T19:17:52.138Z",
+      "indexed_at": "2026-08-12T19:17:52.138Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/TALOA-OVERLAY-P1-0001/receipts/IDC_EXIT_GATE_REPORT.json",
+      "synopsis": "BuilderOS artifact — IDC EXIT GATE REPORT.",
+      "bytes": 1084,
+      "mtime": "2026-08-12T19:17:52.138Z",
+      "indexed_at": "2026-08-12T19:17:52.138Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/TALOA-OVERLAY-P1-0001/receipts/PRE_HANDOFF_INTENT_GATE_REPORT.json",
+      "synopsis": "BuilderOS artifact — PRE HANDOFF INTENT GATE REPORT.",
+      "bytes": 1467,
+      "mtime": "2026-08-12T19:17:52.138Z",
+      "indexed_at": "2026-08-12T19:17:52.138Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/TALOA-OVERLAY-P1-0001/receipts/SNT_INTENT_ATTACK_RECEIPT.json",
+      "synopsis": "BuilderOS artifact — SNT INTENT ATTACK RECEIPT.",
+      "bytes": 2090,
+      "mtime": "2026-08-12T19:17:52.138Z",
+      "indexed_at": "2026-08-12T19:17:52.138Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/TALOA-OVERLAY-P1-0001/receipts/UPSTREAM_ROUTE_REPORT.json",
+      "synopsis": "BuilderOS artifact — UPSTREAM ROUTE REPORT.",
+      "bytes": 789,
+      "mtime": "2026-08-12T19:17:52.138Z",
+      "indexed_at": "2026-08-12T19:17:52.138Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/TALOA-OVERLAY-P1-0001/receipts/WISDOM_REVIEW_RECEIPT.json",
+      "synopsis": "BuilderOS artifact — WISDOM REVIEW RECEIPT.",
+      "bytes": 952,
+      "mtime": "2026-08-12T19:17:52.138Z",
+      "indexed_at": "2026-08-12T19:17:52.138Z",
       "synopsis_index_only": true
     },
     {
@@ -45423,9 +45614,9 @@
     {
       "path": "docs/products/universal-overlay/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Universal Overlay",
-      "bytes": 107879,
-      "mtime": "2026-08-11T08:06:15.686Z",
-      "indexed_at": "2026-08-11T08:06:28.034Z"
+      "bytes": 111429,
+      "mtime": "2026-08-12T19:17:52.138Z",
+      "indexed_at": "2026-08-12T19:17:52.138Z"
     },
     {
       "path": "docs/products/universal-overlay/SEND_PACKET_FLUID_UI_AND_TWO_FACTORIES_2026-08-11.md",
@@ -77084,6 +77275,17 @@
       "indexed_at": "2026-07-28T22:54:46.666Z",
       "ssot": [
         "docs/RUNTIME_REALITY_SNAPSHOT.md"
+      ]
+    },
+    {
+      "path": "scripts/generate-taloa-phase1-mission.mjs",
+      "synopsis": "Turn the sealed Taloa Phase 1 blueprint into an executable factory mission.",
+      "bytes": 9895,
+      "mtime": "2026-08-12T19:17:52.138Z",
+      "indexed_at": "2026-08-12T19:17:52.138Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md",
+        "${SSOT}\".`;"
       ]
     },
     {
