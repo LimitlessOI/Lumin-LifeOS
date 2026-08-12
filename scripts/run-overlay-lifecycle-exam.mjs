@@ -358,6 +358,21 @@ export function runLifecycleExam() {
     { findings: structuralFindings.map((d) => ({ id: d.id, authority: d.authority, detail: d.detail })) }
   );
 
+  // A structural defect nobody is asked about is a structural defect that gets
+  // lost. No allowlisted Architect move resolves a dependency cycle — choosing
+  // which edge is wrong is a real architectural decision — so it joins the
+  // decision set rather than quietly living in a stage log.
+  for (const finding of structuralFindings) {
+    architect.founder_decision_set.push({
+      subject: finding.id,
+      asks: finding.detail,
+      why_it_reached_you:
+        'Found by re-deriving the graph, in a blueprint the legacy ARC gate had already marked ready_to_execute. No allowlisted office move resolves it.',
+      options_the_system_may_not_choose_between: ['drop an edge', 'reorder the steps', 'merge the steps'],
+      answer_goes_to: 'the authoritative blueprint document, before Builder receives it',
+    });
+  }
+
   // 9. EXECUTE — eligibility, not a real write. Execution requires positive,
   // current authorization; the old overloaded ready flag is never consulted.
   const executionEligible =

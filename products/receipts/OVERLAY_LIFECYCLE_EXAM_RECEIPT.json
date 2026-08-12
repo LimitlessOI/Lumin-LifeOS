@@ -1,6 +1,6 @@
 {
   "schema": "overlay_lifecycle_exam_receipt_v1",
-  "generated_at": "2026-08-12T01:53:08.105Z",
+  "generated_at": "2026-08-12T01:58:07.758Z",
   "produced_by": "scripts/run-overlay-lifecycle-exam.mjs",
   "separation_collapsed": true,
   "separation_note": "This script drives and grades the same run. Mitigation: the graded input is a byte-pinned fixture it never writes, the pin is verified before any stage runs, every stage is a pure function of those bytes, and the authorization stage delegates to a verifier that exports no minter. Reproducible byte-identically via `npm run builderos:overlay:lifecycle`.",
@@ -90,6 +90,28 @@
           "design the schema now",
           "defer the store to a later phase",
           "reuse an existing store instead"
+        ],
+        "answer_goes_to": "the authoritative blueprint document, before Builder receives it"
+      },
+      {
+        "subject": "MISSING_FIELD",
+        "asks": "plan is missing required field `blueprint_id`",
+        "why_it_reached_you": "Found by re-deriving the graph, in a blueprint the legacy ARC gate had already marked ready_to_execute. No allowlisted office move resolves it.",
+        "options_the_system_may_not_choose_between": [
+          "drop an edge",
+          "reorder the steps",
+          "merge the steps"
+        ],
+        "answer_goes_to": "the authoritative blueprint document, before Builder receives it"
+      },
+      {
+        "subject": "DEPENDENCY_CYCLE",
+        "asks": "dependency cycle: SL-012 -> SL-014 -> SL-013 -> SL-012",
+        "why_it_reached_you": "Found by re-deriving the graph, in a blueprint the legacy ARC gate had already marked ready_to_execute. No allowlisted office move resolves it.",
+        "options_the_system_may_not_choose_between": [
+          "drop an edge",
+          "reorder the steps",
+          "merge the steps"
         ],
         "answer_goes_to": "the authoritative blueprint document, before Builder receives it"
       }
@@ -398,6 +420,28 @@
             "design the schema now",
             "defer the store to a later phase",
             "reuse an existing store instead"
+          ],
+          "answer_goes_to": "the authoritative blueprint document, before Builder receives it"
+        },
+        {
+          "subject": "MISSING_FIELD",
+          "asks": "plan is missing required field `blueprint_id`",
+          "why_it_reached_you": "Found by re-deriving the graph, in a blueprint the legacy ARC gate had already marked ready_to_execute. No allowlisted office move resolves it.",
+          "options_the_system_may_not_choose_between": [
+            "drop an edge",
+            "reorder the steps",
+            "merge the steps"
+          ],
+          "answer_goes_to": "the authoritative blueprint document, before Builder receives it"
+        },
+        {
+          "subject": "DEPENDENCY_CYCLE",
+          "asks": "dependency cycle: SL-012 -> SL-014 -> SL-013 -> SL-012",
+          "why_it_reached_you": "Found by re-deriving the graph, in a blueprint the legacy ARC gate had already marked ready_to_execute. No allowlisted office move resolves it.",
+          "options_the_system_may_not_choose_between": [
+            "drop an edge",
+            "reorder the steps",
+            "merge the steps"
           ],
           "answer_goes_to": "the authoritative blueprint document, before Builder receives it"
         }

@@ -7,7 +7,7 @@ system could not lawfully answer itself, collected in one pass. Everything the
 Architect and Conductor could resolve within their jurisdiction was already
 resolved before this list was produced.
 
-**7 open.** Answering them unblocks manufacturing; no other input is needed.
+**9 open.** Answering them unblocks manufacturing; no other input is needed.
 
 ## 1. TaskStore
 
@@ -76,6 +76,26 @@ resolved before this list was produced.
 **Why it reached you:** The source document names the store and its purpose but never specifies its schema, and no existing table matches it.
 
 **The system may not choose between:** design the schema now; defer the store to a later phase; reuse an existing store instead
+
+**Your answer goes to:** the authoritative blueprint document, before Builder receives it
+
+## 8. MISSING_FIELD
+
+**Question:** plan is missing required field `blueprint_id`
+
+**Why it reached you:** Found by re-deriving the graph, in a blueprint the legacy ARC gate had already marked ready_to_execute. No allowlisted office move resolves it.
+
+**The system may not choose between:** drop an edge; reorder the steps; merge the steps
+
+**Your answer goes to:** the authoritative blueprint document, before Builder receives it
+
+## 9. DEPENDENCY_CYCLE
+
+**Question:** dependency cycle: SL-012 -> SL-014 -> SL-013 -> SL-012
+
+**Why it reached you:** Found by re-deriving the graph, in a blueprint the legacy ARC gate had already marked ready_to_execute. No allowlisted office move resolves it.
+
+**The system may not choose between:** drop an edge; reorder the steps; merge the steps
 
 **Your answer goes to:** the authoritative blueprint document, before Builder receives it
 
