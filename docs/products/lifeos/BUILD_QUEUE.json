@@ -6586,20 +6586,20 @@
     },
     {
       "id": "1-create-founder-chair-intent-service",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/founder-chair-intent.js",
       "task": "Implement core founder intent classification service",
       "spec": "Create services/founder-chair-intent.js with an exported function classifyFounderIntent that takes a message, uses callCouncilMember('Founder Intent Classifier', message) to determine the intent, and returns a structured intent object including a workflowLane property.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "classifyFounderIntent"
       ],
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-08-12T23:12:06.821Z",
       "last_error": "AIC_GATE_FAILURE",
       "last_attempt": null,
       "revive_count": 5,
