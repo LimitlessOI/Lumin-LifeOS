@@ -6417,13 +6417,13 @@
     },
     {
       "id": "fix-chair-intent-signals",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/chair-intent-signals.js",
       "task": "Update intent signal generation for build prompts",
       "spec": "Adjust `chair-intent-signals.js` to generate appropriate signals for 'drawer_direct_build' prompts, aiding in their accurate classification as 'workflow-content' and preventing misinterpretations leading to counsel/essay responses.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "getIntentSignals"
       ],
@@ -6434,7 +6434,7 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-08-12T22:08:10.990Z",
       "last_error": "AIC_GATE_FAILURE",
       "last_attempt": null,
       "revive_count": 2,
