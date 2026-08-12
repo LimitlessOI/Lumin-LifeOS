@@ -1,6 +1,7 @@
 /**
- * SYNOPSIS: Exports createStrategyRouterService — services/taloa/strategy-router-service.js.
+ * SYNOPSIS: Determines the appropriate strategy for task execution based on a 5-gate deterministic algorithm.
  * @ssot docs/products/universal-overlay/PRODUCT_HOME.md
+ * Determines the appropriate strategy for task execution based on a 5-gate deterministic algorithm.
  */
 
 export function createStrategyRouterService({ pool, logger, authorityLedger, taskOrchestrator }) {

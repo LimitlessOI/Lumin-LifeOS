@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-12T21:12:45.323Z",
+  "generated_at": "2026-08-12T21:38:40.272Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13425,
   "files": [
@@ -101396,10 +101396,10 @@
     },
     {
       "path": "services/taloa/strategy-router-service.js",
-      "synopsis": "Exports createStrategyRouterService — services/taloa/strategy-router-service.js.",
-      "bytes": 2819,
-      "mtime": "2026-08-12T20:19:15.377Z",
-      "indexed_at": "2026-08-12T20:19:15.377Z",
+      "synopsis": "Determines the appropriate strategy for task execution based on a 5-gate deterministic algorithm.",
+      "bytes": 2935,
+      "mtime": "2026-08-12T21:38:40.272Z",
+      "indexed_at": "2026-08-12T21:38:40.272Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
