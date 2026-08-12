@@ -11,13 +11,13 @@
   "steps": [
     {
       "id": "1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/001_create_salesos_call_sessions_table.sql",
       "task": "Create salesos_call_sessions table",
       "spec": "SQL migration to create salesos_call_sessions table with id, created_at, updated_at, user_id, practice_id, recording_url, transcript, transcript_segments, call_start_time, call_end_time, duration_seconds, status, consent_policy_applied, caller_id, recipient_id.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS salesos_call_sessions",
         "user_id UUID NOT NULL REFERENCES users(id)",
@@ -26,7 +26,12 @@
         "transcript JSONB",
         "transcript_segments JSONB",
         "consent_policy_applied TEXT NOT NULL"
-      ]
+      ],
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-08-12T19:51:51.933Z",
+      "last_error": "NOT_ON_BLUEPRINT"
     },
     {
       "id": "2",
