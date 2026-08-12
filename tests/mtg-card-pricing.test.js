@@ -161,10 +161,11 @@ test('collectionToCsv escapes card names that contain commas and quotes', () => 
 });
 
 test('parseCardsFromModelText accepts multi-card, bare array, and legacy single-card JSON', () => {
-  const multi = parseCardsFromModelText('{"cards":[{"name":"Lightning Bolt","set":"Alpha","foil":false,"condition_guess":"lightly played","confidence":"high"},{"name":"Counterspell","set":"Tempest","foil":false,"condition_guess":"near mint","confidence":"medium"}]}');
+  const multi = parseCardsFromModelText('{"cards":[{"name":"Lightning Bolt","set":"Alpha","foil":false,"condition_guess":"lightly played","confidence":"high","box":{"x":0.1,"y":0.2,"w":0.25,"h":0.4}},{"name":"Counterspell","set":"Tempest","foil":false,"condition_guess":"near mint","confidence":"medium"}]}');
   assert.equal(multi.length, 2);
   assert.equal(multi[0].name, 'Lightning Bolt');
   assert.equal(multi[1].set, 'Tempest');
+  assert.deepEqual(multi[0].box, { x: 0.1, y: 0.2, w: 0.25, h: 0.4 });
 
   const bare = parseCardsFromModelText('[{"name":"Darkness","set":"The Dark"}]');
   assert.equal(bare.length, 1);
@@ -210,6 +211,8 @@ test('the pricing rewrite is actually reachable from the live routes and UI', ()
   const routes = fs.readFileSync(path.join(repoRoot, 'routes/mtg-cards-routes.js'), 'utf8');
   assert.match(routes, /import \{[^}]*lookupMtgCardPrice[^}]*\} from '\.\.\/services\/mtg-card-pricing\.js'/);
   assert.match(routes, /identifyMtgCardsFromPhoto/, 'multi-card photos must call the multi-card vision export');
+  assert.match(routes, /saveSourcePhoto/, 'uploads must persist photos instead of discarding buffers');
+  assert.match(routes, /saveCroppedListingPhoto/, 'listing crops must be generated when boxes are present');
   assert.match(routes, /applyPriceToRow\(row, price\)/, 'photo + csv intake must route through the shared pricing rule');
   assert.match(routes, /router\.post\('\/reprice'/, 'already-catalogued cards need a no-vision repricing path');
   assert.match(routes, /router\.get\('\/collection'/);

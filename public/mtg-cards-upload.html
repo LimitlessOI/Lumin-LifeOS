@@ -175,7 +175,7 @@
         // every 2s as identification completes) -- this fires the instant
         // the upload itself succeeds, before any AI/pricing work has run.
         const receivedSoFar = activeBatches.reduce((s, b) => s + b.total, 0);
-        receivedEl.textContent = `✓ UPLOADED — server received ${receivedSoFar} photo(s). Safe to keep photographing. Identifying cards next…`;
+        receivedEl.textContent = `✓ UPLOADED & SAVING — server received ${receivedSoFar} photo(s). Images are kept (not thrown away). Safe to keep photographing. Identifying + cropping next…`;
         receivedEl.style.display = '';
       } catch (err) {
         statusEl.textContent = `Group ${i + 1}/${chunks.length} failed: ${err.message} — ${activeBatches.length} earlier group(s) still processing.`;
@@ -188,7 +188,7 @@
       return;
     }
     const totalReceived = activeBatches.reduce((s, b) => s + b.total, 0);
-    receivedEl.textContent = `✓ UPLOADED — all ${totalReceived} photo(s) received. Safe to start the next stack while these identify.`;
+    receivedEl.textContent = `✓ UPLOADED & SAVING — all ${totalReceived} photo(s) received and stored. Safe to shoot the next stack while these identify/crop/price.`;
     pollAllBatches();
   });
 

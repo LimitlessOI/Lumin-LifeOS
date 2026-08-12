@@ -16,14 +16,27 @@ const MAX_OUTPUT_TOKENS = 4000;
 const IDENTIFY_PROMPT = `You are cataloging Magic: The Gathering cards from a photo for a reseller.
 The photo may show ONE card or MANY cards laid out so each face is readable (often 8–15; sometimes more).
 Respond with ONLY a JSON object, no other text, in this exact shape:
-{"cards":[{"name":"<exact card name as printed>","set":"<set name or code if visible/inferable, else null>","foil":<true|false|null>,"condition_guess":"<near mint|lightly played|moderately played|heavily played|damaged|unknown>","confidence":"<high|medium|low>"}]}
+{"cards":[{"name":"<exact card name as printed>","set":"<set name or code if visible/inferable, else null>","foil":<true|false|null>,"condition_guess":"<near mint|lightly played|moderately played|heavily played|damaged|unknown>","confidence":"<high|medium|low>","box":{"x":0.0,"y":0.0,"w":0.0,"h":0.0}}]}
 Rules:
 - Include every clearly readable Magic card face in the photo, left-to-right, top-to-bottom.
 - Do not invent cards you cannot read. Skip cards that are too blurry, cut off, or face-down.
+- box is REQUIRED when you can see the card: normalized 0..1 fractions of the FULL image (x,y = top-left of the card, w,h = size). Used to crop listing images. If you cannot estimate a box, set box to null.
 - If the image shows no readable Magic card, respond with {"cards":[]}.
 - Return at most ${MAX_CARDS_PER_PHOTO} cards. If more are visible, return the clearest ${MAX_CARDS_PER_PHOTO}.`;
 
 const EMPTY_CARD = { name: null, set: null, foil: null, condition_guess: null, confidence: 'low' };
+
+function parseBox(raw) {
+  if (!raw || typeof raw !== 'object') return null;
+  const x = Number(raw.x);
+  const y = Number(raw.y);
+  const w = Number(raw.w ?? raw.width);
+  const h = Number(raw.h ?? raw.height);
+  if (![x, y, w, h].every((n) => Number.isFinite(n))) return null;
+  if (w <= 0.01 || h <= 0.01) return null;
+  // Accept either 0..1 fractions or accidental pixel coords (normalize later via absolute flag).
+  return { x, y, w, h };
+}
 
 function cardFromParsed(parsed) {
   if (!parsed || typeof parsed !== 'object') return null;
@@ -34,6 +47,7 @@ function cardFromParsed(parsed) {
     foil: typeof parsed.foil === 'boolean' ? parsed.foil : null,
     condition_guess: parsed.condition_guess || 'unknown',
     confidence: parsed.confidence || 'low',
+    box: parseBox(parsed.box),
   };
 }
 

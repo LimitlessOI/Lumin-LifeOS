@@ -36,6 +36,13 @@ import multer from 'multer';
 import crypto from 'node:crypto';
 import { identifyMtgCardsFromPhoto } from '../services/mtg-card-vision.js';
 import { lookupMtgCardPrice, lookupMtgCardById, classifyValueTier } from '../services/mtg-card-pricing.js';
+import {
+  ensurePhotoSchema,
+  saveSourcePhoto,
+  saveCroppedListingPhoto,
+  loadPhotoBuffer,
+} from '../services/mtg-card-photo-store.js';
+import { isR2Configured } from '../services/marketing-r2-upload.js';
 
 const MAX_FILES = 150;
 const MAX_FILE_BYTES = 10 * 1024 * 1024;
@@ -81,6 +88,7 @@ async function ensureSchema(pool) {
   await pool.query(`ALTER TABLE mtg_card_collection ADD COLUMN IF NOT EXISTS price_match TEXT`);
   await pool.query(`ALTER TABLE mtg_card_collection ADD COLUMN IF NOT EXISTS needs_review BOOLEAN NOT NULL DEFAULT FALSE`);
   await pool.query(`ALTER TABLE mtg_card_collection ADD COLUMN IF NOT EXISTS priced_at TIMESTAMPTZ`);
+  await ensurePhotoSchema(pool);
 }
 
 /**
@@ -228,6 +236,9 @@ function blankRow({ userId, batchId, photoName = null, source = 'photo_vision' }
     status: 'error',
     quantity: 1,
     source,
+    source_photo_id: null,
+    listing_photo_id: null,
+    sell_status: 'catalogued',
   };
 }
 
@@ -236,9 +247,11 @@ const INSERT_SQL = `
     (user_id, batch_id, photo_name, identified_name, identified_set, is_foil, condition_guess,
      identify_confidence, identify_error, scryfall_id, price_usd, price_usd_foil, price_used,
      price_source, value_tier, recommended_venue, status, quantity, source,
-     price_min_usd, price_max_usd, printing_count, price_match, needs_review, priced_at)
+     price_min_usd, price_max_usd, printing_count, price_match, needs_review, priced_at,
+     source_photo_id, listing_photo_id, sell_status)
   VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,
-          CASE WHEN $14::text IS NULL THEN NULL ELSE NOW() END)
+          CASE WHEN $14::text IS NULL THEN NULL ELSE NOW() END,
+          $25,$26,$27)
 `;
 
 function insertParams(row) {
@@ -247,7 +260,7 @@ function insertParams(row) {
     row.condition_guess, row.identify_confidence, row.identify_error, row.scryfall_id, row.price_usd,
     row.price_usd_foil, row.price_used, row.price_source, row.value_tier, row.recommended_venue,
     row.status, row.quantity, row.source, row.price_min_usd, row.price_max_usd, row.printing_count,
-    row.price_match, row.needs_review,
+    row.price_match, row.needs_review, row.source_photo_id, row.listing_photo_id, row.sell_status,
   ];
 }
 
@@ -262,16 +275,34 @@ export function photoCardSlotName(originalName, index, total) {
   return `${base}#${index + 1}`;
 }
 
+function boxLooksNormalized(box) {
+  return box && box.x <= 1.5 && box.y <= 1.5 && box.w <= 1.5 && box.h <= 1.5;
+}
+
 async function processBatch({ pool, logger, userId, batchId, files }) {
   for (const file of files) {
     const baseName = file.originalname || 'unknown';
+    let sourcePhoto = null;
 
     try {
+      // ALWAYS persist the upload first -- founder law 2026-08-12: photos are
+      // inventory assets for selling, not disposable vision inputs.
+      sourcePhoto = await saveSourcePhoto({
+        pool,
+        userId,
+        batchId,
+        photoName: baseName,
+        mime: file.mimetype || 'image/jpeg',
+        buffer: file.buffer,
+        logger,
+      });
+
       const photo = { name: baseName, mime: file.mimetype, data: file.buffer.toString('base64') };
       const id = await identifyMtgCardsFromPhoto(photo, { logger });
 
       if (!id.ok) {
         const row = blankRow({ userId, batchId, photoName: baseName });
+        row.source_photo_id = sourcePhoto.id;
         row.identify_error = id.error;
         row.status = 'identify_failed';
         await pool.query(INSERT_SQL, insertParams(row));
@@ -280,11 +311,14 @@ async function processBatch({ pool, logger, userId, batchId, files }) {
 
       if (!id.cards.length) {
         const row = blankRow({ userId, batchId, photoName: baseName });
+        row.source_photo_id = sourcePhoto.id;
         row.identify_error = 'no_card_clearly_identified_in_photo';
         row.status = 'identify_failed';
         await pool.query(INSERT_SQL, insertParams(row));
         continue;
       }
+
+      const preparedSource = { buffer: file.buffer };
 
       for (let i = 0; i < id.cards.length; i++) {
         const card = id.cards[i];
@@ -293,11 +327,36 @@ async function processBatch({ pool, logger, userId, batchId, files }) {
           batchId,
           photoName: photoCardSlotName(baseName, i, id.cards.length),
         });
+        row.source_photo_id = sourcePhoto.id;
         row.identified_name = card.name;
         row.identified_set = card.set;
         row.is_foil = card.foil;
         row.condition_guess = card.condition_guess;
         row.identify_confidence = card.confidence;
+
+        // Crop from the ORIGINAL upload buffer so vision boxes (measured on
+        // that image) line up. The durable source copy may be resized.
+        if (card.box && preparedSource?.buffer) {
+          try {
+            const absolute = !boxLooksNormalized(card.box);
+            const crop = await saveCroppedListingPhoto({
+              pool,
+              userId,
+              batchId,
+              parentPhotoId: sourcePhoto.id,
+              cardSlot: i + 1,
+              photoName: photoCardSlotName(baseName, i, id.cards.length),
+              sourceBuffer: preparedSource.buffer,
+              box: card.box,
+              absolute,
+              logger,
+            });
+            row.listing_photo_id = crop.id;
+            row.sell_status = 'ready_to_list';
+          } catch (err) {
+            logger?.warn?.({ err: err.message, file: baseName, slot: i + 1 }, 'mtg listing crop failed');
+          }
+        }
 
         try {
           const price = await lookupMtgCardPrice(card.name, card.set, { logger });
@@ -317,6 +376,7 @@ async function processBatch({ pool, logger, userId, batchId, files }) {
       }
     } catch (err) {
       const row = blankRow({ userId, batchId, photoName: baseName });
+      if (sourcePhoto?.id) row.source_photo_id = sourcePhoto.id;
       row.identify_error = err.message;
       row.status = 'error';
       logger?.error?.({ err: err.message, file: baseName }, 'mtg card batch item failed');
@@ -466,8 +526,8 @@ export function createMtgCardsRoutes({ pool, requireKey, logger = console }) {
         const names = files.map((f) => f.originalname).filter(Boolean);
         if (names.length) {
           const { rows } = await pool.query(
-            `SELECT COUNT(DISTINCT photo_name)::int AS n FROM mtg_card_collection
-             WHERE user_id = $1 AND photo_name = ANY($2::text[])`,
+            `SELECT COUNT(DISTINCT photo_name)::int AS n FROM mtg_card_photos
+             WHERE user_id = $1 AND kind = 'source' AND photo_name = ANY($2::text[])`,
             [userId, names],
           );
           alreadyCatalogued = rows[0]?.n || 0;
@@ -485,6 +545,9 @@ export function createMtgCardsRoutes({ pool, requireKey, logger = console }) {
         batch_id: batchId,
         file_count: files.length,
         already_catalogued: alreadyCatalogued,
+        photos_will_be_saved: true,
+        photo_storage: isR2Configured() ? 'r2' : 'database',
+        message: `Received ${files.length} photo(s) — saving every image, then identifying/cropping/pricing each card.`,
       });
     } catch (err) {
       logger.error({ err: err.message }, 'mtg cards batch-upload failed');
@@ -797,6 +860,50 @@ export function createMtgCardsRoutes({ pool, requireKey, logger = console }) {
   router.get('/reprice/status', requireKey, (req, res) => {
     if (!repriceJob) return res.json({ ok: true, job: null });
     res.json({ ok: true, job: repriceJob });
+  });
+
+  /** Serve a stored source or cropped listing photo. */
+  router.get('/photos/:photoId', requireKey, async (req, res) => {
+    try {
+      await ready();
+      const loaded = await loadPhotoBuffer(pool, req.params.photoId);
+      if (!loaded) return res.status(404).json({ ok: false, error: 'photo_not_found' });
+      if (loaded.r2_url && !loaded.buffer) return res.redirect(loaded.r2_url);
+      res.setHeader('Content-Type', loaded.mime || 'image/jpeg');
+      res.setHeader('Cache-Control', 'private, max-age=86400');
+      res.send(loaded.buffer);
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  /** Sell queue: cards ready to list, sorted by value. */
+  router.get('/sell-queue', requireKey, async (req, res) => {
+    try {
+      await ready();
+      const userId = Number(req.query.user_id) || DEFAULT_USER_ID;
+      const status = req.query.status || 'ready_to_list';
+      const { rows } = await pool.query(
+        `SELECT id, identified_name, identified_set, is_foil, price_used, value_tier,
+                recommended_venue, sell_status, sell_venue_target, listing_photo_id,
+                source_photo_id, needs_review, condition_guess
+         FROM mtg_card_collection
+         WHERE user_id = $1 AND sell_status = $2
+         ORDER BY price_used DESC NULLS LAST
+         LIMIT 500`,
+        [userId, status],
+      );
+      res.json({
+        ok: true,
+        status,
+        count: rows.length,
+        total_estimated_usd: Number(rows.reduce((s, r) => s + Number(r.price_used || 0), 0).toFixed(2)),
+        rows,
+        photo_storage: isR2Configured() ? 'r2' : 'database',
+      });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
   });
 
   return router;
