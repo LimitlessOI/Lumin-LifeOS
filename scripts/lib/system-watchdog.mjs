@@ -1,7 +1,10 @@
 /**
  * SYNOPSIS: In-system watchdog decisions. The actor doing the work is not
- * the only thing allowed to notice it stopped. Pure functions — production
- * prod-health-watchdog and the local factory-2 lane both call this.
+ * the only thing allowed to notice it stopped. Pure functions — three
+ * consumers of the same signal: production prod-health-watchdog (SMS/call),
+ * the local factory-2 lane (relaunch Taloa), and SENTRY
+ * (`checkSystemStillWorking` in sentry-system-audit.js) which writes the
+ * finding into the Chair → Architect repair pipe and never stops.
  *
  * @ssot docs/products/builderos/PRODUCT_HOME.md
  */

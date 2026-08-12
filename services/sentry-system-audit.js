@@ -13,11 +13,21 @@
  * concern) and produces structured findings a Chair-review step can act on.
  * Extending the check list over time is expected; each new check should stay
  * this same shape: cheap, deterministic, and never fabricate a finding.
+ *
+ * Check 5 (2026-08-12, founder): "is it not SENTRY's job" to keep watching
+ * whether the system is still working, and never stop. Same signal the
+ * prod-health watchdog and factory-2 lane already consume
+ * (`evaluateSystemWatchdog`) — SENTRY is the third consumer, the one that
+ * writes findings into the Chair → Architect → BUILD_QUEUE repair pipe.
+ * SENTRY still never builds (SO-002). Railway cannot hold-click the Taloa
+ * badge; that stay-alive is factory-2's local lane.
  */
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { fetchLatestMainRun } from '../scripts/ci-health-watchdog.mjs';
+import { fetchGovernedStatus } from '../scripts/prod-health-watchdog.mjs';
+import { evaluateSystemWatchdog, overlayNativeBlockedSteps } from '../scripts/lib/system-watchdog.mjs';
 import { extractCorpusBacklog } from './build-queue-planner.js';
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -267,6 +277,105 @@ export async function checkReceiptReproducibility({
   return findings;
 }
 
+export const FIXER_FAILED_MS = 15 * 60 * 1000;
+
+const SYSTEM_WORKING_SUMMARIES = {
+  governed_hard_halt: 'FOUNDER_STOP or PAUSE_AUTONOMY is on — manufacturing is halted by name.',
+  governed_loop_stale: 'Governed shipping lastTick is older than 10 minutes — factory-1 is not manufacturing.',
+  taloa_not_running: 'Taloa is not running on this machine.',
+  factory2_tick_stale: 'factory-2 lane tick is older than 3 minutes — the local factory is not looping.',
+};
+
+function summaryForSystemFinding(id) {
+  if (SYSTEM_WORKING_SUMMARIES[id]) return SYSTEM_WORKING_SUMMARIES[id];
+  if (String(id).startsWith('false_block:')) {
+    return `Native overlay step ${String(id).slice('false_block:'.length)} is blocked NOT_ON_BLUEPRINT after factory-1 shipped a factory-2 file.`;
+  }
+  return String(id);
+}
+
+/**
+ * SENTRY check 5: is the live system still working? Reuses evaluateSystemWatchdog
+ * — SENTRY and the pager/lane are two consumers of the same signal, not two
+ * competing checkers. Railway cannot see Taloa; factory2 is only present when
+ * this process can read the local lane tick.
+ */
+export async function gatherSystemWorkingSignals({
+  baseUrl = process.env.PUBLIC_BASE_URL,
+  commandKey = process.env.COMMAND_CENTER_KEY,
+  fetchFn = fetch,
+  cwd = process.cwd(),
+} = {}) {
+  let governed = null;
+  if (baseUrl && commandKey) {
+    try {
+      governed = await fetchGovernedStatus({ baseUrl, commandKey, fetchFn });
+    } catch {
+      governed = null;
+    }
+  }
+
+  let overlayNativeBlocks = [];
+  try {
+    const queue = JSON.parse(fs.readFileSync(path.join(cwd, 'docs/products/universal-overlay/BUILD_QUEUE.json'), 'utf8'));
+    overlayNativeBlocks = overlayNativeBlockedSteps(queue);
+  } catch {
+    overlayNativeBlocks = [];
+  }
+
+  let factory2 = null;
+  try {
+    factory2 = JSON.parse(fs.readFileSync(path.join(cwd, '.factory-2-tick.json'), 'utf8'));
+  } catch {
+    factory2 = null;
+  }
+
+  return { governed, factory2, overlayNativeBlocks };
+}
+
+export function checkSystemStillWorking({
+  now = Date.now(),
+  governed = null,
+  factory2 = null,
+  overlayNativeBlocks = [],
+} = {}) {
+  const wd = evaluateSystemWatchdog({ now, governed, factory2, overlayNativeBlocks });
+  return (wd.findings || []).map((f) => ({
+    id: f.id,
+    check: f.id === 'governed_hard_halt' ? 'founder_stop' : 'system_still_working',
+    severity: 'P0',
+    summary: summaryForSystemFinding(f.id),
+    proposed_solution: f.proposed_solution,
+    detected_at: new Date(now).toISOString(),
+  }));
+}
+
+/**
+ * If SENTRY already opened a system-working finding and the same condition is
+ * still true after FIXER_FAILED_MS, emit a second finding: the fixer did not
+ * fix it. That is the founder's "never stop / fix the fixer" rule as a check.
+ */
+export function annotateFixerFailures(findings, existingQueue, { now = Date.now(), staleMs = FIXER_FAILED_MS } = {}) {
+  const existing = Array.isArray(existingQueue?.findings) ? existingQueue.findings : [];
+  const extra = [];
+  for (const f of findings || []) {
+    if (String(f.id).startsWith('fixer_failed:')) continue;
+    const prior = existing.find((x) => x.id === f.id && x.queue_status === 'open');
+    if (!prior?.first_detected_at) continue;
+    const age = now - Date.parse(prior.first_detected_at);
+    if (!Number.isFinite(age) || age < staleMs) continue;
+    extra.push({
+      id: `fixer_failed:${f.id}`,
+      check: 'system_still_working',
+      severity: 'P0',
+      summary: `SENTRY found "${f.summary}" and it is still true after ${Math.round(age / 60000)} minutes — the fixer did not fix it.`,
+      proposed_solution: `The original proposed_solution was: ${f.proposed_solution} Investigate why that repair did not land, fix the fixer (the code or daemon that was supposed to apply it), then re-verify this check is green. Do not stop at the alert.`,
+      detected_at: new Date(now).toISOString(),
+    });
+  }
+  return [...(findings || []), ...extra];
+}
+
 /**
  * Runs all SENTRY checks and returns the combined finding list. Each check
  * fails open (returns [] on its own error) so one broken check never blocks
@@ -277,12 +386,22 @@ export async function runSentrySystemAudit({
   repo = process.env.GITHUB_REPO,
   productsDir = PRODUCTS_DIR,
   pool = undefined,
+  systemSignals = undefined,
+  includeSystemWorking = true,
 } = {}) {
-  const [ciFindings, backlogFindings, workflowFindings, receiptFindings] = await Promise.all([
+  const [ciFindings, backlogFindings, workflowFindings, receiptFindings, systemFindings] = await Promise.all([
     checkCiHealth({ token, repo }).catch(() => []),
     Promise.resolve().then(() => checkProductBacklogs({ productsDir })).catch(() => []),
     checkWorkflowHealth({ token, repo }).catch(() => []),
     checkReceiptReproducibility({ pool, token, repo }).catch(() => []),
+    includeSystemWorking
+      ? Promise.resolve()
+        .then(async () => {
+          const signals = systemSignals ?? await gatherSystemWorkingSignals();
+          return checkSystemStillWorking(signals);
+        })
+        .catch(() => [])
+      : Promise.resolve([]),
   ]);
-  return [...ciFindings, ...backlogFindings, ...workflowFindings, ...receiptFindings];
+  return [...ciFindings, ...backlogFindings, ...workflowFindings, ...receiptFindings, ...systemFindings];
 }

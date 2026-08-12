@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 2026-08-12 — Both factories, and fix the fixer (continued) -->
+
 # 2026-08-12 — Both factories, and fix the fixer (continued)
 
 **Surface:** Cursor chat (conductor)
@@ -5,6 +7,10 @@
 **Date:** 2026-08-12
 
 ## Founder (verbatim, load-bearing)
+
+> like is it not she senterys job to do what i asked you to do is that somehting we can have it do and never stop doing if the system stops working its job is
+
+Yes. SENTRY tests, never builds. The SENTRY-Chair scheduler already never-stopped on boot; it was not watching whether factories/overlay/fixer were actually working. That check is now SENTRY's (`checkSystemStillWorking`, every 5m). If a finding stays true 15m, SENTRY emits `fixer_failed`. Railway cannot hold-click the Taloa badge.
 
 > Is the system using both factories now? If not, why not? Haven't you fixed it? I don't see you doing anything. And are you continuously monitoring the system for mistakes that it overlooks? Figure out why you don't like it, and this is it Or not. To stop the bill, please.
 

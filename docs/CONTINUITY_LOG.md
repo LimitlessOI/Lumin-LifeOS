@@ -1,3 +1,9 @@
+<!-- SYNOPSIS: Documentation — CONTINUITY LOG. -->
+
+## 2026-08-12 — SENTRY owns the never-stop watch
+
+Adam: is it not SENTRY's job to do what Cursor was asked to do, and never stop; if the system stops working, that is its job. Yes. The SENTRY-Chair scheduler already never-stopped on boot, but it was not watching factories/overlay/fixer. `checkSystemStillWorking` is now a SENTRY check (same `evaluateSystemWatchdog` signal as the pager). System-working ticks every 5m; if a finding stays true 15m, SENTRY emits `fixer_failed`. SENTRY still never builds. Railway cannot hold-click the Taloa badge.
+
 ## 2026-08-12 — Codex login brought up in Cursor via the Taloa overlay
 
 Adam asked both agents to set up Codex on Cursor using the live overlay and to bring up the login so he could enter it. Taloa captured the desk, opened **Codex: Open Codex Sidebar**, started `codex login --device-auth`, and pointed at Chrome on the right monitor (`auth.openai.com/choose-an-account`, saved account adam@hopkinsgroup.org). Overlay caption showed the one-time device code for him to type. Capture: `docs/products/lifeos/conversations/2026-08-12-codex-on-cursor-via-overlay.md`.

@@ -16,7 +16,12 @@
  */
 import fs from 'fs';
 import path from 'path';
-import { runSentrySystemAudit } from '../services/sentry-system-audit.js';
+import {
+  runSentrySystemAudit,
+  checkSystemStillWorking,
+  gatherSystemWorkingSignals,
+  annotateFixerFailures,
+} from '../services/sentry-system-audit.js';
 import { reviewFindings, reviewFindingsWithAI } from '../services/chair-findings-review.js';
 import { defaultPlannerCallModel } from '../services/never-stop-product-factory.js';
 import { runArchitectPass } from '../services/architect-blueprint-writer.js';
@@ -108,18 +113,47 @@ export async function runGovernanceAuditCycle({
   // Optional DB pool — enables checkReceiptReproducibility (judgment_receipt_links
   // integrity). Undefined in contexts with no DB access; that check simply no-ops.
   pool = undefined,
+  // 'full' = every SENTRY check. 'system' = only "is the live system still
+  // working" (the never-stop watch). Same Chair → Architect pipe either way.
+  auditKind = 'full',
+  systemSignals = undefined,
+  now = Date.now(),
 } = {}) {
-  const rawFindings = await runSentrySystemAudit({ token, repo, pool, ...(productsDir ? { productsDir } : {}) });
+  const rawSnapshot = auditKind === 'system'
+    ? checkSystemStillWorking(systemSignals ?? await gatherSystemWorkingSignals({ baseUrl, commandKey }))
+    : await runSentrySystemAudit({
+      token,
+      repo,
+      pool,
+      ...(productsDir ? { productsDir } : {}),
+      ...(systemSignals ? { systemSignals } : {}),
+    });
+
+  const existingQueue = loadFindingsQueue();
+  const rawFindings = annotateFixerFailures(rawSnapshot, existingQueue, { now });
+  const existingIds = new Set((existingQueue.findings || []).map((f) => f.id));
+  const novel = rawFindings.filter((f) => !existingIds.has(f.id));
+
+  if (novel.length === 0) {
+    return {
+      raw_findings: rawFindings.length,
+      newly_added: 0,
+      escalations: 0,
+      approved: 0,
+      queued_to_blueprint: 0,
+      skipped_review: 'no_novel_findings',
+    };
+  }
+
   const reviewed = callModel
-    ? await reviewFindingsWithAI(rawFindings, { callModel, logger, pool })
-    : reviewFindings(rawFindings);
+    ? await reviewFindingsWithAI(novel, { callModel, logger, pool })
+    : reviewFindings(novel);
 
   // Architect: turn every Chair-approved finding into a real BUILD_QUEUE step
   // where the fix location is unambiguous; label the rest honestly rather
   // than guess or silently skip them.
   const withArchitectStatus = runArchitectPass(reviewed, architectRoot ? { root: architectRoot } : {});
 
-  const existingQueue = loadFindingsQueue();
   const { queue, newlyAdded } = mergeFindingsIntoQueue(withArchitectStatus, existingQueue);
   saveFindingsQueue(queue);
 
@@ -227,19 +261,33 @@ export function startCompetitiveResearchScheduler({ logger = console, pool = und
 export function startSentryChairGovernanceScheduler({ logger = console, pool = undefined } = {}) {
   const intervalMs = Number(process.env.SENTRY_CHAIR_AUDIT_INTERVAL_MS || 30 * 60 * 1000);
   const bootDelayMs = Number(process.env.SENTRY_CHAIR_AUDIT_BOOT_DELAY_MS || 90_000);
+  const systemIntervalMs = Number(process.env.SENTRY_SYSTEM_AUDIT_INTERVAL_MS || 5 * 60 * 1000);
 
-  const tick = async () => {
+  const fullTick = async () => {
     try {
-      await runGovernanceAuditCycle({ logger, pool });
+      await runGovernanceAuditCycle({ logger, pool, auditKind: 'full' });
     } catch (err) {
       logger?.warn?.({ err: err.message }, '[SENTRY-CHAIR] audit cycle failed');
     }
   };
 
-  logger?.info?.({ intervalMs, bootDelayMs }, '[SENTRY-CHAIR] starting periodic governance audit (SENTRY finds -> Chair reviews -> founder escalation)');
+  const systemTick = async () => {
+    try {
+      await runGovernanceAuditCycle({ logger, pool, auditKind: 'system' });
+    } catch (err) {
+      logger?.warn?.({ err: err.message }, '[SENTRY-CHAIR] system-working cycle failed');
+    }
+  };
 
-  setTimeout(() => { tick(); }, bootDelayMs);
-  return setInterval(() => { tick(); }, intervalMs);
+  logger?.info?.(
+    { intervalMs, bootDelayMs, systemIntervalMs },
+    '[SENTRY-CHAIR] starting never-stop audit (full SENTRY finds -> Chair; system-working every 5m)',
+  );
+
+  setTimeout(() => { fullTick(); }, bootDelayMs);
+  const fullHandle = setInterval(() => { fullTick(); }, intervalMs);
+  const systemHandle = setInterval(() => { systemTick(); }, systemIntervalMs);
+  return { fullHandle, systemHandle };
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {

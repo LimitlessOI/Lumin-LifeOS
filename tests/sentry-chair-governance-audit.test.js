@@ -79,6 +79,7 @@ test('runGovernanceAuditCycle: runs end-to-end in an isolated cwd with no GitHub
       callModel: null, // force the deterministic rule-based path — explicit, not env-dependent
       architectRoot: tmpDir, // must never default to the real repo root in a test
       logger: { info() {}, warn() {} },
+      systemSignals: { governed: null, factory2: null, overlayNativeBlocks: [] },
     });
 
     assert.equal(result.raw_findings, 1);
@@ -121,12 +122,90 @@ test('runGovernanceAuditCycle: an injected callModel is actually used to enrich 
       callModel: fakeCallModel,
       architectRoot: tmpDir, // must never default to the real repo root in a test
       logger: { info() {}, warn() {} },
+      systemSignals: { governed: null, factory2: null, overlayNativeBlocks: [] },
     });
 
     assert.equal(callCount, 1, 'the injected model must actually be invoked, not silently bypassed');
     const persisted = loadFindingsQueue();
     assert.match(persisted.findings[0].chair_reasoning, /Chair \(AI\)/);
     assert.equal(persisted.findings[0].chair_reasoning_source, 'ai_model');
+  } finally {
+    process.chdir(originalCwd);
+    fs.rmSync(tmpDir, { recursive: true, force: true });
+  }
+});
+
+test('runGovernanceAuditCycle: a second pass with the same finding does not re-call the model (never-stop must not burn tokens on already-open rows)', async () => {
+  const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'sentry-cycle-skip-'));
+  const originalCwd = process.cwd();
+  process.chdir(tmpDir);
+  try {
+    const productsDir = path.join(tmpDir, 'docs/products');
+    fs.mkdirSync(path.join(productsDir, 'idle-product'), { recursive: true });
+    fs.writeFileSync(path.join(productsDir, 'idle-product/BUILD_QUEUE.json'), JSON.stringify({ steps: [{ id: '1', status: 'done' }] }));
+    fs.writeFileSync(path.join(productsDir, 'idle-product/PRODUCT_HOME.md'), '# Idle\n');
+
+    let callCount = 0;
+    const fakeCallModel = async () => {
+      callCount += 1;
+      return 'judgment';
+    };
+    const opts = {
+      token: null,
+      repo: null,
+      baseUrl: null,
+      commandKey: null,
+      alertPhone: null,
+      productsDir,
+      callModel: fakeCallModel,
+      architectRoot: tmpDir,
+      logger: { info() {}, warn() {} },
+      systemSignals: { governed: null, factory2: null, overlayNativeBlocks: [] },
+    };
+
+    const first = await runGovernanceAuditCycle(opts);
+    assert.equal(first.newly_added, 1);
+    assert.equal(callCount, 1);
+
+    const second = await runGovernanceAuditCycle(opts);
+    assert.equal(second.newly_added, 0);
+    assert.equal(second.skipped_review, 'no_novel_findings');
+    assert.equal(callCount, 1, 'already-open findings must not re-invoke Chair AI');
+  } finally {
+    process.chdir(originalCwd);
+    fs.rmSync(tmpDir, { recursive: true, force: true });
+  }
+});
+
+test('runGovernanceAuditCycle: system-only kind flags a stale governed loop without GitHub checks', async () => {
+  const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'sentry-cycle-system-'));
+  const originalCwd = process.cwd();
+  process.chdir(tmpDir);
+  try {
+    const result = await runGovernanceAuditCycle({
+      token: null,
+      repo: null,
+      baseUrl: null,
+      commandKey: null,
+      alertPhone: null,
+      callModel: null,
+      architectRoot: tmpDir,
+      logger: { info() {}, warn() {} },
+      auditKind: 'system',
+      now: Date.parse('2026-08-12T22:20:00Z'),
+      systemSignals: {
+        governed: { enabled: true, lastTickAt: '2026-08-12T22:00:00Z', hardHalt: false },
+        factory2: null,
+        overlayNativeBlocks: [],
+      },
+    });
+    assert.equal(result.raw_findings, 1);
+    assert.equal(result.newly_added, 1);
+    assert.equal(result.approved, 1);
+    const persisted = loadFindingsQueue();
+    assert.equal(persisted.findings[0].id, 'governed_loop_stale');
+    assert.equal(persisted.findings[0].check, 'system_still_working');
+    assert.equal(persisted.findings[0].chair_status, 'approved');
   } finally {
     process.chdir(originalCwd);
     fs.rmSync(tmpDir, { recursive: true, force: true });

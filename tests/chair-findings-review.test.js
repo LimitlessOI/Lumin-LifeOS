@@ -23,12 +23,32 @@ test('reviewFinding: infrastructure/config findings (ci_health, workflow_health)
 
   const wf = reviewFinding({ id: 'y', check: 'workflow_health', severity: 'P2', summary: 's', proposed_solution: 'the yaml has stray markdown fences, remove them' });
   assert.equal(wf.chair_status, 'approved');
+
+  const sys = reviewFinding({
+    id: 'governed_loop_stale',
+    check: 'system_still_working',
+    severity: 'P0',
+    summary: 's',
+    proposed_solution: 'Governed shipping lastTick is older than 10m. Reschedule the in-process loop or restart the founder_builder service.',
+  });
+  assert.equal(sys.chair_status, 'approved');
 });
 
 test('reviewFinding: product/scope findings (product_backlog) always escalate to the founder, never auto-approve', () => {
   const result = reviewFinding({ id: 'x', check: 'product_backlog', severity: 'P1', summary: 's', proposed_solution: 'interview the founder for next priorities and write them into PRODUCT_HOME' });
   assert.equal(result.chair_status, 'escalate_to_founder');
   assert.match(result.chair_reasoning, /business decision/);
+});
+
+test('reviewFinding: founder_stop (FOUNDER_STOP / PAUSE_AUTONOMY) escalates — lifting a named halt is his call', () => {
+  const result = reviewFinding({
+    id: 'governed_hard_halt',
+    check: 'founder_stop',
+    severity: 'P0',
+    summary: 's',
+    proposed_solution: 'FOUNDER_STOP or PAUSE_AUTONOMY is on. Do not invent a second loop; lift the named halt if the founder asked to keep building.',
+  });
+  assert.equal(result.chair_status, 'escalate_to_founder');
 });
 
 test('reviewFinding: an unrecognized check type fails closed to founder review, never silently auto-approved', () => {

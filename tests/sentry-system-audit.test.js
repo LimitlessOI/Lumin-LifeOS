@@ -7,7 +7,7 @@ import fs from 'fs';
 import os from 'os';
 import path from 'path';
 
-import { checkCiHealth, checkProductBacklogs, checkWorkflowHealth, checkReceiptReproducibility, runSentrySystemAudit } from '../services/sentry-system-audit.js';
+import { checkCiHealth, checkProductBacklogs, checkWorkflowHealth, checkReceiptReproducibility, runSentrySystemAudit, checkSystemStillWorking, annotateFixerFailures } from '../services/sentry-system-audit.js';
 
 test('checkCiHealth: no token/repo skips cleanly (this is why it silently no-ops in a local dev shell with no GITHUB_TOKEN)', async () => {
   const findings = await checkCiHealth({ token: null, repo: null });
@@ -235,10 +235,90 @@ test('runSentrySystemAudit: one check throwing does not prevent the others from 
     fs.writeFileSync(path.join(productDir, 'PRODUCT_HOME.md'), '# Idle\n');
 
     // No token/repo -> CI + workflow checks no-op cleanly; product check still runs for real.
-    const findings = await runSentrySystemAudit({ token: null, repo: null, productsDir: tmpDir });
+    const findings = await runSentrySystemAudit({
+      token: null,
+      repo: null,
+      productsDir: tmpDir,
+      systemSignals: { governed: null, factory2: null, overlayNativeBlocks: [] },
+    });
     assert.equal(findings.length, 1);
     assert.equal(findings[0].check, 'product_backlog');
   } finally {
     fs.rmSync(tmpDir, { recursive: true, force: true });
   }
+});
+
+test('checkSystemStillWorking: governed loop stale is a P0 system_still_working finding with a proposed_solution', () => {
+  const findings = checkSystemStillWorking({
+    now: Date.parse('2026-08-12T22:20:00Z'),
+    governed: { enabled: true, lastTickAt: '2026-08-12T22:00:00Z', hardHalt: false },
+    factory2: null,
+    overlayNativeBlocks: [],
+  });
+  assert.equal(findings.length, 1);
+  assert.equal(findings[0].id, 'governed_loop_stale');
+  assert.equal(findings[0].check, 'system_still_working');
+  assert.equal(findings[0].severity, 'P0');
+  assert.ok(findings[0].proposed_solution.length > 10);
+});
+
+test('checkSystemStillWorking: FOUNDER_STOP is founder_stop, not auto-fixable infrastructure', () => {
+  const findings = checkSystemStillWorking({
+    governed: { enabled: false, hardHalt: true },
+  });
+  assert.equal(findings.length, 1);
+  assert.equal(findings[0].id, 'governed_hard_halt');
+  assert.equal(findings[0].check, 'founder_stop');
+});
+
+test('checkSystemStillWorking: healthy signals produce no finding', () => {
+  const findings = checkSystemStillWorking({
+    now: Date.parse('2026-08-12T22:20:00Z'),
+    governed: { enabled: true, lastTickAt: '2026-08-12T22:19:00Z', hardHalt: false },
+    factory2: { tickAt: '2026-08-12T22:19:30Z', taloaRunning: true },
+    overlayNativeBlocks: [],
+  });
+  assert.deepEqual(findings, []);
+});
+
+test('annotateFixerFailures: a still-open finding older than 15m emits fixer_failed', () => {
+  const now = Date.parse('2026-08-12T22:30:00Z');
+  const findings = [{
+    id: 'governed_loop_stale',
+    check: 'system_still_working',
+    summary: 'Governed shipping lastTick is older than 10 minutes — factory-1 is not manufacturing.',
+    proposed_solution: 'Reschedule the in-process watchdog.',
+    detected_at: '2026-08-12T22:30:00Z',
+  }];
+  const queue = {
+    findings: [{
+      id: 'governed_loop_stale',
+      queue_status: 'open',
+      first_detected_at: '2026-08-12T22:00:00Z',
+    }],
+  };
+  const out = annotateFixerFailures(findings, queue, { now });
+  assert.equal(out.length, 2);
+  assert.equal(out[1].id, 'fixer_failed:governed_loop_stale');
+  assert.equal(out[1].check, 'system_still_working');
+  assert.match(out[1].proposed_solution, /fix the fixer/);
+});
+
+test('annotateFixerFailures: a fresh open finding does not emit fixer_failed yet', () => {
+  const now = Date.parse('2026-08-12T22:05:00Z');
+  const findings = [{
+    id: 'governed_loop_stale',
+    check: 'system_still_working',
+    summary: 'stale',
+    proposed_solution: 'Reschedule the in-process watchdog.',
+  }];
+  const queue = {
+    findings: [{
+      id: 'governed_loop_stale',
+      queue_status: 'open',
+      first_detected_at: '2026-08-12T22:00:00Z',
+    }],
+  };
+  const out = annotateFixerFailures(findings, queue, { now });
+  assert.equal(out.length, 1);
 });
