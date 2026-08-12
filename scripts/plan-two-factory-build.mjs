@@ -203,6 +203,15 @@ function renderMarkdown(r) {
     }
     lines.push('');
   }
+  const knot = r.unschedulable_steps || [];
+  if (knot.length) {
+    lines.push(
+      '## Not schedulable at all',
+      '',
+      `${knot.length} step(s) belong to no wave because they depend on each other in a circle: ${knot.map((k) => `\`${k}\``).join(', ')}. No number of builders can start a step that waits on itself. An office has to break the cycle before this part of the blueprint can be manufactured.`,
+      ''
+    );
+  }
   lines.push(
     '## Putting it back together',
     '',

@@ -42,6 +42,10 @@ One lane: 11 units. Two lanes: 8 units. 1.38x, floored at 5 by the dependency ch
 
 - `SL-011` → unassigned — **blocked on a founder answer**
 
+## Not schedulable at all
+
+5 step(s) belong to no wave because they depend on each other in a circle: `TALOA-P1-012`, `TALOA-P1-013`, `TALOA-P1-014`, `TALOA-P1-015`, `TALOA-P1-016`. No number of builders can start a step that waits on itself. An office has to break the cycle before this part of the blueprint can be manufactured.
+
 ## Putting it back together
 
 Each wave is an integration point: nothing from wave N+1 starts until every slice in wave N has landed and verified. High-risk slices are given to both lanes independently — convergence raises confidence, divergence goes to the Consensus Protocol rather than a vote.

@@ -1,8 +1,8 @@
 {
   "schema": "receipt_truth_validation_v1",
-  "at": "2026-08-12T02:38:52.914Z",
+  "at": "2026-08-12T02:45:29.214Z",
   "ok": true,
-  "checked": 165,
+  "checked": 167,
   "failures": [],
   "known_debt": [
     "SITE_BUILDER_PREALPHA_LAYER_A.json:ACCEPTANCE_PASS_WITHOUT_SHA_OR_BASE|PASS_WITHOUT_NAMED_VERIFIER"
@@ -349,6 +349,13 @@
     },
     {
       "file": "DIRECT_EXECUTION_POINT_B_LIVE.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "FACTORY_HEALTH_RECEIPT.json",
       "ok": true,
       "violations": [],
       "claims_pass": false,
@@ -1176,6 +1183,13 @@
       "ok": true,
       "violations": [],
       "claims_pass": true,
+      "proposed_solutions": []
+    },
+    {
+      "file": "TWO_FACTORY_PLAN_RECEIPT.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
       "proposed_solutions": []
     },
     {

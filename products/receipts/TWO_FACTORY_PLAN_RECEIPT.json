@@ -1,6 +1,6 @@
 {
   "schema": "two_factory_plan_receipt_v1",
-  "generated_at": "2026-08-12T02:44:40.931Z",
+  "generated_at": "2026-08-12T02:47:52.528Z",
   "produced_by": "scripts/plan-two-factory-build.mjs",
   "independent_reproduction_command": "node scripts/plan-two-factory-build.mjs",
   "plan_document": "docs/products/universal-overlay/TWO_FACTORY_BUILD_PLAN.md",

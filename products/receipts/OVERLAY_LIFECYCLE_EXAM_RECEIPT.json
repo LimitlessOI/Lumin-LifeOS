@@ -1,6 +1,6 @@
 {
   "schema": "overlay_lifecycle_exam_receipt_v1",
-  "generated_at": "2026-08-12T02:38:59.518Z",
+  "generated_at": "2026-08-12T02:45:35.777Z",
   "produced_by": "scripts/run-overlay-lifecycle-exam.mjs",
   "separation_collapsed": true,
   "separation_note": "This script drives and grades the same run. Mitigation: the graded input is a byte-pinned fixture it never writes, the pin is verified before any stage runs, every stage is a pure function of those bytes, and the authorization stage delegates to a verifier that exports no minter. Reproducible byte-identically via `npm run builderos:overlay:lifecycle`.",
