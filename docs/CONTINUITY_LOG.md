@@ -696,3 +696,21 @@ Site Builder `services/site-builder.js` placeholder/parked-page fast path and SE
 ## 2026-07-23 — LifeOS billing scaffold live + TC / LifeRE feature audit shipped
 
 LifeOS paid tier checkout scaffold committed, deployed, and live-tested on `dd2c792d6564`: `GET /api/v1/lifeos/auth/billing/pricing` returns env-configured tiers (`core` $19/mo, `premium` $49/mo, `family` $99/mo); authenticated `POST /checkout` returns a live Stripe `cs_live_` session URL; `POST /operator-mark-paid` (command key) updates `lifeos_users.tier`. `npm run builder:preflight` PASS 401/401. Added a detailed TC / LifeRE feature-status audit and human-only blocker list to `docs/products/MARKET_READINESS_PLAN.md`. LifeRE `/health`, `/education/curriculum`, `/top-3`, `/alpha/readiness` are live; `founder_usability_pass` is still false. TC routes exist in code but are disabled in production by runtime-mode safety (`founder_builder` on Railway); enabling them requires env approval and multiple external credentials. Next: resolve email provider + real card charge, then founder usability walkthrough, then enable full-runtime for TC.
+
+## 2026-08-11 — Stage 11: the offices can now answer (deployed 58ca1b7de0d7)
+
+The question "why can't it fix itself" had a concrete answer. Detection, classification and routing all worked; **nothing in the system could ever answer a routed request**. A loop whose only possible terminal state is "blocked" is not self-repairing, it is just polite.
+
+**Architect resolution** (`scripts/architect-resolve-requests.mjs`, policy in `config/architect-writeback-allowlist.js`). Three legal moves, per blueprint §18 B2: cite columns that already exist in the repository (719 real tables scanned from `db/migrations`), mark a store the blueprint itself declares a non-goal, or raise a structured founder question. Drafting a schema is forbidden — resolving "the schema is unspecified" by designing one is the original defect wearing a second office's badge, and that is precisely the laundering path the whole repair exists to close. Citations are checked: the named file must exist and must really contain the table.
+
+**Conductor resolution** (`scripts/conductor-resolve-requests.mjs`). Registration and applying an already-ratified typed gate are bookkeeping. A registration may never imply its gate passed — that conflation is how a registry quietly becomes a claim of completion. Everything else routes upward.
+
+**The loop closed.** `tests/architect-resolution.test.js` runs detect → Architect cites → Conductor registers → revalidate → three-party seal → `MANUFACTURING_AUTHORIZED` with no human in the path. First demonstration that the mechanism can finish on its own when the law permits.
+
+**The Overlay outcome is unchanged and honest.** 0 of 7 stores exist to cite, none are declared non-goals, so all 7 became founder questions. Plus the dependency cycle and a missing field, which no allowlisted move resolves. Nine questions, one artifact: `docs/products/builderos/FOUNDER_DECISION_SET_OVERLAY.md`. One interruption instead of nine.
+
+**Self-attack 20/20**, with four new vectors aimed at the surface I had just created: launder a schema, forge a citation, rule on a Class B subject, register in a state implying a pass. All repelled.
+
+Found while writing the end-to-end test: a slice with no acceptance criterion cannot be sealed. Correct — consenting to work with no definition of done is consenting to nothing — and now locked.
+
+**Next:** answering the 9 questions in `FOUNDER_DECISION_SET_OVERLAY.md` is the only thing standing between the Overlay and manufacturing.
