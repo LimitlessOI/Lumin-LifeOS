@@ -3146,7 +3146,7 @@
     },
     {
       "id": "TALOA-P1-015",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/taloa/receipt-ledger-service.js",
       "task": "The file MUST begin with a JSDoc block comment containing a line exactly \"@ssot docs/products/universal-overlay/PRODUCT_HOME.md\" (mandatory, enforced by a commit gate). Records and manages receipts for operations and transactions, interfacing with the database. Export exactly this factory function, with this exact name and destructured parameter shape: export function createReceiptLedgerService({ pool, logger }). The object it returns MUST expose these methods, each a real async function, not a stub or a thrown \"not implemented\": recordReceipt, getReceipt. Constraints: ES module syntax (import/export, no require); no top-level side effects, no timers started at import, no network calls, and no AI/model calls; all database access goes through the injected pool parameter and no other client; validate required constructor dependencies up front and throw a clear Error naming the missing one; every method must return a plain serialisable object, never undefined; depend only on node builtins and the injected dependencies -- add no new npm packages.",
       "spec": "{\n  \"step_id\": \"TALOA-P1-015\",\n  \"purpose\": \"Records and manages receipts for operations and transactions, interfacing with the database.\",\n  \"sealed_contract\": {\n    \"tables\": [],\n    \"exports\": [\n      \"ReceiptLedgerService\"\n    ],\n    \"ai_calls\": [],\n    \"endpoints\": [],\n    \"test_assertions\": [\n      \"ReceiptLedgerService.recordReceipt is callable\",\n      \"ReceiptLedgerService.getReceipt is callable\"\n    ],\n    \"factory_signature\": \"export function createReceiptLedgerService({ pool, logger })\"\n  },\n  \"ssot_tag\": \"docs/products/universal-overlay/PRODUCT_HOME.md\",\n  \"amended_by\": \"architect_cycle_resolution\"\n}",
@@ -3154,7 +3154,7 @@
         "TALOA-P1-003"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "createReceiptLedgerService"
       ],
@@ -3191,8 +3191,8 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
-      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: ENOENT: no such file or directory, open '/usr/src/app/services/taloa/.factory-import-check-1786563557833-1.mjs'",
+      "last_attempt_at": "2026-08-12T19:47:07.579Z",
+      "last_error": "ship_commit_not_on_main: compare status ahead",
       "same_signature_count": 0,
       "revive_count": 1,
       "revived_at": "2026-08-12T19:46:19.980Z",
