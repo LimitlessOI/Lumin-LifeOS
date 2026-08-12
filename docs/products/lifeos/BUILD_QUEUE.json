@@ -6521,13 +6521,13 @@
     },
     {
       "id": "step-3",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/chair-intent-signals.js",
       "task": "Implement chair intent signal generation service",
       "spec": "Create a service that exports a `generateIntentSignal` function. This function should take a classified intent and the original message, and generate a structured signal or payload suitable for the 'workflow-conten' lane when the intent is identified as 'drawer_direct_build'.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "generateIntentSignal"
       ],
@@ -6537,7 +6537,7 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-08-12T22:14:46.626Z",
       "last_error": "AIC_GATE_FAILURE",
       "last_attempt": null,
       "revive_count": 1,
