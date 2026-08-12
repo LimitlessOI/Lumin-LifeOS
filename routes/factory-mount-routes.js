@@ -269,6 +269,13 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
                     : null;
                   if (importCheckFile) {
                     try {
+                      // The probe has to sit beside the target so the module's own
+                      // relative imports resolve, which means the target's directory
+                      // must exist even when this is the very first file in a new
+                      // folder. Without this, every tier failed with ENOENT and the
+                      // step reported codegen_empty as if no model had answered
+                      // (confirmed live 2026-08-12 on services/taloa/).
+                      fs.mkdirSync(path.dirname(importCheckFile), { recursive: true });
                       fs.writeFileSync(importCheckFile, content);
                       execFileSync(process.execPath, ['--input-type=module', '-e', `import ${JSON.stringify(pathToFileURL(importCheckFile).href)};`]);
                     } catch (err) {
