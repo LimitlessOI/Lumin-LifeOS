@@ -32,6 +32,8 @@ import { compileManufacturingPlan, verifyManufacturingPlan, blueprintHash } from
 import { sealManufacturingPlan } from './seal-manufacturing-plan.mjs';
 import { REQUIRED_CONSENSUS_OFFICES, GATE_STATE } from '../config/manufacturing-plan-schema.js';
 import { stepDependencies } from '../config/step-dependencies.js';
+import { runArchitectResolution } from './architect-resolve-requests.mjs';
+import { runConductorResolution } from './conductor-resolve-requests.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const FIXTURE_DIR = 'docs/products/builderos/fixtures/intake-regression-2026-08-11';
@@ -182,6 +184,46 @@ export function runLifecycleExam() {
     applied.length > 0,
     `${applied.length} defects resolved deterministically from values the system already had; ${unresolved.length} routed to an authority as specification requests`,
     { applied, specification_requests: requests }
+  );
+
+  // 4b. ARCHITECT RESOLUTION — the office with jurisdiction actually answers,
+  // instead of the loop being able only to say "blocked". Its moves are limited to
+  // the write-back allowlist: cite what already exists, mark a declared non-goal,
+  // or raise a structured founder question. Drafting a schema is forbidden, which
+  // is the whole point — otherwise "route it upward" just launders the invention
+  // through a second office.
+  const architect = runArchitectResolution({
+    requests: unresolved.map((d) => ({
+      defect_id: d.id,
+      subject: d.table || d.product || d.field || d.scope,
+      question: d.resolution_required,
+    })),
+    blueprint: working.blueprint_json,
+    intent: working.extracted_intent_json,
+  });
+  stage(
+    'ARCHITECT_RESOLUTION',
+    architect.allowlist_audit.clean,
+    `${architect.resolved_by_architect} resolved by citation or non-goal against ${architect.existing_tables_scanned} real repository tables; ${architect.routed_to_founder} routed to the founder as one decision set — allowlist audit ${architect.allowlist_audit.clean ? 'clean' : 'VIOLATED'}`,
+    {
+      resolved_by_architect: architect.resolved_by_architect,
+      routed_to_founder: architect.routed_to_founder,
+      founder_decision_set: architect.founder_decision_set,
+      allowlist_violations: architect.allowlist_audit.violations,
+    }
+  );
+
+  // 4c. CONDUCTOR RESOLUTION — the other office that had no answering mechanism.
+  // Registration and applying an already-ratified gate are bookkeeping; anything
+  // else routes upward rather than being improvised.
+  const conductor = runConductorResolution({
+    requests: unresolved.map((d) => ({ defect_id: d.id, subject: d.product || d.field || d.table })),
+  });
+  stage(
+    'CONDUCTOR_RESOLUTION',
+    conductor.allowlist_audit.clean,
+    `${conductor.resolved_by_conductor} resolved mechanically, ${conductor.routed_to_founder} routed upward — allowlist audit ${conductor.allowlist_audit.clean ? 'clean' : 'VIOLATED'}`,
+    { resolved_by_conductor: conductor.resolved_by_conductor, violations: conductor.allowlist_audit.violations }
   );
 
   // 5. AMEND — the resolution lands in the authoritative artifact, producing new bytes.
@@ -349,6 +391,8 @@ export function runLifecycleExam() {
         ? 'MET'
         : 'NOT MET — and correctly so. Execution is withheld because the blueprint genuinely does not specify what to build, which is the law working rather than the machine failing.',
       what_the_loop_did_alone: `detected ${initial.defect_count} defects, resolved ${applied.length} deterministically, amended the authoritative artifact, invalidated ${invalidated.length} stale approval(s), revalidated to ${revalidated.defect_count}, and refused to authorize work it cannot build — with zero human edits and zero nested-JSON rescue.`,
+      architect_did_what_it_could: `${architect.resolved_by_architect} resolved by citation or declared non-goal against ${architect.existing_tables_scanned} real repository tables`,
+      founder_decision_set: architect.founder_decision_set,
       what_still_requires_an_authority: requests.map((r) => ({ subject: r.subject, question: r.question })),
       why_these_cannot_be_auto_resolved:
         'The source names seven stores and never specifies their schemas. Any mechanism that fills them in commits exactly the invention this repair exists to prevent. Refusing is the correct behavior, not a limitation.',
@@ -382,6 +426,40 @@ function main() {
   const abs = path.join(ROOT, RECEIPT_REL);
   fs.mkdirSync(path.dirname(abs), { recursive: true });
   fs.writeFileSync(abs, `${JSON.stringify(receipt, null, 2)}\n`);
+
+  // The founder decision set is written where a person will actually find it. A
+  // question buried in a receipt is a question nobody answers, and the whole point
+  // of collecting them together is that the founder gets one interruption, not N.
+  const questions = result.acceptance_assessment?.founder_decision_set ?? [];
+  if (questions.length > 0) {
+    const md = [
+      '<!-- SYNOPSIS: Generated by scripts/run-overlay-lifecycle-exam.mjs. Do not hand-edit. -->',
+      '',
+      '# Founder decision set — Overlay',
+      '',
+      `Generated ${new Date().toISOString().slice(0, 10)} by the governed loop. These are every question the`,
+      'system could not lawfully answer itself, collected in one pass. Everything the',
+      'Architect and Conductor could resolve within their jurisdiction was already',
+      'resolved before this list was produced.',
+      '',
+      `**${questions.length} open.** Answering them unblocks manufacturing; no other input is needed.`,
+      '',
+      ...questions.flatMap((q, i) => [
+        `## ${i + 1}. ${q.subject}`,
+        '',
+        `**Question:** ${q.asks}`,
+        '',
+        `**Why it reached you:** ${q.why_it_reached_you}`,
+        '',
+        `**The system may not choose between:** ${q.options_the_system_may_not_choose_between.join('; ')}`,
+        '',
+        `**Your answer goes to:** ${q.answer_goes_to}`,
+        '',
+      ]),
+    ].join('\n');
+    fs.writeFileSync(path.join(ROOT, 'docs/products/builderos/FOUNDER_DECISION_SET_OVERLAY.md'), `${md}\n`);
+  }
+
   console.log(
     JSON.stringify(
       {

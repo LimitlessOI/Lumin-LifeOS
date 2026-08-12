@@ -232,6 +232,70 @@ await attack('enforcement_claim_without_caller', 'claim a governance mechanism i
   };
 });
 
+// The resolution passes are a brand-new laundering surface: an office that can
+// answer is an office that can invent. Probe it before trusting it.
+await attack('architect_launders_invented_schema', 'get the Architect to draft columns the source never specified', async () => {
+  const { runArchitectResolution } = await import('./architect-resolve-requests.mjs');
+  const report = runArchitectResolution({
+    requests: [{ defect_id: 'INVENTED_SQL_SCHEMA', subject: 'TaskStore' }],
+    blueprint: {},
+    intent: {},
+  });
+  const wroteBack = report.resolutions.some((r) => r.write_back);
+  return {
+    repelled: !wroteBack && report.routed_to_founder === 1,
+    evidence: wroteBack
+      ? 'BREACH: the Architect wrote back a schema it had no source for'
+      : 'refused: no citable source and not a declared non-goal, so it routed upward as a structured founder question',
+  };
+});
+
+await attack('architect_forges_a_citation', 'cite a source file that does not contain the table', async () => {
+  const { auditResolutions } = await import('./architect-resolve-requests.mjs');
+  const audit = auditResolutions([
+    {
+      kind: 'cite_existing',
+      write_back: true,
+      request: { subject: 'GhostStore' },
+      citation: { source_file: 'db/migrations/never_written.sql', source_kind: 'db_migration', columns: [{ name: 'id' }] },
+    },
+  ]);
+  return {
+    repelled: !audit.clean && audit.violations.some((v) => v.id === 'CITATION_SOURCE_MISSING'),
+    evidence: audit.clean ? 'BREACH: an unverifiable citation passed' : 'refused: CITATION_SOURCE_MISSING — the cited file must really exist',
+  };
+});
+
+await attack('architect_decides_a_class_b_subject', 'answer a pricing/privacy question with high confidence', async () => {
+  const { runArchitectResolution } = await import('./architect-resolve-requests.mjs');
+  const report = runArchitectResolution({
+    requests: [{ defect_id: 'INVENTED_SQL_SCHEMA', subject: 'BillingStore', question: 'what should the pricing policy be?' }],
+    blueprint: {},
+    intent: {},
+  });
+  const r = report.resolutions[0];
+  return {
+    repelled: r.write_back === false && /class_b_subject/.test(r.reason || ''),
+    evidence: r.write_back ? 'BREACH: the Architect ruled on product policy' : `refused: ${r.reason}`,
+  };
+});
+
+await attack('conductor_registration_claims_a_pass', 'register a Sentry gate in a state that implies it already passed', async () => {
+  const { auditConductorResolutions, buildSentryRegistration } = await import('./conductor-resolve-requests.mjs');
+  const audit = auditConductorResolutions([
+    {
+      kind: 'register_product_sentry',
+      write_back: true,
+      request: { subject: 'attack-product' },
+      registry_patch: { ...buildSentryRegistration('attack-product'), status: 'passed' },
+    },
+  ]);
+  return {
+    repelled: !audit.clean && audit.violations.some((v) => v.id === 'REGISTRATION_IMPLIES_PASS'),
+    evidence: audit.clean ? 'BREACH: registration doubled as a pass claim' : 'refused: REGISTRATION_IMPLIES_PASS',
+  };
+});
+
 const repelled = results.filter((r) => r.repelled).length;
 const breached = results.filter((r) => !r.repelled);
 
@@ -243,7 +307,7 @@ const receipt = {
     'A hand-audit by the agent that wrote the repair is not verification. These are executable attacks a later agent can rerun.',
   separation_collapsed: true,
   separation_note:
-    'The same agent wrote the repair and these attacks. Mitigation: every attack calls the real mechanism rather than a mock, asserts on a specific refusal reason rather than a truthy value, and is rerunnable by anyone via `npm run builderos:self-attack`. It does not prove the attack set is complete — only that these 16 moves fail.',
+    'The same agent wrote the repair and these attacks. Mitigation: every attack calls the real mechanism rather than a mock, asserts on a specific refusal reason rather than a truthy value, and is rerunnable by anyone via `npm run builderos:self-attack`. It does not prove the attack set is complete — only that these 20 moves fail.',
   independent_reproduction_command: 'npm run builderos:self-attack',
   verdict: breached.length === 0 ? 'ALL_ATTACKS_REPELLED' : 'BREACH_PRESENT',
   attacks_run: results.length,
