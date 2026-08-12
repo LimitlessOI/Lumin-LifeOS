@@ -6885,20 +6885,20 @@
     },
     {
       "id": "s5-add-ssot-to-smoke-test",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/lifeos-direct-build-smoke-test.mjs",
       "task": "Add @ssot tag to smoke test script",
       "spec": "Insert the JSDoc tag `/** @ssot */` at the top of the file `scripts/lifeos-direct-build-smoke-test.mjs` to comply with file placement regulations and resolve the `FILE_PLACEMENT_VIOLATION`.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "/** @ssot */"
       ],
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-08-12T23:53:42.452Z",
       "last_error": "AIC_GATE_FAILURE",
       "last_attempt": null,
       "revive_count": 2,
