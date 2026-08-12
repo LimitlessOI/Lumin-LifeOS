@@ -6479,6 +6479,33 @@
       "proof": null,
       "last_attempt_at": "2026-08-12T21:46:24.700Z",
       "last_error": "AIC_GATE_FAILURE"
+    },
+    {
+      "id": "1-create-founder-chair-intent-service",
+      "status": "pending",
+      "target_file": "services/founder-chair-intent.js",
+      "task": "Implement core founder intent classification service",
+      "spec": "Create services/founder-chair-intent.js with an exported function classifyFounderIntent that takes a message, uses callCouncilMember('Founder Intent Classifier', message) to determine the intent, and returns a structured intent object including a workflowLane property.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "classifyFounderIntent"
+      ]
+    },
+    {
+      "id": "3-create-chair-intent-signals-service",
+      "status": "pending",
+      "target_file": "services/chair-intent-signals.js",
+      "task": "Implement founder intent signal processing service",
+      "spec": "Create services/chair-intent-signals.js with exported functions recordIntentSignal and retrieveIntentSignals. recordIntentSignal should store relevant signals or outcomes, and retrieveIntentSignals should provide historical context for intent classification. These functions should interact with a persistence layer (e.g., a simple in-memory store or a generic db client if available).",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "recordIntentSignal",
+        "retrieveIntentSignals"
+      ]
     }
   ],
   "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
