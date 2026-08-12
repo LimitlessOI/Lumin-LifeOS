@@ -6748,20 +6748,20 @@
     },
     {
       "id": "create-chair-intent-signals-service",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/chair-intent-signals.js",
       "task": "Create chair intent signals service",
       "spec": "Service to interpret and generate structured signals from processed founder intent data, translating natural language requests into actionable system commands or workflow triggers. Must export a function `processIntentSignals(classifiedIntent, deps)`.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "processIntentSignals"
       ],
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-08-12T22:45:51.836Z",
       "last_error": "AIC_GATE_FAILURE",
       "last_attempt": null,
       "revive_count": 1,
