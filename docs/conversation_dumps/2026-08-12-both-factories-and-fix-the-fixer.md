@@ -1,7 +1,7 @@
 # 2026-08-12 — Both factories, and fix the fixer (continued)
 
-Twin of `docs/products/builderos/conversations/2026-08-12-both-factories-and-fix-the-fixer.md` plus overlay-visible work.
+Twin of the BuilderOS/overlay captures.
 
-Adam asked whether both factories are running, why not if not, and to keep monitoring / not stop.
+Adam: the previous pass did not make hold-to-talk work; put a watchdog inside the system.
 
-Honest: they were not both running continuously. This pass starts factory-2 as a local compile loop and lands hold-to-talk on the Taloa badge without expanding Chair.
+Native badge mic now reaches Chair (`voice.send result=sent`). Production watchdog watches governed-loop staleness and native false-blocks; factory-2 relaunches Taloa if she dies.

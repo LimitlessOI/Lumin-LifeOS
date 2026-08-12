@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-12T22:22:05.747Z",
+  "generated_at": "2026-08-12T22:22:21.176Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13426,
   "files": [
@@ -41472,8 +41472,8 @@
       "path": "docs/conversation_dumps/2026-08-12-both-factories-and-fix-the-fixer.md",
       "synopsis": "Documentation — 2026 08 12 Both Factories And Fix The Fixer.",
       "bytes": 0,
-      "mtime": "2026-08-12T21:51:04.113Z",
-      "indexed_at": "2026-08-12T21:51:04.113Z"
+      "mtime": "2026-08-12T22:22:21.176Z",
+      "indexed_at": "2026-08-12T22:22:21.176Z"
     },
     {
       "path": "docs/conversation_dumps/2026-08-12-mtg-collection-stats-by-set-era-rarity.md",
@@ -43697,8 +43697,8 @@
       "path": "docs/products/builderos/conversations/2026-08-12-both-factories-and-fix-the-fixer.md",
       "synopsis": "Documentation — 2026 08 12 Both Factories And Fix The Fixer.",
       "bytes": 0,
-      "mtime": "2026-08-12T21:51:04.113Z",
-      "indexed_at": "2026-08-12T21:51:04.113Z"
+      "mtime": "2026-08-12T22:22:21.176Z",
+      "indexed_at": "2026-08-12T22:22:21.176Z"
     },
     {
       "path": "docs/products/builderos/CREATIVE_BRIEF.md",
@@ -45705,8 +45705,8 @@
       "path": "docs/products/universal-overlay/conversations/2026-08-12-both-factories-and-fix-the-fixer.md",
       "synopsis": "Documentation — 2026 08 12 Both Factories And Fix The Fixer.",
       "bytes": 0,
-      "mtime": "2026-08-12T21:51:04.113Z",
-      "indexed_at": "2026-08-12T21:51:04.113Z"
+      "mtime": "2026-08-12T22:22:21.176Z",
+      "indexed_at": "2026-08-12T22:22:21.176Z"
     },
     {
       "path": "docs/products/universal-overlay/CREATIVE_BRIEF.md",

@@ -1,5 +1,7 @@
 # 2026-08-12 — Keep both factories building; fix the fixer
 
-Copy of the BuilderOS capture for the overlay product space. Founder asked whether both factories are running, to keep monitoring, and not to stop.
+Founder: the previous hold-to-talk did not work; set up a watchdog inside the system.
 
-factory-2's job this pass: compile Taloa locally on a loop, and hold-to-talk on the badge (`TALOA-BADGE-VOICE-001` / `ContainerView.swift`). Chair preload (`TALOA-BADGE-CHAIR-001`) is done on `e2fb6e275e`.
+Hold-to-talk is now native `AVAudioRecorder` → Voice Rail STT → `luminSend` (proven `voice.send result=sent` in Taloa.log). JS click into a hidden WKWebView cannot start getUserMedia.
+
+Watchdog: `evaluateSystemWatchdog` runs in production `prod-health-watchdog` and in the factory-2 LaunchAgent (relaunches Taloa if she dies).
