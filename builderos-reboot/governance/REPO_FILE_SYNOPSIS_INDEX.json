@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-12T18:44:31.741Z",
+  "generated_at": "2026-08-12T19:07:49.272Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13368,
   "files": [
@@ -44637,9 +44637,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 864212,
-      "mtime": "2026-08-12T18:44:31.741Z",
-      "indexed_at": "2026-08-12T18:44:31.741Z"
+      "bytes": 864589,
+      "mtime": "2026-08-12T19:07:49.272Z",
+      "indexed_at": "2026-08-12T19:07:49.272Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -70459,9 +70459,9 @@
     {
       "path": "public/mtg-cards-upload.html",
       "synopsis": "Batch MTG card upload UI -- founder-facing page for routes/mtg-cards-routes.js.",
-      "bytes": 19292,
-      "mtime": "2026-08-12T18:44:31.741Z",
-      "indexed_at": "2026-08-12T18:44:31.741Z"
+      "bytes": 19846,
+      "mtime": "2026-08-12T19:07:49.272Z",
+      "indexed_at": "2026-08-12T19:07:49.272Z"
     },
     {
       "path": "public/onboarding.html",
