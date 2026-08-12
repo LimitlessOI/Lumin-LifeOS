@@ -3270,14 +3270,16 @@
     },
     {
       "id": "TALOA-BADGE-VOICE-001",
-      "status": "pending",
+      "status": "blocked",
       "factory_id": "factory-2",
       "target_file": "native/macos-overlay/ContainerView.swift",
       "task": "Hold-to-talk on the un-expanded Taloa badge using the already-live Chair push-to-talk control. Click still expands. Drag still moves.",
       "spec": "On the un-expanded badge, a hold of ~450ms with no drag starts #lumin-ptt-btn mousedown (or luminDrawerVoiceCtrl.startMic). Release sends mouseup/stopMic. Do not add a second mic UI. Do not edit services/ or routes/.",
-      "depends_on": ["TALOA-BADGE-CHAIR-001"],
+      "depends_on": [
+        "TALOA-BADGE-CHAIR-001"
+      ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [],
       "behavior_assertions": [
         {
@@ -3296,11 +3298,16 @@
       "blueprint_step_id": "TALOA-BADGE-VOICE-001",
       "mission_id": "PRODUCT-universal-overlay",
       "action_type": "local_lane",
-      "source": "factory-2 lane: founder-visible voice on the badge without expanding"
+      "source": "factory-2 lane: founder-visible voice on the badge without expanding",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-08-12T21:51:22.919Z",
+      "last_error": "NOT_ON_BLUEPRINT"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-universal-overlay",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-12T22:00:00.000Z"
+  "updated_at": "2026-08-12T20:16:25.603Z"
 }
