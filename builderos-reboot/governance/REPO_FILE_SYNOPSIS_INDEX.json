@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-12T19:28:06.858Z",
+  "generated_at": "2026-08-12T19:34:05.648Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13393,
   "files": [
@@ -45211,9 +45211,9 @@
     {
       "path": "docs/products/PRODUCT_BUILD_PRIORITY.json",
       "synopsis": "Documentation — PRODUCT BUILD PRIORITY.",
-      "bytes": 4499,
-      "mtime": "2026-07-29T21:43:31.390Z",
-      "indexed_at": "2026-07-29T21:43:47.958Z",
+      "bytes": 4201,
+      "mtime": "2026-08-12T19:34:05.648Z",
+      "indexed_at": "2026-08-12T19:34:05.648Z",
       "synopsis_index_only": true
     },
     {
