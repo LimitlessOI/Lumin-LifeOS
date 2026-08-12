@@ -6266,20 +6266,25 @@
     },
     {
       "id": "update-chair-intent-signals-service",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/chair-intent-signals.js",
       "task": "Augment intent signal generation for 'drawer_direct_build' prompts",
       "spec": "Modify the 'generateFounderIntentSignals' function to produce distinct and reliable signals that facilitate the correct classification of 'drawer_direct_build' prompts into the 'workflow-content' lane by 'founder-chair-intent.js'.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "generateFounderIntentSignals"
       ],
       "file_contains": [
         "drawer_direct_build",
         "workflow-content"
-      ]
+      ],
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-08-12T19:36:34.038Z",
+      "last_error": "AIC_GATE_FAILURE"
     }
   ],
   "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
