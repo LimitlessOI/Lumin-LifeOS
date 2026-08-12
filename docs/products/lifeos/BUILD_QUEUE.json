@@ -6916,16 +6916,21 @@
     },
     {
       "id": "101",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/lifeos-direct-build-smoke-test.mjs",
       "task": "Add @ssot JSDoc tag to resolve FILE_PLACEMENT_VIOLATION",
       "spec": "Ensure the file scripts/lifeos-direct-build-smoke-test.mjs contains the required '@ssot' JSDoc tag at the top level to resolve build refusal.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "/** @ssot */"
-      ]
+      ],
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-08-12T23:42:17.834Z",
+      "last_error": "NOT_ON_BLUEPRINT"
     },
     {
       "id": "104",
