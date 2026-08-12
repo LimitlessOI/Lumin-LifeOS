@@ -3234,14 +3234,14 @@
     },
     {
       "id": "TALOA-BADGE-CHAIR-001",
-      "status": "pending",
+      "status": "blocked",
       "factory_id": "factory-2",
       "target_file": "native/macos-overlay/ContainerView.swift",
       "task": "Preload Chair behind the Taloa badge so click-to-chat is the already-authenticated founder interface, not a cold /lifeos load.",
       "spec": "Install the existing WKWebView (Self.lifeosURL + mint-browser-session auto-login) at badge init, keep it hidden until expand, and open the already-live openLuminDrawer on click once chairReady. Do not add a second chat UI. Do not edit services/ or routes/.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [],
       "behavior_assertions": [
         {
@@ -3260,7 +3260,12 @@
       "mission_id": "TALOA-OVERLAY-P1-0001",
       "action_type": "local_lane",
       "source": "factory-2 lane: founder-visible Chair on the badge",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-08-12T21:39:26.697Z",
+      "last_error": "NOT_ON_BLUEPRINT"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
