@@ -6913,6 +6913,35 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null
+    },
+    {
+      "id": "101",
+      "status": "pending",
+      "target_file": "scripts/lifeos-direct-build-smoke-test.mjs",
+      "task": "Add @ssot JSDoc tag to resolve FILE_PLACEMENT_VIOLATION",
+      "spec": "Ensure the file scripts/lifeos-direct-build-smoke-test.mjs contains the required '@ssot' JSDoc tag at the top level to resolve build refusal.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "/** @ssot */"
+      ]
+    },
+    {
+      "id": "104",
+      "status": "pending",
+      "target_file": "services/chair-intent-signals.js",
+      "task": "Implement intent signals service for founder chair",
+      "spec": "Create a service file 'services/chair-intent-signals.js' that exports a 'getIntentSignals' function. This function must provide signals or utility functions to aid founder intent classification, specifically supporting identification of the 'workflow-conten' lane.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getIntentSignals"
+      ],
+      "file_contains": [
+        "workflow-conten"
+      ]
     }
   ],
   "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
