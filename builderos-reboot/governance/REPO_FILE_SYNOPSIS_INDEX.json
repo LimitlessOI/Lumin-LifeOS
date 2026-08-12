@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-12T18:35:19.165Z",
+  "generated_at": "2026-08-12T18:44:17.517Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13366,
+  "file_count": 13368,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -44637,9 +44637,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 860621,
-      "mtime": "2026-08-12T18:35:19.165Z",
-      "indexed_at": "2026-08-12T18:35:19.165Z"
+      "bytes": 863267,
+      "mtime": "2026-08-12T18:44:17.517Z",
+      "indexed_at": "2026-08-12T18:44:17.517Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -68255,6 +68255,20 @@
       "mtime": "2026-08-12T09:19:55.865Z",
       "indexed_at": "2026-08-12T09:19:55.865Z",
       "synopsis_index_only": true
+    },
+    {
+      "path": "native/macos-overlay/disable-unattended-permissions.sh",
+      "synopsis": "Shell script — Restore the authentication gate on Privacy settings.",
+      "bytes": 1436,
+      "mtime": "2026-08-12T18:44:17.517Z",
+      "indexed_at": "2026-08-12T18:44:17.517Z"
+    },
+    {
+      "path": "native/macos-overlay/enable-unattended-permissions.sh",
+      "synopsis": "Shell script — Remove the per-change fingerprint gate on Privacy settings.",
+      "bytes": 3118,
+      "mtime": "2026-08-12T18:44:17.517Z",
+      "indexed_at": "2026-08-12T18:44:17.517Z"
     },
     {
       "path": "native/macos-overlay/redeploy.sh",
