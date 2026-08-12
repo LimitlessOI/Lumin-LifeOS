@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-12T02:19:44.432Z",
+  "generated_at": "2026-08-12T02:22:43.609Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13274,
+  "file_count": 13276,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -40811,6 +40811,13 @@
       "indexed_at": "2026-08-11T07:00:03.217Z"
     },
     {
+      "path": "docs/conversation_dumps/2026-08-11-fluid-ui-prior-art-research.md",
+      "synopsis": "Founder capture — prior-art research on fluid/generative UI and OS-level AI overlays, and what to copy for the Taloa Universal Overlay, 2026-08-11.",
+      "bytes": 5566,
+      "mtime": "2026-08-12T02:22:42.426Z",
+      "indexed_at": "2026-08-12T02:22:43.609Z"
+    },
+    {
       "path": "docs/conversation_dumps/2026-08-11-mtg-upload-automation-and-the-real-drive-channel.md",
       "synopsis": "Founder capture -- MTG card upload automation attempt, the AppleScript permission wall, and the pivot to the real drive-channel, 2026-08-11.",
       "bytes": 4124,
@@ -44135,6 +44142,13 @@
       "bytes": 10656,
       "mtime": "2026-08-11T06:59:13.948Z",
       "indexed_at": "2026-08-11T07:00:03.217Z"
+    },
+    {
+      "path": "docs/products/lifeos/conversations/2026-08-11-fluid-ui-prior-art-research.md",
+      "synopsis": "Founder capture — prior-art research on fluid/generative UI and OS-level AI overlays, and what to copy for the Taloa Universal Overlay, 2026-08-11.",
+      "bytes": 5566,
+      "mtime": "2026-08-12T02:22:27.640Z",
+      "indexed_at": "2026-08-12T02:22:43.609Z"
     },
     {
       "path": "docs/products/lifeos/conversations/2026-08-11-mtg-upload-automation-and-the-real-drive-channel.md",
