@@ -1,0 +1,32 @@
+{
+  "schema": "product_build_queue_v1",
+  "product_id": "salesos",
+  "planned_at": "2026-08-12T19:50:10.516Z",
+  "backlog_signature": "1d9d657977e16d9a",
+  "corpus_sources": [
+    "docs/products/salesos/PRODUCT_HOME.md",
+    "docs/products/salesos/HUMAN_PERFORMANCE_ENGINE_DEEP_DIVE.md",
+    "docs/products/salesos/SALESOS_ZERO_STATE_AND_BP.md"
+  ],
+  "steps": [
+    {
+      "id": "1",
+      "status": "pending",
+      "target_file": "db/migrations/001_create_salesos_call_sessions_table.sql",
+      "task": "Create salesos_call_sessions table",
+      "spec": "SQL migration to create salesos_call_sessions table with id, created_at, updated_at, user_id, practice_id, recording_url, transcript, transcript_segments, call_start_time, call_end_time, duration_seconds, status, consent_policy_applied, caller_id, recipient_id.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS salesos_call_sessions",
+        "user_id UUID NOT NULL REFERENCES users(id)",
+        "practice_id UUID NOT NULL REFERENCES practices(id)",
+        "recording_url TEXT",
+        "transcript JSONB",
+        "transcript_segments JSONB",
+        "consent_policy_applied TEXT NOT NULL"
+      ]
+    }
+  ]
+}
