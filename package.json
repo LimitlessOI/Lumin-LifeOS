@@ -387,7 +387,9 @@
     "builderos:architect:resolve": "node scripts/architect-resolve-requests.mjs",
     "builderos:conductor:resolve": "node scripts/conductor-resolve-requests.mjs",
     "builderos:staffing:verify": "node scripts/verify-officer-staffing.mjs",
-    "builderos:factory:provision": "node scripts/provision-factory.mjs"
+    "builderos:factory:provision": "node scripts/provision-factory.mjs",
+    "builderos:factory:health": "node scripts/factory-health-audit.mjs",
+    "builderos:factory:plan2": "node scripts/plan-two-factory-build.mjs"
   },
   "dependencies": {
     "@anthropic-ai/claude-code": "^2.1.86",

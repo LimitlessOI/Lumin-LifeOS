@@ -1,0 +1,100 @@
+{
+  "schema": "factory_health_receipt_v1",
+  "generated_at": "2026-08-12T02:41:15.671Z",
+  "produced_by": "scripts/factory-health-audit.mjs",
+  "purpose": "Audit a lane before trusting it with work. Every check executes something; existence is not health.",
+  "independent_reproduction_command": "node scripts/factory-health-audit.mjs",
+  "factories": [
+    {
+      "factory_id": "factory-1",
+      "workspace_root": "/Users/adamhopkins/Projects/Lumin-LifeOS",
+      "status": "active",
+      "checks": [
+        {
+          "check": "workspace_exists",
+          "why": "A lane with no working tree cannot build anything.",
+          "healthy": true,
+          "detail": "/Users/adamhopkins/Projects/Lumin-LifeOS"
+        },
+        {
+          "check": "index_is_independent",
+          "why": "Two factories sharing one git index is the lock contention this repo has already hit.",
+          "healthy": true,
+          "detail": "primary lane owns the repository index"
+        },
+        {
+          "check": "has_dependencies",
+          "why": "A factory that cannot run its own tests cannot verify its own work.",
+          "healthy": true,
+          "detail": "present (directory)"
+        },
+        {
+          "check": "can_write_and_verify",
+          "why": "The core factory act: write an exact file and prove the bytes landed.",
+          "healthy": true,
+          "detail": "byte-exact write verified"
+        },
+        {
+          "check": "cannot_write_into_a_peer",
+          "why": "Isolation is only real if the guard refuses; a rule nobody enforces is a preference.",
+          "healthy": true,
+          "detail": "write_into_peer_workspace"
+        },
+        {
+          "check": "can_run_its_own_verification",
+          "why": "Building without being able to test is half a factory.",
+          "healthy": true,
+          "detail": "ran a real test file inside the lane"
+        }
+      ],
+      "unhealthy_count": 0,
+      "verdict": "HEALTHY"
+    },
+    {
+      "factory_id": "factory-2",
+      "workspace_root": "/Users/adamhopkins/Projects/Lumin-LifeOS-factory-2",
+      "status": "active",
+      "checks": [
+        {
+          "check": "workspace_exists",
+          "why": "A lane with no working tree cannot build anything.",
+          "healthy": true,
+          "detail": "/Users/adamhopkins/Projects/Lumin-LifeOS-factory-2"
+        },
+        {
+          "check": "index_is_independent",
+          "why": "Two factories sharing one git index is the lock contention this repo has already hit.",
+          "healthy": true,
+          "detail": "/Users/adamhopkins/Projects/Lumin-LifeOS/.git/worktrees/Lumin-LifeOS-factory-2"
+        },
+        {
+          "check": "has_dependencies",
+          "why": "A factory that cannot run its own tests cannot verify its own work.",
+          "healthy": true,
+          "detail": "present (symlink)"
+        },
+        {
+          "check": "can_write_and_verify",
+          "why": "The core factory act: write an exact file and prove the bytes landed.",
+          "healthy": true,
+          "detail": "byte-exact write verified"
+        },
+        {
+          "check": "cannot_write_into_a_peer",
+          "why": "Isolation is only real if the guard refuses; a rule nobody enforces is a preference.",
+          "healthy": true,
+          "detail": "write_into_peer_workspace"
+        },
+        {
+          "check": "can_run_its_own_verification",
+          "why": "Building without being able to test is half a factory.",
+          "healthy": true,
+          "detail": "ran a real test file inside the lane"
+        }
+      ],
+      "unhealthy_count": 0,
+      "verdict": "HEALTHY"
+    }
+  ],
+  "verdict": "ALL_HEALTHY"
+}
