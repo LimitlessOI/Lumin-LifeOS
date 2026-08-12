@@ -6776,6 +6776,71 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null
+    },
+    {
+      "id": "s1-founder-chair-intent-service",
+      "status": "pending",
+      "target_file": "services/founder-chair-intent.js",
+      "task": "Create service to classify founder chat intent",
+      "spec": "Implement core logic to classify founder chat prompts, distinguishing workflow directives (like \"drawer_direct_build\") from general inquiries or requests for counsel, ensuring correct lane assignment.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "classifyFounderIntent"
+      ],
+      "file_contains": [
+        "async function classifyFounderIntent",
+        "callCouncilMember('intentClassifier'"
+      ]
+    },
+    {
+      "id": "s2-founder-intent-clarify-service",
+      "status": "pending",
+      "target_file": "services/founder-intent-clarify.js",
+      "task": "Create service to clarify ambiguous founder intent",
+      "spec": "Implement logic to process and clarify ambiguous founder chat prompts, potentially by asking follow-up questions or using contextual information to refine intent classification for build directives.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "clarifyFounderIntent"
+      ],
+      "file_contains": [
+        "async function clarifyFounderIntent",
+        "callCouncilMember('clarifier'"
+      ]
+    },
+    {
+      "id": "s3-chair-intent-signals-service",
+      "status": "pending",
+      "target_file": "services/chair-intent-signals.js",
+      "task": "Create service for intent signaling and event handling",
+      "spec": "Implement functions to emit signals when founder intent is classified or requires clarification, and to listen for and react to these signals to ensure correct workflow routing for build directives.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "emitIntentSignal",
+        "onIntentSignal"
+      ],
+      "file_contains": [
+        "function emitIntentSignal",
+        "function onIntentSignal"
+      ]
+    },
+    {
+      "id": "s5-add-ssot-to-smoke-test",
+      "status": "pending",
+      "target_file": "scripts/lifeos-direct-build-smoke-test.mjs",
+      "task": "Add @ssot tag to smoke test script",
+      "spec": "Insert the JSDoc tag `/** @ssot */` at the top of the file `scripts/lifeos-direct-build-smoke-test.mjs` to comply with file placement regulations and resolve the `FILE_PLACEMENT_VIOLATION`.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "/** @ssot */"
+      ]
     }
   ],
   "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
