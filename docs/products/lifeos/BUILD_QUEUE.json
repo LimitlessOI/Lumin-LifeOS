@@ -6955,16 +6955,21 @@
     },
     {
       "id": "2-create-founder-chair-intent-service",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/founder-chair-intent.js",
       "task": "Create founder chair intent service",
       "spec": "Implement and export classifyFounderChairIntent to categorize founder messages, specifically identifying 'drawer_direct_build' commands for workflow routing instead of generating essay text.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "classifyFounderChairIntent"
-      ]
+      ],
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-08-12T23:45:23.628Z",
+      "last_error": "NOT_ON_BLUEPRINT"
     }
   ],
   "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
