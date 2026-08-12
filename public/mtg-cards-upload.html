@@ -40,12 +40,54 @@
   .stat-panel td { padding: 0.25rem 0.4rem; }
   .live-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #4ade80; margin-right: 6px; vertical-align: middle; }
   .live-dot.off { background: #6b7a8d; }
+  #progressWrap {
+    display: none;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    margin: 0 0 1rem;
+    padding: 0.9rem 1rem;
+    background: #151a24;
+    border: 1px solid #2a3344;
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+  }
+  #progressWrap.done { border-color: #1a7a3a; }
+  #progressWrap.failed { border-color: #f87171; }
+  #progressLabel { font-weight: 700; margin-bottom: 0.45rem; }
+  .progress-track {
+    width: 100%;
+    height: 16px;
+    background: #0f1115;
+    border-radius: 999px;
+    overflow: hidden;
+    border: 1px solid #262b36;
+  }
+  .progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #3b82f6, #6ea8fe);
+    transition: width 0.35s ease;
+  }
+  #progressWrap.done .progress-fill { background: linear-gradient(90deg, #15803d, #4ade80); }
+  #progressWrap.failed .progress-fill { background: linear-gradient(90deg, #b91c1c, #f87171); }
+  #progressMeta { display: flex; justify-content: space-between; gap: 1rem; margin-top: 0.45rem; font-size: 0.9rem; color: #9fb3c8; }
+  #progressPct { font-variant-numeric: tabular-nums; font-weight: 700; color: #e6e6e6; }
 </style>
 </head>
 <body>
   <h1>MTG Card Catalog</h1>
   <p>Your whole collection stays on this page. Upload more photos anytime — counts, prices, set/year/rarity, and sell status refresh live as cards finish identifying.</p>
   <div id="authBanner" class="auth-banner"></div>
+
+  <div id="progressWrap">
+    <div id="progressLabel">Working…</div>
+    <div class="progress-track"><div id="progressFill" class="progress-fill"></div></div>
+    <div id="progressMeta">
+      <span id="progressDetail">Starting…</span>
+      <span id="progressPct">0%</span>
+    </div>
+  </div>
 
   <h2 style="margin-top:1rem; border-top:none; padding-top:0">Your collection <span id="liveLabel" class="muted"><span class="live-dot off" id="liveDot"></span>loading…</span></h2>
   <p class="muted">Persists across uploads. Duplicate re-uploads of the same photo are counted once. Cards whose set couldn't be pinned down are flagged for review instead of bulk-lot guesses.</p>
@@ -82,6 +124,7 @@
   <div id="dupWarn" class="warn" style="display:none"></div>
   <div id="received" style="display:none; font-weight:700; color:#1a7a3a; margin:12px 0; padding:12px 14px; background:#0f2a18; border:1px solid #1a7a3a; border-radius:8px; font-size:1.05rem;"></div>
   <div id="status"></div>
+  <!-- progress bar is sticky at top (#progressWrap) -->
   <div class="summary" id="summary"></div>
   <table id="results" style="display:none">
     <thead><tr><th>Photo</th><th>Card</th><th>Set</th><th>Foil</th><th>Price</th><th>Tier</th><th>Venue</th><th>Status</th></tr></thead>
@@ -89,7 +132,7 @@
   </table>
 
 <script>
-  const PAGE_BUILD = '2026-08-12-live-collection';
+  const PAGE_BUILD = '2026-08-12-progress-bar';
   const drop = document.getElementById('drop');
   const dropLabel = document.getElementById('dropLabel');
   const fileInput = document.getElementById('fileInput');
@@ -103,16 +146,42 @@
   const authBanner = document.getElementById('authBanner');
   const liveDot = document.getElementById('liveDot');
   const liveLabel = document.getElementById('liveLabel');
+  const progressWrap = document.getElementById('progressWrap');
+  const progressFill = document.getElementById('progressFill');
+  const progressLabel = document.getElementById('progressLabel');
+  const progressDetail = document.getElementById('progressDetail');
+  const progressPct = document.getElementById('progressPct');
   let chosenFiles = [];
   let pollTimer = null;
   let collectionRefreshTimer = null;
   // Server hard-caps each request at 150 (routes/mtg-cards-routes.js MAX_FILES).
   // Founder: do not throttle below that — select 500+, system splits into 150s.
-  // The earlier "All groups failed" on 110 was auth/error-swallowing, not chunk size.
   const CHUNK_SIZE = 150;
   let activeBatches = [];
   let uploadInFlight = false;
   let lastUploadErrors = [];
+  let expectedPhotos = 0;
+  let uploadGroupsTotal = 0;
+  let uploadGroupsDone = 0;
+
+  function setProgress({ pct, label, detail, state = 'active' }) {
+    const clamped = Math.max(0, Math.min(100, Number(pct) || 0));
+    progressWrap.style.display = 'block';
+    progressWrap.classList.toggle('done', state === 'done');
+    progressWrap.classList.toggle('failed', state === 'failed');
+    progressFill.style.width = `${clamped}%`;
+    progressLabel.textContent = label || 'Working…';
+    progressDetail.textContent = detail || '';
+    progressPct.textContent = `${Math.round(clamped)}%`;
+  }
+  function progressFromUpload(groupsDone, groupsTotal) {
+    if (!groupsTotal) return 0;
+    return (groupsDone / groupsTotal) * 25;
+  }
+  function progressFromProcessing(done, total) {
+    if (!total) return 25;
+    return 25 + (done / total) * 75;
+  }
 
   function authHeaders(extra = {}) {
     const token = localStorage.getItem('lifeos_access_token') || '';
@@ -193,14 +262,28 @@
     uploadInFlight = true;
     activeBatches = [];
     lastUploadErrors = [];
+    expectedPhotos = chosenFiles.length;
     resultsTable.style.display = '';
     setLive('live', 'updating as cards finish…');
 
     const chunks = chunk(chosenFiles, CHUNK_SIZE);
+    uploadGroupsTotal = chunks.length;
+    uploadGroupsDone = 0;
+    setProgress({
+      pct: 1,
+      label: `Uploading ${expectedPhotos} photo(s)…`,
+      detail: `Group 0/${uploadGroupsTotal} sent`,
+    });
+
     for (let i = 0; i < chunks.length; i++) {
       statusEl.textContent = chunks.length > 1
         ? `Uploading group ${i + 1}/${chunks.length} (${chunks[i].length} photo(s))...`
         : `Uploading ${chunks[i].length} photo(s)...`;
+      setProgress({
+        pct: progressFromUpload(i, uploadGroupsTotal) || 1,
+        label: `Uploading ${expectedPhotos} photo(s)…`,
+        detail: `Sending group ${i + 1}/${uploadGroupsTotal} (${chunks[i].length} photos)`,
+      });
 
       const form = new FormData();
       chunks[i].forEach((f) => form.append('cards', f));
@@ -224,6 +307,7 @@
           statusEl.textContent = `Group ${i + 1}/${chunks.length} failed: ${json.error || 'unknown error'}`;
           continue;
         }
+        uploadGroupsDone += 1;
         activeBatches.push({
           batchId: json.batch_id,
           total: json.file_count,
@@ -239,6 +323,11 @@
         const receivedSoFar = activeBatches.reduce((s, b) => s + b.total, 0);
         receivedEl.textContent = `✓ UPLOADED & SAVING — server received ${receivedSoFar} photo(s). Collection above will fill in as each card is identified.`;
         receivedEl.style.display = '';
+        setProgress({
+          pct: progressFromUpload(uploadGroupsDone, uploadGroupsTotal),
+          label: `Uploaded ${receivedSoFar}/${expectedPhotos} photo(s)`,
+          detail: `Group ${uploadGroupsDone}/${uploadGroupsTotal} on server — identifying next`,
+        });
         loadCollection({ quiet: true });
       } catch (err) {
         lastUploadErrors.push(`group ${i + 1}: ${err.message}`);
@@ -250,12 +339,18 @@
       uploadInFlight = false;
       const why = lastUploadErrors.length ? lastUploadErrors.join(' · ') : 'no response from server';
       statusEl.textContent = `Upload failed — nothing is processing. ${why}`;
+      setProgress({ pct: 100, label: 'Upload failed', detail: why, state: 'failed' });
       setLive('idle', 'upload failed');
       uploadBtn.disabled = false;
       return;
     }
     const totalReceived = activeBatches.reduce((s, b) => s + b.total, 0);
     receivedEl.textContent = `✓ UPLOADED & SAVING — all ${totalReceived} photo(s) received. Watch Your collection above update live.`;
+    setProgress({
+      pct: 25,
+      label: `Identifying & pricing ${totalReceived} photo(s)…`,
+      detail: `0 cards done · ${activeBatches.length} group(s) running`,
+    });
     pollAllBatches();
   });
 
@@ -316,6 +411,11 @@
       statusEl.textContent = photoCount
         ? `${totalDone}/${totalCount} cards processed from ${photoCount} photo(s)${groupNote}`
         : `${totalDone}/${totalCount} processed${groupNote}`;
+      setProgress({
+        pct: progressFromProcessing(totalDone, Math.max(totalCount, 1)),
+        label: `Processing ${photoCount || expectedPhotos} photo(s)…`,
+        detail: `${totalDone}/${totalCount} cards done${groupNote}`,
+      });
 
       collectionPollTick += 1;
       if (collectionPollTick % 2 === 0) loadCollection({ quiet: true });
@@ -343,11 +443,22 @@
       }
       renderSummary(byTier, totalUsd);
       statusEl.textContent = `Done — ${totalCount} card(s)${groupNote}. Collection above is up to date.`;
+      setProgress({
+        pct: 100,
+        label: `Done — ${totalCount} card(s)`,
+        detail: `${photoCount} photo(s)${groupNote} · collection updated`,
+        state: 'done',
+      });
       uploadInFlight = false;
       setLive('idle', 'up to date');
       await loadCollection();
     } catch (err) {
       statusEl.textContent = `Status check failed: ${err.message}`;
+      setProgress({
+        pct: Number(String(progressPct.textContent).replace('%', '')) || 25,
+        label: 'Status check hiccup — retrying…',
+        detail: err.message,
+      });
       pollTimer = setTimeout(pollAllBatches, 3000);
       return;
     }
