@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-12T20:20:43.628Z",
+  "generated_at": "2026-08-12T20:37:13.486Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13415,
+  "file_count": 13416,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -43748,9 +43748,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 562761,
-      "mtime": "2026-08-12T20:17:16.800Z",
-      "indexed_at": "2026-08-12T20:17:16.800Z"
+      "bytes": 563941,
+      "mtime": "2026-08-12T20:37:13.486Z",
+      "indexed_at": "2026-08-12T20:37:13.486Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -69226,9 +69226,9 @@
     {
       "path": "products/receipts/FACTORY_HEALTH_RECEIPT.json",
       "synopsis": "Product receipt — FACTORY HEALTH RECEIPT.",
-      "bytes": 3840,
-      "mtime": "2026-08-12T03:14:04.487Z",
-      "indexed_at": "2026-08-12T03:14:49.513Z",
+      "bytes": 2869,
+      "mtime": "2026-08-12T20:37:13.486Z",
+      "indexed_at": "2026-08-12T20:37:13.486Z",
       "synopsis_index_only": true
     },
     {
@@ -69341,6 +69341,14 @@
       "bytes": 4758,
       "mtime": "2026-08-12T04:42:08.912Z",
       "indexed_at": "2026-08-12T04:42:08.912Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/LANE_ASSIGNMENT.json",
+      "synopsis": "Product receipt — LANE ASSIGNMENT.",
+      "bytes": 1862,
+      "mtime": "2026-08-12T20:37:13.486Z",
+      "indexed_at": "2026-08-12T20:37:13.486Z",
       "synopsis_index_only": true
     },
     {
