@@ -1,55 +1,102 @@
 /**
- * SYNOPSIS: Identifies a Magic: The Gathering card (name, set, foil, condition
- * guess) from a photo using vision-capable AI. Same working OpenAI call shape
- * as services/voice-rail-attachments.js's describeVoiceRailImages; not the AI
- * Council (config/council-members.js has no vision-capable member -- confirmed
- * by reading it, not assumed). Real live batch test 2026-08-10 found
- * production's OpenAI account had zero credits ("You have no credits
- * remaining") -- a real billing block, not a code bug, but SO-003
- * (CLAUDE.md: "never idle on tokens... auto-failover, never idle") says a
- * single exhausted provider must not stall the whole pipeline. Added an
- * Anthropic fallback first; that was ALSO out of credits on the same live
- * test. Founder pushed back directly ("we have free tokens... our system is
- * not without AI") -- checked the real, already-built
- * /api/v1/lifeos/provider-key-health endpoint (not assumed) and found Gemini,
- * Groq, Mistral, DeepSeek, and Replicate all genuinely `working` on
- * production right now. Gemini is natively multimodal (same real request
- * shape already proven live in services/provider-key-health.js's own probe)
- * and is the real third fallback added here.
+ * SYNOPSIS: Identifies Magic: The Gathering card(s) (name, set, foil, condition
+ * guess) from a photo using vision-capable AI. Supports one card per photo OR
+ * a grid/layout of multiple cards in a single shot (founder ask 2026-08-12:
+ * "can i take photos of say 10 at a time?" / "or more then 10 if i want" --
+ * previously the prompt required a single card and returned null on group
+ * shots). Hard cap is MAX_CARDS_PER_PHOTO; accuracy drops if faces are tiny.
+ * Same OpenAI call shape as services/voice-rail-attachments.js; failover
+ * OpenAI → Anthropic → Gemini → Groq per SO-003.
  * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
-const IDENTIFY_PROMPT = `You are identifying a single Magic: The Gathering trading card from a photo for a reseller cataloging a large collection.
+export const MAX_CARDS_PER_PHOTO = 30;
+const MAX_OUTPUT_TOKENS = 4000;
+
+const IDENTIFY_PROMPT = `You are cataloging Magic: The Gathering cards from a photo for a reseller.
+The photo may show ONE card or MANY cards laid out so each face is readable (often 8–15; sometimes more).
 Respond with ONLY a JSON object, no other text, in this exact shape:
-{"name": "<exact card name as printed>", "set": "<set name or code if visible/inferable, else null>", "foil": <true|false|null>, "condition_guess": "<near mint|lightly played|moderately played|heavily played|damaged|unknown>", "confidence": "<high|medium|low>"}
-If the image does not clearly show a single Magic card, respond with {"name": null, "set": null, "foil": null, "condition_guess": null, "confidence": "low"}.`;
+{"cards":[{"name":"<exact card name as printed>","set":"<set name or code if visible/inferable, else null>","foil":<true|false|null>,"condition_guess":"<near mint|lightly played|moderately played|heavily played|damaged|unknown>","confidence":"<high|medium|low>"}]}
+Rules:
+- Include every clearly readable Magic card face in the photo, left-to-right, top-to-bottom.
+- Do not invent cards you cannot read. Skip cards that are too blurry, cut off, or face-down.
+- If the image shows no readable Magic card, respond with {"cards":[]}.
+- Return at most ${MAX_CARDS_PER_PHOTO} cards. If more are visible, return the clearest ${MAX_CARDS_PER_PHOTO}.`;
 
-const EMPTY_RESULT = { name: null, set: null, foil: null, condition_guess: null, confidence: 'low' };
+const EMPTY_CARD = { name: null, set: null, foil: null, condition_guess: null, confidence: 'low' };
 
-function parseModelJson(text) {
-  const match = String(text || '').match(/\{[\s\S]*\}/);
-  if (!match) return null;
-  try {
-    return JSON.parse(match[0]);
-  } catch {
-    return null;
-  }
-}
-
-function toResult(parsed) {
+function cardFromParsed(parsed) {
+  if (!parsed || typeof parsed !== 'object') return null;
+  const name = parsed.name == null ? null : String(parsed.name).trim() || null;
   return {
-    ok: true,
-    name: parsed.name || null,
-    set: parsed.set || null,
+    name,
+    set: parsed.set == null ? null : (String(parsed.set).trim() || null),
     foil: typeof parsed.foil === 'boolean' ? parsed.foil : null,
     condition_guess: parsed.condition_guess || 'unknown',
     confidence: parsed.confidence || 'low',
   };
 }
 
+/**
+ * Pulls a cards[] array out of model text. Accepts {"cards":[...]}, a bare
+ * [...], or a legacy single-card object (one-card photos / old prompts).
+ * Exported for tests -- this is the contract between the model and the DB.
+ */
+export function parseCardsFromModelText(text) {
+  const raw = String(text || '').trim();
+  if (!raw) return null;
+
+  const arrayMatch = raw.match(/\[[\s\S]*\]/);
+  const objectMatch = raw.match(/\{[\s\S]*\}/);
+
+  let parsed = null;
+  for (const match of [objectMatch, arrayMatch]) {
+    if (!match) continue;
+    try {
+      parsed = JSON.parse(match[0]);
+      break;
+    } catch {
+      // try the other shape
+    }
+  }
+  if (parsed == null) return null;
+
+  let list;
+  if (Array.isArray(parsed)) {
+    list = parsed;
+  } else if (Array.isArray(parsed.cards)) {
+    list = parsed.cards;
+  } else if (parsed.name != null || Object.prototype.hasOwnProperty.call(parsed, 'name')) {
+    // Legacy single-card JSON from the pre-multi-card prompt.
+    list = [parsed];
+  } else {
+    return null;
+  }
+
+  const cards = [];
+  for (const item of list.slice(0, MAX_CARDS_PER_PHOTO)) {
+    const card = cardFromParsed(item);
+    if (card && card.name) cards.push(card);
+  }
+  return cards;
+}
+
+function failResult(error) {
+  return { ok: false, error, cards: [] };
+}
+
+function okResult(cards) {
+  return { ok: true, cards };
+}
+
+function unparseable(text, extra = '') {
+  const snippet = text ? text.slice(0, 200) : '(empty response text)';
+  return failResult(`unparseable_model_output${extra ? ` ${extra}` : ''} text=${snippet}`);
+}
+
 async function identifyViaOpenAI(photo) {
   const apiKey = process.env.OPENAI_API_KEY?.trim();
-  if (!apiKey) return { ok: false, error: 'openai_not_configured', ...EMPTY_RESULT };
+  if (!apiKey) return failResult('openai_not_configured');
   const model = process.env.MTG_VISION_MODEL || 'gpt-4o-mini';
 
   const res = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -57,7 +104,7 @@ async function identifyViaOpenAI(photo) {
     headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({
       model,
-      max_tokens: 300,
+      max_tokens: MAX_OUTPUT_TOKENS,
       messages: [
         {
           role: 'user',
@@ -70,18 +117,16 @@ async function identifyViaOpenAI(photo) {
     }),
   });
   const json = await res.json().catch(() => ({}));
-  if (!res.ok) {
-    return { ok: false, error: json?.error?.message || `openai_vision_${res.status}`, ...EMPTY_RESULT };
-  }
+  if (!res.ok) return failResult(json?.error?.message || `openai_vision_${res.status}`);
   const text = String(json?.choices?.[0]?.message?.content || '').trim();
-  const parsed = parseModelJson(text);
-  if (!parsed) return { ok: false, error: 'unparseable_model_output', ...EMPTY_RESULT };
-  return toResult(parsed);
+  const cards = parseCardsFromModelText(text);
+  if (cards == null) return unparseable(text);
+  return okResult(cards);
 }
 
 async function identifyViaAnthropic(photo) {
   const apiKey = process.env.ANTHROPIC_API_KEY?.trim();
-  if (!apiKey) return { ok: false, error: 'anthropic_not_configured', ...EMPTY_RESULT };
+  if (!apiKey) return failResult('anthropic_not_configured');
   const model = process.env.MTG_VISION_MODEL_ANTHROPIC || 'claude-3-5-sonnet-latest';
 
   const res = await fetch('https://api.anthropic.com/v1/messages', {
@@ -89,7 +134,7 @@ async function identifyViaAnthropic(photo) {
     headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01' },
     body: JSON.stringify({
       model,
-      max_tokens: 300,
+      max_tokens: MAX_OUTPUT_TOKENS,
       messages: [
         {
           role: 'user',
@@ -102,18 +147,16 @@ async function identifyViaAnthropic(photo) {
     }),
   });
   const json = await res.json().catch(() => ({}));
-  if (!res.ok) {
-    return { ok: false, error: json?.error?.message || `anthropic_vision_${res.status}`, ...EMPTY_RESULT };
-  }
+  if (!res.ok) return failResult(json?.error?.message || `anthropic_vision_${res.status}`);
   const text = String(json?.content?.[0]?.text || '').trim();
-  const parsed = parseModelJson(text);
-  if (!parsed) return { ok: false, error: 'unparseable_model_output', ...EMPTY_RESULT };
-  return toResult(parsed);
+  const cards = parseCardsFromModelText(text);
+  if (cards == null) return unparseable(text);
+  return okResult(cards);
 }
 
 async function identifyViaGemini(photo) {
   const apiKey = (process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY)?.trim();
-  if (!apiKey) return { ok: false, error: 'gemini_not_configured', ...EMPTY_RESULT };
+  if (!apiKey) return failResult('gemini_not_configured');
   const model = process.env.MTG_VISION_MODEL_GEMINI || 'gemini-2.5-flash';
 
   const res = await fetch(
@@ -130,58 +173,27 @@ async function identifyViaGemini(photo) {
             ],
           },
         ],
-        // 300 was too tight -- real live failure found 2026-08-10:
-        // gemini-2.5-flash hit finish=MAX_TOKENS before completing the JSON
-        // output. Raised to 1000 -- STILL hit MAX_TOKENS on real production
-        // traffic checked live 2026-08-11 (Adam: "audit the tool... its not
-        // working"), confirmed via GET /recent-activity + a real failed
-        // batch row: finish=MAX_TOKENS on a response that should only ever
-        // be a ~80-character JSON object. Root cause: gemini-2.5-flash
-        // defaults to an internal "thinking" pass whose tokens count against
-        // the same maxOutputTokens budget -- the model was spending its
-        // whole budget reasoning before ever writing the actual JSON.
-        // thinkingBudget: 0 turns that off (not needed for a fixed-shape
-        // extraction task); maxOutputTokens raised further too as a real
-        // safety margin, not just relying on the thinking-budget fix alone.
-        generationConfig: { maxOutputTokens: 2000, thinkingConfig: { thinkingBudget: 0 } },
+        // thinkingBudget: 0 -- gemini-2.5-flash otherwise burns the output
+        // budget on internal reasoning before writing JSON (live MAX_TOKENS
+        // failures 2026-08-10/11). Raised further for multi-card arrays.
+        generationConfig: { maxOutputTokens: 8000, thinkingConfig: { thinkingBudget: 0 } },
       }),
     },
   );
   const json = await res.json().catch(() => ({}));
-  if (!res.ok) {
-    return { ok: false, error: json?.error?.message || `gemini_vision_${res.status}`, ...EMPTY_RESULT };
-  }
+  if (!res.ok) return failResult(json?.error?.message || `gemini_vision_${res.status}`);
   const text = String(json?.candidates?.[0]?.content?.parts?.[0]?.text || '').trim();
-  const parsed = parseModelJson(text);
-  if (!parsed) {
-    // Real debugging need, not decoration: an empty/unparseable response
-    // could be a genuinely different reason each time (safety block, hit
-    // maxOutputTokens before finishing the JSON, markdown-fenced text a
-    // stricter regex would miss) -- surfacing WHICH one actually happened
-    // beats a bare "unparseable_model_output" that hides the real cause.
+  const cards = parseCardsFromModelText(text);
+  if (cards == null) {
     const finishReason = json?.candidates?.[0]?.finishReason || 'unknown';
-    const snippet = text ? text.slice(0, 200) : '(empty response text)';
-    return { ok: false, error: `unparseable_model_output finish=${finishReason} text=${snippet}`, ...EMPTY_RESULT };
+    return unparseable(text, `finish=${finishReason}`);
   }
-  return toResult(parsed);
+  return okResult(cards);
 }
 
-/**
- * Real fourth fallback, added 2026-08-11 after Adam pointed out Gemini
- * shouldn't be a single point of failure ("i dont know why gemini is our
- * first choice... maybe we look for one of the other free options").
- * Groq's own key is already confirmed `working` on production
- * (provider-key-health.js), but that probe only exercises a text-only
- * model (llama-3.1-8b-instant) -- it does NOT prove vision works, so this
- * is genuinely new capability, not just reusing an already-proven call
- * shape. Groq mirrors the OpenAI chat-completions API (same pattern
- * council-service.js already uses for Groq text calls), so this reuses
- * identifyViaOpenAI's exact request/response shape against Groq's
- * endpoint with a real vision-capable model.
- */
 async function identifyViaGroq(photo) {
   const apiKey = process.env.GROQ_API_KEY?.trim();
-  if (!apiKey) return { ok: false, error: 'groq_not_configured', ...EMPTY_RESULT };
+  if (!apiKey) return failResult('groq_not_configured');
   const model = process.env.MTG_VISION_MODEL_GROQ || 'llama-3.2-11b-vision-preview';
 
   const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
@@ -189,7 +201,7 @@ async function identifyViaGroq(photo) {
     headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({
       model,
-      max_tokens: 300,
+      max_tokens: MAX_OUTPUT_TOKENS,
       messages: [
         {
           role: 'user',
@@ -202,20 +214,18 @@ async function identifyViaGroq(photo) {
     }),
   });
   const json = await res.json().catch(() => ({}));
-  if (!res.ok) {
-    return { ok: false, error: json?.error?.message || `groq_vision_${res.status}`, ...EMPTY_RESULT };
-  }
+  if (!res.ok) return failResult(json?.error?.message || `groq_vision_${res.status}`);
   const text = String(json?.choices?.[0]?.message?.content || '').trim();
-  const parsed = parseModelJson(text);
-  if (!parsed) return { ok: false, error: 'unparseable_model_output', ...EMPTY_RESULT };
-  return toResult(parsed);
+  const cards = parseCardsFromModelText(text);
+  if (cards == null) return unparseable(text);
+  return okResult(cards);
 }
 
 /**
  * @param {{ name: string, mime: string, data: string }} photo base64 image, no data: prefix
- * @returns {Promise<{ ok: boolean, name: string|null, set: string|null, foil: boolean|null, condition_guess: string|null, confidence: string, error?: string }>}
+ * @returns {Promise<{ ok: boolean, cards: Array<{name,set,foil,condition_guess,confidence}>, error?: string }>}
  */
-export async function identifyMtgCardFromPhoto(photo, { logger } = {}) {
+export async function identifyMtgCardsFromPhoto(photo, { logger } = {}) {
   try {
     const primary = await identifyViaOpenAI(photo);
     if (primary.ok) return primary;
@@ -232,13 +242,22 @@ export async function identifyMtgCardFromPhoto(photo, { logger } = {}) {
     const groq = await identifyViaGroq(photo);
     if (groq.ok) return groq;
 
-    return {
-      ok: false,
-      error: `openai:${primary.error} | anthropic:${anthropic.error} | gemini:${gemini.error} | groq:${groq.error}`,
-      ...EMPTY_RESULT,
-    };
+    return failResult(
+      `openai:${primary.error} | anthropic:${anthropic.error} | gemini:${gemini.error} | groq:${groq.error}`,
+    );
   } catch (err) {
     logger?.warn?.({ err: err.message, name: photo.name }, 'mtg card vision identify failed');
-    return { ok: false, error: err.message, ...EMPTY_RESULT };
+    return failResult(err.message);
   }
+}
+
+/**
+ * Backward-compatible single-card wrapper (older callers / single-face photos).
+ * Prefer identifyMtgCardsFromPhoto for new code.
+ */
+export async function identifyMtgCardFromPhoto(photo, { logger } = {}) {
+  const result = await identifyMtgCardsFromPhoto(photo, { logger });
+  if (!result.ok) return { ok: false, error: result.error, ...EMPTY_CARD };
+  if (!result.cards.length) return { ok: true, ...EMPTY_CARD };
+  return { ok: true, ...result.cards[0] };
 }

@@ -15,7 +15,8 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { pickPrinting, resolveSetCodeFrom, classifyValueTier } from '../services/mtg-card-pricing.js';
-import { applyPriceToRow, collectionToCsv, parseManaBoxCsv } from '../routes/mtg-cards-routes.js';
+import { parseCardsFromModelText, MAX_CARDS_PER_PHOTO } from '../services/mtg-card-vision.js';
+import { applyPriceToRow, collectionToCsv, parseManaBoxCsv, photoCardSlotName } from '../routes/mtg-cards-routes.js';
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -159,6 +160,35 @@ test('collectionToCsv escapes card names that contain commas and quotes', () => 
   assert.ok(lines[2].includes(',yes,'), 'review flag must reach the sell sheet');
 });
 
+test('parseCardsFromModelText accepts multi-card, bare array, and legacy single-card JSON', () => {
+  const multi = parseCardsFromModelText('{"cards":[{"name":"Lightning Bolt","set":"Alpha","foil":false,"condition_guess":"lightly played","confidence":"high"},{"name":"Counterspell","set":"Tempest","foil":false,"condition_guess":"near mint","confidence":"medium"}]}');
+  assert.equal(multi.length, 2);
+  assert.equal(multi[0].name, 'Lightning Bolt');
+  assert.equal(multi[1].set, 'Tempest');
+
+  const bare = parseCardsFromModelText('[{"name":"Darkness","set":"The Dark"}]');
+  assert.equal(bare.length, 1);
+  assert.equal(bare[0].name, 'Darkness');
+
+  const legacy = parseCardsFromModelText('{"name":"Natural Order","set":"Visions","foil":false,"condition_guess":"near mint","confidence":"high"}');
+  assert.equal(legacy.length, 1);
+  assert.equal(legacy[0].name, 'Natural Order');
+
+  assert.deepEqual(parseCardsFromModelText('{"cards":[]}'), []);
+  assert.equal(parseCardsFromModelText('not json'), null);
+
+  const overflow = parseCardsFromModelText(JSON.stringify({
+    cards: Array.from({ length: MAX_CARDS_PER_PHOTO + 5 }, (_, i) => ({ name: `Card ${i + 1}`, set: 'Tempest' })),
+  }));
+  assert.equal(overflow.length, MAX_CARDS_PER_PHOTO);
+});
+
+test('photoCardSlotName keeps single-card names stable and indexes multi-card slots', () => {
+  assert.equal(photoCardSlotName('a.jpg', 0, 1), 'a.jpg');
+  assert.equal(photoCardSlotName('a.jpg', 0, 10), 'a.jpg#1');
+  assert.equal(photoCardSlotName('a.jpg', 9, 10), 'a.jpg#10');
+});
+
 test('parseManaBoxCsv reads a real ManaBox export shape', () => {
   const parsed = parseManaBoxCsv(
     'Name,Set code,Foil,Quantity,Condition,Scryfall ID\n' +
@@ -179,14 +209,20 @@ test('parseManaBoxCsv reads a real ManaBox export shape', () => {
 test('the pricing rewrite is actually reachable from the live routes and UI', () => {
   const routes = fs.readFileSync(path.join(repoRoot, 'routes/mtg-cards-routes.js'), 'utf8');
   assert.match(routes, /import \{[^}]*lookupMtgCardPrice[^}]*\} from '\.\.\/services\/mtg-card-pricing\.js'/);
+  assert.match(routes, /identifyMtgCardsFromPhoto/, 'multi-card photos must call the multi-card vision export');
   assert.match(routes, /applyPriceToRow\(row, price\)/, 'photo + csv intake must route through the shared pricing rule');
   assert.match(routes, /router\.post\('\/reprice'/, 'already-catalogued cards need a no-vision repricing path');
   assert.match(routes, /router\.get\('\/collection'/);
   assert.match(routes, /router\.get\('\/collection\.csv'/);
 
+  const vision = fs.readFileSync(path.join(repoRoot, 'services/mtg-card-vision.js'), 'utf8');
+  assert.match(vision, /MAX_CARDS_PER_PHOTO = 30/);
+  assert.match(vision, /export async function identifyMtgCardsFromPhoto/);
+
   const page = fs.readFileSync(path.join(repoRoot, 'public/mtg-cards-upload.html'), 'utf8');
   assert.ok(page.includes('/api/v1/mtg-cards/collection'), 'the collection view must be reachable from the real page');
   assert.ok(page.includes('/api/v1/mtg-cards/reprice'), 'the reprice action must be reachable from the real page');
+  assert.ok(/10, 15, 20\+|as many cards as you want/i.test(page), 'UI must tell the founder multi-card photos are allowed');
 
   for (const lane of ['startup/register-runtime-routes.js', 'startup/register-founder-runtime-routes.js']) {
     const src = fs.readFileSync(path.join(repoRoot, lane), 'utf8');

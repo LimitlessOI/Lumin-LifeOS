@@ -34,7 +34,7 @@
 import express from 'express';
 import multer from 'multer';
 import crypto from 'node:crypto';
-import { identifyMtgCardFromPhoto } from '../services/mtg-card-vision.js';
+import { identifyMtgCardsFromPhoto } from '../services/mtg-card-vision.js';
 import { lookupMtgCardPrice, lookupMtgCardById, classifyValueTier } from '../services/mtg-card-pricing.js';
 
 const MAX_FILES = 150;
@@ -251,50 +251,77 @@ function insertParams(row) {
   ];
 }
 
+/**
+ * One photo can yield many cards (grid of 10+). Store each as its own row with
+ * photo_name "file.jpg#1", "file.jpg#2", ... so collection dedupe by photo_name
+ * does not collapse a whole grid into a single card.
+ */
+export function photoCardSlotName(originalName, index, total) {
+  const base = originalName || 'unknown';
+  if (total <= 1) return base;
+  return `${base}#${index + 1}`;
+}
+
 async function processBatch({ pool, logger, userId, batchId, files }) {
   for (const file of files) {
-    const row = blankRow({ userId, batchId, photoName: file.originalname || 'unknown' });
+    const baseName = file.originalname || 'unknown';
 
     try {
-      const photo = { name: row.photo_name, mime: file.mimetype, data: file.buffer.toString('base64') };
-      const id = await identifyMtgCardFromPhoto(photo, { logger });
-      row.identified_name = id.name;
-      row.identified_set = id.set;
-      row.is_foil = id.foil;
-      row.condition_guess = id.condition_guess;
-      row.identify_confidence = id.confidence;
+      const photo = { name: baseName, mime: file.mimetype, data: file.buffer.toString('base64') };
+      const id = await identifyMtgCardsFromPhoto(photo, { logger });
+
       if (!id.ok) {
+        const row = blankRow({ userId, batchId, photoName: baseName });
         row.identify_error = id.error;
-      } else if (!id.name) {
-        // Real bug found live 2026-08-11 checking Adam's actual failed
-        // uploads: identifyMtgCardFromPhoto can legitimately return
-        // {ok:true, name:null} -- the model responded fine but couldn't
-        // clearly see a single Magic card in the photo (mtg-card-vision.js's
-        // EMPTY_RESULT shape). The old code only ever set identify_error
-        // when id.ok was false, so this case fell through to
-        // status:'identify_failed' with identify_error left null --
-        // Adam had zero way to know WHY a photo failed. Confirmed via
-        // GET /recent-activity + a real failed batch row.
-        row.identify_error = 'no_card_clearly_identified_in_photo';
+        row.status = 'identify_failed';
+        await pool.query(INSERT_SQL, insertParams(row));
+        continue;
       }
 
-      if (id.ok && id.name) {
-        const price = await lookupMtgCardPrice(id.name, id.set, { logger });
-        if (price.ok) {
-          applyPriceToRow(row, price);
-        } else {
-          row.identify_error = row.identify_error || `price_lookup_failed:${price.error}`;
-          row.status = 'priced_failed';
-        }
-      } else {
+      if (!id.cards.length) {
+        const row = blankRow({ userId, batchId, photoName: baseName });
+        row.identify_error = 'no_card_clearly_identified_in_photo';
         row.status = 'identify_failed';
+        await pool.query(INSERT_SQL, insertParams(row));
+        continue;
+      }
+
+      for (let i = 0; i < id.cards.length; i++) {
+        const card = id.cards[i];
+        const row = blankRow({
+          userId,
+          batchId,
+          photoName: photoCardSlotName(baseName, i, id.cards.length),
+        });
+        row.identified_name = card.name;
+        row.identified_set = card.set;
+        row.is_foil = card.foil;
+        row.condition_guess = card.condition_guess;
+        row.identify_confidence = card.confidence;
+
+        try {
+          const price = await lookupMtgCardPrice(card.name, card.set, { logger });
+          if (price.ok) {
+            applyPriceToRow(row, price);
+          } else {
+            row.identify_error = `price_lookup_failed:${price.error}`;
+            row.status = 'priced_failed';
+          }
+        } catch (err) {
+          row.identify_error = err.message;
+          row.status = 'priced_failed';
+          logger?.error?.({ err: err.message, file: row.photo_name }, 'mtg card price step failed');
+        }
+
+        await pool.query(INSERT_SQL, insertParams(row));
       }
     } catch (err) {
+      const row = blankRow({ userId, batchId, photoName: baseName });
       row.identify_error = err.message;
-      logger?.error?.({ err: err.message, file: row.photo_name }, 'mtg card batch item failed');
+      row.status = 'error';
+      logger?.error?.({ err: err.message, file: baseName }, 'mtg card batch item failed');
+      await pool.query(INSERT_SQL, insertParams(row));
     }
-
-    await pool.query(INSERT_SQL, insertParams(row));
   }
 }
 
