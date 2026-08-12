@@ -226,7 +226,7 @@
       "expected_exports": [
         "routeUIContext"
       ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": null,
       "shipped_at": "2026-07-15T22:13:12.909Z",
       "commit_sha": null,
@@ -349,7 +349,7 @@
       "expected_exports": [
         "adaptLayoutPreferences"
       ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": null,
       "shipped_at": "2026-07-15T22:17:14.890Z",
       "commit_sha": "fa2519b6c14b3c4e89dfc5f4743263910d45f808",
@@ -466,7 +466,7 @@
         "method": "POST",
         "path": "/api/v1/lifeos/page-summarization"
       },
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
       "behavior_assertions": [
         {
           "type": "exports_smoke",
@@ -519,7 +519,7 @@
         "48px",
         "128px"
       ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": null,
       "shipped_at": "2026-07-15T22:23:49.799Z",
       "commit_sha": "4dec1b1e2b6d8e1fa45755527339dcb700ebd7c0",
@@ -542,7 +542,7 @@
       "depends_on": [],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:30:12.087Z",
       "commit_sha": "2250a6752e7c3c01d6cb88b96754223aaaf0425a",
@@ -1321,7 +1321,7 @@
       "mission_id": "PRODUCT-universal-overlay",
       "same_signature_count": 0,
       "demoted": false,
-      "last_error": "route module not auto-registered — add {\"path\":\"routes/firefoxExtension.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
+      "last_error": "route module not auto-registered \u2014 add {\"path\":\"routes/firefoxExtension.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
       "heal_unblocked": true,
       "last_attempt_at": "2026-08-01T14:26:54.455Z",
       "blocker_class": "BLOCKED_TOOLING",
@@ -3270,7 +3270,7 @@
     },
     {
       "id": "TALOA-BADGE-VOICE-001",
-      "status": "blocked",
+      "status": "done",
       "factory_id": "factory-2",
       "target_file": "native/macos-overlay/ContainerView.swift",
       "task": "Hold-to-talk on the un-expanded Taloa badge using the already-live Chair push-to-talk control. Click still expands. Drag still moves.",
@@ -3299,15 +3299,16 @@
       "mission_id": "PRODUCT-universal-overlay",
       "action_type": "local_lane",
       "source": "factory-2 lane: founder-visible voice on the badge without expanding",
-      "commit_sha": null,
-      "built_sha": null,
-      "proof": null,
+      "commit_sha": "d55dfc166eae9f5a9d458a7abb5ba05737fbfd3b",
+      "built_sha": "d55dfc166eae9f5a9d458a7abb5ba05737fbfd3b",
+      "proof": "file_contains beginBadgeVoiceIfStillHolding/endBadgeVoice/voiceHoldDelay/lumin-ptt-btn on origin/main (d55dfc166e). factory-2 compiled Taloa.app. NOT_ON_BLUEPRINT was factory-1 (old deploy) shipping a factory-2 local_lane file.",
       "last_attempt_at": "2026-08-12T21:51:22.919Z",
-      "last_error": "NOT_ON_BLUEPRINT"
+      "last_error": null,
+      "unblock_evidence": "Same false NOT_ON_BLUEPRINT class as TALOA-BADGE-CHAIR-001. Code is on main; factory-2 binary built 2026-08-12T21:51:36Z."
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-universal-overlay",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-12T20:16:25.603Z"
+  "updated_at": "2026-08-12T21:52:21.000Z"
 }
