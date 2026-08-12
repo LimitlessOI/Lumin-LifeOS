@@ -6332,13 +6332,13 @@
     },
     {
       "id": "fix-founder-chair-intent",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/founder-chair-intent.js",
       "task": "Refine intent classification for build prompts",
       "spec": "Update the `founder-chair-intent.js` service to correctly classify prompts related to 'drawer_direct_build' as 'workflow-content', preventing irrelevant 'counsel/essay text' responses. This includes refining internal logic or `callCouncilMember` prompts.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "processFounderIntent"
       ],
@@ -6346,7 +6346,12 @@
         "workflow-content",
         "drawer_direct_build",
         "callCouncilMember"
-      ]
+      ],
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-08-12T21:45:32.403Z",
+      "last_error": "AIC_GATE_FAILURE"
     },
     {
       "id": "fix-founder-intent-clarify",
