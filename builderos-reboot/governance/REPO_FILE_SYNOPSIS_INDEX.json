@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-12T04:43:04.622Z",
+  "generated_at": "2026-08-12T05:12:20.805Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13358,
+  "file_count": 13360,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -40944,9 +40944,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 183448,
-      "mtime": "2026-08-12T04:41:47.841Z",
-      "indexed_at": "2026-08-12T04:41:47.841Z"
+      "bytes": 186454,
+      "mtime": "2026-08-12T05:12:20.805Z",
+      "indexed_at": "2026-08-12T05:12:20.805Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -41171,6 +41171,13 @@
       "bytes": 4063,
       "mtime": "2026-08-12T04:41:47.841Z",
       "indexed_at": "2026-08-12T04:41:47.841Z"
+    },
+    {
+      "path": "docs/conversation_dumps/2026-08-11-mtg-cataloger-mispricing-root-cause.md",
+      "synopsis": "Founder capture -- picking the MTG cataloger back up cold, finding that the catalogue was mispriced rather than merely incomplete, 2026-08-11.",
+      "bytes": 4279,
+      "mtime": "2026-08-12T05:12:20.805Z",
+      "indexed_at": "2026-08-12T05:12:20.805Z"
     },
     {
       "path": "docs/conversation_dumps/2026-08-11-mtg-upload-automation-and-the-real-drive-channel.md",
@@ -44564,6 +44571,13 @@
       "indexed_at": "2026-08-12T02:22:43.609Z"
     },
     {
+      "path": "docs/products/lifeos/conversations/2026-08-11-mtg-cataloger-mispricing-root-cause.md",
+      "synopsis": "Founder capture -- picking the MTG cataloger back up cold, finding that the catalogue was mispriced rather than merely incomplete, 2026-08-11.",
+      "bytes": 4279,
+      "mtime": "2026-08-12T05:12:20.805Z",
+      "indexed_at": "2026-08-12T05:12:20.805Z"
+    },
+    {
       "path": "docs/products/lifeos/conversations/2026-08-11-mtg-upload-automation-and-the-real-drive-channel.md",
       "synopsis": "Founder capture -- MTG card upload automation attempt, the AppleScript permission wall, and the pivot to the real drive-channel, 2026-08-11.",
       "bytes": 4124,
@@ -44609,9 +44623,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 850497,
-      "mtime": "2026-08-12T04:43:04.622Z",
-      "indexed_at": "2026-08-12T04:43:04.622Z"
+      "bytes": 851946,
+      "mtime": "2026-08-12T05:12:20.805Z",
+      "indexed_at": "2026-08-12T05:12:20.805Z"
     },
     {
       "path": "docs/products/LIFERE.md",
