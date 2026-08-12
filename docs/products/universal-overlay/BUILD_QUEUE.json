@@ -226,7 +226,7 @@
       "expected_exports": [
         "routeUIContext"
       ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": null,
       "shipped_at": "2026-07-15T22:13:12.909Z",
       "commit_sha": null,
@@ -349,7 +349,7 @@
       "expected_exports": [
         "adaptLayoutPreferences"
       ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": null,
       "shipped_at": "2026-07-15T22:17:14.890Z",
       "commit_sha": "fa2519b6c14b3c4e89dfc5f4743263910d45f808",
@@ -466,7 +466,7 @@
         "method": "POST",
         "path": "/api/v1/lifeos/page-summarization"
       },
-      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "behavior_assertions": [
         {
           "type": "exports_smoke",
@@ -519,7 +519,7 @@
         "48px",
         "128px"
       ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": null,
       "shipped_at": "2026-07-15T22:23:49.799Z",
       "commit_sha": "4dec1b1e2b6d8e1fa45755527339dcb700ebd7c0",
@@ -542,7 +542,7 @@
       "depends_on": [],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:30:12.087Z",
       "commit_sha": "2250a6752e7c3c01d6cb88b96754223aaaf0425a",
@@ -1321,7 +1321,7 @@
       "mission_id": "PRODUCT-universal-overlay",
       "same_signature_count": 0,
       "demoted": false,
-      "last_error": "route module not auto-registered \u2014 add {\"path\":\"routes/firefoxExtension.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
+      "last_error": "route module not auto-registered — add {\"path\":\"routes/firefoxExtension.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
       "heal_unblocked": true,
       "last_attempt_at": "2026-08-01T14:26:54.455Z",
       "blocker_class": "BLOCKED_TOOLING",
@@ -3305,6 +3305,53 @@
       "last_attempt_at": "2026-08-12T21:51:22.919Z",
       "last_error": null,
       "unblock_evidence": "Same false NOT_ON_BLUEPRINT class as TALOA-BADGE-CHAIR-001. Code is on main; factory-2 binary built 2026-08-12T21:51:36Z."
+    },
+    {
+      "id": "step-1",
+      "status": "pending",
+      "target_file": "services/holdToTalkService.js",
+      "task": "Create service to manage hold-to-talk audio streams and integrate with Taloa perception.",
+      "spec": "Implement a service that buffers incoming audio from the client-side 'hold-to-talk' interaction, coordinates with Taloa's perception-fusion-service and task-orchestrator-service for processing upon release, and handles streaming state.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "handleAudioStream",
+        "initHoldToTalkService"
+      ]
+    },
+    {
+      "id": "step-2",
+      "status": "pending",
+      "target_file": "routes/holdToTalk.js",
+      "task": "Create API route for hold-to-talk audio input from the overlay.",
+      "spec": "Expose a POST endpoint for the overlay to stream audio chunks during a 'hold-to-talk' session, piping them to the `holdToTalkService`.",
+      "depends_on": [
+        "step-1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerHoldToTalkRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/overlay/hold-to-talk"
+      },
+      "design_review_flagged": true
+    },
+    {
+      "id": "step-4",
+      "status": "pending",
+      "target_file": "public/overlay/holdToTalkBadge.js",
+      "task": "Implement client-side hold-to-talk interaction for the overlay badge.",
+      "spec": "Develop a JavaScript module for the 'universal-overlay' to detect 'hold' and 'release' gestures on the visual badge (already existing), capture microphone input during 'hold', and stream the audio to the `/api/v1/overlay/hold-to-talk` endpoint. Manage microphone permissions and streaming state.",
+      "depends_on": [
+        "step-2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "design_review_flagged": true
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
