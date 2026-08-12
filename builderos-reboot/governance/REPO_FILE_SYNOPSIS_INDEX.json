@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-12T20:17:16.800Z",
+  "generated_at": "2026-08-12T20:19:15.377Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13412,
+  "file_count": 13413,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -101311,6 +101311,16 @@
       "bytes": 2267,
       "mtime": "2026-08-12T19:47:00.532Z",
       "indexed_at": "2026-08-12T19:47:00.532Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/taloa/strategy-router-service.js",
+      "synopsis": "Exports createStrategyRouterService — services/taloa/strategy-router-service.js.",
+      "bytes": 2819,
+      "mtime": "2026-08-12T20:19:15.377Z",
+      "indexed_at": "2026-08-12T20:19:15.377Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
