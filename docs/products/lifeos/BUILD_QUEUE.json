@@ -6244,13 +6244,13 @@
     },
     {
       "id": "update-founder-intent-clarify-service",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/founder-intent-clarify.js",
       "task": "Enhance founder intent clarification for 'drawer_direct_build'",
       "spec": "Update the 'clarifyFounderPrompt' function to provide precise signals or follow-up logic specifically for 'drawer_direct_build' prompts, aiding in correct routing to the 'workflow-content' lane.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "clarifyFounderPrompt"
       ],
@@ -6261,7 +6261,7 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-08-12T21:55:10.364Z",
       "last_error": "AIC_GATE_FAILURE",
       "last_attempt": null,
       "revive_count": 4,
