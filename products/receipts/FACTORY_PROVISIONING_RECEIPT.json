@@ -1,0 +1,34 @@
+{
+  "schema": "factory_provisioning_receipt_v1",
+  "generated_at": "2026-08-12T02:31:27.911Z",
+  "produced_by": "scripts/provision-factory.mjs",
+  "purpose": "Records which factories have a real, independent execution lane — verified against git, not against a config field.",
+  "independent_reproduction_command": "node scripts/provision-factory.mjs --verify",
+  "action": {
+    "factory_id": "factory-2",
+    "action": "provisioned",
+    "workspace_root": "/Users/adamhopkins/Projects/Lumin-LifeOS-factory-2",
+    "branch": "factory/factory-2",
+    "base_commit": "27ca6675222a000f408ff7259dc17cbd57ffdfad"
+  },
+  "factories": [
+    {
+      "factory_id": "factory-1",
+      "workspace_root": "/Users/adamhopkins/Projects/Lumin-LifeOS",
+      "on_disk": true,
+      "git_knows_the_worktree": true,
+      "branch": "refs/heads/main",
+      "status": "provisioned"
+    },
+    {
+      "factory_id": "factory-2",
+      "workspace_root": "/Users/adamhopkins/Projects/Lumin-LifeOS-factory-2",
+      "on_disk": true,
+      "git_knows_the_worktree": true,
+      "branch": "refs/heads/factory/factory-2",
+      "status": "provisioned"
+    }
+  ],
+  "provisioned_count": 2,
+  "verdict": "CONSISTENT"
+}

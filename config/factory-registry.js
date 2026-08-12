@@ -14,23 +14,37 @@
  * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 import { CAPABILITY_DIMENSIONS } from './trust-scoring.js';
+import { isProvisioned, workspaceRootFor } from './factory-workspace.js';
 
+/**
+ * Identity only. A factory declares who it is here; whether it can actually
+ * build is answered by `factoryStatus()` against the filesystem, because a
+ * config field claiming `active` is precisely the dormant-enforcement pattern
+ * this repair exists to eliminate.
+ */
 export const FACTORIES = Object.freeze([
   Object.freeze({
     factory_id: 'factory-1',
     kind: 'governed_codegen',
     entrypoint: '/factory/ship-queue',
-    status: 'active',
-    note: 'The existing governed factory. Active by default so historical ledger rows have a truthful owner.',
+    note: 'The existing governed factory, and the repository working tree itself. Historical ledger rows belong to it.',
   }),
   Object.freeze({
     factory_id: 'factory-2',
     kind: 'governed_codegen',
     entrypoint: '/factory/ship-queue',
-    status: 'registered_not_provisioned',
-    note: 'Identity and allocation are real and tested. It has no independent runtime yet, so its status says so rather than implying capacity that does not exist.',
+    note: 'Second lane. Provisioned as its own git worktree so it has an independent index — two factories sharing one index is the git-lock and staging-contamination failure this repo has already hit.',
   }),
 ]);
+
+/** Capacity is observed, never declared. */
+export function factoryStatus(factoryId) {
+  return isProvisioned(factoryId) ? 'active' : 'registered_not_provisioned';
+}
+
+export function factoryWorkspace(factoryId) {
+  return workspaceRootFor(factoryId);
+}
 
 /** How the Conductor may spend additional compute on a slice. */
 export const ALLOCATION_MODE = Object.freeze({
@@ -61,7 +75,7 @@ export const HIGH_RISK_MARKERS = Object.freeze([
 ]);
 
 export function activeFactories() {
-  return FACTORIES.filter((f) => f.status === 'active');
+  return FACTORIES.filter((f) => factoryStatus(f.factory_id) === 'active');
 }
 
 export function knownFactoryIds() {

@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-12T02:28:13.441Z",
+  "generated_at": "2026-08-12T02:34:28.525Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13276,
+  "file_count": 13280,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -32310,9 +32310,19 @@
     {
       "path": "config/factory-registry.js",
       "synopsis": "Factory identity and allocation policy. Factories are PEERS: neither",
-      "bytes": 3531,
-      "mtime": "2026-08-11T22:49:35.562Z",
-      "indexed_at": "2026-08-11T22:52:15.869Z",
+      "bytes": 4141,
+      "mtime": "2026-08-12T02:31:59.207Z",
+      "indexed_at": "2026-08-12T02:34:28.525Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "config/factory-workspace.js",
+      "synopsis": "Workspace isolation for parallel factories. Two factories writing",
+      "bytes": 4094,
+      "mtime": "2026-08-12T02:30:39.241Z",
+      "indexed_at": "2026-08-12T02:34:28.525Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -43061,9 +43071,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 538373,
-      "mtime": "2026-08-12T01:58:24.777Z",
-      "indexed_at": "2026-08-12T01:58:27.496Z"
+      "bytes": 539494,
+      "mtime": "2026-08-12T02:34:26.912Z",
+      "indexed_at": "2026-08-12T02:34:28.525Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -44985,6 +44995,13 @@
       "bytes": 107879,
       "mtime": "2026-08-11T08:06:15.686Z",
       "indexed_at": "2026-08-11T08:06:28.034Z"
+    },
+    {
+      "path": "docs/products/universal-overlay/SEND_PACKET_FLUID_UI_AND_TWO_FACTORIES_2026-08-11.md",
+      "synopsis": "Sendable founder brief — fluid UI field lessons adopted into the Taloa blueprint, and the two-factory competition model as actually built, 2026-08-11.",
+      "bytes": 7510,
+      "mtime": "2026-08-12T02:33:27.315Z",
+      "indexed_at": "2026-08-12T02:34:28.525Z"
     },
     {
       "path": "docs/products/universal-overlay/TALOA_BLUEPRINT_COMPARISON_CLAUDE_VS_CHATGPT_2026-08-11.md",
@@ -68418,6 +68435,14 @@
       "synopsis_index_only": true
     },
     {
+      "path": "products/receipts/FACTORY_PROVISIONING_RECEIPT.json",
+      "synopsis": "Product receipt — FACTORY PROVISIONING RECEIPT.",
+      "bytes": 1194,
+      "mtime": "2026-08-12T02:31:27.912Z",
+      "indexed_at": "2026-08-12T02:34:28.525Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "products/receipts/FOUNDER_ALPHA_READINESS_AUDIT.json",
       "synopsis": "Product receipt — FOUNDER ALPHA READINESS AUDIT.",
       "bytes": 5130,
@@ -77980,6 +78005,16 @@
       "indexed_at": "2026-07-28T22:54:46.666Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/provision-factory.mjs",
+      "synopsis": "Provisions a factory as a REAL execution lane by creating its own",
+      "bytes": 5138,
+      "mtime": "2026-08-12T02:31:19.398Z",
+      "indexed_at": "2026-08-12T02:34:28.525Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
       ]
     },
     {
@@ -103084,9 +103119,9 @@
     {
       "path": "tests/factory-allocation.test.js",
       "synopsis": "Proves two-factory operation in both modes the founder asked for —",
-      "bytes": 8830,
-      "mtime": "2026-08-11T22:51:30.287Z",
-      "indexed_at": "2026-08-11T22:52:15.869Z"
+      "bytes": 9694,
+      "mtime": "2026-08-12T02:33:49.018Z",
+      "indexed_at": "2026-08-12T02:34:28.525Z"
     },
     {
       "path": "tests/factory-authoring-model-rotation.test.js",

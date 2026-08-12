@@ -30,9 +30,27 @@ test('factories are peers, and a temporary role confers no standing authority', 
   assert.ok(FACTORY_HIERARCHY.temporary_roles_allowed.includes('integration_owner'));
 });
 
-test('factory-2 declares that it is registered but not provisioned', () => {
+test('a factory declares identity only — capacity is observed, never declared', async () => {
+  const { factoryStatus } = await import('../config/factory-registry.js');
   const f2 = FACTORIES.find((f) => f.factory_id === 'factory-2');
-  assert.equal(f2.status, 'registered_not_provisioned', 'status must not imply capacity that does not exist');
+  assert.equal(f2.status, undefined, 'a config field claiming "active" is the dormant-enforcement pattern this repair removed');
+
+  // Status comes from the filesystem: is there really an independent worktree?
+  const { isProvisioned } = await import('../config/factory-workspace.js');
+  assert.equal(factoryStatus('factory-2'), isProvisioned('factory-2') ? 'active' : 'registered_not_provisioned');
+});
+
+test('an unprovisioned factory cannot report capacity', async () => {
+  const { factoryStatus } = await import('../config/factory-registry.js');
+  const key = 'FACTORY_WORKSPACE_FACTORY_2';
+  const prior = process.env[key];
+  process.env[key] = '/tmp/lifeos-factory-2-does-not-exist';
+  try {
+    assert.equal(factoryStatus('factory-2'), 'registered_not_provisioned');
+  } finally {
+    if (prior === undefined) delete process.env[key];
+    else process.env[key] = prior;
+  }
 });
 
 test('PARALLEL PRODUCTION: independent slices split across both factories', () => {
