@@ -6667,19 +6667,24 @@
     },
     {
       "id": "create-founder-chair-intent-service",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/founder-chair-intent.js",
       "task": "Create founder intent service",
       "spec": "Service to process founder-level commands, identify their core intent, and route them to appropriate internal workflows. Must export a function `handleFounderIntent(prompt, deps)`. It will likely use `deps.callCouncilMember` for intent analysis.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "handleFounderIntent"
       ],
       "file_contains": [
         "callCouncilMember"
-      ]
+      ],
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-08-12T22:29:03.884Z",
+      "last_error": "AIC_GATE_FAILURE"
     },
     {
       "id": "create-founder-intent-clarify-service",
