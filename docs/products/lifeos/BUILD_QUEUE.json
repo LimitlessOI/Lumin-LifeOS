@@ -6397,6 +6397,68 @@
       "proof": null,
       "last_attempt_at": "2026-08-12T21:45:42.501Z",
       "last_error": "AIC_GATE_FAILURE"
+    },
+    {
+      "id": "step-1",
+      "status": "pending",
+      "target_file": "services/founder-chair-intent.js",
+      "task": "Implement founder intent classification service",
+      "spec": "Create a service that exports a `classifyFounderIntent` function. This function must accept a founder message and use `callCouncilMember('intent_classifier', prompt)` to classify its intent. Specifically, it must identify prompts related to 'drawer_direct_build' and classify them into the 'workflow-conten' lane, preventing 'counsel/essay text' responses for these specific build-related prompts.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "classifyFounderIntent"
+      ],
+      "file_contains": [
+        "callCouncilMember",
+        "workflow-conten"
+      ]
+    },
+    {
+      "id": "step-2",
+      "status": "pending",
+      "target_file": "services/founder-intent-clarify.js",
+      "task": "Implement founder intent clarification service",
+      "spec": "Create a service that exports a `clarifyIntent` function. This function should accept a founder message and a proposed intent, using `callCouncilMember('intent_clarifier', prompt)` to refine or confirm the intent, particularly when initial classification might be ambiguous or require further context.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "clarifyIntent"
+      ],
+      "file_contains": [
+        "callCouncilMember"
+      ]
+    },
+    {
+      "id": "step-3",
+      "status": "pending",
+      "target_file": "services/chair-intent-signals.js",
+      "task": "Implement chair intent signal generation service",
+      "spec": "Create a service that exports a `generateIntentSignal` function. This function should take a classified intent and the original message, and generate a structured signal or payload suitable for the 'workflow-conten' lane when the intent is identified as 'drawer_direct_build'.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "generateIntentSignal"
+      ],
+      "file_contains": [
+        "workflow-conten"
+      ]
+    },
+    {
+      "id": "step-5",
+      "status": "pending",
+      "target_file": "scripts/lifeos-direct-build-smoke-test.mjs",
+      "task": "Add @ssot JSDoc tag to direct build smoke test script",
+      "spec": "Ensure the file `scripts/lifeos-direct-build-smoke-test.mjs` contains the required `@ssot` JSDoc tag to resolve the `FILE_PLACEMENT_VIOLATION` build error.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "@ssot"
+      ]
     }
   ],
   "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
