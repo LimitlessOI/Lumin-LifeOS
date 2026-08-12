@@ -1,0 +1,20 @@
+{
+  "schema": "officer_staffing_receipt_v1",
+  "generated_at": "2026-08-12T02:38:59.351Z",
+  "produced_by": "scripts/verify-officer-staffing.mjs",
+  "purpose": "Proves SO-003 mechanically rather than by comment: no load-bearing channel may be routed below the judgment floor, and no staff duty may claim an implementation that does not exist.",
+  "independent_reproduction_command": "node scripts/verify-officer-staffing.mjs",
+  "floors": {
+    "lookup": "deterministic",
+    "mechanical": "deterministic",
+    "draft": "free_model",
+    "analysis": "free_model",
+    "judgment": "strong_model",
+    "verification": "cheap_model"
+  },
+  "offices_audited": 5,
+  "duties_audited": 18,
+  "zero_token_duties": 13,
+  "findings": [],
+  "verdict": "CLEAN"
+}

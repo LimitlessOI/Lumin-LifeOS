@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-12T02:34:28.525Z",
+  "generated_at": "2026-08-12T02:39:23.517Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13280,
+  "file_count": 13284,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -32547,6 +32547,16 @@
       "synopsis_index_only": true
     },
     {
+      "path": "config/officer-staff.js",
+      "synopsis": "Officer staffing — every office gets cheap assistants, and the",
+      "bytes": 9091,
+      "mtime": "2026-08-12T02:37:20.710Z",
+      "indexed_at": "2026-08-12T02:39:23.517Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "config/printerCapabilities.json",
       "synopsis": "Configuration — PrinterCapabilities.",
       "bytes": 266,
@@ -43071,9 +43081,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 539494,
-      "mtime": "2026-08-12T02:34:26.912Z",
-      "indexed_at": "2026-08-12T02:34:28.525Z"
+      "bytes": 541010,
+      "mtime": "2026-08-12T02:39:22.071Z",
+      "indexed_at": "2026-08-12T02:39:23.517Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -67863,9 +67873,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 40188,
-      "mtime": "2026-08-12T01:52:44.423Z",
-      "indexed_at": "2026-08-12T01:54:20.424Z",
+      "bytes": 40410,
+      "mtime": "2026-08-12T02:38:51.257Z",
+      "indexed_at": "2026-08-12T02:39:23.517Z",
       "synopsis_index_only": true
     },
     {
@@ -69035,6 +69045,14 @@
       "synopsis_index_only": true
     },
     {
+      "path": "products/receipts/OFFICER_STAFFING_RECEIPT.json",
+      "synopsis": "Product receipt — OFFICER STAFFING RECEIPT.",
+      "bytes": 751,
+      "mtime": "2026-08-12T02:38:59.352Z",
+      "indexed_at": "2026-08-12T02:39:23.517Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "products/receipts/OVERLAY_ALPHA_BATTERY.json",
       "synopsis": "Product receipt — OVERLAY ALPHA BATTERY.",
       "bytes": 341,
@@ -69133,9 +69151,9 @@
     {
       "path": "products/receipts/RECEIPT_TRUTH_VALIDATION.json",
       "synopsis": "Product receipt — RECEIPT TRUTH VALIDATION.",
-      "bytes": 30564,
-      "mtime": "2026-08-11T22:53:54.560Z",
-      "indexed_at": "2026-08-11T22:54:32.565Z",
+      "bytes": 30890,
+      "mtime": "2026-08-12T02:38:52.916Z",
+      "indexed_at": "2026-08-12T02:39:23.517Z",
       "synopsis_index_only": true
     },
     {
@@ -80824,6 +80842,16 @@
       "bytes": 2183,
       "mtime": "2026-06-29T17:44:54.636Z",
       "indexed_at": "2026-07-28T22:54:46.666Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/verify-officer-staffing.mjs",
+      "synopsis": "Deterministic guard that SO-003's floor is real. Reads the live",
+      "bytes": 4924,
+      "mtime": "2026-08-12T02:37:54.581Z",
+      "indexed_at": "2026-08-12T02:39:23.517Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -103786,6 +103814,13 @@
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "tests/officer-staff.test.js",
+      "synopsis": "Proves the staffing ladder actually constrains something — that the",
+      "bytes": 4841,
+      "mtime": "2026-08-12T02:38:35.089Z",
+      "indexed_at": "2026-08-12T02:39:23.517Z"
     },
     {
       "path": "tests/oil-proof-freshness.test.js",
