@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-12T05:30:41.713Z",
+  "generated_at": "2026-08-12T05:32:29.082Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13362,
+  "file_count": 13363,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -44638,8 +44638,8 @@
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
       "bytes": 853992,
-      "mtime": "2026-08-12T05:30:41.713Z",
-      "indexed_at": "2026-08-12T05:30:41.713Z"
+      "mtime": "2026-08-12T05:32:29.082Z",
+      "indexed_at": "2026-08-12T05:32:29.082Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -68301,9 +68301,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\":\"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",\"lifeos:file-synopsis:backfill\":\"node scripts/file-synopsis-enforce.mjs --all --auto-fix && node scripts/generate-file-synopsis-index.mjs\",\"lifeos:file-synopsis:index\":\"n",
-      "bytes": 38557,
-      "mtime": "2026-08-12T04:41:47.841Z",
-      "indexed_at": "2026-08-12T04:41:47.841Z",
+      "bytes": 38635,
+      "mtime": "2026-08-12T05:32:29.082Z",
+      "indexed_at": "2026-08-12T05:32:29.082Z",
       "synopsis_index_only": true
     },
     {
@@ -80003,6 +80003,16 @@
       "indexed_at": "2026-07-28T22:54:46.666Z",
       "ssot": [
         "docs/products/command-center/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/taloa.mjs",
+      "synopsis": "CLI for the Taloa overlay command channel (native macOS app).",
+      "bytes": 3372,
+      "mtime": "2026-08-12T05:32:29.082Z",
+      "indexed_at": "2026-08-12T05:32:29.082Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
       ]
     },
     {
