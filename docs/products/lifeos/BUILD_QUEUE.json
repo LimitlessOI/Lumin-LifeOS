@@ -6314,16 +6314,21 @@
     },
     {
       "id": "fix-smoke-test-ssot",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/lifeos-direct-build-smoke-test.mjs",
       "task": "Add @ssot JSDoc tag",
       "spec": "The script `scripts/lifeos-direct-build-smoke-test.mjs` must contain the `@ssot` JSDoc tag to resolve the `FILE_PLACEMENT_VIOLATION` build error.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "@ssot"
-      ]
+      ],
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-08-12T21:45:27.193Z",
+      "last_error": "NOT_ON_BLUEPRINT"
     },
     {
       "id": "fix-founder-chair-intent",
