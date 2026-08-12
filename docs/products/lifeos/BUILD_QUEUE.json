@@ -6649,16 +6649,21 @@
     },
     {
       "id": "step-4",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/chair-intent-signals.js",
       "task": "Create chair intent signals processing service",
       "spec": "Implement a service that processes classified founder intents to generate actionable signals, exporting a 'processIntentSignals' function. This service should integrate with other intent services for comprehensive signal generation.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "processIntentSignals"
-      ]
+      ],
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-08-12T22:28:06.705Z",
+      "last_error": "NOT_ON_BLUEPRINT"
     }
   ],
   "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
