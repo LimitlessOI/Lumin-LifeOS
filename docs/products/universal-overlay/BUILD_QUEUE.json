@@ -2917,7 +2917,7 @@
     },
     {
       "id": "TALOA-P1-010",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/taloa/perception-fusion-service.js",
       "task": "The file MUST begin with a JSDoc block comment containing a line exactly \"@ssot docs/products/universal-overlay/PRODUCT_HOME.md\" (mandatory, enforced by a commit gate). Integrates and processes sensory input for the Digital Imprint system. Export exactly this factory function, with this exact name and destructured parameter shape: export function createPerceptionFusionService({ pool, logger, bodyAdapter }). The object it returns MUST expose these methods, each a real async function, not a stub or a thrown \"not implemented\": processInput, getFusedPerception. Constraints: ES module syntax (import/export, no require); no top-level side effects, no timers started at import, no network calls, and no AI/model calls; all database access goes through the injected pool parameter and no other client; validate required constructor dependencies up front and throw a clear Error naming the missing one; every method must return a plain serialisable object, never undefined; depend only on node builtins and the injected dependencies -- add no new npm packages.",
       "spec": "{\n  \"step_id\": \"TALOA-P1-010\",\n  \"purpose\": \"Integrates and processes sensory input for the Digital Imprint system.\",\n  \"sealed_contract\": {\n    \"tables\": [],\n    \"exports\": [\n      \"PerceptionFusionService\"\n    ],\n    \"ai_calls\": [],\n    \"endpoints\": [],\n    \"test_assertions\": [\n      \"PerceptionFusionService.processInput is callable\",\n      \"PerceptionFusionService.getFusedPerception is callable\"\n    ],\n    \"factory_signature\": \"export function createPerceptionFusionService({ pool, logger, bodyAdapter })\"\n  },\n  \"ssot_tag\": \"docs/products/universal-overlay/PRODUCT_HOME.md\",\n  \"amended_by\": null\n}",
@@ -2959,7 +2959,8 @@
         "Do not widen any Body capability or authority -- Gate 0 (blueprint 45a) is still open."
       ],
       "source": "TALOA-OVERLAY-P1-0001 sealed Phase 1",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "commit_sha": "1a772d69e1433210fbe2fc7e6cb4c6775dbbbee8"
     },
     {
       "id": "TALOA-P1-011",
