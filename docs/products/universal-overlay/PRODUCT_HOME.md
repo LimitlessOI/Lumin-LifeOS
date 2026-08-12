@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/universal-overlay/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-08-12 — Hold-to-talk is native mic + Voice Rail STT (JS click into a hidden WKWebView cannot start getUserMedia). In-system watchdog watches governed loop + false native blocks + Taloa alive. |
+| **Last Updated** | 2026-08-12 — Phase 1 construction 15/15 on main; badge Chair + native hold-to-talk marked done. Not founder-usable yet: Phase 1 services have no live route callers; Overlay Layer A/B still unregistered-not-implemented. factory-2 is looping, native unchanged. |
 
 ---
 ---
@@ -338,7 +338,7 @@ User on insurance portal
 | Field | Value |
 |---|---|
 | **Lane log** | `docs/CONTINUITY_LOG.md` (cross-cutting) |
-| **Next build** | factory-2: hold-to-talk on the badge after Taloa rebuild. Overlay Phase 1 construction is 15/15 on main — not wired to routes/native/Chair. Gate 0 still open. |
+| **Next build** | Wire Phase 1 `services/taloa/*` into a real founder-visible path (routes + native/Chair). Overlay Layer A/B scripts are still `REGISTERED_NOT_IMPLEMENTED`. factory-2 has zero pending native steps. |
 | **Known gaps** | Signed iOS `.ipa` blocked on Apple Developer cert + UDID (PWA works today). Phase 1 stubs are not founder-usable. |
 | **⚠️ IN PROGRESS** | factory-2 LaunchAgent `com.lumin.factory-2-lane` must stay loaded; factory-1 must not ship `native/macos-overlay/`. |
 | **How to load extension in Chrome** | Go to `chrome://extensions` → Enable Developer Mode → Load Unpacked → select the `extension/` folder in this repo |
@@ -346,6 +346,8 @@ User on insurance portal
 ---
 
 ## Change Receipts
+
+| 2026-08-12 | **Progress report (observed, not a new build).** Origin queue: TALOA-P1-001…015 all `done`; `TALOA-BADGE-CHAIR-001` and `TALOA-BADGE-VOICE-001` `done`. Four leftover non-Phase-1 rows: two `STEP_STATUS_FORBIDDEN` blocks (`moduleRouter.js`, `holdToTalkService.js`) and two pending JS hold-to-talk files the native badge path replaced. factory-2 LaunchAgent is running (PID live); last native compile 21:51Z, then `native_unchanged` / `pending_owned: []`. Production `/builder/ready` serves `0cf9fc4d7548` (handoff commit `b775c40d` is an ancestor). Overlay Layer A/B remain `REGISTERED_NOT_IMPLEMENTED`. Phase 1 services exist on disk with **no route callers** — construction ≠ usable. | Founder asked how overlay is actually doing after the SENTRY handoff ship. | Queue + factory-2 log + production ready SHA. |
 
 | 2026-08-12 | **Hold-to-talk actually records now.** The previous JS `#lumin-ptt-btn` dispatch was not a WebKit user gesture, and the WKWebView was `isHidden` — getUserMedia never started. Native `AVAudioRecorder` → already-live `POST /voice-rail/stt` → `luminSend`. Click still expands. Drag still moves. In-system watchdog: production watches governed-loop staleness + native `NOT_ON_BLUEPRINT` false-blocks; factory-2 relaunches Taloa if she dies. | Founder: you didn't make this work; set up a watchdog within the own system. | Hold the badge ~0.45s and speak. Mic permission once. |
 

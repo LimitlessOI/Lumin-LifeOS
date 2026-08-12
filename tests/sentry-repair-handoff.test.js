@@ -10,6 +10,7 @@ import {
   compareRepairSolutions,
   applyRepairHandoff,
   readyForArchitect,
+  sealConsensusRound,
 } from '../config/sentry-repair-handoff.js';
 
 test('simple native false-block: SENTRY sends issue + solution; Conductor does not re-solve', () => {
@@ -70,7 +71,7 @@ test('dual-solve consensus is not broken by a trailing period on a playbook verb
   assert.equal(compared.reason, 'shared_playbook');
 });
 
-test('dual-solve dissent escalates to the officer panel', () => {
+test('dual-solve dissent enters the consensus protocol — not a vote, not a panel-as-tiebreak', () => {
   const applied = applyRepairHandoff(
     {
       id: 'ci_health:x:abc',
@@ -79,11 +80,45 @@ test('dual-solve dissent escalates to the officer panel', () => {
     },
     { conductorSolution: 'Do not touch YAML. The failure is a flaky network assertion in tests/foo.test.js.' },
   );
-  assert.equal(applied.conductor_status, 'dissent');
-  assert.equal(applied.repair_lane, REPAIR_LANE.OFFICER_PANEL);
-  assert.ok(applied.repair_officers.includes('architect'));
-  assert.ok(applied.repair_officers.includes('wisdom'));
+  assert.equal(applied.conductor_status, 'consensus_protocol');
+  assert.equal(applied.repair_lane, REPAIR_LANE.CONSENSUS_PROTOCOL);
+  assert.equal(applied.forbidden_action, 'majority_vote');
+  assert.equal(applied.consensus_protocol.threshold, 'unanimous_100_percent');
+  assert.ok(applied.consensus_protocol.protocol.some((s) => s.includes('third solution')));
+  assert.ok(applied.consensus_protocol.protocol.some((s) => s.includes('unintended consequences')));
   assert.equal(readyForArchitect({ ...applied, chair_status: 'approved' }), false);
+});
+
+test('two of three accepting is majority and is refused', () => {
+  const sealed = sealConsensusRound({
+    synthesized: 'Combine: fix the YAML fence and the flaky assertion in tests/foo.test.js.',
+    sentry_accepts: true,
+    conductor_accepts: true,
+    other_accepts: [false],
+  });
+  assert.equal(sealed.unanimous, false);
+  assert.equal(sealed.forbidden_action, 'majority_vote');
+});
+
+test('unanimous synthesis of both positions can seal', () => {
+  const applied = applyRepairHandoff(
+    {
+      id: 'ci_health:x:abc',
+      check: 'ci_health',
+      proposed_solution: 'Rewrite the entire smoke-test.yml from scratch.',
+      conductor_solution: 'Fix tests/foo.test.js instead.',
+    },
+    {
+      consensusRound: {
+        synthesized: 'Keep the workflow; fix the flaky assertion in tests/foo.test.js and the YAML fence.',
+        sentry_accepts: true,
+        conductor_accepts: true,
+      },
+    },
+  );
+  assert.equal(applied.repair_consensus, true);
+  assert.equal(applied.consensus_round.reason, 'unanimous_100_percent');
+  assert.equal(readyForArchitect({ ...applied, chair_status: 'approved' }), true);
 });
 
 test('manufacturing stopped is breaking: more officers, not a two-agent chat', () => {

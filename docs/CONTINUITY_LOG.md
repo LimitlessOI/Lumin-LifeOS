@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Documentation — CONTINUITY LOG. -->
 
+## 2026-08-12 — Disagreement is the consensus protocol, not a vote
+
+Adam: if SENTRY and Conductor do not agree, they did not use the proper consensus protocol — it is not a tie and not a majority. 100% consensus. Combine pieces; the answer may be E. Argue both sides. Unintended consequences + and -. Add more models if needed, still unanimous. First handoff had dissent → officer_panel; that was wrong. Now `consensus_protocol`. Overlay: Phase 1 15/15 constructed, not wired; factory-2 looping with nothing native pending; Layer A/B still not implemented.
+
 ## 2026-08-12 — SENTRY solves, then the Conductor; escalate the hard ones
 
 Adam: any issue SENTRY finds, it also has to solve, then send to the Conductor. Simple → send the issue and the solution so two agents do not re-work the obvious. Complicated / other implications → withhold SENTRY's solution; Conductor sees only the problem, they compare and consensus. Larger / something's breaking → bring in more officers. Wired as `send_conclusion` / `dual_solve` / `officer_panel` in `config/sentry-repair-handoff.js`. Cadence and 5m/10m fixer kick unchanged. SENTRY still never builds.

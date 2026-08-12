@@ -27,7 +27,7 @@ import { defaultPlannerCallModel } from '../services/never-stop-product-factory.
 import { runArchitectPass } from '../services/architect-blueprint-writer.js';
 import { runCompetitiveResearchCycle } from '../services/chair-competitive-research.js';
 import { SENTRY_CADENCE, observationAiBudget, cadenceForTier } from '../config/sentry-observation-cadence.js';
-import { applyRepairHandoff, readyForArchitect } from '../config/sentry-repair-handoff.js';
+import { applyRepairHandoff, readyForArchitect, REPAIR_CONSENSUS_PROTOCOL } from '../config/sentry-repair-handoff.js';
 
 const CALL_ESCALATION_DELAY_MS = 10 * 60 * 1000;
 
@@ -269,13 +269,47 @@ export async function runGovernanceAuditCycle({
     handed = next;
   }
 
+  if (runConductorSolve) {
+    const next = [];
+    for (const f of handed) {
+      if (f.repair_lane !== 'consensus_protocol' || f.repair_consensus === true) {
+        next.push(f);
+        continue;
+      }
+      try {
+        const prompt = [
+          'You are running the existing consensus protocol (LOOP_ESCALATION_CONTRACT recovery_ladder_v2).',
+          `Threshold: ${REPAIR_CONSENSUS_PROTOCOL.threshold}. Majority is forbidden. Partial consensus is forbidden.`,
+          'Goal is not to pick option A or option B. Combine pieces. Seek a third solution. Argue both sides.',
+          'Name unintended consequences, positive and negative.',
+          'Protocol:',
+          ...REPAIR_CONSENSUS_PROTOCOL.protocol.map((s) => `- ${s}`),
+          `SENTRY solution: ${f.proposed_solution}`,
+          `Conductor solution: ${f.conductor_solution}`,
+          'Return JSON only: {"synthesized":"...","sentry_accepts":true,"conductor_accepts":true,"unintended_positive":"...","unintended_negative":"...","argued_both_sides":true}',
+        ].join('\n');
+        const raw = await resolvedModel('consensus', prompt, { maxOutputTokens: 500 });
+        const match = String(raw || '').match(/\{[\s\S]*\}/);
+        const parsed = match ? JSON.parse(match[0]) : null;
+        if (parsed && typeof parsed === 'object') {
+          next.push(applyRepairHandoff(f, { consensusRound: parsed }));
+        } else {
+          next.push(f);
+        }
+      } catch {
+        next.push(f);
+      }
+    }
+    handed = next;
+  }
+
   const forArchitect = handed.filter((f) => readyForArchitect(f));
   const architected = runArchitectPass(forArchitect, architectRoot ? { root: architectRoot } : {});
   const architectById = new Map(architected.map((f) => [f.id, f]));
   const withArchitectStatus = handed.map((f) => {
     if (architectById.has(f.id)) return architectById.get(f.id);
     if (f.repair_lane === 'officer_panel') return { ...f, architect_status: 'officer_panel' };
-    if (f.repair_lane === 'dual_solve' && f.repair_consensus !== true) {
+    if (f.repair_lane === 'consensus_protocol' || (f.repair_lane === 'dual_solve' && f.repair_consensus !== true)) {
       return { ...f, architect_status: 'awaiting_consensus' };
     }
     return f;

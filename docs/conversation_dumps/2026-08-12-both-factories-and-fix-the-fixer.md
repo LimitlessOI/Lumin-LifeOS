@@ -11,3 +11,5 @@ Yes. SENTRY-Chair already never-stopped on boot but was not watching factories/o
 Native badge mic now reaches Chair (`voice.send result=sent`). Production watchdog watches governed-loop staleness and native false-blocks; factory-2 relaunches Taloa if she dies.
 
 Then: any issue SENTRY finds, it also has to solve, then send to the Conductor. Simple → send issue and solution so two agents do not re-work the obvious. Complicated → withhold SENTRY's solution; Conductor sees only the problem; they compare and consensus. Larger / something's breaking → bring in more officers.
+
+Then: disagreement is not a tie and not a majority. If they do not agree they did not use the consensus protocol. 100%. Combine pieces. Argue both sides. Unintended consequences + and -. Add more models if needed, still unanimous. First ship had dissent → officer_panel; that was wrong.

@@ -18,8 +18,35 @@
 export const REPAIR_LANE = Object.freeze({
   SEND_CONCLUSION: 'send_conclusion',
   DUAL_SOLVE: 'dual_solve',
+  CONSENSUS_PROTOCOL: 'consensus_protocol',
   OFFICER_PANEL: 'officer_panel',
   FOUNDER: 'founder',
+});
+
+/**
+ * Existing protocol — not a new one. Copied from
+ * LOOP_ESCALATION_CONTRACT recovery_ladder_v2.consensus_protocol and
+ * factory-allocation compareRedundantResults. Disagreement is not a tie
+ * and not a majority. The goal is not A vs B; the answer may combine
+ * pieces or be a third solution. More models join if needed; still 100%.
+ */
+export const REPAIR_CONSENSUS_PROTOCOL = Object.freeze({
+  source: 'builderos-reboot/LOOP_ESCALATION_CONTRACT.json#recovery_ladder_v2.consensus_protocol',
+  also: 'scripts/factory-allocation.mjs#compareRedundantResults',
+  threshold: 'unanimous_100_percent',
+  partial_consensus_forbidden: true,
+  soft_consensus_forbidden: true,
+  forbidden_action: 'majority_vote',
+  protocol: Object.freeze([
+    'each side defends the peer solution',
+    'each side attacks its own solution',
+    'each side states its assumptions explicitly',
+    'seek a third solution neither proposed — combine pieces; the answer may be E',
+    'search how others solved this (web research)',
+    'name unintended consequences, positive and negative',
+    'if still unresolved, add more models (stage 3) — still unanimous, never majority',
+    'test against Reality wherever a test exists',
+  ]),
 });
 
 const FOUNDER_CHECKS = new Set(['product_backlog', 'competitive_gap', 'founder_stop']);
@@ -123,7 +150,8 @@ function tokens(text) {
 
 /**
  * Pure. Two solutions agree when they name the same target path or the same
- * playbook verb. Disagreement is not a tie — it escalates to the officer panel.
+ * playbook verb. Disagreement is not a tie and not a vote — it enters the
+ * existing consensus protocol (100%, combine, argue both sides).
  */
 export function compareRepairSolutions(sentrySolution, conductorSolution) {
   const a = String(sentrySolution || '').trim();
@@ -143,14 +171,41 @@ export function compareRepairSolutions(sentrySolution, conductorSolution) {
   if (sharedPlay.length) {
     return { consensus: true, reason: 'shared_playbook', shared: sharedPlay };
   }
-  return { consensus: false, reason: 'divergent' };
+  return { consensus: false, reason: 'divergent', next_action: 'consensus_protocol' };
+}
+
+/**
+ * Pure. A consensus round seals only when every named party accepts the
+ * synthesized repair. Two of three is majority and is refused.
+ */
+export function sealConsensusRound(round) {
+  const synthesized = String(round?.synthesized || '').trim();
+  if (synthesized.length < 10) {
+    return { unanimous: false, reason: 'missing_synthesis', forbidden_action: 'majority_vote' };
+  }
+  const sentry = round?.sentry_accepts === true;
+  const conductor = round?.conductor_accepts === true;
+  const extra = Array.isArray(round?.other_accepts) ? round.other_accepts : [];
+  const parties = [sentry, conductor, ...extra.map(Boolean)];
+  const accepted = parties.filter(Boolean).length;
+  if (accepted === parties.length && parties.length >= 2) {
+    return { unanimous: true, reason: 'unanimous_100_percent', synthesized };
+  }
+  return {
+    unanimous: false,
+    reason: 'not_unanimous',
+    accepted,
+    parties: parties.length,
+    forbidden_action: 'majority_vote',
+  };
 }
 
 /**
  * Stamps the handoff onto a finding. Does not mutate the input.
  * `conductorSolution` is omitted on send_conclusion (Conductor accepts SENTRY's).
+ * `consensusRound` is the protocol result after dissent — never a majority vote.
  */
-export function applyRepairHandoff(finding, { conductorSolution = undefined } = {}) {
+export function applyRepairHandoff(finding, { conductorSolution = undefined, consensusRound = undefined } = {}) {
   const classified = classifyRepairHandoff(finding);
   const packet = conductorProblemPacket(finding, { withhold: classified.withhold_solution });
   const base = {
@@ -174,26 +229,57 @@ export function applyRepairHandoff(finding, { conductorSolution = undefined } = 
     return { ...base, conductor_status: 'not_applicable', repair_consensus: null };
   }
 
+  if (consensusRound) {
+    const sealed = sealConsensusRound(consensusRound);
+    return {
+      ...base,
+      conductor_solution: finding.conductor_solution,
+      conductor_status: sealed.unanimous ? 'consensus' : 'consensus_protocol',
+      repair_consensus: sealed.unanimous === true,
+      repair_compare: finding.repair_compare,
+      repair_lane: sealed.unanimous ? REPAIR_LANE.DUAL_SOLVE : REPAIR_LANE.CONSENSUS_PROTOCOL,
+      repair_officers: classified.officers,
+      forbidden_action: 'majority_vote',
+      consensus_protocol: REPAIR_CONSENSUS_PROTOCOL,
+      consensus_round: { ...consensusRound, ...sealed },
+    };
+  }
+
   if (classified.lane === REPAIR_LANE.OFFICER_PANEL) {
     return {
       ...base,
       conductor_status: 'officer_panel',
       repair_consensus: null,
+      forbidden_action: 'majority_vote',
+      consensus_protocol: REPAIR_CONSENSUS_PROTOCOL,
+      next_action: 'consensus_protocol',
     };
   }
 
   if (conductorSolution) {
     const compared = compareRepairSolutions(finding.proposed_solution, conductorSolution);
+    if (compared.consensus) {
+      return {
+        ...base,
+        conductor_solution: conductorSolution,
+        conductor_status: 'consensus',
+        repair_consensus: true,
+        repair_compare: compared,
+        repair_lane: REPAIR_LANE.DUAL_SOLVE,
+        repair_officers: classified.officers,
+      };
+    }
     return {
       ...base,
       conductor_solution: conductorSolution,
-      conductor_status: compared.consensus ? 'consensus' : 'dissent',
-      repair_consensus: compared.consensus,
+      conductor_status: 'consensus_protocol',
+      repair_consensus: false,
       repair_compare: compared,
-      repair_lane: compared.consensus ? REPAIR_LANE.DUAL_SOLVE : REPAIR_LANE.OFFICER_PANEL,
-      repair_officers: compared.consensus
-        ? classified.officers
-        : ['sentry', 'conductor', 'architect', 'wisdom'],
+      repair_lane: REPAIR_LANE.CONSENSUS_PROTOCOL,
+      repair_officers: classified.officers,
+      forbidden_action: 'majority_vote',
+      consensus_protocol: REPAIR_CONSENSUS_PROTOCOL,
+      next_action: 'consensus_protocol',
     };
   }
 
@@ -206,7 +292,8 @@ export function applyRepairHandoff(finding, { conductorSolution = undefined } = 
 
 export function readyForArchitect(finding) {
   if (!finding || finding.chair_status !== 'approved') return false;
-  if (finding.repair_lane === REPAIR_LANE.SEND_CONCLUSION && finding.repair_consensus === true) return true;
-  if (finding.repair_lane === REPAIR_LANE.DUAL_SOLVE && finding.repair_consensus === true) return true;
+  if (finding.repair_consensus !== true) return false;
+  if (finding.repair_lane === REPAIR_LANE.SEND_CONCLUSION) return true;
+  if (finding.repair_lane === REPAIR_LANE.DUAL_SOLVE) return true;
   return false;
 }
