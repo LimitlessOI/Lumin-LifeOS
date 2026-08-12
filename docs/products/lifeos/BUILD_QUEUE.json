@@ -6664,6 +6664,51 @@
       "proof": null,
       "last_attempt_at": "2026-08-12T22:28:06.705Z",
       "last_error": "NOT_ON_BLUEPRINT"
+    },
+    {
+      "id": "create-founder-chair-intent-service",
+      "status": "pending",
+      "target_file": "services/founder-chair-intent.js",
+      "task": "Create founder intent service",
+      "spec": "Service to process founder-level commands, identify their core intent, and route them to appropriate internal workflows. Must export a function `handleFounderIntent(prompt, deps)`. It will likely use `deps.callCouncilMember` for intent analysis.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "handleFounderIntent"
+      ],
+      "file_contains": [
+        "callCouncilMember"
+      ]
+    },
+    {
+      "id": "create-founder-intent-clarify-service",
+      "status": "pending",
+      "target_file": "services/founder-intent-clarify.js",
+      "task": "Create founder intent clarification service",
+      "spec": "Service to detect and resolve ambiguities in founder intent prompts by generating clarifying questions or suggesting alternatives. Must export a function `clarifyIntent(ambiguousPrompt, deps)`. It will likely use `deps.callCouncilMember` for clarification.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "clarifyIntent"
+      ],
+      "file_contains": [
+        "callCouncilMember"
+      ]
+    },
+    {
+      "id": "create-chair-intent-signals-service",
+      "status": "pending",
+      "target_file": "services/chair-intent-signals.js",
+      "task": "Create chair intent signals service",
+      "spec": "Service to interpret and generate structured signals from processed founder intent data, translating natural language requests into actionable system commands or workflow triggers. Must export a function `processIntentSignals(classifiedIntent, deps)`.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "processIntentSignals"
+      ]
     }
   ],
   "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
