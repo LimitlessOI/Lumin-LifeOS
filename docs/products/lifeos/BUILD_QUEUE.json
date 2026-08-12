@@ -6617,13 +6617,13 @@
     },
     {
       "id": "3-create-chair-intent-signals-service",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/chair-intent-signals.js",
       "task": "Implement founder intent signal processing service",
       "spec": "Create services/chair-intent-signals.js with exported functions recordIntentSignal and retrieveIntentSignals. recordIntentSignal should store relevant signals or outcomes, and retrieveIntentSignals should provide historical context for intent classification. These functions should interact with a persistence layer (e.g., a simple in-memory store or a generic db client if available).",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "recordIntentSignal",
         "retrieveIntentSignals"
@@ -6631,7 +6631,7 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-08-12T23:12:10.698Z",
       "last_error": "AIC_GATE_FAILURE",
       "last_attempt": null,
       "revive_count": 5,
