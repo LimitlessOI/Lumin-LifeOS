@@ -981,6 +981,34 @@ Not "the code compiles" and not "a unit test passes in isolation" — per this r
 
 ---
 
+## 65a. Prior-art corrections — adopted from field research, 2026-08-11
+
+Research pass over the shipping generative-UI and desktop-overlay field (A2UI, AG-UI/CopilotKit, Vercel `streamUI`, Atlas, Everywhere, Gemma Wagon, Spark Desktop, plus a year of production post-mortems). Full capture: `docs/products/lifeos/conversations/2026-08-11-fluid-ui-prior-art-research.md`. Founder framing: *"We don't have to be first... it means we can learn from them"* and *"make it cheap, make it easy."*
+
+**Independently converged, no change needed.** §8's `ViewIntent` → closed primitive set is the same mechanism Google's A2UI arrived at: the model expresses intent, a trusted catalog does the rendering, and no model-authored code ever reaches the surface. Two independent designs landing on the same answer is the strongest signal available that it is the right one. §8 stands as written.
+
+**Ahead of the field.** No surveyed overlay product defines who owns a keystroke. §8's four input-ownership zones have no counterpart in Atlas, Everywhere or Spark Desktop — they are the hardest problem in a real overlay and the one everyone else has left implicit.
+
+**Behind, and adopted here as normative:**
+
+**A. Fixed envelope, composed fill.** The most consistent production failure in the field is not a bad composition — it is users losing their bearings because the frame moved. A named set of surface elements MUST be declared unmovable regardless of what the composer decides: the Body anchor, the way to reach a human (§27's handoff), the dismiss control (item D), and the authority/consequence indicator (§14d). The composer may never place, restyle or omit these. *Why:* it is a constraint, not code — the cheapest item in this section and the one that prevents the most damage.
+
+**B. Deterministic fallback is the floor, not the polish.** §10 specifies fallback for perception and §60 for network loss, but nothing yet says what renders when composition itself fails. If a `ViewIntent` fails primitive-set validation, references an unknown primitive, or exceeds the §63 latency budget, the surface MUST render a known-good default (plain text answer or the last valid composition) and record the failure. The composed surface is the upgrade; it is never the requirement. *Why:* every framework that shipped this late shipped visible blank panels first.
+
+**C. Same intent, same surface — and it must be testable.** Identical `ViewIntent` + identical data model MUST produce an identical composed tree. `FluidUIComposer` is already specified as deterministic (§8); this makes that property an acceptance test rather than an adjective — hash the composed tree and assert stability across runs. *Why:* the field's blunt formulation is "if your team can't test it, your customers are the test." This repo already hashes artifacts for exactly this reason.
+
+**D. Dismissible and steerable.** The user MUST be able to clear any composed surface and restate the request. A dynamic surface the user cannot get rid of is the most-reported friction in shipped generative UI. *Why:* it converts a bad composition from a trap into a retry.
+
+**E. Serialize composed output in A2UI's shape.** `ViewIntent` stays ours and stays intent-level — that is a deliberate step above A2UI's component-level payload and should not be given up. But the composer's *output* SHOULD serialize as A2UI-compatible messages: flat adjacency list with ID references rather than a nested tree, streamed incrementally. *Why:* two reasons, neither aesthetic. The flat shape exists because models generate and self-correct incrementally and cannot be relied on to emit perfect nested JSON in one shot. And A2UI is Apache-2.0 with Google, AWS, Microsoft and LangChain converging on the surrounding stack — fluency is cheap now and expensive later, which is the same reuse discipline the constitution already enforces on every other subsystem.
+
+**F. Primitive-level telemetry.** Record which primitives each composition actually used and which the user interacted with. *Why:* the catalog is the product surface, and without this there is no evidence for which primitives earn their place. The trust-scoring ledger already exists to receive this.
+
+**G. Template replay is the cost story, and it is already the top-ranked item.** §899 already names template replay the highest value-per-effort item in this document, and the truth table already records capture as shipping and replay as 0% built — every driven task re-runs full reasoning today. The field independently reached the same conclusion: *generate once, cache the tree, reuse* is the only pattern that makes composed UI affordable at frequency. This section adds one requirement to §30–32: a composed surface, not just a driven task, is a cacheable template. *Why:* the founder's goal is "make it cheap, make it easy," and this is the item that makes it cheap.
+
+**Explicitly rejected: making everything fluid.** A year of production evidence says high-frequency, muscle-memory flows want consistency, and that fully-generative products hit cost and relearning walls. The founder's own framing — capture the screen as a template, adjust it later — is the mature pattern, not a compromise with it.
+
+---
+
 ## 66. Source Appendix (§70)
 
 **Independent draft reviewed for this revision:** `TALOA_UNIVERSAL_OVERLAY_FLUID_UI_COMPLETE_BLUEPRINT_MANUFACTURING_SPEC_v1_0_2026-08-11.md` (ChatGPT, produced without repository access, per the founder's own independent-drafts-then-consensus process). Reviewed twice: round 1 produced the merge documented in Changelog v1 (top of this document); round 2, a second ChatGPT critique of that merge, produced Changelog v2 — 12 findings, all 12 resolved, 2 requiring direct founder confirmation (obtained 2026-08-11, not inferred from either draft) rather than resolved by either author's judgment. Full round-1 section-by-section comparison receipts: `TALOA_BLUEPRINT_COMPARISON_CLAUDE_VS_CHATGPT_2026-08-11.md`. Both original independent drafts remain unedited and permanently preserved as evidence of independent reasoning.
