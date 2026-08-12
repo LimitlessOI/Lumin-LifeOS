@@ -1,4 +1,12 @@
-<!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
+## 2026-08-12 — Both factories: factory-1 ships backend; factory-2 is a running local compile loop
+
+Adam: are we using both factories; if not why not; haven't you fixed it; I don't see you doing anything; keep monitoring; don't stop.
+
+Honest answer before this pass: **no, not continuously.** The dispatch filter landed (`e2fb6e275e`) but factory-2 had no daemon, missing lane JSON fail-opened native files to factory-1, and factory-1 blocked `TALOA-BADGE-CHAIR-001` as `NOT_ON_BLUEPRINT`. Closed: fallback owns native→factory-2, never-stop skips other-lane files without failing them, LaunchAgent compiles Taloa, hold-to-talk is in `ContainerView.swift`.
+
+## 2026-08-12 — Both factories were assigned; manufacturing was paused
+
+Live check: `PAUSE_AUTONOMY` was on, governed ship `enabled: false`, `running: false`, `totalRuns: 0`. Fence on + ship off = nobody building. Lifted pause. factory-2 hold-to-talk on the badge is the native lane's next slice. Overlay Phase 1 files 012–014 were already on main with the queue still pending — claimed against those commits.
 
 ## 2026-08-12 — Both factories now dispatch; Chair preloads behind the badge
 

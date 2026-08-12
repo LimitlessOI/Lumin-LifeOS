@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/universal-overlay/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-08-12 — factory-2 lane: Chair preloads behind the Taloa badge (`TALOA-BADGE-CHAIR-001`). Phase 1 services remain construction-only. |
+| **Last Updated** | 2026-08-12 — factory-2 loop compiles Taloa; hold-to-talk on the badge is in `ContainerView.swift` (`TALOA-BADGE-VOICE-001`). Chair preload claimed done (`e2fb6e275e`). |
 
 ---
 ---
@@ -338,14 +338,18 @@ User on insurance portal
 | Field | Value |
 |---|---|
 | **Lane log** | `docs/CONTINUITY_LOG.md` (cross-cutting) |
-| **Next build** | **iPhone PWA:** `/install` → Add to Home Screen (shipped). **Signed IPA:** Apple Dev secrets + `Build LifeOS iOS IPA` workflow. P1 — struggle detection + form fill. |
-| **Known gaps** | Signed iOS `.ipa` blocked on Apple Developer cert + UDID (PWA works today). **iOS `ios/`** scaffold via CI when workflow runs. Fill-form maps basic user fields only. |
-| **⚠️ IN PROGRESS** | None — founding doc + scaffold complete as of 2026-04-21 |
+| **Next build** | factory-2: hold-to-talk on the badge after Taloa rebuild. Overlay Phase 1 construction is 15/15 on main — not wired to routes/native/Chair. Gate 0 still open. |
+| **Known gaps** | Signed iOS `.ipa` blocked on Apple Developer cert + UDID (PWA works today). Phase 1 stubs are not founder-usable. |
+| **⚠️ IN PROGRESS** | factory-2 LaunchAgent `com.lumin.factory-2-lane` must stay loaded; factory-1 must not ship `native/macos-overlay/`. |
 | **How to load extension in Chrome** | Go to `chrome://extensions` → Enable Developer Mode → Load Unpacked → select the `extension/` folder in this repo |
 
 ---
 
 ## Change Receipts
+
+| 2026-08-12 | **Hold-to-talk code is in `ContainerView.swift` now, and factory-2 is the lane that compiles it.** Previous receipt named the behavior before the symbols existed on disk. `beginBadgeVoiceIfStillHolding` / `endBadgeVoice` drive the already-live `#lumin-ptt-btn`. `TALOA-BADGE-CHAIR-001` unblocked (`NOT_ON_BLUEPRINT` was factory-1 shipping a factory-2 file). LaunchAgent `com.lumin.factory-2-lane` syncs + `build.sh`. | Founder: are we using both factories; I don't see you doing anything; don't stop. | Rebuild is factory-2's job. Hold the badge ~0.45s to talk; click still expands. |
+
+| 2026-08-12 | **Hold-to-talk on the small badge (factory-2).** Long-press ~450ms with no drag starts the already-live `#lumin-ptt-btn` mic in the preloaded Chair webview; release sends. Click still expands. Drag still snaps. Manufacturing was paused (`PAUSE_AUTONOMY`) so factory-1 was not shipping either — lifted. | Founder: are we using both factories; I don't see you doing anything; don't stop. | Rebuild Taloa. Hold her to talk. |
 
 | 2026-08-12 | **factory-2 is now the lane that writes native overlay, and Chair preloads behind the badge.** Click-to-chat used to cold-load `/lifeos` only after expand. `ContainerView.swift` now installs the existing WKWebView + auto-login at badge init (hidden) and opens the already-live `openLuminDrawer` once `chairReady`. Queued as `TALOA-BADGE-CHAIR-001` owned by factory-2. Production ship loop will skip this file. Rebuild Taloa.app to see it. | Founder: keep using both factories; overlay never stops building. | Needs a local `build.sh` + one click on the badge after rebuild. Not claimed live-verified. |
 
