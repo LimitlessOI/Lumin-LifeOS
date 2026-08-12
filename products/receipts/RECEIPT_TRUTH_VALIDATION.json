@@ -1,8 +1,8 @@
 {
   "schema": "receipt_truth_validation_v1",
-  "at": "2026-08-12T03:13:58.028Z",
+  "at": "2026-08-12T04:05:05.977Z",
   "ok": true,
-  "checked": 167,
+  "checked": 168,
   "failures": [],
   "known_debt": [
     "SITE_BUILDER_PREALPHA_LAYER_A.json:ACCEPTANCE_PASS_WITHOUT_SHA_OR_BASE|PASS_WITHOUT_NAMED_VERIFIER"
@@ -377,6 +377,13 @@
     },
     {
       "file": "FOUNDER_CHAT_ALPHA_BATTERY.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false,
+      "proposed_solutions": []
+    },
+    {
+      "file": "FOUNDER_DECISION_PROPOSALS_RECEIPT.json",
       "ok": true,
       "violations": [],
       "claims_pass": false,

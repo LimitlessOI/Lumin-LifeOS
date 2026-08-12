@@ -1,0 +1,489 @@
+{
+  "schema": "founder_decision_proposals_receipt_v1",
+  "generated_at": "2026-08-12T04:05:04.694Z",
+  "produced_by": "scripts/propose-founder-decisions.mjs",
+  "status": "PROPOSALS_ONLY_NOT_RATIFIED",
+  "independent_reproduction_command": "node scripts/propose-founder-decisions.mjs",
+  "document": "docs/products/builderos/FOUNDER_SCHEMA_OPTIONS_OVERLAY.md",
+  "stores": [
+    "TaskStore",
+    "AuthorityLedger",
+    "ReceiptLedger",
+    "CapsuleStore",
+    "TemplateStore",
+    "DeviceRegistry",
+    "PreferenceStore"
+  ],
+  "proposals": [
+    {
+      "store": "TaskStore",
+      "reuse_candidates": [
+        {
+          "table": "task_deferrals",
+          "migration": "20260418_lifeos_daily_scorecard.sql",
+          "columns": [
+            "id            BIGSERIAL PRIMARY KEY",
+            "user_id       BIGINT NOT NULL REFERENCES lifeos_users(id) ON DELETE CASCADE",
+            "item_type     TEXT NOT NULL CHECK (item_type IN ('mit', 'commitment'))",
+            "item_id       BIGINT NOT NULL",
+            "item_title    TEXT NOT NULL",
+            "deferred_from DATE NOT NULL",
+            "deferred_to   DATE",
+            "deferral_count INT NOT NULL DEFAULT 1,   -- increments each time same item is deferred again",
+            "created_at    TIMESTAMPTZ NOT NULL DEFAULT NOW()"
+          ],
+          "score": 1,
+          "column_count": 9,
+          "name_specificity": "1 concept token(s), 1 unrelated"
+        },
+        {
+          "table": "execution_tasks",
+          "migration": "20260313_core_schema.sql",
+          "columns": [
+            "id SERIAL PRIMARY KEY",
+            "task_id TEXT UNIQUE NOT NULL",
+            "type VARCHAR(50)",
+            "description TEXT",
+            "status VARCHAR(20) DEFAULT 'pending'",
+            "metadata JSONB",
+            "result TEXT",
+            "error TEXT",
+            "created_at TIMESTAMPTZ DEFAULT NOW()",
+            "completed_at TIMESTAMPTZ"
+          ],
+          "score": 1,
+          "column_count": 10,
+          "name_specificity": "1 concept token(s), 1 unrelated"
+        },
+        {
+          "table": "lifeos_tasks",
+          "migration": "20260723_lifeos_core_complete.sql",
+          "columns": [
+            "task_id UUID PRIMARY KEY DEFAULT gen_random_uuid()",
+            "goal_id UUID REFERENCES lifeos_goals(goal_id) ON DELETE CASCADE",
+            "user_id UUID NOT NULL REFERENCES lifeos_users(user_id) ON DELETE CASCADE",
+            "title VARCHAR(255) NOT NULL",
+            "description TEXT",
+            "due_date DATE",
+            "status VARCHAR(50) DEFAULT 'open'",
+            "priority INT DEFAULT 0",
+            "created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP",
+            "updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP"
+          ],
+          "score": 1,
+          "column_count": 10,
+          "name_specificity": "1 concept token(s), 1 unrelated"
+        },
+        {
+          "table": "task_tracking",
+          "migration": "20260313_core_schema.sql",
+          "columns": [
+            "id SERIAL PRIMARY KEY",
+            "task_id TEXT UNIQUE NOT NULL",
+            "task_type VARCHAR(50)",
+            "description TEXT",
+            "expected_outcome TEXT",
+            "status VARCHAR(20) DEFAULT 'in_progress'",
+            "steps JSONB",
+            "errors JSONB",
+            "verification_results JSONB",
+            "completion_reason TEXT",
+            "start_time TIMESTAMPTZ",
+            "end_time TIMESTAMPTZ",
+            "created_at TIMESTAMPTZ DEFAULT NOW()",
+            "updated_at TIMESTAMPTZ DEFAULT NOW()"
+          ],
+          "score": 1,
+          "column_count": 14,
+          "name_specificity": "1 concept token(s), 1 unrelated"
+        }
+      ]
+    },
+    {
+      "store": "AuthorityLedger",
+      "reuse_candidates": [
+        {
+          "table": "delegation_scopes",
+          "migration": "20260719_cognitive_core_era4.sql",
+          "columns": [
+            "scope_id UUID PRIMARY KEY DEFAULT gen_random_uuid()",
+            "user_id TEXT NOT NULL",
+            "domain TEXT NOT NULL",
+            "delegation_tier TEXT NOT NULL DEFAULT 'refuse'",
+            "stakes_max TEXT NOT NULL DEFAULT 'low'",
+            "approved_actions JSONB NOT NULL DEFAULT '[]'::jsonb",
+            "accuracy DOUBLE PRECISION",
+            "brier_score DOUBLE PRECISION",
+            "n INTEGER NOT NULL DEFAULT 0",
+            "founder_approved BOOLEAN NOT NULL DEFAULT FALSE",
+            "status TEXT NOT NULL DEFAULT 'active'",
+            "notes TEXT",
+            "updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()",
+            "created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()"
+          ],
+          "score": 1,
+          "column_count": 14,
+          "name_specificity": "1 concept token(s), 1 unrelated"
+        },
+        {
+          "table": "lifere_permission_grants",
+          "migration": "20260613_lifere_twin_framework.sql",
+          "columns": [
+            "id BIGSERIAL PRIMARY KEY",
+            "tenant_id TEXT NOT NULL DEFAULT 'default'",
+            "user_id TEXT NOT NULL",
+            "action_type TEXT NOT NULL",
+            "autonomy_level SMALLINT NOT NULL CHECK (autonomy_level BETWEEN 0 AND 5)",
+            "bounds JSONB NOT NULL DEFAULT '{}'",
+            "granted_by TEXT NOT NULL",
+            "granted_at TIMESTAMPTZ NOT NULL DEFAULT now()"
+          ],
+          "score": 0,
+          "column_count": 8,
+          "name_specificity": "1 concept token(s), 2 unrelated"
+        },
+        {
+          "table": "agent_task_authority",
+          "migration": "20260426_memory_protocol_enforcement.sql",
+          "columns": [
+            "id               UUID         PRIMARY KEY DEFAULT gen_random_uuid()",
+            "agent_id         VARCHAR(100) NOT NULL",
+            "task_type        VARCHAR(100) NOT NULL",
+            "authority_status VARCHAR(10)  NOT NULL DEFAULT 'allowed', -- allowed | watch | blocked",
+            "reason           TEXT         NOT NULL",
+            "notes            TEXT",
+            "metadata         JSONB",
+            "set_by           VARCHAR(100) NOT NULL DEFAULT 'system'",
+            "expires_at       TIMESTAMPTZ",
+            "updated_at       TIMESTAMPTZ  NOT NULL DEFAULT NOW()"
+          ],
+          "score": 0,
+          "column_count": 10,
+          "name_specificity": "1 concept token(s), 2 unrelated"
+        }
+      ]
+    },
+    {
+      "store": "ReceiptLedger",
+      "reuse_candidates": [
+        {
+          "table": "security_receipt_spine",
+          "migration": "2023-10-01-security-receipt-spine.sql",
+          "columns": [
+            "id UUID PRIMARY KEY DEFAULT gen_random_uuid()",
+            "created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP",
+            "updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP",
+            "receipt_data JSONB NOT NULL"
+          ],
+          "score": 3,
+          "column_count": 4,
+          "name_specificity": "2 concept token(s), 1 unrelated"
+        },
+        {
+          "table": "token_receipts",
+          "migration": "20231012_create_token_receipts.sql",
+          "columns": [
+            "id SERIAL PRIMARY KEY",
+            "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP",
+            "updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP"
+          ],
+          "score": 1,
+          "column_count": 3,
+          "name_specificity": "1 concept token(s), 1 unrelated"
+        },
+        {
+          "table": "security_receipts",
+          "migration": "20260524_oil_security_receipts.sql",
+          "columns": [
+            "id UUID PRIMARY KEY DEFAULT gen_random_uuid()",
+            "receipt_type TEXT NOT NULL CHECK (receipt_type IN (",
+            "'gemini_live_proof'",
+            "'runtime_proof'",
+            "'oil_audit_run'",
+            "'security_fix_verified'",
+            "'audit_verification'",
+            "'daily_oil_summary'",
+            "'red_team_finding'",
+            "'honeypot_probe'",
+            "'canary_trip'",
+            "'builder_supervised_build'",
+            "'builder_mode_change'",
+            "))",
+            "payload JSONB NOT NULL DEFAULT '{}'",
+            "created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()"
+          ],
+          "score": 1,
+          "column_count": 16,
+          "name_specificity": "1 concept token(s), 1 unrelated"
+        },
+        {
+          "table": "builder_mode_receipts",
+          "migration": "20260601_builder_runtime_config.sql",
+          "columns": [
+            "id uuid PRIMARY KEY DEFAULT gen_random_uuid()",
+            "mode text NOT NULL",
+            "triggered_by text",
+            "receipt_payload jsonb",
+            "created_at timestamptz DEFAULT now()"
+          ],
+          "score": 0,
+          "column_count": 5,
+          "name_specificity": "1 concept token(s), 2 unrelated"
+        }
+      ]
+    },
+    {
+      "store": "CapsuleStore",
+      "reuse_candidates": [
+        {
+          "table": "memory_capsules",
+          "migration": "20260521_memory_capsule_core.sql",
+          "columns": [
+            "capsule_id UUID PRIMARY KEY DEFAULT gen_random_uuid()",
+            "fact_id UUID REFERENCES epistemic_facts(id)",
+            "title TEXT NOT NULL",
+            "capsule_type TEXT NOT NULL",
+            "truth_class TEXT NOT NULL CHECK (truth_class IN ('objective','inferential','probabilistic','procedural','symbolic','emotional','relationship','preference','institutional','document_truth'))",
+            "trust_level TEXT NOT NULL DEFAULT 'PROPOSED' CHECK (trust_level IN ('UNTRUSTED','PROPOSED','SCOPED','RECEIPT_BACKED','TRUSTED_FOR_CONTEXT','CANONICAL','QUARANTINED','DEPRECATED'))",
+            "evidence_level TEXT NOT NULL DEFAULT 'CLAIM' CHECK (evidence_level IN ('CLAIM','HYPOTHESIS','TESTED','RECEIPT','VERIFIED','FACT','INVARIANT'))",
+            "sensitivity TEXT NOT NULL DEFAULT 'STANDARD' CHECK (sensitivity IN ('STANDARD','HIGH','SENSITIVE'))",
+            "source_type TEXT NOT NULL CHECK (source_type IN ('founder_input','user_input','system_observation','legacy_import','council_output','external_signal','working_memory_entry','institutional_record'))",
+            "source_ref TEXT",
+            "retrieval_permission TEXT NOT NULL DEFAULT 'context_only' CHECK (retrieval_permission IN ('context_only','decision_support','action_authority','blocked'))",
+            "task_scope TEXT",
+            "retrieval_lane_ceiling TEXT CHECK (retrieval_lane_ceiling IN ('context_lane','decision_support_lane','action_authority_lane','review_lane','relationship_sensitive_lane'))",
+            "canonical_statement_id UUID",
+            "fact_family_id UUID",
+            "review_by TIMESTAMPTZ DEFAULT (NOW() + INTERVAL '30 days')",
+            "status TEXT NOT NULL DEFAULT 'PROPOSED'",
+            "legacy_import_method TEXT",
+            "review_required BOOLEAN DEFAULT FALSE",
+            "created_at TIMESTAMPTZ DEFAULT NOW()",
+            "updated_at TIMESTAMPTZ DEFAULT NOW()"
+          ],
+          "score": 4,
+          "column_count": 21,
+          "name_specificity": "2 concept token(s), 0 unrelated"
+        },
+        {
+          "table": "memory_categories",
+          "migration": "202311_memory_category_taxonomy_update.sql",
+          "columns": [
+            "id SERIAL PRIMARY KEY",
+            "name VARCHAR(255) NOT NULL",
+            "parent_id INT REFERENCES memory_categories(id) ON DELETE CASCADE",
+            "description TEXT"
+          ],
+          "score": 1,
+          "column_count": 4,
+          "name_specificity": "1 concept token(s), 1 unrelated"
+        },
+        {
+          "table": "memory_links",
+          "migration": "20260704_create_memory_links.sql",
+          "columns": [
+            "id UUID PRIMARY KEY DEFAULT gen_random_uuid()",
+            "owner_id TEXT NOT NULL",
+            "link_type TEXT NOT NULL",
+            "source_id UUID NOT NULL",
+            "target_id UUID NOT NULL",
+            "created_at TIMESTAMPTZ DEFAULT NOW()"
+          ],
+          "score": 1,
+          "column_count": 6,
+          "name_specificity": "1 concept token(s), 1 unrelated"
+        },
+        {
+          "table": "conversation_memory",
+          "migration": "20260313_core_schema.sql",
+          "columns": [
+            "id SERIAL PRIMARY KEY",
+            "memory_id TEXT UNIQUE NOT NULL",
+            "orchestrator_msg TEXT NOT NULL",
+            "ai_response TEXT NOT NULL",
+            "ai_member VARCHAR(50)",
+            "key_facts JSONB",
+            "context_metadata JSONB",
+            "memory_type TEXT DEFAULT 'conversation'",
+            "created_at TIMESTAMPTZ DEFAULT NOW()"
+          ],
+          "score": 1,
+          "column_count": 9,
+          "name_specificity": "1 concept token(s), 1 unrelated"
+        }
+      ]
+    },
+    {
+      "store": "TemplateStore",
+      "reuse_candidates": [
+        {
+          "table": "additional_templates",
+          "migration": "20241001_add_more_templates.sql",
+          "columns": [
+            "id SERIAL PRIMARY KEY",
+            "name VARCHAR(255) NOT NULL",
+            "description TEXT",
+            "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP"
+          ],
+          "score": 1,
+          "column_count": 4,
+          "name_specificity": "1 concept token(s), 1 unrelated"
+        },
+        {
+          "table": "template_choices",
+          "migration": "20241001_add_template_choices.sql",
+          "columns": [
+            "id SERIAL PRIMARY KEY",
+            "name VARCHAR(255) NOT NULL",
+            "description TEXT",
+            "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP"
+          ],
+          "score": 1,
+          "column_count": 4,
+          "name_specificity": "1 concept token(s), 1 unrelated"
+        },
+        {
+          "table": "template_variations",
+          "migration": "20241015_add_template_variations.sql",
+          "columns": [
+            "id UUID PRIMARY KEY DEFAULT gen_random_uuid()",
+            "name VARCHAR(255) NOT NULL",
+            "description TEXT",
+            "created_at TIMESTAMP DEFAULT now()"
+          ],
+          "score": 1,
+          "column_count": 4,
+          "name_specificity": "1 concept token(s), 1 unrelated"
+        },
+        {
+          "table": "site_builder_templates",
+          "migration": "20240801_site_builder_templates.sql",
+          "columns": [
+            "id UUID PRIMARY KEY DEFAULT gen_random_uuid()",
+            "name TEXT NOT NULL",
+            "thumbnail_url TEXT",
+            "config JSONB NOT NULL",
+            "sort_order INT DEFAULT 0",
+            "created_at TIMESTAMPTZ DEFAULT now()",
+            "updated_at TIMESTAMPTZ DEFAULT now()"
+          ],
+          "score": 0,
+          "column_count": 7,
+          "name_specificity": "1 concept token(s), 2 unrelated"
+        }
+      ]
+    },
+    {
+      "store": "DeviceRegistry",
+      "reuse_candidates": []
+    },
+    {
+      "store": "PreferenceStore",
+      "reuse_candidates": [
+        {
+          "table": "user_preferences",
+          "migration": "20260421_lifeos_missing_tables.sql",
+          "columns": [
+            "id         BIGSERIAL    PRIMARY KEY",
+            "user_id    BIGINT       NOT NULL REFERENCES lifeos_users(id) ON DELETE CASCADE",
+            "key        TEXT         NOT NULL",
+            "value      TEXT",
+            "updated_at TIMESTAMPTZ  NOT NULL DEFAULT NOW()"
+          ],
+          "score": 1,
+          "column_count": 5,
+          "name_specificity": "1 concept token(s), 1 unrelated"
+        },
+        {
+          "table": "dashboard_preferences",
+          "migration": "20260513_repair_phase3_users_monetization.sql",
+          "columns": [
+            "id          SERIAL PRIMARY KEY",
+            "user_id     BIGINT NOT NULL REFERENCES lifeos_users(id) ON DELETE CASCADE",
+            "preferences JSONB NOT NULL",
+            "created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP",
+            "updated_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP"
+          ],
+          "score": 1,
+          "column_count": 5,
+          "name_specificity": "1 concept token(s), 1 unrelated"
+        },
+        {
+          "table": "user_preference",
+          "migration": "20260704_create_user_preference.sql",
+          "columns": [
+            "id UUID PRIMARY KEY DEFAULT gen_random_uuid()",
+            "owner_id TEXT NOT NULL",
+            "preference_key TEXT NOT NULL",
+            "preference_value TEXT",
+            "created_at TIMESTAMPTZ DEFAULT NOW()"
+          ],
+          "score": 1,
+          "column_count": 5,
+          "name_specificity": "1 concept token(s), 1 unrelated"
+        },
+        {
+          "table": "flourishing_prefs",
+          "migration": "addAdaptiveLayoutColumn.sql",
+          "columns": [
+            "id SERIAL PRIMARY KEY",
+            "user_id TEXT NOT NULL UNIQUE",
+            "adaptive_layout_preferences JSONB",
+            "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP",
+            "updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP"
+          ],
+          "score": 1,
+          "column_count": 5,
+          "name_specificity": "1 concept token(s), 1 unrelated"
+        }
+      ]
+    }
+  ],
+  "cycle_repairs": [
+    {
+      "id": "CR-1",
+      "title": "Drop the router's build-time dependencies on verification and receipt-ledger",
+      "removes": [
+        "TALOA-P1-012 -> TALOA-P1-014",
+        "TALOA-P1-012 -> TALOA-P1-015"
+      ],
+      "reasoning": "The strategy router CALLS verification and the receipt ledger at runtime, but it does not need either module to exist in order to be authored against their interfaces. The blueprint appears to have recorded a runtime relationship as a build order, which is the most common way an acyclic system acquires a cyclic plan.",
+      "result": "Graph becomes acyclic. Build order: 012 -> 013 -> 014 -> 015, then 016 verifies everything.",
+      "cost": "Cheapest. No decomposition, no new steps.",
+      "risk": "If the router genuinely imports concrete implementations rather than interfaces, the first build fails fast on an unresolved import — a loud, cheap failure."
+    },
+    {
+      "id": "CR-2",
+      "title": "Decompose the router into interface and implementation",
+      "removes": [
+        "TALOA-P1-012 (single step)"
+      ],
+      "reasoning": "Splits into 012a (router interface and gate algorithm, no dependencies) and 012b (wiring to verification and receipts, depending on both). Preserves every stated runtime relationship instead of asserting that it was a mistake.",
+      "result": "Acyclic, and the declared dependencies survive intact. Adds one step and one wave.",
+      "cost": "Moderate: one extra slice, one extra integration point.",
+      "risk": "A larger change to a blueprint that is already the frozen regression fixture for a different purpose."
+    },
+    {
+      "id": "CR-3",
+      "title": "Re-examine whether verification should depend on the capsule runtime at all",
+      "removes": [
+        "TALOA-P1-014 -> TALOA-P1-013"
+      ],
+      "reasoning": "Verification is described as validating operations and states. If it validates state rather than executing capsules, its dependency on the capsule runtime may be the incorrect edge, in which case the other three edges are all sound.",
+      "result": "Acyclic if that edge was wrong. Requires reading the intent of verification, not just the graph.",
+      "cost": "Low to implement, higher to decide: this is a question about what verification IS.",
+      "risk": "If verification really does need to execute capsules to verify them, this repair is wrong and would surface as a redesign later."
+    },
+    {
+      "id": "CR-4",
+      "title": "Declare the cycle lawful with an explicit iterative execution contract",
+      "removes": [],
+      "reasoning": "The new topology gate permits a declared cycle that states how many passes it takes and what makes it terminate — for example pass 1 authors stubs, pass 2 wires them. This is the only option that keeps every edge.",
+      "result": "Lawful under the gate, but the most expensive to execute and to verify.",
+      "cost": "Highest. Two-pass manufacturing for four modules.",
+      "risk": "Chair guidance is that a cycle should be broken where it is conceptually wrong, not accommodated. Recommended only if all four edges are genuinely correct."
+    }
+  ],
+  "tables_scanned": 718,
+  "stores_with_candidates": 6
+}

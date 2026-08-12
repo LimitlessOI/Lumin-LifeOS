@@ -1,6 +1,6 @@
 {
   "schema": "overlay_regression_exam_receipt_v1",
-  "generated_at": "2026-08-12T03:14:04.555Z",
+  "generated_at": "2026-08-12T04:05:12.672Z",
   "produced_by": "scripts/run-overlay-regression-exam.mjs",
   "separation_collapsed": true,
   "separation_note": "The same script detects and grades. Mitigation: the graded input is a byte-pinned fixture this script never writes, its sha256 is verified before grading, and every check is a pure function of those bytes — reproducible byte-identically by any third party via `npm run builderos:overlay:exam`. No model judgment is in the verdict path.",

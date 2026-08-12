@@ -390,7 +390,8 @@
     "builderos:factory:provision": "node scripts/provision-factory.mjs",
     "builderos:factory:health": "node scripts/factory-health-audit.mjs",
     "builderos:factory:plan2": "node scripts/plan-two-factory-build.mjs",
-    "builderos:schema:authority": "node scripts/schema-decision-artifact.mjs"
+    "builderos:schema:authority": "node scripts/schema-decision-artifact.mjs",
+    "builderos:decisions:propose": "node scripts/propose-founder-decisions.mjs"
   },
   "dependencies": {
     "@anthropic-ai/claude-code": "^2.1.86",

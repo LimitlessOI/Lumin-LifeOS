@@ -1,6 +1,6 @@
 {
   "schema": "factory_health_receipt_v1",
-  "generated_at": "2026-08-12T03:14:04.486Z",
+  "generated_at": "2026-08-12T04:05:12.599Z",
   "produced_by": "scripts/factory-health-audit.mjs",
   "purpose": "Audit a lane before trusting it with work. Every check executes something; existence is not health.",
   "independent_reproduction_command": "node scripts/factory-health-audit.mjs",
@@ -52,7 +52,7 @@
       ],
       "unhealthy_count": 0,
       "verdict": "HEALTHY",
-      "checked_at": "2026-08-12T03:14:04.324Z"
+      "checked_at": "2026-08-12T04:05:12.431Z"
     },
     {
       "factory_id": "factory-2",

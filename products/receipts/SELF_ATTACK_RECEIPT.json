@@ -1,6 +1,6 @@
 {
   "schema": "self_attack_receipt_v1",
-  "generated_at": "2026-08-12T03:14:04.782Z",
+  "generated_at": "2026-08-12T04:05:12.904Z",
   "produced_by": "scripts/self-attack-governance.mjs",
   "purpose": "A hand-audit by the agent that wrote the repair is not verification. These are executable attacks a later agent can rerun.",
   "separation_collapsed": true,

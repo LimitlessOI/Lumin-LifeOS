@@ -40,7 +40,10 @@ test('an artifact with no answers is AWAITING_FOUNDER and names what is missing'
 test('answering every store seals the artifact', () => {
   const a = createSchemaDecisionArtifact({
     requiredStores: STORES,
-    answers: { TaskStore: { columns: ['id'] }, AuthorityLedger: { columns: ['id'] } },
+    answers: {
+      TaskStore: { columns: ['id'], ratified_by: 'founder' },
+      AuthorityLedger: { columns: ['id'], ratified_by: 'founder' },
+    },
     provenance: { decided_by: 'founder', decided_at: '2026-08-12T00:00:00Z' },
   });
   assert.equal(a.status, ARTIFACT_STATUS.SEALED);
@@ -81,10 +84,44 @@ test('an unanswered store blocks the build and routes to the founder', () => {
   assert.equal(d.origin, 'founder_decision');
 });
 
+test('a proposed answer the founder never ratified is refused, not counted', () => {
+  const file = tmpArtifact(
+    createSchemaDecisionArtifact({
+      requiredStores: STORES,
+      answers: {
+        TaskStore: { columns: ['id'], proposed_by: 'architect' },
+        AuthorityLedger: { columns: ['id'], ratified_by: 'founder', ratified_at: '2026-08-12T00:00:00Z' },
+      },
+    })
+  );
+  const r = verifySchemaAuthority({ requiredStores: STORES, artifactPath: file });
+  assert.equal(r.ok, false);
+  const d = r.defects.find((x) => x.id === 'UNRATIFIED_SCHEMA_ANSWER');
+  assert.deepEqual(d.stores, ['TaskStore'], 'only the unratified proposal is refused');
+  assert.equal(d.authority, 'founder');
+});
+
+test('a fully ratified artifact passes', () => {
+  const file = tmpArtifact(
+    createSchemaDecisionArtifact({
+      requiredStores: STORES,
+      answers: {
+        TaskStore: { columns: ['id'], ratified_by: 'founder' },
+        AuthorityLedger: { columns: ['id'], ratified_by: 'founder' },
+      },
+    })
+  );
+  const r = verifySchemaAuthority({ requiredStores: STORES, artifactPath: file });
+  assert.equal(r.ok, true);
+});
+
 test('two factories citing different artifact hashes is caught as specification divergence', () => {
   const artifact = createSchemaDecisionArtifact({
     requiredStores: STORES,
-    answers: { TaskStore: { columns: ['id'] }, AuthorityLedger: { columns: ['id'] } },
+    answers: {
+      TaskStore: { columns: ['id'], ratified_by: 'founder' },
+      AuthorityLedger: { columns: ['id'], ratified_by: 'founder' },
+    },
   });
   const file = tmpArtifact(artifact);
   const r = verifySchemaAuthority({
@@ -101,7 +138,10 @@ test('two factories citing different artifact hashes is caught as specification 
 test('both factories citing the sealed hash passes', () => {
   const artifact = createSchemaDecisionArtifact({
     requiredStores: STORES,
-    answers: { TaskStore: { columns: ['id'] }, AuthorityLedger: { columns: ['id'] } },
+    answers: {
+      TaskStore: { columns: ['id'], ratified_by: 'founder' },
+      AuthorityLedger: { columns: ['id'], ratified_by: 'founder' },
+    },
   });
   const file = tmpArtifact(artifact);
   const r = verifySchemaAuthority({

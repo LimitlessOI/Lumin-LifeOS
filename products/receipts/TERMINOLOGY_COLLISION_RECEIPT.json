@@ -1,6 +1,6 @@
 {
   "schema": "terminology_collision_receipt_v1",
-  "generated_at": "2026-08-12T03:14:04.091Z",
+  "generated_at": "2026-08-12T04:05:12.161Z",
   "produced_by": "scripts/verify-terminology-collisions.mjs",
   "resolution": "OPEN-6: the constitutional office keeps the name Conductor; the mechanical session-supervisor role was renamed to Session Supervisor.",
   "verdict": "NO_NEW_COLLISIONS",

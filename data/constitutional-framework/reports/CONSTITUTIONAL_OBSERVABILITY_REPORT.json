@@ -1,7 +1,7 @@
 {
   "schema": "constitutional_observability_report_v1",
   "version": "2026-08-02",
-  "generated_at": "2026-08-12T03:14:07.191Z",
+  "generated_at": "2026-08-12T04:05:15.402Z",
   "source_map": "/Users/adamhopkins/Projects/Lumin-LifeOS/data/constitutional-framework/PRINCIPLE_RUNTIME_MAP.json",
   "summary": {
     "total": 14,
@@ -52,7 +52,7 @@
         "runtime_artifact": "services/lifeos-coaching-protocol.js",
         "measurement": "Coaching protocol runs Observe -> Curious -> Understood -> Expand -> Verify -> Ready -> Explore without forcing advice",
         "pass_criteria": "each coaching step returns a non-empty, non-directive output",
-        "duration_ms": 1,
+        "duration_ms": 0,
         "runtime_reachable": false,
         "runtime_importers": []
       },
@@ -148,7 +148,7 @@
         "runtime_artifact": "services/readiness-engine.js",
         "measurement": "Readiness engine returns a calibrated readiness score and risk_if_forced for any insight",
         "pass_criteria": "assessReadiness returns readiness_score in [0,1] and a non-empty risk_if_forced string",
-        "duration_ms": 1,
+        "duration_ms": 0,
         "runtime_reachable": false,
         "runtime_importers": []
       },
@@ -212,7 +212,7 @@
         "runtime_artifact": "services/institutional-constellation.js",
         "measurement": "Institutional Constellation uses the same graph, confidence, causality, and calibration machinery as the Human Constellation",
         "pass_criteria": "createInstitutionalConstellation, addBelief, addOffice, recordPrediction, recordOutcome, and getCalibrationReport all return expected structures",
-        "duration_ms": 0,
+        "duration_ms": 1,
         "runtime_reachable": false,
         "runtime_importers": []
       },
@@ -228,7 +228,7 @@
         "runtime_artifact": "scripts/verify-constitutional-parity.mjs",
         "measurement": "Constitutional parity gate passes and every registry item has a matrix entry",
         "pass_criteria": "verify-constitutional-parity exits 0 and reports registry and matrix counts match",
-        "duration_ms": 130,
+        "duration_ms": 135,
         "runtime_reachable": true,
         "runtime_wiring": "invoked from builder:preflight (CI gate), not a routes/ import"
       },

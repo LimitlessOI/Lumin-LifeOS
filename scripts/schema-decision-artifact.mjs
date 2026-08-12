@@ -120,6 +120,25 @@ export function verifySchemaAuthority({ requiredStores = [], artifactPath = ARTI
     return { ok: false, defects, artifact: loaded.artifact };
   }
 
+  // An answer counts only if the founder ratified it. Candidate contracts are
+  // drafted for him to choose from — see FOUNDER_SCHEMA_OPTIONS_OVERLAY.md — and
+  // without this check a proposal sitting in the artifact would be indistinguishable
+  // from a decision, which is precisely the invention laundering the no-invention
+  // law exists to prevent. Drafting options is lawful; letting one pass as ratified
+  // is not.
+  const unratified = Object.entries(loaded.artifact.answers || {})
+    .filter(([, answer]) => answer && answer.ratified_by !== 'founder')
+    .map(([store]) => store);
+  if (unratified.length > 0) {
+    defects.push({
+      id: 'UNRATIFIED_SCHEMA_ANSWER',
+      authority: 'founder',
+      origin: 'founder_decision',
+      detail: `${unratified.length} store contract(s) carry a proposed answer that the founder has not ratified: ${unratified.join(', ')}. A proposal is a question with options attached, never a decision.`,
+      stores: unratified,
+    });
+  }
+
   const missing = requiredStores.filter((s) => !loaded.artifact.answers?.[s]);
   if (missing.length > 0) {
     defects.push({
