@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-12T19:57:56.004Z",
+  "generated_at": "2026-08-12T19:58:41.095Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13407,
+  "file_count": 13408,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -101270,6 +101270,16 @@
       "bytes": 1636,
       "mtime": "2026-08-12T19:47:00.532Z",
       "indexed_at": "2026-08-12T19:47:00.532Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/taloa/perception-fusion-service.js",
+      "synopsis": "Exports createPerceptionFusionService — services/taloa/perception-fusion-service.js.",
+      "bytes": 1912,
+      "mtime": "2026-08-12T19:58:41.095Z",
+      "indexed_at": "2026-08-12T19:58:41.095Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]

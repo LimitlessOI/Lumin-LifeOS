@@ -2911,6 +2911,8 @@
       ],
       "source": "TALOA-OVERLAY-P1-0001 sealed Phase 1",
       "same_signature_count": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-08-12T19:58:00.246Z",
       "commit_sha": "29d7adb4396d2f43a0b04c46529203aee8046f42"
     },
     {
