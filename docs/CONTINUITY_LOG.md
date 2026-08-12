@@ -1,5 +1,13 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-08-12 — Both factories now dispatch; Chair preloads behind the badge
+
+Adam: keep monitoring, use both factories, and if BuilderOS finds an issue and does not fix itself, fix the fixer — continuously, while always building.
+
+**Were we using both?** No. factory-1 shipped Overlay Phase 1 (15/15). factory-2 was HEALTHY and idle. The two-factory plan printed every slice `unassigned` because `allocate()` read `.factory_id` on string ids (undefined) and defaulted to an empty `status === 'active'` filter. Production `ship-queue-and-commit` still has no factory_id; Railway is one container.
+
+**Fixed the dispatcher, not the receipt.** Lane ownership is now the ship-loop filter. `npm run builderos:factory:sync` / `:lane` tick factory-2. Watchdog applies `DR-BIND-MIGRATION` on the same tick as the alert. factory-2's current job: preload the already-live `/lifeos` Chair behind the Taloa badge (`TALOA-BADGE-CHAIR-001`). Production `/ready` is undegraded on `01864b7155ff`. Rebuild Taloa.app to see Chair-on-badge.
+
 ## 2026-08-12 — MTG collection stats (set / era / year / foil / rarity)
 
 Adam asked for breakdowns: how many cards by set/version, generation, foil, rarity, status, and set year. Shipping taxonomy on priced rows from Scryfall, `GET /collection/stats`, and panels on the upload page. One Re-price after deploy backfills older catalogued cards. Sell automation beyond photos+queue still open.

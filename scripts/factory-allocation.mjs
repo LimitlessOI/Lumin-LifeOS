@@ -20,12 +20,12 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
-  FACTORIES,
   ALLOCATION_MODE,
   HIGH_RISK_MARKERS,
   ISOLATION_RULES,
   FACTORY_HIERARCHY,
   isKnownFactory,
+  activeFactories,
 } from '../config/factory-registry.js';
 
 import { BLOCKER_ORIGIN } from './plan-topology.mjs';
@@ -33,6 +33,23 @@ import { effectiveIndependence, isCorrelated } from '../config/independence-fact
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const HEALTH_RECEIPT = path.join(ROOT, 'products/receipts/FACTORY_HEALTH_RECEIPT.json');
+
+/**
+ * The planner passes factory id strings. Tests pass `{ factory_id }` objects.
+ * FACTORIES in the registry have no `status` field (capacity is observed), so
+ * `FACTORIES.filter(f => f.status === 'active')` was always empty — every live
+ * two-factory plan printed `unassigned` / `→  +`.
+ */
+export function normalizeFactories(factories) {
+  const list = Array.isArray(factories) ? factories : [];
+  return list
+    .map((f) => {
+      if (typeof f === 'string' && f.trim()) return { factory_id: f.trim() };
+      if (f && typeof f === 'object' && f.factory_id) return f;
+      return null;
+    })
+    .filter(Boolean);
+}
 
 /** A slice is high risk when what it touches is expensive to get wrong. */
 export function sliceRiskClass(slice) {
@@ -112,27 +129,41 @@ export function loadHealthProofs(receiptPath = HEALTH_RECEIPT, { now = Date.now(
 }
 
 export function allocate(plan, {
-  factories = FACTORIES.filter((f) => f.status === 'active'),
+  factories = activeFactories(),
   profiles = [],
   mode = ALLOCATION_MODE.PARALLEL_SPLIT,
   redundancy_for_high_risk = true,
   healthProofs = loadHealthProofs(),
+  ownerFor = null,
 } = {}) {
+  const factoryList = normalizeFactories(factories);
   const slices = Array.isArray(plan?.slices) ? plan.slices : [];
   const assignments = [];
   const violations = [];
 
   slices.forEach((slice, i) => {
     const risk = sliceRiskClass(slice);
+    const file = slice.target_files?.[0] || slice.target || '';
+    if (typeof ownerFor === 'function') {
+      const owner = ownerFor(file);
+      assignments.push({
+        slice_id: slice.slice_id,
+        mode: ALLOCATION_MODE.PARALLEL_SPLIT,
+        factory_ids: [owner],
+        risk,
+        basis: 'lane_assignment',
+      });
+      return;
+    }
     const wantsRedundancy =
       mode === ALLOCATION_MODE.REDUNDANT_INDEPENDENT ||
-      (redundancy_for_high_risk && risk.high_risk && factories.length > 1);
+      (redundancy_for_high_risk && risk.high_risk && factoryList.length > 1);
 
-    if (wantsRedundancy && factories.length > 1) {
+    if (wantsRedundancy && factoryList.length > 1) {
       assignments.push({
         slice_id: slice.slice_id,
         mode: ALLOCATION_MODE.REDUNDANT_INDEPENDENT,
-        factory_ids: factories.map((f) => f.factory_id),
+        factory_ids: factoryList.map((f) => f.factory_id),
         risk,
         // Both build the same thing without seeing each other's answer. The point
         // is independent cognition; showing the work early destroys it.
@@ -143,7 +174,7 @@ export function allocate(plan, {
       return;
     }
 
-    const chosen = chooseByCapability(slice, factories, profiles, i);
+    const chosen = chooseByCapability(slice, factoryList, profiles, i);
     assignments.push({
       slice_id: slice.slice_id,
       mode: ALLOCATION_MODE.PARALLEL_SPLIT,
@@ -209,7 +240,7 @@ export function allocate(plan, {
   return {
     ok: violations.length === 0,
     plan_id: plan?.plan_id ?? null,
-    factories: factories.map((f) => f.factory_id),
+    factories: factoryList.map((f) => f.factory_id),
     hierarchy: FACTORY_HIERARCHY.model,
     assignments,
     redundant_slices: assignments.filter((a) => a.mode === ALLOCATION_MODE.REDUNDANT_INDEPENDENT).map((a) => a.slice_id),

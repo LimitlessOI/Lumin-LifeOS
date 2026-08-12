@@ -25,6 +25,7 @@ import { resolveCycles } from './architect-resolve-cycle.mjs';
 import { resolveAllStores } from './architect-resolve-stores.mjs';
 import { sealManufacturingPlan } from './seal-manufacturing-plan.mjs';
 import { allocate } from './factory-allocation.mjs';
+import { ownerFor } from '../config/lane-assignment.js';
 import { REQUIRED_CONSENSUS_OFFICES } from '../config/manufacturing-plan-schema.js';
 import { detectInventions } from '../services/blueprint-invention-detector.js';
 import { activeFactories } from '../config/factory-registry.js';
@@ -81,7 +82,14 @@ export function planTwoFactoryBuild() {
   const schedule = scheduleWaves(
     steps0(blueprint).map((n) => ({ id: n.id, depends_on: n.deps.filter((d) => !removedEdge(n.id, d)) }))
   );
-  const allocation = allocate(plan, { factories, redundancy_for_high_risk: true });
+  // Parallel split by path. Redundant-independent of the same file is forbidden
+  // by LANE_ASSIGNMENT (git-lock) and would not raise confidence while the
+  // lanes share node_modules (1.0 effective perspectives).
+  const allocation = allocate(plan, {
+    factories,
+    redundancy_for_high_risk: false,
+    ownerFor,
+  });
 
   // ARCHITECT: does this decomposition still describe the specified system?
   const schemaArtifact = loadSchemaDecisionArtifact();
@@ -290,7 +298,7 @@ function renderMarkdown(r) {
   lines.push(
     '## Putting it back together',
     '',
-    'Each wave is an integration point: nothing from wave N+1 starts until every slice in wave N has landed and verified. High-risk slices are given to both lanes independently — convergence raises confidence, divergence goes to the Consensus Protocol rather than a vote.',
+    'Each wave is an integration point: nothing from wave N+1 starts until every slice in wave N has landed and verified. Assignment is parallel-split by path (`LANE_ASSIGNMENT.json`): a file is owned by exactly one lane. Redundant-independent of the same file is off while the lanes share `node_modules` — agreement would not raise confidence.',
     '',
     `**Authorization:** ${r.authorized ? 'MANUFACTURING_AUTHORIZED' : `withheld — ${r.blocking_defects.join(', ') || r.authorization_state}`}`,
     ''

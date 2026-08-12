@@ -199,7 +199,13 @@ function prepareQueueForPlanning(queue, { now = Date.now() } = {}) {
  * @param {number}  [opts.maxStepsPerProduct]   cap per product (throughput/cost guard)
  * @returns {{ by_product: Array, total_shippable:number, total_gaps:number, runnable:boolean }}
  */
-export function planGovernedBuildQueueRun({ products, readQueue, maxStepsPerProduct = Infinity }) {
+export function planGovernedBuildQueueRun({
+  products,
+  readQueue,
+  maxStepsPerProduct = Infinity,
+  factoryId = null,
+  ownerFor = null,
+} = {}) {
   if (!Array.isArray(products)) throw new Error('planGovernedBuildQueueRun requires products[]');
   if (typeof readQueue !== 'function') throw new Error('planGovernedBuildQueueRun requires an injected readQueue fn');
 
@@ -215,7 +221,10 @@ export function planGovernedBuildQueueRun({ products, readQueue, maxStepsPerProd
       continue;
     }
     prepareQueueForPlanning(queue);
-    const shippable = selectShippableSteps(queue);
+    const shippable = selectShippableSteps(queue).filter((step) => {
+      if (!factoryId || typeof ownerFor !== 'function') return true;
+      return ownerFor(step.target_file || step.file) === factoryId;
+    });
     const ship_steps = [];
     const gaps = [];
     for (const step of shippable) {

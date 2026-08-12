@@ -22,6 +22,7 @@
 import fs from 'fs';
 import path from 'path';
 import { sendFounderSms, sendFounderCall } from './ci-health-watchdog.mjs';
+import { classifyHealthRepair, repairBindMigrationsInRepo } from './lib/repair-bind-migration.mjs';
 
 const CALL_ESCALATION_DELAY_MS = 10 * 60 * 1000; // matches ci-health-watchdog.mjs's own escalation timing
 
@@ -132,8 +133,31 @@ export async function runProdHealthWatchdogCycle({
     await sendFounderCall({ baseUrl, commandKey, to: alertPhone, message });
   }
 
+  // Alarm without a playbook is not a fixer. The last migrations_failed
+  // incident was caught (SMS+call) and then sat unrepaired because the
+  // executor only knew DR-003-RECEIPT-STALE. Apply the bind-migration class
+  // here, on the same tick that alerts.
+  let repair = null;
+  const classified = classifyHealthRepair(health);
+  if (classified?.repair_id === 'DR-BIND-MIGRATION') {
+    try {
+      const changed = repairBindMigrationsInRepo(process.cwd(), classified.migrations_failed);
+      repair = {
+        repair_id: classified.repair_id,
+        changed,
+        proposed_solution: changed.length
+          ? 'Bind-before-create SQL rewritten on disk. Commit these files and redeploy so the next boot applies them.'
+          : 'migrations_failed but no RAISE EXCEPTION bind file matched — different class, still needs a playbook.',
+      };
+      logger.warn?.({ repair }, '[PROD-HEALTH-WATCHDOG] attempted bind-migration self-repair');
+    } catch (err) {
+      repair = { repair_id: classified.repair_id, error: err.message };
+      logger.warn?.({ err: err.message }, '[PROD-HEALTH-WATCHDOG] bind-migration self-repair threw');
+    }
+  }
+
   logger.warn?.(`[PROD-HEALTH-WATCHDOG] ${action} alert sent for reason=${reasonKey}`);
-  return { action, reasonKey, alerted: true };
+  return { action, reasonKey, alerted: true, repair };
 }
 
 /** Mirrors startCiHealthWatchdogScheduler's exact convention. */

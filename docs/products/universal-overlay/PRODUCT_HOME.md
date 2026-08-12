@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/universal-overlay/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-08-10 — Biometric gate plugin shipped (real Android `BiometricPrompt`: fingerprint/face + PIN fallback, unified by the OS) so the AI-driving trigger requires founder confirmation. Prior same day: stuck-handoff UI visually confirmed live-rendering + a raw-CSS-selector label bug fixed; `system-notify-routes.js` email-send route shipped + hardened; stuck-field human handoff for the drive channel; Android `LifeosAccessibilityService` Capacitor plugin. Prior: 2026-08-09 OVERLAY-DRIVE-CHANNEL-0001 shipped, 15/15 acceptance PASS. |
+| **Last Updated** | 2026-08-12 — factory-2 lane: Chair preloads behind the Taloa badge (`TALOA-BADGE-CHAIR-001`). Phase 1 services remain construction-only. |
 
 ---
 ---
@@ -346,6 +346,8 @@ User on insurance portal
 ---
 
 ## Change Receipts
+
+| 2026-08-12 | **factory-2 is now the lane that writes native overlay, and Chair preloads behind the badge.** Click-to-chat used to cold-load `/lifeos` only after expand. `ContainerView.swift` now installs the existing WKWebView + auto-login at badge init (hidden) and opens the already-live `openLuminDrawer` once `chairReady`. Queued as `TALOA-BADGE-CHAIR-001` owned by factory-2. Production ship loop will skip this file. Rebuild Taloa.app to see it. | Founder: keep using both factories; overlay never stops building. | Needs a local `build.sh` + one click on the badge after rebuild. Not claimed live-verified. |
 
 | 2026-08-12 | **Live boot was degraded by the Phase 1 bind migrations we just shipped.** `/ready` reported `migrations_failed: ["20240101000001_create_task_store_table.sql"]`. Watchdog caught it (SMS + call). Self-repair did not: the executor only knows `DR-003-RECEIPT-STALE`. Root cause: files dated `20240101` can run before `lifeos_tasks` is created (`20260723`), and the factory prompt told the model to `RAISE EXCEPTION` if the table is missing — fail-closed of a COMMENT took down founder-runtime health. Rewrote the five reuse binds to `RAISE NOTICE` + COMMENT inside the guard. Generator no longer asks for EXCEPTION. | Watchdog detects, does not repair. Self-repair has no playbook for this class. | After deploy, `/ready` must show `degraded: false` with empty `migrations_failed`. |
 

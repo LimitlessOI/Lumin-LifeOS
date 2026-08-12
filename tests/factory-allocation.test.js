@@ -56,6 +56,22 @@ test('an unprovisioned factory cannot report capacity', async () => {
   }
 });
 
+test('allocate accepts factory id strings the planner actually passes', () => {
+  const plan = compileManufacturingPlan(blueprint, { factories: ['factory-1', 'factory-2'] });
+  const result = allocate(plan, {
+    factories: ['factory-1', 'factory-2'],
+    redundancy_for_high_risk: false,
+    healthProofs: {
+      'factory-1': { verdict: 'HEALTHY' },
+      'factory-2': { verdict: 'HEALTHY' },
+    },
+  });
+  const used = new Set(result.assignments.flatMap((a) => a.factory_ids));
+  assert.equal(used.has(undefined), false);
+  assert.equal(used.size, 2, 'both factories must receive work when slices are independent');
+  assert.ok([...used].every((id) => id === 'factory-1' || id === 'factory-2'));
+});
+
 test('PARALLEL PRODUCTION: independent slices split across both factories', () => {
   const plan = compileManufacturingPlan(blueprint, { factories: ['factory-1', 'factory-2'] });
   const result = allocate(plan, { factories: twoFactories, redundancy_for_high_risk: false });

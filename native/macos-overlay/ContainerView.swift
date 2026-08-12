@@ -83,6 +83,7 @@ final class ContainerView: NSView, WKNavigationDelegate, WKUIDelegate {
     private static let chatSize = NSSize(width: 420, height: 580)
     private static let clickMoveThreshold: CGFloat = 4
     private var pendingAutoOpenChat = false
+    private var chairReady = false
 
     // Real founder auto-login -- see header comment.
     private static let mintSessionURL = URL(string: "https://lumin-web-production-e3a9.up.railway.app/api/v1/lifeos/auth/operator/mint-browser-session")!
@@ -127,6 +128,11 @@ final class ContainerView: NSView, WKNavigationDelegate, WKUIDelegate {
         addSubview(badgeView)
         addSubview(shrinkButton)
         layoutChildren()
+        // Factory-2 job: Chair is alive behind the badge, not only after expand.
+        // installWebViewIfNeeded used to wait for expandThreshold, so a click
+        // paid a cold /lifeos load + auto-login every time. Preload it hidden.
+        installWebViewIfNeeded()
+        webView?.isHidden = true
     }
 
     required init?(coder: NSCoder) { fatalError("init(coder:) not used") }
@@ -235,16 +241,10 @@ final class ContainerView: NSView, WKNavigationDelegate, WKUIDelegate {
             return
         }
 
+        chairReady = true
         if pendingAutoOpenChat {
             pendingAutoOpenChat = false
-            // openLuminDrawer/#lumin-input are real globals in the already-live
-            // public/overlay/lifeos-app.html -- same call its own Cmd+L
-            // shortcut makes. Best-effort: if the page shape ever changes,
-            // this silently does nothing rather than throwing in the app.
-            webView.evaluateJavaScript(
-                "try { if (window.openLuminDrawer) { window.openLuminDrawer({expand:true}); " +
-                "var el = document.getElementById('lumin-input'); if (el) el.focus(); } } catch (e) {}"
-            )
+            openChairDrawer(on: webView)
         }
     }
 
@@ -452,6 +452,17 @@ final class ContainerView: NSView, WKNavigationDelegate, WKUIDelegate {
         dragMode = .none
     }
 
+    private func openChairDrawer(on webView: WKWebView) {
+        // openLuminDrawer/#lumin-input are real globals in the already-live
+        // public/overlay/lifeos-app.html -- same call its own Cmd+L
+        // shortcut makes. Best-effort: if the page shape ever changes,
+        // this silently does nothing rather than throwing in the app.
+        webView.evaluateJavaScript(
+            "try { if (window.openLuminDrawer) { window.openLuminDrawer({expand:true}); " +
+            "var el = document.getElementById('lumin-input'); if (el) el.focus(); } } catch (e) {}"
+        )
+    }
+
     /// Click-to-chat -- see header comment. Grows from the current bottom-left
     /// anchor (matches how she's positioned/homed everywhere else) so this
     /// never jumps off-screen.
@@ -461,6 +472,10 @@ final class ContainerView: NSView, WKNavigationDelegate, WKUIDelegate {
         var f = window.frame
         f.size = Self.chatSize
         window.setFrame(f, display: true, animate: true)
+        if chairReady, let wv = webView {
+            pendingAutoOpenChat = false
+            openChairDrawer(on: wv)
+        }
     }
 
     /// Shrink-back-to-circle -- see header comment. Keeps the same top-left

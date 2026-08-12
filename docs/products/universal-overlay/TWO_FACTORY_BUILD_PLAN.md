@@ -19,7 +19,7 @@ Reported per blocked slice so nobody can later attribute a blueprint that cannot
 
 Every one of the 16 source steps is accounted for exactly once (coverage invariant holds): 16 scheduled.
 
-Schema authority: **SEALED** (artifact `16fae9f8c2c2`). Both lanes must build against this one frozen artifact, so that a disagreement between them can be read as builder divergence rather than two different readings of the same silence.
+Schema authority: **SEALED** (artifact `125f19fae23c`). Both lanes must build against this one frozen artifact, so that a disagreement between them can be read as builder divergence rather than two different readings of the same silence.
 
 ## What can be built the moment the blueprint is answered
 
@@ -29,46 +29,46 @@ Schema authority: **SEALED** (artifact `16fae9f8c2c2`). Both lanes must build ag
 
 **Wave 1** — 7 slice(s), runs in parallel:
 
-- `SL-001` →  +  *(both, independently — high risk)*
-- `SL-002` →  +  *(both, independently — high risk)*
-- `SL-003` →  +  *(both, independently — high risk)*
-- `SL-004` →  +  *(both, independently — high risk)*
-- `SL-005` →  +  *(both, independently — high risk)*
-- `SL-006` →  +  *(both, independently — high risk)*
-- `SL-007` →  +  *(both, independently — high risk)*
+- `SL-001` → factory-1
+- `SL-002` → factory-1
+- `SL-003` → factory-1
+- `SL-004` → factory-1
+- `SL-005` → factory-1
+- `SL-006` → factory-1
+- `SL-007` → factory-1
 
 **Wave 2** — 2 slice(s), runs in parallel:
 
-- `SL-008` → unassigned
-- `SL-015` → unassigned
+- `SL-008` → factory-1
+- `SL-015` → factory-1
 
 **Wave 3** — 1 slice(s), runs in parallel:
 
-- `SL-009` → unassigned
+- `SL-009` → factory-1
 
 **Wave 4** — 1 slice(s), runs in parallel:
 
-- `SL-010` → unassigned
+- `SL-010` → factory-1
 
 **Wave 5** — 1 slice(s), runs in parallel:
 
-- `SL-011` → unassigned
+- `SL-011` → factory-1
 
 **Wave 6** — 1 slice(s), runs in parallel:
 
-- `SL-012` → unassigned
+- `SL-012` → factory-1
 
 **Wave 7** — 1 slice(s), runs in parallel:
 
-- `SL-013` → unassigned
+- `SL-013` → factory-1
 
 **Wave 8** — 1 slice(s), runs in parallel:
 
-- `SL-014` → unassigned
+- `SL-014` → factory-1
 
 **Wave 9** — 1 slice(s), runs in parallel:
 
-- `SL-016` → unassigned
+- `SL-016` → factory-1
 
 ## Putting it back together
 

@@ -30,6 +30,7 @@ import { createUsefulWorkGuard } from './useful-work-guard.js';
 import { governedFactoryOnly } from './governed-factory-guard.js';
 import { hasTokenCapacity, dailyBuildBudget, recordDailyBuildAttempts, mergeQueueRuntimeStatus, defaultPlannerCallModel, discoverPlanWork, discoverSentryFixWork, runPlanBuildQueue, commitQueueStatusToRepo } from './never-stop-product-factory.js';
 import { planGovernedBuildQueueRun } from './governed-build-queue-scheduler.js';
+import { ownerFor, thisFactoryId } from '../config/lane-assignment.js';
 import { verifyCommitOnMain } from '../scripts/lib/ship-main-ancestor.mjs';
 import {
   loadBuildQueue,
@@ -1036,6 +1037,8 @@ export async function runGovernedAutonomousShipOnce({ logger, maxStepsPerProduct
       products,
       readQueue: (id) => queueCache[id],
       maxStepsPerProduct,
+      factoryId: thisFactoryId(),
+      ownerFor,
     });
     if (!plan.runnable) {
       const planned = await planQueueIfNeeded({ products, queueCache, logger });
@@ -1044,6 +1047,8 @@ export async function runGovernedAutonomousShipOnce({ logger, maxStepsPerProduct
           products,
           readQueue: (id) => queueCache[id],
           maxStepsPerProduct,
+          factoryId: thisFactoryId(),
+          ownerFor,
         });
       }
     }
@@ -1293,6 +1298,8 @@ export function startGovernedAutonomousShippingLoop({ logger, pool } = {}) {
         products,
         readQueue: (id) => cache[id],
         maxStepsPerProduct: 1,
+        factoryId: thisFactoryId(),
+        ownerFor,
       });
       const activeProducts = plan.by_product.filter((p) => p.ship_steps.length > 0).length;
       const productsWithGaps = plan.by_product.filter((p) => p.gaps.length > 0).length;

@@ -31,6 +31,7 @@ export const EXECUTOR_MAX_ATTEMPTS = SELF_REPAIR_MAX_ATTEMPTS;
 
 const SUPPORTED_REPAIR_IDS = new Set([
   'DR-003-RECEIPT-STALE',
+  'DR-BIND-MIGRATION',
   'all_authorized',
 ]);
 
@@ -180,6 +181,19 @@ function buildPlan(repairId, readiness) {
       return { ok: false, stoppedReason: 'proof_not_stale', steps: [] };
     }
     return { ok: true, stoppedReason: null, steps: [...CHAIN_STEPS] };
+  }
+
+  if (repairId === 'DR-BIND-MIGRATION') {
+    return {
+      ok: true,
+      stoppedReason: null,
+      steps: [{
+        code: 'BM-001',
+        endpoint: '/api/v1/lifeos/command-center/self-repair/audit/run',
+        method: 'POST',
+        description: 'Bind-before-create migrations: watchdog applies scripts/lib/repair-bind-migration.mjs on the same tick as the alert',
+      }],
+    };
   }
 
   if (!readiness?.can_continue_under_approved_pb) {
@@ -439,6 +453,38 @@ export async function runSelfRepairExecutor({
       stopped_reason: null,
       audit_before: initialReadiness,
       audit_result: 'DRY_RUN',
+    });
+  }
+
+  if (repairId === 'DR-BIND-MIGRATION') {
+    const { repairBindMigrationsInRepo } = await import('../scripts/lib/repair-bind-migration.mjs');
+    const changed = repairBindMigrationsInRepo(process.cwd());
+    const stepsExecuted = [{ code: 'BM-001', ok: true, changed, attempt: 1 }];
+    const verification = await verifyState(baseUrl, commandKey);
+    const status = 'PASS';
+    const payload = buildExecutorReceiptPayload({
+      status,
+      repairId,
+      dryRun: false,
+      authority,
+      stepsPlanned: plan.steps,
+      stepsExecuted,
+      verification,
+      stoppedReason: changed.length ? null : 'no_bind_migration_matched_files_already_repaired',
+      attemptsUsed: 1,
+      triggeredBy,
+      durationMs: Date.now() - startedAt,
+    });
+    const { receipt_id } = await writeExecutorReceipt(pool, payload);
+    return finishExecutorRun(pool, finishArgs, {
+      authority,
+      steps_planned: plan.steps,
+      steps_executed: stepsExecuted,
+      receipts_written: [{ receipt_id, type: SECURITY_RECEIPT_TYPES.AUDIT_VERIFICATION, purpose: 'executor_run' }],
+      verification_result: verification,
+      stopped_reason: changed.length ? null : 'no_bind_migration_matched_files_already_repaired',
+      audit_before: initialReadiness,
+      audit_result: status,
     });
   }
 
