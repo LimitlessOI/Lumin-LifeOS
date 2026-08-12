@@ -5,6 +5,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { dispatchExecuteStep, REPO_ROOT } from './run-step.js';
 import { detectLayout } from '../layout/repo-layout.js';
+import { stepDependencies } from '../../../config/step-dependencies.js';
 
 function sortStepsByDependencies(steps) {
   const byId = new Map(steps.map((s) => [s.step_id, s]));
@@ -18,7 +19,7 @@ function sortStepsByDependencies(steps) {
     visiting.add(stepId);
     const step = byId.get(stepId);
     if (!step) throw new Error(`Unknown step ${stepId}`);
-    for (const dep of step.dependencies || []) visit(dep);
+    for (const dep of stepDependencies(step)) visit(dep);
     visiting.delete(stepId);
     visited.add(stepId);
     sorted.push(step);

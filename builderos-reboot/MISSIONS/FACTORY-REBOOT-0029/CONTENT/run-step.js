@@ -13,6 +13,7 @@ import { appendStepMetrics } from '../tsos/record-step-metrics.js';
 import { evaluateEfficiency } from '../tsos/evaluate-efficiency.js';
 import { appendStepExecutionRecord } from '../historian/append-record.js';
 import { runBpbIntakeGate } from '../bpb/intake-gate.js';
+import { runChairConsensusGate, chairGateMode } from './chair-consensus-gate.mjs';
 import { runBehaviorAssertions } from '../sentry/behavior-assertions.js';
 import { stepRequiresAuthoring, runAuthoring } from './authoring.js';
 import { REPO_ROOT, FACTORY_ROOT, resolveRepoPath } from '../repo-paths.js';
@@ -133,7 +134,15 @@ export async function dispatchExecuteStep(body, options = {}) {
   const mission_id = body?.mission_id || 'unknown';
   const blueprint_id = body?.blueprint_id || 'unknown';
   let step = body?.step;
-  const skipIntake = body?.skip_intake_gate === true;
+  // `skip_intake_gate` was env-gated by an adversarial-probe fix (AMENDMENT_48,
+  // 2026-06-10) and that protection later regressed away — a §2.13 no-regression
+  // violation that `deliberation-governance-behavior.mjs` only appeared to catch
+  // because its fixture step also fails BPB for missing content. Restored here:
+  // the caller may request the skip, but only the environment may grant it.
+  const skipRequested = body?.skip_intake_gate === true;
+  const skipAllowed = String(process.env.FACTORY_ALLOW_SKIP_INTAKE_GATE || '').trim().toLowerCase() === 'true';
+  const skipIntake = skipRequested && skipAllowed;
+  const skipDenied = skipRequested && !skipAllowed;
   const assertionRunner = options?.assertionRunner || null;
   const codegenRunner = options?.codegenRunner || null;
 
@@ -153,6 +162,19 @@ export async function dispatchExecuteStep(body, options = {}) {
     };
   }
 
+  if (skipDenied) {
+    return {
+      httpStatus: 422,
+      body: {
+        ok: false,
+        status: 'AIC_GATE_FAILURE',
+        reason: 'skip_intake_gate_not_permitted',
+        summary: 'Caller requested skip_intake_gate but FACTORY_ALLOW_SKIP_INTAKE_GATE is not enabled',
+        attempted_bypass: true,
+      },
+    };
+  }
+
   if (!skipIntake) {
     const intake = runBpbIntakeGate(mission_id, { strict_pd: body?.strict_upstream_gates === true });
     if (!intake.ok) {
@@ -166,6 +188,34 @@ export async function dispatchExecuteStep(body, options = {}) {
         },
       };
     }
+  }
+
+  // §2.0K Conductor consensus entry gate. This call is the caller the gate never
+  // had. It verifies a plan and seal it did not author; it cannot mint either.
+  // In `advisory` mode a missing/invalid seal is recorded, not fatal, because the
+  // sealing-authority path is not yet integrated into autonomous dispatch —
+  // `CHAIR_GATE_STRICT=true` makes it fail-closed. The verdict travels with the
+  // step result so no consumer can mistake advisory for enforced.
+  const consensus = runChairConsensusGate({
+    mission_id,
+    blueprint_id,
+    step,
+    reasoning_plan: body?.reasoning_plan || null,
+    reasoning_plan_id: body?.reasoning_plan_id || null,
+    seal: body?.chair_seal || null,
+    repoRoot: REPO_ROOT,
+  });
+  if (!consensus.ok) {
+    return {
+      httpStatus: 422,
+      body: {
+        ok: false,
+        status: 'AIC_GATE_FAILURE',
+        reason: `chair_consensus_gate:${consensus.reason}`,
+        consensus_gate: consensus,
+        summary: 'Conductor consensus gate blocked this step (§2.0K)',
+      },
+    };
   }
 
   const t0 = Date.now();
@@ -301,6 +351,8 @@ export async function dispatchExecuteStep(body, options = {}) {
     httpStatus: 200,
     body: {
       ok: true,
+      // Carried so a consumer can never read an advisory pass as enforcement.
+      consensus_gate: { ...consensus, mode: consensus.mode || chairGateMode() },
       builder: builderResult,
       sentry: {
         implementation_status: 'PASS',

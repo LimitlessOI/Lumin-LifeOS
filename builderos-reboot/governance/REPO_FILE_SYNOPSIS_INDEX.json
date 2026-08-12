@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-12T19:21:16.033Z",
+  "generated_at": "2026-08-12T19:28:06.858Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13393,
   "files": [
@@ -21442,9 +21442,9 @@
     {
       "path": "builderos-reboot/DUPLICATION_RECEIPT.json",
       "synopsis": "BuilderOS artifact — DUPLICATION RECEIPT.",
-      "bytes": 1211,
-      "mtime": "2026-08-11T22:12:18.850Z",
-      "indexed_at": "2026-08-11T22:15:50.764Z",
+      "bytes": 972,
+      "mtime": "2026-08-12T19:28:06.858Z",
+      "indexed_at": "2026-08-12T19:28:06.858Z",
       "synopsis_index_only": true
     },
     {
@@ -24850,9 +24850,9 @@
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0004/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
-      "bytes": 45552,
-      "mtime": "2026-07-14T09:22:00.710Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 35055,
+      "mtime": "2026-08-12T19:28:06.858Z",
+      "indexed_at": "2026-08-12T19:28:06.858Z",
       "synopsis_index_only": true
     },
     {
@@ -25056,9 +25056,9 @@
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0006/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
-      "bytes": 3432,
-      "mtime": "2026-07-10T00:20:31.775Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 2629,
+      "mtime": "2026-08-12T19:28:06.858Z",
+      "indexed_at": "2026-08-12T19:28:06.858Z",
       "synopsis_index_only": true
     },
     {
@@ -25078,9 +25078,9 @@
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0006/CONTENT/run-mission.js",
       "synopsis": "Exports loadBlueprintFromRepo — builderos-reboot/MISSIONS/FACTORY-REBOOT-0006/CONTENT/run-mission.js.",
-      "bytes": 2936,
-      "mtime": "2026-07-10T00:25:23.979Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 3008,
+      "mtime": "2026-08-12T19:28:06.858Z",
+      "indexed_at": "2026-08-12T19:28:06.858Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0006/FOUNDER_PACKET.json",
@@ -26807,9 +26807,9 @@
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0029/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
-      "bytes": 7788,
-      "mtime": "2026-07-14T09:22:00.712Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 5937,
+      "mtime": "2026-08-12T19:28:06.858Z",
+      "indexed_at": "2026-08-12T19:28:06.858Z",
       "synopsis_index_only": true
     },
     {
@@ -26836,9 +26836,9 @@
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0029/CONTENT/run-step.js",
       "synopsis": "Exports resolveRepoPath — factory-staging/factory-core/builder/run-step.js.",
-      "bytes": 11174,
-      "mtime": "2026-07-28T23:38:09.022Z",
-      "indexed_at": "2026-07-28T23:44:15.529Z"
+      "bytes": 13423,
+      "mtime": "2026-08-12T19:28:06.858Z",
+      "indexed_at": "2026-08-12T19:28:06.858Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0029/CONTENT/TSOS_FACTORY_INTEGRATION.md",
@@ -43671,9 +43671,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 554351,
-      "mtime": "2026-08-12T05:40:42.202Z",
-      "indexed_at": "2026-08-12T05:40:42.202Z"
+      "bytes": 556839,
+      "mtime": "2026-08-12T19:28:06.858Z",
+      "indexed_at": "2026-08-12T19:28:06.858Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
