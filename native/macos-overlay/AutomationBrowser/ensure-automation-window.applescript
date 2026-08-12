@@ -5,17 +5,25 @@
 -- starts"). Uses Adam's REAL Chrome instance/profile (not a fresh headless
 -- browser) so it inherits his real logged-in sessions.
 --
--- REAL BUG FOUND LIVE: the original design tried positioning this window
--- off-screen (bounds far outside any display). Tested directly -- macOS/
--- Chrome silently clamps the window back to an on-screen position instead,
--- so that approach created a real, visible, cluttering extra window (twice,
--- confirmed via before/after window counts) rather than an invisible one.
--- Both stray windows were found and closed. Switched to `minimized` instead
--- -- a real, reliably-supported window state (not a positioning hack) that
--- actually keeps it out of view, confirmed by testing.
+-- REAL BUG FOUND LIVE (2026-08-11, second one): this script opened ~12
+-- windows and would have kept going forever at one every 5 minutes. The
+-- idempotency check required a window to be BOTH on the automation host AND
+-- minimized, but minimizing depends on a System Events keystroke that was
+-- failing every single run with "AppleEvent timed out (-1712)" — System
+-- Events needs Accessibility permission this agent never reliably had. So
+-- the window it had just created never matched its own liveness check, and
+-- the next tick created another one. A cosmetic step (minimize) was load-
+-- bearing for a correctness decision (does one already exist?), which is the
+-- actual design error.
+--
+-- Fixes: (1) presence is judged by the URL alone — minimize is cosmetic and
+-- may fail freely; (2) minimize is best-effort inside a timeout so a hung
+-- System Events can never stall or fail the run; (3) a hard cap closes
+-- extras, so even a future logic slip self-heals instead of accumulating.
 -- See docs/products/lifeos/communication/COMMUNICATION_SYSTEM_BLUEPRINT.md §21.1.
 
 property automationURL : "https://lumin-web-production-e3a9.up.railway.app/lifeos?native=1&direct_system=1"
+property automationHost : "lumin-web-production-e3a9.up.railway.app"
 
 on run
 	tell application "Google Chrome"
@@ -24,19 +32,29 @@ on run
 			delay 1.5
 		end if
 
-		-- Idempotent: an automation window is one whose tab is already on
-		-- the automation URL's host AND is minimized -- don't create a
-		-- second one on every login/watchdog tick.
+		-- Presence, judged only by the URL. Whether the window is minimized is
+		-- cosmetic and must never decide whether another one gets created.
+		set existing to {}
 		repeat with w in windows
 			try
-				if minimized of w is true then
-					set u to URL of active tab of w
-					if u contains "lumin-web-production-e3a9.up.railway.app" then
-						return "already_running"
-					end if
+				if (URL of active tab of w) contains automationHost then
+					set end of existing to w
 				end if
 			end try
 		end repeat
+
+		-- Self-heal: close any surplus. If this script ever miscounts again,
+		-- the damage is bounded at one window instead of one every 5 minutes.
+		if (count of existing) > 1 then
+			repeat with i from (count of existing) to 2 by -1
+				try
+					close (item i of existing)
+				end try
+			end repeat
+			return "closed_surplus"
+		end if
+
+		if (count of existing) is 1 then return "already_running"
 
 		set newWindow to make new window
 		tell newWindow
@@ -46,14 +64,19 @@ on run
 		delay 1
 	end tell
 
-	-- Direct property-set on `minimized` was tested live and did not stick
-	-- (real bug, found and logged above the first time). The keyboard
-	-- shortcut route, sent via System Events to the now-frontmost window,
-	-- is what Chrome actually expects a minimize request to look like.
-	tell application "System Events"
-		tell process "Google Chrome"
-			keystroke "m" using command down
-		end tell
-	end tell
+	-- Best-effort, and genuinely optional. The window is already correct and
+	-- discoverable without this; keeping it out of sight is a nicety. Wrapped
+	-- in a timeout because the un-permissioned call previously hung for the
+	-- full default AppleEvent window on every single run.
+	try
+		with timeout of 5 seconds
+			tell application "System Events"
+				tell process "Google Chrome"
+					keystroke "m" using command down
+				end tell
+			end tell
+		end timeout
+	end try
+
 	return "created"
 end run
