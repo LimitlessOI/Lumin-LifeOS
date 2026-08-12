@@ -6952,6 +6952,19 @@
       "proof": null,
       "last_attempt_at": "2026-08-12T23:42:22.321Z",
       "last_error": "AIC_GATE_FAILURE"
+    },
+    {
+      "id": "2-create-founder-chair-intent-service",
+      "status": "pending",
+      "target_file": "services/founder-chair-intent.js",
+      "task": "Create founder chair intent service",
+      "spec": "Implement and export classifyFounderChairIntent to categorize founder messages, specifically identifying 'drawer_direct_build' commands for workflow routing instead of generating essay text.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "classifyFounderChairIntent"
+      ]
     }
   ],
   "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
