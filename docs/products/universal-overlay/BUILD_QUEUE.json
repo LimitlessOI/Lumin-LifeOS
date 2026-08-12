@@ -2708,13 +2708,13 @@
     },
     {
       "id": "TALOA-P1-007",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/20240101000007_create_preference_store_table.sql",
       "task": "The file MUST begin with a SQL comment line exactly \"-- @ssot docs/products/universal-overlay/PRODUCT_HOME.md\". This migration creates NO new table. Bind PreferenceStore to the existing `user_preferences` table; no new table is created. Write idempotent SQL that does exactly two things and nothing else: (1) Inside a DO $$ ... $$ block, RAISE EXCEPTION with a clear message if to_regclass('public.user_preferences') IS NULL -- a missing binding target must fail loudly here at migration time instead of silently at runtime. (2) Run COMMENT ON TABLE user_preferences IS '...' recording that this table is the Taloa Phase 1 binding target for this store. Do NOT write CREATE TABLE. Do NOT ALTER or DROP anything. Do NOT insert rows.",
       "spec": "{\n  \"step_id\": \"TALOA-P1-007\",\n  \"purpose\": \"Bind PreferenceStore to the existing `user_preferences` table; no new table is created.\",\n  \"sealed_contract\": {\n    \"tables\": [],\n    \"exports\": [],\n    \"ai_calls\": [],\n    \"endpoints\": [],\n    \"test_assertions\": [],\n    \"factory_signature\": \"\",\n    \"reuses_existing_table\": \"user_preferences\"\n  },\n  \"ssot_tag\": \"docs/products/universal-overlay/PRODUCT_HOME.md\",\n  \"amended_by\": \"architect_store_reuse\"\n}",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [],
       "behavior_assertions": [
         {
@@ -2750,7 +2750,12 @@
         "Do not modify any file other than the target file.",
         "Do not widen any Body capability or authority -- Gate 0 (blueprint 45a) is still open."
       ],
-      "source": "TALOA-OVERLAY-P1-0001 sealed Phase 1"
+      "source": "TALOA-OVERLAY-P1-0001 sealed Phase 1",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-08-12T19:39:20.993Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: ENOENT: no such file or directory, open '/usr/src/app/services/taloa/.factory-import-check-1786563557833-1.mjs'"
     },
     {
       "id": "TALOA-P1-008",
