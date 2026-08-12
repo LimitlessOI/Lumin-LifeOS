@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-12T21:38:58.588Z",
+  "generated_at": "2026-08-12T21:39:15.837Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13425,
   "files": [
@@ -101418,8 +101418,8 @@
       "path": "services/taloa/verification-service.js",
       "synopsis": "Exports createVerificationService — services/taloa/verification-service.js.",
       "bytes": 2339,
-      "mtime": "2026-08-12T20:20:43.628Z",
-      "indexed_at": "2026-08-12T20:20:43.628Z",
+      "mtime": "2026-08-12T21:39:15.837Z",
+      "indexed_at": "2026-08-12T21:39:15.837Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]

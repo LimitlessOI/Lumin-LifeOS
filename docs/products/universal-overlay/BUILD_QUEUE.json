@@ -3065,9 +3065,7 @@
       "last_error": null,
       "demoted": false,
       "demote_reason": null,
-      "blocker_class": null,
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-08-12T21:38:45.505Z"
+      "blocker_class": null
     },
     {
       "id": "TALOA-P1-013",
@@ -3115,6 +3113,8 @@
       ],
       "source": "TALOA-OVERLAY-P1-0001 sealed Phase 1",
       "same_signature_count": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-08-12T21:39:03.929Z",
       "commit_sha": "c2e8f5c81b200eb43bfe94d94e3c4cadb6c5521a"
     },
     {
