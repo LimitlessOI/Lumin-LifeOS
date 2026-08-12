@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-12T19:52:26.515Z",
+  "generated_at": "2026-08-12T19:55:38.116Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13406,
   "files": [
@@ -43734,9 +43734,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 559266,
-      "mtime": "2026-08-12T19:44:16.410Z",
-      "indexed_at": "2026-08-12T19:44:16.410Z"
+      "bytes": 561162,
+      "mtime": "2026-08-12T19:55:38.116Z",
+      "indexed_at": "2026-08-12T19:55:38.116Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -77789,9 +77789,9 @@
     {
       "path": "scripts/lib/ship-main-ancestor.mjs",
       "synopsis": "Prove a ship commit landed on origin/main (false-done guard).",
-      "bytes": 2086,
-      "mtime": "2026-07-30T03:57:08.487Z",
-      "indexed_at": "2026-07-30T22:32:11.913Z",
+      "bytes": 3116,
+      "mtime": "2026-08-12T19:55:38.116Z",
+      "indexed_at": "2026-08-12T19:55:38.116Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -105028,9 +105028,9 @@
     {
       "path": "tests/runtime-fingerprint-main-ancestor.test.js",
       "synopsis": "Tests for Q-001 runtime fingerprint + main-ancestor ship guard.",
-      "bytes": 3281,
-      "mtime": "2026-07-30T03:57:08.491Z",
-      "indexed_at": "2026-07-30T22:32:11.913Z"
+      "bytes": 4091,
+      "mtime": "2026-08-12T19:55:38.116Z",
+      "indexed_at": "2026-08-12T19:55:38.116Z"
     },
     {
       "path": "tests/runtime-modes.test.js",

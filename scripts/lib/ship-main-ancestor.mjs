@@ -29,6 +29,14 @@ export function interpretMainCompareStatus(status) {
 
 /**
  * Verify commitSha is an ancestor of (or equal to) the deploy branch tip via GitHub Compare API.
+ *
+ * `ahead` is retried rather than trusted on first read. The loop commits to main
+ * and compares immediately, and the Compare API can still be serving the
+ * pre-push ref, which reports the brand-new commit as ahead of the branch it is
+ * already on. Confirmed live 2026-08-12: commit 9b227dc9d6 was on origin/main
+ * and had added both target files, yet its own ship step was marked blocked and
+ * routed to rework. A commit that genuinely is not on main stays ahead across
+ * every retry, so the false-done guard keeps its teeth.
  */
 export async function verifyCommitOnMain(commitSha, {
   branch = 'main',
@@ -36,6 +44,9 @@ export async function verifyCommitOnMain(commitSha, {
   repo,
   token,
   fetchFn = fetch,
+  retries = 4,
+  retryDelayMs = 3000,
+  sleepFn = (ms) => new Promise((resolve) => setTimeout(resolve, ms)),
 } = {}) {
   const sha = String(commitSha || '').trim();
   if (!/^[0-9a-f]{7,40}$/i.test(sha)) {
@@ -45,21 +56,30 @@ export async function verifyCommitOnMain(commitSha, {
     return { ok: false, reason: 'ship_commit_not_on_main: missing github credentials', status: null };
   }
   const url = `https://api.github.com/repos/${owner}/${repo}/compare/${encodeURIComponent(branch)}...${encodeURIComponent(sha)}`;
-  const res = await fetchFn(url, {
-    headers: {
-      Authorization: `token ${token}`,
-      Accept: 'application/vnd.github+json',
-      'User-Agent': 'lifeos-ship-main-ancestor',
-    },
-  });
-  if (!res.ok) {
-    const body = await res.text().catch(() => '');
-    return {
-      ok: false,
-      reason: `ship_commit_not_on_main: compare HTTP ${res.status}${body ? ` ${body.slice(0, 120)}` : ''}`,
-      status: null,
-    };
+
+  let last = { ok: false, reason: 'ship_commit_not_on_main: no attempt made', status: null };
+  const attempts = Math.max(1, Number(retries) || 1);
+  for (let attempt = 0; attempt < attempts; attempt += 1) {
+    if (attempt > 0) await sleepFn(retryDelayMs * attempt);
+    const res = await fetchFn(url, {
+      headers: {
+        Authorization: `token ${token}`,
+        Accept: 'application/vnd.github+json',
+        'User-Agent': 'lifeos-ship-main-ancestor',
+      },
+    });
+    if (!res.ok) {
+      const body = await res.text().catch(() => '');
+      last = {
+        ok: false,
+        reason: `ship_commit_not_on_main: compare HTTP ${res.status}${body ? ` ${body.slice(0, 120)}` : ''}`,
+        status: null,
+      };
+      continue;
+    }
+    const json = await res.json().catch(() => ({}));
+    last = interpretMainCompareStatus(json?.status);
+    if (last.ok) return last;
   }
-  const json = await res.json().catch(() => ({}));
-  return interpretMainCompareStatus(json?.status);
+  return { ...last, attempts };
 }

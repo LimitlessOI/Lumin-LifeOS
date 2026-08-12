@@ -92,12 +92,36 @@ test('verifyCommitOnMain uses compare API', async () => {
 });
 
 test('verifyCommitOnMain fails on shadow ahead', async () => {
+  let attempts = 0;
   const v = await verifyCommitOnMain('abcdef0123456789', {
     owner: 'Org',
     repo: 'Repo',
     token: 't',
-    fetchFn: async () => ({ ok: true, async json() { return { status: 'ahead' }; } }),
+    fetchFn: async () => {
+      attempts += 1;
+      return { ok: true, async json() { return { status: 'ahead' }; } };
+    },
+    sleepFn: async () => {},
   });
   assert.equal(v.ok, false);
   assert.match(v.reason, /ship_commit_not_on_main/);
+  assert.ok(attempts > 1, 'a persistent ahead must be re-read before it is trusted');
+});
+
+test('verifyCommitOnMain rides out the compare read-after-write race', async () => {
+  // Live 2026-08-12: a commit already on origin/main compared as `ahead`
+  // immediately after its own push, and two shipped steps were marked blocked.
+  let attempts = 0;
+  const v = await verifyCommitOnMain('abcdef0123456789', {
+    owner: 'Org',
+    repo: 'Repo',
+    token: 't',
+    fetchFn: async () => {
+      attempts += 1;
+      return { ok: true, async json() { return { status: attempts < 3 ? 'ahead' : 'identical' }; } };
+    },
+    sleepFn: async () => {},
+  });
+  assert.equal(v.ok, true);
+  assert.equal(v.status, 'identical');
 });
