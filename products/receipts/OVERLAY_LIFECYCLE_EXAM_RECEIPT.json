@@ -1,6 +1,6 @@
 {
   "schema": "overlay_lifecycle_exam_receipt_v1",
-  "generated_at": "2026-08-12T02:45:35.777Z",
+  "generated_at": "2026-08-12T03:14:04.657Z",
   "produced_by": "scripts/run-overlay-lifecycle-exam.mjs",
   "separation_collapsed": true,
   "separation_note": "This script drives and grades the same run. Mitigation: the graded input is a byte-pinned fixture it never writes, the pin is verified before any stage runs, every stage is a pure function of those bytes, and the authorization stage delegates to a verifier that exports no minter. Reproducible byte-identically via `npm run builderos:overlay:lifecycle`.",
@@ -107,6 +107,17 @@
       {
         "subject": "DEPENDENCY_CYCLE",
         "asks": "dependency cycle: SL-012 -> SL-014 -> SL-013 -> SL-012",
+        "why_it_reached_you": "Found by re-deriving the graph, in a blueprint the legacy ARC gate had already marked ready_to_execute. No allowlisted office move resolves it.",
+        "options_the_system_may_not_choose_between": [
+          "drop an edge",
+          "reorder the steps",
+          "merge the steps"
+        ],
+        "answer_goes_to": "the authoritative blueprint document, before Builder receives it"
+      },
+      {
+        "subject": "UNDECLARED_DEPENDENCY_CYCLE",
+        "asks": "source dependency graph contains a strongly connected component of 4 steps that no office declared: TALOA-P1-012 -> TALOA-P1-013 -> TALOA-P1-014 -> TALOA-P1-015 -> TALOA-P1-012. No builder can start a step that waits on itself.",
         "why_it_reached_you": "Found by re-deriving the graph, in a blueprint the legacy ARC gate had already marked ready_to_execute. No allowlisted office move resolves it.",
         "options_the_system_may_not_choose_between": [
           "drop an edge",
@@ -444,6 +455,17 @@
             "merge the steps"
           ],
           "answer_goes_to": "the authoritative blueprint document, before Builder receives it"
+        },
+        {
+          "subject": "UNDECLARED_DEPENDENCY_CYCLE",
+          "asks": "source dependency graph contains a strongly connected component of 4 steps that no office declared: TALOA-P1-012 -> TALOA-P1-013 -> TALOA-P1-014 -> TALOA-P1-015 -> TALOA-P1-012. No builder can start a step that waits on itself.",
+          "why_it_reached_you": "Found by re-deriving the graph, in a blueprint the legacy ARC gate had already marked ready_to_execute. No allowlisted office move resolves it.",
+          "options_the_system_may_not_choose_between": [
+            "drop an edge",
+            "reorder the steps",
+            "merge the steps"
+          ],
+          "answer_goes_to": "the authoritative blueprint document, before Builder receives it"
         }
       ],
       "allowlist_violations": []
@@ -548,7 +570,7 @@
     {
       "stage": "STRUCTURAL_TRUTH",
       "ok": true,
-      "detail": "2 structural defect(s) found in a blueprint ARC had already marked ready_to_execute: MISSING_FIELD, DEPENDENCY_CYCLE",
+      "detail": "3 structural defect(s) found in a blueprint ARC had already marked ready_to_execute: MISSING_FIELD, DEPENDENCY_CYCLE, UNDECLARED_DEPENDENCY_CYCLE",
       "findings": [
         {
           "id": "MISSING_FIELD",
@@ -559,6 +581,11 @@
           "id": "DEPENDENCY_CYCLE",
           "authority": "architect",
           "detail": "dependency cycle: SL-012 -> SL-014 -> SL-013 -> SL-012"
+        },
+        {
+          "id": "UNDECLARED_DEPENDENCY_CYCLE",
+          "authority": "architect",
+          "detail": "source dependency graph contains a strongly connected component of 4 steps that no office declared: TALOA-P1-012 -> TALOA-P1-013 -> TALOA-P1-014 -> TALOA-P1-015 -> TALOA-P1-012. No builder can start a step that waits on itself."
         }
       ]
     },

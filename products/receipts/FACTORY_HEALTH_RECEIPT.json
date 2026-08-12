@@ -1,9 +1,12 @@
 {
   "schema": "factory_health_receipt_v1",
-  "generated_at": "2026-08-12T02:41:15.671Z",
+  "generated_at": "2026-08-12T03:14:04.486Z",
   "produced_by": "scripts/factory-health-audit.mjs",
   "purpose": "Audit a lane before trusting it with work. Every check executes something; existence is not health.",
   "independent_reproduction_command": "node scripts/factory-health-audit.mjs",
+  "audited_this_run": [
+    "factory-1"
+  ],
   "factories": [
     {
       "factory_id": "factory-1",
@@ -48,7 +51,8 @@
         }
       ],
       "unhealthy_count": 0,
-      "verdict": "HEALTHY"
+      "verdict": "HEALTHY",
+      "checked_at": "2026-08-12T03:14:04.324Z"
     },
     {
       "factory_id": "factory-2",
@@ -93,7 +97,8 @@
         }
       ],
       "unhealthy_count": 0,
-      "verdict": "HEALTHY"
+      "verdict": "HEALTHY",
+      "checked_at": "2026-08-12T03:13:26.627Z"
     }
   ],
   "verdict": "ALL_HEALTHY"

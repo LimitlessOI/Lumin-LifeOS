@@ -1,0 +1,82 @@
+{
+  "schema": "snt_intent_attack_v1",
+  "mission_id": "BUILDEROS-DIRECT-INTAKE-SOCIALMEDIAOS-20260811071706",
+  "seat": "SNT",
+  "simulated_at": "2026-08-11T07:17:06.217Z",
+  "simulated_by": "factory-core/arc/department-simulations.js",
+  "attacks_run": 4,
+  "attacks": [
+    {
+      "claim": "Desired outcome is stated",
+      "pass": false,
+      "failure_scenario": "Builder/ARC invents product scope",
+      "severity": "blocking",
+      "evidence": "missing or ambiguous",
+      "evidence_if_wrong": "Builder/ARC invents product scope",
+      "recommended_action": "Chair resolves in development — return to conversation"
+    },
+    {
+      "claim": "Success is measurable",
+      "pass": false,
+      "failure_scenario": "Alpha claimed without behavioral test",
+      "severity": "blocking",
+      "evidence": "missing or ambiguous",
+      "evidence_if_wrong": "Alpha claimed without behavioral test",
+      "recommended_action": "Chair resolves in development — return to conversation"
+    },
+    {
+      "claim": "Failure mode defined",
+      "pass": false,
+      "failure_scenario": "Silent failure at Alpha",
+      "severity": "blocking",
+      "evidence": "missing or ambiguous",
+      "evidence_if_wrong": "Silent failure at Alpha",
+      "recommended_action": "Chair resolves in development — return to conversation"
+    },
+    {
+      "claim": "Scope boundary present",
+      "pass": true,
+      "failure_scenario": "Scope creep during build",
+      "severity": "advisory",
+      "evidence": "found in FOUNDER_PACKET or INTENT_BASELINE",
+      "recommended_action": "none"
+    }
+  ],
+  "blocking_count": 3,
+  "verdict": "BLOCKED_INTENT_AMBIGUITY",
+  "pass": false,
+  "route_on_fail": "CHAIR",
+  "role_contract": {
+    "seat": "SNT",
+    "contract_version": "2.0A",
+    "title": "Sentinel",
+    "role": "Adversarial review — intent fidelity, drift, translation attack, reality invalidation"
+  },
+  "measurements": [
+    {
+      "metric_id": "intent_measurable",
+      "seat": "SNT",
+      "predicted": "blocked",
+      "confidence": "THINK",
+      "how_we_know_if_wrong": "IDC exit gate or acceptance FAIL on scope drift",
+      "evidence_path": null,
+      "predicted_at": "2026-08-11T07:17:06.217Z",
+      "actual": null,
+      "scored_at": null,
+      "match": null
+    },
+    {
+      "metric_id": "blocking_attack_count",
+      "seat": "SNT",
+      "predicted": 0,
+      "confidence": "KNOW",
+      "how_we_know_if_wrong": "attacks with severity=blocking and pass=false",
+      "evidence_path": null,
+      "predicted_at": "2026-08-11T07:17:06.217Z",
+      "actual": null,
+      "scored_at": null,
+      "match": null
+    }
+  ],
+  "simulation_tier": "COUNCIL_SIM"
+}

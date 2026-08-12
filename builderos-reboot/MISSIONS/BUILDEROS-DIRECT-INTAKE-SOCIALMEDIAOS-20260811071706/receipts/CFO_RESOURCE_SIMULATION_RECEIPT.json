@@ -1,0 +1,38 @@
+{
+  "schema": "cfo_resource_simulation_v1",
+  "mission_id": "BUILDEROS-DIRECT-INTAKE-SOCIALMEDIAOS-20260811071706",
+  "seat": "CFO",
+  "simulated_at": "2026-08-11T07:17:06.217Z",
+  "simulated_by": "factory-core/arc/department-simulations.js",
+  "roi_note": "Greenfield — higher token/time cost",
+  "build_vs_buy": "BUILD",
+  "opportunity_cost": "Per BP_PRIORITY ordering",
+  "priority_rank": null,
+  "resource_burden": "low",
+  "constitutional_exemption_applied": false,
+  "fastest_responsible_path": "greenfield build",
+  "verdict": "priority_unconfirmed",
+  "pass": false,
+  "route_on_fail": "CHAIR",
+  "role_contract": {
+    "seat": "CFO",
+    "contract_version": "2.0A",
+    "title": "Office of Efficiency (Efficiency Officer)",
+    "role": "Resource burden, ROI note, priority fit — never demote constitutional floor on ROI alone. The Efficiency Officer stewards money, tokens, time, founder attention, developer attention, compute, APIs, opportunity cost, timeline, strategic leverage, external tools, vendor options, open-source options, fastest responsible path, and priority-list impact."
+  },
+  "measurements": [
+    {
+      "metric_id": "within_budget",
+      "seat": "CFO",
+      "predicted": "no",
+      "confidence": "THINK",
+      "how_we_know_if_wrong": "Mission blocked on BP or overrun token ledger vs PREDICTION_RECEIPT",
+      "evidence_path": null,
+      "predicted_at": "2026-08-11T07:17:06.217Z",
+      "actual": null,
+      "scored_at": null,
+      "match": null
+    }
+  ],
+  "simulation_tier": "COUNCIL_SIM"
+}

@@ -1,0 +1,30 @@
+{
+  "schema": "schema_decision_artifact_v1",
+  "required_stores": [
+    "AuthorityLedger",
+    "CapsuleStore",
+    "DeviceRegistry",
+    "PreferenceStore",
+    "ReceiptLedger",
+    "TaskStore",
+    "TemplateStore"
+  ],
+  "answers": {},
+  "provenance": {
+    "decided_by": null,
+    "decided_at": null,
+    "source": "awaiting founder answers to the Overlay decision set",
+    "question_set": "docs/products/builderos/FOUNDER_DECISION_SET_OVERLAY.md"
+  },
+  "status": "AWAITING_FOUNDER",
+  "unanswered_stores": [
+    "AuthorityLedger",
+    "CapsuleStore",
+    "DeviceRegistry",
+    "PreferenceStore",
+    "ReceiptLedger",
+    "TaskStore",
+    "TemplateStore"
+  ],
+  "artifact_hash": "804caec42a079c277edbde568fc983d89d18926272835fbfa95b97a993780758"
+}

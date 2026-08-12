@@ -28,7 +28,11 @@ import {
   isKnownFactory,
 } from '../config/factory-registry.js';
 
+import { BLOCKER_ORIGIN } from './plan-topology.mjs';
+import { effectiveIndependence, isCorrelated } from '../config/independence-factors.js';
+
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const HEALTH_RECEIPT = path.join(ROOT, 'products/receipts/FACTORY_HEALTH_RECEIPT.json');
 
 /** A slice is high risk when what it touches is expensive to get wrong. */
 export function sliceRiskClass(slice) {
@@ -76,11 +80,43 @@ function chooseByCapability(slice, factories, profiles, index) {
  * `mode` selects how extra capacity is spent; high-risk slices are upgraded to
  * redundant independent work automatically when more than one factory is available.
  */
+/**
+ * Reads the last health audit. Deliberately reads evidence from disk rather than
+ * accepting a caller's assertion of health: the lane under test cannot be the
+ * witness to its own fitness.
+ */
+export const HEALTH_PROOF_MAX_AGE_MS = 24 * 60 * 60 * 1000;
+
+export function loadHealthProofs(receiptPath = HEALTH_RECEIPT, { now = Date.now() } = {}) {
+  try {
+    const receipt = JSON.parse(fs.readFileSync(receiptPath, 'utf8'));
+    const proofs = {};
+    for (const f of receipt.factories || []) {
+      const checkedAt = f.checked_at || receipt.generated_at;
+      // A lane proves itself when it comes online, not once in its lifetime. An
+      // expired proof is treated as no proof: the workspace may have changed in
+      // any way since, including losing the dependencies it needs to verify work.
+      const stale = checkedAt ? now - Date.parse(checkedAt) > HEALTH_PROOF_MAX_AGE_MS : true;
+      proofs[f.factory_id] = {
+        verdict: stale ? 'STALE_PROOF' : f.verdict,
+        checked_at: checkedAt,
+        failed_checks: stale
+          ? [`health proof is older than ${HEALTH_PROOF_MAX_AGE_MS / 3600000}h — re-run the audit`]
+          : (f.checks || []).filter((c) => !c.healthy).map((c) => c.check),
+      };
+    }
+    return proofs;
+  } catch {
+    return {};
+  }
+}
+
 export function allocate(plan, {
   factories = FACTORIES.filter((f) => f.status === 'active'),
   profiles = [],
   mode = ALLOCATION_MODE.PARALLEL_SPLIT,
   redundancy_for_high_risk = true,
+  healthProofs = loadHealthProofs(),
 } = {}) {
   const slices = Array.isArray(plan?.slices) ? plan.slices : [];
   const assignments = [];
@@ -149,6 +185,27 @@ export function allocate(plan, {
     }
   }
 
+  // Health is a precondition for receiving work, not a property of being
+  // registered. factory-2 existed, held a branch, and would have accepted an
+  // assignment while being unable to run a single test — the "looks operational"
+  // state this gate exists to kill. Fail closed: no proof means not healthy.
+  for (const a of assignments) {
+    for (const id of a.factory_ids) {
+      const proof = healthProofs?.[id];
+      if (!proof || proof.verdict !== 'HEALTHY') {
+        violations.push({
+          id: 'UNHEALTHY_FACTORY_ASSIGNED',
+          slice_id: a.slice_id,
+          factory_id: id,
+          detail: proof
+            ? `factory \`${id}\` last proved ${proof.verdict}: ${(proof.failed_checks || []).join(', ') || 'no passing proof'}`
+            : `factory \`${id}\` has no health proof — a lane must prove it can mutate its own workspace, run its own verification, and fail to touch a peer before it may be given work`,
+          origin: BLOCKER_ORIGIN.ENVIRONMENT,
+        });
+      }
+    }
+  }
+
   return {
     ok: violations.length === 0,
     plan_id: plan?.plan_id ?? null,
@@ -175,13 +232,47 @@ export function compareRedundantResults({ slice_id, results = [] }) {
   }));
   const distinct = new Set(fingerprints.map((f) => f.fingerprint));
 
+  // Independence before consensus. A result produced after seeing the peer is not
+  // a second opinion, it is an echo — and an echo that agrees is the most
+  // convincing worthless evidence available.
+  const contaminated = results.filter((r) => r.saw_peer_before_sealing === true || (r.sealed_at && r.peer_revealed_at && r.sealed_at > r.peer_revealed_at));
+  if (contaminated.length > 0) {
+    return {
+      slice_id,
+      converged: null,
+      confidence: 'void',
+      next_action: 'rerun_with_sealed_independence',
+      detail: `${contaminated.map((r) => r.factory_id).join(', ')} saw a peer result before sealing its own; agreement produced this way carries no information`,
+      required_order: ['freeze evidence', 'independent analysis', 'seal', 'reveal', 'disagreement analysis', 'consensus'],
+    };
+  }
+
+  const independence = effectiveIndependence(
+    results.map((r) => ({ id: r.factory_id, ...(r.independence_profile || {}) }))
+  );
+
   if (distinct.size <= 1) {
+    // Agreement is evidence only to the extent the agreers could have failed
+    // separately. Two lanes sharing a dependency tree, a test suite and a model
+    // lineage produce one result twice.
+    if (isCorrelated(independence)) {
+      return {
+        slice_id,
+        converged: true,
+        confidence: 'not_raised_correlated_failure_risk',
+        next_action: 'seek_independent_verification',
+        effective_perspectives: independence.effective_perspectives,
+        shared_factors: independence.shared_factors,
+        detail: `${results.length} factories agree, but only ${independence.effective_perspectives} effective perspective(s): they share ${independence.shared_factors.join(', ') || 'unknown factors'}. A defect in anything shared is reproduced identically by both, so agreement about it proves nothing.`,
+      };
+    }
     return {
       slice_id,
       converged: true,
       confidence: 'raised',
       next_action: 'accept',
-      detail: `${results.length} factories independently produced the same result`,
+      effective_perspectives: independence.effective_perspectives,
+      detail: `${results.length} factories independently produced the same result across ${independence.effective_perspectives} effective perspectives`,
     };
   }
   return {

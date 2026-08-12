@@ -5,7 +5,10 @@
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { allocate, compareRedundantResults, raisePeerChallenge, sliceRiskClass } from '../scripts/factory-allocation.mjs';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import { allocate, compareRedundantResults, raisePeerChallenge, sliceRiskClass, loadHealthProofs } from '../scripts/factory-allocation.mjs';
 import { compileManufacturingPlan } from '../scripts/manufacturing-plan.mjs';
 import { FACTORIES, ALLOCATION_MODE, FACTORY_HIERARCHY, ISOLATION_RULES, knownFactoryIds } from '../config/factory-registry.js';
 
@@ -136,7 +139,76 @@ test('a factory with a proven concealment is excluded from high-risk work', () =
   assert.deepEqual(result.assignments[0].factory_ids, ['factory-2'], 'a great record does not buy back trustworthiness');
 });
 
-test('INDEPENDENT REDUNDANCY: convergence raises confidence', () => {
+test('convergence raises confidence only when the agreeing lanes were genuinely independent', () => {
+  const out = compareRedundantResults({
+    slice_id: 'SL-001',
+    results: [
+      {
+        factory_id: 'factory-1',
+        output_hash: 'abc',
+        independence_profile: {
+          model_lineage: 'anthropic',
+          prompt_perspective: 'implementer',
+          dependency_tree: 'tree-a',
+          retrieval_sources: ['repo'],
+          test_suite: 'suite-a',
+          runtime: 'node26',
+          architecture_interpretation: 'reading-a',
+          prior_exposure_to_peer: false,
+        },
+      },
+      {
+        factory_id: 'factory-2',
+        output_hash: 'abc',
+        independence_profile: {
+          model_lineage: 'openai',
+          prompt_perspective: 'skeptic',
+          dependency_tree: 'tree-b',
+          retrieval_sources: ['spec'],
+          test_suite: 'suite-b',
+          runtime: 'node26',
+          architecture_interpretation: 'reading-b',
+          prior_exposure_to_peer: false,
+        },
+      },
+    ],
+  });
+  assert.equal(out.converged, true);
+  assert.equal(out.confidence, 'raised');
+  assert.equal(out.next_action, 'accept');
+  // Not 2.0: both lanes still share a runtime, and demanding perfect
+  // orthogonality would make corroboration unreachable for any real pair.
+  assert.ok(out.effective_perspectives > 1.75, `expected near-full independence, got ${out.effective_perspectives}`);
+});
+
+test('agreement between correlated lanes is one failure counted twice, not corroboration', () => {
+  // The live case: factory-2's dependency tree is a symlink to factory-1's, so a
+  // defect in any shared package is reproduced identically in both lanes.
+  const shared = {
+    model_lineage: 'anthropic',
+    prompt_perspective: 'implementer',
+    dependency_tree: 'symlink:factory-1/node_modules',
+    retrieval_sources: ['repo'],
+    test_suite: 'suite-a',
+    runtime: 'node26',
+    architecture_interpretation: 'reading-a',
+    prior_exposure_to_peer: false,
+  };
+  const out = compareRedundantResults({
+    slice_id: 'SL-001',
+    results: [
+      { factory_id: 'factory-1', output_hash: 'abc', independence_profile: shared },
+      { factory_id: 'factory-2', output_hash: 'abc', independence_profile: { ...shared } },
+    ],
+  });
+  assert.equal(out.converged, true);
+  assert.equal(out.confidence, 'not_raised_correlated_failure_risk');
+  assert.equal(out.next_action, 'seek_independent_verification');
+  assert.equal(out.effective_perspectives, 1);
+  assert.ok(out.shared_factors.includes('dependency_tree'));
+});
+
+test('unknown independence counts as shared, so silence cannot buy confidence', () => {
   const out = compareRedundantResults({
     slice_id: 'SL-001',
     results: [
@@ -144,8 +216,82 @@ test('INDEPENDENT REDUNDANCY: convergence raises confidence', () => {
       { factory_id: 'factory-2', output_hash: 'abc' },
     ],
   });
-  assert.equal(out.converged, true);
-  assert.equal(out.next_action, 'accept');
+  assert.equal(out.confidence, 'not_raised_correlated_failure_risk');
+});
+
+test('INDEPENDENCE BEFORE CONSENSUS: a result produced after seeing the peer is void', () => {
+  const out = compareRedundantResults({
+    slice_id: 'SL-001',
+    results: [
+      { factory_id: 'factory-1', output_hash: 'abc' },
+      { factory_id: 'factory-2', output_hash: 'abc', saw_peer_before_sealing: true },
+    ],
+  });
+  assert.equal(out.confidence, 'void');
+  assert.equal(out.next_action, 'rerun_with_sealed_independence');
+  assert.deepEqual(out.required_order.slice(0, 4), ['freeze evidence', 'independent analysis', 'seal', 'reveal']);
+});
+
+test('sealing after the peer was revealed is contamination even if nobody admits it', () => {
+  const out = compareRedundantResults({
+    slice_id: 'SL-001',
+    results: [
+      { factory_id: 'factory-1', output_hash: 'abc', sealed_at: '2026-08-11T10:00:00Z' },
+      { factory_id: 'factory-2', output_hash: 'abc', peer_revealed_at: '2026-08-11T10:01:00Z', sealed_at: '2026-08-11T10:02:00Z' },
+    ],
+  });
+  assert.equal(out.confidence, 'void');
+});
+
+test('a lane with no health proof cannot be given work', () => {
+  const plan = {
+    plan_id: 'MP-HEALTH',
+    slices: [{ slice_id: 'SL-001', steps: ['S1'], depends_on: [], target_files: ['a.js'] }],
+    waves: [{ wave_index: 0, slice_ids: ['SL-001'] }],
+  };
+  const refused = allocate(plan, {
+    factories: [{ factory_id: 'factory-1' }],
+    healthProofs: {},
+  });
+  assert.equal(refused.ok, false);
+  assert.ok(refused.violations.some((v) => v.id === 'UNHEALTHY_FACTORY_ASSIGNED'));
+
+  const allowed = allocate(plan, {
+    factories: [{ factory_id: 'factory-1' }],
+    healthProofs: { 'factory-1': { verdict: 'HEALTHY' } },
+  });
+  assert.ok(!allowed.violations.some((v) => v.id === 'UNHEALTHY_FACTORY_ASSIGNED'));
+});
+
+test('a health proof older than a day is treated as no proof at all', () => {
+  const file = path.join(os.tmpdir(), `health-${Date.now()}.json`);
+  fs.writeFileSync(
+    file,
+    JSON.stringify({
+      generated_at: '2026-08-01T00:00:00Z',
+      factories: [{ factory_id: 'factory-1', verdict: 'HEALTHY', checked_at: '2026-08-01T00:00:00Z', checks: [] }],
+    })
+  );
+  const proofs = loadHealthProofs(file, { now: Date.parse('2026-08-11T00:00:00Z') });
+  assert.equal(proofs['factory-1'].verdict, 'STALE_PROOF');
+
+  const fresh = loadHealthProofs(file, { now: Date.parse('2026-08-01T01:00:00Z') });
+  assert.equal(fresh['factory-1'].verdict, 'HEALTHY');
+});
+
+test('a lane that failed its audit cannot be given work either', () => {
+  const plan = {
+    plan_id: 'MP-HEALTH-2',
+    slices: [{ slice_id: 'SL-001', steps: ['S1'], depends_on: [], target_files: ['a.js'] }],
+    waves: [{ wave_index: 0, slice_ids: ['SL-001'] }],
+  };
+  const out = allocate(plan, {
+    factories: [{ factory_id: 'factory-2' }],
+    healthProofs: { 'factory-2': { verdict: 'DEFECTS_PRESENT', failed_checks: ['can_run_its_own_verification'] } },
+  });
+  assert.equal(out.ok, false);
+  const v = out.violations.find((x) => x.id === 'UNHEALTHY_FACTORY_ASSIGNED');
+  assert.match(v.detail, /can_run_its_own_verification/);
 });
 
 test('disagreement routes to the Consensus Protocol and never to a vote', () => {
@@ -199,7 +345,10 @@ test('an unknown identity can neither challenge nor be challenged', () => {
 test('the architecture reaches N factories without redesign', () => {
   const many = Array.from({ length: 12 }, (_, i) => ({ factory_id: `factory-${i + 1}`, status: 'active' }));
   const plan = compileManufacturingPlan(blueprint);
-  const result = allocate(plan, { factories: many.slice(0, 2), redundancy_for_high_risk: false });
+  // Health is supplied explicitly: this test is about scaling to N lanes, and it
+  // must not depend on which lanes happen to have been audited most recently.
+  const healthProofs = Object.fromEntries(many.map((f) => [f.factory_id, { verdict: 'HEALTHY' }]));
+  const result = allocate(plan, { factories: many.slice(0, 2), redundancy_for_high_risk: false, healthProofs });
   assert.equal(result.ok, true, 'nothing in allocation hardcodes two');
   assert.equal(result.factories.length, 2);
 });

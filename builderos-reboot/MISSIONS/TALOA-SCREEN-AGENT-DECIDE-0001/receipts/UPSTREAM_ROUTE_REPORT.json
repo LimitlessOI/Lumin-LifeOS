@@ -1,0 +1,23 @@
+{
+  "schema": "upstream_route_v1",
+  "mission_id": "TALOA-SCREEN-AGENT-DECIDE-0001",
+  "pushed_by": "ARC",
+  "defect_owner_seat": "Chair",
+  "route_to": "CHAIR",
+  "escalate_to_founder": true,
+  "founder_frame": "Chair failed to synthesize your intent from our conversation — not that you failed to provide it.",
+  "violations": [
+    "department:SNT",
+    "department:CFO",
+    "development:intent_not_clear failure_metric:MISSING,priority_fit:MISSING",
+    "development:INTENT_BASELINE not HANDOFF_READY (missing)",
+    "department:SNT simulation failed (BLOCKED_INTENT_AMBIGUITY)",
+    "department:CFO simulation failed (priority_unconfirmed)"
+  ],
+  "flow": [
+    "ARC → Chair (handoff incomplete)",
+    "Chair → Adam (Chair acknowledges synthesis failure)",
+    "resolve → back down chain"
+  ],
+  "lesson": "Incomplete handoff clarity = Chair failure. Architect pushes upstream."
+}

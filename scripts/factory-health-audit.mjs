@@ -115,10 +115,30 @@ export function auditFactory(factoryId) {
   };
 }
 
+/**
+ * Merge, never replace. Auditing one lane must not erase another lane's proof:
+ * the first version of this wrote the whole receipt from a single-factory run,
+ * which silently revoked factory-2's health and made it ineligible for work.
+ * Each factory's proof therefore carries its own timestamp.
+ */
+function mergeResults(fresh, receiptPath) {
+  const byId = new Map();
+  try {
+    const prior = JSON.parse(fs.readFileSync(receiptPath, 'utf8'));
+    for (const f of prior.factories || []) byId.set(f.factory_id, f);
+  } catch {
+    // No prior receipt is normal on a first run.
+  }
+  for (const f of fresh) byId.set(f.factory_id, f);
+  return [...byId.values()].sort((a, b) => a.factory_id.localeCompare(b.factory_id));
+}
+
 function main() {
   const i = process.argv.indexOf('--factory');
   const ids = i > -1 ? [process.argv[i + 1]] : knownFactoryIds();
-  const results = ids.map(auditFactory);
+  const now = new Date().toISOString();
+  const results = ids.map((id) => ({ ...auditFactory(id), checked_at: now }));
+  const merged = mergeResults(results, path.join(ROOT, RECEIPT_REL));
 
   const receipt = {
     schema: 'factory_health_receipt_v1',
@@ -126,8 +146,9 @@ function main() {
     produced_by: 'scripts/factory-health-audit.mjs',
     purpose: 'Audit a lane before trusting it with work. Every check executes something; existence is not health.',
     independent_reproduction_command: 'node scripts/factory-health-audit.mjs',
-    factories: results,
-    verdict: results.every((r) => r.verdict === 'HEALTHY') ? 'ALL_HEALTHY' : 'DEFECTS_PRESENT',
+    audited_this_run: ids,
+    factories: merged,
+    verdict: merged.every((r) => r.verdict === 'HEALTHY') ? 'ALL_HEALTHY' : 'DEFECTS_PRESENT',
   };
   fs.mkdirSync(path.dirname(path.join(ROOT, RECEIPT_REL)), { recursive: true });
   fs.writeFileSync(path.join(ROOT, RECEIPT_REL), `${JSON.stringify(receipt, null, 2)}\n`);

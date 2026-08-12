@@ -37,6 +37,7 @@ import {
   PLAN_DEFECT,
   PLAN_DEFECT_AUTHORITY,
 } from '../config/manufacturing-plan-schema.js';
+import { topologyReport, accountForSteps, findCycles, STEP_DISPOSITION } from './plan-topology.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -121,7 +122,15 @@ export function computeWaves(nodes) {
 export function compileManufacturingPlan(blueprint, { factories = ['factory-1'] } = {}) {
   const steps = Array.isArray(blueprint?.steps) ? blueprint.steps : [];
   const nodes = steps.map((s) => ({ id: stepId(s), depends_on: stepDependencies(s) }));
-  const { cycle, waves } = computeWaves(nodes);
+  // Schedule the part that resolves and name the part that does not. Returning
+  // an empty schedule on the first cycle reports a mostly-fine graph as totally
+  // unschedulable, which reads identically to a broken scheduler.
+  const topology = topologyReport(nodes, {
+    declaredCycles: blueprint?._meta?.declared_cycles || blueprint?.declared_cycles || [],
+    laneCount: factories.length,
+  });
+  const waves = topology.waves;
+  const cycle = topology.cycles.length ? topology.cycles[0].members : null;
 
   const slices = steps.map((s, i) => {
     const id = stepId(s);
@@ -191,6 +200,14 @@ export function compileManufacturingPlan(blueprint, { factories = ['factory-1'] 
     factory_assignment: { factories, strategy: 'round_robin_placeholder' },
     compiled_by: 'scripts/manufacturing-plan.mjs',
     dependency_cycle: cycle,
+    dependency_cycles: topology.cycles,
+    unschedulable_steps: topology.unschedulable_steps,
+    parallelism: topology.parallelism,
+    step_accounting: accountForSteps({
+      sourceStepIds: nodes.map((n) => n.id),
+      scheduled: waves.flat(),
+      cyclic: topology.unschedulable_steps,
+    }),
   };
   plan.plan_hash = manufacturingPlanHash(plan);
   return plan;
@@ -280,6 +297,60 @@ export function verifyManufacturingPlan(plan, blueprint, { inventionReport = nul
   const { cycle, waves } = computeWaves(sliceNodes);
   if (cycle) {
     flag(PLAN_DEFECT.DEPENDENCY_CYCLE, `dependency cycle: ${cycle.join(' -> ')}`, { cycle });
+  }
+
+  // Independent topological validation against the FROZEN SOURCE, not against the
+  // plan's own normalized slices. A plan derived from a cyclic blueprint can look
+  // internally consistent, which is how a blueprint marked `ready_to_execute`
+  // shipped a knot of five impossible steps.
+  const sourceNodes = steps.map((s) => ({ id: stepId(s), depends_on: stepDependencies(s) }));
+  const declaredCycles = blueprint?._meta?.declared_cycles || blueprint?.declared_cycles || [];
+  const sourceCycles = findCycles(sourceNodes);
+  for (const members of sourceCycles) {
+    const declared = declaredCycles.find(
+      (d) => Array.isArray(d?.members) && d.members.length === members.length && [...d.members].sort().every((m, i) => m === members[i])
+    );
+    if (!declared) {
+      flag(
+        PLAN_DEFECT.UNDECLARED_DEPENDENCY_CYCLE,
+        `source dependency graph contains a strongly connected component of ${members.length} steps that no office declared: ${members.join(' -> ')} -> ${members[0]}. No builder can start a step that waits on itself.`,
+        { members, origin: 'architecture' }
+      );
+    } else if (!declared.iterative_execution_contract) {
+      flag(
+        PLAN_DEFECT.CYCLE_MISSING_ITERATIVE_CONTRACT,
+        `cycle ${members.join(', ')} is declared but carries no iterative execution contract stating how many passes it takes and what makes it terminate`,
+        { members, origin: 'architecture' }
+      );
+    }
+  }
+
+  // If N steps enter planning, N must appear in the report. This is the invariant
+  // that catches an analysis silently omitting whatever it could not classify.
+  const accounting =
+    plan?.step_accounting ||
+    accountForSteps({
+      sourceStepIds: sourceNodes.map((n) => n.id),
+      scheduled: (plan?.waves || []).flatMap((w) => w.slice_ids || []),
+    });
+  if (!accounting.complete) {
+    flag(
+      PLAN_DEFECT.SOURCE_COVERAGE_INCOMPLETE,
+      `plan accounts for ${accounting.accounted_count} of ${accounting.source_step_count} source steps; every step must appear in exactly one of ${Object.values(STEP_DISPOSITION).join(', ')}`,
+      {
+        unaccounted_steps: accounting.unaccounted_steps,
+        double_counted_steps: accounting.double_counted_steps,
+        steps_not_in_source: accounting.steps_not_in_source,
+      }
+    );
+  }
+
+  if (plan?.parallelism && typeof plan.parallelism.expected_speedup_x !== 'number') {
+    flag(
+      PLAN_DEFECT.MISSING_PARALLELISM_METRICS,
+      'plan reports parallelism without an expected speedup — lane count on its own is a vanity metric',
+      { parallelism: plan.parallelism }
+    );
   }
 
   const knownStepIds = new Set(blueprintStepIds);

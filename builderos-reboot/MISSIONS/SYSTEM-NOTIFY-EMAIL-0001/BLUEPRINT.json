@@ -1,0 +1,38 @@
+{
+  "mission_id": "SYSTEM-NOTIFY-EMAIL-0001",
+  "blueprint_id": "SYSTEM-NOTIFY-EMAIL-0001-BP1",
+  "scope": "New routes/system-notify-routes.js: a single requireKey-gated POST /email route that sends a plain-text email via Postmark using process.env.POSTMARK_SERVER_TOKEN and process.env.EMAIL_FROM (falling back to POSTMARK_FROM), never logging or returning the raw token.",
+  "authority": "BPB",
+  "acceptance_command": "npm run system-notify-email:acceptance",
+  "allowed_action_types": ["author_then_write"],
+  "platform_gap_fill": true,
+  "platform_gap_fill_reason": "GAP-FILL: founder-directed live need (Adam, 2026-08-10) to email himself a device-install link across an Apple/Android boundary that has no native share path -- not a pre-planned BP_PRIORITY queue item.",
+  "steps": [
+    {
+      "step_id": "SNE-S01",
+      "phase_id": "P0",
+      "title": "Create routes/system-notify-routes.js",
+      "target_file": "routes/system-notify-routes.js",
+      "target_files": ["routes/system-notify-routes.js"],
+      "action_type": "author_then_write",
+      "patch_mode": false,
+      "task": "The file MUST begin with a JSDoc block comment containing a line exactly '@ssot docs/products/universal-overlay/PRODUCT_HOME.md' (mandatory, checked by a commit gate). Create a new Express route module exporting a function createSystemNotifyRoutes({ requireKey, logger }) that returns an express.Router(). The router has one route: router.post('/email', requireKey, async (req, res) => {...}). Handler behavior: read { to, subject, text } from req.body. Read token = process.env.POSTMARK_SERVER_TOKEN and from = process.env.EMAIL_FROM || process.env.POSTMARK_FROM, trimmed. If token or from is missing, respond 503 { ok:false, error:'email not configured' } -- do NOT include the token value anywhere in the response. If to, subject, or text is missing/empty, respond 400 { ok:false, error:'to, subject, and text are required' }. Otherwise POST to https://api.postmarkapp.com/email using fetch, headers 'X-Postmark-Server-Token': token and 'Content-Type':'application/json', body JSON { From: from, To: to, Subject: subject, TextBody: text, MessageStream: 'outbound' }. Parse the JSON response; if the Postmark response is not ok, respond 502 { ok:false, error: (Postmark's Message field or the HTTP status) } -- never include the token in this error. If Postmark succeeds, respond 200 { ok:true, message_id: (the Postmark response's MessageID field) }. Wrap the whole handler body in try/catch; on a caught exception call logger?.error?.({ err: err.message }, '[SYSTEM-NOTIFY] send failed') if logger is provided, then respond 500 { ok:false, error: err.message }. Default export an object { createSystemNotifyRoutes }. No other routes, no other files.",
+      "authoring": { "tiers": ["deepseek", "groq_llama", "mistral_free"] },
+      "assertion_spec": {
+        "expected_exports": ["createSystemNotifyRoutes"],
+        "file_contains": ["POSTMARK_SERVER_TOKEN", "MessageStream"]
+      },
+      "behavior_assertions": [
+        { "type": "exports_smoke", "target": "routes/system-notify-routes.js" },
+        { "type": "file_contains", "target": "routes/system-notify-routes.js", "substring": "POSTMARK_SERVER_TOKEN" },
+        { "type": "file_contains", "target": "routes/system-notify-routes.js", "substring": "requireKey" }
+      ],
+      "sandbox_boundary": "routes/**",
+      "authority_owner": "Builder",
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "non_goals": ["editing any other file", "mounting the route (handled separately)", "logging or returning the raw token"],
+      "dependencies": []
+    }
+  ],
+  "blueprint_status": "handoff_ready"
+}

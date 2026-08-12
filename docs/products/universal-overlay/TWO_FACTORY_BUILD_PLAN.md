@@ -10,6 +10,19 @@ Generated 2026-08-12. Conductor decomposition, Architect fidelity check, Builder
 
 One lane: 11 units. Two lanes: 8 units. 1.38x, floored at 5 by the dependency chain — extra builders cannot beat the critical path.
 
+Maximum theoretical parallelism 7 · effective parallelism 1.375 · critical-path floor 5 · lane utilization 0.688. Units are steps, not minutes: this is the shape of the dependency graph, not a duration estimate.
+
+## Where the blockers actually come from
+
+Reported per blocked slice so nobody can later attribute a blueprint that cannot execute to slow factories.
+
+- **founder decision** — 11 slice(s)
+- **architecture** — 5 slice(s)
+
+Every one of the 16 source steps is accounted for exactly once (coverage invariant holds): 11 blocked, 5 cyclic.
+
+Schema authority: **AWAITING_FOUNDER** (artifact `804caec42a07`). Both lanes must build against this one frozen artifact, so that a disagreement between them can be read as builder divergence rather than two different readings of the same silence.
+
 ## What can be built the moment the blueprint is answered
 
 0 of 16 slices are buildable now; 16 wait on the founder decision set.
@@ -50,5 +63,5 @@ One lane: 11 units. Two lanes: 8 units. 1.38x, floored at 5 by the dependency ch
 
 Each wave is an integration point: nothing from wave N+1 starts until every slice in wave N has landed and verified. High-risk slices are given to both lanes independently — convergence raises confidence, divergence goes to the Consensus Protocol rather than a vote.
 
-**Authorization:** withheld — MISSING_FIELD, DEPENDENCY_CYCLE, BLUEPRINT_DEFECTS_OUTSTANDING, MISSING_CONSENSUS_SEAL, MISSING_CONSENSUS_SEAL, MISSING_CONSENSUS_SEAL
+**Authorization:** withheld — MISSING_FIELD, DEPENDENCY_CYCLE, UNDECLARED_DEPENDENCY_CYCLE, BLUEPRINT_DEFECTS_OUTSTANDING, MISSING_CONSENSUS_SEAL, MISSING_CONSENSUS_SEAL, MISSING_CONSENSUS_SEAL
 

@@ -1,0 +1,26 @@
+{
+  "schema": "chair_handoff_failure_v1",
+  "mission_id": "BUILDEROS-DIRECT-INTAKE-SOCIALMEDIAOS-20260811071706",
+  "recorded_at": "2026-08-11T07:17:06.223Z",
+  "chair_failed": true,
+  "pushed_by": "ARC",
+  "defect_owner_seat": "Chair",
+  "violations": [
+    "department:SNT",
+    "department:CFO",
+    "development:FOUNDER_PACKET missing Problem",
+    "development:FOUNDER_PACKET missing Desired Outcome",
+    "development:FOUNDER_PACKET missing FOUNDER SUCCESS TEST",
+    "development:intent_not_clear outcome:MISSING,pain:MISSING,value:MISSING,success_metric:MISSING,failure_metric:MISSING,unacceptable_result:MISSING,ownership:MISSING,priority_fit:MISSING",
+    "development:INTENT_BASELINE not HANDOFF_READY (missing)",
+    "department:SNT simulation failed (BLOCKED_INTENT_AMBIGUITY)",
+    "department:CFO simulation failed (priority_unconfirmed)"
+  ],
+  "escalate_to_founder": true,
+  "founder_message": "Chair failed to synthesize your intent from our conversation — not that you failed to provide it.",
+  "next": [
+    "ARC → Chair (handoff incomplete)",
+    "Chair → Adam (Chair acknowledges synthesis failure)",
+    "resolve → back down chain"
+  ]
+}

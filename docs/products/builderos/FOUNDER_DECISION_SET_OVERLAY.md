@@ -7,7 +7,7 @@ system could not lawfully answer itself, collected in one pass. Everything the
 Architect and Conductor could resolve within their jurisdiction was already
 resolved before this list was produced.
 
-**9 open.** Answering them unblocks manufacturing; no other input is needed.
+**10 open.** Answering them unblocks manufacturing; no other input is needed.
 
 ## 1. TaskStore
 
@@ -92,6 +92,16 @@ resolved before this list was produced.
 ## 9. DEPENDENCY_CYCLE
 
 **Question:** dependency cycle: SL-012 -> SL-014 -> SL-013 -> SL-012
+
+**Why it reached you:** Found by re-deriving the graph, in a blueprint the legacy ARC gate had already marked ready_to_execute. No allowlisted office move resolves it.
+
+**The system may not choose between:** drop an edge; reorder the steps; merge the steps
+
+**Your answer goes to:** the authoritative blueprint document, before Builder receives it
+
+## 10. UNDECLARED_DEPENDENCY_CYCLE
+
+**Question:** source dependency graph contains a strongly connected component of 4 steps that no office declared: TALOA-P1-012 -> TALOA-P1-013 -> TALOA-P1-014 -> TALOA-P1-015 -> TALOA-P1-012. No builder can start a step that waits on itself.
 
 **Why it reached you:** Found by re-deriving the graph, in a blueprint the legacy ARC gate had already marked ready_to_execute. No allowlisted office move resolves it.
 

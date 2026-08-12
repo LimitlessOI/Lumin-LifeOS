@@ -19,6 +19,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { compileManufacturingPlan, verifyManufacturingPlan } from './manufacturing-plan.mjs';
+import { scheduleWaves, parallelismMetrics, accountForSteps, BLOCKER_ORIGIN } from './plan-topology.mjs';
+import { verifySchemaAuthority } from './schema-decision-artifact.mjs';
 import { sealManufacturingPlan } from './seal-manufacturing-plan.mjs';
 import { allocate } from './factory-allocation.mjs';
 import { REQUIRED_CONSENSUS_OFFICES } from '../config/manufacturing-plan-schema.js';
@@ -42,26 +44,6 @@ function steps0(blueprint) {
   return (blueprint.steps || []).map((s) => ({ id: s.id, deps: stepDependencies(s), step: s }));
 }
 
-/**
- * Kahn's algorithm, stopped honestly. Whatever still has unmet dependencies when
- * no further progress is possible is the knot — reported, not silently dropped.
- */
-function scheduleWhatWeCan(nodes) {
-  const remaining = new Map(nodes.map((n) => [n.id, new Set(n.deps)]));
-  const done = new Set();
-  const waves = [];
-  for (;;) {
-    const ready = [...remaining.entries()].filter(([, deps]) => [...deps].every((d) => done.has(d))).map(([id]) => id);
-    if (ready.length === 0) break;
-    waves.push(ready);
-    for (const id of ready) {
-      remaining.delete(id);
-      done.add(id);
-    }
-  }
-  return { waves, unschedulable: [...remaining.keys()] };
-}
-
 export function planTwoFactoryBuild() {
   const { session, blueprint } = loadBlueprint();
   const factories = activeFactories().map((f) => f.factory_id);
@@ -75,7 +57,7 @@ export function planTwoFactoryBuild() {
   // The compiler refuses to schedule a cyclic graph, which is correct but leaves
   // nothing to look at. Schedule the part that IS resolvable and name the knot,
   // so the founder sees the real parallel plan alongside the real blocker.
-  const schedule = scheduleWhatWeCan(steps0(blueprint));
+  const schedule = scheduleWaves(steps0(blueprint).map((n) => ({ id: n.id, depends_on: n.deps })));
   const allocation = allocate(plan, { factories, redundancy_for_high_risk: true });
 
   // ARCHITECT: does this decomposition still describe the specified system?
@@ -122,8 +104,21 @@ export function planTwoFactoryBuild() {
       factories: assignment?.factory_ids ?? [],
       mode: assignment?.mode ?? null,
       buildable_now: !isBlocked(stepId),
+      // Blocked-by-Origin: without this, a blueprint that cannot execute at all
+      // is indistinguishable from slow factories, and the factories get blamed.
+      blocker_origin: schedule.unschedulable.includes(stepId)
+        ? BLOCKER_ORIGIN.ARCHITECTURE
+        : isBlocked(stepId)
+          ? BLOCKER_ORIGIN.FOUNDER_DECISION
+          : null,
     };
   });
+
+  const blockedByOrigin = sliceRows.reduce((acc, row) => {
+    if (!row.blocker_origin) return acc;
+    acc[row.blocker_origin] = (acc[row.blocker_origin] || 0) + 1;
+    return acc;
+  }, {});
 
   // BUILDER: manufacturability, then all three seal.
   let sealed = plan;
@@ -138,10 +133,24 @@ export function planTwoFactoryBuild() {
   const authorization = verifyManufacturingPlan(sealed, blueprint, { inventionReport });
 
   // Honest speedup: dependencies set the floor, not head count.
-  const scheduled = schedule.waves.flat().length;
-  const criticalPath = schedule.waves.length;
-  const widest = schedule.waves.length ? Math.max(...schedule.waves.map((w) => w.length)) : 0;
-  const withTwo = schedule.waves.reduce((n, w) => n + Math.ceil(w.length / factories.length), 0);
+  const metrics = parallelismMetrics(schedule.waves, factories.length);
+  const scheduled = metrics.scheduled_steps;
+  const criticalPath = metrics.critical_path_floor;
+  const widest = metrics.max_theoretical_parallelism;
+  const withTwo = metrics.expected_makespan_units;
+
+  // If 16 steps enter planning, 16 must appear in the report.
+  const stepOfSlice = (sliceId) => plan.slices.find((sl) => sl.slice_id === sliceId)?.steps?.[0];
+  const accounting = accountForSteps({
+    sourceStepIds: steps.map((st) => st.id),
+    scheduled: sliceRows.filter((r) => r.buildable_now && !schedule.unschedulable.includes(stepOfSlice(r.slice_id))).map((r) => stepOfSlice(r.slice_id)),
+    blocked: sliceRows.filter((r) => r.blocker_origin === BLOCKER_ORIGIN.FOUNDER_DECISION).map((r) => stepOfSlice(r.slice_id)),
+    cyclic: schedule.unschedulable,
+  });
+
+  const schemaAuthority = verifySchemaAuthority({
+    requiredStores: inventionReport.defects.filter((d) => d.id === 'INVENTED_SQL_SCHEMA').map((d) => d.table),
+  });
 
   return {
     ok: true,
@@ -161,6 +170,15 @@ export function planTwoFactoryBuild() {
         withTwo === scheduled
           ? 'No speedup available: the graph is a chain, so a second builder waits. Splitting the blueprint differently is the only way to parallelize it.'
           : `${(scheduled / withTwo).toFixed(2)}x, floored at ${criticalPath} by the dependency chain — extra builders cannot beat the critical path.`,
+    },
+    parallelism: metrics,
+    blocked_by_origin: blockedByOrigin,
+    step_accounting: accounting,
+    schema_authority: {
+      ok: schemaAuthority.ok,
+      status: schemaAuthority.artifact?.status ?? 'NO_ARTIFACT',
+      artifact_hash: schemaAuthority.artifact?.artifact_hash ?? null,
+      defects: schemaAuthority.defects.map((d) => d.id),
     },
     allocation_violations: allocation.violations,
     seal_errors: sealErrors,
@@ -185,6 +203,18 @@ function renderMarkdown(r) {
     '## Speed',
     '',
     `One lane: ${r.speedup.one_factory_units} units. Two lanes: ${r.speedup.two_factory_units} units. ${r.speedup.note}`,
+    '',
+    `Maximum theoretical parallelism ${r.parallelism.max_theoretical_parallelism} · effective parallelism ${r.parallelism.effective_parallelism} · critical-path floor ${r.parallelism.critical_path_floor} · lane utilization ${r.parallelism.lane_utilization}. Units are steps, not minutes: this is the shape of the dependency graph, not a duration estimate.`,
+    '',
+    '## Where the blockers actually come from',
+    '',
+    'Reported per blocked slice so nobody can later attribute a blueprint that cannot execute to slow factories.',
+    '',
+    ...Object.entries(r.blocked_by_origin).map(([origin, count]) => `- **${origin.replace(/_/g, ' ')}** — ${count} slice(s)`),
+    '',
+    `Every one of the ${r.step_accounting.source_step_count} source steps is accounted for exactly once (${r.step_accounting.complete ? 'coverage invariant holds' : 'COVERAGE INCOMPLETE'}): ${Object.entries(r.step_accounting.counts).filter(([, n]) => n > 0).map(([k, n]) => `${n} ${k}`).join(', ')}.`,
+    '',
+    `Schema authority: **${r.schema_authority.status}**${r.schema_authority.artifact_hash ? ` (artifact \`${r.schema_authority.artifact_hash.slice(0, 12)}\`)` : ''}. Both lanes must build against this one frozen artifact, so that a disagreement between them can be read as builder divergence rather than two different readings of the same silence.`,
     '',
     '## What can be built the moment the blueprint is answered',
     '',
@@ -249,6 +279,9 @@ function main() {
         buildable_now: r.buildable_now,
         blocked: r.blocked_on_founder_answers,
         speedup: r.speedup,
+        blocked_by_origin: r.blocked_by_origin,
+        step_accounting_complete: r.step_accounting.complete,
+        schema_authority: r.schema_authority,
         authorized: r.authorized,
         blocking: r.blocking_defects,
         plan: PLAN_MD,

@@ -714,3 +714,13 @@ The question "why can't it fix itself" had a concrete answer. Detection, classif
 Found while writing the end-to-end test: a slice with no acceptance criterion cannot be sealed. Correct — consenting to work with no definition of done is consenting to nothing — and now locked.
 
 **Next:** answering the 9 questions in `FOUNDER_DECISION_SET_OVERLAY.md` is the only thing standing between the Overlay and manufacturing.
+
+## 2026-08-11 (late) — Chair directives enforced; two lanes proven correlated
+
+The two-factory run produced three classes of truth and the Chair converted them into eight mechanical directives, all now enforced with tests: parallelism reported as makespan before work begins; factory health a fail-closed precondition for receiving work; dependency topology validated independently from the frozen source with Tarjan (SCC > 1 fails authorization unless declared with an iterative execution contract); a source-coverage invariant that accounts for every step exactly once; critical-path-first dispatch; a hashed Schema Decision Artifact so both lanes consume one frozen specification; cycle authority reserved to the Architect; and Blocked-by-Origin on every blocked slice.
+
+The Overlay now reports its blockers by origin: 11 founder decision, 5 architecture, zero manufacturing, environment, tooling or builder execution. Nothing is blocked on factory capacity.
+
+Most consequential finding: the Chair's research on diversity collapse says agreement is evidence only in proportion to independence — and factory-2's dependency tree is a symlink to factory-1's, so the two lanes score 1.0 effective perspectives and their convergence no longer raises confidence. Recorded rather than hidden.
+
+Next: the seven store contracts and the cycle decision are both founder/architecture calls. Both lanes start on wave 1's seven parallel slices the moment they land.

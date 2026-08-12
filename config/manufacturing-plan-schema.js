@@ -68,6 +68,9 @@ export const REQUIRED_PLAN_FIELDS = Object.freeze([
   'collision_risks',
   'factory_assignment',
   'terminology_version',
+  // Reported before work begins, so lane count can never be presented as speed.
+  'parallelism',
+  'step_accounting',
 ]);
 
 export const REQUIRED_SLICE_FIELDS = Object.freeze([
@@ -106,6 +109,11 @@ export const PLAN_DEFECT = Object.freeze({
   BLUEPRINT_DEFECTS_OUTSTANDING: 'BLUEPRINT_DEFECTS_OUTSTANDING',
   CONTRADICTORY_DEPENDENCY_KEYS: 'CONTRADICTORY_DEPENDENCY_KEYS',
   UNASSIGNED_SLICE: 'UNASSIGNED_SLICE',
+  UNDECLARED_DEPENDENCY_CYCLE: 'UNDECLARED_DEPENDENCY_CYCLE',
+  CYCLE_MISSING_ITERATIVE_CONTRACT: 'CYCLE_MISSING_ITERATIVE_CONTRACT',
+  SOURCE_COVERAGE_INCOMPLETE: 'SOURCE_COVERAGE_INCOMPLETE',
+  MISSING_PARALLELISM_METRICS: 'MISSING_PARALLELISM_METRICS',
+  UNHEALTHY_FACTORY_ASSIGNED: 'UNHEALTHY_FACTORY_ASSIGNED',
 });
 
 /** Which office must resolve each defect. A flag with no owner is not routable. */
@@ -129,4 +137,12 @@ export const PLAN_DEFECT_AUTHORITY = Object.freeze({
   [PLAN_DEFECT.BLUEPRINT_DEFECTS_OUTSTANDING]: 'architect',
   [PLAN_DEFECT.CONTRADICTORY_DEPENDENCY_KEYS]: 'architect',
   [PLAN_DEFECT.UNASSIGNED_SLICE]: 'conductor',
+  // Breaking a cycle means deciding which dependency is conceptually wrong or
+  // which step needs decomposition. That is architecture, not implementation, so
+  // no builder may resolve it by choosing an order that happens to run.
+  [PLAN_DEFECT.UNDECLARED_DEPENDENCY_CYCLE]: 'architect',
+  [PLAN_DEFECT.CYCLE_MISSING_ITERATIVE_CONTRACT]: 'architect',
+  [PLAN_DEFECT.SOURCE_COVERAGE_INCOMPLETE]: 'conductor',
+  [PLAN_DEFECT.MISSING_PARALLELISM_METRICS]: 'conductor',
+  [PLAN_DEFECT.UNHEALTHY_FACTORY_ASSIGNED]: 'conductor',
 });
