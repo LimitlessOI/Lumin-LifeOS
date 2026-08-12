@@ -84,6 +84,7 @@ function esmTask(step) {
   const factory = exportedFactoryName(step);
   const methods = methodsFromAssertions(step);
   const signature = step.contract?.factory_signature;
+  const tables = (step.contract?.tables || []).map((t) => t?.name).filter(Boolean);
   return [
     `The file MUST begin with a JSDoc block comment containing a line exactly "@ssot ${SSOT}" (mandatory, enforced by a commit gate).`,
     `${step.purpose}`,
@@ -92,7 +93,9 @@ function esmTask(step) {
       ? `The object it returns MUST expose these methods, each a real async function, not a stub or a thrown "not implemented": ${methods.join(', ')}.`
       : `The object it returns MUST expose the behaviour described above as named async methods.`,
     `Constraints: ES module syntax (import/export, no require); no top-level side effects, no timers started at import, no network calls, and no AI/model calls;`,
-    `all database access goes through the injected pool parameter and no other client;`,
+    tables.length
+      ? `SQL is allowed only against these sealed tables: ${tables.join(', ')} — all of it through the injected pool, no other client.`
+      : `Sealed contract tables is []. Do not query, CREATE, or name any SQL table. Use only injected collaborators. Inventing a table is a grounding failure.`,
     `validate required constructor dependencies up front and throw a clear Error naming the missing one;`,
     `every method must return a plain serialisable object, never undefined;`,
     `depend only on node builtins and the injected dependencies -- add no new npm packages.`,

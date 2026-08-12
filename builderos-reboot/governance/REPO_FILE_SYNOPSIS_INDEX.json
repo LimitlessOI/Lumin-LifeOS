@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-12T20:06:27.497Z",
+  "generated_at": "2026-08-12T20:17:16.800Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13412,
   "files": [
@@ -31169,9 +31169,9 @@
     {
       "path": "builderos-reboot/MISSIONS/TALOA-OVERLAY-P1-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
-      "bytes": 44381,
-      "mtime": "2026-08-12T19:21:16.033Z",
-      "indexed_at": "2026-08-12T19:21:16.033Z",
+      "bytes": 44831,
+      "mtime": "2026-08-12T20:17:16.800Z",
+      "indexed_at": "2026-08-12T20:17:16.800Z",
       "synopsis_index_only": true
     },
     {
@@ -43748,9 +43748,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 561162,
-      "mtime": "2026-08-12T19:55:38.116Z",
-      "indexed_at": "2026-08-12T19:55:38.116Z"
+      "bytes": 562761,
+      "mtime": "2026-08-12T20:17:16.800Z",
+      "indexed_at": "2026-08-12T20:17:16.800Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -66118,9 +66118,9 @@
     {
       "path": "factory-staging/factory-core/builder/authoring.js",
       "synopsis": "STEP 4 — codegen as an UNTRUSTED authoring sub-step (the \"dumb pipe\").",
-      "bytes": 10807,
-      "mtime": "2026-07-28T17:47:22.516Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 11516,
+      "mtime": "2026-08-12T20:17:16.800Z",
+      "indexed_at": "2026-08-12T20:17:16.800Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -77371,9 +77371,9 @@
     {
       "path": "scripts/generate-taloa-phase1-mission.mjs",
       "synopsis": "Turn the sealed Taloa Phase 1 blueprint into an executable factory mission.",
-      "bytes": 10372,
-      "mtime": "2026-08-12T19:21:16.033Z",
-      "indexed_at": "2026-08-12T19:21:16.033Z",
+      "bytes": 10684,
+      "mtime": "2026-08-12T20:17:16.800Z",
+      "indexed_at": "2026-08-12T20:17:16.800Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md",
         "${SSOT}\".`;"
@@ -96195,9 +96195,9 @@
     {
       "path": "services/governed-autonomous-shipping-loop.js",
       "synopsis": "STEP 5g — the governed AUTONOMOUS shipping loop. When the STEP 5a",
-      "bytes": 64421,
-      "mtime": "2026-08-03T03:25:34.128Z",
-      "indexed_at": "2026-08-03T03:27:04.922Z",
+      "bytes": 64831,
+      "mtime": "2026-08-12T20:17:16.800Z",
+      "indexed_at": "2026-08-12T20:17:16.800Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

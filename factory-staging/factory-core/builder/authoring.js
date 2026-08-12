@@ -16,6 +16,7 @@
  * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 import crypto from 'node:crypto';
+import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import { stepRequiresBehaviorProof } from '../sentry/behavior-assertions.js';
 import { normalizeCommonJsToEsm } from '../bpb/author-assertions.js';
@@ -69,6 +70,17 @@ export function extractContent(raw) {
  * @param {object} step
  * @param {{ generate?: Function } | null} codegenRunner injected at route boundary
  */
+function fileIsOnHead(target_file) {
+  try {
+    execFileSync('git', ['cat-file', '-e', `HEAD:${String(target_file).replace(/\\/g, '/')}`], {
+      stdio: 'ignore',
+    });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 function existingFileSatisfiesContains(target_file, needles) {
   if (!Array.isArray(needles) || needles.length === 0) return null;
   let existing = '';
@@ -102,8 +114,13 @@ export async function runAuthoring(step, codegenRunner) {
     ...(Array.isArray(step?.file_contains) ? step.file_contains : []),
     ...(Array.isArray(step?.assertion_spec?.file_contains) ? step.assertion_spec.file_contains : []),
   ];
+  // Confirmed live 2026-08-12: ship-queue wrote strategy-router-service.js to the
+  // ephemeral Railway disk, grounding then failed (invented `resources` table),
+  // and the next attempt reused that leftover as pre_existing_disk because
+  // file_contains still matched. An uncommitted file is not a proven artifact.
+  // A step with last_error is a rewrite request, not a skip.
   const preSatisfied = existingFileSatisfiesContains(target_file, needles);
-  if (preSatisfied) {
+  if (preSatisfied && !step.last_error && fileIsOnHead(target_file)) {
     return {
       ...base,
       ok: true,

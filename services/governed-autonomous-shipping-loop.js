@@ -338,6 +338,15 @@ function deriveFailureReason(body) {
     if (inner.sentry.implementation_status) return `SENTRY_FAILED: ${inner.sentry.implementation_status}`;
   }
 
+  const grounding = Array.isArray(body.grounding_failures) ? body.grounding_failures
+    : Array.isArray(inner.grounding_failures) ? inner.grounding_failures
+    : [];
+  if (grounding.length) {
+    const first = grounding.find((g) => g && g.ok === false) || grounding[0];
+    const reason = first?.reason || first?.status || 'GROUNDING_FAIL';
+    return `GROUNDING_FAIL: ${String(reason).slice(0, 300)}`;
+  }
+
   if (inner.status) return String(inner.status);
   if (inner.error) return String(inner.error);
   if (inner.reason) return String(inner.reason);
