@@ -281,14 +281,14 @@ test('checkSystemStillWorking: healthy signals produce no finding', () => {
   assert.deepEqual(findings, []);
 });
 
-test('annotateFixerFailures: a still-open finding older than 15m emits fixer_failed', () => {
-  const now = Date.parse('2026-08-12T22:30:00Z');
+test('annotateFixerFailures: still-open at 5m emits fixer_failed (kick the fixer, do not wait 15m)', () => {
+  const now = Date.parse('2026-08-12T22:06:00Z');
   const findings = [{
     id: 'governed_loop_stale',
     check: 'system_still_working',
     summary: 'Governed shipping lastTick is older than 10 minutes — factory-1 is not manufacturing.',
     proposed_solution: 'Reschedule the in-process watchdog.',
-    detected_at: '2026-08-12T22:30:00Z',
+    detected_at: '2026-08-12T22:06:00Z',
   }];
   const queue = {
     findings: [{
@@ -304,8 +304,30 @@ test('annotateFixerFailures: a still-open finding older than 15m emits fixer_fai
   assert.match(out[1].proposed_solution, /fix the fixer/);
 });
 
-test('annotateFixerFailures: a fresh open finding does not emit fixer_failed yet', () => {
-  const now = Date.parse('2026-08-12T22:05:00Z');
+test('annotateFixerFailures: still-open at 10m also emits fixer_unrepaired (escalate, cap)', () => {
+  const now = Date.parse('2026-08-12T22:11:00Z');
+  const findings = [{
+    id: 'governed_loop_stale',
+    check: 'system_still_working',
+    summary: 'Governed shipping lastTick is older than 10 minutes — factory-1 is not manufacturing.',
+    proposed_solution: 'Reschedule the in-process watchdog.',
+  }];
+  const queue = {
+    findings: [{
+      id: 'governed_loop_stale',
+      queue_status: 'open',
+      first_detected_at: '2026-08-12T22:00:00Z',
+    }],
+  };
+  const out = annotateFixerFailures(findings, queue, { now });
+  assert.equal(out.length, 3);
+  assert.equal(out[1].id, 'fixer_failed:governed_loop_stale');
+  assert.equal(out[2].id, 'fixer_unrepaired:governed_loop_stale');
+  assert.equal(out[2].check, 'fixer_unrepaired');
+});
+
+test('annotateFixerFailures: a fresh open finding under 5m does not emit fixer_failed yet', () => {
+  const now = Date.parse('2026-08-12T22:04:00Z');
   const findings = [{
     id: 'governed_loop_stale',
     check: 'system_still_working',

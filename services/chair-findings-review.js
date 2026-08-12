@@ -36,7 +36,7 @@ const AUTO_APPROVABLE_CHECKS = new Set(['ci_health', 'workflow_health', 'system_
 // competitive_gap (2026-07-19): real web-research findings about what
 // competitors do — always a product-direction call, same as product_backlog,
 // never auto-approved regardless of how the research reads.
-const FOUNDER_ESCALATION_CHECKS = new Set(['product_backlog', 'competitive_gap', 'founder_stop']);
+const FOUNDER_ESCALATION_CHECKS = new Set(['product_backlog', 'competitive_gap', 'founder_stop', 'fixer_unrepaired']);
 
 /**
  * Reviews ONE finding. Pure — no I/O, fully unit-testable.

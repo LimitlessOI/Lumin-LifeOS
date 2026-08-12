@@ -51,6 +51,17 @@ test('reviewFinding: founder_stop (FOUNDER_STOP / PAUSE_AUTONOMY) escalates — 
   assert.equal(result.chair_status, 'escalate_to_founder');
 });
 
+test('reviewFinding: fixer_unrepaired (still broken at 10m) escalates to the founder', () => {
+  const result = reviewFinding({
+    id: 'fixer_unrepaired:governed_loop_stale',
+    check: 'fixer_unrepaired',
+    severity: 'P0',
+    summary: 's',
+    proposed_solution: 'The 5-minute fixer kick did not clear it. Name why the playbook failed and apply the next concrete repair.',
+  });
+  assert.equal(result.chair_status, 'escalate_to_founder');
+});
+
 test('reviewFinding: an unrecognized check type fails closed to founder review, never silently auto-approved', () => {
   const result = reviewFinding({ id: 'x', check: 'some_new_check_type_nobody_classified_yet', severity: 'P1', summary: 's', proposed_solution: 'a real concrete fix described here' });
   assert.equal(result.chair_status, 'escalate_to_founder');

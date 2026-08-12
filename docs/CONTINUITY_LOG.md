@@ -2,7 +2,9 @@
 
 ## 2026-08-12 — SENTRY owns the never-stop watch
 
-Adam: is it not SENTRY's job to do what Cursor was asked to do, and never stop; if the system stops working, that is its job. Yes. The SENTRY-Chair scheduler already never-stopped on boot, but it was not watching factories/overlay/fixer. `checkSystemStillWorking` is now a SENTRY check (same `evaluateSystemWatchdog` signal as the pager). System-working ticks every 5m; if a finding stays true 15m, SENTRY emits `fixer_failed`. SENTRY still never builds. Railway cannot hold-click the Taloa badge.
+## 2026-08-12 — SENTRY owns the never-stop watch
+
+Adam: is it not SENTRY's job to do what Cursor was asked to do, and never stop; if the system stops working, that is its job. Yes. Then: do not wait 15 minutes — if it did not take action, escalate at five minutes, ten at most. `fixer_failed` at 5m; `fixer_unrepaired` (founder SMS) at 10m. SENTRY still never builds. Railway cannot hold-click the Taloa badge.
 
 ## 2026-08-12 — Codex login brought up in Cursor via the Taloa overlay
 

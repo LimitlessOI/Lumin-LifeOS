@@ -10,7 +10,9 @@
 
 > like is it not she senterys job to do what i asked you to do is that somehting we can have it do and never stop doing if the system stops working its job is
 
-Yes. SENTRY tests, never builds. The SENTRY-Chair scheduler already never-stopped on boot; it was not watching whether factories/overlay/fixer were actually working. That check is now SENTRY's (`checkSystemStillWorking`, every 5m). If a finding stays true 15m, SENTRY emits `fixer_failed`. Railway cannot hold-click the Taloa badge.
+> They should not wait for fifteen minutes for the system to fix itself. If it didn't take action to fix itself Then After five, ten minutes most. It escalated. What are all the things we could have Centric do while it is observing?
+
+Yes. SENTRY tests, never builds. 5m still-true → kick the fixer. 10m still-true → escalate to the founder. Railway cannot hold-click the Taloa badge.
 
 > Is the system using both factories now? If not, why not? Haven't you fixed it? I don't see you doing anything. And are you continuously monitoring the system for mistakes that it overlooks? Figure out why you don't like it, and this is it Or not. To stop the bill, please.
 

@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-12T22:46:29.979Z",
+  "generated_at": "2026-08-12T22:46:49.115Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13428,
   "files": [
@@ -41205,9 +41205,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Documentation — CONTINUITY LOG.",
-      "bytes": 190403,
-      "mtime": "2026-08-12T22:30:50.776Z",
-      "indexed_at": "2026-08-12T22:30:50.776Z"
+      "bytes": 190320,
+      "mtime": "2026-08-12T22:46:49.115Z",
+      "indexed_at": "2026-08-12T22:46:49.115Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -41471,9 +41471,9 @@
     {
       "path": "docs/conversation_dumps/2026-08-12-both-factories-and-fix-the-fixer.md",
       "synopsis": "2026-08-12 — Both factories, and fix the fixer (continued)",
-      "bytes": 711,
-      "mtime": "2026-08-12T22:30:50.776Z",
-      "indexed_at": "2026-08-12T22:30:50.776Z"
+      "bytes": 737,
+      "mtime": "2026-08-12T22:46:49.115Z",
+      "indexed_at": "2026-08-12T22:46:49.115Z"
     },
     {
       "path": "docs/conversation_dumps/2026-08-12-mtg-catalog-as-consumer-app.md",
@@ -43703,9 +43703,9 @@
     {
       "path": "docs/products/builderos/conversations/2026-08-12-both-factories-and-fix-the-fixer.md",
       "synopsis": "2026-08-12 — Both factories, and fix the fixer (continued)",
-      "bytes": 2001,
-      "mtime": "2026-08-12T22:30:50.776Z",
-      "indexed_at": "2026-08-12T22:30:50.776Z"
+      "bytes": 2056,
+      "mtime": "2026-08-12T22:46:49.115Z",
+      "indexed_at": "2026-08-12T22:46:49.115Z"
     },
     {
       "path": "docs/products/builderos/CREATIVE_BRIEF.md",
@@ -43776,9 +43776,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 566741,
-      "mtime": "2026-08-12T22:30:50.776Z",
-      "indexed_at": "2026-08-12T22:30:50.776Z"
+      "bytes": 566911,
+      "mtime": "2026-08-12T22:46:49.115Z",
+      "indexed_at": "2026-08-12T22:46:49.115Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -93601,9 +93601,9 @@
     {
       "path": "services/chair-findings-review.js",
       "synopsis": "Chair review of SENTRY findings — the \"Chair reviews\" half of the",
-      "bytes": 9226,
-      "mtime": "2026-08-12T22:30:50.776Z",
-      "indexed_at": "2026-08-12T22:30:50.776Z",
+      "bytes": 9246,
+      "mtime": "2026-08-12T22:46:49.115Z",
+      "indexed_at": "2026-08-12T22:46:49.115Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -100541,9 +100541,9 @@
     {
       "path": "services/sentry-system-audit.js",
       "synopsis": "SENTRY periodic system audit — the \"SENTRY finds, proposes a",
-      "bytes": 18300,
-      "mtime": "2026-08-12T22:30:50.776Z",
-      "indexed_at": "2026-08-12T22:30:50.776Z",
+      "bytes": 19207,
+      "mtime": "2026-08-12T22:46:49.115Z",
+      "indexed_at": "2026-08-12T22:46:49.115Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -103885,9 +103885,9 @@
     {
       "path": "tests/chair-findings-review.test.js",
       "synopsis": "SO-003: \"the Chair debate/counsel channel ... must never be served a",
-      "bytes": 8026,
-      "mtime": "2026-08-12T22:30:50.776Z",
-      "indexed_at": "2026-08-12T22:30:50.776Z"
+      "bytes": 8475,
+      "mtime": "2026-08-12T22:46:49.115Z",
+      "indexed_at": "2026-08-12T22:46:49.115Z"
     },
     {
       "path": "tests/chair-founder-packet-v2-enforcement.test.js",
@@ -105299,9 +105299,9 @@
     {
       "path": "tests/sentry-system-audit.test.js",
       "synopsis": "js — tests/sentry-system-audit.test.js.",
-      "bytes": 14157,
-      "mtime": "2026-08-12T22:30:50.776Z",
-      "indexed_at": "2026-08-12T22:30:50.776Z"
+      "bytes": 15029,
+      "mtime": "2026-08-12T22:46:49.115Z",
+      "indexed_at": "2026-08-12T22:46:49.115Z"
     },
     {
       "path": "tests/site-builder-asset-hero-filter.test.js",

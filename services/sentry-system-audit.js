@@ -277,7 +277,8 @@ export async function checkReceiptReproducibility({
   return findings;
 }
 
-export const FIXER_FAILED_MS = 15 * 60 * 1000;
+export const FIXER_FAILED_MS = 5 * 60 * 1000;
+export const FIXER_ESCALATE_MS = 10 * 60 * 1000;
 
 const SYSTEM_WORKING_SUMMARIES = {
   governed_hard_halt: 'FOUNDER_STOP or PAUSE_AUTONOMY is on — manufacturing is halted by name.',
@@ -352,26 +353,45 @@ export function checkSystemStillWorking({
 
 /**
  * If SENTRY already opened a system-working finding and the same condition is
- * still true after FIXER_FAILED_MS, emit a second finding: the fixer did not
- * fix it. That is the founder's "never stop / fix the fixer" rule as a check.
+ * still true, do not sit on it. Founder (2026-08-12): five minutes if the
+ * fixer took no action, ten minutes most, then escalate.
+ *   - >= 5m: fixer_failed (Chair auto-approves — kick the repair pipe)
+ *   - >= 10m: fixer_unrepaired (Chair escalates to the founder)
  */
-export function annotateFixerFailures(findings, existingQueue, { now = Date.now(), staleMs = FIXER_FAILED_MS } = {}) {
+export function annotateFixerFailures(findings, existingQueue, {
+  now = Date.now(),
+  staleMs = FIXER_FAILED_MS,
+  escalateMs = FIXER_ESCALATE_MS,
+} = {}) {
   const existing = Array.isArray(existingQueue?.findings) ? existingQueue.findings : [];
   const extra = [];
   for (const f of findings || []) {
-    if (String(f.id).startsWith('fixer_failed:')) continue;
+    if (String(f.id).startsWith('fixer_failed:') || String(f.id).startsWith('fixer_unrepaired:')) continue;
     const prior = existing.find((x) => x.id === f.id && x.queue_status === 'open');
     if (!prior?.first_detected_at) continue;
     const age = now - Date.parse(prior.first_detected_at);
-    if (!Number.isFinite(age) || age < staleMs) continue;
-    extra.push({
-      id: `fixer_failed:${f.id}`,
-      check: 'system_still_working',
-      severity: 'P0',
-      summary: `SENTRY found "${f.summary}" and it is still true after ${Math.round(age / 60000)} minutes — the fixer did not fix it.`,
-      proposed_solution: `The original proposed_solution was: ${f.proposed_solution} Investigate why that repair did not land, fix the fixer (the code or daemon that was supposed to apply it), then re-verify this check is green. Do not stop at the alert.`,
-      detected_at: new Date(now).toISOString(),
-    });
+    if (!Number.isFinite(age)) continue;
+    const minutes = Math.round(age / 60000);
+    if (age >= staleMs) {
+      extra.push({
+        id: `fixer_failed:${f.id}`,
+        check: 'system_still_working',
+        severity: 'P0',
+        summary: `SENTRY found "${f.summary}" and it is still true after ${minutes} minutes — the fixer did not take action (or the action did not land).`,
+        proposed_solution: `The original proposed_solution was: ${f.proposed_solution} Investigate why that repair did not land, fix the fixer (the code or daemon that was supposed to apply it), then re-verify this check is green. Do not stop at the alert.`,
+        detected_at: new Date(now).toISOString(),
+      });
+    }
+    if (age >= escalateMs) {
+      extra.push({
+        id: `fixer_unrepaired:${f.id}`,
+        check: 'fixer_unrepaired',
+        severity: 'P0',
+        summary: `Still true after ${minutes} minutes (cap is 10). Escalating — the system did not fix itself.`,
+        proposed_solution: `The original proposed_solution was: ${f.proposed_solution} The 5-minute fixer kick did not clear it. Name why the playbook failed, apply the next concrete repair, and re-verify. Do not wait another cycle.`,
+        detected_at: new Date(now).toISOString(),
+      });
+    }
   }
   return [...(findings || []), ...extra];
 }
