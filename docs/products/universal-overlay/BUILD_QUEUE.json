@@ -3071,7 +3071,7 @@
     },
     {
       "id": "TALOA-P1-013",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/taloa/capsule-runtime-service.js",
       "task": "The file MUST begin with a JSDoc block comment containing a line exactly \"@ssot docs/products/universal-overlay/PRODUCT_HOME.md\" (mandatory, enforced by a commit gate). Executes Operational Capsules with compiled replay-first logic, ensuring correct namespacing. Export exactly this factory function, with this exact name and destructured parameter shape: export function createCapsuleRuntimeService({ pool, logger, capsuleStore, strategyRouter }). The object it returns MUST expose these methods, each a real async function, not a stub or a thrown \"not implemented\": executeCapsule, validateCapsule. Constraints: ES module syntax (import/export, no require); no top-level side effects, no timers started at import, no network calls, and no AI/model calls; all database access goes through the injected pool parameter and no other client; validate required constructor dependencies up front and throw a clear Error naming the missing one; every method must return a plain serialisable object, never undefined; depend only on node builtins and the injected dependencies -- add no new npm packages. Sealed contract tables is []. Do not query, CREATE, or name any SQL table. Use only injected collaborators. Inventing a table is a grounding failure.",
       "spec": "{\n  \"step_id\": \"TALOA-P1-013\",\n  \"purpose\": \"Executes Operational Capsules with compiled replay-first logic, ensuring correct namespacing.\",\n  \"sealed_contract\": {\n    \"tables\": [],\n    \"exports\": [\n      \"CapsuleRuntimeService\"\n    ],\n    \"ai_calls\": [],\n    \"endpoints\": [],\n    \"test_assertions\": [\n      \"CapsuleRuntimeService.executeCapsule is callable\",\n      \"CapsuleRuntimeService.validateCapsule is callable\"\n    ],\n    \"factory_signature\": \"export function createCapsuleRuntimeService({ pool, logger, capsuleStore, strategyRouter })\"\n  },\n  \"ssot_tag\": \"docs/products/universal-overlay/PRODUCT_HOME.md\",\n  \"amended_by\": null\n}",
@@ -3114,7 +3114,8 @@
         "Do not widen any Body capability or authority -- Gate 0 (blueprint 45a) is still open."
       ],
       "source": "TALOA-OVERLAY-P1-0001 sealed Phase 1",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "commit_sha": "e1156c434e44a926c5e86ae690d8fd4ed785a656"
     },
     {
       "id": "TALOA-P1-014",
