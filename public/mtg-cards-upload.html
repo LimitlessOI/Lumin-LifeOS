@@ -22,11 +22,19 @@
   .tier-unknown, .err { color: #f87171; }
   .summary { display: flex; gap: 1.5rem; margin: 1rem 0; flex-wrap: wrap; }
   .summary div { background: #151a24; border-radius: 8px; padding: 0.6rem 1rem; }
+  h2 { font-size: 1.1rem; margin-top: 2.5rem; border-top: 1px solid #262b36; padding-top: 1.5rem; }
+  .row { display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap; }
+  button.secondary { background: #262b36; color: #e6e6e6; }
+  a.download { background: #262b36; color: #e6e6e6; border-radius: 8px; padding: 0.6rem 1.2rem; font-weight: 600; text-decoration: none; }
+  .warn { color: #facc15; font-weight: 600; margin: 8px 0; }
+  .review { color: #facc15; }
+  .muted { color: #6b7a8d; font-size: 0.85rem; }
+  select { background: #151a24; color: #e6e6e6; border: 1px solid #262b36; border-radius: 8px; padding: 0.5rem; }
 </style>
 </head>
 <body>
   <h1>MTG Card Batch Upload</h1>
-  <p>Select any number of card photos — larger selections are uploaded in groups of 150 automatically. Each is identified (vision AI), priced (Scryfall), and routed to a sell tier.</p>
+  <p>Select any number of card photos — larger selections are uploaded in groups of 104 automatically. Each is identified (vision AI), priced (Scryfall), and routed to a sell tier.</p>
 
   <div class="drop" id="drop">
     <div id="dropLabel">Click to choose photos, or drag them here</div>
@@ -34,12 +42,35 @@
   </div>
 
   <button id="uploadBtn" disabled>Upload batch</button>
+  <div id="dupWarn" class="warn" style="display:none"></div>
   <div id="received" style="display:none; font-weight:600; color:#1a7a3a; margin:8px 0;"></div>
   <div id="status"></div>
   <div class="summary" id="summary"></div>
   <table id="results" style="display:none">
     <thead><tr><th>Photo</th><th>Card</th><th>Set</th><th>Foil</th><th>Price</th><th>Tier</th><th>Venue</th><th>Status</th></tr></thead>
     <tbody id="resultsBody"></tbody>
+  </table>
+
+  <h2>Your collection</h2>
+  <p class="muted">Every card catalogued so far, with duplicate re-uploads of the same photo counted once. Prices come from the real paper printing on Scryfall; cards whose set couldn't be pinned down are flagged for review instead of being guessed into a bulk lot.</p>
+  <div class="row">
+    <button id="loadCollectionBtn" class="secondary">Load collection</button>
+    <select id="tierFilter">
+      <option value="">All tiers</option>
+      <option value="high">High — list individually</option>
+      <option value="mid">Mid — buylist</option>
+      <option value="low">Low — bulk lot</option>
+      <option value="unknown">Unknown</option>
+      <option value="__review">Needs review only</option>
+    </select>
+    <a id="csvLink" class="download" href="#">Download sell sheet (CSV)</a>
+    <button id="repriceBtn" class="secondary">Re-price everything</button>
+  </div>
+  <div id="collectionStatus" class="muted" style="margin-top:0.75rem"></div>
+  <div class="summary" id="collectionSummary"></div>
+  <table id="collectionTable" style="display:none">
+    <thead><tr><th>Card</th><th>Set</th><th>Foil</th><th>Price</th><th>Range</th><th>Tier</th><th>Venue</th><th>Basis</th></tr></thead>
+    <tbody id="collectionBody"></tbody>
   </table>
 
 <script>
@@ -52,6 +83,7 @@
   const summaryEl = document.getElementById('summary');
   const resultsTable = document.getElementById('results');
   const resultsBody = document.getElementById('resultsBody');
+  const dupWarn = document.getElementById('dupWarn');
   let chosenFiles = [];
   let pollTimer = null;
   // Real bug found live (2026-08-10): the server hard-caps each batch at
@@ -127,6 +159,15 @@
           continue; // don't let one bad group abandon the rest
         }
         activeBatches.push({ batchId: json.batch_id, total: json.file_count, done: 0, rows: [] });
+        // Found live 2026-08-11 by auditing the database days later: 110
+        // identical photos were processed twice, five minutes apart, which
+        // doubled their contribution to the collection's reported value. The
+        // server now checks filenames against what is already catalogued, so
+        // that is caught at upload time instead.
+        if (json.already_catalogued > 0) {
+          dupWarn.textContent = `Heads up: ${json.already_catalogued} of these photos are already in your collection. They'll be counted once, not twice.`;
+          dupWarn.style.display = '';
+        }
         // Real, immediate confirmation the server actually received these
         // files -- founder, direct: "we can have a show that it received
         // the hundred and ten. That way I know I can go onto the next."
@@ -224,11 +265,140 @@
       }
       renderSummary(byTier, totalUsd);
       statusEl.textContent = `Done — ${totalCount} card(s)${groupNote}`;
+      loadCollection();
     } catch (err) {
       statusEl.textContent = `Status check failed: ${err.message}`;
     }
     uploadBtn.disabled = false;
   }
+
+  // ---- Collection view: the whole catalogue as one actionable sell list ----
+
+  const loadCollectionBtn = document.getElementById('loadCollectionBtn');
+  const tierFilter = document.getElementById('tierFilter');
+  const csvLink = document.getElementById('csvLink');
+  const repriceBtn = document.getElementById('repriceBtn');
+  const collectionStatus = document.getElementById('collectionStatus');
+  const collectionSummary = document.getElementById('collectionSummary');
+  const collectionTable = document.getElementById('collectionTable');
+  const collectionBody = document.getElementById('collectionBody');
+  let repriceTimer = null;
+
+  function collectionQuery() {
+    const value = tierFilter.value;
+    if (value === '__review') return '?review=true';
+    return value ? `?tier=${encodeURIComponent(value)}` : '';
+  }
+
+  function money(v) {
+    return v == null ? '—' : '$' + Number(v).toFixed(2);
+  }
+
+  async function loadCollection() {
+    collectionStatus.textContent = 'Loading collection...';
+    try {
+      const res = await fetch(`/api/v1/mtg-cards/collection${collectionQuery()}`, { headers: authHeaders() });
+      const json = await res.json();
+      if (!json.ok) {
+        collectionStatus.textContent = `Could not load collection: ${json.error || 'unknown error'}`;
+        return;
+      }
+
+      collectionSummary.innerHTML = ['high', 'mid', 'low', 'unknown'].map((t) => {
+        const d = json.by_tier[t] || { count: 0, subtotal_usd: 0 };
+        return `<div><strong class="${tierClass(t)}">${t}</strong>: ${d.count} card(s), $${Number(d.subtotal_usd).toFixed(2)}</div>`;
+      }).join('')
+        + `<div><strong>Total estimated:</strong> $${Number(json.total_estimated_usd).toFixed(2)}</div>`
+        + `<div class="review"><strong>Needs review:</strong> ${json.needs_review_count} card(s)</div>`;
+
+      collectionBody.innerHTML = json.rows.map((r) => `
+        <tr>
+          <td>${r.identified_name || '<span class="err">unidentified</span>'}</td>
+          <td>${r.identified_set || ''}</td>
+          <td>${r.is_foil ? 'Foil' : ''}</td>
+          <td>${money(r.price_used)}</td>
+          <td class="muted">${r.price_min_usd != null ? money(r.price_min_usd) + '–' + money(r.price_max_usd) : ''}</td>
+          <td class="${tierClass(r.value_tier)}">${r.value_tier}</td>
+          <td>${r.needs_review ? '<span class="review">review</span>' : (r.recommended_venue || '')}</td>
+          <td class="muted">${r.price_match || ''}</td>
+        </tr>
+      `).join('');
+      collectionTable.style.display = '';
+      collectionStatus.textContent = `${json.card_count} card(s) in your collection${json.truncated ? ` — showing the top ${json.rows.length}, download the CSV for all of them` : ''}.`;
+    } catch (err) {
+      collectionStatus.textContent = `Could not load collection: ${err.message}`;
+    }
+  }
+
+  // The CSV endpoint needs the same Bearer token as everything else, which a
+  // plain <a href> download cannot send -- fetch it and hand the browser a blob.
+  csvLink.addEventListener('click', async (e) => {
+    e.preventDefault();
+    collectionStatus.textContent = 'Building sell sheet...';
+    try {
+      const res = await fetch(`/api/v1/mtg-cards/collection.csv${collectionQuery()}`, { headers: authHeaders() });
+      if (!res.ok) throw new Error(`export failed (${res.status})`);
+      const url = URL.createObjectURL(await res.blob());
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'mtg-collection.csv';
+      a.click();
+      URL.revokeObjectURL(url);
+      collectionStatus.textContent = 'Sell sheet downloaded.';
+    } catch (err) {
+      collectionStatus.textContent = `Export failed: ${err.message}`;
+    }
+  });
+
+  async function pollReprice() {
+    clearTimeout(repriceTimer);
+    try {
+      const res = await fetch('/api/v1/mtg-cards/reprice/status', { headers: authHeaders() });
+      const json = await res.json();
+      const job = json.job;
+      if (!job) return;
+      collectionStatus.textContent = `Re-pricing ${job.processed}/${job.total || '?'} — ${job.repriced} updated, ${job.failed} failed.`;
+      if (job.running) {
+        repriceTimer = setTimeout(pollReprice, 2000);
+        return;
+      }
+      repriceBtn.disabled = false;
+      collectionStatus.textContent = `Re-priced ${job.repriced} card(s), ${job.failed} failed. Reloading...`;
+      loadCollection();
+    } catch (err) {
+      repriceBtn.disabled = false;
+      collectionStatus.textContent = `Re-price status check failed: ${err.message}`;
+    }
+  }
+
+  // Re-runs Scryfall pricing over cards already in the database. No vision
+  // call, so it is free -- and it means a pricing fix reaches cards catalogued
+  // months ago without re-photographing anything.
+  repriceBtn.addEventListener('click', async () => {
+    repriceBtn.disabled = true;
+    collectionStatus.textContent = 'Starting re-price...';
+    try {
+      const res = await fetch('/api/v1/mtg-cards/reprice', {
+        method: 'POST',
+        headers: { ...authHeaders(), 'Content-Type': 'application/json' },
+        body: JSON.stringify({ scope: 'all' }),
+      });
+      const json = await res.json();
+      if (!json.ok) {
+        collectionStatus.textContent = `Could not start re-price: ${json.error || 'unknown error'}`;
+        repriceBtn.disabled = false;
+        return;
+      }
+      pollReprice();
+    } catch (err) {
+      collectionStatus.textContent = `Could not start re-price: ${err.message}`;
+      repriceBtn.disabled = false;
+    }
+  });
+
+  loadCollectionBtn.addEventListener('click', loadCollection);
+  tierFilter.addEventListener('change', loadCollection);
+  loadCollection();
 </script>
 </body>
 </html>

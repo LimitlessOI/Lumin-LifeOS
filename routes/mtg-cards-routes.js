@@ -18,10 +18,17 @@
  * lookups, would otherwise hold the HTTP request open for minutes) -- same
  * async-session shape as routes/extension-drive-routes.js's POST /start + GET /status.
  * Mounted at /api/v1/mtg-cards
- *   POST /batch-upload  (multipart, field name "cards", up to 150 files) -> { ok, batch_id, file_count }
- *   POST /import-csv    (multipart, field name "csv", one file) -> { ok, batch_id, row_count }
- *   GET  /batch/:batchId -> { ok, batch_id, total, done, rows[] }
- *   GET  /batch/:batchId/summary -> { ok, by_tier: { high, mid, low, unknown }, total_estimated_usd }
+ *   POST   /batch-upload  (multipart, field name "cards", up to 150 files) -> { ok, batch_id, file_count }
+ *   POST   /import-csv    (multipart, field name "csv", one file) -> { ok, batch_id, row_count }
+ *   GET    /batch/:batchId -> { ok, batch_id, total, done, rows[] }
+ *   GET    /batch/:batchId/summary -> { ok, by_tier: { high, mid, low, unknown }, total_estimated_usd }
+ *   DELETE /batch/:batchId -> { ok, deleted } (removes a duplicate re-upload)
+ *   GET    /recent-activity -> per-batch progress, for "is it actually running?"
+ *   GET    /collection -> whole deduped collection + totals + review queue
+ *   GET    /collection.csv -> the same list as a real sell sheet
+ *   GET    /duplicates -> batches that re-processed photos already catalogued
+ *   POST   /reprice -> re-run Scryfall pricing over stored rows (no vision cost)
+ *   GET    /reprice/status -> progress of the running reprice job
  * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import express from 'express';
@@ -34,11 +41,7 @@ const MAX_FILES = 150;
 const MAX_FILE_BYTES = 10 * 1024 * 1024;
 const MAX_CSV_BYTES = 5 * 1024 * 1024;
 const MAX_CSV_ROWS = 5000;
-const SCRYFALL_DELAY_MS = 120; // keeps batch lookups well under Scryfall's requested ~10 req/sec
-
-function sleep(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
+const DEFAULT_USER_ID = 1;
 
 async function ensureSchema(pool) {
   await pool.query(`
@@ -70,6 +73,13 @@ async function ensureSchema(pool) {
   // the original photo-only schema, not decoration.
   await pool.query(`ALTER TABLE mtg_card_collection ADD COLUMN IF NOT EXISTS quantity INTEGER NOT NULL DEFAULT 1`);
   await pool.query(`ALTER TABLE mtg_card_collection ADD COLUMN IF NOT EXISTS source TEXT NOT NULL DEFAULT 'photo_vision'`);
+  // Pricing provenance (2026-08-11) -- see db/migrations/20260811_mtg_card_pricing_provenance.sql.
+  await pool.query(`ALTER TABLE mtg_card_collection ADD COLUMN IF NOT EXISTS price_min_usd NUMERIC`);
+  await pool.query(`ALTER TABLE mtg_card_collection ADD COLUMN IF NOT EXISTS price_max_usd NUMERIC`);
+  await pool.query(`ALTER TABLE mtg_card_collection ADD COLUMN IF NOT EXISTS printing_count INTEGER`);
+  await pool.query(`ALTER TABLE mtg_card_collection ADD COLUMN IF NOT EXISTS price_match TEXT`);
+  await pool.query(`ALTER TABLE mtg_card_collection ADD COLUMN IF NOT EXISTS needs_review BOOLEAN NOT NULL DEFAULT FALSE`);
+  await pool.query(`ALTER TABLE mtg_card_collection ADD COLUMN IF NOT EXISTS priced_at TIMESTAMPTZ`);
 }
 
 /**
@@ -157,27 +167,92 @@ export function parseManaBoxCsv(text) {
   return { ok: true, rows };
 }
 
+/**
+ * Single place where a Scryfall result becomes a stored, tiered, sell-routable
+ * row -- shared by photo intake, CSV intake, and repricing so all three can
+ * never drift apart on what a price means.
+ *
+ * Exported for tests: this decides whether a card gets individually listed or
+ * thrown in a bulk lot, which is the whole point of the system.
+ */
+export function applyPriceToRow(row, price) {
+  row.scryfall_id = price.scryfall_id || row.scryfall_id || null;
+  row.price_usd = price.price_usd;
+  row.price_usd_foil = price.price_usd_foil;
+  row.price_min_usd = price.price_min_usd ?? null;
+  row.price_max_usd = price.price_max_usd ?? null;
+  row.printing_count = price.printing_count ?? null;
+  row.price_match = price.price_match ?? null;
+  row.needs_review = Boolean(price.needs_review);
+  row.price_source = 'scryfall';
+
+  const perCard = row.is_foil ? (price.price_usd_foil ?? price.price_usd) : price.price_usd;
+  const quantity = Math.max(1, Number(row.quantity) || 1);
+  row.price_used = perCard != null ? perCard * quantity : null;
+
+  const tier = classifyValueTier(perCard);
+  row.value_tier = tier.tier;
+  // A card whose set could not be pinned down but whose most expensive
+  // printing is worth real money must never be routed to a bulk lot on the
+  // strength of a median guess -- send it to manual review instead. Cards
+  // already tiered `high` are being looked at individually anyway.
+  row.recommended_venue = row.needs_review && tier.tier !== 'high' ? 'manual_review' : tier.venue;
+  row.status = 'done';
+  return row;
+}
+
+function blankRow({ userId, batchId, photoName = null, source = 'photo_vision' }) {
+  return {
+    user_id: userId,
+    batch_id: batchId,
+    photo_name: photoName,
+    identified_name: null,
+    identified_set: null,
+    is_foil: null,
+    condition_guess: null,
+    identify_confidence: null,
+    identify_error: null,
+    scryfall_id: null,
+    price_usd: null,
+    price_usd_foil: null,
+    price_used: null,
+    price_source: null,
+    price_min_usd: null,
+    price_max_usd: null,
+    printing_count: null,
+    price_match: null,
+    needs_review: false,
+    value_tier: 'unknown',
+    recommended_venue: 'manual_review',
+    status: 'error',
+    quantity: 1,
+    source,
+  };
+}
+
+const INSERT_SQL = `
+  INSERT INTO mtg_card_collection
+    (user_id, batch_id, photo_name, identified_name, identified_set, is_foil, condition_guess,
+     identify_confidence, identify_error, scryfall_id, price_usd, price_usd_foil, price_used,
+     price_source, value_tier, recommended_venue, status, quantity, source,
+     price_min_usd, price_max_usd, printing_count, price_match, needs_review, priced_at)
+  VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,
+          CASE WHEN $14::text IS NULL THEN NULL ELSE NOW() END)
+`;
+
+function insertParams(row) {
+  return [
+    row.user_id, row.batch_id, row.photo_name, row.identified_name, row.identified_set, row.is_foil,
+    row.condition_guess, row.identify_confidence, row.identify_error, row.scryfall_id, row.price_usd,
+    row.price_usd_foil, row.price_used, row.price_source, row.value_tier, row.recommended_venue,
+    row.status, row.quantity, row.source, row.price_min_usd, row.price_max_usd, row.printing_count,
+    row.price_match, row.needs_review,
+  ];
+}
+
 async function processBatch({ pool, logger, userId, batchId, files }) {
   for (const file of files) {
-    let row = {
-      user_id: userId,
-      batch_id: batchId,
-      photo_name: file.originalname || 'unknown',
-      identified_name: null,
-      identified_set: null,
-      is_foil: null,
-      condition_guess: null,
-      identify_confidence: null,
-      identify_error: null,
-      scryfall_id: null,
-      price_usd: null,
-      price_usd_foil: null,
-      price_used: null,
-      price_source: null,
-      value_tier: 'unknown',
-      recommended_venue: 'manual_review',
-      status: 'error',
-    };
+    const row = blankRow({ userId, batchId, photoName: file.originalname || 'unknown' });
 
     try {
       const photo = { name: row.photo_name, mime: file.mimetype, data: file.buffer.toString('base64') };
@@ -203,18 +278,9 @@ async function processBatch({ pool, logger, userId, batchId, files }) {
       }
 
       if (id.ok && id.name) {
-        await sleep(SCRYFALL_DELAY_MS);
         const price = await lookupMtgCardPrice(id.name, id.set, { logger });
         if (price.ok) {
-          row.scryfall_id = price.scryfall_id;
-          row.price_usd = price.price_usd;
-          row.price_usd_foil = price.price_usd_foil;
-          row.price_used = id.foil ? (price.price_usd_foil ?? price.price_usd) : price.price_usd;
-          row.price_source = 'scryfall';
-          const tier = classifyValueTier(row.price_used);
-          row.value_tier = tier.tier;
-          row.recommended_venue = tier.venue;
-          row.status = 'done';
+          applyPriceToRow(row, price);
         } else {
           row.identify_error = row.identify_error || `price_lookup_failed:${price.error}`;
           row.status = 'priced_failed';
@@ -227,16 +293,7 @@ async function processBatch({ pool, logger, userId, batchId, files }) {
       logger?.error?.({ err: err.message, file: row.photo_name }, 'mtg card batch item failed');
     }
 
-    await pool.query(
-      `INSERT INTO mtg_card_collection
-        (user_id, batch_id, photo_name, identified_name, identified_set, is_foil, condition_guess,
-         identify_confidence, identify_error, scryfall_id, price_usd, price_usd_foil, price_used,
-         price_source, value_tier, recommended_venue, status)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17)`,
-      [row.user_id, row.batch_id, row.photo_name, row.identified_name, row.identified_set, row.is_foil,
-       row.condition_guess, row.identify_confidence, row.identify_error, row.scryfall_id, row.price_usd,
-       row.price_usd_foil, row.price_used, row.price_source, row.value_tier, row.recommended_venue, row.status]
-    );
+    await pool.query(INSERT_SQL, insertParams(row));
   }
 }
 
@@ -248,49 +305,26 @@ async function processBatch({ pool, logger, userId, batchId, files }) {
  */
 async function processCsvImport({ pool, logger, userId, batchId, rows }) {
   for (const r of rows) {
-    let row = {
-      user_id: userId,
-      batch_id: batchId,
-      photo_name: null,
-      identified_name: r.name,
-      identified_set: r.set,
-      is_foil: r.foil,
-      condition_guess: r.condition,
-      identify_confidence: 'high', // ManaBox already scanned/identified this card
-      identify_error: null,
-      scryfall_id: null,
-      price_usd: null,
-      price_usd_foil: null,
-      price_used: null,
-      price_source: null,
-      value_tier: 'unknown',
-      recommended_venue: 'manual_review',
-      status: 'error',
-      quantity: r.quantity,
-      source: 'csv_import',
-    };
+    const row = blankRow({ userId, batchId, source: 'csv_import' });
+    row.identified_name = r.name;
+    row.identified_set = r.set;
+    row.is_foil = r.foil;
+    row.condition_guess = r.condition;
+    row.identify_confidence = 'high'; // ManaBox already scanned/identified this card
+    row.quantity = r.quantity;
 
     try {
-      await sleep(SCRYFALL_DELAY_MS);
       const price = r.scryfallId
         ? await lookupMtgCardById(r.scryfallId, { logger })
         : await lookupMtgCardPrice(r.name, r.set, { logger });
 
       if (price.ok) {
-        row.scryfall_id = price.scryfall_id;
-        row.price_usd = price.price_usd;
-        row.price_usd_foil = price.price_usd_foil;
-        const perCard = r.foil ? (price.price_usd_foil ?? price.price_usd) : price.price_usd;
-        // Store the STACK's total value (per-card price x quantity) so batch
-        // summary totals reflect the founder's real collection value, not
-        // just one copy of each unique card -- a real ManaBox CSV routinely
-        // has quantity > 1 per row for commons/staples.
-        row.price_used = perCard != null ? perCard * r.quantity : null;
-        row.price_source = 'scryfall';
-        const tier = classifyValueTier(perCard);
-        row.value_tier = tier.tier;
-        row.recommended_venue = tier.venue;
-        row.status = 'done';
+        // price_used holds the STACK's total value (per-card price x quantity)
+        // so batch summary totals reflect the founder's real collection value,
+        // not just one copy of each unique card -- a real ManaBox CSV routinely
+        // has quantity > 1 per row for commons/staples. applyPriceToRow does
+        // that multiplication while tiering on the per-card price.
+        applyPriceToRow(row, price);
       } else {
         row.identify_error = `price_lookup_failed:${price.error}`;
         row.status = 'priced_failed';
@@ -300,18 +334,56 @@ async function processCsvImport({ pool, logger, userId, batchId, rows }) {
       logger?.error?.({ err: err.message, name: r.name }, 'mtg card csv import row failed');
     }
 
-    await pool.query(
-      `INSERT INTO mtg_card_collection
-        (user_id, batch_id, photo_name, identified_name, identified_set, is_foil, condition_guess,
-         identify_confidence, identify_error, scryfall_id, price_usd, price_usd_foil, price_used,
-         price_source, value_tier, recommended_venue, status, quantity, source)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19)`,
-      [row.user_id, row.batch_id, row.photo_name, row.identified_name, row.identified_set, row.is_foil,
-       row.condition_guess, row.identify_confidence, row.identify_error, row.scryfall_id, row.price_usd,
-       row.price_usd_foil, row.price_used, row.price_source, row.value_tier, row.recommended_venue, row.status,
-       row.quantity, row.source]
-    );
+    await pool.query(INSERT_SQL, insertParams(row));
   }
+}
+
+/**
+ * One row per physical card. The same photo can legitimately exist in two
+ * batches (confirmed live 2026-08-11: 110 identical filenames re-uploaded five
+ * minutes apart, because the page's progress counter made the first attempt
+ * look stalled) -- counting both would double the collection's reported value.
+ * CSV rows are never deduped this way: their `quantity` column already carries
+ * real duplicate copies.
+ */
+const DEDUPED_COLLECTION_CTE = `
+  WITH deduped AS (
+    SELECT DISTINCT ON (
+      CASE WHEN source = 'photo_vision' AND photo_name IS NOT NULL
+           THEN photo_name ELSE id::text END
+    ) *
+    FROM mtg_card_collection
+    WHERE user_id = $1
+    ORDER BY
+      CASE WHEN source = 'photo_vision' AND photo_name IS NOT NULL
+           THEN photo_name ELSE id::text END,
+      created_at DESC
+  )
+`;
+
+function csvEscape(value) {
+  if (value == null) return '';
+  const s = String(value);
+  return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+}
+
+export function collectionToCsv(rows) {
+  const headers = [
+    'Card', 'Set', 'Foil', 'Condition', 'Price USD', 'Price Low', 'Price High',
+    'Tier', 'Venue', 'Needs Review', 'Price Basis', 'Quantity', 'Photo', 'Scryfall ID',
+  ];
+  const lines = [headers.join(',')];
+  for (const r of rows) {
+    lines.push([
+      r.identified_name, r.identified_set, r.is_foil ? 'foil' : '', r.condition_guess,
+      r.price_used != null ? Number(r.price_used).toFixed(2) : '',
+      r.price_min_usd != null ? Number(r.price_min_usd).toFixed(2) : '',
+      r.price_max_usd != null ? Number(r.price_max_usd).toFixed(2) : '',
+      r.value_tier, r.recommended_venue, r.needs_review ? 'yes' : '',
+      r.price_match, r.quantity, r.photo_name, r.scryfall_id,
+    ].map(csvEscape).join(','));
+  }
+  return lines.join('\n');
 }
 
 export function createMtgCardsRoutes({ pool, requireKey, logger = console }) {
@@ -324,6 +396,8 @@ export function createMtgCardsRoutes({ pool, requireKey, logger = console }) {
     await schemaReady;
   }
 
+  let repriceJob = null;
+
   router.post('/import-csv', requireKey, csvUpload.single('csv'), async (req, res) => {
     try {
       await ready();
@@ -333,7 +407,7 @@ export function createMtgCardsRoutes({ pool, requireKey, logger = console }) {
       if (!parsed.ok) return res.status(400).json({ ok: false, error: parsed.error });
       if (!parsed.rows.length) return res.status(400).json({ ok: false, error: 'no_data_rows' });
 
-      const userId = Number(req.body?.user_id) || 1;
+      const userId = Number(req.body?.user_id) || DEFAULT_USER_ID;
       const batchId = crypto.randomUUID();
 
       processCsvImport({ pool, logger, userId, batchId, rows: parsed.rows }).catch((err) => {
@@ -353,14 +427,37 @@ export function createMtgCardsRoutes({ pool, requireKey, logger = console }) {
       const files = req.files || [];
       if (!files.length) return res.status(400).json({ ok: false, error: 'no_files' });
 
-      const userId = Number(req.body?.user_id) || 1;
+      const userId = Number(req.body?.user_id) || DEFAULT_USER_ID;
       const batchId = crypto.randomUUID();
+
+      // Tell the founder up front if this selection re-uploads photos already
+      // catalogued -- the duplicate-batch problem was only discovered days
+      // later by auditing the database, which is far too late to be useful.
+      let alreadyCatalogued = 0;
+      try {
+        const names = files.map((f) => f.originalname).filter(Boolean);
+        if (names.length) {
+          const { rows } = await pool.query(
+            `SELECT COUNT(DISTINCT photo_name)::int AS n FROM mtg_card_collection
+             WHERE user_id = $1 AND photo_name = ANY($2::text[])`,
+            [userId, names],
+          );
+          alreadyCatalogued = rows[0]?.n || 0;
+        }
+      } catch (err) {
+        logger.warn?.({ err: err.message }, 'mtg duplicate precheck failed (non-fatal)');
+      }
 
       processBatch({ pool, logger, userId, batchId, files }).catch((err) => {
         logger.error({ err: err.message, batchId }, 'mtg card batch processing crashed');
       });
 
-      res.json({ ok: true, batch_id: batchId, file_count: files.length });
+      res.json({
+        ok: true,
+        batch_id: batchId,
+        file_count: files.length,
+        already_catalogued: alreadyCatalogued,
+      });
     } catch (err) {
       logger.error({ err: err.message }, 'mtg cards batch-upload failed');
       res.status(500).json({ ok: false, error: err.message });
@@ -401,6 +498,19 @@ export function createMtgCardsRoutes({ pool, requireKey, logger = console }) {
     }
   });
 
+  router.delete('/batch/:batchId', requireKey, async (req, res) => {
+    try {
+      await ready();
+      const { rowCount } = await pool.query(
+        `DELETE FROM mtg_card_collection WHERE batch_id = $1`,
+        [req.params.batchId],
+      );
+      res.json({ ok: true, batch_id: req.params.batchId, deleted: rowCount });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
   // Real diagnostic need found live 2026-08-11: "is it uploading?" asked
   // twice, and Railway's deploymentLogs GraphQL query only returns the most
   // recent ~101 lines (a hard cap on Railway's side, not something this repo
@@ -428,6 +538,213 @@ export function createMtgCardsRoutes({ pool, requireKey, logger = console }) {
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
     }
+  });
+
+  /** Batches whose photos were already catalogued by an earlier batch. */
+  router.get('/duplicates', requireKey, async (req, res) => {
+    try {
+      await ready();
+      const userId = Number(req.query.user_id) || DEFAULT_USER_ID;
+      const { rows } = await pool.query(
+        `WITH first_seen AS (
+           SELECT photo_name, MIN(created_at) AS first_at
+           FROM mtg_card_collection
+           WHERE user_id = $1 AND photo_name IS NOT NULL AND source = 'photo_vision'
+           GROUP BY photo_name
+           HAVING COUNT(*) > 1
+         )
+         SELECT c.batch_id,
+                COUNT(*)::int AS duplicate_rows,
+                COALESCE(SUM(c.price_used), 0)::float AS duplicate_value_usd,
+                MIN(c.created_at) AS batch_started_at
+         FROM mtg_card_collection c
+         JOIN first_seen f ON f.photo_name = c.photo_name
+         WHERE c.user_id = $1 AND c.created_at > f.first_at
+         GROUP BY c.batch_id
+         ORDER BY MIN(c.created_at) DESC`,
+        [userId],
+      );
+      res.json({
+        ok: true,
+        duplicate_batches: rows,
+        total_duplicate_rows: rows.reduce((s, r) => s + r.duplicate_rows, 0),
+      });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  async function loadCollection(userId, { tier, review } = {}) {
+    const params = [userId];
+    const filters = [];
+    if (tier) {
+      params.push(String(tier));
+      filters.push(`value_tier = $${params.length}`);
+    }
+    if (review) filters.push('needs_review = TRUE');
+    const where = filters.length ? `WHERE ${filters.join(' AND ')}` : '';
+    const { rows } = await pool.query(
+      `${DEDUPED_COLLECTION_CTE}
+       SELECT * FROM deduped ${where}
+       ORDER BY price_used DESC NULLS LAST, identified_name ASC`,
+      params,
+    );
+    return rows;
+  }
+
+  router.get('/collection', requireKey, async (req, res) => {
+    try {
+      await ready();
+      const userId = Number(req.query.user_id) || DEFAULT_USER_ID;
+      const rows = await loadCollection(userId, {
+        tier: req.query.tier || null,
+        review: req.query.review === 'true',
+      });
+
+      const byTier = {};
+      let totalUsd = 0;
+      let reviewCount = 0;
+      for (const r of rows) {
+        const tier = r.value_tier || 'unknown';
+        byTier[tier] = byTier[tier] || { count: 0, subtotal_usd: 0 };
+        byTier[tier].count += 1;
+        byTier[tier].subtotal_usd += Number(r.price_used || 0);
+        totalUsd += Number(r.price_used || 0);
+        if (r.needs_review) reviewCount += 1;
+      }
+
+      const limit = Math.min(parseInt(req.query.limit, 10) || 500, 5000);
+      res.json({
+        ok: true,
+        card_count: rows.length,
+        total_estimated_usd: Number(totalUsd.toFixed(2)),
+        needs_review_count: reviewCount,
+        by_tier: byTier,
+        rows: rows.slice(0, limit),
+        truncated: rows.length > limit,
+      });
+    } catch (err) {
+      logger.error({ err: err.message }, 'mtg collection query failed');
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.get('/collection.csv', requireKey, async (req, res) => {
+    try {
+      await ready();
+      const userId = Number(req.query.user_id) || DEFAULT_USER_ID;
+      const rows = await loadCollection(userId, {
+        tier: req.query.tier || null,
+        review: req.query.review === 'true',
+      });
+      res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+      res.setHeader('Content-Disposition', 'attachment; filename="mtg-collection.csv"');
+      res.send(collectionToCsv(rows));
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  /**
+   * Re-runs Scryfall pricing over rows already in the database using their
+   * stored name/set -- no vision call, so it costs nothing and can safely be
+   * re-run whenever the pricing logic changes or market prices move. Added
+   * 2026-08-11 because the pricing rewrite corrected values for cards that
+   * were already catalogued, and re-photographing hundreds of cards to pick up
+   * a backend fix would be an absurd thing to ask the founder to do.
+   */
+  async function runReprice({ userId, scope, batchId }) {
+    const where = ['user_id = $1', "identified_name IS NOT NULL"];
+    const params = [userId];
+    if (scope === 'batch' && batchId) {
+      params.push(batchId);
+      where.push(`batch_id = $${params.length}`);
+    } else if (scope === 'unpriced') {
+      where.push("(price_used IS NULL OR value_tier = 'unknown')");
+    }
+
+    const { rows } = await pool.query(
+      `SELECT id, identified_name, identified_set, is_foil, quantity, scryfall_id, source
+       FROM mtg_card_collection WHERE ${where.join(' AND ')} ORDER BY created_at ASC`,
+      params,
+    );
+
+    repriceJob.total = rows.length;
+    for (const r of rows) {
+      if (repriceJob.cancelled) break;
+      try {
+        const price = r.source === 'csv_import' && r.scryfall_id
+          ? await lookupMtgCardById(r.scryfall_id, { logger })
+          : await lookupMtgCardPrice(r.identified_name, r.identified_set, { logger });
+
+        if (price.ok) {
+          const updated = applyPriceToRow({ ...r }, price);
+          await pool.query(
+            `UPDATE mtg_card_collection SET
+               scryfall_id = $2, price_usd = $3, price_usd_foil = $4, price_used = $5,
+               price_source = $6, value_tier = $7, recommended_venue = $8, status = $9,
+               price_min_usd = $10, price_max_usd = $11, printing_count = $12,
+               price_match = $13, needs_review = $14, priced_at = NOW()
+             WHERE id = $1`,
+            [r.id, updated.scryfall_id, updated.price_usd, updated.price_usd_foil, updated.price_used,
+             updated.price_source, updated.value_tier, updated.recommended_venue, updated.status,
+             updated.price_min_usd, updated.price_max_usd, updated.printing_count,
+             updated.price_match, updated.needs_review],
+          );
+          repriceJob.repriced += 1;
+        } else {
+          repriceJob.failed += 1;
+        }
+      } catch (err) {
+        repriceJob.failed += 1;
+        logger.warn?.({ err: err.message, id: r.id }, 'mtg reprice row failed');
+      }
+      repriceJob.processed += 1;
+    }
+
+    repriceJob.finished_at = new Date().toISOString();
+    repriceJob.running = false;
+  }
+
+  router.post('/reprice', requireKey, async (req, res) => {
+    try {
+      await ready();
+      if (repriceJob?.running) {
+        return res.status(409).json({ ok: false, error: 'reprice_already_running', job: repriceJob });
+      }
+      const userId = Number(req.body?.user_id) || DEFAULT_USER_ID;
+      const scope = ['all', 'unpriced', 'batch'].includes(req.body?.scope) ? req.body.scope : 'all';
+      const batchId = req.body?.batch_id || null;
+
+      repriceJob = {
+        job_id: crypto.randomUUID(),
+        running: true,
+        cancelled: false,
+        scope,
+        batch_id: batchId,
+        total: 0,
+        processed: 0,
+        repriced: 0,
+        failed: 0,
+        started_at: new Date().toISOString(),
+        finished_at: null,
+      };
+
+      runReprice({ userId, scope, batchId }).catch((err) => {
+        logger.error({ err: err.message }, 'mtg reprice crashed');
+        repriceJob.running = false;
+        repriceJob.error = err.message;
+      });
+
+      res.json({ ok: true, job: repriceJob });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.get('/reprice/status', requireKey, (req, res) => {
+    if (!repriceJob) return res.json({ ok: true, job: null });
+    res.json({ ok: true, job: repriceJob });
   });
 
   return router;
