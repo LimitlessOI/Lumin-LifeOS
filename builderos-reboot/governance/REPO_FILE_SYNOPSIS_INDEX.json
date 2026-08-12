@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-12T20:19:15.377Z",
+  "generated_at": "2026-08-12T20:19:43.197Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13413,
+  "file_count": 13414,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -101281,6 +101281,16 @@
       "bytes": 2572,
       "mtime": "2026-08-12T19:57:56.004Z",
       "indexed_at": "2026-08-12T19:57:56.004Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/taloa/capsule-runtime-service.js",
+      "synopsis": "Exports createCapsuleRuntimeService — services/taloa/capsule-runtime-service.js.",
+      "bytes": 2041,
+      "mtime": "2026-08-12T20:19:43.197Z",
+      "indexed_at": "2026-08-12T20:19:43.197Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]

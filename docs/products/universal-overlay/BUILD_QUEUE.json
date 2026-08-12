@@ -3065,7 +3065,9 @@
       "last_error": null,
       "demoted": false,
       "demote_reason": null,
-      "blocker_class": null
+      "blocker_class": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-08-12T20:19:19.655Z"
     },
     {
       "id": "TALOA-P1-013",
