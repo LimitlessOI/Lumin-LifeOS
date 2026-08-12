@@ -26,6 +26,8 @@ import { reviewFindings, reviewFindingsWithAI } from '../services/chair-findings
 import { defaultPlannerCallModel } from '../services/never-stop-product-factory.js';
 import { runArchitectPass } from '../services/architect-blueprint-writer.js';
 import { runCompetitiveResearchCycle } from '../services/chair-competitive-research.js';
+import { SENTRY_CADENCE, observationAiBudget, cadenceForTier } from '../config/sentry-observation-cadence.js';
+import { applyRepairHandoff, readyForArchitect } from '../config/sentry-repair-handoff.js';
 
 const CALL_ESCALATION_DELAY_MS = 10 * 60 * 1000;
 
@@ -73,6 +75,69 @@ export function mergeFindingsIntoQueue(reviewedFindings, existingQueue) {
   return { queue: { findings: merged }, newlyAdded };
 }
 
+/**
+ * Deep look: attach a strong-model re-read to already-open findings that are
+ * still true. Does not duplicate rows and does not reset queue_status.
+ */
+export function refreshOpenFindings(reviewedFindings, existingQueue, { now = Date.now() } = {}) {
+  const existing = Array.isArray(existingQueue?.findings) ? existingQueue.findings : [];
+  const reviewedById = new Map((reviewedFindings || []).map((f) => [f.id, f]));
+  const stamp = new Date(now).toISOString();
+  return {
+    queue: {
+      findings: existing.map((f) => {
+        const reviewed = reviewedById.get(f.id);
+        if (!reviewed || f.queue_status !== 'open') return f;
+        return {
+          ...f,
+          last_deep_review_at: stamp,
+          deep_review: reviewed.chair_reasoning || f.deep_review,
+        };
+      }),
+    },
+  };
+}
+
+export async function cheapObserverCallModel({ fetchFn = fetch } = {}) {
+  return async (_member, prompt, opts = {}) => {
+    const maxTokens = Number(opts.maxOutputTokens) || 400;
+    const groqKey = process.env.GROQ_API_KEY;
+    if (groqKey) {
+      const res = await fetchFn('https://api.groq.com/openai/v1/chat/completions', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${groqKey}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: process.env.GROQ_MODEL || 'llama-3.1-8b-instant',
+          messages: [{ role: 'user', content: String(prompt) }],
+          max_tokens: maxTokens,
+        }),
+      });
+      const json = await res.json().catch(() => ({}));
+      const text = json?.choices?.[0]?.message?.content;
+      if (text && String(text).trim()) return String(text).trim();
+    }
+    const gKey = process.env.GOOGLE_API_KEY || process.env.GEMINI_API_KEY;
+    if (gKey) {
+      const model = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
+      const res = await fetchFn(
+        `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(gKey)}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: String(prompt) }] }],
+            generationConfig: { maxOutputTokens: maxTokens },
+          }),
+        },
+      );
+      const json = await res.json().catch(() => ({}));
+      const text = json?.candidates?.[0]?.content?.parts?.map((p) => p.text).filter(Boolean).join('\n');
+      if (text && String(text).trim()) return String(text).trim();
+    }
+    throw new Error('no cheap observer model available');
+  };
+}
+
 async function sendFounderSms({ baseUrl, commandKey, message, fetchFn = fetch }) {
   const resp = await fetchFn(`${baseUrl}/api/v1/lifeos/founder/sms`, {
     method: 'POST',
@@ -98,64 +163,129 @@ export async function runGovernanceAuditCycle({
   commandKey = process.env.COMMAND_CENTER_KEY,
   alertPhone = process.env.ALERT_PHONE || process.env.ADAM_SMS_NUMBER,
   productsDir = undefined,
-  // Real AI judgment (SO-003: Chair may not run on a canned/templated
-  // answer). Defaults to the existing auto-failover multi-provider caller
-  // (services/never-stop-product-factory.js) so this reuses the same
-  // already-proven "never idle, switch providers on error" mechanism rather
-  // than inventing a second one. Pass null explicitly to force the pure
-  // rule-based path (e.g. in tests).
-  callModel = defaultPlannerCallModel(),
-  // Injectable so tests can point Architect at an isolated fixture BUILD_QUEUE
-  // instead of the real builderos/ one. Left undefined in production so
-  // services/architect-blueprint-writer.js uses the real repo root.
+  // undefined = pick from observationTier (cheap vs strong vs none).
+  // Pass null in tests to force the rule-based path. Pass a function to inject.
+  callModel = undefined,
+  cheapCallModel = undefined,
+  strongCallModel = undefined,
   architectRoot = undefined,
   logger = console,
-  // Optional DB pool — enables checkReceiptReproducibility (judgment_receipt_links
-  // integrity). Undefined in contexts with no DB access; that check simply no-ops.
   pool = undefined,
-  // 'full' = every SENTRY check. 'system' = only "is the live system still
-  // working" (the never-stop watch). Same Chair → Architect pipe either way.
   auditKind = 'full',
+  observationTier = undefined,
   systemSignals = undefined,
   now = Date.now(),
 } = {}) {
-  const rawSnapshot = auditKind === 'system'
-    ? checkSystemStillWorking(systemSignals ?? await gatherSystemWorkingSignals({ baseUrl, commandKey }))
+  const cadence = observationTier ? cadenceForTier(observationTier) : null;
+  const kind = cadence?.auditKind || auditKind;
+  const reviewOpen = cadence?.reviewOpen === true;
+  const modelTier = cadence?.model || 'strong';
+
+  const signals = systemSignals ? { now, ...systemSignals } : undefined;
+  const rawSnapshot = kind === 'system'
+    ? checkSystemStillWorking(signals ?? { now, ...(await gatherSystemWorkingSignals({ baseUrl, commandKey })) })
     : await runSentrySystemAudit({
       token,
       repo,
       pool,
       ...(productsDir ? { productsDir } : {}),
-      ...(systemSignals ? { systemSignals } : {}),
+      ...(signals ? { systemSignals: signals } : {}),
     });
 
   const existingQueue = loadFindingsQueue();
   const rawFindings = annotateFixerFailures(rawSnapshot, existingQueue, { now });
   const existingIds = new Set((existingQueue.findings || []).map((f) => f.id));
   const novel = rawFindings.filter((f) => !existingIds.has(f.id));
+  const rawIds = new Set(rawFindings.map((f) => f.id));
+  const openStillTrue = reviewOpen
+    ? (existingQueue.findings || []).filter((f) => f.queue_status === 'open' && rawIds.has(f.id))
+    : [];
 
-  if (novel.length === 0) {
+  const budget = observationAiBudget({
+    model: modelTier,
+    novelCount: novel.length,
+    openCount: openStillTrue.length,
+    reviewOpen,
+  });
+
+  if (novel.length === 0 && openStillTrue.length === 0) {
     return {
       raw_findings: rawFindings.length,
       newly_added: 0,
       escalations: 0,
       approved: 0,
       queued_to_blueprint: 0,
-      skipped_review: 'no_novel_findings',
+      skipped_review: 'no_work',
+      observation_tier: observationTier || null,
+      ai_budget: budget,
     };
   }
 
-  const reviewed = callModel
-    ? await reviewFindingsWithAI(novel, { callModel, logger, pool })
-    : reviewFindings(novel);
+  const toReview = [...novel];
+  for (const f of openStillTrue) {
+    if (!toReview.some((x) => x.id === f.id)) toReview.push(f);
+  }
 
-  // Architect: turn every Chair-approved finding into a real BUILD_QUEUE step
-  // where the fix location is unambiguous; label the rest honestly rather
-  // than guess or silently skip them.
-  const withArchitectStatus = runArchitectPass(reviewed, architectRoot ? { root: architectRoot } : {});
+  let resolvedModel = callModel;
+  if (resolvedModel === undefined) {
+    if (!budget.callAi) {
+      resolvedModel = null;
+    } else if (budget.tier === 'cheap') {
+      resolvedModel = cheapCallModel || await cheapObserverCallModel();
+    } else {
+      resolvedModel = strongCallModel || defaultPlannerCallModel();
+    }
+  }
+
+  const reviewed = resolvedModel
+    ? await reviewFindingsWithAI(toReview, { callModel: resolvedModel, logger, pool })
+    : reviewFindings(toReview);
+
+  const runConductorSolve = Boolean(
+    resolvedModel
+    && (observationTier === 'deep_look' || observationTier === 'full_audit' || !observationTier),
+  );
+
+  let handed = reviewed.map((f) => applyRepairHandoff(f));
+  if (runConductorSolve) {
+    const next = [];
+    for (const f of handed) {
+      if (f.repair_lane !== 'dual_solve' || f.conductor_status !== 'awaiting_conductor_solution') {
+        next.push(f);
+        continue;
+      }
+      try {
+        const prompt = [
+          'You are Conductor. SENTRY found a problem. Propose one concrete repair.',
+          'You have not been shown SENTRY\'s solution. Do not guess what it said.',
+          JSON.stringify(f.conductor_packet),
+        ].join('\n');
+        const conductorSolution = await resolvedModel('conductor', prompt, { maxOutputTokens: 400 });
+        next.push(applyRepairHandoff(f, { conductorSolution: String(conductorSolution || '') }));
+      } catch {
+        next.push(f);
+      }
+    }
+    handed = next;
+  }
+
+  const forArchitect = handed.filter((f) => readyForArchitect(f));
+  const architected = runArchitectPass(forArchitect, architectRoot ? { root: architectRoot } : {});
+  const architectById = new Map(architected.map((f) => [f.id, f]));
+  const withArchitectStatus = handed.map((f) => {
+    if (architectById.has(f.id)) return architectById.get(f.id);
+    if (f.repair_lane === 'officer_panel') return { ...f, architect_status: 'officer_panel' };
+    if (f.repair_lane === 'dual_solve' && f.repair_consensus !== true) {
+      return { ...f, architect_status: 'awaiting_consensus' };
+    }
+    return f;
+  });
 
   const { queue, newlyAdded } = mergeFindingsIntoQueue(withArchitectStatus, existingQueue);
-  saveFindingsQueue(queue);
+  const refreshed = reviewOpen
+    ? refreshOpenFindings(withArchitectStatus, queue, { now })
+    : { queue };
+  saveFindingsQueue(refreshed.queue);
 
   const newEscalations = newlyAdded.filter((f) => f.chair_status === 'escalate_to_founder');
   const newApproved = newlyAdded.filter((f) => f.chair_status === 'approved');
@@ -163,7 +293,7 @@ export async function runGovernanceAuditCycle({
 
   if (newlyAdded.length) {
     logger?.info?.(
-      { new_findings: newlyAdded.length, escalations: newEscalations.length, approved: newApproved.length, queued_to_blueprint: newQueuedToBlueprint.length },
+      { new_findings: newlyAdded.length, escalations: newEscalations.length, approved: newApproved.length, queued_to_blueprint: newQueuedToBlueprint.length, observation_tier: observationTier || kind },
       '[SENTRY-CHAIR] governance audit cycle found new findings',
     );
   }
@@ -176,9 +306,6 @@ export async function runGovernanceAuditCycle({
     } catch (err) {
       logger?.warn?.({ err: err.message }, '[SENTRY-CHAIR] founder SMS failed');
     }
-    // Same escalation shape as the CI watchdog: a follow-up call only if this
-    // exact set of escalations is still unresolved after the delay window —
-    // checked by the NEXT cycle's read of queue_status, not a timer here.
   }
 
   return {
@@ -187,6 +314,9 @@ export async function runGovernanceAuditCycle({
     escalations: newEscalations.length,
     approved: newApproved.length,
     queued_to_blueprint: newQueuedToBlueprint.length,
+    observation_tier: observationTier || null,
+    ai_budget: budget,
+    skipped_review: budget.callAi ? undefined : (novel.length ? undefined : 'no_work'),
   };
 }
 
@@ -259,35 +389,47 @@ export function startCompetitiveResearchScheduler({ logger = console, pool = und
 }
 
 export function startSentryChairGovernanceScheduler({ logger = console, pool = undefined } = {}) {
-  const intervalMs = Number(process.env.SENTRY_CHAIR_AUDIT_INTERVAL_MS || 30 * 60 * 1000);
-  const bootDelayMs = Number(process.env.SENTRY_CHAIR_AUDIT_BOOT_DELAY_MS || 90_000);
-  const systemIntervalMs = Number(process.env.SENTRY_SYSTEM_AUDIT_INTERVAL_MS || 5 * 60 * 1000);
+  const heartbeatMs = Number(process.env.SENTRY_HEARTBEAT_MS || process.env.SENTRY_SYSTEM_AUDIT_INTERVAL_MS || SENTRY_CADENCE.heartbeat.intervalMs);
+  const deepMs = Number(process.env.SENTRY_DEEP_LOOK_MS || SENTRY_CADENCE.deep_look.intervalMs);
+  const fullMs = Number(process.env.SENTRY_FULL_AUDIT_MS || process.env.SENTRY_CHAIR_AUDIT_INTERVAL_MS || SENTRY_CADENCE.full_audit.intervalMs);
+  const heartbeatBootMs = Number(process.env.SENTRY_HEARTBEAT_BOOT_DELAY_MS || 30_000);
+  const fullBootMs = Number(process.env.SENTRY_CHAIR_AUDIT_BOOT_DELAY_MS || 90_000);
 
-  const fullTick = async () => {
+  const heartbeatTick = async () => {
     try {
-      await runGovernanceAuditCycle({ logger, pool, auditKind: 'full' });
+      await runGovernanceAuditCycle({ logger, pool, observationTier: 'heartbeat' });
     } catch (err) {
-      logger?.warn?.({ err: err.message }, '[SENTRY-CHAIR] audit cycle failed');
+      logger?.warn?.({ err: err.message }, '[SENTRY-CHAIR] heartbeat cycle failed');
     }
   };
-
-  const systemTick = async () => {
+  const deepTick = async () => {
     try {
-      await runGovernanceAuditCycle({ logger, pool, auditKind: 'system' });
+      await runGovernanceAuditCycle({ logger, pool, observationTier: 'deep_look' });
     } catch (err) {
-      logger?.warn?.({ err: err.message }, '[SENTRY-CHAIR] system-working cycle failed');
+      logger?.warn?.({ err: err.message }, '[SENTRY-CHAIR] deep-look cycle failed');
+    }
+  };
+  const fullTick = async () => {
+    try {
+      await runGovernanceAuditCycle({ logger, pool, observationTier: 'full_audit' });
+    } catch (err) {
+      logger?.warn?.({ err: err.message }, '[SENTRY-CHAIR] full-audit cycle failed');
     }
   };
 
   logger?.info?.(
-    { intervalMs, bootDelayMs, systemIntervalMs },
-    '[SENTRY-CHAIR] starting never-stop audit (full SENTRY finds -> Chair; system-working every 5m)',
+    { heartbeatMs, deepMs, fullMs, heartbeatBootMs, fullBootMs },
+    '[SENTRY-CHAIR] cadence: heartbeat cheap/free, deep look strong on open issues, full audit slower',
   );
 
-  setTimeout(() => { fullTick(); }, bootDelayMs);
-  const fullHandle = setInterval(() => { fullTick(); }, intervalMs);
-  const systemHandle = setInterval(() => { systemTick(); }, systemIntervalMs);
-  return { fullHandle, systemHandle };
+  setTimeout(() => { heartbeatTick(); }, heartbeatBootMs);
+  setTimeout(() => { fullTick(); }, fullBootMs);
+  setTimeout(() => { deepTick(); }, deepMs);
+  return {
+    heartbeatHandle: setInterval(() => { heartbeatTick(); }, heartbeatMs),
+    deepHandle: setInterval(() => { deepTick(); }, deepMs),
+    fullHandle: setInterval(() => { fullTick(); }, fullMs),
+  };
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {

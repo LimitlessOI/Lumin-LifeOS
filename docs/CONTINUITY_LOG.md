@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Documentation — CONTINUITY LOG. -->
 
+## 2026-08-12 — SENTRY solves, then the Conductor; escalate the hard ones
+
+Adam: any issue SENTRY finds, it also has to solve, then send to the Conductor. Simple → send the issue and the solution so two agents do not re-work the obvious. Complicated / other implications → withhold SENTRY's solution; Conductor sees only the problem, they compare and consensus. Larger / something's breaking → bring in more officers. Wired as `send_conclusion` / `dual_solve` / `officer_panel` in `config/sentry-repair-handoff.js`. Cadence and 5m/10m fixer kick unchanged. SENTRY still never builds.
+
 ## 2026-08-12 — SENTRY owns the never-stop watch
 
 ## 2026-08-12 — SENTRY owns the never-stop watch

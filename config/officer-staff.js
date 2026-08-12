@@ -96,6 +96,7 @@ export const OFFICER_STAFF = Object.freeze({
       { task: 'read the dependency graph and compute waves', tier: STAFF_TIER.DETERMINISTIC, implemented_by: 'scripts/manufacturing-plan.mjs' },
       { task: 'detect dependency cycles and collisions', tier: STAFF_TIER.DETERMINISTIC, implemented_by: 'scripts/manufacturing-plan.mjs' },
       { task: 'check whether a product is registered for its gates', tier: STAFF_TIER.DETERMINISTIC, implemented_by: 'scripts/conductor-resolve-requests.mjs' },
+      { task: 'accept a simple SENTRY conclusion without re-solving it', tier: STAFF_TIER.DETERMINISTIC, implemented_by: 'config/sentry-repair-handoff.js' },
       { task: 'summarise mission status for a founder update', tier: STAFF_TIER.FREE_MODEL },
     ]),
   }),
@@ -115,6 +116,7 @@ export const OFFICER_STAFF = Object.freeze({
       { task: 'walk the page and capture screenshots', tier: STAFF_TIER.DETERMINISTIC },
       { task: 'check that a claimed mechanism has a real caller', tier: STAFF_TIER.DETERMINISTIC, implemented_by: 'scripts/verify-enforcement-truth.mjs' },
       { task: 'critique the captured walkthrough as a client', tier: STAFF_TIER.STRONG_MODEL, note: 'Layer B is judgment; SO-002 requires real UX reasoning, not an endpoint 200.' },
+      { task: 'classify a finding as send-conclusion, dual-solve, or officer-panel', tier: STAFF_TIER.DETERMINISTIC, implemented_by: 'config/sentry-repair-handoff.js' },
     ]),
   }),
   wisdom: Object.freeze({
