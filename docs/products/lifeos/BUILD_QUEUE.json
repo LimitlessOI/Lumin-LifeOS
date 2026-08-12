@@ -6279,13 +6279,13 @@
     },
     {
       "id": "update-chair-intent-signals-service",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/chair-intent-signals.js",
       "task": "Augment intent signal generation for 'drawer_direct_build' prompts",
       "spec": "Modify the 'generateFounderIntentSignals' function to produce distinct and reliable signals that facilitate the correct classification of 'drawer_direct_build' prompts into the 'workflow-content' lane by 'founder-chair-intent.js'.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "generateFounderIntentSignals"
       ],
@@ -6296,7 +6296,7 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-08-12T20:14:20.075Z",
       "last_error": "AIC_GATE_FAILURE",
       "last_attempt": null,
       "revive_count": 2,
