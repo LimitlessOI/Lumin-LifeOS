@@ -31,8 +31,18 @@ const SCRYFALL_BASE = 'https://api.scryfall.com';
 // card lookup now costs 2-3 requests, so the throttle lives here (applied to
 // every outbound call) rather than relying on the caller's per-card delay.
 const HEADERS = { 'User-Agent': 'LifeOS-MTG-Cataloger/1.0', Accept: 'application/json' };
-const MIN_REQUEST_GAP_MS = 110;
+// Found live 2026-08-11 repricing 368 real rows from production: the first 15
+// lookups succeeded and the next 353 all failed within ~45 seconds -- roughly
+// one request each, i.e. every first call was being rejected outright. Scryfall
+// sits behind Cloudflare and a datacenter IP issuing ~9 req/sec trips it, even
+// though that is nominally inside their stated ~10/sec guidance. Backed off to
+// a slower floor with real retry/backoff rather than pretending the failures
+// were the cards' fault.
+const MIN_REQUEST_GAP_MS = 175;
 const MAX_PRINT_PAGES = 3;
+const MAX_RETRIES = 3;
+const RETRYABLE_STATUS = new Set([429, 500, 502, 503, 504]);
+const CACHE_LIMIT = 10000;
 
 let lastRequestAt = 0;
 let requestChain = Promise.resolve();
@@ -41,16 +51,54 @@ function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-/** Serializes every Scryfall call and spaces them >= MIN_REQUEST_GAP_MS apart. */
-function scryfallFetch(url) {
+/**
+ * Serializes every Scryfall call, spaces them >= MIN_REQUEST_GAP_MS apart, and
+ * retries the statuses that mean "slow down" rather than "no such card".
+ */
+function scryfallFetch(url, { logger } = {}) {
   const run = requestChain.then(async () => {
-    const wait = MIN_REQUEST_GAP_MS - (Date.now() - lastRequestAt);
-    if (wait > 0) await sleep(wait);
-    lastRequestAt = Date.now();
-    return fetch(url, { headers: HEADERS });
+    let res = null;
+    for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+      const wait = MIN_REQUEST_GAP_MS - (Date.now() - lastRequestAt);
+      if (wait > 0) await sleep(wait);
+      lastRequestAt = Date.now();
+      res = await fetch(url, { headers: HEADERS });
+      if (!RETRYABLE_STATUS.has(res.status) || attempt === MAX_RETRIES) return res;
+
+      const retryAfter = Number(res.headers.get('retry-after'));
+      const backoff = Number.isFinite(retryAfter) && retryAfter > 0
+        ? retryAfter * 1000
+        : 1000 * 2 ** attempt;
+      logger?.warn?.({ status: res.status, backoff, url }, 'scryfall throttled, backing off');
+      await sleep(backoff);
+      lastRequestAt = Date.now();
+    }
+    return res;
   });
   requestChain = run.then(() => undefined, () => undefined);
   return run;
+}
+
+// A collection legitimately contains the same card many times over (and the
+// duplicate-batch problem means the same photo can appear twice), so the same
+// name+set is looked up repeatedly within one reprice run. Caching turns that
+// into one real request instead of hundreds.
+const priceCache = new Map();
+
+function cacheKey(name, set) {
+  return `${String(name).toLowerCase()}|${String(set || '').toLowerCase()}`;
+}
+
+function rememberPrice(key, value) {
+  if (priceCache.size >= CACHE_LIMIT) priceCache.clear();
+  priceCache.set(key, value);
+  return value;
+}
+
+/** Exported for tests and for callers that want a fresh read of live prices. */
+export function clearPriceCache() {
+  priceCache.clear();
+  setIndexPromise = null;
 }
 
 function normalizeSetKey(value) {
@@ -215,7 +263,7 @@ async function fetchPaperPrints(cardName, { logger } = {}) {
   const prints = [];
 
   for (let page = 0; page < MAX_PRINT_PAGES && url; page++) {
-    const res = await scryfallFetch(url);
+    const res = await scryfallFetch(url, { logger });
     if (res.status === 404) break; // no paper printings at all (MTGO-only card)
     if (!res.ok) {
       logger?.warn?.({ status: res.status, cardName }, 'scryfall prints search failed');
@@ -247,11 +295,14 @@ const EMPTY_PRICE = {
 export async function lookupMtgCardPrice(name, set, { logger } = {}) {
   if (!name) return { ok: false, error: 'no_name', ...EMPTY_PRICE };
 
+  const key = cacheKey(name, set);
+  if (priceCache.has(key)) return priceCache.get(key);
+
   try {
     // Step 1: canonicalize the name. The vision model's spelling can be
     // slightly off, and the exact-name print search below needs the real one.
-    const namedRes = await scryfallFetch(`${SCRYFALL_BASE}/cards/named?fuzzy=${encodeURIComponent(name)}`);
-    if (namedRes.status === 404) return { ok: false, error: 'not_found', ...EMPTY_PRICE };
+    const namedRes = await scryfallFetch(`${SCRYFALL_BASE}/cards/named?fuzzy=${encodeURIComponent(name)}`, { logger });
+    if (namedRes.status === 404) return rememberPrice(key, { ok: false, error: 'not_found', ...EMPTY_PRICE });
     if (!namedRes.ok) return { ok: false, error: `scryfall_${namedRes.status}`, ...EMPTY_PRICE };
     const namedCard = await namedRes.json();
     const canonicalName = namedCard?.name || name;
@@ -260,7 +311,7 @@ export async function lookupMtgCardPrice(name, set, { logger } = {}) {
     // MTGO-only set that has no paper market price.
     const prints = await fetchPaperPrints(canonicalName, { logger });
     if (!prints.length) {
-      return {
+      return rememberPrice(key, {
         ok: true,
         scryfall_id: namedCard.id,
         canonical_name: canonicalName,
@@ -272,7 +323,7 @@ export async function lookupMtgCardPrice(name, set, { logger } = {}) {
         printing_count: 0,
         price_match: 'no_paper_printing',
         needs_review: true,
-      };
+      });
     }
 
     // Step 3: pick the printing the founder most likely physically holds.
@@ -280,7 +331,7 @@ export async function lookupMtgCardPrice(name, set, { logger } = {}) {
     const setCode = resolveSetCodeFrom(index, set);
     const picked = pickPrinting(prints, setCode);
 
-    return {
+    return rememberPrice(key, {
       ok: true,
       scryfall_id: picked?.chosen?.print?.id || namedCard.id,
       canonical_name: canonicalName,
@@ -292,7 +343,7 @@ export async function lookupMtgCardPrice(name, set, { logger } = {}) {
       printing_count: picked?.printing_count ?? prints.length,
       price_match: picked?.price_match ?? null,
       needs_review: picked?.needs_review ?? false,
-    };
+    });
   } catch (err) {
     logger?.warn?.({ err: err.message, name, set }, 'scryfall price lookup failed');
     return { ok: false, error: err.message, ...EMPTY_PRICE };
@@ -308,7 +359,7 @@ export async function lookupMtgCardPrice(name, set, { logger } = {}) {
 export async function lookupMtgCardById(scryfallId, { logger } = {}) {
   if (!scryfallId) return { ok: false, error: 'no_id', ...EMPTY_PRICE };
   try {
-    const res = await scryfallFetch(`${SCRYFALL_BASE}/cards/${encodeURIComponent(scryfallId)}`);
+    const res = await scryfallFetch(`${SCRYFALL_BASE}/cards/${encodeURIComponent(scryfallId)}`, { logger });
     if (!res.ok) return { ok: false, error: `scryfall_${res.status}`, ...EMPTY_PRICE };
     const card = await res.json();
     const usd = toNumber(card.prices?.usd);

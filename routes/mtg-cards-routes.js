@@ -653,6 +653,12 @@ export function createMtgCardsRoutes({ pool, requireKey, logger = console }) {
    * were already catalogued, and re-photographing hundreds of cards to pick up
    * a backend fix would be an absurd thing to ask the founder to do.
    */
+  function recordRepriceError(message) {
+    const key = String(message).slice(0, 80);
+    repriceJob.error_counts[key] = (repriceJob.error_counts[key] || 0) + 1;
+    repriceJob.last_error = key;
+  }
+
   async function runReprice({ userId, scope, batchId }) {
     const where = ['user_id = $1', "identified_name IS NOT NULL"];
     const params = [userId];
@@ -694,9 +700,14 @@ export function createMtgCardsRoutes({ pool, requireKey, logger = console }) {
           repriceJob.repriced += 1;
         } else {
           repriceJob.failed += 1;
+          // A bare failure count is useless for diagnosis -- the first reprice
+          // run reported 353 failures with no way to tell a rate-limited
+          // request from a genuinely unrecognised card name.
+          recordRepriceError(price.error || 'unknown');
         }
       } catch (err) {
         repriceJob.failed += 1;
+        recordRepriceError(err.message);
         logger.warn?.({ err: err.message, id: r.id }, 'mtg reprice row failed');
       }
       repriceJob.processed += 1;
@@ -726,6 +737,8 @@ export function createMtgCardsRoutes({ pool, requireKey, logger = console }) {
         processed: 0,
         repriced: 0,
         failed: 0,
+        error_counts: {},
+        last_error: null,
         started_at: new Date().toISOString(),
         finished_at: null,
       };
