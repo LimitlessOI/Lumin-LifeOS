@@ -3011,7 +3011,7 @@
     },
     {
       "id": "TALOA-P1-012",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/taloa/strategy-router-service.js",
       "task": "The file MUST begin with a JSDoc block comment containing a line exactly \"@ssot docs/products/universal-overlay/PRODUCT_HOME.md\" (mandatory, enforced by a commit gate). Determines the appropriate strategy for task execution based on a 5-gate deterministic algorithm. Export exactly this factory function, with this exact name and destructured parameter shape: export function createStrategyRouterService({ pool, logger, authorityLedger, taskOrchestrator }). The object it returns MUST expose these methods, each a real async function, not a stub or a thrown \"not implemented\": determineStrategy. Constraints: ES module syntax (import/export, no require); no top-level side effects, no timers started at import, no network calls, and no AI/model calls; all database access goes through the injected pool parameter and no other client; validate required constructor dependencies up front and throw a clear Error naming the missing one; every method must return a plain serialisable object, never undefined; depend only on node builtins and the injected dependencies -- add no new npm packages.",
       "spec": "{\n  \"step_id\": \"TALOA-P1-012\",\n  \"purpose\": \"Determines the appropriate strategy for task execution based on a 5-gate deterministic algorithm.\",\n  \"sealed_contract\": {\n    \"tables\": [],\n    \"exports\": [\n      \"StrategyRouterService\"\n    ],\n    \"ai_calls\": [],\n    \"endpoints\": [],\n    \"test_assertions\": [\n      \"StrategyRouterService.determineStrategy is callable\"\n    ],\n    \"factory_signature\": \"export function createStrategyRouterService({ pool, logger, authorityLedger, taskOrchestrator })\"\n  },\n  \"ssot_tag\": \"docs/products/universal-overlay/PRODUCT_HOME.md\",\n  \"amended_by\": \"architect_cycle_resolution\"\n}",
@@ -3024,7 +3024,7 @@
         "TALOA-P1-010"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "createStrategyRouterService"
       ],
@@ -3057,7 +3057,12 @@
         "Do not widen any Body capability or authority -- Gate 0 (blueprint 45a) is still open."
       ],
       "source": "TALOA-OVERLAY-P1-0001 sealed Phase 1",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-08-12T20:12:28.213Z",
+      "last_error": "governed_ship_failed"
     },
     {
       "id": "TALOA-P1-013",
