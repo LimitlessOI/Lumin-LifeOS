@@ -14,7 +14,8 @@ mkdir -p "$APP_BUNDLE/Contents/MacOS"
 mkdir -p "$APP_BUNDLE/Contents/Resources"
 
 swiftc -O OverlayWindow.swift TaloaLog.swift ShowLayer.swift TaloaImageCharacterView.swift \
-    ContainerView.swift ScreenControl.swift ScreenControlCommands.swift main.swift \
+    ContainerView.swift BadgeVoice.swift ScreenControl.swift ScreenControlCommands.swift main.swift \
+    -framework AVFoundation \
     -o "$APP_BUNDLE/Contents/MacOS/$APP_NAME"
 
 cp Info.plist "$APP_BUNDLE/Contents/Info.plist"

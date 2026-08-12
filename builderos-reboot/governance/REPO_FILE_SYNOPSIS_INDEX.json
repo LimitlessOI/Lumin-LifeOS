@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-12T21:51:17.798Z",
+  "generated_at": "2026-08-12T22:21:35.412Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13425,
+  "file_count": 13426,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -68554,9 +68554,9 @@
     {
       "path": "native/macos-overlay/build.sh",
       "synopsis": "Shell script — Build.",
-      "bytes": 1874,
-      "mtime": "2026-08-12T18:35:19.165Z",
-      "indexed_at": "2026-08-12T18:35:19.165Z"
+      "bytes": 0,
+      "mtime": "2026-08-12T22:21:35.412Z",
+      "indexed_at": "2026-08-12T22:21:35.412Z"
     },
     {
       "path": "native/macos-overlay/demos/capability-tour.json",
@@ -77864,6 +77864,13 @@
       ]
     },
     {
+      "path": "scripts/lib/system-watchdog.mjs",
+      "synopsis": "Script — System Watchdog.",
+      "bytes": 0,
+      "mtime": "2026-08-12T22:21:35.412Z",
+      "indexed_at": "2026-08-12T22:21:35.412Z"
+    },
+    {
       "path": "scripts/lifeos-alpha-break-it.mjs",
       "synopsis": "Live break-it alpha — stress edge cases beyond standard batteries.",
       "bytes": 8985,
@@ -78891,13 +78898,10 @@
     },
     {
       "path": "scripts/prod-health-watchdog.mjs",
-      "synopsis": "Production runtime-health watchdog — polls this server's own",
-      "bytes": 7717,
-      "mtime": "2026-08-12T21:12:45.323Z",
-      "indexed_at": "2026-08-12T21:12:45.323Z",
-      "ssot": [
-        "docs/products/builderos/PRODUCT_HOME.md"
-      ]
+      "synopsis": "Script — Prod Health Watchdog.",
+      "bytes": 0,
+      "mtime": "2026-08-12T22:21:35.412Z",
+      "indexed_at": "2026-08-12T22:21:35.412Z"
     },
     {
       "path": "scripts/programming-artifacts-preflight.js",
@@ -79296,8 +79300,8 @@
       "path": "scripts/run-factory-lane.mjs",
       "synopsis": "Script — Run Factory Lane.",
       "bytes": 0,
-      "mtime": "2026-08-12T21:50:46.856Z",
-      "indexed_at": "2026-08-12T21:50:46.856Z"
+      "mtime": "2026-08-12T22:21:35.412Z",
+      "indexed_at": "2026-08-12T22:21:35.412Z"
     },
     {
       "path": "scripts/run-foundation-pipeline.mjs",
@@ -105053,9 +105057,9 @@
     {
       "path": "tests/prod-health-watchdog.test.js",
       "synopsis": "js — tests/prod-health-watchdog.test.js.",
-      "bytes": 3902,
-      "mtime": "2026-07-29T04:00:35.718Z",
-      "indexed_at": "2026-07-29T04:01:55.226Z"
+      "bytes": 0,
+      "mtime": "2026-08-12T22:21:35.412Z",
+      "indexed_at": "2026-08-12T22:21:35.412Z"
     },
     {
       "path": "tests/product-build-orchestrator.test.js",

@@ -17,6 +17,7 @@ import { execFileSync } from 'node:child_process';
 import { ownerFor, thisFactoryId } from '../config/lane-assignment.js';
 import { workspaceRootFor } from '../config/factory-workspace.js';
 import { syncFactoryWorktree } from './sync-factory-worktree.mjs';
+import { evaluateSystemWatchdog, overlayNativeBlockedSteps } from './lib/system-watchdog.mjs';
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -75,6 +76,29 @@ function readLastTick(repoRoot) {
   }
 }
 
+function taloaPids() {
+  try {
+    return execFileSync('pgrep', ['-f', 'Taloa.app/Contents/MacOS/Taloa'], { encoding: 'utf8' })
+      .trim()
+      .split('\n')
+      .filter(Boolean);
+  } catch {
+    return [];
+  }
+}
+
+export function ensureTaloaRunning(repoRoot) {
+  if (taloaPids().length) return { running: true };
+  const app = path.join(repoRoot, 'native/macos-overlay/build/Taloa.app');
+  if (!fs.existsSync(app)) return { running: false, error: 'app_missing' };
+  try {
+    execFileSync('open', [app]);
+    return { running: true, relaunched: true };
+  } catch (err) {
+    return { running: false, error: String(err.message || err).slice(0, 200) };
+  }
+}
+
 function writeTick(repoRoot, tick) {
   const dir = path.dirname(tickPath(repoRoot));
   fs.mkdirSync(dir, { recursive: true });
@@ -104,6 +128,8 @@ export function runFactoryLane({ factoryId = thisFactoryId(), productId = 'unive
   const claimable = checks.filter((c) => c.ok);
 
   let build = { skipped: true, reason: 'primary_lane_does_not_compile_native' };
+  let taloa = null;
+  let watchdog = null;
   if (factoryId !== 'factory-1' && sync.ok !== false) {
     const head = nativeTreeSha(repoRoot);
     const prev = readLastTick(repoRoot);
@@ -121,11 +147,19 @@ export function runFactoryLane({ factoryId = thisFactoryId(), productId = 'unive
     } else {
       build = { skipped: true, reason: 'native_unchanged', native_tree_sha: head };
     }
+    const taloaState = ensureTaloaRunning(repoRoot);
+    taloa = taloaState;
+    watchdog = evaluateSystemWatchdog({
+      factory2: { tickAt: prev?.at, ok: true, taloaRunning: taloaState.running },
+      overlayNativeBlocks: overlayNativeBlockedSteps(queue),
+    });
     writeTick(repoRoot, {
       at: new Date().toISOString(),
       factory_id: factoryId,
       native_tree_sha: head,
       build,
+      taloa: taloaState,
+      watchdog,
       pending_owned: checks,
     });
   }
@@ -151,6 +185,8 @@ export function runFactoryLane({ factoryId = thisFactoryId(), productId = 'unive
     product_id: productId,
     pending_owned: checks,
     build,
+    taloa,
+    watchdog,
     detail,
   };
 }

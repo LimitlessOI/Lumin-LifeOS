@@ -23,6 +23,7 @@ import fs from 'fs';
 import path from 'path';
 import { sendFounderSms, sendFounderCall } from './ci-health-watchdog.mjs';
 import { classifyHealthRepair, repairBindMigrationsInRepo } from './lib/repair-bind-migration.mjs';
+import { evaluateSystemWatchdog, overlayNativeBlockedSteps } from './lib/system-watchdog.mjs';
 
 const CALL_ESCALATION_DELAY_MS = 10 * 60 * 1000; // matches ci-health-watchdog.mjs's own escalation timing
 
@@ -90,6 +91,30 @@ export function evaluateProdHealth({ health, state, now = Date.now() }) {
   return { action: 'none', reasonKey, newState: state };
 }
 
+export async function fetchGovernedStatus({ baseUrl, commandKey, fetchFn = fetch }) {
+  if (!commandKey) return null;
+  const res = await fetchFn(`${baseUrl}/api/v1/lifeos/never-stop/status`, {
+    headers: { 'x-command-key': commandKey },
+    signal: AbortSignal.timeout(10000),
+  });
+  const body = await res.json().catch(() => null);
+  const ns = body?.never_stop || {};
+  const gs = ns.governed_status || {};
+  return {
+    enabled: gs.enabled === true,
+    lastTickAt: gs.lastTickAt || gs.lastRunAt || null,
+    hardHalt: ns.hard_halt?.halt === true,
+  };
+}
+
+function readOverlayQueue() {
+  try {
+    return JSON.parse(fs.readFileSync(path.join(process.cwd(), 'docs/products/universal-overlay/BUILD_QUEUE.json'), 'utf8'));
+  } catch {
+    return { steps: [] };
+  }
+}
+
 export async function runProdHealthWatchdogCycle({
   baseUrl = process.env.PUBLIC_BASE_URL,
   commandKey = process.env.COMMAND_CENTER_KEY,
@@ -110,54 +135,73 @@ export async function runProdHealthWatchdogCycle({
 
   const state = loadState();
   const { action, reasonKey, newState } = evaluateProdHealth({ health, state });
-  saveState(newState);
 
-  if (action === 'none') return { action, reasonKey };
+  let governed = null;
+  try {
+    governed = await fetchGovernedStatus({ baseUrl, commandKey });
+  } catch {
+    governed = null;
+  }
+  const overlayNativeBlocks = overlayNativeBlockedSteps(readOverlayQueue());
+  const sys = evaluateSystemWatchdog({ governed, overlayNativeBlocks });
+  const prevSys = state.systemReasonKey || null;
+  let systemAction = 'none';
+  if (sys.reasonKey && sys.reasonKey !== prevSys) systemAction = 'sms';
+  else if (!sys.reasonKey && prevSys) systemAction = 'recovered';
+
+  const merged = { ...newState, systemReasonKey: sys.reasonKey || null };
+  saveState(merged);
+
+  if (action === 'none' && systemAction === 'none') {
+    return { action: 'none', reasonKey, system: sys };
+  }
 
   if (!commandKey || !alertPhone) {
-    logger.warn?.(`[PROD-HEALTH-WATCHDOG] would ${action} (${reasonKey}) but COMMAND_CENTER_KEY/ALERT_PHONE missing — cannot actually alert`);
-    return { action, reasonKey, alerted: false, reason: 'missing_alert_config' };
+    logger.warn?.(`[PROD-HEALTH-WATCHDOG] would ${action}/${systemAction} (${reasonKey || sys.reasonKey}) but COMMAND_CENTER_KEY/ALERT_PHONE missing — cannot actually alert`);
+    return { action, reasonKey, systemAction, system: sys, alerted: false, reason: 'missing_alert_config' };
   }
 
   if (action === 'recovered') {
     await sendFounderSms({ baseUrl, commandKey, message: 'BuilderOS: production /healthz is back to healthy.' });
     logger.info?.('[PROD-HEALTH-WATCHDOG] recovery SMS sent');
-    return { action, alerted: true };
-  }
-
-  const message = `BuilderOS ALERT: production is degraded (${reasonKey}). ${baseUrl}/healthz`;
-
-  if (action === 'sms') {
-    await sendFounderSms({ baseUrl, commandKey, message });
+  } else if (action === 'sms') {
+    await sendFounderSms({ baseUrl, commandKey, message: `BuilderOS ALERT: production is degraded (${reasonKey}). ${baseUrl}/healthz` });
   } else if (action === 'call') {
-    await sendFounderCall({ baseUrl, commandKey, to: alertPhone, message });
+    await sendFounderCall({ baseUrl, commandKey, to: alertPhone, message: `BuilderOS ALERT: production is degraded (${reasonKey}). ${baseUrl}/healthz` });
   }
 
-  // Alarm without a playbook is not a fixer. The last migrations_failed
-  // incident was caught (SMS+call) and then sat unrepaired because the
-  // executor only knew DR-003-RECEIPT-STALE. Apply the bind-migration class
-  // here, on the same tick that alerts.
+  if (systemAction === 'sms') {
+    const lines = (sys.findings || []).map((f) => `${f.id}: ${f.proposed_solution}`).join(' | ');
+    await sendFounderSms({ baseUrl, commandKey, message: `BuilderOS watchdog: ${lines}` });
+  } else if (systemAction === 'recovered') {
+    await sendFounderSms({ baseUrl, commandKey, message: 'BuilderOS watchdog: factory/overlay findings cleared.' });
+  }
+
   let repair = null;
-  const classified = classifyHealthRepair(health);
-  if (classified?.repair_id === 'DR-BIND-MIGRATION') {
-    try {
-      const changed = repairBindMigrationsInRepo(process.cwd(), classified.migrations_failed);
-      repair = {
-        repair_id: classified.repair_id,
-        changed,
-        proposed_solution: changed.length
-          ? 'Bind-before-create SQL rewritten on disk. Commit these files and redeploy so the next boot applies them.'
-          : 'migrations_failed but no RAISE EXCEPTION bind file matched — different class, still needs a playbook.',
-      };
-      logger.warn?.({ repair }, '[PROD-HEALTH-WATCHDOG] attempted bind-migration self-repair');
-    } catch (err) {
-      repair = { repair_id: classified.repair_id, error: err.message };
-      logger.warn?.({ err: err.message }, '[PROD-HEALTH-WATCHDOG] bind-migration self-repair threw');
+  if (action === 'sms' || action === 'call') {
+    const classified = classifyHealthRepair(health);
+    if (classified?.repair_id === 'DR-BIND-MIGRATION') {
+      try {
+        const changed = repairBindMigrationsInRepo(process.cwd(), classified.migrations_failed);
+        repair = {
+          repair_id: classified.repair_id,
+          changed,
+          proposed_solution: changed.length
+            ? 'Bind-before-create SQL rewritten on disk. Commit these files and redeploy so the next boot applies them.'
+            : 'migrations_failed but no RAISE EXCEPTION bind file matched — different class, still needs a playbook.',
+        };
+        logger.warn?.({ repair }, '[PROD-HEALTH-WATCHDOG] attempted bind-migration self-repair');
+      } catch (err) {
+        repair = { repair_id: classified.repair_id, error: err.message };
+        logger.warn?.({ err: err.message }, '[PROD-HEALTH-WATCHDOG] bind-migration self-repair threw');
+      }
     }
   }
 
-  logger.warn?.(`[PROD-HEALTH-WATCHDOG] ${action} alert sent for reason=${reasonKey}`);
-  return { action, reasonKey, alerted: true, repair };
+  if (action !== 'none') {
+    logger.warn?.(`[PROD-HEALTH-WATCHDOG] ${action} alert sent for reason=${reasonKey}`);
+  }
+  return { action, reasonKey, systemAction, system: sys, alerted: true, repair };
 }
 
 /** Mirrors startCiHealthWatchdogScheduler's exact convention. */

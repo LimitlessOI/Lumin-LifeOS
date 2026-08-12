@@ -219,6 +219,15 @@ extension ScreenControl {
             TaloaShow.clear()
             writeResult(["ok": true, "op": op, "request_id": requestId])
 
+        case "badge_voice":
+            let action = (cmd["action"] as? String ?? "start").lowercased()
+            TaloaLog.write("voice.cmd", "action=\(action)")
+            writeResult(["ok": true, "op": op, "request_id": requestId, "action": action])
+            NotificationCenter.default.post(
+                name: .taloaBadgeVoice, object: nil,
+                userInfo: ["action": action]
+            )
+
         case "capture":
             let path = cmd["path"] as? String ?? "/tmp/taloa-capture.png"
             let index = number(cmd["display"]).map { Int($0) } ?? 1

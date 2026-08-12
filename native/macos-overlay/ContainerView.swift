@@ -52,6 +52,7 @@ extension Notification.Name {
     /// badge -- main.swift listens and snaps her home to whichever of the
     /// four corners she's now closest to. See HomeCorner in main.swift.
     static let taloaDidFinishDrag = Notification.Name("taloaDidFinishDrag")
+    static let taloaBadgeVoice = Notification.Name("taloaBadgeVoice")
 }
 
 final class ContainerView: NSView, WKNavigationDelegate, WKUIDelegate {
@@ -135,7 +136,11 @@ final class ContainerView: NSView, WKNavigationDelegate, WKUIDelegate {
         // installWebViewIfNeeded used to wait for expandThreshold, so a click
         // paid a cold /lifeos load + auto-login every time. Preload it hidden.
         installWebViewIfNeeded()
-        webView?.isHidden = true
+        BadgeVoice.requestPermission()
+        NotificationCenter.default.addObserver(
+            self, selector: #selector(onBadgeVoiceCommand),
+            name: .taloaBadgeVoice, object: nil
+        )
     }
 
     required init?(coder: NSCoder) { fatalError("init(coder:) not used") }
@@ -155,7 +160,6 @@ final class ContainerView: NSView, WKNavigationDelegate, WKUIDelegate {
                 webView?.isHidden = false
             } else {
                 badgeView.isHidden = false
-                webView?.isHidden = true
             }
         }
         badgeView.frame = bounds
@@ -474,31 +478,88 @@ final class ContainerView: NSView, WKNavigationDelegate, WKUIDelegate {
         dragMode = .none
     }
 
-    /// Hold on the un-expanded badge (~450ms, no drag) talks through the
-    /// already-live Chair push-to-talk control. Click still expands. Drag
-    /// still moves. Do not invent a second mic UI.
-    private func beginBadgeVoiceIfStillHolding() {
-        guard !isExpanded, chairReady, let wv = webView else { return }
-        guard (NSEvent.pressedMouseButtons & 1) != 0 else { return }
+    /// Native hold-to-talk. Injecting a JS click into WKWebView is not a
+    /// WebKit user gesture, so getUserMedia never starts. Record here, STT
+    /// on the already-live Voice Rail, then luminSend. Do not expand.
+    @objc private func onBadgeVoiceCommand(_ note: Notification) {
+        let action = (note.userInfo?["action"] as? String ?? "").lowercased()
+        if action == "start" {
+            beginBadgeVoiceIfStillHolding(force: true)
+        } else if action == "stop" {
+            endBadgeVoice()
+        }
+    }
+
+    private func beginBadgeVoiceIfStillHolding(force: Bool = false) {
+        guard !isExpanded else { return }
+        if !force {
+            guard (NSEvent.pressedMouseButtons & 1) != 0 else { return }
+        }
+        if BadgeVoice.shared.isRecording { return }
+        if !BadgeVoice.micAuthorized() {
+            TaloaLog.write("voice.hold_failed", "mic_not_authorized")
+            BadgeVoice.requestPermission()
+            badgeView.concern()
+            return
+        }
+        guard BadgeVoice.shared.start() else {
+            TaloaLog.write("voice.hold_failed", "recorder")
+            badgeView.concern()
+            return
+        }
         voiceHoldActive = true
         badgeView.castSpell()
-        wv.evaluateJavaScript(
-            "try { var b = document.getElementById('lumin-ptt-btn'); " +
-            "if (b) { b.dispatchEvent(new MouseEvent('mousedown', {bubbles:true, cancelable:true})); } " +
-            "else if (window.luminDrawerVoiceCtrl && window.luminDrawerVoiceCtrl.startMic) { " +
-            "window.luminDrawerVoiceCtrl.startMic(); } } catch (e) {}"
-        )
+        TaloaLog.write("voice.hold_start", force ? "cmd" : "mouse")
     }
 
     private func endBadgeVoice() {
         guard voiceHoldActive else { return }
         voiceHoldActive = false
-        webView?.evaluateJavaScript(
-            "try { var b = document.getElementById('lumin-ptt-btn'); " +
-            "if (b) { b.dispatchEvent(new MouseEvent('mouseup', {bubbles:true, cancelable:true})); } " +
-            "else if (window.luminDrawerVoiceCtrl && window.luminDrawerVoiceCtrl.stopMic) { " +
-            "window.luminDrawerVoiceCtrl.stopMic(); } } catch (e) {}"
-        )
+        guard let file = BadgeVoice.shared.stop() else {
+            TaloaLog.write("voice.hold_empty")
+            return
+        }
+        guard let commandKey = Self.readLocalCommandKey() else {
+            TaloaLog.write("voice.stt_skipped", "no_command_key")
+            badgeView.concern()
+            return
+        }
+        BadgeVoice.transcribe(file: file, commandKey: commandKey) { [weak self] text, error in
+            DispatchQueue.main.async {
+                if let error {
+                    TaloaLog.write("voice.stt_failed", error)
+                    self?.badgeView.concern()
+                    return
+                }
+                self?.sendVoiceTranscript(text ?? "")
+            }
+        }
+    }
+
+    private func sendVoiceTranscript(_ text: String) {
+        let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else {
+            TaloaLog.write("voice.empty")
+            badgeView.concern()
+            return
+        }
+        guard let wv = webView else {
+            TaloaLog.write("voice.send_failed", "no_webview")
+            badgeView.concern()
+            return
+        }
+        guard let data = try? JSONSerialization.data(withJSONObject: ["text": trimmed]),
+              let json = String(data: data, encoding: .utf8) else {
+            TaloaLog.write("voice.send_failed", "json")
+            badgeView.concern()
+            return
+        }
+        wv.evaluateJavaScript(
+            "try { var t = (\(json)).text; if (typeof luminSend === 'function') { luminSend({ text: t, voice: true }); 'sent'; } else { 'no_luminSend'; } } catch (e) { String(e) }"
+        ) { result, err in
+            TaloaLog.write("voice.send", "result=\(result ?? "nil") err=\(err?.localizedDescription ?? "")")
+        }
+        badgeView.celebrate()
     }
 
     private func openChairDrawer(on webView: WKWebView) {

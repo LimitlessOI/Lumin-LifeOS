@@ -5,6 +5,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 
 import { evaluateProdHealth } from '../scripts/prod-health-watchdog.mjs';
+import { evaluateSystemWatchdog } from '../scripts/lib/system-watchdog.mjs';
 
 const healthy = { httpOk: true, body: { startup: { startup_report: { reasons: [] } } } };
 const degraded = { httpOk: true, body: { startup: { startup_report: { reasons: ['migrations_failed:2'] } } } };
@@ -79,4 +80,38 @@ test('evaluateProdHealth: reasons list order does not create a false distinct-in
     now: 2,
   });
   assert.equal(action, 'none');
+});
+
+test('system watchdog is quiet when governed is ticking and Taloa is up', () => {
+  const { ok, findings } = evaluateSystemWatchdog({
+    now: 10_000,
+    governed: { enabled: true, lastTickAt: new Date(9_000).toISOString(), hardHalt: false },
+    factory2: { tickAt: new Date(9_000).toISOString(), taloaRunning: true },
+  });
+  assert.equal(ok, true);
+  assert.equal(findings.length, 0);
+});
+
+test('system watchdog names a playbook when factory-1 false-blocks native overlay', () => {
+  const { ok, findings, reasonKey } = evaluateSystemWatchdog({
+    overlayNativeBlocks: [{
+      id: 'TALOA-BADGE-VOICE-001',
+      status: 'blocked',
+      last_error: 'NOT_ON_BLUEPRINT',
+      target_file: 'native/macos-overlay/ContainerView.swift',
+    }],
+  });
+  assert.equal(ok, false);
+  assert.equal(reasonKey, 'false_block:TALOA-BADGE-VOICE-001');
+  assert.match(findings[0].proposed_solution, /factory-2 native/);
+});
+
+test('system watchdog flags a stale governed loop', () => {
+  const now = 20 * 60 * 1000;
+  const { ok, findings } = evaluateSystemWatchdog({
+    now,
+    governed: { enabled: true, lastTickAt: new Date(0).toISOString() },
+  });
+  assert.equal(ok, false);
+  assert.equal(findings[0].id, 'governed_loop_stale');
 });
