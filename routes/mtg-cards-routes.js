@@ -26,6 +26,7 @@
  *   GET    /recent-activity -> per-batch progress, for "is it actually running?"
  *   GET    /collection -> whole deduped collection + totals + review queue
  *   GET    /collection.csv -> the same list as a real sell sheet
+ *   GET    /collection/stats -> counts by era/year/set/rarity/foil/sell status
  *   GET    /duplicates -> batches that re-processed photos already catalogued
  *   POST   /reprice -> re-run Scryfall pricing over stored rows (no vision cost)
  *   GET    /reprice/status -> progress of the running reprice job
@@ -88,6 +89,11 @@ async function ensureSchema(pool) {
   await pool.query(`ALTER TABLE mtg_card_collection ADD COLUMN IF NOT EXISTS price_match TEXT`);
   await pool.query(`ALTER TABLE mtg_card_collection ADD COLUMN IF NOT EXISTS needs_review BOOLEAN NOT NULL DEFAULT FALSE`);
   await pool.query(`ALTER TABLE mtg_card_collection ADD COLUMN IF NOT EXISTS priced_at TIMESTAMPTZ`);
+  await pool.query(`ALTER TABLE mtg_card_collection ADD COLUMN IF NOT EXISTS rarity TEXT`);
+  await pool.query(`ALTER TABLE mtg_card_collection ADD COLUMN IF NOT EXISTS set_code TEXT`);
+  await pool.query(`ALTER TABLE mtg_card_collection ADD COLUMN IF NOT EXISTS set_name TEXT`);
+  await pool.query(`ALTER TABLE mtg_card_collection ADD COLUMN IF NOT EXISTS set_released_at DATE`);
+  await pool.query(`ALTER TABLE mtg_card_collection ADD COLUMN IF NOT EXISTS era TEXT`);
   await ensurePhotoSchema(pool);
 }
 
@@ -194,6 +200,11 @@ export function applyPriceToRow(row, price) {
   row.price_match = price.price_match ?? null;
   row.needs_review = Boolean(price.needs_review);
   row.price_source = 'scryfall';
+  row.rarity = price.rarity ?? row.rarity ?? null;
+  row.set_code = price.set_code ?? row.set_code ?? null;
+  row.set_name = price.set_name ?? row.set_name ?? null;
+  row.set_released_at = price.set_released_at ?? row.set_released_at ?? null;
+  row.era = price.era ?? row.era ?? null;
 
   const perCard = row.is_foil ? (price.price_usd_foil ?? price.price_usd) : price.price_usd;
   const quantity = Math.max(1, Number(row.quantity) || 1);
@@ -239,6 +250,11 @@ function blankRow({ userId, batchId, photoName = null, source = 'photo_vision' }
     source_photo_id: null,
     listing_photo_id: null,
     sell_status: 'catalogued',
+    rarity: null,
+    set_code: null,
+    set_name: null,
+    set_released_at: null,
+    era: null,
   };
 }
 
@@ -248,10 +264,11 @@ const INSERT_SQL = `
      identify_confidence, identify_error, scryfall_id, price_usd, price_usd_foil, price_used,
      price_source, value_tier, recommended_venue, status, quantity, source,
      price_min_usd, price_max_usd, printing_count, price_match, needs_review, priced_at,
-     source_photo_id, listing_photo_id, sell_status)
+     source_photo_id, listing_photo_id, sell_status,
+     rarity, set_code, set_name, set_released_at, era)
   VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,
           CASE WHEN $14::text IS NULL THEN NULL ELSE NOW() END,
-          $25,$26,$27)
+          $25,$26,$27,$28,$29,$30,$31,$32)
 `;
 
 function insertParams(row) {
@@ -261,6 +278,7 @@ function insertParams(row) {
     row.price_usd_foil, row.price_used, row.price_source, row.value_tier, row.recommended_venue,
     row.status, row.quantity, row.source, row.price_min_usd, row.price_max_usd, row.printing_count,
     row.price_match, row.needs_review, row.source_photo_id, row.listing_photo_id, row.sell_status,
+    row.rarity, row.set_code, row.set_name, row.set_released_at, row.era,
   ];
 }
 
@@ -457,21 +475,72 @@ function csvEscape(value) {
 
 export function collectionToCsv(rows) {
   const headers = [
-    'Card', 'Set', 'Foil', 'Condition', 'Price USD', 'Price Low', 'Price High',
-    'Tier', 'Venue', 'Needs Review', 'Price Basis', 'Quantity', 'Photo', 'Scryfall ID',
+    'Card', 'Set', 'Set Code', 'Set Year', 'Era', 'Rarity', 'Foil', 'Condition',
+    'Price USD', 'Price Low', 'Price High',
+    'Tier', 'Venue', 'Needs Review', 'Sell Status', 'Price Basis', 'Quantity', 'Photo', 'Scryfall ID',
   ];
   const lines = [headers.join(',')];
   for (const r of rows) {
+    const year = r.set_released_at ? String(r.set_released_at).slice(0, 4) : '';
     lines.push([
-      r.identified_name, r.identified_set, r.is_foil ? 'foil' : '', r.condition_guess,
+      r.identified_name, r.set_name || r.identified_set, r.set_code, year, r.era, r.rarity,
+      r.is_foil ? 'foil' : '', r.condition_guess,
       r.price_used != null ? Number(r.price_used).toFixed(2) : '',
       r.price_min_usd != null ? Number(r.price_min_usd).toFixed(2) : '',
       r.price_max_usd != null ? Number(r.price_max_usd).toFixed(2) : '',
       r.value_tier, r.recommended_venue, r.needs_review ? 'yes' : '',
-      r.price_match, r.quantity, r.photo_name, r.scryfall_id,
+      r.sell_status, r.price_match, r.quantity, r.photo_name, r.scryfall_id,
     ].map(csvEscape).join(','));
   }
   return lines.join('\n');
+}
+
+/** Aggregate counts/values for the founder "what do I have?" breakdown. */
+export function buildCollectionStats(rows) {
+  function bucket(map, key, usd) {
+    const k = key || 'unknown';
+    map[k] = map[k] || { count: 0, subtotal_usd: 0 };
+    map[k].count += 1;
+    map[k].subtotal_usd += Number(usd || 0);
+  }
+
+  const by_era = {};
+  const by_set = {};
+  const by_year = {};
+  const by_rarity = {};
+  const by_foil = {};
+  const by_tier = {};
+  const by_sell_status = {};
+  const by_status = {};
+
+  for (const r of rows) {
+    const usd = r.price_used;
+    bucket(by_era, r.era, usd);
+    const setLabel = r.set_name || r.identified_set || r.set_code || 'unknown';
+    bucket(by_set, setLabel, usd);
+    const year = r.set_released_at ? String(r.set_released_at).slice(0, 4) : 'unknown';
+    bucket(by_year, year, usd);
+    bucket(by_rarity, r.rarity, usd);
+    bucket(by_foil, r.is_foil === true ? 'foil' : r.is_foil === false ? 'nonfoil' : 'unknown', usd);
+    bucket(by_tier, r.value_tier, usd);
+    bucket(by_sell_status, r.sell_status, usd);
+    bucket(by_status, r.status, usd);
+  }
+
+  const sortBuckets = (map) => Object.entries(map)
+    .map(([key, v]) => ({ key, count: v.count, subtotal_usd: Number(v.subtotal_usd.toFixed(2)) }))
+    .sort((a, b) => b.count - a.count || b.subtotal_usd - a.subtotal_usd);
+
+  return {
+    by_era: sortBuckets(by_era),
+    by_set: sortBuckets(by_set),
+    by_year: sortBuckets(by_year).sort((a, b) => String(a.key).localeCompare(String(b.key))),
+    by_rarity: sortBuckets(by_rarity),
+    by_foil: sortBuckets(by_foil),
+    by_tier: sortBuckets(by_tier),
+    by_sell_status: sortBuckets(by_sell_status),
+    by_status: sortBuckets(by_status),
+  };
 }
 
 export function createMtgCardsRoutes({ pool, requireKey, logger = console }) {
@@ -711,11 +780,33 @@ export function createMtgCardsRoutes({ pool, requireKey, logger = console }) {
         total_estimated_usd: Number(totalUsd.toFixed(2)),
         needs_review_count: reviewCount,
         by_tier: byTier,
+        stats: buildCollectionStats(rows),
         rows: rows.slice(0, limit),
         truncated: rows.length > limit,
       });
     } catch (err) {
       logger.error({ err: err.message }, 'mtg collection query failed');
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.get('/collection/stats', requireKey, async (req, res) => {
+    try {
+      await ready();
+      const userId = Number(req.query.user_id) || DEFAULT_USER_ID;
+      const rows = await loadCollection(userId);
+      const totalUsd = rows.reduce((s, r) => s + Number(r.price_used || 0), 0);
+      res.json({
+        ok: true,
+        card_count: rows.length,
+        total_estimated_usd: Number(totalUsd.toFixed(2)),
+        foil_count: rows.filter((r) => r.is_foil === true).length,
+        rare_plus_count: rows.filter((r) => ['rare', 'mythic', 'special', 'bonus'].includes(String(r.rarity || '').toLowerCase())).length,
+        needs_review_count: rows.filter((r) => r.needs_review).length,
+        ready_to_list_count: rows.filter((r) => r.sell_status === 'ready_to_list').length,
+        ...buildCollectionStats(rows),
+      });
+    } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
     }
   });
@@ -781,12 +872,14 @@ export function createMtgCardsRoutes({ pool, requireKey, logger = console }) {
                scryfall_id = $2, price_usd = $3, price_usd_foil = $4, price_used = $5,
                price_source = $6, value_tier = $7, recommended_venue = $8, status = $9,
                price_min_usd = $10, price_max_usd = $11, printing_count = $12,
-               price_match = $13, needs_review = $14, priced_at = NOW()
+               price_match = $13, needs_review = $14, priced_at = NOW(),
+               rarity = $15, set_code = $16, set_name = $17, set_released_at = $18, era = $19
              WHERE id = $1`,
             [r.id, updated.scryfall_id, updated.price_usd, updated.price_usd_foil, updated.price_used,
              updated.price_source, updated.value_tier, updated.recommended_venue, updated.status,
              updated.price_min_usd, updated.price_max_usd, updated.printing_count,
-             updated.price_match, updated.needs_review],
+             updated.price_match, updated.needs_review,
+             updated.rarity, updated.set_code, updated.set_name, updated.set_released_at, updated.era],
           );
           repriceJob.repriced += 1;
         } else {

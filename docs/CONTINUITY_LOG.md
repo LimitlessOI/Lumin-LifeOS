@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-08-12 — MTG collection stats (set / era / year / foil / rarity)
+
+Adam asked for breakdowns: how many cards by set/version, generation, foil, rarity, status, and set year. Shipping taxonomy on priced rows from Scryfall, `GET /collection/stats`, and panels on the upload page. One Re-price after deploy backfills older catalogued cards. Sell automation beyond photos+queue still open.
+
 ## 2026-08-11 (night) — The MTG catalogue was priced wrong, not just incomplete
 
 Adam handed the card-cataloging work over cold (*"ran out of useage for claude. i need to have you pick that up for me"*). Checking real production data before reading the receipts as truth: the pipeline was **working** — 366 cards catalogued across 6 real batches that day. The open problem was one nobody had looked for, because the pipeline appeared to succeed.

@@ -300,7 +300,39 @@ const EMPTY_PRICE = {
   printing_count: 0,
   price_match: null,
   needs_review: false,
+  rarity: null,
+  set_code: null,
+  set_name: null,
+  set_released_at: null,
+  era: null,
 };
+
+/** Generation bucket from a set's release year — what Adam means by "what generation." */
+export function eraFromReleaseDate(releasedAt) {
+  if (!releasedAt) return 'unknown';
+  const year = Number(String(releasedAt).slice(0, 4));
+  if (!Number.isFinite(year)) return 'unknown';
+  if (year <= 1993) return '1993 — Alpha / Beta / Unlimited / Arabian';
+  if (year <= 1995) return '1994–95 — early expansions';
+  if (year <= 1997) return '1996–97 — mid-90s / Mirage–Tempest';
+  if (year <= 1999) return '1998–99 — late 90s / Urza–Masques';
+  if (year <= 2003) return '2000–03 — early 2000s';
+  return '2004+ — modern';
+}
+
+function catalogFieldsFromCard(card) {
+  if (!card) {
+    return { rarity: null, set_code: null, set_name: null, set_released_at: null, era: null };
+  }
+  const set_released_at = card.released_at || null;
+  return {
+    rarity: card.rarity || null,
+    set_code: card.set || null,
+    set_name: card.set_name || null,
+    set_released_at,
+    era: eraFromReleaseDate(set_released_at),
+  };
+}
 
 /**
  * @returns {Promise<{ ok: boolean, scryfall_id?: string, canonical_name?: string, set_code?: string|null,
@@ -331,7 +363,6 @@ export async function lookupMtgCardPrice(name, set, { logger } = {}) {
         ok: true,
         scryfall_id: namedCard.id,
         canonical_name: canonicalName,
-        set_code: null,
         price_usd: toNumber(namedCard.prices?.usd),
         price_usd_foil: toNumber(namedCard.prices?.usd_foil),
         price_min_usd: toNumber(namedCard.prices?.usd),
@@ -339,6 +370,7 @@ export async function lookupMtgCardPrice(name, set, { logger } = {}) {
         printing_count: 0,
         price_match: 'no_paper_printing',
         needs_review: true,
+        ...catalogFieldsFromCard(namedCard),
       });
     }
 
@@ -346,12 +378,12 @@ export async function lookupMtgCardPrice(name, set, { logger } = {}) {
     const index = await getSetIndex({ logger });
     const setCode = resolveSetCodeFrom(index, set);
     const picked = pickPrinting(prints, setCode);
+    const chosenPrint = picked?.chosen?.print || null;
 
     return rememberPrice(key, {
       ok: true,
-      scryfall_id: picked?.chosen?.print?.id || namedCard.id,
+      scryfall_id: chosenPrint?.id || namedCard.id,
       canonical_name: canonicalName,
-      set_code: picked?.chosen?.print?.set || setCode || null,
       price_usd: picked?.chosen?.usd ?? null,
       price_usd_foil: picked?.chosen?.foil ?? null,
       price_min_usd: picked?.price_min_usd ?? null,
@@ -359,6 +391,8 @@ export async function lookupMtgCardPrice(name, set, { logger } = {}) {
       printing_count: picked?.printing_count ?? prints.length,
       price_match: picked?.price_match ?? null,
       needs_review: picked?.needs_review ?? false,
+      ...catalogFieldsFromCard(chosenPrint),
+      set_code: chosenPrint?.set || setCode || null,
     });
   } catch (err) {
     logger?.warn?.({ err: err.message, name, set }, 'scryfall price lookup failed');
@@ -383,7 +417,6 @@ export async function lookupMtgCardById(scryfallId, { logger } = {}) {
       ok: true,
       scryfall_id: card.id,
       canonical_name: card.name,
-      set_code: card.set || null,
       price_usd: usd,
       price_usd_foil: toNumber(card.prices?.usd_foil),
       price_min_usd: usd,
@@ -391,6 +424,7 @@ export async function lookupMtgCardById(scryfallId, { logger } = {}) {
       printing_count: 1,
       price_match: 'scryfall_id',
       needs_review: false,
+      ...catalogFieldsFromCard(card),
     };
   } catch (err) {
     logger?.warn?.({ err: err.message, scryfallId }, 'scryfall id lookup failed');

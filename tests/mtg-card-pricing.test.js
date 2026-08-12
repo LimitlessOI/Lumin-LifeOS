@@ -14,9 +14,9 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { pickPrinting, resolveSetCodeFrom, classifyValueTier } from '../services/mtg-card-pricing.js';
+import { pickPrinting, resolveSetCodeFrom, classifyValueTier, eraFromReleaseDate } from '../services/mtg-card-pricing.js';
 import { parseCardsFromModelText, MAX_CARDS_PER_PHOTO } from '../services/mtg-card-vision.js';
-import { applyPriceToRow, collectionToCsv, parseManaBoxCsv, photoCardSlotName } from '../routes/mtg-cards-routes.js';
+import { applyPriceToRow, buildCollectionStats, collectionToCsv, parseManaBoxCsv, photoCardSlotName } from '../routes/mtg-cards-routes.js';
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -148,14 +148,39 @@ test('applyPriceToRow leaves an unpriced card unpriced', () => {
   assert.equal(row.recommended_venue, 'manual_review');
 });
 
+test('eraFromReleaseDate buckets sets into generations Adam can scan', () => {
+  assert.equal(eraFromReleaseDate('1993-08-05'), '1993 — Alpha / Beta / Unlimited / Arabian');
+  assert.equal(eraFromReleaseDate('1995-06-01'), '1994–95 — early expansions');
+  assert.equal(eraFromReleaseDate('1997-10-14'), '1996–97 — mid-90s / Mirage–Tempest');
+  assert.equal(eraFromReleaseDate('1999-06-01'), '1998–99 — late 90s / Urza–Masques');
+  assert.equal(eraFromReleaseDate('2002-05-01'), '2000–03 — early 2000s');
+  assert.equal(eraFromReleaseDate('2015-01-01'), '2004+ — modern');
+  assert.equal(eraFromReleaseDate(null), 'unknown');
+});
+
+test('buildCollectionStats counts by era, year, set, rarity, foil, and sell status', () => {
+  const stats = buildCollectionStats([
+    { era: '1993 — Alpha / Beta / Unlimited / Arabian', set_name: 'Limited Edition Alpha', set_released_at: '1993-08-05', rarity: 'rare', is_foil: false, value_tier: 'high', sell_status: 'ready_to_list', status: 'done', price_used: 100 },
+    { era: '1996–97 — mid-90s / Mirage–Tempest', set_name: 'Tempest', set_released_at: '1997-10-14', rarity: 'common', is_foil: true, value_tier: 'low', sell_status: 'catalogued', status: 'done', price_used: 1.5 },
+    { era: '1996–97 — mid-90s / Mirage–Tempest', set_name: 'Tempest', set_released_at: '1997-10-14', rarity: 'uncommon', is_foil: false, value_tier: 'mid', sell_status: 'catalogued', status: 'done', price_used: 5 },
+  ]);
+  assert.equal(stats.by_era.find((r) => r.key.startsWith('1996')).count, 2);
+  assert.equal(stats.by_year.find((r) => r.key === '1993').count, 1);
+  assert.equal(stats.by_set.find((r) => r.key === 'Tempest').count, 2);
+  assert.equal(stats.by_rarity.find((r) => r.key === 'rare').subtotal_usd, 100);
+  assert.equal(stats.by_foil.find((r) => r.key === 'foil').count, 1);
+  assert.equal(stats.by_sell_status.find((r) => r.key === 'ready_to_list').count, 1);
+});
+
 test('collectionToCsv escapes card names that contain commas and quotes', () => {
   const csv = collectionToCsv([
-    { identified_name: 'Jace, the Mind Sculptor', identified_set: 'Worldwake', is_foil: false, price_used: 89.5, value_tier: 'high', recommended_venue: 'tcgplayer_individual_listing', needs_review: false, quantity: 1 },
+    { identified_name: 'Jace, the Mind Sculptor', identified_set: 'Worldwake', set_name: 'Worldwake', set_released_at: '2010-02-05', era: '2004+ — modern', rarity: 'mythic', is_foil: false, price_used: 89.5, value_tier: 'high', recommended_venue: 'tcgplayer_individual_listing', needs_review: false, quantity: 1 },
     { identified_name: 'Say "Hello"', identified_set: null, price_used: null, value_tier: 'unknown', needs_review: true, quantity: 2 },
   ]);
   const lines = csv.split('\n');
-  assert.match(lines[0], /^Card,Set,Foil,/);
+  assert.match(lines[0], /^Card,Set,Set Code,Set Year,Era,Rarity,Foil,/);
   assert.ok(lines[1].includes('"Jace, the Mind Sculptor"'), 'comma in a card name must not split the column');
+  assert.ok(lines[1].includes(',2010,'), 'set year must reach the sell sheet');
   assert.ok(lines[2].includes('"Say ""Hello"""'), 'quotes must be doubled per RFC 4180');
   assert.ok(lines[2].includes(',yes,'), 'review flag must reach the sell sheet');
 });
@@ -217,15 +242,23 @@ test('the pricing rewrite is actually reachable from the live routes and UI', ()
   assert.match(routes, /router\.post\('\/reprice'/, 'already-catalogued cards need a no-vision repricing path');
   assert.match(routes, /router\.get\('\/collection'/);
   assert.match(routes, /router\.get\('\/collection\.csv'/);
+  assert.match(routes, /router\.get\('\/collection\/stats'/);
+  assert.match(routes, /buildCollectionStats/);
 
   const vision = fs.readFileSync(path.join(repoRoot, 'services/mtg-card-vision.js'), 'utf8');
   assert.match(vision, /MAX_CARDS_PER_PHOTO = 30/);
   assert.match(vision, /export async function identifyMtgCardsFromPhoto/);
 
+  const pricing = fs.readFileSync(path.join(repoRoot, 'services/mtg-card-pricing.js'), 'utf8');
+  assert.match(pricing, /export function eraFromReleaseDate/);
+  assert.match(pricing, /catalogFieldsFromCard/);
+
   const page = fs.readFileSync(path.join(repoRoot, 'public/mtg-cards-upload.html'), 'utf8');
   assert.ok(page.includes('/api/v1/mtg-cards/collection'), 'the collection view must be reachable from the real page');
+  assert.ok(page.includes('/api/v1/mtg-cards/collection/stats'), 'stats breakdowns must be reachable from the real page');
   assert.ok(page.includes('/api/v1/mtg-cards/reprice'), 'the reprice action must be reachable from the real page');
   assert.ok(/10, 15, 20\+|as many cards as you want/i.test(page), 'UI must tell the founder multi-card photos are allowed');
+  assert.ok(page.includes('By generation / era'), 'UI must show generation/era breakdown');
 
   for (const lane of ['startup/register-runtime-routes.js', 'startup/register-founder-runtime-routes.js']) {
     const src = fs.readFileSync(path.join(repoRoot, lane), 'utf8');

@@ -29,7 +29,11 @@
   .warn { color: #facc15; font-weight: 600; margin: 8px 0; }
   .review { color: #facc15; }
   .muted { color: #6b7a8d; font-size: 0.85rem; }
-  select { background: #151a24; color: #e6e6e6; border: 1px solid #262b36; border-radius: 8px; padding: 0.5rem; }
+  .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin: 1rem 0; }
+  .stat-panel { background: #151a24; border-radius: 8px; padding: 0.75rem 1rem; }
+  .stat-panel h3 { margin: 0 0 0.5rem; font-size: 0.85rem; color: #9fb3c8; font-weight: 600; }
+  .stat-panel table { margin: 0; font-size: 0.8rem; }
+  .stat-panel td { padding: 0.25rem 0.4rem; }
 </style>
 </head>
 <body>
@@ -68,8 +72,9 @@
   </div>
   <div id="collectionStatus" class="muted" style="margin-top:0.75rem"></div>
   <div class="summary" id="collectionSummary"></div>
+  <div id="statsPanels" style="display:none; margin:1rem 0;"></div>
   <table id="collectionTable" style="display:none">
-    <thead><tr><th>Card</th><th>Set</th><th>Foil</th><th>Price</th><th>Range</th><th>Tier</th><th>Venue</th><th>Basis</th></tr></thead>
+    <thead><tr><th>Card</th><th>Set</th><th>Year</th><th>Rarity</th><th>Foil</th><th>Price</th><th>Tier</th><th>Sell status</th></tr></thead>
     <tbody id="collectionBody"></tbody>
   </table>
 
@@ -287,6 +292,7 @@
   const collectionSummary = document.getElementById('collectionSummary');
   const collectionTable = document.getElementById('collectionTable');
   const collectionBody = document.getElementById('collectionBody');
+  const statsPanels = document.getElementById('statsPanels');
   let repriceTimer = null;
 
   function collectionQuery() {
@@ -299,11 +305,22 @@
     return v == null ? '—' : '$' + Number(v).toFixed(2);
   }
 
+  function renderStatPanel(title, rows, limit = 12) {
+    const body = (rows || []).slice(0, limit).map((r) =>
+      `<tr><td>${r.key}</td><td>${r.count}</td><td>${money(r.subtotal_usd)}</td></tr>`
+    ).join('') || '<tr><td colspan="3" class="muted">No data yet — re-price to fill set/year/rarity</td></tr>';
+    return `<div class="stat-panel"><h3>${title}</h3><table><thead><tr><th>Group</th><th>#</th><th>$</th></tr></thead><tbody>${body}</tbody></table></div>`;
+  }
+
   async function loadCollection() {
     collectionStatus.textContent = 'Loading collection...';
     try {
-      const res = await fetch(`/api/v1/mtg-cards/collection${collectionQuery()}`, { headers: authHeaders() });
-      const json = await res.json();
+      const [collRes, statsRes] = await Promise.all([
+        fetch(`/api/v1/mtg-cards/collection${collectionQuery()}`, { headers: authHeaders() }),
+        fetch('/api/v1/mtg-cards/collection/stats', { headers: authHeaders() }),
+      ]);
+      const json = await collRes.json();
+      const stats = await statsRes.json();
       if (!json.ok) {
         collectionStatus.textContent = `Could not load collection: ${json.error || 'unknown error'}`;
         return;
@@ -314,22 +331,36 @@
         return `<div><strong class="${tierClass(t)}">${t}</strong>: ${d.count} card(s), $${Number(d.subtotal_usd).toFixed(2)}</div>`;
       }).join('')
         + `<div><strong>Total estimated:</strong> $${Number(json.total_estimated_usd).toFixed(2)}</div>`
-        + `<div class="review"><strong>Needs review:</strong> ${json.needs_review_count} card(s)</div>`;
+        + `<div class="review"><strong>Needs review:</strong> ${json.needs_review_count} card(s)</div>`
+        + (stats.ok ? `<div><strong>Foil:</strong> ${stats.foil_count}</div><div><strong>Rare+:</strong> ${stats.rare_plus_count}</div><div><strong>Ready to list:</strong> ${stats.ready_to_list_count}</div>` : '');
+
+      if (stats.ok) {
+        statsPanels.className = 'stat-grid';
+        statsPanels.innerHTML = [
+          renderStatPanel('By generation / era', stats.by_era),
+          renderStatPanel('By set year', stats.by_year, 20),
+          renderStatPanel('By set', stats.by_set, 15),
+          renderStatPanel('By rarity', stats.by_rarity),
+          renderStatPanel('Foil vs non-foil', stats.by_foil),
+          renderStatPanel('Sell status', stats.by_sell_status),
+        ].join('');
+        statsPanels.style.display = '';
+      }
 
       collectionBody.innerHTML = json.rows.map((r) => `
         <tr>
           <td>${r.identified_name || '<span class="err">unidentified</span>'}</td>
-          <td>${r.identified_set || ''}</td>
+          <td>${r.set_name || r.identified_set || ''}</td>
+          <td class="muted">${r.set_released_at ? String(r.set_released_at).slice(0, 4) : ''}</td>
+          <td>${r.rarity || ''}</td>
           <td>${r.is_foil ? 'Foil' : ''}</td>
           <td>${money(r.price_used)}</td>
-          <td class="muted">${r.price_min_usd != null ? money(r.price_min_usd) + '–' + money(r.price_max_usd) : ''}</td>
           <td class="${tierClass(r.value_tier)}">${r.value_tier}</td>
-          <td>${r.needs_review ? '<span class="review">review</span>' : (r.recommended_venue || '')}</td>
-          <td class="muted">${r.price_match || ''}</td>
+          <td class="muted">${r.sell_status || ''}${r.needs_review ? ' · <span class="review">review</span>' : ''}</td>
         </tr>
       `).join('');
       collectionTable.style.display = '';
-      collectionStatus.textContent = `${json.card_count} card(s) in your collection${json.truncated ? ` — showing the top ${json.rows.length}, download the CSV for all of them` : ''}.`;
+      collectionStatus.textContent = `${json.card_count} card(s) in your collection${json.truncated ? ` — showing the top ${json.rows.length}, download the CSV for all of them` : ''}. Re-price once to fill year/rarity on older rows.`;
     } catch (err) {
       collectionStatus.textContent = `Could not load collection: ${err.message}`;
     }
