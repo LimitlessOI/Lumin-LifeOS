@@ -289,10 +289,19 @@ ScreenControl.requestAccessibilityTrust()
 ScreenControl.startDebugTriggerPolling()
 ScreenControl.startCommandChannel()
 // Screen Recording is a separate grant from Accessibility and fails silently
-// rather than loudly -- see the note on screenRecordingGranted(). Asking at
-// launch means both prompts appear in one sitting instead of the app quietly
-// producing wallpaper screenshots for weeks.
-ScreenControl.requestScreenRecording()
+// rather than loudly -- see the note on screenRecordingGranted().
+//
+// Deferred past app.run() deliberately. Called here, inline, the request
+// returned without ever registering Taloa: confirmed 2026-08-12 by reading the
+// Screen Recording pane's own rows through the Accessibility API -- Cursor and
+// eight other apps were listed and Taloa was simply absent, so there was no
+// switch for anyone, founder or agent, to turn on. The Accessibility request
+// above works pre-run-loop; this one needs the app actually running.
+DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+    guard !ScreenControl.screenRecordingGranted() else { return }
+    ScreenControl.requestScreenRecording()
+    TaloaLog.write("app.screen_recording_requested", "granted_after_request=\(ScreenControl.screenRecordingGranted())")
+}
 TaloaLog.write("app.launched", "windows=\(overlayWindows.count) displays=\(TaloaShow.displayBounds().count) can_click=\(ScreenControl.isAccessibilityTrusted()) can_see=\(ScreenControl.screenRecordingGranted()) can_show=true")
 for display in TaloaShow.displayBounds() {
     TaloaLog.write("app.display", "index=\(display.index) name=\(display.name) bounds=\(Int(display.bounds.origin.x)),\(Int(display.bounds.origin.y)),\(Int(display.bounds.width)),\(Int(display.bounds.height))")

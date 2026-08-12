@@ -22,9 +22,19 @@ cp Assets/TaloaCharacter.png "$APP_BUNDLE/Contents/Resources/TaloaCharacter.png"
 cp Assets/TaloaCharacterBlink.png "$APP_BUNDLE/Contents/Resources/TaloaCharacterBlink.png"
 cp Assets/TaloaCharacterSpeak.png "$APP_BUNDLE/Contents/Resources/TaloaCharacterSpeak.png"
 
-# Ad-hoc signature -- no Developer ID needed for local use; makes Gatekeeper
-# and SMAppService registration behave like a normal installed app instead
-# of an unsigned loose binary.
-codesign --force --deep --sign - "$APP_BUNDLE"
+# Sign with the stable local identity if it exists. This is not cosmetic: an
+# ad-hoc signature makes the app's designated requirement a hash of the binary,
+# so every rebuild reads as a different app and silently voids the
+# Accessibility and Screen Recording grants. See setup-signing.sh.
+SIGN_DIR="$HOME/.taloa-signing"
+if [ -f "$SIGN_DIR/identity-hash" ] && [ -f "$SIGN_DIR/keychain-password" ]; then
+    security unlock-keychain -p "$(cat "$SIGN_DIR/keychain-password")" taloa.keychain 2>/dev/null || true
+    codesign --force --deep --sign "$(cat "$SIGN_DIR/identity-hash")" "$APP_BUNDLE"
+    echo "Signed with stable identity (permissions survive this rebuild)"
+else
+    codesign --force --deep --sign - "$APP_BUNDLE"
+    echo "WARNING: ad-hoc signed -- every rebuild voids granted permissions."
+    echo "         Run ./setup-signing.sh once to fix this permanently."
+fi
 
 echo "Built: $APP_BUNDLE"

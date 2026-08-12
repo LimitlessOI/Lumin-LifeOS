@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-12T09:19:55.865Z",
+  "generated_at": "2026-08-12T18:35:19.165Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13365,
+  "file_count": 13366,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -44637,9 +44637,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 856411,
-      "mtime": "2026-08-12T09:19:55.865Z",
-      "indexed_at": "2026-08-12T09:19:55.865Z"
+      "bytes": 860621,
+      "mtime": "2026-08-12T18:35:19.165Z",
+      "indexed_at": "2026-08-12T18:35:19.165Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -68244,9 +68244,9 @@
     {
       "path": "native/macos-overlay/build.sh",
       "synopsis": "Shell script — Build.",
-      "bytes": 1225,
-      "mtime": "2026-08-12T05:30:41.713Z",
-      "indexed_at": "2026-08-12T05:30:41.713Z"
+      "bytes": 1874,
+      "mtime": "2026-08-12T18:35:19.165Z",
+      "indexed_at": "2026-08-12T18:35:19.165Z"
     },
     {
       "path": "native/macos-overlay/demos/capability-tour.json",
@@ -68258,10 +68258,17 @@
     },
     {
       "path": "native/macos-overlay/redeploy.sh",
-      "synopsis": "Shell script — Build, relaunch, and auto-grant Accessibility.",
-      "bytes": 1065,
-      "mtime": "2026-08-11T06:41:15.798Z",
-      "indexed_at": "2026-08-11T06:42:35.101Z"
+      "synopsis": "Shell script — Build, relaunch, and verify Taloa's real capabilities.",
+      "bytes": 1681,
+      "mtime": "2026-08-12T18:35:19.165Z",
+      "indexed_at": "2026-08-12T18:35:19.165Z"
+    },
+    {
+      "path": "native/macos-overlay/setup-signing.sh",
+      "synopsis": "Shell script — Setup Signing.",
+      "bytes": 4575,
+      "mtime": "2026-08-12T18:35:19.165Z",
+      "indexed_at": "2026-08-12T18:35:19.165Z"
     },
     {
       "path": "NEON_OPTIMIZATION_STRATEGY.md",

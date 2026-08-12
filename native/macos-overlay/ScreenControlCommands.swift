@@ -27,13 +27,46 @@ extension ScreenControl {
     /// "capture succeeded" claim not gated on this preflight is a false claim
     /// -- an agent would be reasoning confidently about an empty desk.
     static func screenRecordingGranted() -> Bool {
-        CGPreflightScreenCaptureAccess()
+        CGPreflightScreenCaptureAccess() || canSeeOtherWindows()
     }
 
-    /// Prompts once for Screen Recording. Like Accessibility, the actual grant
-    /// is the founder's own click in System Settings -- a macOS security
-    /// boundary, not a gap in this code.
+    /// Ground truth, independent of the TCC API. macOS only reveals other
+    /// applications' window *titles* to a process that holds Screen Recording,
+    /// so seeing even one is proof of real sight.
+    ///
+    /// This exists because on 2026-08-12 the grant was confirmed on in System
+    /// Settings (persisting across a cold reopen) while
+    /// `CGPreflightScreenCaptureAccess()` kept returning false for a process
+    /// launched afterwards. Trusting the API alone would have had Taloa refuse
+    /// work it was actually authorized to do -- the mirror image of the
+    /// wallpaper-capture lie this file already guards against.
+    static func canSeeOtherWindows() -> Bool {
+        let mine = ProcessInfo.processInfo.processIdentifier
+        guard let windows = CGWindowListCopyWindowInfo(
+            [.optionOnScreenOnly, .excludeDesktopElements], kCGNullWindowID) as? [[String: Any]] else {
+            return false
+        }
+        for window in windows {
+            let owner = window[kCGWindowOwnerPID as String] as? Int32 ?? mine
+            guard owner != mine else { continue }
+            if let title = window[kCGWindowName as String] as? String, !title.isEmpty {
+                return true
+            }
+        }
+        return false
+    }
+
+    /// Prompts once for Screen Recording and, more importantly, makes Taloa
+    /// appear in the Screen Recording list at all.
+    ///
+    /// `CGRequestScreenCaptureAccess()` alone was not sufficient here: on
+    /// 2026-08-12 the pane listed nine other apps and no Taloa row, so the
+    /// permission could not be granted by anyone. A real in-process capture
+    /// attempt is what actually attributes the access to this app -- the
+    /// shell-out to `/usr/sbin/screencapture` used elsewhere in this file does
+    /// not, because the child process carries its own TCC identity.
     static func requestScreenRecording() {
+        _ = CGWindowListCreateImage(.infinite, .optionOnScreenOnly, kCGNullWindowID, [])
         _ = CGRequestScreenCaptureAccess()
     }
 
@@ -41,23 +74,37 @@ extension ScreenControl {
     /// `TaloaShow.displayBounds()` and `screencapture -D`). Returns the
     /// display's CG bounds alongside the file so a caller can map any pixel in
     /// the frame back to the global coordinate space clicks are expressed in.
+    /// Captured in-process rather than by shelling out to
+    /// `/usr/sbin/screencapture`. The shell-out was a real bug, not a style
+    /// choice: a spawned Apple binary carries its own TCC identity, so the
+    /// capture was never attributed to Taloa -- which is also why Taloa never
+    /// appeared in the Screen Recording list until it attempted a capture from
+    /// inside its own process.
     static func captureDisplay(index: Int, to path: String) -> (ok: Bool, bounds: CGRect?, blind: Bool) {
         let blind = !screenRecordingGranted()
-        let task = Process()
-        task.executableURL = URL(fileURLWithPath: "/usr/sbin/screencapture")
-        task.arguments = ["-x", "-D", String(index), path]
-        do {
-            try task.run()
-            task.waitUntilExit()
-            let bounds = TaloaShow.displayBounds().first(where: { $0.index == index })?.bounds
-            if blind {
-                TaloaLog.write("capture.blind", "display=\(index) wrote wallpaper-only frame to \(path)")
-            }
-            return (task.terminationStatus == 0 && !blind, bounds, blind)
-        } catch {
-            TaloaLog.write("capture.error", "display=\(index) err=\(error.localizedDescription)")
+        guard let bounds = TaloaShow.displayBounds().first(where: { $0.index == index })?.bounds else {
+            TaloaLog.write("capture.error", "display=\(index) no such display")
             return (false, nil, blind)
         }
+        guard let image = CGWindowListCreateImage(bounds, [.optionOnScreenOnly], kCGNullWindowID, [.bestResolution]) else {
+            TaloaLog.write("capture.error", "display=\(index) CGWindowListCreateImage returned nil")
+            return (false, bounds, blind)
+        }
+        let rep = NSBitmapImageRep(cgImage: image)
+        guard let data = rep.representation(using: .png, properties: [:]) else {
+            TaloaLog.write("capture.error", "display=\(index) png encode failed")
+            return (false, bounds, blind)
+        }
+        do {
+            try data.write(to: URL(fileURLWithPath: path))
+        } catch {
+            TaloaLog.write("capture.error", "display=\(index) write failed: \(error.localizedDescription)")
+            return (false, bounds, blind)
+        }
+        if blind {
+            TaloaLog.write("capture.blind", "display=\(index) wrote wallpaper-only frame to \(path)")
+        }
+        return (!blind, bounds, blind)
     }
 
     static func startCommandChannel() {
