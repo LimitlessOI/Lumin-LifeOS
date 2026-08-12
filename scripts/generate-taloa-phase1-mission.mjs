@@ -140,6 +140,20 @@ function toMissionStep(step, index) {
     action_type: 'author_then_write',
     patch_mode: false,
     task: isSql ? sqlTask(step) : esmTask(step),
+    // The frozen contract travels as the spec so the authoring model is bound to
+    // what the Architect sealed, not to a paraphrase of it. ship-queue also
+    // requires task+spec+assertion_spec together before a step is rebuildable.
+    spec: JSON.stringify(
+      {
+        step_id: step.id,
+        purpose: step.purpose,
+        sealed_contract: step.contract,
+        ssot_tag: SSOT,
+        amended_by: step._amended_by || null,
+      },
+      null,
+      2,
+    ),
     // No tiers override: these are load-bearing server modules, so SO-003's
     // strong-first default chain applies rather than a cheap-first list.
     expected_exports: isSql || !factory ? [] : [factory],

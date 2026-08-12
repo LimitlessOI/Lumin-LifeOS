@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-12T19:17:52.138Z",
+  "generated_at": "2026-08-12T19:21:16.033Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13393,
   "files": [
@@ -31169,9 +31169,9 @@
     {
       "path": "builderos-reboot/MISSIONS/TALOA-OVERLAY-P1-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
-      "bytes": 34847,
-      "mtime": "2026-08-12T19:17:52.138Z",
-      "indexed_at": "2026-08-12T19:17:52.138Z",
+      "bytes": 44381,
+      "mtime": "2026-08-12T19:21:16.033Z",
+      "indexed_at": "2026-08-12T19:21:16.033Z",
       "synopsis_index_only": true
     },
     {
@@ -77280,9 +77280,9 @@
     {
       "path": "scripts/generate-taloa-phase1-mission.mjs",
       "synopsis": "Turn the sealed Taloa Phase 1 blueprint into an executable factory mission.",
-      "bytes": 9895,
-      "mtime": "2026-08-12T19:17:52.138Z",
-      "indexed_at": "2026-08-12T19:17:52.138Z",
+      "bytes": 10372,
+      "mtime": "2026-08-12T19:21:16.033Z",
+      "indexed_at": "2026-08-12T19:21:16.033Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md",
         "${SSOT}\".`;"
