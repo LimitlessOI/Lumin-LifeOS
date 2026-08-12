@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-12T20:45:01.357Z",
+  "generated_at": "2026-08-12T20:59:26.551Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13418,
   "files": [
@@ -44919,9 +44919,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 867353,
-      "mtime": "2026-08-12T20:39:42.396Z",
-      "indexed_at": "2026-08-12T20:39:42.396Z"
+      "bytes": 867732,
+      "mtime": "2026-08-12T20:59:26.551Z",
+      "indexed_at": "2026-08-12T20:59:26.551Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -70749,9 +70749,9 @@
     {
       "path": "public/mtg-cards-upload.html",
       "synopsis": "Batch MTG card upload UI -- founder-facing page for routes/mtg-cards-routes.js.",
-      "bytes": 24302,
-      "mtime": "2026-08-12T20:39:42.396Z",
-      "indexed_at": "2026-08-12T20:39:42.396Z"
+      "bytes": 24324,
+      "mtime": "2026-08-12T20:59:26.551Z",
+      "indexed_at": "2026-08-12T20:59:26.551Z"
     },
     {
       "path": "public/onboarding.html",
@@ -104806,9 +104806,9 @@
     {
       "path": "tests/mtg-card-pricing.test.js",
       "synopsis": "Covers the MTG cataloger's money decisions -- which printing's",
-      "bytes": 15583,
-      "mtime": "2026-08-12T20:39:42.396Z",
-      "indexed_at": "2026-08-12T20:39:42.396Z",
+      "bytes": 15580,
+      "mtime": "2026-08-12T20:59:26.551Z",
+      "indexed_at": "2026-08-12T20:59:26.551Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

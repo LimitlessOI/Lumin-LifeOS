@@ -71,7 +71,7 @@
   </table>
 
   <h2>Add more photos</h2>
-  <p class="muted">Lay out as many cards as you want per photo — <strong>10, 15, 20+</strong> is fine if every face is readable. Larger selections upload in small groups so big phone photos don't stall. New cards appear in the collection above as they finish.</p>
+  <p class="muted">Lay out as many cards as you want per photo — <strong>10, 15, 20+</strong> is fine if every face is readable. Select as many photos as you want (500+ is fine); they upload in groups of 150. New cards appear in the collection above as they finish.</p>
 
   <div class="drop" id="drop">
     <div id="dropLabel">Click to choose photos, or drag them here</div>
@@ -106,10 +106,10 @@
   let chosenFiles = [];
   let pollTimer = null;
   let collectionRefreshTimer = null;
-  // Keep chunks small: 110 full-size phone photos in one POST routinely dies
-  // before the server can accept them (memory / proxy body limits). Found live
-  // as "All groups failed to start" with no useful error. 20 is conservative.
-  const CHUNK_SIZE = 20;
+  // Server hard-caps each request at 150 (routes/mtg-cards-routes.js MAX_FILES).
+  // Founder: do not throttle below that — select 500+, system splits into 150s.
+  // The earlier "All groups failed" on 110 was auth/error-swallowing, not chunk size.
+  const CHUNK_SIZE = 150;
   let activeBatches = [];
   let uploadInFlight = false;
   let lastUploadErrors = [];

@@ -260,7 +260,7 @@ test('the pricing rewrite is actually reachable from the live routes and UI', ()
   assert.ok(/10, 15, 20\+|as many cards as you want/i.test(page), 'UI must tell the founder multi-card photos are allowed');
   assert.ok(page.includes('By generation / era'), 'UI must show generation/era breakdown');
   assert.ok(page.includes('Your collection'), 'collection must be the persistent surface');
-  assert.ok(/CHUNK_SIZE = 20/.test(page), 'uploads must use small chunks so large photo batches actually start');
+  assert.ok(/CHUNK_SIZE = 150/.test(page), 'uploads must allow 150 per group (founder: not throttled to 20)');
   assert.ok(page.includes('x-command-key'), 'page must send command key as well as bearer token');
   assert.ok(page.includes('updating as cards finish'), 'collection must refresh live during uploads');
 
