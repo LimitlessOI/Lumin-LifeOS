@@ -6311,6 +6311,72 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null
+    },
+    {
+      "id": "fix-smoke-test-ssot",
+      "status": "pending",
+      "target_file": "scripts/lifeos-direct-build-smoke-test.mjs",
+      "task": "Add @ssot JSDoc tag",
+      "spec": "The script `scripts/lifeos-direct-build-smoke-test.mjs` must contain the `@ssot` JSDoc tag to resolve the `FILE_PLACEMENT_VIOLATION` build error.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "@ssot"
+      ]
+    },
+    {
+      "id": "fix-founder-chair-intent",
+      "status": "pending",
+      "target_file": "services/founder-chair-intent.js",
+      "task": "Refine intent classification for build prompts",
+      "spec": "Update the `founder-chair-intent.js` service to correctly classify prompts related to 'drawer_direct_build' as 'workflow-content', preventing irrelevant 'counsel/essay text' responses. This includes refining internal logic or `callCouncilMember` prompts.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "processFounderIntent"
+      ],
+      "file_contains": [
+        "workflow-content",
+        "drawer_direct_build",
+        "callCouncilMember"
+      ]
+    },
+    {
+      "id": "fix-founder-intent-clarify",
+      "status": "pending",
+      "target_file": "services/founder-intent-clarify.js",
+      "task": "Improve intent clarification for build prompts",
+      "spec": "Modify the `founder-intent-clarify.js` service to provide clearer guidance or re-prompts for ambiguous 'drawer_direct_build' requests, ensuring they are ultimately directed to the 'workflow-content' lane.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "clarifyFounderPrompt"
+      ],
+      "file_contains": [
+        "workflow-content",
+        "drawer_direct_build",
+        "callCouncilMember"
+      ]
+    },
+    {
+      "id": "fix-chair-intent-signals",
+      "status": "pending",
+      "target_file": "services/chair-intent-signals.js",
+      "task": "Update intent signal generation for build prompts",
+      "spec": "Adjust `chair-intent-signals.js` to generate appropriate signals for 'drawer_direct_build' prompts, aiding in their accurate classification as 'workflow-content' and preventing misinterpretations leading to counsel/essay responses.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getIntentSignals"
+      ],
+      "file_contains": [
+        "workflow-content",
+        "drawer_direct_build"
+      ]
     }
   ],
   "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
