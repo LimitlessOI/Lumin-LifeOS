@@ -6688,19 +6688,24 @@
     },
     {
       "id": "create-founder-intent-clarify-service",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/founder-intent-clarify.js",
       "task": "Create founder intent clarification service",
       "spec": "Service to detect and resolve ambiguities in founder intent prompts by generating clarifying questions or suggesting alternatives. Must export a function `clarifyIntent(ambiguousPrompt, deps)`. It will likely use `deps.callCouncilMember` for clarification.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "clarifyIntent"
       ],
       "file_contains": [
         "callCouncilMember"
-      ]
+      ],
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-08-12T22:29:08.365Z",
+      "last_error": "AIC_GATE_FAILURE"
     },
     {
       "id": "create-chair-intent-signals-service",
