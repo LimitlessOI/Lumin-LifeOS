@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/universal-overlay/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-08-12 — factory-2 loop compiles Taloa; hold-to-talk on the badge is in `ContainerView.swift` (`TALOA-BADGE-VOICE-001`). Chair preload claimed done (`e2fb6e275e`). |
+| **Last Updated** | 2026-08-12 — Hold-to-talk is native mic + Voice Rail STT (JS click into a hidden WKWebView cannot start getUserMedia). In-system watchdog watches governed loop + false native blocks + Taloa alive. |
 
 ---
 ---
@@ -346,6 +346,8 @@ User on insurance portal
 ---
 
 ## Change Receipts
+
+| 2026-08-12 | **Hold-to-talk actually records now.** The previous JS `#lumin-ptt-btn` dispatch was not a WebKit user gesture, and the WKWebView was `isHidden` — getUserMedia never started. Native `AVAudioRecorder` → already-live `POST /voice-rail/stt` → `luminSend`. Click still expands. Drag still moves. In-system watchdog: production watches governed-loop staleness + native `NOT_ON_BLUEPRINT` false-blocks; factory-2 relaunches Taloa if she dies. | Founder: you didn't make this work; set up a watchdog within the own system. | Hold the badge ~0.45s and speak. Mic permission once. |
 
 | 2026-08-12 | **Hold-to-talk code is in `ContainerView.swift` now, and factory-2 is the lane that compiles it.** Previous receipt named the behavior before the symbols existed on disk. `beginBadgeVoiceIfStillHolding` / `endBadgeVoice` drive the already-live `#lumin-ptt-btn`. `TALOA-BADGE-CHAIR-001` unblocked (`NOT_ON_BLUEPRINT` was factory-1 shipping a factory-2 file). LaunchAgent `com.lumin.factory-2-lane` syncs + `build.sh`. | Founder: are we using both factories; I don't see you doing anything; don't stop. | Rebuild is factory-2's job. Hold the badge ~0.45s to talk; click still expands. |
 

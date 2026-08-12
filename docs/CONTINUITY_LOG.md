@@ -1,3 +1,11 @@
+## 2026-08-12 — Codex login brought up in Cursor via the Taloa overlay
+
+Adam asked both agents to set up Codex on Cursor using the live overlay and to bring up the login so he could enter it. Taloa captured the desk, opened **Codex: Open Codex Sidebar**, started `codex login --device-auth`, and pointed at Chrome on the right monitor (`auth.openai.com/choose-an-account`, saved account adam@hopkinsgroup.org). Overlay caption showed the one-time device code for him to type. Capture: `docs/products/lifeos/conversations/2026-08-12-codex-on-cursor-via-overlay.md`.
+
+## 2026-08-12 — Hold-to-talk is native recording; watchdog is inside BuilderOS
+
+The JS PTT dispatch could not work (no WebKit user gesture; webview was hidden). Native `AVAudioRecorder` → Voice Rail STT → `luminSend`. Production `prod-health-watchdog` now also watches governed-loop staleness and native false-blocks. factory-2 relaunches Taloa if she dies.
+
 ## 2026-08-12 — Both factories: factory-1 ships backend; factory-2 is a running local compile loop
 
 Adam: are we using both factories; if not why not; haven't you fixed it; I don't see you doing anything; keep monitoring; don't stop.
