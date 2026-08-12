@@ -57,8 +57,8 @@ function sqlTask(step) {
       header,
       `This migration creates NO new table. ${step.purpose}`,
       `Write idempotent SQL that does exactly two things and nothing else:`,
-      `(1) Inside a DO $$ ... $$ block, RAISE EXCEPTION with a clear message if to_regclass('public.${reuse}') IS NULL -- a missing binding target must fail loudly here at migration time instead of silently at runtime.`,
-      `(2) Run COMMENT ON TABLE ${reuse} IS '...' recording that this table is the Taloa Phase 1 binding target for this store.`,
+      `(1) Inside a DO $$ ... $$ block, if to_regclass('public.${reuse}') IS NULL then RAISE NOTICE that the bind is deferred and RETURN — do NOT RAISE EXCEPTION. These files are dated 20240101 and can run before the table's own CREATE (lifeos_tasks is 20260723). Crashing boot of the whole app is the wrong fail-closed.`,
+      `(2) If the table exists, COMMENT ON TABLE ${reuse} from inside that same DO block (EXECUTE) recording the Taloa Phase 1 binding. Never COMMENT outside the guard — a missing table would then fail the COMMENT.`,
       `Do NOT write CREATE TABLE. Do NOT ALTER or DROP anything. Do NOT insert rows.`,
     ].join(' ');
   }

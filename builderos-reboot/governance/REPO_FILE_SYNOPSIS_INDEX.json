@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-12T20:39:42.396Z",
+  "generated_at": "2026-08-12T20:45:01.357Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13416,
+  "file_count": 13418,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -36777,30 +36777,30 @@
     {
       "path": "db/migrations/20240101000001_create_task_store_table.sql",
       "synopsis": "Database migration — 20240101000001_create_task_store_table.sql.",
-      "bytes": 421,
-      "mtime": "2026-08-12T19:36:22.800Z",
-      "indexed_at": "2026-08-12T19:36:22.800Z"
+      "bytes": 597,
+      "mtime": "2026-08-12T20:45:01.357Z",
+      "indexed_at": "2026-08-12T20:45:01.357Z"
     },
     {
       "path": "db/migrations/20240101000002_create_authority_ledger_table.sql",
       "synopsis": "Database migration — 20240101000002_create_authority_ledger_table.sql.",
-      "bytes": 485,
-      "mtime": "2026-08-12T19:36:22.800Z",
-      "indexed_at": "2026-08-12T19:36:22.800Z"
+      "bytes": 499,
+      "mtime": "2026-08-12T20:45:01.357Z",
+      "indexed_at": "2026-08-12T20:45:01.357Z"
     },
     {
       "path": "db/migrations/20240101000003_create_receipt_ledger_table.sql",
       "synopsis": "Database migration — 20240101000003_create_receipt_ledger_table.sql.",
-      "bytes": 475,
-      "mtime": "2026-08-12T19:36:22.800Z",
-      "indexed_at": "2026-08-12T19:36:22.800Z"
+      "bytes": 503,
+      "mtime": "2026-08-12T20:45:01.357Z",
+      "indexed_at": "2026-08-12T20:45:01.357Z"
     },
     {
       "path": "db/migrations/20240101000004_create_capsule_store_table.sql",
       "synopsis": "Database migration — 20240101000004_create_capsule_store_table.sql.",
-      "bytes": 453,
-      "mtime": "2026-08-12T19:36:22.800Z",
-      "indexed_at": "2026-08-12T19:36:22.800Z"
+      "bytes": 473,
+      "mtime": "2026-08-12T20:45:01.357Z",
+      "indexed_at": "2026-08-12T20:45:01.357Z"
     },
     {
       "path": "db/migrations/20240101000005_create_template_store_table.sql",
@@ -36819,9 +36819,9 @@
     {
       "path": "db/migrations/20240101000007_create_preference_store_table.sql",
       "synopsis": "Database migration — 20240101000007_create_preference_store_table.sql.",
-      "bytes": 440,
-      "mtime": "2026-08-12T19:46:26.736Z",
-      "indexed_at": "2026-08-12T19:46:26.736Z"
+      "bytes": 483,
+      "mtime": "2026-08-12T20:45:01.357Z",
+      "indexed_at": "2026-08-12T20:45:01.357Z"
     },
     {
       "path": "db/migrations/20240601_tc_intake_e2e.sql",
@@ -43748,9 +43748,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 563941,
-      "mtime": "2026-08-12T20:37:13.486Z",
-      "indexed_at": "2026-08-12T20:37:13.486Z"
+      "bytes": 564861,
+      "mtime": "2026-08-12T20:45:01.357Z",
+      "indexed_at": "2026-08-12T20:45:01.357Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -44326,9 +44326,9 @@
     {
       "path": "docs/products/financial-revenue/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Financial Revenue",
-      "bytes": 17647,
-      "mtime": "2026-08-01T08:48:17.387Z",
-      "indexed_at": "2026-08-01T08:48:17.387Z"
+      "bytes": 18019,
+      "mtime": "2026-08-12T20:45:01.357Z",
+      "indexed_at": "2026-08-12T20:45:01.357Z"
     },
     {
       "path": "docs/products/financial-revenue/SMOS_REVENUE_READINESS.md",
@@ -45705,9 +45705,9 @@
     {
       "path": "docs/products/universal-overlay/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Universal Overlay",
-      "bytes": 111429,
-      "mtime": "2026-08-12T19:17:52.138Z",
-      "indexed_at": "2026-08-12T19:17:52.138Z"
+      "bytes": 112228,
+      "mtime": "2026-08-12T20:45:01.357Z",
+      "indexed_at": "2026-08-12T20:45:01.357Z"
     },
     {
       "path": "docs/products/universal-overlay/SEND_PACKET_FLUID_UI_AND_TWO_FACTORIES_2026-08-11.md",
@@ -77379,9 +77379,9 @@
     {
       "path": "scripts/generate-taloa-phase1-mission.mjs",
       "synopsis": "Turn the sealed Taloa Phase 1 blueprint into an executable factory mission.",
-      "bytes": 10684,
-      "mtime": "2026-08-12T20:17:16.800Z",
-      "indexed_at": "2026-08-12T20:17:16.800Z",
+      "bytes": 10877,
+      "mtime": "2026-08-12T20:45:01.357Z",
+      "indexed_at": "2026-08-12T20:45:01.357Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md",
         "${SSOT}\".`;"
@@ -77791,6 +77791,16 @@
       "bytes": 9146,
       "mtime": "2026-08-11T21:49:15.079Z",
       "indexed_at": "2026-08-11T22:01:29.323Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/lib/repair-bind-migration.mjs",
+      "synopsis": "Repair overlay-style bind migrations that RAISE EXCEPTION when the",
+      "bytes": 1232,
+      "mtime": "2026-08-12T20:45:01.357Z",
+      "indexed_at": "2026-08-12T20:45:01.357Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -105085,6 +105095,16 @@
       "indexed_at": "2026-07-28T22:54:46.666Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "tests/repair-bind-migration.test.js",
+      "synopsis": "js — tests/repair-bind-migration.test.js.",
+      "bytes": 1361,
+      "mtime": "2026-08-12T20:45:01.357Z",
+      "indexed_at": "2026-08-12T20:45:01.357Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
     },
     {
