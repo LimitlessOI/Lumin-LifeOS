@@ -193,7 +193,11 @@ func rebuildOverlaysForAllScreens() {
 
 rebuildOverlaysForAllScreens()
 
-Timer.scheduledTimer(withTimeInterval: 1.0 / 30.0, repeats: true) { _ in
+// 10Hz, not 30Hz: each tick moves three borderless transparent windows, which
+// forces the compositor to recomposite every display it touches. See the CPU
+// note in TaloaImageCharacterView -- `ease` below is re-derived for this rate
+// so the drift travels at exactly the same speed as before.
+let wanderTimer = Timer(timeInterval: 1.0 / 10.0, repeats: true) { _ in
     let now = ProcessInfo.processInfo.systemUptime
     for i in 0..<overlayWindows.count {
         guard i < wanderTargets.count, i < wanderNextChangeAt.count else { continue }
@@ -213,11 +217,13 @@ Timer.scheduledTimer(withTimeInterval: 1.0 / 30.0, repeats: true) { _ in
         let dy = target.y - currentCenter.y
         if abs(dx) < 0.5, abs(dy) < 0.5 { continue }
 
-        let ease: CGFloat = 0.015 // slow, graceful drift, not a snap
+        let ease: CGFloat = 0.044 // same per-second glide as 0.015 did at 30Hz
         let newCenter = NSPoint(x: currentCenter.x + dx * ease, y: currentCenter.y + dy * ease)
         window.setFrameOrigin(NSPoint(x: newCenter.x - frame.width / 2, y: newCenter.y - frame.height / 2))
     }
 }
+wanderTimer.tolerance = 0.05
+RunLoop.main.add(wanderTimer, forMode: .common)
 
 // Rebuild on monitor connect/disconnect/resolution change so the overlay
 // doesn't silently vanish or end up stranded off a screen that went away.

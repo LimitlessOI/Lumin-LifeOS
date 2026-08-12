@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-12T05:12:20.805Z",
+  "generated_at": "2026-08-12T05:17:41.563Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13360,
+  "file_count": 13362,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -41187,6 +41187,13 @@
       "indexed_at": "2026-08-11T18:04:46.734Z"
     },
     {
+      "path": "docs/conversation_dumps/2026-08-11-overlay-layer-b-uat.md",
+      "synopsis": "Layer B human-sim UAT of the Taloa overlay + founder interface, 2026-08-11. 9 live tests, 7 defects, 1 fixed.",
+      "bytes": 10912,
+      "mtime": "2026-08-12T05:17:41.563Z",
+      "indexed_at": "2026-08-12T05:17:41.563Z"
+    },
+    {
       "path": "docs/conversation_dumps/2026-08-11-taloa-blueprint-consensus-and-live-intake-test.md",
       "synopsis": "Founder capture -- Taloa Universal Overlay blueprint independent-draft consensus process and live BuilderOS intake test, 2026-08-11.",
       "bytes": 11917,
@@ -44583,6 +44590,13 @@
       "bytes": 4124,
       "mtime": "2026-08-11T18:03:43.891Z",
       "indexed_at": "2026-08-11T18:04:46.734Z"
+    },
+    {
+      "path": "docs/products/lifeos/conversations/2026-08-11-overlay-layer-b-uat.md",
+      "synopsis": "Layer B human-sim UAT of the Taloa overlay + founder interface, 2026-08-11. 9 live tests, 7 defects, 1 fixed.",
+      "bytes": 10912,
+      "mtime": "2026-08-12T05:17:41.563Z",
+      "indexed_at": "2026-08-12T05:17:41.563Z"
     },
     {
       "path": "docs/products/lifeos/conversations/2026-08-11-taloa-blueprint-consensus-and-live-intake-test.md",

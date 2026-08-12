@@ -63,6 +63,18 @@ final class TaloaImageCharacterView: NSView {
     private var phase: CGFloat = 0
     private var timer: Timer?
 
+    // Measured 2026-08-11: a fixed 30fps redraw across three displays (one of
+    // them a 3456x2234 Retina panel) held this process at 72% CPU around the
+    // clock -- `sample` put over half the frames in CoreAnimation commit work.
+    // The ambient motion is a 2% breathe and a 2% hover; it survives a much
+    // lower idle rate intact, so full rate is spent only while a gesture or
+    // cross-fade is actually on screen. phase advances on real elapsed time so
+    // her speed is identical at either rate.
+    private static let activeFPS: Double = 30
+    private static let idleFPS: Double = 8
+    private var currentFPS: Double = 0
+    private var lastTickAt: TimeInterval = ProcessInfo.processInfo.systemUptime
+
     private let idleImage: NSImage?
     private let blinkImage: NSImage?
     private let speakImage: NSImage?
@@ -94,9 +106,7 @@ final class TaloaImageCharacterView: NSView {
         wantsLayer = true
         layer?.masksToBounds = false
 
-        timer = Timer.scheduledTimer(withTimeInterval: 1.0 / 30.0, repeats: true) { [weak self] _ in
-            self?.tick()
-        }
+        scheduleTicks(fps: Self.idleFPS)
 
         pollHealth()
         healthTimer = Timer.scheduledTimer(withTimeInterval: Self.healthPollInterval, repeats: true) { [weak self] _ in
@@ -172,8 +182,23 @@ final class TaloaImageCharacterView: NSView {
         }
     }
 
+    private func scheduleTicks(fps: Double) {
+        guard fps != currentFPS else { return }
+        currentFPS = fps
+        timer?.invalidate()
+        let t = Timer(timeInterval: 1.0 / fps, repeats: true) { [weak self] _ in
+            self?.tick()
+        }
+        // Idle ticks are decorative; letting them slip under load is correct.
+        t.tolerance = (1.0 / fps) * 0.5
+        RunLoop.main.add(t, forMode: .common)
+        timer = t
+    }
+
     private func tick() {
-        let dt: CGFloat = 1.0 / 30.0
+        let now = ProcessInfo.processInfo.systemUptime
+        let dt = CGFloat(min(max(now - lastTickAt, 0), 0.5))
+        lastTickAt = now
         phase += dt
 
         if gesture != .none, phase - gestureStartedAt > gestureDuration {
@@ -196,6 +221,7 @@ final class TaloaImageCharacterView: NSView {
             blendProgress = min(1, blendProgress + dt * blendSpeed)
         }
 
+        scheduleTicks(fps: (gesture != .none || blendProgress < 1) ? Self.activeFPS : Self.idleFPS)
         needsDisplay = true
     }
 
