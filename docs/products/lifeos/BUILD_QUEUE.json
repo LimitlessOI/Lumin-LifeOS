@@ -6646,6 +6646,19 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null
+    },
+    {
+      "id": "step-4",
+      "status": "pending",
+      "target_file": "services/chair-intent-signals.js",
+      "task": "Create chair intent signals processing service",
+      "spec": "Implement a service that processes classified founder intents to generate actionable signals, exporting a 'processIntentSignals' function. This service should integrate with other intent services for comprehensive signal generation.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "processIntentSignals"
+      ]
     }
   ],
   "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
