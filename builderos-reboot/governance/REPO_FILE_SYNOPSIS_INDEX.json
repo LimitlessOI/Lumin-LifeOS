@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-12T19:44:16.410Z",
+  "generated_at": "2026-08-12T19:46:26.736Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13397,
+  "file_count": 13400,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -36801,6 +36801,27 @@
       "bytes": 453,
       "mtime": "2026-08-12T19:36:22.800Z",
       "indexed_at": "2026-08-12T19:36:22.800Z"
+    },
+    {
+      "path": "db/migrations/20240101000005_create_template_store_table.sql",
+      "synopsis": "Database migration — 20240101000005_create_template_store_table.sql.",
+      "bytes": 754,
+      "mtime": "2026-08-12T19:46:26.736Z",
+      "indexed_at": "2026-08-12T19:46:26.736Z"
+    },
+    {
+      "path": "db/migrations/20240101000006_create_device_registry_table.sql",
+      "synopsis": "Database migration — 20240101000006_create_device_registry_table.sql.",
+      "bytes": 519,
+      "mtime": "2026-08-12T19:46:26.736Z",
+      "indexed_at": "2026-08-12T19:46:26.736Z"
+    },
+    {
+      "path": "db/migrations/20240101000007_create_preference_store_table.sql",
+      "synopsis": "Database migration — 20240101000007_create_preference_store_table.sql.",
+      "bytes": 440,
+      "mtime": "2026-08-12T19:46:26.736Z",
+      "indexed_at": "2026-08-12T19:46:26.736Z"
     },
     {
       "path": "db/migrations/20240601_tc_intake_e2e.sql",

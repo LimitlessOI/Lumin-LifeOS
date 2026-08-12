@@ -2461,7 +2461,8 @@
         "Do not widen any Body capability or authority -- Gate 0 (blueprint 45a) is still open."
       ],
       "source": "TALOA-OVERLAY-P1-0001 sealed Phase 1",
-      "commit_sha": "d81e33939bd9e148995e92efbc2808ee691c4f70"
+      "commit_sha": "d81e33939bd9e148995e92efbc2808ee691c4f70",
+      "same_signature_count": 0
     },
     {
       "id": "TALOA-P1-002",
@@ -2508,7 +2509,8 @@
         "Do not widen any Body capability or authority -- Gate 0 (blueprint 45a) is still open."
       ],
       "source": "TALOA-OVERLAY-P1-0001 sealed Phase 1",
-      "commit_sha": "d81e33939bd9e148995e92efbc2808ee691c4f70"
+      "commit_sha": "d81e33939bd9e148995e92efbc2808ee691c4f70",
+      "same_signature_count": 0
     },
     {
       "id": "TALOA-P1-003",
@@ -2555,7 +2557,8 @@
         "Do not widen any Body capability or authority -- Gate 0 (blueprint 45a) is still open."
       ],
       "source": "TALOA-OVERLAY-P1-0001 sealed Phase 1",
-      "commit_sha": "d81e33939bd9e148995e92efbc2808ee691c4f70"
+      "commit_sha": "d81e33939bd9e148995e92efbc2808ee691c4f70",
+      "same_signature_count": 0
     },
     {
       "id": "TALOA-P1-004",
@@ -2602,17 +2605,18 @@
         "Do not widen any Body capability or authority -- Gate 0 (blueprint 45a) is still open."
       ],
       "source": "TALOA-OVERLAY-P1-0001 sealed Phase 1",
-      "commit_sha": "d81e33939bd9e148995e92efbc2808ee691c4f70"
+      "commit_sha": "d81e33939bd9e148995e92efbc2808ee691c4f70",
+      "same_signature_count": 0
     },
     {
       "id": "TALOA-P1-005",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "db/migrations/20240101000005_create_template_store_table.sql",
       "task": "The file MUST begin with a SQL comment line exactly \"-- @ssot docs/products/universal-overlay/PRODUCT_HOME.md\". Creates the TemplateStore table to manage templates for replay-first compiled execution. Write CREATE TABLE IF NOT EXISTS overlay_view_templates containing exactly these columns and no others: id, product, intent_key, component_tree, variant, hit_count, created_at. Assign types by this rule, and do not invent any other type: a column named id -> UUID PRIMARY KEY DEFAULT gen_random_uuid(); any column whose name ends in _at -> TIMESTAMPTZ NOT NULL DEFAULT now(); any column whose name ends in _count -> INTEGER NOT NULL DEFAULT 0; any column named component_tree, params, payload, metadata or capabilities -> JSONB NOT NULL DEFAULT '{}'::jsonb; every remaining column -> TEXT. Then add CREATE INDEX IF NOT EXISTS statements for any column that is a lookup key (a column whose name ends in _key, or named product, variant, or platform). The whole file must be safely re-runnable. Do NOT drop anything.",
       "spec": "{\n  \"step_id\": \"TALOA-P1-005\",\n  \"purpose\": \"Creates the TemplateStore table to manage templates for replay-first compiled execution.\",\n  \"sealed_contract\": {\n    \"tables\": [\n      {\n        \"name\": \"overlay_view_templates\",\n        \"columns\": [\n          \"id\",\n          \"product\",\n          \"intent_key\",\n          \"component_tree\",\n          \"variant\",\n          \"hit_count\",\n          \"created_at\"\n        ]\n      }\n    ],\n    \"exports\": [],\n    \"ai_calls\": [],\n    \"endpoints\": [],\n    \"test_assertions\": [],\n    \"factory_signature\": \"\"\n  },\n  \"ssot_tag\": \"docs/products/universal-overlay/PRODUCT_HOME.md\",\n  \"amended_by\": \"architect_store_specification\"\n}",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [],
       "behavior_assertions": [
         {
@@ -2652,18 +2656,32 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-12T19:39:17.886Z",
-      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: ENOENT: no such file or directory, open '/usr/src/app/services/taloa/.factory-import-check-1786563557833-1.mjs'"
+      "last_attempt_at": null,
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: ENOENT: no such file or directory, open '/usr/src/app/services/taloa/.factory-import-check-1786563557833-1.mjs'",
+      "same_signature_count": 0,
+      "revive_count": 1,
+      "revived_at": "2026-08-12T19:46:19.980Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "TALOA-P1-006",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "db/migrations/20240101000006_create_device_registry_table.sql",
       "task": "The file MUST begin with a SQL comment line exactly \"-- @ssot docs/products/universal-overlay/PRODUCT_HOME.md\". Creates the DeviceRegistry table to register and manage device information. Write CREATE TABLE IF NOT EXISTS overlay_devices containing exactly these columns and no others: id, user_id, device_key, platform, last_seen_at. Assign types by this rule, and do not invent any other type: a column named id -> UUID PRIMARY KEY DEFAULT gen_random_uuid(); any column whose name ends in _at -> TIMESTAMPTZ NOT NULL DEFAULT now(); any column whose name ends in _count -> INTEGER NOT NULL DEFAULT 0; any column named component_tree, params, payload, metadata or capabilities -> JSONB NOT NULL DEFAULT '{}'::jsonb; every remaining column -> TEXT. Then add CREATE INDEX IF NOT EXISTS statements for any column that is a lookup key (a column whose name ends in _key, or named product, variant, or platform). The whole file must be safely re-runnable. Do NOT drop anything.",
       "spec": "{\n  \"step_id\": \"TALOA-P1-006\",\n  \"purpose\": \"Creates the DeviceRegistry table to register and manage device information.\",\n  \"sealed_contract\": {\n    \"tables\": [\n      {\n        \"name\": \"overlay_devices\",\n        \"columns\": [\n          \"id\",\n          \"user_id\",\n          \"device_key\",\n          \"platform\",\n          \"last_seen_at\"\n        ]\n      }\n    ],\n    \"exports\": [],\n    \"ai_calls\": [],\n    \"endpoints\": [],\n    \"test_assertions\": [],\n    \"factory_signature\": \"\"\n  },\n  \"ssot_tag\": \"docs/products/universal-overlay/PRODUCT_HOME.md\",\n  \"amended_by\": \"architect_store_specification\"\n}",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [],
       "behavior_assertions": [
         {
@@ -2703,18 +2721,32 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-12T19:39:19.345Z",
-      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: ENOENT: no such file or directory, open '/usr/src/app/services/taloa/.factory-import-check-1786563557833-1.mjs'"
+      "last_attempt_at": null,
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: ENOENT: no such file or directory, open '/usr/src/app/services/taloa/.factory-import-check-1786563557833-1.mjs'",
+      "same_signature_count": 0,
+      "revive_count": 1,
+      "revived_at": "2026-08-12T19:46:19.980Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "TALOA-P1-007",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "db/migrations/20240101000007_create_preference_store_table.sql",
       "task": "The file MUST begin with a SQL comment line exactly \"-- @ssot docs/products/universal-overlay/PRODUCT_HOME.md\". This migration creates NO new table. Bind PreferenceStore to the existing `user_preferences` table; no new table is created. Write idempotent SQL that does exactly two things and nothing else: (1) Inside a DO $$ ... $$ block, RAISE EXCEPTION with a clear message if to_regclass('public.user_preferences') IS NULL -- a missing binding target must fail loudly here at migration time instead of silently at runtime. (2) Run COMMENT ON TABLE user_preferences IS '...' recording that this table is the Taloa Phase 1 binding target for this store. Do NOT write CREATE TABLE. Do NOT ALTER or DROP anything. Do NOT insert rows.",
       "spec": "{\n  \"step_id\": \"TALOA-P1-007\",\n  \"purpose\": \"Bind PreferenceStore to the existing `user_preferences` table; no new table is created.\",\n  \"sealed_contract\": {\n    \"tables\": [],\n    \"exports\": [],\n    \"ai_calls\": [],\n    \"endpoints\": [],\n    \"test_assertions\": [],\n    \"factory_signature\": \"\",\n    \"reuses_existing_table\": \"user_preferences\"\n  },\n  \"ssot_tag\": \"docs/products/universal-overlay/PRODUCT_HOME.md\",\n  \"amended_by\": \"architect_store_reuse\"\n}",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [],
       "behavior_assertions": [
         {
@@ -2754,8 +2786,22 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-12T19:39:20.993Z",
-      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: ENOENT: no such file or directory, open '/usr/src/app/services/taloa/.factory-import-check-1786563557833-1.mjs'"
+      "last_attempt_at": null,
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: ENOENT: no such file or directory, open '/usr/src/app/services/taloa/.factory-import-check-1786563557833-1.mjs'",
+      "same_signature_count": 0,
+      "revive_count": 1,
+      "revived_at": "2026-08-12T19:46:19.980Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "TALOA-P1-008",
@@ -2811,7 +2857,8 @@
         "Do not modify any file other than the target file.",
         "Do not widen any Body capability or authority -- Gate 0 (blueprint 45a) is still open."
       ],
-      "source": "TALOA-OVERLAY-P1-0001 sealed Phase 1"
+      "source": "TALOA-OVERLAY-P1-0001 sealed Phase 1",
+      "same_signature_count": 0
     },
     {
       "id": "TALOA-P1-009",
@@ -2867,7 +2914,8 @@
         "Do not modify any file other than the target file.",
         "Do not widen any Body capability or authority -- Gate 0 (blueprint 45a) is still open."
       ],
-      "source": "TALOA-OVERLAY-P1-0001 sealed Phase 1"
+      "source": "TALOA-OVERLAY-P1-0001 sealed Phase 1",
+      "same_signature_count": 0
     },
     {
       "id": "TALOA-P1-010",
@@ -2923,7 +2971,8 @@
         "Do not modify any file other than the target file.",
         "Do not widen any Body capability or authority -- Gate 0 (blueprint 45a) is still open."
       ],
-      "source": "TALOA-OVERLAY-P1-0001 sealed Phase 1"
+      "source": "TALOA-OVERLAY-P1-0001 sealed Phase 1",
+      "same_signature_count": 0
     },
     {
       "id": "TALOA-P1-011",
@@ -2986,7 +3035,8 @@
         "Do not modify any file other than the target file.",
         "Do not widen any Body capability or authority -- Gate 0 (blueprint 45a) is still open."
       ],
-      "source": "TALOA-OVERLAY-P1-0001 sealed Phase 1"
+      "source": "TALOA-OVERLAY-P1-0001 sealed Phase 1",
+      "same_signature_count": 0
     },
     {
       "id": "TALOA-P1-012",
@@ -3041,7 +3091,8 @@
         "Do not modify any file other than the target file.",
         "Do not widen any Body capability or authority -- Gate 0 (blueprint 45a) is still open."
       ],
-      "source": "TALOA-OVERLAY-P1-0001 sealed Phase 1"
+      "source": "TALOA-OVERLAY-P1-0001 sealed Phase 1",
+      "same_signature_count": 0
     },
     {
       "id": "TALOA-P1-013",
@@ -3098,7 +3149,8 @@
         "Do not modify any file other than the target file.",
         "Do not widen any Body capability or authority -- Gate 0 (blueprint 45a) is still open."
       ],
-      "source": "TALOA-OVERLAY-P1-0001 sealed Phase 1"
+      "source": "TALOA-OVERLAY-P1-0001 sealed Phase 1",
+      "same_signature_count": 0
     },
     {
       "id": "TALOA-P1-014",
@@ -3155,11 +3207,12 @@
         "Do not modify any file other than the target file.",
         "Do not widen any Body capability or authority -- Gate 0 (blueprint 45a) is still open."
       ],
-      "source": "TALOA-OVERLAY-P1-0001 sealed Phase 1"
+      "source": "TALOA-OVERLAY-P1-0001 sealed Phase 1",
+      "same_signature_count": 0
     },
     {
       "id": "TALOA-P1-015",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/taloa/receipt-ledger-service.js",
       "task": "The file MUST begin with a JSDoc block comment containing a line exactly \"@ssot docs/products/universal-overlay/PRODUCT_HOME.md\" (mandatory, enforced by a commit gate). Records and manages receipts for operations and transactions, interfacing with the database. Export exactly this factory function, with this exact name and destructured parameter shape: export function createReceiptLedgerService({ pool, logger }). The object it returns MUST expose these methods, each a real async function, not a stub or a thrown \"not implemented\": recordReceipt, getReceipt. Constraints: ES module syntax (import/export, no require); no top-level side effects, no timers started at import, no network calls, and no AI/model calls; all database access goes through the injected pool parameter and no other client; validate required constructor dependencies up front and throw a clear Error naming the missing one; every method must return a plain serialisable object, never undefined; depend only on node builtins and the injected dependencies -- add no new npm packages.",
       "spec": "{\n  \"step_id\": \"TALOA-P1-015\",\n  \"purpose\": \"Records and manages receipts for operations and transactions, interfacing with the database.\",\n  \"sealed_contract\": {\n    \"tables\": [],\n    \"exports\": [\n      \"ReceiptLedgerService\"\n    ],\n    \"ai_calls\": [],\n    \"endpoints\": [],\n    \"test_assertions\": [\n      \"ReceiptLedgerService.recordReceipt is callable\",\n      \"ReceiptLedgerService.getReceipt is callable\"\n    ],\n    \"factory_signature\": \"export function createReceiptLedgerService({ pool, logger })\"\n  },\n  \"ssot_tag\": \"docs/products/universal-overlay/PRODUCT_HOME.md\",\n  \"amended_by\": \"architect_cycle_resolution\"\n}",
@@ -3167,7 +3220,7 @@
         "TALOA-P1-003"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "createReceiptLedgerService"
       ],
@@ -3215,13 +3268,26 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-12T19:39:22.297Z",
-      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: ENOENT: no such file or directory, open '/usr/src/app/services/taloa/.factory-import-check-1786563557833-1.mjs'"
+      "last_attempt_at": null,
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: ENOENT: no such file or directory, open '/usr/src/app/services/taloa/.factory-import-check-1786563557833-1.mjs'",
+      "same_signature_count": 0,
+      "revive_count": 1,
+      "revived_at": "2026-08-12T19:46:19.980Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-universal-overlay",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-12T19:33:37.333Z",
-  "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS/docs/products/universal-overlay/BUILD_QUEUE.json"
+  "updated_at": "2026-08-12T19:33:37.333Z"
 }
