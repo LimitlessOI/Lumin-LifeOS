@@ -3,15 +3,20 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>MTG Card Batch Upload</title>
 <style>
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 900px; margin: 2rem auto; padding: 0 1rem; background: #0f1115; color: #e6e6e6; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 1100px; margin: 2rem auto; padding: 0 1rem; background: #0f1115; color: #e6e6e6; }
   h1 { font-size: 1.4rem; }
+  h2 { font-size: 1.1rem; margin-top: 2rem; border-top: 1px solid #262b36; padding-top: 1.5rem; }
   .drop { border: 2px dashed #444; border-radius: 12px; padding: 2.5rem; text-align: center; cursor: pointer; margin: 1rem 0; }
   .drop.drag { border-color: #6ea8fe; background: #151a24; }
   .drop input { display: none; }
   button { background: #6ea8fe; color: #0f1115; border: none; border-radius: 8px; padding: 0.6rem 1.2rem; font-weight: 600; cursor: pointer; }
   button:disabled { opacity: 0.5; cursor: default; }
+  button.secondary { background: #262b36; color: #e6e6e6; }
   #status { margin: 1rem 0; color: #9fb3c8; }
   table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.85rem; }
   th, td { text-align: left; padding: 0.4rem 0.6rem; border-bottom: 1px solid #262b36; }
@@ -22,23 +27,51 @@
   .tier-unknown, .err { color: #f87171; }
   .summary { display: flex; gap: 1.5rem; margin: 1rem 0; flex-wrap: wrap; }
   .summary div { background: #151a24; border-radius: 8px; padding: 0.6rem 1rem; }
-  h2 { font-size: 1.1rem; margin-top: 2.5rem; border-top: 1px solid #262b36; padding-top: 1.5rem; }
   .row { display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap; }
-  button.secondary { background: #262b36; color: #e6e6e6; }
   a.download { background: #262b36; color: #e6e6e6; border-radius: 8px; padding: 0.6rem 1.2rem; font-weight: 600; text-decoration: none; }
   .warn { color: #facc15; font-weight: 600; margin: 8px 0; }
   .review { color: #facc15; }
   .muted { color: #6b7a8d; font-size: 0.85rem; }
+  .auth-banner { display: none; background: #3a1d1d; border: 1px solid #f87171; color: #fecaca; border-radius: 8px; padding: 0.85rem 1rem; margin: 1rem 0; }
   .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin: 1rem 0; }
   .stat-panel { background: #151a24; border-radius: 8px; padding: 0.75rem 1rem; }
   .stat-panel h3 { margin: 0 0 0.5rem; font-size: 0.85rem; color: #9fb3c8; font-weight: 600; }
   .stat-panel table { margin: 0; font-size: 0.8rem; }
   .stat-panel td { padding: 0.25rem 0.4rem; }
+  .live-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #4ade80; margin-right: 6px; vertical-align: middle; }
+  .live-dot.off { background: #6b7a8d; }
 </style>
 </head>
 <body>
-  <h1>MTG Card Batch Upload</h1>
-  <p>Lay out as many cards as you want in each photo — <strong>10, 15, 20+</strong> is fine if every face is readable (good light, little overlap). More than ~30 readable faces in one shot may truncate. Select as many photos as you want; larger selections upload in groups of 104. Every readable card is identified, priced (Scryfall), and routed to a sell tier.</p>
+  <h1>MTG Card Catalog</h1>
+  <p>Your whole collection stays on this page. Upload more photos anytime — counts, prices, set/year/rarity, and sell status refresh live as cards finish identifying.</p>
+  <div id="authBanner" class="auth-banner"></div>
+
+  <h2 style="margin-top:1rem; border-top:none; padding-top:0">Your collection <span id="liveLabel" class="muted"><span class="live-dot off" id="liveDot"></span>loading…</span></h2>
+  <p class="muted">Persists across uploads. Duplicate re-uploads of the same photo are counted once. Cards whose set couldn't be pinned down are flagged for review instead of bulk-lot guesses.</p>
+  <div class="row">
+    <button id="loadCollectionBtn" class="secondary">Refresh now</button>
+    <select id="tierFilter">
+      <option value="">All tiers</option>
+      <option value="high">High — list individually</option>
+      <option value="mid">Mid — buylist</option>
+      <option value="low">Low — bulk lot</option>
+      <option value="unknown">Unknown</option>
+      <option value="__review">Needs review only</option>
+    </select>
+    <a id="csvLink" class="download" href="#">Download sell sheet (CSV)</a>
+    <button id="repriceBtn" class="secondary">Re-price everything</button>
+  </div>
+  <div id="collectionStatus" class="muted" style="margin-top:0.75rem"></div>
+  <div class="summary" id="collectionSummary"></div>
+  <div id="statsPanels" class="stat-grid" style="display:none"></div>
+  <table id="collectionTable" style="display:none">
+    <thead><tr><th>Card</th><th>Set</th><th>Year</th><th>Era</th><th>Rarity</th><th>Foil</th><th>Price</th><th>Tier</th><th>Sell status</th></tr></thead>
+    <tbody id="collectionBody"></tbody>
+  </table>
+
+  <h2>Add more photos</h2>
+  <p class="muted">Lay out as many cards as you want per photo — <strong>10, 15, 20+</strong> is fine if every face is readable. Larger selections upload in small groups so big phone photos don't stall. New cards appear in the collection above as they finish.</p>
 
   <div class="drop" id="drop">
     <div id="dropLabel">Click to choose photos, or drag them here</div>
@@ -55,30 +88,8 @@
     <tbody id="resultsBody"></tbody>
   </table>
 
-  <h2>Your collection</h2>
-  <p class="muted">Every card catalogued so far, with duplicate re-uploads of the same photo counted once. Prices come from the real paper printing on Scryfall; cards whose set couldn't be pinned down are flagged for review instead of being guessed into a bulk lot.</p>
-  <div class="row">
-    <button id="loadCollectionBtn" class="secondary">Load collection</button>
-    <select id="tierFilter">
-      <option value="">All tiers</option>
-      <option value="high">High — list individually</option>
-      <option value="mid">Mid — buylist</option>
-      <option value="low">Low — bulk lot</option>
-      <option value="unknown">Unknown</option>
-      <option value="__review">Needs review only</option>
-    </select>
-    <a id="csvLink" class="download" href="#">Download sell sheet (CSV)</a>
-    <button id="repriceBtn" class="secondary">Re-price everything</button>
-  </div>
-  <div id="collectionStatus" class="muted" style="margin-top:0.75rem"></div>
-  <div class="summary" id="collectionSummary"></div>
-  <div id="statsPanels" style="display:none; margin:1rem 0;"></div>
-  <table id="collectionTable" style="display:none">
-    <thead><tr><th>Card</th><th>Set</th><th>Year</th><th>Rarity</th><th>Foil</th><th>Price</th><th>Tier</th><th>Sell status</th></tr></thead>
-    <tbody id="collectionBody"></tbody>
-  </table>
-
 <script>
+  const PAGE_BUILD = '2026-08-12-live-collection';
   const drop = document.getElementById('drop');
   const dropLabel = document.getElementById('dropLabel');
   const fileInput = document.getElementById('fileInput');
@@ -89,30 +100,53 @@
   const resultsTable = document.getElementById('results');
   const resultsBody = document.getElementById('resultsBody');
   const dupWarn = document.getElementById('dupWarn');
+  const authBanner = document.getElementById('authBanner');
+  const liveDot = document.getElementById('liveDot');
+  const liveLabel = document.getElementById('liveLabel');
   let chosenFiles = [];
   let pollTimer = null;
-  // Real bug found live (2026-08-10): the server hard-caps each batch at
-  // 150 files (routes/mtg-cards-routes.js MAX_FILES), but this page sent
-  // every selected file in one request regardless of count -- a 495-photo
-  // selection would be rejected outright before any processing started.
-  // Caught while actually watching a real 495-photo upload in progress.
-  //
-  // Lowered 150 -> 40 (2026-08-11), real live failure found: a 275-photo
-  // upload never reached the server at all (confirmed via GET
-  // /recent-activity showing zero new rows), while 110- and 15-photo
-  // batches minutes earlier both succeeded cleanly. The server buffers
-  // uploaded files in RAM before processing (multer memoryStorage, up to
-  // 10MB/file -- routes/mtg-cards-routes.js MAX_FILE_BYTES), so a 150-photo
-  // chunk of real full-size phone photos can mean hundreds of MB to
-  // upward of 1GB in a single request. Founder set this to 104 directly
-  // (2026-08-11, "reduce the size to hundred and four") as the real test
-  // value to try next.
-  const CHUNK_SIZE = 104;
-  let activeBatches = []; // [{ batchId, total, done, rows }]
+  let collectionRefreshTimer = null;
+  // Keep chunks small: 110 full-size phone photos in one POST routinely dies
+  // before the server can accept them (memory / proxy body limits). Found live
+  // as "All groups failed to start" with no useful error. 20 is conservative.
+  const CHUNK_SIZE = 20;
+  let activeBatches = [];
+  let uploadInFlight = false;
+  let lastUploadErrors = [];
 
-  function authHeaders() {
+  function authHeaders(extra = {}) {
     const token = localStorage.getItem('lifeos_access_token') || '';
-    return { 'Authorization': `Bearer ${token}` };
+    const key =
+      localStorage.getItem('COMMAND_CENTER_KEY') ||
+      localStorage.getItem('command_key') ||
+      localStorage.getItem('commandKey') ||
+      localStorage.getItem('lifeos_command_key') ||
+      localStorage.getItem('lifeos_key') ||
+      '';
+    const headers = { ...extra };
+    if (token) headers.Authorization = `Bearer ${token}`;
+    if (key) headers['x-command-key'] = key;
+    return headers;
+  }
+
+  function hasAuth() {
+    const h = authHeaders();
+    return Boolean(h.Authorization || h['x-command-key']);
+  }
+
+  function showAuthBanner(detail) {
+    authBanner.style.display = 'block';
+    authBanner.innerHTML = `Sign in required to load and update your collection. Open <a href="/overlay/lifeos-login.html" style="color:#fff">LifeOS login</a>, sign in, then hard-refresh this page.` +
+      (detail ? `<div class="muted" style="margin-top:0.4rem">${detail}</div>` : '');
+  }
+
+  function clearAuthBanner() {
+    authBanner.style.display = 'none';
+  }
+
+  function setLive(state, text) {
+    liveDot.classList.toggle('off', state !== 'live');
+    liveLabel.innerHTML = `<span class="live-dot${state === 'live' ? '' : ' off'}" id="liveDot"></span>${text}`;
   }
 
   function setFiles(files) {
@@ -120,7 +154,7 @@
     dropLabel.textContent = chosenFiles.length
       ? `${chosenFiles.length} photo(s) selected`
       : 'Click to choose photos, or drag them here';
-    uploadBtn.disabled = chosenFiles.length === 0;
+    uploadBtn.disabled = chosenFiles.length === 0 || !hasAuth();
   }
 
   drop.addEventListener('click', () => fileInput.click());
@@ -137,17 +171,36 @@
     return out;
   }
 
+  async function readError(res) {
+    const text = await res.text();
+    try {
+      const json = JSON.parse(text);
+      return json.error || json.message || JSON.stringify(json);
+    } catch {
+      return text.slice(0, 180) || `HTTP ${res.status}`;
+    }
+  }
+
   uploadBtn.addEventListener('click', async () => {
     if (!chosenFiles.length) return;
+    if (!hasAuth()) {
+      showAuthBanner('Upload blocked — no login token or command key in this browser.');
+      statusEl.textContent = 'Sign in first, then upload again.';
+      return;
+    }
+    clearAuthBanner();
     uploadBtn.disabled = true;
+    uploadInFlight = true;
     activeBatches = [];
+    lastUploadErrors = [];
     resultsTable.style.display = '';
+    setLive('live', 'updating as cards finish…');
 
     const chunks = chunk(chosenFiles, CHUNK_SIZE);
     for (let i = 0; i < chunks.length; i++) {
       statusEl.textContent = chunks.length > 1
         ? `Uploading group ${i + 1}/${chunks.length} (${chunks[i].length} photo(s))...`
-        : `Uploading ${chunks[i].length} photo(s))...`;
+        : `Uploading ${chunks[i].length} photo(s)...`;
 
       const form = new FormData();
       chunks[i].forEach((f) => form.append('cards', f));
@@ -158,42 +211,51 @@
           headers: authHeaders(),
           body: form,
         });
+        if (!res.ok) {
+          const detail = await readError(res);
+          lastUploadErrors.push(`group ${i + 1}: ${res.status} ${detail}`);
+          if (res.status === 401 || res.status === 403) showAuthBanner(detail);
+          statusEl.textContent = `Group ${i + 1}/${chunks.length} failed (${res.status}): ${detail}`;
+          continue;
+        }
         const json = await res.json();
         if (!json.ok) {
-          statusEl.textContent = `Group ${i + 1}/${chunks.length} failed: ${json.error || 'unknown error'} — ${activeBatches.length} earlier group(s) still processing.`;
-          continue; // don't let one bad group abandon the rest
+          lastUploadErrors.push(`group ${i + 1}: ${json.error || 'unknown error'}`);
+          statusEl.textContent = `Group ${i + 1}/${chunks.length} failed: ${json.error || 'unknown error'}`;
+          continue;
         }
-        activeBatches.push({ batchId: json.batch_id, total: json.file_count, fileCount: json.file_count, done: 0, rows: [] });
-        // Found live 2026-08-11 by auditing the database days later: 110
-        // identical photos were processed twice, five minutes apart, which
-        // doubled their contribution to the collection's reported value. The
-        // server now checks filenames against what is already catalogued, so
-        // that is caught at upload time instead.
+        activeBatches.push({
+          batchId: json.batch_id,
+          total: json.file_count,
+          fileCount: json.file_count,
+          done: 0,
+          rows: [],
+          startedAt: Date.now(),
+        });
         if (json.already_catalogued > 0) {
           dupWarn.textContent = `Heads up: ${json.already_catalogued} of these photos are already in your collection. They'll be counted once, not twice.`;
           dupWarn.style.display = '';
         }
-        // Real, immediate confirmation the server actually received these
-        // files -- founder, direct: "we can have a show that it received
-        // the hundred and ten. That way I know I can go onto the next."
-        // Separate from the live done/total polling below (which updates
-        // every 2s as identification completes) -- this fires the instant
-        // the upload itself succeeds, before any AI/pricing work has run.
         const receivedSoFar = activeBatches.reduce((s, b) => s + b.total, 0);
-        receivedEl.textContent = `✓ UPLOADED & SAVING — server received ${receivedSoFar} photo(s). Images are kept (not thrown away). Safe to keep photographing. Identifying + cropping next…`;
+        receivedEl.textContent = `✓ UPLOADED & SAVING — server received ${receivedSoFar} photo(s). Collection above will fill in as each card is identified.`;
         receivedEl.style.display = '';
+        loadCollection({ quiet: true });
       } catch (err) {
-        statusEl.textContent = `Group ${i + 1}/${chunks.length} failed: ${err.message} — ${activeBatches.length} earlier group(s) still processing.`;
+        lastUploadErrors.push(`group ${i + 1}: ${err.message}`);
+        statusEl.textContent = `Group ${i + 1}/${chunks.length} failed: ${err.message}`;
       }
     }
 
     if (!activeBatches.length) {
-      statusEl.textContent = 'All groups failed to start. Nothing is processing.';
+      uploadInFlight = false;
+      const why = lastUploadErrors.length ? lastUploadErrors.join(' · ') : 'no response from server';
+      statusEl.textContent = `Upload failed — nothing is processing. ${why}`;
+      setLive('idle', 'upload failed');
       uploadBtn.disabled = false;
       return;
     }
     const totalReceived = activeBatches.reduce((s, b) => s + b.total, 0);
-    receivedEl.textContent = `✓ UPLOADED & SAVING — all ${totalReceived} photo(s) received and stored. Safe to shoot the next stack while these identify/crop/price.`;
+    receivedEl.textContent = `✓ UPLOADED & SAVING — all ${totalReceived} photo(s) received. Watch Your collection above update live.`;
     pollAllBatches();
   });
 
@@ -207,11 +269,11 @@
         <td>${r.photo_name || ''}</td>
         <td>${r.identified_name || (r.identify_error ? `<span class="err">${r.identify_error}</span>` : '…')}</td>
         <td>${r.identified_set || ''}</td>
-        <td>${r.is_foil === true ? 'Foil' : r.is_foil === false ? '' : ''}</td>
+        <td>${r.is_foil === true ? 'Foil' : ''}</td>
         <td>${r.price_used != null ? '$' + Number(r.price_used).toFixed(2) : ''}</td>
-        <td class="${tierClass(r.value_tier)}">${r.value_tier}</td>
+        <td class="${tierClass(r.value_tier)}">${r.value_tier || ''}</td>
         <td>${r.recommended_venue || ''}</td>
-        <td>${r.status}</td>
+        <td>${r.status || ''}</td>
       </tr>
     `).join('');
   }
@@ -221,22 +283,27 @@
     summaryEl.innerHTML = tiers.map((t) => {
       const d = byTier[t] || { count: 0, subtotal_usd: 0 };
       return `<div><strong class="${tierClass(t)}">${t}</strong>: ${d.count} card(s), $${Number(d.subtotal_usd || 0).toFixed(2)}</div>`;
-    }).join('') + `<div><strong>Total estimated:</strong> $${Number(totalUsd || 0).toFixed(2)}</div>`;
+    }).join('') + `<div><strong>This upload estimated:</strong> $${Number(totalUsd || 0).toFixed(2)}</div>`;
   }
 
-  /// Polls every batch a chunked upload created and merges them into one
-  /// combined table + summary, so a 495-photo upload (4 real groups behind
-  /// the scenes) reads as one job, not four disconnected ones.
+  let collectionPollTick = 0;
+
   async function pollAllBatches() {
     clearTimeout(pollTimer);
     try {
       await Promise.all(activeBatches.map(async (b) => {
         const res = await fetch(`/api/v1/mtg-cards/batch/${b.batchId}`, { headers: authHeaders() });
+        if (!res.ok) return;
         const json = await res.json();
         if (json.ok) {
           b.done = json.done;
-          b.total = json.total;
+          b.total = Math.max(json.total, b.fileCount || 0);
           b.rows = json.rows;
+          // Rows arrive after vision starts — until then keep waiting.
+          if (json.total === 0 && Date.now() - b.startedAt < 120000) {
+            b.total = b.fileCount || 1;
+            b.done = 0;
+          }
         }
       }));
 
@@ -246,18 +313,19 @@
       const photoCount = activeBatches.reduce((s, b) => s + (b.fileCount || 0), 0);
       renderRows(allRows);
       const groupNote = activeBatches.length > 1 ? ` across ${activeBatches.length} group(s)` : '';
-      // Multi-card photos: row count (cards) grows above photo count — show both
-      // so the founder knows upload landed AND how many faces were read.
       statusEl.textContent = photoCount
         ? `${totalDone}/${totalCount} cards processed from ${photoCount} photo(s)${groupNote}`
         : `${totalDone}/${totalCount} processed${groupNote}`;
 
-      if (totalDone < totalCount) {
+      collectionPollTick += 1;
+      if (collectionPollTick % 2 === 0) loadCollection({ quiet: true });
+
+      const stillWaiting = activeBatches.some((b) => b.rows.length === 0 && Date.now() - b.startedAt < 120000);
+      if (totalDone < totalCount || stillWaiting) {
         pollTimer = setTimeout(pollAllBatches, 2000);
         return;
       }
 
-      // All groups done -- merge per-group summaries into one real total.
       const summaries = await Promise.all(activeBatches.map(async (b) => {
         const res = await fetch(`/api/v1/mtg-cards/batch/${b.batchId}/summary`, { headers: authHeaders() });
         return res.json();
@@ -274,15 +342,17 @@
         totalUsd += Number(s.total_estimated_usd || 0);
       }
       renderSummary(byTier, totalUsd);
-      statusEl.textContent = `Done — ${totalCount} card(s)${groupNote}`;
-      loadCollection();
+      statusEl.textContent = `Done — ${totalCount} card(s)${groupNote}. Collection above is up to date.`;
+      uploadInFlight = false;
+      setLive('idle', 'up to date');
+      await loadCollection();
     } catch (err) {
       statusEl.textContent = `Status check failed: ${err.message}`;
+      pollTimer = setTimeout(pollAllBatches, 3000);
+      return;
     }
-    uploadBtn.disabled = false;
+    uploadBtn.disabled = chosenFiles.length === 0;
   }
-
-  // ---- Collection view: the whole catalogue as one actionable sell list ----
 
   const loadCollectionBtn = document.getElementById('loadCollectionBtn');
   const tierFilter = document.getElementById('tierFilter');
@@ -297,8 +367,9 @@
 
   function collectionQuery() {
     const value = tierFilter.value;
-    if (value === '__review') return '?review=true';
-    return value ? `?tier=${encodeURIComponent(value)}` : '';
+    const base = value === '__review' ? '?review=true' : value ? `?tier=${encodeURIComponent(value)}` : '?';
+    const join = base.includes('=') ? '&' : '';
+    return `${base}${join}limit=5000`;
   }
 
   function money(v) {
@@ -312,13 +383,26 @@
     return `<div class="stat-panel"><h3>${title}</h3><table><thead><tr><th>Group</th><th>#</th><th>$</th></tr></thead><tbody>${body}</tbody></table></div>`;
   }
 
-  async function loadCollection() {
-    collectionStatus.textContent = 'Loading collection...';
+  async function loadCollection({ quiet = false } = {}) {
+    if (!quiet) collectionStatus.textContent = 'Loading collection...';
+    if (!hasAuth()) {
+      showAuthBanner();
+      collectionStatus.textContent = 'Sign in to see your saved collection.';
+      setLive('idle', 'signed out');
+      return;
+    }
     try {
       const [collRes, statsRes] = await Promise.all([
         fetch(`/api/v1/mtg-cards/collection${collectionQuery()}`, { headers: authHeaders() }),
         fetch('/api/v1/mtg-cards/collection/stats', { headers: authHeaders() }),
       ]);
+      if (collRes.status === 401 || collRes.status === 403) {
+        showAuthBanner(await readError(collRes));
+        collectionStatus.textContent = 'Sign in to see your saved collection.';
+        setLive('idle', 'auth required');
+        return;
+      }
+      clearAuthBanner();
       const json = await collRes.json();
       const stats = await statsRes.json();
       if (!json.ok) {
@@ -335,7 +419,6 @@
         + (stats.ok ? `<div><strong>Foil:</strong> ${stats.foil_count}</div><div><strong>Rare+:</strong> ${stats.rare_plus_count}</div><div><strong>Ready to list:</strong> ${stats.ready_to_list_count}</div>` : '');
 
       if (stats.ok) {
-        statsPanels.className = 'stat-grid';
         statsPanels.innerHTML = [
           renderStatPanel('By generation / era', stats.by_era),
           renderStatPanel('By set year', stats.by_year, 20),
@@ -352,22 +435,23 @@
           <td>${r.identified_name || '<span class="err">unidentified</span>'}</td>
           <td>${r.set_name || r.identified_set || ''}</td>
           <td class="muted">${r.set_released_at ? String(r.set_released_at).slice(0, 4) : ''}</td>
+          <td class="muted">${r.era || ''}</td>
           <td>${r.rarity || ''}</td>
           <td>${r.is_foil ? 'Foil' : ''}</td>
           <td>${money(r.price_used)}</td>
-          <td class="${tierClass(r.value_tier)}">${r.value_tier}</td>
+          <td class="${tierClass(r.value_tier)}">${r.value_tier || ''}</td>
           <td class="muted">${r.sell_status || ''}${r.needs_review ? ' · <span class="review">review</span>' : ''}</td>
         </tr>
       `).join('');
       collectionTable.style.display = '';
-      collectionStatus.textContent = `${json.card_count} card(s) in your collection${json.truncated ? ` — showing the top ${json.rows.length}, download the CSV for all of them` : ''}. Re-price once to fill year/rarity on older rows.`;
+      const stamp = new Date().toLocaleTimeString();
+      collectionStatus.textContent = `${json.card_count} card(s) saved${json.truncated ? ` — showing ${json.rows.length}` : ''}. Updated ${stamp}.`;
+      setLive(uploadInFlight ? 'live' : 'idle', uploadInFlight ? 'updating as cards finish…' : `up to date · ${stamp}`);
     } catch (err) {
       collectionStatus.textContent = `Could not load collection: ${err.message}`;
     }
   }
 
-  // The CSV endpoint needs the same Bearer token as everything else, which a
-  // plain <a href> download cannot send -- fetch it and hand the browser a blob.
   csvLink.addEventListener('click', async (e) => {
     e.preventDefault();
     collectionStatus.textContent = 'Building sell sheet...';
@@ -394,29 +478,27 @@
       const job = json.job;
       if (!job) return;
       collectionStatus.textContent = `Re-pricing ${job.processed}/${job.total || '?'} — ${job.repriced} updated, ${job.failed} failed.`;
+      setLive('live', 're-pricing…');
       if (job.running) {
         repriceTimer = setTimeout(pollReprice, 2000);
         return;
       }
       repriceBtn.disabled = false;
       collectionStatus.textContent = `Re-priced ${job.repriced} card(s), ${job.failed} failed. Reloading...`;
-      loadCollection();
+      await loadCollection();
     } catch (err) {
       repriceBtn.disabled = false;
       collectionStatus.textContent = `Re-price status check failed: ${err.message}`;
     }
   }
 
-  // Re-runs Scryfall pricing over cards already in the database. No vision
-  // call, so it is free -- and it means a pricing fix reaches cards catalogued
-  // months ago without re-photographing anything.
   repriceBtn.addEventListener('click', async () => {
     repriceBtn.disabled = true;
     collectionStatus.textContent = 'Starting re-price...';
     try {
       const res = await fetch('/api/v1/mtg-cards/reprice', {
         method: 'POST',
-        headers: { ...authHeaders(), 'Content-Type': 'application/json' },
+        headers: authHeaders({ 'Content-Type': 'application/json' }),
         body: JSON.stringify({ scope: 'all' }),
       });
       const json = await res.json();
@@ -432,9 +514,14 @@
     }
   });
 
-  loadCollectionBtn.addEventListener('click', loadCollection);
-  tierFilter.addEventListener('change', loadCollection);
+  loadCollectionBtn.addEventListener('click', () => loadCollection());
+  tierFilter.addEventListener('change', () => loadCollection());
   loadCollection();
+  // Soft refresh so returning to the tab always shows current DB truth.
+  setInterval(() => {
+    if (!document.hidden) loadCollection({ quiet: true });
+  }, 15000);
+  console.info('[mtg-cards-upload]', PAGE_BUILD);
 </script>
 </body>
 </html>
