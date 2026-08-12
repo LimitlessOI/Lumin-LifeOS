@@ -20,7 +20,9 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { compileManufacturingPlan, verifyManufacturingPlan } from './manufacturing-plan.mjs';
 import { scheduleWaves, parallelismMetrics, accountForSteps, BLOCKER_ORIGIN } from './plan-topology.mjs';
-import { verifySchemaAuthority } from './schema-decision-artifact.mjs';
+import { verifySchemaAuthority, loadSchemaDecisionArtifact } from './schema-decision-artifact.mjs';
+import { resolveCycles } from './architect-resolve-cycle.mjs';
+import { resolveAllStores } from './architect-resolve-stores.mjs';
 import { sealManufacturingPlan } from './seal-manufacturing-plan.mjs';
 import { allocate } from './factory-allocation.mjs';
 import { REQUIRED_CONSENSUS_OFFICES } from '../config/manufacturing-plan-schema.js';
@@ -37,7 +39,20 @@ const PLAN_MD = 'docs/products/universal-overlay/TWO_FACTORY_BUILD_PLAN.md';
 function loadBlueprint() {
   const raw = JSON.parse(fs.readFileSync(path.join(ROOT, FIXTURE), 'utf8'));
   const session = raw.session || raw;
-  return { session: raw, blueprint: session.blueprint_json };
+  // Plan against the amended blueprint when the Offices have produced one. The
+  // fixture stays frozen as the regression exam; planning from it after the
+  // resolutions exist would report blockers that have already been resolved.
+  const amendedPath = path.join(ROOT, 'products/artifacts/OVERLAY_AMENDED_SESSION.json');
+  if (fs.existsSync(amendedPath)) {
+    const amended = JSON.parse(fs.readFileSync(amendedPath, 'utf8'));
+    const inner = amended.session || amended;
+    return {
+      session: amended,
+      blueprint: inner.blueprint_json,
+      planning_from: 'products/artifacts/OVERLAY_AMENDED_SESSION.json',
+    };
+  }
+  return { session: raw, blueprint: session.blueprint_json, planning_from: FIXTURE };
 }
 
 function steps0(blueprint) {
@@ -45,7 +60,7 @@ function steps0(blueprint) {
 }
 
 export function planTwoFactoryBuild() {
-  const { session, blueprint } = loadBlueprint();
+  const { session, blueprint, planning_from } = loadBlueprint();
   const factories = activeFactories().map((f) => f.factory_id);
   if (factories.length < 2) {
     return { ok: false, reason: `only ${factories.length} healthy factory lane(s) — nothing to split` };
@@ -57,13 +72,35 @@ export function planTwoFactoryBuild() {
   // The compiler refuses to schedule a cyclic graph, which is correct but leaves
   // nothing to look at. Schedule the part that IS resolvable and name the knot,
   // so the founder sees the real parallel plan alongside the real blocker.
-  const schedule = scheduleWaves(steps0(blueprint).map((n) => ({ id: n.id, depends_on: n.deps })));
+  // The Architect's cycle repair is applied here rather than being asked about.
+  // It removes only edges whose target appears nowhere in the dependent step's own
+  // factory signature, which is why this is a proof and not a preference — see
+  // scripts/architect-resolve-cycle.mjs.
+  const cycleRepair = resolveCycles(blueprint);
+  const removedEdge = (from, to) => cycleRepair.removed_edges.some((e) => e.from === from && e.to === to);
+  const schedule = scheduleWaves(
+    steps0(blueprint).map((n) => ({ id: n.id, depends_on: n.deps.filter((d) => !removedEdge(n.id, d)) }))
+  );
   const allocation = allocate(plan, { factories, redundancy_for_high_risk: true });
 
   // ARCHITECT: does this decomposition still describe the specified system?
-  const inventionReport = detectInventions(session);
+  const schemaArtifact = loadSchemaDecisionArtifact();
+  const inventionReport = detectInventions(session, {
+    schemaAuthority: schemaArtifact.ok ? schemaArtifact.artifact : null,
+  });
+  // A store the Architect lawfully resolved — by reusing an existing canonical
+  // table, or by specifying a contract with nothing policy-bearing in it — is no
+  // longer a founder blocker. Only a store that genuinely encodes his policy stays
+  // blocked, and then it is blocked on a policy question rather than on a schema.
+  const storeResolution = resolveAllStores();
+  const resolvedStores = new Set(
+    storeResolution.resolutions.filter((r) => !r.escalates).map((r) => String(r.store).toLowerCase())
+  );
   const blockedSubjects = new Set(
-    inventionReport.defects.filter((d) => d.id === 'INVENTED_SQL_SCHEMA').map((d) => String(d.table).toLowerCase())
+    inventionReport.defects
+      .filter((d) => d.id === 'INVENTED_SQL_SCHEMA')
+      .map((d) => String(d.table).toLowerCase())
+      .filter((t) => !resolvedStores.has(t))
   );
   const steps = blueprint.steps || [];
   const blockedSteps = new Set(
@@ -172,7 +209,15 @@ export function planTwoFactoryBuild() {
           : `${(scheduled / withTwo).toFixed(2)}x, floored at ${criticalPath} by the dependency chain — extra builders cannot beat the critical path.`,
     },
     parallelism: metrics,
+    planning_from,
     blocked_by_origin: blockedByOrigin,
+    internal_resolution: {
+      cycle_repaired: cycleRepair.resolved,
+      cycle_edges_removed: cycleRepair.removed_edges.map((e) => `${e.from} -> ${e.to}`),
+      stores_reusing_existing: storeResolution.reuse_existing,
+      stores_architect_specifies: storeResolution.architect_specifies,
+      stores_escalated_to_founder: storeResolution.escalated_to_founder,
+    },
     step_accounting: accounting,
     schema_authority: {
       ok: schemaAuthority.ok,

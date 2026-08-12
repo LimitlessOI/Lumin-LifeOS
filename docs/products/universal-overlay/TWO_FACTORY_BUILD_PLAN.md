@@ -4,64 +4,75 @@
 
 Generated 2026-08-12. Conductor decomposition, Architect fidelity check, Builder manufacturability — all three seal or nothing is authorized.
 
-**Lanes:** factory-1, factory-2 · **Slices:** 16 · **Waves:** 5 · **Widest wave:** 7
+**Lanes:** factory-1, factory-2 · **Slices:** 16 · **Waves:** 9 · **Widest wave:** 7
 
 ## Speed
 
-One lane: 11 units. Two lanes: 8 units. 1.38x, floored at 5 by the dependency chain — extra builders cannot beat the critical path.
+One lane: 16 units. Two lanes: 12 units. 1.33x, floored at 9 by the dependency chain — extra builders cannot beat the critical path.
 
-Maximum theoretical parallelism 7 · effective parallelism 1.375 · critical-path floor 5 · lane utilization 0.688. Units are steps, not minutes: this is the shape of the dependency graph, not a duration estimate.
+Maximum theoretical parallelism 7 · effective parallelism 1.333 · critical-path floor 9 · lane utilization 0.667. Units are steps, not minutes: this is the shape of the dependency graph, not a duration estimate.
 
 ## Where the blockers actually come from
 
 Reported per blocked slice so nobody can later attribute a blueprint that cannot execute to slow factories.
 
-- **founder decision** — 11 slice(s)
-- **architecture** — 5 slice(s)
 
-Every one of the 16 source steps is accounted for exactly once (coverage invariant holds): 11 blocked, 5 cyclic.
+Every one of the 16 source steps is accounted for exactly once (coverage invariant holds): 16 scheduled.
 
-Schema authority: **AWAITING_FOUNDER** (artifact `804caec42a07`). Both lanes must build against this one frozen artifact, so that a disagreement between them can be read as builder divergence rather than two different readings of the same silence.
+Schema authority: **SEALED** (artifact `16fae9f8c2c2`). Both lanes must build against this one frozen artifact, so that a disagreement between them can be read as builder divergence rather than two different readings of the same silence.
 
 ## What can be built the moment the blueprint is answered
 
-0 of 16 slices are buildable now; 16 wait on the founder decision set.
+16 of 16 slices are buildable now; 0 wait on the founder decision set.
 
 ## Assignment by wave
 
 **Wave 1** — 7 slice(s), runs in parallel:
 
-- `SL-001` →  +  *(both, independently — high risk)* — **blocked on a founder answer**
-- `SL-002` →  +  *(both, independently — high risk)* — **blocked on a founder answer**
-- `SL-003` →  +  *(both, independently — high risk)* — **blocked on a founder answer**
-- `SL-004` →  +  *(both, independently — high risk)* — **blocked on a founder answer**
-- `SL-005` →  +  *(both, independently — high risk)* — **blocked on a founder answer**
-- `SL-006` →  +  *(both, independently — high risk)* — **blocked on a founder answer**
-- `SL-007` →  +  *(both, independently — high risk)* — **blocked on a founder answer**
+- `SL-001` →  +  *(both, independently — high risk)*
+- `SL-002` →  +  *(both, independently — high risk)*
+- `SL-003` →  +  *(both, independently — high risk)*
+- `SL-004` →  +  *(both, independently — high risk)*
+- `SL-005` →  +  *(both, independently — high risk)*
+- `SL-006` →  +  *(both, independently — high risk)*
+- `SL-007` →  +  *(both, independently — high risk)*
 
-**Wave 2** — 1 slice(s), runs in parallel:
+**Wave 2** — 2 slice(s), runs in parallel:
 
-- `SL-008` → unassigned — **blocked on a founder answer**
+- `SL-008` → unassigned
+- `SL-015` → unassigned
 
 **Wave 3** — 1 slice(s), runs in parallel:
 
-- `SL-009` → unassigned — **blocked on a founder answer**
+- `SL-009` → unassigned
 
 **Wave 4** — 1 slice(s), runs in parallel:
 
-- `SL-010` → unassigned — **blocked on a founder answer**
+- `SL-010` → unassigned
 
 **Wave 5** — 1 slice(s), runs in parallel:
 
-- `SL-011` → unassigned — **blocked on a founder answer**
+- `SL-011` → unassigned
 
-## Not schedulable at all
+**Wave 6** — 1 slice(s), runs in parallel:
 
-5 step(s) belong to no wave because they depend on each other in a circle: `TALOA-P1-012`, `TALOA-P1-013`, `TALOA-P1-014`, `TALOA-P1-015`, `TALOA-P1-016`. No number of builders can start a step that waits on itself. An office has to break the cycle before this part of the blueprint can be manufactured.
+- `SL-012` → unassigned
+
+**Wave 7** — 1 slice(s), runs in parallel:
+
+- `SL-013` → unassigned
+
+**Wave 8** — 1 slice(s), runs in parallel:
+
+- `SL-014` → unassigned
+
+**Wave 9** — 1 slice(s), runs in parallel:
+
+- `SL-016` → unassigned
 
 ## Putting it back together
 
 Each wave is an integration point: nothing from wave N+1 starts until every slice in wave N has landed and verified. High-risk slices are given to both lanes independently — convergence raises confidence, divergence goes to the Consensus Protocol rather than a vote.
 
-**Authorization:** withheld — MISSING_FIELD, DEPENDENCY_CYCLE, UNDECLARED_DEPENDENCY_CYCLE, BLUEPRINT_DEFECTS_OUTSTANDING, MISSING_CONSENSUS_SEAL, MISSING_CONSENSUS_SEAL, MISSING_CONSENSUS_SEAL
+**Authorization:** MANUFACTURING_AUTHORIZED
 

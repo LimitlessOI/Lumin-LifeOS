@@ -144,11 +144,27 @@ function tableKey(name) {
  * table with `columns: []` means "unspecified", which is a blueprint defect to
  * route upward — NOT a blank cheque for the generator to design the schema.
  */
-export function detectSchemaInvention({ intent, blueprint }) {
+export function detectSchemaInvention({ intent, blueprint, schemaAuthority = null }) {
   const defects = [];
   const intentTables = new Map();
   for (const t of intentTableList(intent)) {
     intentTables.set(tableKey(t.name), t);
+  }
+
+  // A column is an invention when nothing authorized it — not merely when the
+  // intent is silent. IMPLEMENTATION_DELEGATION lets the Architect specify a
+  // contract the source left unspecified, so a delegated resolution is a lawful
+  // authority here. It is accepted only with the full Builder/Sentry/Conductor
+  // consensus attached, and it authorizes exactly the columns it names: an extra
+  // column still reports, which keeps this from becoming a way around the rule.
+  const authorized = new Map();
+  for (const [table, record] of Object.entries(schemaAuthority?.answers || {})) {
+    const consensus = Array.isArray(record?.consensus) ? record.consensus : [];
+    const lawful =
+      record?.ratified_by === 'founder' ||
+      (record?.resolved_by === 'architect' && ['builder', 'sentry', 'conductor'].every((o) => consensus.includes(o)));
+    if (!lawful) continue;
+    authorized.set(tableKey(table), record);
   }
 
   for (const step of blueprint?.steps || []) {
@@ -159,6 +175,28 @@ export function detectSchemaInvention({ intent, blueprint }) {
       const generated = table.columns || [];
       if (generated.length === 0) continue;
 
+      const delegated = authorized.get(key);
+      if (delegated) {
+        const allowed = (delegated.columns || []).map((c) =>
+          typeof c === 'string' ? c.trim().split(/\s+/)[0] : c?.name
+        );
+        const beyond = generated.filter((c) => !allowed.includes(c));
+        if (beyond.length > 0) {
+          defects.push({
+            id: 'INVENTED_SQL_SCHEMA',
+            authority: DEFECT_AUTHORITY.INVENTED_SQL_SCHEMA,
+            step_id: step.id || null,
+            table: name,
+            invented_columns: beyond,
+            detail: `"${name}" carries a delegated Architect resolution, but the blueprint asserts ${beyond.length} column(s) it does not authorize: ${beyond.join(', ')}`,
+            resolution_required: `bring these into the schema decision artifact or remove them: ${beyond.join(', ')}`,
+          });
+        }
+        continue;
+      }
+
+      // A delegated resolution authorizes the table as well as its columns, so this
+      // has to be consulted before the intent is judged silent about it.
       if (!intentTables.has(key)) {
         defects.push({
           id: 'INVENTED_TABLE',
@@ -345,10 +383,14 @@ export function detectOverloadedReadyFlag({ arcReport }) {
 function detectMissingSentryAuthority({
   productName,
   registryPath = 'builderos-reboot/governance/SENTRY_PRODUCT_REGISTRY.json',
+  registrySnapshot = null,
 }) {
   const defects = [];
   if (!productName) return defects;
-  const registry = readJson(registryPath);
+  // A frozen exam has to be judged against frozen governance state. Reading live
+  // state means every lawful registration silently deletes a required detection,
+  // and the exam then fails for having been improved.
+  const registry = registrySnapshot || readJson(registryPath);
   if (!registry) return defects;
   const text = JSON.stringify(registry).toLowerCase();
   if (text.includes(String(productName).toLowerCase())) return defects;
@@ -370,7 +412,7 @@ function detectMissingSentryAuthority({
  * because a review that stops at the first defect forces N round trips through
  * the offices for one blueprint.
  */
-export function detectInventions(session = {}) {
+export function detectInventions(session = {}, { schemaAuthority = null, registrySnapshot = null } = {}) {
   const s = session.session || session;
   const intent = s.extracted_intent_json || {};
   const blueprint = s.blueprint_json || {};
@@ -378,11 +420,11 @@ export function detectInventions(session = {}) {
   const productName = s.product_name || null;
 
   const defects = [
-    ...detectSchemaInvention({ intent, blueprint }),
+    ...detectSchemaInvention({ intent, blueprint, schemaAuthority }),
     ...detectIdentityMismatch({ productName, blueprint }),
     ...detectStaleTerminology({ intent }),
     ...detectOverloadedReadyFlag({ arcReport }),
-    ...detectMissingSentryAuthority({ productName }),
+    ...detectMissingSentryAuthority({ productName, registrySnapshot }),
   ];
 
   const byId = {};

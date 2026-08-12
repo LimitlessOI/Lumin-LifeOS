@@ -1109,3 +1109,53 @@ Both are **one day old and contain founder-only decisions**; specifying them now
 - **M0 is added and ordered first.**
 - **The end-to-end lifecycle is NOT design-freeze ready** (C3/C4 unspecified, OPEN-6/OPEN-7 unanswered).
 - **Still no code.**
+
+## 22. M6 — Decision compression and the Founder Escalation Threshold (2026-08-11, built)
+
+Chair-directed and founder-ratified the same evening, after the repaired loop produced ten founder questions and put two of them to him directly: pick one of four dependency-cycle repairs, and define seven database schemas.
+
+> "Right now it's effectively using you as its missing reasoning layer. That's exactly what the Conductor/Architect/Builder/Sentry structure is supposed to eliminate."
+>
+> "What you want is not 'fewer questions.' You want decision compression: the organization handles 100 internal uncertainties and brings you one question only when your unique authority is actually required."
+
+### 22.1 Why this was a governance defect, not a UX complaint
+
+Every earlier mechanism in this blueprint pushes in one direction: refuse to invent, refuse to proceed, route upward. That was the right correction for a system that had been fabricating architecture — but applied without a counterweight it produces a machine that escalates everything, because escalation is free for the office that escalates and costly only for the person receiving it. Asking is always defensible. So the ten questions were not a failure of any single mechanism; they were the predictable equilibrium of mechanisms that only ever say "stop."
+
+The counterweight has to be mechanical for the same reason the no-invention rule had to be: a cultural norm that "we shouldn't bother the founder" loses every argument against "but what if we're wrong."
+
+### 22.2 The threshold (closed set — `config/founder-escalation-threshold.js`)
+
+A question may reach the founder only when it: changes founder intent or mission; creates or changes constitutional policy; materially changes user rights, privacy, ownership, safety or consent; commits money or time beyond delegated authority; creates a major irreversible architectural commitment; deadlocks the required Offices; or presents multiple valid outcomes with materially different human or business consequences that existing principles cannot settle.
+
+**Inverse rule, equally binding:** uncertainty is not sufficient reason to escalate. Reducing uncertainty is the system's job.
+
+The gate (`scripts/escalation-gate.mjs`) requires a named criterion *and* its evidence, refuses invented criteria, and will not accept a deadlock claim without each office's recorded position — otherwise "we couldn't agree" becomes the universal bypass. Refused questions are routed back to the office that owes the answer; a refusal with no owner is just a question nobody answers.
+
+### 22.3 The delegation this required (narrowing of M1)
+
+M1's no-invention rule was written against a builder fabricating schemas mid-build, which remains forbidden. But read literally it also forbade any office from specifying a column the source left blank, which is what turned the founder into the reasoning layer. `IMPLEMENTATION_DELEGATION` now lets the **Architect** specify implementation detail — schemas, signatures, ordering, naming, and reuse of an existing canonical asset — with **Builder, Sentry and Conductor consensus**, and never anything policy-bearing: who owns data and whether it can be exported, retention and deletion, consent and sharing, prices or costs to a user, or an irreversible architectural commitment. Those escalate as a policy question in plain language, never as a column list.
+
+The detector enforces the boundary rather than trusting it: a delegated resolution authorizes exactly the columns it names, an extra column still reports as invention, and a resolution missing any of the three seals is not an authority at all.
+
+### 22.4 Proven on the frozen fixture
+
+| | before | after |
+|---|---|---|
+| questions put to the founder | 10 | **0** |
+| dependency cycle | unresolved, offered as four options | repaired from injection evidence |
+| store contracts | 7 unspecified | 5 reuse an existing table, 2 Architect-specified, 7/7 sealed by three Offices |
+| blueprint defects | 13 detected | 0 remaining after application |
+| gate state | execution refused | **MANUFACTURING_AUTHORIZED**, 16 slices |
+
+The cycle repair is a proof rather than a preference, which is the part that matters: every step in the knot declares its collaborators by injection, `TALOA-P1-015` injects only `pool, logger` while declaring a dependency on verification, and `TALOA-P1-012` never injects verification or receipt-ledger at all. Three edges were therefore unsupported by the dependent steps' own contracts and were removed; both genuine injected collaborations were preserved. Where no edge in a knot is removable, the resolver escalates — that path is tested.
+
+### 22.5 What this cost, recorded honestly
+
+Two bugs in the first implementation are worth keeping in the record because both failed in the safe direction and both were found by running it rather than reading it. Sentry refused `DeviceRegistry` because the column `platform` contains the substring `lat`; and the policy classifier read Sentry's own note that "reuse inherits the handling already ratified for it" as evidence that the answer was policy-bearing, demanding founder ratification for a question already settled. A checker that cries wolf gets switched off, which is why neither was left in.
+
+One consequence is structural and now permanent doctrine: the Conductor lawfully registering `universal-overlay` for its SO-002 gates **deleted a required detection from the frozen regression exam**, because the exam read live governance state. A frozen exam judged against live state teaches the system that improving governance breaks its own tests. Fixed by `GOVERNANCE_SNAPSHOT_AT_CAPTURE.json` in the fixture directory — the exam is judged against the governance state that existed at capture, and the fixture bytes remain untouched.
+
+### 22.6 Where the founder still gets asked
+
+Unchanged and deliberately so: ownership and export rights over personal data, retention and deletion, consent and third-party sharing, anything with a price, irreversible architecture, and genuine Office deadlock. The Chair's own example is a test case in `tests/founder-escalation-threshold.test.js` and it passes the gate: *"Option A means users own and can export this data; Option B means we retain it as proprietary intelligence."*

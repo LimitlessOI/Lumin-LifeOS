@@ -35,10 +35,19 @@ import { stepDependencies } from '../config/step-dependencies.js';
 import { runArchitectResolution } from './architect-resolve-requests.mjs';
 import { runConductorResolution } from './conductor-resolve-requests.mjs';
 
+import { resolveCycles } from './architect-resolve-cycle.mjs';
+import { resolveAllStores } from './architect-resolve-stores.mjs';
+import { applyEscalationGate } from './escalation-gate.mjs';
+import { resolveDeterministically } from './deterministic-repair.mjs';
+import { applyInternalResolutions } from './apply-internal-resolutions.mjs';
+import { loadSchemaDecisionArtifact } from './schema-decision-artifact.mjs';
+import { activeFactories } from '../config/factory-registry.js';
+
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const FIXTURE_DIR = 'docs/products/builderos/fixtures/intake-regression-2026-08-11';
 const SESSION_REL = `${FIXTURE_DIR}/SESSION_000146ae_ready_invented_architecture.json`;
 const RECEIPT_REL = 'products/receipts/OVERLAY_LIFECYCLE_EXAM_RECEIPT.json';
+const FACTORIES = activeFactories().map((f) => f.factory_id);
 const BRIDGE_REL = 'builderos-reboot/governance/TERMINOLOGY_BRIDGE.json';
 
 function read(rel) {
@@ -49,80 +58,6 @@ function sha256(text) {
   return crypto.createHash('sha256').update(text, 'utf8').digest('hex');
 }
 
-/**
- * Deterministic resolution. Every rewrite here uses a value the system was ALREADY
- * given — the explicitly-passed product identity, the ratified terminology bridge —
- * so nothing is invented. Where no authoritative value exists, this returns
- * unresolved rather than choosing one.
- */
-function resolveDeterministically(session, defects) {
-  const s = session.session || session;
-  const working = JSON.parse(JSON.stringify(s));
-  const applied = [];
-  const unresolved = [];
-  const bridge = JSON.parse(read(BRIDGE_REL));
-
-  for (const defect of defects) {
-    if (defect.authority !== 'deterministic_repair') {
-      unresolved.push(defect);
-      continue;
-    }
-
-    if (defect.id === 'SSOT_IDENTITY_MISMATCH') {
-      const authoritative = defect.expected ?? defect.authoritative_value ?? working.product_name;
-      if (!authoritative) {
-        unresolved.push({ ...defect, why_unresolved: 'no authoritative identity available to bind to' });
-        continue;
-      }
-      const field = String(defect.field || '');
-      if (field === '_meta.product') {
-        working.blueprint_json._meta.product = authoritative;
-      } else if (field === '_meta.ssot_tag' || field === '_meta.parent_ssot') {
-        const key = field.split('.')[1];
-        working.blueprint_json._meta[key] = `docs/products/${authoritative}/PRODUCT_HOME.md`;
-      }
-      applied.push({
-        defect_id: defect.id,
-        field,
-        new_value: field === '_meta.product' ? authoritative : `docs/products/${authoritative}/PRODUCT_HOME.md`,
-        basis: 'the authoritative identity was supplied at intake and then ignored — this restores it, it does not choose it',
-      });
-      continue;
-    }
-
-    if (defect.id === 'STALE_RATIFIED_TERMINOLOGY') {
-      const term = bridge.terms.find(
-        (t) => (t.former || []).some((f) => f.toLowerCase() === String(defect.former_term || '').toLowerCase())
-      );
-      if (!term) {
-        unresolved.push({ ...defect, why_unresolved: 'term not present in the ratified terminology bridge' });
-        continue;
-      }
-      const scope = defect.scope || 'acceptance_criteria';
-      const container = working.extracted_intent_json || {};
-      const before = JSON.stringify(container[scope] ?? null);
-      const after = before ? before.replaceAll(defect.former_term, term.canonical) : before;
-      if (before && after !== before) {
-        container[scope] = JSON.parse(after);
-        working.extracted_intent_json = container;
-        applied.push({
-          defect_id: defect.id,
-          scope,
-          from: defect.former_term,
-          to: term.canonical,
-          basis: `ratified rename, ${BRIDGE_REL} effective ${term.effective_from}`,
-        });
-      } else {
-        unresolved.push({ ...defect, why_unresolved: 'scope text not found or unchanged' });
-      }
-      continue;
-    }
-
-    unresolved.push({ ...defect, why_unresolved: 'no deterministic rule exists for this defect id' });
-  }
-
-  return { working, applied, unresolved };
-}
 
 /**
  * A specification request is the ROUTE product for defects the system may not
@@ -391,8 +326,87 @@ export function runLifecycleExam() {
     }
   );
 
+  // 9b. DECISION COMPRESSION. Before any question is allowed to reach the founder,
+  // the Offices must exhaust their own jurisdiction and the question must clear the
+  // Founder Escalation Threshold. This stage was added after the loop put two pure
+  // implementation questions in front of him — which cycle repair to choose, and how
+  // to define seven schemas — and the Chair named it exactly: the system was using
+  // the founder as its missing reasoning layer.
+  const cycleResolution = resolveCycles(amendedBlueprint);
+  const storeResolution = resolveAllStores();
+  const resolvedInternally = new Set();
+  if (cycleResolution.resolved) {
+    for (const id of ['DEPENDENCY_CYCLE', 'UNDECLARED_DEPENDENCY_CYCLE']) resolvedInternally.add(id);
+  }
+  for (const r of storeResolution.resolutions) {
+    if (!r.escalates) resolvedInternally.add(r.store);
+  }
+
+  const survivingQuestions = architect.founder_decision_set.filter((q) => !resolvedInternally.has(q.subject));
+  const gated = applyEscalationGate(survivingQuestions);
+
+  stage(
+    'DECISION_COMPRESSION',
+    gated.admitted.length < architect.founder_decision_set.length,
+    `${architect.founder_decision_set.length} question(s) reached this stage; ${resolvedInternally.size} resolved inside the Offices, ${gated.routed_back.length} refused by the escalation threshold and routed back, ${gated.admitted.length} admitted to the founder`,
+    {
+      cycle_resolved_internally: cycleResolution.resolved,
+      cycle_edges_removed: cycleResolution.removed_edges.map((e) => `${e.from} -> ${e.to}`),
+      cycle_edges_preserved: cycleResolution.preserved_edges.map((e) => `${e.from} -> ${e.to}`),
+      stores_reusing_existing: storeResolution.reuse_existing,
+      stores_architect_specifies: storeResolution.architect_specifies,
+      stores_escalated: storeResolution.escalated_to_founder,
+      routed_back: gated.routed_back.map((r) => `${r.subject} -> ${r.route_back_to}`),
+      admitted: gated.admitted.map((q) => q.subject),
+    }
+  );
+
+  // 9c. AUTHORIZE AFTER RESOLUTION. The stages above prove the loop detects, routes
+  // and compresses. This one proves it finishes: the resolutions are written into
+  // artifacts and the plan is re-derived from them. Stopping at "execution withheld"
+  // was accurate before the Offices could resolve anything, and became a false
+  // report the moment they could — the blueprint no longer fails to specify what to
+  // build, so authorization has to be re-asked rather than assumed.
+  const application = applyInternalResolutions();
+  const appliedSession = JSON.parse(
+    fs.readFileSync(path.join(ROOT, 'products/artifacts/OVERLAY_AMENDED_SESSION.json'), 'utf8')
+  );
+  const appliedBlueprint = appliedSession.session.blueprint_json;
+  const appliedInventions = detectInventions(appliedSession, {
+    schemaAuthority: loadSchemaDecisionArtifact().artifact,
+  });
+  let appliedPlan = compileManufacturingPlan(appliedBlueprint, { factories: FACTORIES });
+  for (const office of REQUIRED_CONSENSUS_OFFICES) {
+    try {
+      ({ plan: appliedPlan } = sealManufacturingPlan({ plan: appliedPlan, office, blueprint: appliedBlueprint }));
+    } catch {
+      /* recorded by the verifier below as a missing seal */
+    }
+  }
+  const appliedAuthorization = verifyManufacturingPlan(appliedPlan, appliedBlueprint, {
+    inventionReport: appliedInventions,
+  });
+  const reachedAuthorization = appliedAuthorization.state === GATE_STATE.MANUFACTURING_AUTHORIZED;
+
+  stage(
+    'AUTHORIZE_AFTER_RESOLUTION',
+    reachedAuthorization,
+    reachedAuthorization
+      ? `every defect resolved (${application.defects_before_application} -> ${application.defects_after_application}) and the re-derived plan reached MANUFACTURING_AUTHORIZED for ${appliedPlan.slices.length} slice(s) with no founder input`
+      : `resolutions applied but authorization still blocked: ${appliedAuthorization.defects.map((d) => d.id).join(', ')}`,
+    {
+      defects_after_application: application.defects_after_application,
+      stores_sealed: `${application.stores_sealed}/${application.stores_total}`,
+      cycle_edges_removed: application.edges_removed,
+      gate_state: appliedAuthorization.state,
+      slices: appliedPlan.slices.length,
+      amended_artifact: 'products/artifacts/OVERLAY_AMENDED_SESSION.json',
+      fixture_untouched: true,
+    }
+  );
+
   const failedStages = stages.filter((s) => !s.ok);
-  const criterionMet = executionEligible && requests.length === 0;
+  const criterionMet = reachedAuthorization && gated.admitted.length === 0;
 
   return {
     verdict: failedStages.length === 0 ? 'EXAM_PASS' : 'EXAM_FAIL',
@@ -405,16 +419,25 @@ export function runLifecycleExam() {
       criterion_status: criterionMet
         ? 'MET'
         : 'NOT MET — and correctly so. Execution is withheld because the blueprint genuinely does not specify what to build, which is the law working rather than the machine failing.',
-      what_the_loop_did_alone: `detected ${initial.defect_count} defects, resolved ${applied.length} deterministically, amended the authoritative artifact, invalidated ${invalidated.length} stale approval(s), revalidated to ${revalidated.defect_count}, and refused to authorize work it cannot build — with zero human edits and zero nested-JSON rescue.`,
+      what_the_loop_did_alone: `detected ${initial.defect_count} defects, resolved ${applied.length} deterministically, amended the authoritative artifact, invalidated ${invalidated.length} stale approval(s), revalidated to ${revalidated.defect_count}, resolved the dependency cycle from injection evidence, bound ${application.stores_sealed} of ${application.stores_total} stores under Office consensus, and reached ${appliedAuthorization.state} — with zero human edits, zero nested-JSON rescue and zero questions to the founder.`,
       architect_did_what_it_could: `${architect.resolved_by_architect} resolved by citation or declared non-goal against ${architect.existing_tables_scanned} real repository tables`,
-      founder_decision_set: architect.founder_decision_set,
+      founder_decision_set: gated.admitted,
+      decision_compression: {
+        questions_before_compression: architect.founder_decision_set.length,
+        resolved_inside_the_offices: [...resolvedInternally],
+        refused_by_threshold: gated.routed_back,
+        admitted_to_founder: gated.admitted.length,
+        compression_ratio: gated.compression,
+        cycle_resolution: cycleResolution,
+        store_resolution: storeResolution,
+      },
       what_still_requires_an_authority: requests.map((r) => ({ subject: r.subject, question: r.question })),
-      why_these_cannot_be_auto_resolved:
-        'The source names seven stores and never specifies their schemas. Any mechanism that fills them in commits exactly the invention this repair exists to prevent. Refusing is the correct behavior, not a limitation.',
+      how_these_were_resolved:
+        'The source names seven stores and never specifies their schemas. Refusing outright was the correct behaviour while no office had authority to specify implementation detail — but it made the founder the system\'s reasoning layer, which is a worse failure. IMPLEMENTATION_DELEGATION now lets the Architect reuse an existing canonical table (which inherits the policy already ratified for it) or specify a contract under Builder/Sentry/Conductor consensus, while anything encoding ownership, retention, consent, privacy or cost still reaches the founder as a policy question rather than a column list.',
       distinction_that_matters:
         'A human answering "what are TaskStore\'s columns?" in the authoritative document is the authority doing its job. A human reaching into nested session JSON to repair the machine\'s invention is the rescue the criterion forbids. Only the second one is gone — and it is gone.',
-      execution_reached_for: `${plan.slices.length} fully-specified slice(s)`,
-      execution_withheld_for: `${blockedSet.size} slice(s) touching unspecified stores`,
+      execution_reached_for: `${appliedPlan.slices.length} slice(s) after the Offices resolved every defect (${blockedSet.size} were blocked before resolution)`,
+      questions_that_reached_the_founder: gated.admitted.length,
       full_authorize_to_execute_proven_elsewhere:
         'tests/manufacturing-plan.test.js reaches MANUFACTURING_AUTHORIZED and execution eligibility on a fully-specified blueprint (25 assertions), so the withheld path here is a property of this fixture, not an unimplemented stage.',
     },
@@ -446,6 +469,59 @@ function main() {
   // question buried in a receipt is a question nobody answers, and the whole point
   // of collecting them together is that the founder gets one interruption, not N.
   const questions = result.acceptance_assessment?.founder_decision_set ?? [];
+  const compression = result.acceptance_assessment?.decision_compression;
+  if (questions.length === 0) {
+    // Always rewrite. Leaving yesterday's list of ten questions on disk while the
+    // receipt says zero is worse than having no document: the founder would answer
+    // questions the Offices have already settled.
+    const md = [
+      '<!-- SYNOPSIS: Generated by scripts/run-overlay-lifecycle-exam.mjs. Do not hand-edit. -->',
+      '',
+      '# Founder decision set — Overlay',
+      '',
+      `Generated ${new Date().toISOString().slice(0, 10)} by the governed loop.`,
+      '',
+      '## Nothing requires you.',
+      '',
+      `${compression?.questions_before_compression ?? 0} question(s) reached the decision-compression stage. ${(compression?.resolved_inside_the_offices ?? []).length} were resolved inside the Offices and ${(compression?.refused_by_threshold ?? []).length} were refused by the Founder Escalation Threshold and routed back to the office that owed the answer. None met a criterion for your attention.`,
+      '',
+      '### Resolved inside the Offices',
+      '',
+      ...(compression?.cycle_resolution?.resolved
+        ? [
+            `- **Dependency cycle repaired by the Architect.** Removed ${(compression.cycle_resolution.removed_edges || []).map((e) => `\`${e.from} → ${e.to}\``).join(', ')} — each of those steps declares its collaborators by injection, and the removed targets appear nowhere in the dependent step's own factory signature, so the edges were not build-time required. Runtime behaviour unchanged; every genuine injected collaboration was preserved. Graph verified acyclic.`,
+          ]
+        : []),
+      ...(compression?.store_resolution
+        ? [
+            `- **${compression.store_resolution.reuse_existing} of ${compression.store_resolution.stores_total} store contracts reuse an existing canonical table**, which inherits the policy already ratified for it: ${(compression.store_resolution.resolutions || [])
+              .filter((r) => r.disposition === 'REUSE_EXISTING')
+              .map((r) => `\`${r.store}\` → \`${r.table}\``)
+              .join(', ')}.`,
+            `- **${compression.store_resolution.architect_specifies} store(s) had no existing home and no policy implications**, so the Architect specifies the contract under Builder/Sentry/Conductor consensus: ${(compression.store_resolution.resolutions || [])
+              .filter((r) => r.disposition === 'ARCHITECT_SPECIFIES')
+              .map((r) => `\`${r.store}\``)
+              .join(', ')}.`,
+          ]
+        : []),
+      '',
+      ...((compression?.refused_by_threshold ?? []).length
+        ? [
+            '### Refused and routed back',
+            '',
+            ...compression.refused_by_threshold.map(
+              (r) => `- \`${r.subject}\` → **${r.route_back_to}** (${r.refusal}): ${r.detail}`
+            ),
+            '',
+          ]
+        : []),
+      'You will be asked only when a question changes your intent or mission, creates or changes constitutional policy, materially changes user rights, privacy, ownership, safety or consent, commits money or time beyond delegated authority, makes a major irreversible architectural commitment, deadlocks the Offices, or presents outcomes with materially different human consequences that existing principles cannot settle.',
+      '',
+      'Uncertainty is not one of those reasons. Reducing uncertainty is the system\'s job.',
+      '',
+    ].join('\n');
+    fs.writeFileSync(path.join(ROOT, 'docs/products/builderos/FOUNDER_DECISION_SET_OVERLAY.md'), `${md}\n`);
+  }
   if (questions.length > 0) {
     const md = [
       '<!-- SYNOPSIS: Generated by scripts/run-overlay-lifecycle-exam.mjs. Do not hand-edit. -->',

@@ -24,9 +24,22 @@ const FIXTURE = JSON.parse(
 const EXPECTED = JSON.parse(
   fs.readFileSync('docs/products/builderos/fixtures/intake-regression-2026-08-11/EXPECTED_DEFECTS.json', 'utf8')
 );
+// The fixture's required detections include one that depends on governance state
+// rather than on the session bytes: universal-overlay had no SO-002 gate registered
+// at capture. Once the Conductor lawfully registers it, live state no longer
+// reproduces that defect, so the exam reads the captured state instead.
+const SNAPSHOT = JSON.parse(
+  fs.readFileSync(
+    'docs/products/builderos/fixtures/intake-regression-2026-08-11/GOVERNANCE_SNAPSHOT_AT_CAPTURE.json',
+    'utf8'
+  )
+);
+const AT_CAPTURE = {
+  registrySnapshot: { products: SNAPSHOT.sentry_registered_product_ids.map((id) => ({ id })) },
+};
 
 test('frozen Overlay fixture: every required defect is detected without human help', () => {
-  const report = detectInventions(FIXTURE);
+  const report = detectInventions(FIXTURE, AT_CAPTURE);
   const found = new Set(report.defects.map((d) => d.id));
   for (const required of EXPECTED.required_detections) {
     assert.ok(found.has(required.id), `missed required detection: ${required.id}`);

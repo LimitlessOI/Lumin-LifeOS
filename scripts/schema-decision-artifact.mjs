@@ -26,6 +26,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
+import { policyBearing, IMPLEMENTATION_DELEGATION } from '../config/founder-escalation-threshold.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 export const ARTIFACT_PATH = path.join(ROOT, 'docs/products/builderos/SCHEMA_DECISION_ARTIFACT.json');
@@ -120,21 +121,39 @@ export function verifySchemaAuthority({ requiredStores = [], artifactPath = ARTI
     return { ok: false, defects, artifact: loaded.artifact };
   }
 
-  // An answer counts only if the founder ratified it. Candidate contracts are
-  // drafted for him to choose from — see FOUNDER_SCHEMA_OPTIONS_OVERLAY.md — and
-  // without this check a proposal sitting in the artifact would be indistinguishable
-  // from a decision, which is precisely the invention laundering the no-invention
-  // law exists to prevent. Drafting options is lawful; letting one pass as ratified
-  // is not.
+  // An answer must carry authority from someone entitled to give it. Two routes
+  // are lawful, and the difference between them is the whole point of the
+  // escalation threshold:
+  //
+  //   founder ratification — required for anything policy-bearing;
+  //   architect resolution with Builder/Sentry/Conductor consensus — sufficient
+  //   for implementation detail, per IMPLEMENTATION_DELEGATION.
+  //
+  // Without the second route the founder is the system's reasoning layer, which is
+  // the failure the Chair named. Without the first, the system quietly decides
+  // policy on his behalf. Both routes demand named authority; neither accepts a
+  // bare proposal.
   const unratified = Object.entries(loaded.artifact.answers || {})
-    .filter(([, answer]) => answer && answer.ratified_by !== 'founder')
+    .filter(([store, answer]) => {
+      if (!answer) return false;
+      if (answer.ratified_by === 'founder') return false;
+      // Classify the decision, not the prose about it. Passing the whole answer
+      // here made Sentry's own note that "reuse inherits the handling already
+      // ratified for it" read as proof the answer was policy-bearing, which
+      // demanded founder ratification for a question he had already settled.
+      const policy = policyBearing({ store, table: answer.table, columns: answer.columns });
+      if (policy.policy_bearing) return true;
+      const consensus = Array.isArray(answer.consensus) ? answer.consensus : [];
+      const complete = IMPLEMENTATION_DELEGATION.requires_consensus_from.every((office) => consensus.includes(office));
+      return !(answer.resolved_by === 'architect' && complete);
+    })
     .map(([store]) => store);
   if (unratified.length > 0) {
     defects.push({
       id: 'UNRATIFIED_SCHEMA_ANSWER',
       authority: 'founder',
       origin: 'founder_decision',
-      detail: `${unratified.length} store contract(s) carry a proposed answer that the founder has not ratified: ${unratified.join(', ')}. A proposal is a question with options attached, never a decision.`,
+      detail: `${unratified.length} store contract(s) carry an answer with no lawful authority behind it: ${unratified.join(', ')}. Implementation detail needs an Architect resolution with ${IMPLEMENTATION_DELEGATION.requires_consensus_from.join('/')} consensus; anything policy-bearing needs the founder.`,
       stores: unratified,
     });
   }

@@ -50,7 +50,14 @@ export function runOverlayExam() {
     };
   }
 
-  const report = detectInventions(JSON.parse(raw));
+  // Judge the frozen intake against the governance state it was captured in. One of
+  // the required detections is that universal-overlay had no SO-002 gate registered,
+  // which stops being true the moment the Conductor lawfully registers it — reading
+  // live state would turn that improvement into an exam failure.
+  const snapshot = JSON.parse(read(`${FIXTURE_DIR}/GOVERNANCE_SNAPSHOT_AT_CAPTURE.json`));
+  const report = detectInventions(JSON.parse(raw), {
+    registrySnapshot: { products: snapshot.sentry_registered_product_ids.map((id) => ({ id })) },
+  });
 
   const requiredIds = (expected.required_detections || []).map((d) => d.id);
   const detectedIds = new Set(report.defects.map((d) => d.id));

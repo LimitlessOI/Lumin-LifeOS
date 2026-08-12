@@ -2,110 +2,23 @@
 
 # Founder decision set — Overlay
 
-Generated 2026-08-12 by the governed loop. These are every question the
-system could not lawfully answer itself, collected in one pass. Everything the
-Architect and Conductor could resolve within their jurisdiction was already
-resolved before this list was produced.
+Generated 2026-08-12 by the governed loop.
 
-**10 open.** Answering them unblocks manufacturing; no other input is needed.
+## Nothing requires you.
 
-## 1. TaskStore
+10 question(s) reached the decision-compression stage. 9 were resolved inside the Offices and 1 were refused by the Founder Escalation Threshold and routed back to the office that owed the answer. None met a criterion for your attention.
 
-**Question:** What are the columns and types of "TaskStore"?
+### Resolved inside the Offices
 
-**Why it reached you:** The source document names the store and its purpose but never specifies its schema, and no existing table matches it.
+- **Dependency cycle repaired by the Architect.** Removed `TALOA-P1-012 → TALOA-P1-014`, `TALOA-P1-012 → TALOA-P1-015`, `TALOA-P1-015 → TALOA-P1-014` — each of those steps declares its collaborators by injection, and the removed targets appear nowhere in the dependent step's own factory signature, so the edges were not build-time required. Runtime behaviour unchanged; every genuine injected collaboration was preserved. Graph verified acyclic.
+- **5 of 7 store contracts reuse an existing canonical table**, which inherits the policy already ratified for it: `TaskStore` → `lifeos_tasks`, `AuthorityLedger` → `agent_task_authority`, `ReceiptLedger` → `security_receipt_spine`, `CapsuleStore` → `memory_capsules`, `PreferenceStore` → `user_preferences`.
+- **2 store(s) had no existing home and no policy implications**, so the Architect specifies the contract under Builder/Sentry/Conductor consensus: `TemplateStore`, `DeviceRegistry`.
 
-**The system may not choose between:** design the schema now; defer the store to a later phase; reuse an existing store instead
+### Refused and routed back
 
-**Your answer goes to:** the authoritative blueprint document, before Builder receives it
+- `MISSING_FIELD` → **architect** (NO_CRITERION_NAMED): the question names no escalation criterion, so it is unfinished work rather than a founder decision
 
-## 2. AuthorityLedger
+You will be asked only when a question changes your intent or mission, creates or changes constitutional policy, materially changes user rights, privacy, ownership, safety or consent, commits money or time beyond delegated authority, makes a major irreversible architectural commitment, deadlocks the Offices, or presents outcomes with materially different human consequences that existing principles cannot settle.
 
-**Question:** What are the columns and types of "AuthorityLedger"?
-
-**Why it reached you:** The source document names the store and its purpose but never specifies its schema, and no existing table matches it.
-
-**The system may not choose between:** design the schema now; defer the store to a later phase; reuse an existing store instead
-
-**Your answer goes to:** the authoritative blueprint document, before Builder receives it
-
-## 3. ReceiptLedger
-
-**Question:** What are the columns and types of "ReceiptLedger"?
-
-**Why it reached you:** The source document names the store and its purpose but never specifies its schema, and no existing table matches it.
-
-**The system may not choose between:** design the schema now; defer the store to a later phase; reuse an existing store instead
-
-**Your answer goes to:** the authoritative blueprint document, before Builder receives it
-
-## 4. CapsuleStore
-
-**Question:** What are the columns and types of "CapsuleStore"?
-
-**Why it reached you:** The source document names the store and its purpose but never specifies its schema, and no existing table matches it.
-
-**The system may not choose between:** design the schema now; defer the store to a later phase; reuse an existing store instead
-
-**Your answer goes to:** the authoritative blueprint document, before Builder receives it
-
-## 5. TemplateStore
-
-**Question:** What are the columns and types of "TemplateStore"?
-
-**Why it reached you:** The source document names the store and its purpose but never specifies its schema, and no existing table matches it.
-
-**The system may not choose between:** design the schema now; defer the store to a later phase; reuse an existing store instead
-
-**Your answer goes to:** the authoritative blueprint document, before Builder receives it
-
-## 6. DeviceRegistry
-
-**Question:** What are the columns and types of "DeviceRegistry"?
-
-**Why it reached you:** The source document names the store and its purpose but never specifies its schema, and no existing table matches it.
-
-**The system may not choose between:** design the schema now; defer the store to a later phase; reuse an existing store instead
-
-**Your answer goes to:** the authoritative blueprint document, before Builder receives it
-
-## 7. PreferenceStore
-
-**Question:** What are the columns and types of "PreferenceStore"?
-
-**Why it reached you:** The source document names the store and its purpose but never specifies its schema, and no existing table matches it.
-
-**The system may not choose between:** design the schema now; defer the store to a later phase; reuse an existing store instead
-
-**Your answer goes to:** the authoritative blueprint document, before Builder receives it
-
-## 8. MISSING_FIELD
-
-**Question:** plan is missing required field `blueprint_id`
-
-**Why it reached you:** Found by re-deriving the graph, in a blueprint the legacy ARC gate had already marked ready_to_execute. No allowlisted office move resolves it.
-
-**The system may not choose between:** drop an edge; reorder the steps; merge the steps
-
-**Your answer goes to:** the authoritative blueprint document, before Builder receives it
-
-## 9. DEPENDENCY_CYCLE
-
-**Question:** dependency cycle: SL-012 -> SL-014 -> SL-013 -> SL-012
-
-**Why it reached you:** Found by re-deriving the graph, in a blueprint the legacy ARC gate had already marked ready_to_execute. No allowlisted office move resolves it.
-
-**The system may not choose between:** drop an edge; reorder the steps; merge the steps
-
-**Your answer goes to:** the authoritative blueprint document, before Builder receives it
-
-## 10. UNDECLARED_DEPENDENCY_CYCLE
-
-**Question:** source dependency graph contains a strongly connected component of 4 steps that no office declared: TALOA-P1-012 -> TALOA-P1-013 -> TALOA-P1-014 -> TALOA-P1-015 -> TALOA-P1-012. No builder can start a step that waits on itself.
-
-**Why it reached you:** Found by re-deriving the graph, in a blueprint the legacy ARC gate had already marked ready_to_execute. No allowlisted office move resolves it.
-
-**The system may not choose between:** drop an edge; reorder the steps; merge the steps
-
-**Your answer goes to:** the authoritative blueprint document, before Builder receives it
+Uncertainty is not one of those reasons. Reducing uncertainty is the system's job.
 
