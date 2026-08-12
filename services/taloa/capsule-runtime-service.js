@@ -19,7 +19,7 @@ export function createCapsuleRuntimeService({ pool, logger, capsuleStore, strate
 
   return {
     /**
-     * Executes an Operational Capsule with compiled replay-first logic.
+     * Executes an Operational Capsule with compiled replay-first logic, ensuring correct namespacing.
      * @param {object} capsuleData - The data for the capsule to execute.
      * @returns {Promise<object>} A promise that resolves to a serializable result object.
      */

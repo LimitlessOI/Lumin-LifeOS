@@ -3065,7 +3065,9 @@
       "last_error": null,
       "demoted": false,
       "demote_reason": null,
-      "blocker_class": null
+      "blocker_class": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-08-12T21:38:45.505Z"
     },
     {
       "id": "TALOA-P1-013",
@@ -3255,7 +3257,8 @@
       "blueprint_step_id": "TALOA-BADGE-CHAIR-001",
       "mission_id": "TALOA-OVERLAY-P1-0001",
       "action_type": "local_lane",
-      "source": "factory-2 lane: founder-visible Chair on the badge"
+      "source": "factory-2 lane: founder-visible Chair on the badge",
+      "same_signature_count": 0
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
