@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-12T04:42:08.912Z",
+  "generated_at": "2026-08-12T04:43:04.622Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13358,
   "files": [
@@ -44609,9 +44609,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 849768,
-      "mtime": "2026-08-12T04:24:47.334Z",
-      "indexed_at": "2026-08-12T04:24:47.334Z"
+      "bytes": 850497,
+      "mtime": "2026-08-12T04:43:04.622Z",
+      "indexed_at": "2026-08-12T04:43:04.622Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -74252,9 +74252,9 @@
     {
       "path": "routes/mtg-cards-routes.js",
       "synopsis": "Magic: The Gathering card cataloging, two intake paths sharing one",
-      "bytes": 31219,
-      "mtime": "2026-08-12T04:24:47.334Z",
-      "indexed_at": "2026-08-12T04:24:47.334Z",
+      "bytes": 31890,
+      "mtime": "2026-08-12T04:43:04.622Z",
+      "indexed_at": "2026-08-12T04:43:04.622Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -98627,9 +98627,9 @@
     {
       "path": "services/mtg-card-pricing.js",
       "synopsis": "Looks up real market pricing for a Magic: The Gathering card via",
-      "bytes": 15650,
-      "mtime": "2026-08-12T04:24:47.334Z",
-      "indexed_at": "2026-08-12T04:24:47.334Z",
+      "bytes": 16487,
+      "mtime": "2026-08-12T04:43:04.622Z",
+      "indexed_at": "2026-08-12T04:43:04.622Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

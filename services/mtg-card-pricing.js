@@ -42,6 +42,11 @@ const MIN_REQUEST_GAP_MS = 175;
 const MAX_PRINT_PAGES = 3;
 const MAX_RETRIES = 3;
 const RETRYABLE_STATUS = new Set([429, 500, 502, 503, 504]);
+// Found live 2026-08-11: a reprice run stalled permanently at 249/368 with
+// zero errors recorded. `fetch` has no default timeout, and because every
+// Scryfall call is serialized through one chain, a single hung request blocks
+// every later card forever -- the job just sat there looking busy.
+const REQUEST_TIMEOUT_MS = 15000;
 const CACHE_LIMIT = 10000;
 
 let lastRequestAt = 0;
@@ -62,7 +67,18 @@ function scryfallFetch(url, { logger } = {}) {
       const wait = MIN_REQUEST_GAP_MS - (Date.now() - lastRequestAt);
       if (wait > 0) await sleep(wait);
       lastRequestAt = Date.now();
-      res = await fetch(url, { headers: HEADERS });
+      try {
+        res = await fetch(url, { headers: HEADERS, signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS) });
+      } catch (err) {
+        // A timed-out or dropped connection is exactly the "try again" case;
+        // let it fall through to the same backoff as a 429 rather than
+        // killing the chain.
+        if (attempt === MAX_RETRIES) throw err;
+        logger?.warn?.({ err: err.message, url }, 'scryfall request failed, retrying');
+        await sleep(1000 * 2 ** attempt);
+        lastRequestAt = Date.now();
+        continue;
+      }
       if (!RETRYABLE_STATUS.has(res.status) || attempt === MAX_RETRIES) return res;
 
       const retryAfter = Number(res.headers.get('retry-after'));

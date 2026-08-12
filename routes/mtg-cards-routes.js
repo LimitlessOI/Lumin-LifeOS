@@ -42,6 +42,7 @@ const MAX_FILE_BYTES = 10 * 1024 * 1024;
 const MAX_CSV_BYTES = 5 * 1024 * 1024;
 const MAX_CSV_ROWS = 5000;
 const DEFAULT_USER_ID = 1;
+const STALE_REPRICE_MS = 3 * 60 * 1000;
 
 async function ensureSchema(pool) {
   await pool.query(`
@@ -711,6 +712,7 @@ export function createMtgCardsRoutes({ pool, requireKey, logger = console }) {
         logger.warn?.({ err: err.message, id: r.id }, 'mtg reprice row failed');
       }
       repriceJob.processed += 1;
+      repriceJob.updated_at = new Date().toISOString();
     }
 
     repriceJob.finished_at = new Date().toISOString();
@@ -720,8 +722,17 @@ export function createMtgCardsRoutes({ pool, requireKey, logger = console }) {
   router.post('/reprice', requireKey, async (req, res) => {
     try {
       await ready();
-      if (repriceJob?.running) {
+      // A job that has not advanced in STALE_REPRICE_MS is not "running", it
+      // is wedged -- refusing to start a new one then leaves the founder with
+      // no way to recover short of a redeploy.
+      const stalledFor = repriceJob?.running ? Date.now() - new Date(repriceJob.updated_at).getTime() : 0;
+      if (repriceJob?.running && stalledFor < STALE_REPRICE_MS) {
         return res.status(409).json({ ok: false, error: 'reprice_already_running', job: repriceJob });
+      }
+      if (repriceJob?.running) {
+        repriceJob.cancelled = true;
+        repriceJob.running = false;
+        repriceJob.error = `superseded_after_stall_ms_${stalledFor}`;
       }
       const userId = Number(req.body?.user_id) || DEFAULT_USER_ID;
       const scope = ['all', 'unpriced', 'batch'].includes(req.body?.scope) ? req.body.scope : 'all';
@@ -740,6 +751,7 @@ export function createMtgCardsRoutes({ pool, requireKey, logger = console }) {
         error_counts: {},
         last_error: null,
         started_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
         finished_at: null,
       };
 
