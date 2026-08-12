@@ -2811,7 +2811,7 @@
     },
     {
       "id": "TALOA-P1-008",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/taloa/overlay-host-service.js",
       "task": "The file MUST begin with a JSDoc block comment containing a line exactly \"@ssot docs/products/universal-overlay/PRODUCT_HOME.md\" (mandatory, enforced by a commit gate). Manages the universal overlay display and interactions for the Digital Imprint system. Export exactly this factory function, with this exact name and destructured parameter shape: export function createOverlayHostService({ pool, logger, preferenceStore }). The object it returns MUST expose these methods, each a real async function, not a stub or a thrown \"not implemented\": displayOverlay, hideOverlay. Constraints: ES module syntax (import/export, no require); no top-level side effects, no timers started at import, no network calls, and no AI/model calls; all database access goes through the injected pool parameter and no other client; validate required constructor dependencies up front and throw a clear Error naming the missing one; every method must return a plain serialisable object, never undefined; depend only on node builtins and the injected dependencies -- add no new npm packages.",
       "spec": "{\n  \"step_id\": \"TALOA-P1-008\",\n  \"purpose\": \"Manages the universal overlay display and interactions for the Digital Imprint system.\",\n  \"sealed_contract\": {\n    \"tables\": [],\n    \"exports\": [\n      \"OverlayHostService\"\n    ],\n    \"ai_calls\": [],\n    \"endpoints\": [],\n    \"test_assertions\": [\n      \"OverlayHostService.displayOverlay is callable\",\n      \"OverlayHostService.hideOverlay is callable\"\n    ],\n    \"factory_signature\": \"export function createOverlayHostService({ pool, logger, preferenceStore })\"\n  },\n  \"ssot_tag\": \"docs/products/universal-overlay/PRODUCT_HOME.md\",\n  \"amended_by\": null\n}",
@@ -2819,7 +2819,7 @@
         "TALOA-P1-007"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "createOverlayHostService"
       ],
@@ -2853,7 +2853,12 @@
         "Do not widen any Body capability or authority -- Gate 0 (blueprint 45a) is still open."
       ],
       "source": "TALOA-OVERLAY-P1-0001 sealed Phase 1",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-08-12T19:47:05.549Z",
+      "last_error": "ship_commit_not_on_main: compare status ahead"
     },
     {
       "id": "TALOA-P1-009",
