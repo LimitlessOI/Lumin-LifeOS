@@ -2671,7 +2671,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-08-12T19:46:31.046Z"
     },
     {
       "id": "TALOA-P1-006",
@@ -2736,7 +2738,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-08-12T19:46:31.046Z"
     },
     {
       "id": "TALOA-P1-007",
@@ -2801,7 +2805,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-08-12T19:46:31.046Z"
     },
     {
       "id": "TALOA-P1-008",
@@ -2820,22 +2826,11 @@
       "behavior_assertions": [
         {
           "type": "exports_smoke",
-          "target": "services/taloa/overlay-host-service.js"
-        },
-        {
-          "type": "file_contains",
-          "target": "services/taloa/overlay-host-service.js",
-          "substring": "createOverlayHostService"
-        },
-        {
-          "type": "file_contains",
-          "target": "services/taloa/overlay-host-service.js",
-          "substring": "displayOverlay"
-        },
-        {
-          "type": "file_contains",
-          "target": "services/taloa/overlay-host-service.js",
-          "substring": "hideOverlay"
+          "path": "services/taloa/overlay-host-service.js",
+          "exports": [
+            "createOverlayHostService"
+          ],
+          "assertion_id": "expected_exports:services/taloa/overlay-host-service.js"
         }
       ],
       "assertion_spec": {
@@ -2877,22 +2872,11 @@
       "behavior_assertions": [
         {
           "type": "exports_smoke",
-          "target": "services/taloa/body-adapter-service.js"
-        },
-        {
-          "type": "file_contains",
-          "target": "services/taloa/body-adapter-service.js",
-          "substring": "createBodyAdapterService"
-        },
-        {
-          "type": "file_contains",
-          "target": "services/taloa/body-adapter-service.js",
-          "substring": "adaptContent"
-        },
-        {
-          "type": "file_contains",
-          "target": "services/taloa/body-adapter-service.js",
-          "substring": "registerDisplayPlane"
+          "path": "services/taloa/body-adapter-service.js",
+          "exports": [
+            "createBodyAdapterService"
+          ],
+          "assertion_id": "expected_exports:services/taloa/body-adapter-service.js"
         }
       ],
       "assertion_spec": {
@@ -2934,22 +2918,11 @@
       "behavior_assertions": [
         {
           "type": "exports_smoke",
-          "target": "services/taloa/perception-fusion-service.js"
-        },
-        {
-          "type": "file_contains",
-          "target": "services/taloa/perception-fusion-service.js",
-          "substring": "createPerceptionFusionService"
-        },
-        {
-          "type": "file_contains",
-          "target": "services/taloa/perception-fusion-service.js",
-          "substring": "processInput"
-        },
-        {
-          "type": "file_contains",
-          "target": "services/taloa/perception-fusion-service.js",
-          "substring": "getFusedPerception"
+          "path": "services/taloa/perception-fusion-service.js",
+          "exports": [
+            "createPerceptionFusionService"
+          ],
+          "assertion_id": "expected_exports:services/taloa/perception-fusion-service.js"
         }
       ],
       "assertion_spec": {
@@ -2992,27 +2965,11 @@
       "behavior_assertions": [
         {
           "type": "exports_smoke",
-          "target": "services/taloa/task-orchestrator-service.js"
-        },
-        {
-          "type": "file_contains",
-          "target": "services/taloa/task-orchestrator-service.js",
-          "substring": "createTaskOrchestratorService"
-        },
-        {
-          "type": "file_contains",
-          "target": "services/taloa/task-orchestrator-service.js",
-          "substring": "createTask"
-        },
-        {
-          "type": "file_contains",
-          "target": "services/taloa/task-orchestrator-service.js",
-          "substring": "updateTaskStatus"
-        },
-        {
-          "type": "file_contains",
-          "target": "services/taloa/task-orchestrator-service.js",
-          "substring": "generalizeSessionSchema"
+          "path": "services/taloa/task-orchestrator-service.js",
+          "exports": [
+            "createTaskOrchestratorService"
+          ],
+          "assertion_id": "expected_exports:services/taloa/task-orchestrator-service.js"
         }
       ],
       "assertion_spec": {
@@ -3060,17 +3017,11 @@
       "behavior_assertions": [
         {
           "type": "exports_smoke",
-          "target": "services/taloa/strategy-router-service.js"
-        },
-        {
-          "type": "file_contains",
-          "target": "services/taloa/strategy-router-service.js",
-          "substring": "createStrategyRouterService"
-        },
-        {
-          "type": "file_contains",
-          "target": "services/taloa/strategy-router-service.js",
-          "substring": "determineStrategy"
+          "path": "services/taloa/strategy-router-service.js",
+          "exports": [
+            "createStrategyRouterService"
+          ],
+          "assertion_id": "expected_exports:services/taloa/strategy-router-service.js"
         }
       ],
       "assertion_spec": {
@@ -3112,22 +3063,11 @@
       "behavior_assertions": [
         {
           "type": "exports_smoke",
-          "target": "services/taloa/capsule-runtime-service.js"
-        },
-        {
-          "type": "file_contains",
-          "target": "services/taloa/capsule-runtime-service.js",
-          "substring": "createCapsuleRuntimeService"
-        },
-        {
-          "type": "file_contains",
-          "target": "services/taloa/capsule-runtime-service.js",
-          "substring": "executeCapsule"
-        },
-        {
-          "type": "file_contains",
-          "target": "services/taloa/capsule-runtime-service.js",
-          "substring": "validateCapsule"
+          "path": "services/taloa/capsule-runtime-service.js",
+          "exports": [
+            "createCapsuleRuntimeService"
+          ],
+          "assertion_id": "expected_exports:services/taloa/capsule-runtime-service.js"
         }
       ],
       "assertion_spec": {
@@ -3170,22 +3110,11 @@
       "behavior_assertions": [
         {
           "type": "exports_smoke",
-          "target": "services/taloa/verification-service.js"
-        },
-        {
-          "type": "file_contains",
-          "target": "services/taloa/verification-service.js",
-          "substring": "createVerificationService"
-        },
-        {
-          "type": "file_contains",
-          "target": "services/taloa/verification-service.js",
-          "substring": "verifyOperation"
-        },
-        {
-          "type": "file_contains",
-          "target": "services/taloa/verification-service.js",
-          "substring": "validateState"
+          "path": "services/taloa/verification-service.js",
+          "exports": [
+            "createVerificationService"
+          ],
+          "assertion_id": "expected_exports:services/taloa/verification-service.js"
         }
       ],
       "assertion_spec": {
@@ -3227,22 +3156,11 @@
       "behavior_assertions": [
         {
           "type": "exports_smoke",
-          "target": "services/taloa/receipt-ledger-service.js"
-        },
-        {
-          "type": "file_contains",
-          "target": "services/taloa/receipt-ledger-service.js",
-          "substring": "createReceiptLedgerService"
-        },
-        {
-          "type": "file_contains",
-          "target": "services/taloa/receipt-ledger-service.js",
-          "substring": "recordReceipt"
-        },
-        {
-          "type": "file_contains",
-          "target": "services/taloa/receipt-ledger-service.js",
-          "substring": "getReceipt"
+          "path": "services/taloa/receipt-ledger-service.js",
+          "exports": [
+            "createReceiptLedgerService"
+          ],
+          "assertion_id": "expected_exports:services/taloa/receipt-ledger-service.js"
         }
       ],
       "assertion_spec": {

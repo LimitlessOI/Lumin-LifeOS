@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-12T19:46:26.736Z",
+  "generated_at": "2026-08-12T19:47:00.532Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13400,
+  "file_count": 13402,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -101221,6 +101221,26 @@
       "indexed_at": "2026-07-28T22:54:46.666Z",
       "ssot": [
         "docs/products/token-accounting-os/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/taloa/overlay-host-service.js",
+      "synopsis": "Manages the universal overlay display and interactions for the Digital Imprint system.",
+      "bytes": 1636,
+      "mtime": "2026-08-12T19:47:00.532Z",
+      "indexed_at": "2026-08-12T19:47:00.532Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/taloa/receipt-ledger-service.js",
+      "synopsis": "Exports createReceiptLedgerService — services/taloa/receipt-ledger-service.js.",
+      "bytes": 2267,
+      "mtime": "2026-08-12T19:47:00.532Z",
+      "indexed_at": "2026-08-12T19:47:00.532Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
     },
     {
