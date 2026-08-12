@@ -16,6 +16,7 @@ import { enforceClaim, toWatchlist } from './truth-ladder.js';
 import { extractCorpusBacklog, backlogSignature, planBuildQueue } from './build-queue-planner.js';
 import { buildIntegrationContext } from './build-integration-context.js';
 import { assertUngovernedShippingAllowed } from './governed-factory-guard.js';
+import { ownerFor, thisFactoryId, queueForThisFactory } from '../config/lane-assignment.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const BP_PATH = path.join(ROOT, 'builderos-reboot/BP_PRIORITY.json');
@@ -437,7 +438,7 @@ export function discoverBuildQueueWork() {
       const queue = loadBuildQueue(productId);
       // Do NOT revive on discover — revive mutates blocked→pending and schedules
       // thrashers ahead of real pending blueprint steps. Revive only at execute.
-      const { step } = selectNextStep(queue);
+      const { step } = selectNextStep(queueForThisFactory(queue));
       if (step) {
         found.push({
           id: `product_build_${productId}_${step.id}`,
@@ -479,7 +480,7 @@ export async function discoverBuildQueueWorkFresh() {
     try {
       const queue = await loadBuildQueuePreferRemote(productId);
       // Discover must not revive — see discoverBuildQueueWork.
-      const { step } = selectNextStep(queue);
+      const { step } = selectNextStep(queueForThisFactory(queue));
       if (step) {
         found.push({
           id: `product_build_${productId}_${step.id}`,
@@ -1294,6 +1295,19 @@ async function runProductBuildStep(task, { baseUrl, commandKey, logger } = {}) {
   }
   // If discovery raced a sibling that already finished this step, skip.
   const already = (queue.steps || []).find((s) => s && s.id === task.step_id);
+  if (already && ownerFor(already.target_file || task.target_file) !== thisFactoryId()) {
+    return {
+      ok: true,
+      detail: 'other_factory_lane_skipped',
+      outcome: {
+        ok: true,
+        step_id: task.step_id,
+        skipped: true,
+        reason: `owned by ${ownerFor(already.target_file || task.target_file)}, this lane is ${thisFactoryId()}`,
+      },
+      summary: queueSummary(queue),
+    };
+  }
   if (already && (already.status === STEP_STATUS.DONE || already.status === 'complete')) {
     return {
       ok: true,

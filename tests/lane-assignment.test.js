@@ -3,7 +3,7 @@
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { ownerFor, stepBelongsToFactory } from '../config/lane-assignment.js';
+import { ownerFor, stepBelongsToFactory, queueForThisFactory } from '../config/lane-assignment.js';
 import { allocate, normalizeFactories } from '../scripts/factory-allocation.mjs';
 import { compileManufacturingPlan } from '../scripts/manufacturing-plan.mjs';
 import { planGovernedBuildQueueRun } from '../services/governed-build-queue-scheduler.js';
@@ -99,4 +99,23 @@ test('shipping planner skips steps owned by the other factory', () => {
     false,
   );
   assert.equal(stepBelongsToFactory({ target_file: 'native/macos-overlay/ContainerView.swift' }, 'factory-2', assignment), true);
+});
+
+test('empty assignment still routes native to factory-2 via FALLBACK_LANES', () => {
+  assert.equal(ownerFor('native/macos-overlay/ContainerView.swift', { lanes: [] }), 'factory-2');
+  assert.equal(ownerFor('services/taloa/overlay-host-service.js', { lanes: [] }), 'factory-1');
+});
+
+test('queueForThisFactory hides other-lane pending so factory-1 can still pick later backend steps', () => {
+  const visible = queueForThisFactory(
+    {
+      steps: [
+        { id: 'NAT', status: 'pending', target_file: 'native/macos-overlay/ContainerView.swift' },
+        { id: 'BE', status: 'pending', target_file: 'services/taloa/x.js' },
+      ],
+    },
+    'factory-1',
+    assignment,
+  );
+  assert.deepEqual(visible.steps.map((s) => s.id), ['BE']);
 });

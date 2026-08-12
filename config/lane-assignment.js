@@ -13,16 +13,30 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ASSIGNMENT_PATH = path.join(ROOT, 'products/receipts/LANE_ASSIGNMENT.json');
 const PRIMARY = 'factory-1';
 
+/** Hard floor so a missing receipt cannot assign native overlay to factory-1. */
+export const FALLBACK_LANES = Object.freeze([
+  Object.freeze({ factory_id: 'factory-1', owns: Object.freeze(['services/', 'routes/', 'db/migrations/', 'builderos-reboot/MISSIONS/']) }),
+  Object.freeze({ factory_id: 'factory-2', owns: Object.freeze(['native/macos-overlay/']) }),
+]);
+
 export function loadLaneAssignment(filePath = ASSIGNMENT_PATH) {
   try {
-    return JSON.parse(fs.readFileSync(filePath, 'utf8'));
+    const parsed = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+    if (Array.isArray(parsed.lanes) && parsed.lanes.length) return parsed;
   } catch {
-    return { lanes: [] };
+    // fall through
   }
+  return { lanes: FALLBACK_LANES, source: 'fallback' };
 }
 
 function normalizeRel(targetFile) {
   return String(targetFile || '').replace(/\\/g, '/').replace(/^\.\//, '');
+}
+
+function matchPrefix(rel, prefix) {
+  const p = normalizeRel(prefix);
+  if (!p || p.includes('*')) return false;
+  return rel === p || rel.startsWith(p.endsWith('/') ? p : `${p}/`) || rel.startsWith(p);
 }
 
 /**
@@ -31,14 +45,21 @@ function normalizeRel(targetFile) {
  */
 export function ownerFor(targetFile, assignment = loadLaneAssignment()) {
   const rel = normalizeRel(targetFile);
+  const lanes = (assignment.lanes && assignment.lanes.length) ? assignment.lanes : FALLBACK_LANES;
   let best = { factory_id: PRIMARY, len: -1 };
-  for (const lane of assignment.lanes || []) {
+  for (const lane of lanes) {
     for (const prefix of lane.owns || []) {
       const p = normalizeRel(prefix);
-      if (!p) continue;
-      const hit = rel === p || rel.startsWith(p.endsWith('/') ? p : `${p}/`) || rel.startsWith(p);
-      if (hit && p.length > best.len) {
-        best = { factory_id: lane.factory_id, len: p.length };
+      if (!matchPrefix(rel, p)) continue;
+      if (p.length > best.len) best = { factory_id: lane.factory_id, len: p.length };
+    }
+  }
+  if (best.len < 0) {
+    for (const lane of FALLBACK_LANES) {
+      for (const prefix of lane.owns) {
+        if (matchPrefix(rel, prefix) && prefix.length > best.len) {
+          best = { factory_id: lane.factory_id, len: prefix.length };
+        }
       }
     }
   }
@@ -52,4 +73,20 @@ export function thisFactoryId() {
 export function stepBelongsToFactory(step, factoryId = thisFactoryId(), assignment) {
   const file = step?.target_file || step?.file || '';
   return ownerFor(file, assignment) === factoryId;
+}
+
+/**
+ * Other-lane pending work stays invisible so selectNextStep cannot pick a
+ * native file on factory-1 (or a service file on factory-2). Done steps stay
+ * so cross-lane dependencies still resolve.
+ */
+export function queueForThisFactory(queue, factoryId = thisFactoryId(), assignment) {
+  return {
+    ...queue,
+    steps: (queue.steps || []).filter((s) => {
+      const st = String(s.status || '').toLowerCase();
+      if (st === 'done' || st === 'complete') return true;
+      return ownerFor(s.target_file || s.file, assignment) === factoryId;
+    }),
+  };
 }

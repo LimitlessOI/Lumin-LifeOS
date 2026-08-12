@@ -84,6 +84,9 @@ final class ContainerView: NSView, WKNavigationDelegate, WKUIDelegate {
     private static let clickMoveThreshold: CGFloat = 4
     private var pendingAutoOpenChat = false
     private var chairReady = false
+    private static let voiceHoldDelay: TimeInterval = 0.45
+    private var voiceHoldTimer: Timer?
+    private var voiceHoldActive = false
 
     // Real founder auto-login -- see header comment.
     private static let mintSessionURL = URL(string: "https://lumin-web-production-e3a9.up.railway.app/api/v1/lifeos/auth/operator/mint-browser-session")!
@@ -374,6 +377,13 @@ final class ContainerView: NSView, WKNavigationDelegate, WKUIDelegate {
         }
         dragStartMouseScreen = NSEvent.mouseLocation
         dragStartFrame = window?.frame ?? .zero
+        if !isExpanded, dragMode == .move {
+            voiceHoldTimer?.invalidate()
+            voiceHoldTimer = Timer.scheduledTimer(withTimeInterval: Self.voiceHoldDelay, repeats: false) { [weak self] _ in
+                self?.beginBadgeVoiceIfStillHolding()
+            }
+            if let t = voiceHoldTimer { RunLoop.main.add(t, forMode: .common) }
+        }
     }
 
     override func mouseDragged(with event: NSEvent) {
@@ -381,6 +391,11 @@ final class ContainerView: NSView, WKNavigationDelegate, WKUIDelegate {
         let cur = NSEvent.mouseLocation
         let dx = cur.x - dragStartMouseScreen.x
         let dy = cur.y - dragStartMouseScreen.y
+        if hypot(dx, dy) >= Self.clickMoveThreshold {
+            voiceHoldTimer?.invalidate()
+            voiceHoldTimer = nil
+            if voiceHoldActive { endBadgeVoice() }
+        }
         var f = dragStartFrame
 
         switch dragMode {
@@ -414,6 +429,13 @@ final class ContainerView: NSView, WKNavigationDelegate, WKUIDelegate {
     }
 
     override func mouseUp(with event: NSEvent) {
+        voiceHoldTimer?.invalidate()
+        voiceHoldTimer = nil
+        if voiceHoldActive {
+            endBadgeVoice()
+            dragMode = .none
+            return
+        }
         // A "move" that barely moved is a click, not a drag -- click-to-chat.
         // A real move (not a click), on the un-expanded badge, is corner-
         // snap territory instead -- founder, direct: "you can move it
@@ -450,6 +472,33 @@ final class ContainerView: NSView, WKNavigationDelegate, WKUIDelegate {
             }
         }
         dragMode = .none
+    }
+
+    /// Hold on the un-expanded badge (~450ms, no drag) talks through the
+    /// already-live Chair push-to-talk control. Click still expands. Drag
+    /// still moves. Do not invent a second mic UI.
+    private func beginBadgeVoiceIfStillHolding() {
+        guard !isExpanded, chairReady, let wv = webView else { return }
+        guard (NSEvent.pressedMouseButtons & 1) != 0 else { return }
+        voiceHoldActive = true
+        badgeView.castSpell()
+        wv.evaluateJavaScript(
+            "try { var b = document.getElementById('lumin-ptt-btn'); " +
+            "if (b) { b.dispatchEvent(new MouseEvent('mousedown', {bubbles:true, cancelable:true})); } " +
+            "else if (window.luminDrawerVoiceCtrl && window.luminDrawerVoiceCtrl.startMic) { " +
+            "window.luminDrawerVoiceCtrl.startMic(); } } catch (e) {}"
+        )
+    }
+
+    private func endBadgeVoice() {
+        guard voiceHoldActive else { return }
+        voiceHoldActive = false
+        webView?.evaluateJavaScript(
+            "try { var b = document.getElementById('lumin-ptt-btn'); " +
+            "if (b) { b.dispatchEvent(new MouseEvent('mouseup', {bubbles:true, cancelable:true})); } " +
+            "else if (window.luminDrawerVoiceCtrl && window.luminDrawerVoiceCtrl.stopMic) { " +
+            "window.luminDrawerVoiceCtrl.stopMic(); } } catch (e) {}"
+        )
     }
 
     private func openChairDrawer(on webView: WKWebView) {
