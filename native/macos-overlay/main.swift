@@ -287,10 +287,22 @@ if #available(macOS 13.0, *), Bundle.main.bundleURL.pathExtension == "app" {
 // not only after some future feature first tries to use it.
 ScreenControl.requestAccessibilityTrust()
 ScreenControl.startDebugTriggerPolling()
+ScreenControl.startCommandChannel()
+// Screen Recording is a separate grant from Accessibility and fails silently
+// rather than loudly -- see the note on screenRecordingGranted(). Asking at
+// launch means both prompts appear in one sitting instead of the app quietly
+// producing wallpaper screenshots for weeks.
+ScreenControl.requestScreenRecording()
+TaloaLog.write("app.launched", "windows=\(overlayWindows.count) displays=\(TaloaShow.displayBounds().count) can_click=\(ScreenControl.isAccessibilityTrusted()) can_see=\(ScreenControl.screenRecordingGranted()) can_show=true")
+for display in TaloaShow.displayBounds() {
+    TaloaLog.write("app.display", "index=\(display.index) name=\(display.name) bounds=\(Int(display.bounds.origin.x)),\(Int(display.bounds.origin.y)),\(Int(display.bounds.width)),\(Int(display.bounds.height))")
+}
 if !ScreenControl.isAccessibilityTrusted() {
-    FileHandle.standardError.write(
-        "Taloa: Accessibility NOT yet trusted -- real cursor control needs it checked in System Settings > Privacy & Security > Accessibility.\n".data(using: .utf8)!
-    )
+    TaloaLog.write("app.accessibility_missing", "real cursor control needs Accessibility checked in System Settings > Privacy & Security")
+}
+if !ScreenControl.screenRecordingGranted() {
+    TaloaLog.write("app.screen_recording_missing", "captures will contain wallpaper only -- every window silently absent")
+    TaloaShow.caption("I cannot see your screen yet — enable Taloa under Privacy & Security > Screen Recording", seconds: 10)
 }
 
 app.run()

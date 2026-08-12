@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-12T05:17:41.563Z",
+  "generated_at": "2026-08-12T05:30:41.713Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13362,
   "files": [
@@ -44637,9 +44637,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 851946,
-      "mtime": "2026-08-12T05:12:20.805Z",
-      "indexed_at": "2026-08-12T05:12:20.805Z"
+      "bytes": 853992,
+      "mtime": "2026-08-12T05:30:41.713Z",
+      "indexed_at": "2026-08-12T05:30:41.713Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -68244,9 +68244,9 @@
     {
       "path": "native/macos-overlay/build.sh",
       "synopsis": "Shell script — Build.",
-      "bytes": 1160,
-      "mtime": "2026-08-11T06:28:43.767Z",
-      "indexed_at": "2026-08-11T06:42:35.101Z"
+      "bytes": 1225,
+      "mtime": "2026-08-12T05:30:41.713Z",
+      "indexed_at": "2026-08-12T05:30:41.713Z"
     },
     {
       "path": "native/macos-overlay/redeploy.sh",
