@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-12T05:40:42.202Z",
+  "generated_at": "2026-08-12T09:19:55.865Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13364,
+  "file_count": 13365,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -44637,9 +44637,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 853992,
-      "mtime": "2026-08-12T05:32:29.082Z",
-      "indexed_at": "2026-08-12T05:32:29.082Z"
+      "bytes": 856411,
+      "mtime": "2026-08-12T09:19:55.865Z",
+      "indexed_at": "2026-08-12T09:19:55.865Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -68249,6 +68249,14 @@
       "indexed_at": "2026-08-12T05:30:41.713Z"
     },
     {
+      "path": "native/macos-overlay/demos/capability-tour.json",
+      "synopsis": "JSON data/config — native/macos-overlay/demos/capability-tour.json.",
+      "bytes": 867,
+      "mtime": "2026-08-12T09:19:55.865Z",
+      "indexed_at": "2026-08-12T09:19:55.865Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "native/macos-overlay/redeploy.sh",
       "synopsis": "Shell script — Build, relaunch, and auto-grant Accessibility.",
       "bytes": 1065,
@@ -80018,9 +80026,9 @@
     {
       "path": "scripts/taloa.mjs",
       "synopsis": "CLI for the Taloa overlay command channel (native macOS app).",
-      "bytes": 3372,
-      "mtime": "2026-08-12T05:32:29.082Z",
-      "indexed_at": "2026-08-12T05:32:29.082Z",
+      "bytes": 4558,
+      "mtime": "2026-08-12T09:19:55.865Z",
+      "indexed_at": "2026-08-12T09:19:55.865Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

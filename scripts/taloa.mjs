@@ -45,6 +45,31 @@ function build() {
         label: args[4] ?? '',
         seconds: num(args[5]) ?? 4,
       };
+    case 'spotlight':
+      return {
+        op,
+        rect: [num(args[0]), num(args[1]), num(args[2]), num(args[3])],
+        label: args[4] ?? '',
+        seconds: num(args[5]) ?? 4,
+      };
+    case 'arrow':
+      return {
+        op,
+        from_x: num(args[0]),
+        from_y: num(args[1]),
+        to_x: num(args[2]),
+        to_y: num(args[3]),
+        label: args[4] ?? '',
+        seconds: num(args[5]) ?? 4,
+      };
+    case 'walkthrough': {
+      // Steps come from a file: a multi-step tour is far past what survives
+      // shell quoting, and a file is also replayable and diffable.
+      const source = args[0];
+      if (!source) return null;
+      const steps = JSON.parse(fs.readFileSync(source, 'utf8'));
+      return { op, steps: Array.isArray(steps) ? steps : steps.steps };
+    }
     case 'caption':
       return { op, text: args[0] ?? '', seconds: num(args[1]) ?? 5 };
     case 'capture':
@@ -62,7 +87,7 @@ function build() {
 
 const command = build();
 if (!command) {
-  console.error('unknown op. supported: state point highlight caption capture capture-all click type clear');
+  console.error('unknown op. supported: state point highlight spotlight arrow walkthrough <steps.json> caption capture capture-all click type clear');
   process.exit(2);
 }
 
@@ -73,7 +98,12 @@ try { fs.rmSync(RESULT, { force: true }); } catch { /* nothing to clear */ }
 const requestId = `cli-${Date.now()}`;
 fs.writeFileSync(CMD, JSON.stringify({ ...command, request_id: requestId }));
 
-const deadline = Date.now() + 20_000;
+// A walkthrough only writes its receipt after the last step has played, so the
+// wait has to cover the tour it just asked for, not a fixed 20s.
+const budgetMs = command.op === 'walkthrough'
+  ? command.steps.reduce((total, step) => total + ((Number(step.seconds) || 3) + 0.25) * 1000, 10_000)
+  : 20_000;
+const deadline = Date.now() + budgetMs;
 while (Date.now() < deadline) {
   await sleep(200);
   if (!fs.existsSync(RESULT)) continue;
@@ -85,5 +115,5 @@ while (Date.now() < deadline) {
   process.exit(parsed.ok === false ? 1 : 0);
 }
 
-console.error(`no receipt within 20s -- is Taloa.app running? (open native/macos-overlay/build/Taloa.app)`);
+console.error(`no receipt within ${Math.round(budgetMs / 1000)}s -- is Taloa.app running? (open native/macos-overlay/build/Taloa.app)`);
 process.exit(1);

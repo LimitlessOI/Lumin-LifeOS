@@ -78,6 +78,40 @@ enum TaloaShow {
         return true
     }
 
+    /// Dims an entire display except one cut-out region. Where `highlight`
+    /// says "this one", spotlight says "only this one" -- the difference
+    /// matters on a 1920x1080 panel full of windows, where a thin outline is
+    /// easy to miss and everything around it competes for attention.
+    @discardableResult
+    static func spotlight(rect: CGRect, label: String, seconds: Double = 4.0) -> Bool {
+        guard rect.width > 0, rect.height > 0 else { return false }
+        let center = CGPoint(x: rect.midX, y: rect.midY)
+        guard let screen = displayBoundsContaining(center) else { return false }
+        let hole = CGRect(x: rect.origin.x - screen.origin.x,
+                          y: rect.origin.y - screen.origin.y,
+                          width: rect.width, height: rect.height)
+        present(kind: .spotlight(hole: hole, label: label), cgFrame: screen, seconds: seconds)
+        TaloaLog.write("show.spotlight", "rect=\(Int(rect.origin.x)),\(Int(rect.origin.y)),\(Int(rect.width)),\(Int(rect.height)) label=\(label)")
+        return true
+    }
+
+    /// Draws an arrow between two points, which may sit on different displays
+    /// -- the window is sized to the union, so "this control affects that
+    /// panel over there" is expressible across the whole desk.
+    @discardableResult
+    static func arrow(from: CGPoint, to: CGPoint, label: String, seconds: Double = 4.0) -> Bool {
+        let pad: CGFloat = 90
+        let frame = CGRect(x: min(from.x, to.x) - pad,
+                           y: min(from.y, to.y) - pad,
+                           width: abs(to.x - from.x) + pad * 2,
+                           height: abs(to.y - from.y) + pad * 2)
+        let localFrom = CGPoint(x: from.x - frame.origin.x, y: from.y - frame.origin.y)
+        let localTo = CGPoint(x: to.x - frame.origin.x, y: to.y - frame.origin.y)
+        present(kind: .arrow(from: localFrom, to: localTo, label: label), cgFrame: frame, seconds: seconds)
+        TaloaLog.write("show.arrow", "from=\(Int(from.x)),\(Int(from.y)) to=\(Int(to.x)),\(Int(to.y)) label=\(label)")
+        return true
+    }
+
     static func clear() {
         live.forEach { $0.dismissNow() }
         live.removeAll()
@@ -122,6 +156,8 @@ enum AnnotationKind {
     case box(target: CGRect, label: String)
     case point(center: CGPoint, label: String)
     case caption(text: String)
+    case spotlight(hole: CGRect, label: String)
+    case arrow(from: CGPoint, to: CGPoint, label: String)
 }
 
 final class AnnotationWindow: NSWindow {
@@ -218,6 +254,70 @@ final class AnnotationView: NSView {
             drawPoint(ctx: ctx, center: center, label: label, pulse: pulse)
         case let .caption(text):
             drawCaption(text: text)
+        case let .spotlight(hole, label):
+            drawSpotlight(hole: hole, label: label, pulse: pulse)
+        case let .arrow(from, to, label):
+            drawArrow(from: from, to: to, label: label, pulse: pulse)
+        }
+    }
+
+    private func drawSpotlight(hole: CGRect, label: String, pulse: CGFloat) {
+        // Even-odd fill punches a real transparent hole rather than painting a
+        // lighter rectangle over the target, so what is underneath stays
+        // exactly as bright and as readable as it was.
+        let path = NSBezierPath(rect: bounds)
+        path.append(NSBezierPath(roundedRect: hole, xRadius: 10, yRadius: 10))
+        path.windingRule = .evenOdd
+        NSColor(calibratedWhite: 0, alpha: 0.58).setFill()
+        path.fill()
+
+        let border = NSBezierPath(roundedRect: hole, xRadius: 10, yRadius: 10)
+        TaloaShow.accent.withAlphaComponent(0.55 + 0.45 * pulse).setStroke()
+        border.lineWidth = 2.5
+        border.stroke()
+
+        if !label.isEmpty {
+            let chipY = hole.minY >= 34 ? hole.minY - 34 : hole.maxY + 10
+            drawChip(label, at: CGPoint(x: hole.minX, y: chipY))
+        }
+    }
+
+    private func drawArrow(from: CGPoint, to: CGPoint, label: String, pulse: CGFloat) {
+        let accent = TaloaShow.accent
+        let dx = to.x - from.x, dy = to.y - from.y
+        let length = max(sqrt(dx * dx + dy * dy), 1)
+        let ux = dx / length, uy = dy / length
+
+        // Stop short of the target so the head points at it rather than
+        // covering it, and start clear of the origin marker.
+        let start = CGPoint(x: from.x + ux * 14, y: from.y + uy * 14)
+        let head = CGPoint(x: to.x - ux * 16, y: to.y - uy * 16)
+
+        let shaft = NSBezierPath()
+        shaft.move(to: start)
+        shaft.line(to: head)
+        shaft.lineWidth = 3
+        shaft.lineCapStyle = .round
+        accent.withAlphaComponent(0.55 + 0.45 * pulse).setStroke()
+        shaft.stroke()
+
+        let wing: CGFloat = 15
+        let left = CGPoint(x: head.x - ux * wing - uy * wing * 0.6, y: head.y - uy * wing + ux * wing * 0.6)
+        let right = CGPoint(x: head.x - ux * wing + uy * wing * 0.6, y: head.y - uy * wing - ux * wing * 0.6)
+        let arrowhead = NSBezierPath()
+        arrowhead.move(to: left)
+        arrowhead.line(to: CGPoint(x: to.x - ux * 2, y: to.y - uy * 2))
+        arrowhead.line(to: right)
+        arrowhead.close()
+        accent.setFill()
+        arrowhead.fill()
+
+        let origin = NSBezierPath(ovalIn: CGRect(x: from.x - 6, y: from.y - 6, width: 12, height: 12))
+        accent.withAlphaComponent(0.9).setFill()
+        origin.fill()
+
+        if !label.isEmpty {
+            drawChip(label, at: CGPoint(x: (from.x + to.x) / 2 - 20, y: (from.y + to.y) / 2 - 34))
         }
     }
 

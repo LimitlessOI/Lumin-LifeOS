@@ -134,6 +134,40 @@ extension ScreenControl {
             let ok = TaloaShow.caption(text, seconds: number(cmd["seconds"]) ?? 4.0, near: near)
             writeResult(["ok": ok, "op": op, "request_id": requestId])
 
+        case "spotlight":
+            guard let rect = rect(from: cmd) else {
+                writeResult(["ok": false, "op": op, "request_id": requestId, "error": "rect_required"])
+                return
+            }
+            let ok = TaloaShow.spotlight(rect: rect,
+                                         label: cmd["label"] as? String ?? "",
+                                         seconds: number(cmd["seconds"]) ?? 4.0)
+            writeResult(["ok": ok, "op": op, "request_id": requestId,
+                         "rect": [rect.origin.x, rect.origin.y, rect.width, rect.height]])
+
+        case "arrow":
+            guard let fromX = number(cmd["from_x"]), let fromY = number(cmd["from_y"]),
+                  let toX = number(cmd["to_x"]), let toY = number(cmd["to_y"]) else {
+                writeResult(["ok": false, "op": op, "request_id": requestId,
+                             "error": "from_x, from_y, to_x and to_y are all required"])
+                return
+            }
+            let ok = TaloaShow.arrow(from: CGPoint(x: fromX, y: fromY),
+                                     to: CGPoint(x: toX, y: toY),
+                                     label: cmd["label"] as? String ?? "",
+                                     seconds: number(cmd["seconds"]) ?? 4.0)
+            writeResult(["ok": ok, "op": op, "request_id": requestId])
+
+        case "walkthrough":
+            guard let steps = cmd["steps"] as? [[String: Any]], !steps.isEmpty else {
+                writeResult(["ok": false, "op": op, "request_id": requestId,
+                             "error": "steps array required",
+                             "step_shape": "{kind: highlight|point|spotlight|arrow|caption, rect|x,y|from_x..to_y, label, caption, seconds}"])
+                return
+            }
+            TaloaLog.write("walkthrough.start", "steps=\(steps.count) id=\(requestId)")
+            playWalkthrough(steps: steps, index: 0, played: 0, requestId: requestId)
+
         case "clear":
             TaloaShow.clear()
             writeResult(["ok": true, "op": op, "request_id": requestId])
@@ -243,8 +277,63 @@ extension ScreenControl {
         default:
             writeResult(["ok": false, "op": op, "request_id": requestId,
                          "error": "unknown_op",
-                         "supported": ["state", "highlight", "point", "caption", "clear",
+                         "supported": ["state", "highlight", "point", "caption", "spotlight",
+                                       "arrow", "walkthrough", "clear",
                                        "capture", "capture_all", "click", "type"]])
+        }
+    }
+
+    // MARK: - Walkthrough
+
+    /// Plays annotations in sequence, one step at a time, clearing between
+    /// steps so two instructions can never be on screen at once. The receipt
+    /// is written only when the last step finishes, so a caller can tell a
+    /// completed walkthrough from an abandoned one.
+    private static func playWalkthrough(steps: [[String: Any]], index: Int, played: Int, requestId: String) {
+        guard index < steps.count else {
+            TaloaLog.write("walkthrough.done", "steps=\(played) id=\(requestId)")
+            writeResult(["ok": played > 0, "op": "walkthrough", "request_id": requestId,
+                         "steps_played": played, "steps_requested": steps.count])
+            return
+        }
+
+        let step = steps[index]
+        let seconds = number(step["seconds"]) ?? 3.0
+        let label = step["label"] as? String ?? ""
+        let kind = (step["kind"] as? String ?? "highlight").lowercased()
+        TaloaShow.clear()
+
+        var shown = false
+        switch kind {
+        case "highlight":
+            if let r = rect(from: step) { shown = TaloaShow.highlight(rect: r, label: label, seconds: seconds) }
+        case "spotlight":
+            if let r = rect(from: step) { shown = TaloaShow.spotlight(rect: r, label: label, seconds: seconds) }
+        case "point":
+            if let x = number(step["x"]), let y = number(step["y"]) {
+                shown = TaloaShow.point(at: CGPoint(x: x, y: y), label: label, seconds: seconds)
+            }
+        case "arrow":
+            if let fx = number(step["from_x"]), let fy = number(step["from_y"]),
+               let tx = number(step["to_x"]), let ty = number(step["to_y"]) {
+                shown = TaloaShow.arrow(from: CGPoint(x: fx, y: fy), to: CGPoint(x: tx, y: ty),
+                                        label: label, seconds: seconds)
+            }
+        case "caption":
+            shown = false // a caption-only step is carried by the caption field below
+        default:
+            TaloaLog.write("walkthrough.unknown_kind", "kind=\(kind) index=\(index)")
+        }
+
+        if let caption = step["caption"] as? String, !caption.isEmpty {
+            var near: CGPoint?
+            if let x = number(step["x"]), let y = number(step["y"]) { near = CGPoint(x: x, y: y) }
+            else if let r = rect(from: step) { near = CGPoint(x: r.midX, y: r.midY) }
+            shown = TaloaShow.caption(caption, seconds: seconds, near: near) || shown
+        }
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + seconds + 0.25) {
+            playWalkthrough(steps: steps, index: index + 1, played: played + (shown ? 1 : 0), requestId: requestId)
         }
     }
 
