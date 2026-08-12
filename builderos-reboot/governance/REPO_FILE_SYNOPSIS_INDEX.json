@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-12T19:34:05.648Z",
+  "generated_at": "2026-08-12T19:36:22.800Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13393,
+  "file_count": 13397,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -36773,6 +36773,34 @@
       "bytes": 918,
       "mtime": "2026-07-10T00:30:24.606Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "db/migrations/20240101000001_create_task_store_table.sql",
+      "synopsis": "Database migration — 20240101000001_create_task_store_table.sql.",
+      "bytes": 421,
+      "mtime": "2026-08-12T19:36:22.800Z",
+      "indexed_at": "2026-08-12T19:36:22.800Z"
+    },
+    {
+      "path": "db/migrations/20240101000002_create_authority_ledger_table.sql",
+      "synopsis": "Database migration — 20240101000002_create_authority_ledger_table.sql.",
+      "bytes": 485,
+      "mtime": "2026-08-12T19:36:22.800Z",
+      "indexed_at": "2026-08-12T19:36:22.800Z"
+    },
+    {
+      "path": "db/migrations/20240101000003_create_receipt_ledger_table.sql",
+      "synopsis": "Database migration — 20240101000003_create_receipt_ledger_table.sql.",
+      "bytes": 475,
+      "mtime": "2026-08-12T19:36:22.800Z",
+      "indexed_at": "2026-08-12T19:36:22.800Z"
+    },
+    {
+      "path": "db/migrations/20240101000004_create_capsule_store_table.sql",
+      "synopsis": "Database migration — 20240101000004_create_capsule_store_table.sql.",
+      "bytes": 453,
+      "mtime": "2026-08-12T19:36:22.800Z",
+      "indexed_at": "2026-08-12T19:36:22.800Z"
     },
     {
       "path": "db/migrations/20240601_tc_intake_e2e.sql",
