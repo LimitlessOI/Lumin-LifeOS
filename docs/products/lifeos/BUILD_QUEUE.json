@@ -6355,13 +6355,13 @@
     },
     {
       "id": "fix-founder-intent-clarify",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/founder-intent-clarify.js",
       "task": "Improve intent clarification for build prompts",
       "spec": "Modify the `founder-intent-clarify.js` service to provide clearer guidance or re-prompts for ambiguous 'drawer_direct_build' requests, ensuring they are ultimately directed to the 'workflow-content' lane.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "clarifyFounderPrompt"
       ],
@@ -6369,7 +6369,12 @@
         "workflow-content",
         "drawer_direct_build",
         "callCouncilMember"
-      ]
+      ],
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-08-12T21:45:37.135Z",
+      "last_error": "AIC_GATE_FAILURE"
     },
     {
       "id": "fix-chair-intent-signals",
