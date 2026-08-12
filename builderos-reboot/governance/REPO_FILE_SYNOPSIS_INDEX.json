@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-12T19:58:41.095Z",
+  "generated_at": "2026-08-12T19:59:24.155Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13408,
+  "file_count": 13409,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -101290,6 +101290,16 @@
       "bytes": 2267,
       "mtime": "2026-08-12T19:47:00.532Z",
       "indexed_at": "2026-08-12T19:47:00.532Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/taloa/task-orchestrator-service.js",
+      "synopsis": "Manages the lifecycle and state of tasks and steps across the Digital Imprint system, generalizing browser session schemas.",
+      "bytes": 2599,
+      "mtime": "2026-08-12T19:59:24.155Z",
+      "indexed_at": "2026-08-12T19:59:24.155Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
