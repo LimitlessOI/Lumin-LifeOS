@@ -27,6 +27,200 @@
         "transcript_segments JSONB",
         "consent_policy_applied TEXT NOT NULL"
       ]
+    },
+    {
+      "id": "2",
+      "status": "pending",
+      "target_file": "db/migrations/0002_create_salesos_consent_policies_table.sql",
+      "task": "Create salesos_consent_policies table",
+      "spec": "Create CREATE TABLE IF NOT EXISTS salesos_consent_policies with id (UUID, PK), created_at (TIMESTAMPTZ, default now()), updated_at (TIMESTAMPTZ, default now()), policy_name (TEXT UNIQUE), policy_description (TEXT), disclosure_type (TEXT), recording_allowed_a_to_b (BOOLEAN), recording_allowed_b_to_a (BOOLEAN).",
+      "depends_on": [
+        "1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS salesos_consent_policies"
+      ]
+    },
+    {
+      "id": "3",
+      "status": "pending",
+      "target_file": "scripts/seed_salesos_consent_policies.mjs",
+      "task": "Seed initial salesos consent policies",
+      "spec": "Insert default consent policies into salesos_consent_policies: 'Universal Disclosure + Affirmative Consent' and 'Nevada One-Party with Interstate Disclosure'. Ensure `policy_name` is unique.",
+      "depends_on": [
+        "2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "INSERT INTO salesos_consent_policies",
+        "Universal Disclosure",
+        "Nevada One-Party"
+      ]
+    },
+    {
+      "id": "4",
+      "status": "pending",
+      "target_file": "services/salesos_consent_engine.js",
+      "task": "Implement consent policy engine service",
+      "spec": "Create a service to determine and apply jurisdiction-aware consent policies. Export `getConsentPolicyForCall(jurisdictionA, jurisdictionB)` which returns the relevant policy from `salesos_consent_policies`, and `applyPolicyRestrictions(callSessionId, policyId)` which logs policy application details or restricts functionality (e.g., recording enablement).",
+      "depends_on": [
+        "2",
+        "3"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getConsentPolicyForCall",
+        "applyPolicyRestrictions"
+      ],
+      "file_contains": [
+        "getConsentPolicyForCall",
+        "applyPolicyRestrictions"
+      ]
+    },
+    {
+      "id": "5",
+      "status": "pending",
+      "target_file": "services/salesos_twilio_recorder.js",
+      "task": "Implement Twilio outbound call and recording service",
+      "spec": "Create a service to initiate outbound calls via Twilio. Export `startOutboundCallRecording(callerId, calleeNumber, jurisdictionA, jurisdictionB)`. This function should call `salesos_consent_engine.getConsentPolicyForCall` to determine recording parameters, configure Twilio to record and/or stream (live transcription), and persist an initial entry in `salesos_call_sessions` with `recording_url` and `transcript_url` (placeholders).",
+      "depends_on": [
+        "1",
+        "4"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "startOutboundCallRecording"
+      ],
+      "file_contains": [
+        "startOutboundCallRecording",
+        "twilio.calls.create",
+        "salesos_consent_engine"
+      ]
+    },
+    {
+      "id": "6",
+      "status": "pending",
+      "target_file": "services/salesos_transcription_processor.js",
+      "task": "Implement transcription processing service",
+      "spec": "Create a service to handle Twilio webhook callbacks for transcription. Export `processCallTranscript(callSessionId, twilioRecordingUrl, twilioTranscript)`. This service should fetch the full transcript, segment it, and update the `salesos_call_sessions` table with `recording_url`, `transcript_raw`, and `transcript_segments`.",
+      "depends_on": [
+        "1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "processCallTranscript"
+      ],
+      "file_contains": [
+        "processCallTranscript",
+        "update salesos_call_sessions"
+      ]
+    },
+    {
+      "id": "7",
+      "status": "pending",
+      "target_file": "routes/salesos_call_routes.js",
+      "task": "Implement SalesOS call API routes",
+      "spec": "Create API routes for SalesOS. Export `registerSalesOSCallRoutes(app, deps)`. Implement `POST /api/v1/salesos/call/start` which takes `callerId`, `calleeNumber`, `jurisdictionA`, `jurisdictionB` and uses `salesos_twilio_recorder.startOutboundCallRecording`. Implement `POST /api/v1/salesos/call/webhook` as a Twilio callback endpoint that uses `salesos_transcription_processor.processCallTranscript`.",
+      "depends_on": [
+        "5",
+        "6"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerSalesOSCallRoutes"
+      ],
+      "file_contains": [
+        "registerSalesOSCallRoutes",
+        "salesos_twilio_recorder",
+        "salesos_transcription_processor"
+      ]
+    },
+    {
+      "id": "8",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "Register SalesOS call routes",
+      "spec": "Add the `routes/salesos_call_routes.js` module to the list of auto-registered product modules in this config file, ensuring its `registerSalesOSCallRoutes` function is called at server startup.",
+      "depends_on": [
+        "7"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "routes/salesos_call_routes.js"
+      ]
+    },
+    {
+      "id": "9",
+      "status": "pending",
+      "target_file": "services/salesos_call_analyzer.js",
+      "task": "Implement AI-powered call analysis service",
+      "spec": "Create a service for in-depth call analysis. Export `analyzeCallForCoachingMetrics(callSessionId)` and `extractCoachingClips(callSessionId)`. Use `callCouncilMember('audio_analyst', prompt)` to perform audio analysis (pace, pauses, interruptions, energy, warmth, certainty, tonality timeline) and identify strong moments/missed opportunities, then update `salesos_call_sessions.analysis_results` with the findings.",
+      "depends_on": [
+        "1",
+        "6"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "analyzeCallForCoachingMetrics",
+        "extractCoachingClips"
+      ],
+      "file_contains": [
+        "analyzeCallForCoachingMetrics",
+        "extractCoachingClips",
+        "callCouncilMember('audio_analyst'"
+      ]
+    },
+    {
+      "id": "10",
+      "status": "pending",
+      "target_file": "services/salesos_sales_dna_engine.js",
+      "task": "Implement Sales DNA and adaptive coaching service",
+      "spec": "Create a service for pattern learning and coaching. Export `learnSalesDNA(userId)` which analyzes multiple calls for a user to identify patterns. Export `generateCoachingSuggestions(callSessionId, userId)` which uses `callCouncilMember('sales_coach', prompt)` to generate adaptive, identity-safe coaching suggestions (via `lumin-communication-guard` principles), focusing on bottlenecks, based on call analysis and learned Sales DNA.",
+      "depends_on": [
+        "9"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "learnSalesDNA",
+        "generateCoachingSuggestions"
+      ],
+      "file_contains": [
+        "learnSalesDNA",
+        "generateCoachingSuggestions",
+        "callCouncilMember('sales_coach'"
+      ]
+    },
+    {
+      "id": "11",
+      "status": "pending",
+      "target_file": "services/salesos_post_call_automation.js",
+      "task": "Implement post-call automation service",
+      "spec": "Create a service for post-call status and commitment drafting. Export `autoDraftCommitmentsAndStatus(callSessionId)`. This service should use `callCouncilMember('commitment_drafter', prompt)` to analyze the call transcript, analysis results, and coaching insights to automatically draft a call status and commitments, ready for human confirmation. Update `salesos_call_sessions` with these drafts.",
+      "depends_on": [
+        "1",
+        "6",
+        "9",
+        "10"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "autoDraftCommitmentsAndStatus"
+      ],
+      "file_contains": [
+        "autoDraftCommitmentsAndStatus",
+        "callCouncilMember('commitment_drafter'"
+      ]
     }
   ]
 }
