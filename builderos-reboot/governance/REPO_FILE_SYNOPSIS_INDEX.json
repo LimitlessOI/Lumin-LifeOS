@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-12T05:32:29.082Z",
+  "generated_at": "2026-08-12T05:40:42.202Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13363,
+  "file_count": 13364,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -23750,9 +23750,9 @@
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
-      "bytes": 12010,
-      "mtime": "2026-07-10T06:28:08.571Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 10945,
+      "mtime": "2026-08-12T05:40:42.202Z",
+      "indexed_at": "2026-08-12T05:40:42.202Z",
       "synopsis_index_only": true
     },
     {
@@ -43480,9 +43480,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 551725,
-      "mtime": "2026-08-12T04:41:47.841Z",
-      "indexed_at": "2026-08-12T04:41:47.841Z"
+      "bytes": 554351,
+      "mtime": "2026-08-12T05:40:42.202Z",
+      "indexed_at": "2026-08-12T05:40:42.202Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -68301,9 +68301,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\":\"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",\"lifeos:file-synopsis:backfill\":\"node scripts/file-synopsis-enforce.mjs --all --auto-fix && node scripts/generate-file-synopsis-index.mjs\",\"lifeos:file-synopsis:index\":\"n",
-      "bytes": 38635,
-      "mtime": "2026-08-12T05:32:29.082Z",
-      "indexed_at": "2026-08-12T05:32:29.082Z",
+      "bytes": 38752,
+      "mtime": "2026-08-12T05:40:42.202Z",
+      "indexed_at": "2026-08-12T05:40:42.202Z",
       "synopsis_index_only": true
     },
     {
@@ -75684,6 +75684,16 @@
       "indexed_at": "2026-07-28T22:54:46.666Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/audit-blueprint-queue.mjs",
+      "synopsis": "Audits every blueprint in the BP_PRIORITY scheduler queue for",
+      "bytes": 11638,
+      "mtime": "2026-08-12T05:40:42.202Z",
+      "indexed_at": "2026-08-12T05:40:42.202Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
       ]
     },
     {
