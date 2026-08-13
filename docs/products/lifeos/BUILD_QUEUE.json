@@ -7394,7 +7394,7 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-13T01:01:39.584Z",
+      "last_attempt_at": "2026-08-13T01:17:48.972Z",
       "last_error": "STEP_STATUS_FORBIDDEN",
       "same_signature_count": 0,
       "behavior_assertions": [
@@ -7408,8 +7408,8 @@
         }
       ],
       "last_attempt": null,
-      "revive_count": 1,
-      "revived_at": "2026-08-13T01:01:39.426Z",
+      "revive_count": 2,
+      "revived_at": "2026-08-13T01:17:48.795Z",
       "no_op": null,
       "pre_existing": null,
       "demoted": false,
