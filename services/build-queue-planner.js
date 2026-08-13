@@ -9,7 +9,7 @@ import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { STEP_STATUS } from './product-build-orchestrator.js';
+import { STEP_STATUS, skipNonBlueprintSlices, enrollNextOverlayPrintSlice, loadBuildQueue } from './product-build-orchestrator.js';
 import {
   LIVE_BUILD_QUEUE_PRODUCT,
   LIVE_BUILD_QUEUE_PRODUCTS,
@@ -497,6 +497,21 @@ export async function planBuildQueue({
     throw new Error(
       `${NEW_QUEUE_FORBIDDEN}: planBuildQueue refused to mint ${LIVE_BUILD_QUEUE_REL}. Overlay queue must already exist — restore from git. This is supposed to break.`,
     );
+  }
+  if (productId === LIVE_BUILD_QUEUE_PRODUCT) {
+    let queue = existingQueue;
+    if (!queue || !Array.isArray(queue.steps)) {
+      try {
+        queue = loadBuildQueue(productId);
+      } catch (e) {
+        logger?.warn?.({ productId, error: e.message }, '[BUILD-QUEUE-PLANNER] overlay queue missing — fail closed');
+        return null;
+      }
+    }
+    skipNonBlueprintSlices(queue);
+    const enrolled = enrollNextOverlayPrintSlice(queue);
+    logger?.info?.({ productId, enrolled }, '[BUILD-QUEUE-PLANNER] overlay print is sealed — model planning forbidden');
+    return { queue, added: enrolled ? [enrolled] : [], source: 'sealed_overlay_print' };
   }
   // extraBacklog carries non-doc-sourced work (e.g. SENTRY self-fix findings)
   // that must also be planned into concrete target_file steps. It is merged with

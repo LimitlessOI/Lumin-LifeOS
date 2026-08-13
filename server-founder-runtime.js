@@ -434,6 +434,7 @@ async function bootFounderRuntime() {
           notificationService,
           getRailwayEnvVars,
           setRailwayEnvVar,
+          builderOSControlPlane,
         });
         founderRoutesRegistered = true;
         _bootLog('registerRoutes_done');

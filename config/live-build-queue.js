@@ -16,6 +16,7 @@ export const LIVE_BUILD_QUEUE_REL = 'docs/products/universal-overlay/BUILD_QUEUE
 
 export const SECOND_QUEUE_FORBIDDEN = 'SECOND_QUEUE_FORBIDDEN';
 export const NEW_QUEUE_FORBIDDEN = 'NEW_QUEUE_FORBIDDEN';
+export const PRINT_INVENTION_FORBIDDEN = 'PRINT_INVENTION_FORBIDDEN';
 
 export function normalizeQueueRel(filePath) {
   return String(filePath || '').replace(/\\/g, '/').replace(/^\.\//, '');

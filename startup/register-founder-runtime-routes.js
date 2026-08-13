@@ -45,6 +45,7 @@ import {
 import { checkAllProviders } from "../services/provider-key-health.js";
 import { autoRegisterProductModules, getModuleHealth } from "./auto-register-product-modules.js";
 import { createFactoryMountRoutes } from "../routes/factory-mount-routes.js";
+import { createBuilderOSControlPlaneRoutes } from "../routes/builderos-control-plane-routes.js";
 import { assertFounderRuntimeRoutes } from "../services/founder-runtime-route-assert.js";
 import { registerFounderMemoryRoutes } from "../routes/founder-memory-routes.js";
 import { createRailwayManagedEnvRoutes } from "../routes/railway-managed-env-routes.js";
@@ -66,6 +67,7 @@ export async function registerFounderRuntimeRoutes(app, deps) {
     notificationService,
     getRailwayEnvVars,
     setRailwayEnvVar,
+    builderOSControlPlane,
   } = deps;
 
   const councilChatAI = callCouncilMember
@@ -520,6 +522,20 @@ export async function registerFounderRuntimeRoutes(app, deps) {
     }
   });
   logger.info("✅ [PROVIDER-KEYS] Health route mounted at /api/v1/lifeos/provider-key-health");
+
+  if (builderOSControlPlane) {
+    app.use(
+      "/api/v1/builderos/control-plane",
+      createBuilderOSControlPlaneRoutes({
+        pool,
+        requireKey,
+        controlPlane: builderOSControlPlane,
+      }),
+    );
+    logger.info("✅ [BUILDEROS-CONTROL-PLANE] Founder-builder routes mounted at /api/v1/builderos/control-plane/{health,summary,spend-outcomes}");
+  } else {
+    logger.warn("⚠️ [BUILDEROS-CONTROL-PLANE] control plane service missing — spend-outcomes not mounted on founder runtime");
+  }
 
   app.use(createFactoryMountRoutes({ requireKey, logger, pool, baseUrl: siteBaseUrl, callCouncilMember, commitToGitHub }));
 

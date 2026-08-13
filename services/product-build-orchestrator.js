@@ -29,6 +29,7 @@ export {
   LIVE_BUILD_QUEUE_REL,
   SECOND_QUEUE_FORBIDDEN,
   NEW_QUEUE_FORBIDDEN,
+  PRINT_INVENTION_FORBIDDEN,
   assertLiveBuildQueuePath,
   assertBuildQueueMayBeWritten,
   assertNoNewBuildQueueInCommit,
@@ -37,6 +38,22 @@ export {
 } from './build-queue-core.js';
 import { STEP_STATUS, queuePathForProduct, evaluateStepExpectations, assertBuildQueueMayBeWritten } from './build-queue-core.js';
 import { stepDependencies } from '../config/step-dependencies.js';
+import {
+  isOverlayPrintSliceId,
+  isCollectiblesPrintSlice,
+  isAuthorizedQueueSlice,
+  overlayPrintStillOpen,
+  enrollNextOverlayPrintSlice,
+  assertOverlayQueuePrintLaw,
+} from '../config/overlay-print-sequence.js';
+
+export {
+  isOverlayPrintSliceId,
+  isCollectiblesPrintSlice,
+  overlayPrintStillOpen,
+  enrollNextOverlayPrintSlice,
+  assertOverlayQueuePrintLaw,
+};
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const TYPED_BLOCKERS_PATH = path.join(ROOT, 'builderos-reboot/governance/TYPED_BLOCKER_SSOT.json');
@@ -155,21 +172,15 @@ export const COLLECTIBLES_PRINT_SOURCE = /docs\/products\/collectibles\/MASTER_B
  * Overlay print ids / sources, or Collectibles V-slices with MASTER_BLUEPRINT source.
  * Anything else in the manufacturing queue is invention.
  */
-export function isBlueprintSlice(step, productId) {
-  const id = String(step?.id || '');
-  const source = String(step?.source || '');
-  const stepProduct = String(step?.product_id || '').trim();
+export function isBlueprintSlice(step, _productId) {
+  return isAuthorizedQueueSlice(step);
+}
 
-  if (stepProduct === 'collectibles' || COLLECTIBLES_PRINT_SLICE_ID.test(id)) {
-    return COLLECTIBLES_PRINT_SLICE_ID.test(id) && COLLECTIBLES_PRINT_SOURCE.test(source);
-  }
-
-  if (OVERLAY_PRINT_SLICE_ID.test(id)) return true;
-  if (OVERLAY_PRINT_SOURCE.test(source)) return true;
-
-  // Legacy non-live product queues (should not exist on disk).
-  if (productId && productId !== 'universal-overlay') return true;
-  return false;
+export function prepareOverlayManufacturingQueue(queue) {
+  const skipped = skipNonBlueprintSlices(queue);
+  const enrolled = enrollNextOverlayPrintSlice(queue);
+  assertOverlayQueuePrintLaw(queue);
+  return { skipped, enrolled };
 }
 
 export function skipNonBlueprintSlices(queue) {
@@ -196,6 +207,9 @@ export function selectNextStep(queue) {
     if (TERMINAL.has(step.status)) return null;
     if (step.demoted === true || step.status === STEP_STATUS.SKIPPED) return null;
     if (queue.product_id === 'universal-overlay' && !isBlueprintSlice(step, queue.product_id)) return null;
+    if (queue.product_id === 'universal-overlay' && isCollectiblesPrintSlice(step) && overlayPrintStillOpen(queue)) {
+      return null;
+    }
     if (isHumanHold(step)) return null;
     if (step.status === STEP_STATUS.FOUNDER_GATED && !isHumanHold(step)) {
       step.status = STEP_STATUS.PENDING;
@@ -465,6 +479,7 @@ export function queueSummary(queue) {
 export function persistQueue(queue, { root = ROOT } = {}) {
   const p = queue._sourcePath || queuePathForProduct(queue.product_id);
   assertBuildQueueMayBeWritten(p, { creating: !fs.existsSync(p) });
+  if (queue.product_id === 'universal-overlay') prepareOverlayManufacturingQueue(queue);
   const { _sourcePath, ...clean } = queue;
   fs.writeFileSync(p, `${JSON.stringify(clean, null, 2)}\n`);
   return p;
@@ -503,6 +518,7 @@ export async function runNextStep(queue, { buildFn, verifyFn, deployProofFn, mod
   step.status = STEP_STATUS.BUILDING;
   step.attempts += 1;
   step.last_attempt_at = new Date().toISOString();
+  step.started_at = step.last_attempt_at;
 
   const build = await buildFn({
     product_id: queue.product_id,
@@ -623,6 +639,7 @@ export async function runNextStep(queue, { buildFn, verifyFn, deployProofFn, mod
 
   step.status = STEP_STATUS.DONE;
   step.completed_at = new Date().toISOString();
+  stampSliceTiming(step, build);
   step.deploy_proven = true;
   step.failure_signature = null;
   step.same_signature_count = 0;
@@ -686,7 +703,20 @@ function normalizeFailureSignature(reason, stage, blockerClass) {
   return `${stage || 'unknown'}|${blockerClass || 'unknown'}|${stripped}`;
 }
 
+function stampSliceTiming(step, extra = {}) {
+  const started = Date.parse(step.started_at || step.last_attempt_at || '');
+  if (Number.isFinite(started)) step.duration_ms = Math.max(0, Date.now() - started);
+  const usage = extra.usage || extra;
+  const tokens = Number(usage.tokens_used ?? usage.total_tokens ?? (
+    (Number(usage.prompt_tokens) || 0) + (Number(usage.completion_tokens) || 0)
+  ));
+  if (Number.isFinite(tokens) && tokens > 0) step.tokens_used = tokens;
+  const usd = Number(usage.estimated_usd ?? extra.estimated_usd);
+  if (Number.isFinite(usd) && usd > 0) step.estimated_usd = usd;
+}
+
 function failStep(step, queue, maxAttempts, info, logger) {
+  stampSliceTiming(step, info);
   step.last_error = info.reason;
   const blockerClass = resolveTypedBlockerClass({ stage: info.stage, reason: info.reason });
   step.blocker_class = blockerClass;

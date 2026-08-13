@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Documentation — CONTINUITY LOG. -->
 
+## 2026-08-13 — Overlay stopped because the loop invented work; hard-gated
+
+Adam: building stopped; he keeps asking and it is not done; hard-gate so it is impossible not to do what he asked. Root cause: invented `register-*.mjs` counted as print slices via source-string hole; persist did not skip/enroll; discover never enrolled the next sealed §64 item so the planner invented more scripts; Collectibles were allowed to ship while overlay print was open. Closed: sealed `OVERLAY_PRINT_SEQUENCE`, `PRINT_INVENTION_FORBIDDEN`, planner cannot call a model for overlay, Collectibles wait, REGISTER claimed done (capreg already mounted), next step `TALOA-S64-ANDROID-BODY-001`. Spend-outcomes mounted on founder-runtime.
+
 ## 2026-08-13 — One-queue law reaffirmed; factory-3 healed
 
 Adam restated: we do not start a new queue; one queue manages multiple factories and more than one project; it pulls from the BPs. factory-3 LaunchAgent was still resolving deleted `collectibles/BUILD_QUEUE.json` (`queue_missing`) — reloaded to `product_id:universal-overlay`. Twin/mtg reset after self-referential `STEP_STATUS_FORBIDDEN` thrash; truth-ladder no longer treats that meta-block as terminal.

@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/universal-overlay/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-08-12 — BuilderOS observation report: running, not on next print slice; slice-time and token-spend not live-queryable. |
+| **Last Updated** | 2026-08-13 — Hard gate: next sealed slice is Android Body; invented register scripts skipped; REGISTER claimed done (capreg already mounted). |
 
 ---
 ---
@@ -338,14 +338,16 @@ User on insurance portal
 | Field | Value |
 |---|---|
 | **Lane log** | `docs/CONTINUITY_LOG.md` (cross-cutting) |
-| **Next build** | Next real print slice is §64 item 3 (Android Universal Body adapter), not invented `scripts/register*.mjs`. factory-2: native/macos-overlay only. factory-3 has no live queue (one-queue law). |
-| **Known gaps** | Slice duration and token spend required, not live on founder-runtime (`/api/v1/builderos/control-plane/spend-outcomes` 404). REGISTER queue row blocked `github_commit_failed` even though capreg is mounted. Layer B `REGISTERED_NOT_IMPLEMENTED`. Overlay SENTRY feed file missing on Railway. |
-| **⚠️ IN PROGRESS** | BuilderOS looping invented overlay register scripts + factory-2 leftover `step-5`. Not advancing the uploaded print. |
+| **Next build** | `TALOA-S64-ANDROID-BODY-001` (`services/taloa/android-body-adapter.js`) — sealed §64 item 3. factory-2: native/macos-overlay only. Collectibles wait while overlay print is open. |
+| **Known gaps** | Layer B `REGISTERED_NOT_IMPLEMENTED`. Overlay SENTRY feed file missing on Railway. Spend-outcomes mounts on this deploy — not live until SHA matches. |
+| **⚠️ IN PROGRESS** | Overlay manufacturing resumes at Android Universal Body adapter after this ship. |
 | **How to load extension in Chrome** | Go to `chrome://extensions` → Enable Developer Mode → Load Unpacked → select the `extension/` folder in this repo |
 
 ---
 
 ## Change Receipts
+
+| 2026-08-13 | **Hard gate so overlay cannot stop inventing instead of printing.** Invented `register-*.mjs` / leftover `step-5` skipped `off_print`. `TALOA-S64-CAPREG-REGISTER-001` marked done (capreg already mounted live). Next sealed slice enrolled: `TALOA-S64-ANDROID-BODY-001`. Collectibles remain on this queue but are not shippable until overlay print closes. | Founder: it stopped; I keep asking and it is not done; make it impossible not to do what I asked. | Queue next step `TALOA-S64-ANDROID-BODY-001`. |
 
 | 2026-08-13 | **Collectibles V1 BP slices enrolled on this queue (honest).** Docs claimed enrollment earlier; steps were missing on tip. Added `COLLECTIBLES-V1-*` with `product_id: collectibles` + MASTER_BLUEPRINT `source`. `multi_project: true`. factory-3 owns those targets. | Founder: one queue; multi-factory; multi-project from BPs. | factory-3 plan → `COLLECTIBLES-V1-ADAPTER-INTERFACE-001` |
 

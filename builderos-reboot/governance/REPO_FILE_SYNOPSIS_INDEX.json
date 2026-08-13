@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T06:44:10.376Z",
+  "generated_at": "2026-08-13T06:49:34.249Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13529,
+  "file_count": 13532,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21678,9 +21678,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 4109963,
-      "mtime": "2026-08-13T06:44:09.217Z",
-      "indexed_at": "2026-08-13T06:44:10.376Z"
+      "bytes": 4111556,
+      "mtime": "2026-08-13T06:48:47.713Z",
+      "indexed_at": "2026-08-13T06:49:34.249Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -33045,9 +33045,9 @@
     {
       "path": "config/live-build-queue.js",
       "synopsis": "There is ONE live manufacturing queue. Multiple factories and",
-      "bytes": 1535,
-      "mtime": "2026-08-13T05:23:57.945Z",
-      "indexed_at": "2026-08-13T05:23:57.945Z",
+      "bytes": 1605,
+      "mtime": "2026-08-13T06:28:41.237Z",
+      "indexed_at": "2026-08-13T06:48:47.620Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -33096,6 +33096,17 @@
       "indexed_at": "2026-08-13T06:44:07.157Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "config/overlay-print-sequence.js",
+      "synopsis": "Sealed overlay manufacturing sequence — the factory may not invent",
+      "bytes": 8841,
+      "mtime": "2026-08-13T06:32:27.329Z",
+      "indexed_at": "2026-08-13T06:48:47.620Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md",
+        "docs/products/universal-overlay/PRODUCT_HOME.md\". Overlay print §64 item 3: Android Universal Body adapter. Export exactly: export function createAndroidBodyAdapter(deps). Return { observe(scope), act(action), verify(goal, expected) }. observe MUST call deps.dumpVisibleText (injected) then CALL redactObservation from \"../drive-sensitive-content-filter.js\" on that text before returning. act MUST call deps.enqueueCommand. verify MUST use independent evidence from a fresh observe(). Do NOT rebuild runBrowserGoal. Do NOT invent a table. ES module. Do not edit server.js.',"
       ]
     },
     {
@@ -41255,9 +41266,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Documentation — CONTINUITY LOG.",
-      "bytes": 198635,
-      "mtime": "2026-08-13T06:24:07.119Z",
-      "indexed_at": "2026-08-13T06:24:07.119Z"
+      "bytes": 199357,
+      "mtime": "2026-08-13T06:42:56.794Z",
+      "indexed_at": "2026-08-13T06:48:47.620Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -41594,6 +41605,13 @@
       "bytes": 1122,
       "mtime": "2026-08-13T05:59:55.590Z",
       "indexed_at": "2026-08-13T06:44:07.157Z"
+    },
+    {
+      "path": "docs/conversation_dumps/2026-08-13-hard-gate-print-invention.md",
+      "synopsis": "Twin-archive dump — founder: overlay stopped; hard-gate so the system cannot skip what he asked.",
+      "bytes": 901,
+      "mtime": "2026-08-13T06:42:54.910Z",
+      "indexed_at": "2026-08-13T06:48:47.620Z"
     },
     {
       "path": "docs/conversation_dumps/2026-08-13-one-queue-multi-factory-multi-project.md",
@@ -45601,9 +45619,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 869484,
+      "bytes": 869940,
       "mtime": "2026-08-13T06:42:54.185Z",
-      "indexed_at": "2026-08-13T06:44:07.157Z"
+      "indexed_at": "2026-08-13T06:48:47.620Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -46405,6 +46423,13 @@
       "indexed_at": "2026-08-13T06:44:07.157Z"
     },
     {
+      "path": "docs/products/universal-overlay/conversations/2026-08-13-hard-gate-print-invention.md",
+      "synopsis": "Founder conversation capture — overlay manufacturing stopped; hard-gate print invention.",
+      "bytes": 2291,
+      "mtime": "2026-08-13T06:42:54.841Z",
+      "indexed_at": "2026-08-13T06:48:47.620Z"
+    },
+    {
       "path": "docs/products/universal-overlay/CREATIVE_BRIEF.md",
       "synopsis": "Creative Brief — Universal Overlay (universal-overlay)",
       "bytes": 3769,
@@ -46429,9 +46454,9 @@
     {
       "path": "docs/products/universal-overlay/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Universal Overlay",
-      "bytes": 121233,
-      "mtime": "2026-08-13T06:01:06.579Z",
-      "indexed_at": "2026-08-13T06:01:06.579Z"
+      "bytes": 121585,
+      "mtime": "2026-08-13T06:41:35.757Z",
+      "indexed_at": "2026-08-13T06:48:47.620Z"
     },
     {
       "path": "docs/products/universal-overlay/SEND_PACKET_FLUID_UI_AND_TWO_FACTORIES_2026-08-11.md",
@@ -66808,9 +66833,9 @@
     {
       "path": "factory-staging/factory-core/bpb/build-queue-step-adapter.js",
       "synopsis": "STEP 5e — adapt a per-product docs/products/<id>/BUILD_QUEUE.json step",
-      "bytes": 17388,
-      "mtime": "2026-08-13T06:08:06.203Z",
-      "indexed_at": "2026-08-13T06:08:06.203Z",
+      "bytes": 17286,
+      "mtime": "2026-08-13T06:29:41.042Z",
+      "indexed_at": "2026-08-13T06:48:47.620Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -92995,9 +93020,9 @@
     {
       "path": "server-founder-runtime.js",
       "synopsis": "Founder-builder minimal runtime entrypoint.",
-      "bytes": 26116,
-      "mtime": "2026-08-06T23:19:59.315Z",
-      "indexed_at": "2026-08-06T23:23:47.311Z",
+      "bytes": 26149,
+      "mtime": "2026-08-13T06:33:55.459Z",
+      "indexed_at": "2026-08-13T06:48:47.620Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -93688,9 +93713,9 @@
     {
       "path": "services/build-queue-core.js",
       "synopsis": "Shared BUILD_QUEUE.json primitives plus the one-queue lock:",
-      "bytes": 14419,
-      "mtime": "2026-08-13T05:25:30.116Z",
-      "indexed_at": "2026-08-13T05:25:30.116Z",
+      "bytes": 14477,
+      "mtime": "2026-08-13T06:29:28.523Z",
+      "indexed_at": "2026-08-13T06:48:47.620Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -93698,9 +93723,9 @@
     {
       "path": "services/build-queue-planner.js",
       "synopsis": "Build-queue planner — turns a product's PRODUCT_HOME backlog into a",
-      "bytes": 27689,
-      "mtime": "2026-08-13T05:03:17.278Z",
-      "indexed_at": "2026-08-13T05:03:17.278Z",
+      "bytes": 28424,
+      "mtime": "2026-08-13T06:32:32.679Z",
+      "indexed_at": "2026-08-13T06:48:47.620Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -97039,9 +97064,9 @@
     {
       "path": "services/governed-build-queue-scheduler.js",
       "synopsis": "STEP 5f — the governed BUILD_QUEUE scheduler. Gathers the shippable",
-      "bytes": 10755,
-      "mtime": "2026-08-12T21:12:45.323Z",
-      "indexed_at": "2026-08-12T21:12:45.323Z",
+      "bytes": 10878,
+      "mtime": "2026-08-13T06:29:41.042Z",
+      "indexed_at": "2026-08-13T06:48:47.620Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -100443,9 +100468,9 @@
     {
       "path": "services/product-build-orchestrator.js",
       "synopsis": "General product-build orchestrator — turns a product's structured",
-      "bytes": 31447,
-      "mtime": "2026-08-13T05:23:57.945Z",
-      "indexed_at": "2026-08-13T05:23:57.945Z",
+      "bytes": 32495,
+      "mtime": "2026-08-13T06:29:02.487Z",
+      "indexed_at": "2026-08-13T06:48:47.620Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -103876,9 +103901,9 @@
     {
       "path": "startup/register-founder-runtime-routes.js",
       "synopsis": "Minimal founder-builder runtime route composition.",
-      "bytes": 27722,
-      "mtime": "2026-08-11T00:57:51.654Z",
-      "indexed_at": "2026-08-11T00:59:37.266Z",
+      "bytes": 28366,
+      "mtime": "2026-08-13T06:34:02.206Z",
+      "indexed_at": "2026-08-13T06:48:47.620Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -105016,9 +105041,9 @@
     {
       "path": "tests/exclusive-queue-lock.test.js",
       "synopsis": "One overlay queue, blueprint slices only — the factory may not choose.",
-      "bytes": 9278,
-      "mtime": "2026-08-13T06:08:06.203Z",
-      "indexed_at": "2026-08-13T06:08:06.203Z",
+      "bytes": 12014,
+      "mtime": "2026-08-13T06:34:04.106Z",
+      "indexed_at": "2026-08-13T06:48:47.620Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

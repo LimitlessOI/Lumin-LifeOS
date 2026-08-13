@@ -22,7 +22,7 @@
 import fs from 'node:fs';
 import { selectShippableSteps, toGovernedShipStep, deriveExpectedExportsFromSpec, parseRouteDeclaration } from '../factory-staging/factory-core/bpb/build-queue-step-adapter.js';
 import { resolveRepoPath } from '../factory-staging/factory-core/repo-paths.js';
-import { reviveStaleBlockedSteps, STEP_STATUS } from './product-build-orchestrator.js';
+import { reviveStaleBlockedSteps, STEP_STATUS, prepareOverlayManufacturingQueue } from './product-build-orchestrator.js';
 
 const SERVER_CODE_DIR_RE = /^(routes|services|middleware|startup)\/|^factory-staging\/factory-core\//;
 const AUTO_REGISTER_TARGET = 'config/auto-registered-product-modules.json';
@@ -188,6 +188,7 @@ function prepareQueueForPlanning(queue, { now = Date.now() } = {}) {
   if (!queue || !Array.isArray(queue.steps)) return;
   clearFutureLastAttemptAt(queue, now);
   reviveStaleBlockedSteps(queue, { now });
+  if (queue.product_id === 'universal-overlay') prepareOverlayManufacturingQueue(queue);
   inferQueueExpectations(queue);
 }
 

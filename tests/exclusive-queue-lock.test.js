@@ -8,9 +8,11 @@ import {
   isBlueprintSlice,
   skipNonBlueprintSlices,
   selectNextStep,
-  persistQueue,
+  prepareOverlayManufacturingQueue,
   enrollNextOverlayPrintSlice,
   overlayPrintStillOpen,
+  runNextStep,
+  assertOverlayQueuePrintLaw,
   PRINT_INVENTION_FORBIDDEN,
   STEP_STATUS,
   loadBuildQueue,
@@ -172,6 +174,70 @@ test('enrollNextOverlayPrintSlice adds the sealed Android Body adapter', () => {
   assert.equal(queue.steps[0].target_file, 'services/taloa/android-body-adapter.js');
 });
 
+test('prepareOverlayManufacturingQueue skips invented register scripts and enrolls the next print slice', () => {
+  const queue = {
+    product_id: 'universal-overlay',
+    steps: [{
+      id: 'register-taloa-s64-capability',
+      status: STEP_STATUS.PENDING,
+      source: 'TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md §64',
+      target_file: 'scripts/registerTaloaS64Capability.mjs',
+    }],
+  };
+  const { skipped, enrolled } = prepareOverlayManufacturingQueue(queue);
+  assert.deepEqual(skipped, ['register-taloa-s64-capability']);
+  assert.equal(enrolled, 'TALOA-S64-ANDROID-BODY-001');
+  assert.equal(queue.steps[0].status, STEP_STATUS.SKIPPED);
+});
+
+test('runNextStep records duration_ms and tokens_used on every slice', async () => {
+  const queue = {
+    product_id: 'universal-overlay',
+    steps: [{
+      id: 'TALOA-S64-ANDROID-BODY-001',
+      status: STEP_STATUS.PENDING,
+      target_file: 'services/taloa/android-body-adapter.js',
+      depends_on: [],
+    }],
+  };
+  const result = await runNextStep(queue, {
+    buildFn: async () => ({ ok: true, commit_sha: 'abc1234deadbeef', usage: { total_tokens: 42, estimated_usd: 0.01 } }),
+    artifactProofFn: async () => ({ ok: true }),
+    deployProofFn: async () => ({ ok: true }),
+  });
+  assert.equal(result.ok, true);
+  assert.equal(typeof queue.steps[0].duration_ms, 'number');
+  assert.ok(queue.steps[0].duration_ms >= 0);
+  assert.equal(queue.steps[0].tokens_used, 42);
+});
+
+test('assertOverlayQueuePrintLaw throws PRINT_INVENTION_FORBIDDEN on invented open steps', () => {
+  assert.throws(
+    () => assertOverlayQueuePrintLaw({
+      product_id: 'universal-overlay',
+      steps: [{ id: 'invented-register-script', status: STEP_STATUS.PENDING }],
+    }),
+    new RegExp(PRINT_INVENTION_FORBIDDEN),
+  );
+});
+
+test('planBuildQueue never calls the model for overlay — enrolls the sealed print slice', async () => {
+  let called = 0;
+  const planned = await planBuildQueue({
+    productId: 'universal-overlay',
+    homeText: '- [ ] invent a register script for capability registry',
+    existingQueue: { product_id: 'universal-overlay', steps: [] },
+    callModel: async () => {
+      called += 1;
+      return '{"steps":[{"id":"register-taloa-s64-capability","target_file":"scripts/x.mjs","task":"invented"}]}';
+    },
+  });
+  assert.equal(called, 0);
+  assert.equal(planned.source, 'sealed_overlay_print');
+  assert.equal(planned.added[0], 'TALOA-S64-ANDROID-BODY-001');
+  assert.ok(planned.queue.steps.some((s) => s.id === 'TALOA-S64-ANDROID-BODY-001'));
+});
+
 test('planBuildQueue refuses every product except overlay', async () => {
   await assert.rejects(
     () => planBuildQueue({ productId: 'lifeos', homeText: '- [ ] fake', callModel: async () => '{}' }),
@@ -189,6 +255,7 @@ test('discoverPlanWork never mints a queue for a product that does not have one'
   const items = discoverPlanWork();
   assert.ok(Array.isArray(items));
   assert.ok(!items.some((i) => /no BUILD_QUEUE yet/.test(i.detail || '')));
+  assert.ok(!items.some((i) => i.kind === 'plan_build_queue'), 'overlay print is sealed — the model may not replan it');
 });
 
 test('assertNoNewBuildQueueInCommit refuses a new lifeos queue even if overlay is also in the batch', () => {
