@@ -6825,9 +6825,9 @@
       "shipped_via": "governed_ship_queue"
     },
     {
-      "status": "pending",
+      "status": "done",
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "action_type": "write_file_exact",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
@@ -6890,8 +6890,8 @@
       ],
       "started_at": "2026-08-13T21:32:52.574Z",
       "last_attempt_at": "2026-08-13T21:32:52.648Z",
-      "last_error": "AIC_GATE_FAILURE",
-      "commit_sha": null,
+      "last_error": null,
+      "commit_sha": "625d12d9b03aa117dcc80af78372ca22c3ae48bc",
       "built_sha": null,
       "proof": null,
       "failure_signature": "AIC_GATE_FAILURE",
@@ -6902,10 +6902,41 @@
       "escalation_required": false,
       "escalation_note": null,
       "park_until": null,
-      "heal_unblocked": true,
+      "heal_unblocked": false,
       "tokens_used": 0,
-      "duration_ms": 1000,
-      "shipped_at": "2026-08-13T21:32:54.493Z"
+      "duration_ms": 8825,
+      "shipped_at": "2026-08-13T21:33:01.397Z",
+      "shipped_via": "governed_ship_queue"
+    },
+    {
+      "status": "pending",
+      "founder_gated": false,
+      "attempts": 0,
+      "action_type": "author_then_write",
+      "product_id": "collectibles",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "mission_id": "PRODUCT-universal-overlay",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
+      "depends_on": [
+        "COLLECTIBLES-V1-ERA-WALL-001",
+        "COLLECTIBLES-V1-DOSSIER-001",
+        "COLLECTIBLES-V1-REVIEW-QUEUE-001",
+        "COLLECTIBLES-V1-LOCATION-API-001",
+        "COLLECTIBLES-V1-HOUSEHOLD-001",
+        "COLLECTIBLES-V1-GUEST-CLAIM-001",
+        "COLLECTIBLES-V1-EXPORT-PRIVACY-001"
+      ],
+      "id": "COLLECTIBLES-V1-LAYER-B-001",
+      "target_file": "scripts/sentry-collectibles-layer-b.mjs",
+      "sandbox_boundary": "scripts/**",
+      "task": "SO-002 Layer B: real browser walkthrough of Vault capture → review → Era Wall → Dossier. Every finding needs proposed_solution. Register product in SENTRY registry if required.",
+      "spec": "VERSION_ACCEPTANCE_GATES V1-B1. Foundation acceptance is not V1 done.",
+      "file_contains": [
+        "collectibles",
+        "proposed_solution",
+        "layer-b"
+      ],
+      "blueprint_step_id": "COLLECTIBLES-V1-LAYER-B-001"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
