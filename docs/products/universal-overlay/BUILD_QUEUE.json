@@ -4251,8 +4251,8 @@
     {
       "id": "COLLECTIBLES-V1-TWIN-SERVICE-001",
       "product_id": "collectibles",
-      "status": "pending",
-      "attempts": 0,
+      "status": "blocked",
+      "attempts": 1,
       "target_file": "services/collectibles/twin-service.js",
       "action_type": "author_then_write",
       "depends_on": [
@@ -4290,8 +4290,8 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
-      "last_error": null,
+      "last_attempt_at": "2026-08-13T07:58:06.970Z",
+      "last_error": "github_commit_failed_after_local_ship",
       "last_attempt": null,
       "revive_count": 0,
       "revived_at": "2026-08-13T06:17:39.524Z",
@@ -4308,11 +4308,11 @@
       "escalation_required": false,
       "escalation_note": null,
       "skip_reason": null,
-      "failure_signature": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing:owned_; behavior_assertion_failed; behavior_proof",
+      "failure_signature": "github_commit_failed_after_local_ship",
       "heal_unblocked": true,
       "heal_reason": "identity_status_needle_2026-08-13",
-      "started_at": "2026-08-13T07:51:44.070Z",
-      "escalation_class": "evidence_gap"
+      "started_at": "2026-08-13T07:58:00.516Z",
+      "escalation_class": "same_signature_repeat"
     },
     {
       "id": "COLLECTIBLES-V1-MTG-ADAPTER-001",
@@ -4644,7 +4644,7 @@
       "status": "pending",
       "founder_gated": false,
       "attempts": 0,
-      "action_type": "author_then_write",
+      "action_type": "write_file_exact",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
       "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md §64",
@@ -4691,7 +4691,33 @@
         }
       ],
       "failure_signature": "github_commit_failed_after_local_ship",
-      "escalation_class": "same_signature_repeat"
+      "escalation_class": "same_signature_repeat",
+      "exact_inputs": {
+        "content_source_path": "docs/products/universal-overlay/twins/steps/TALOA-S64-AUTH-ENVELOPE-001.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-08-13T07:58:11.892Z",
+        "shipped_at": "2026-08-13T07:58:11.892Z",
+        "commit_sha": null,
+        "content_sha256": "cc127a29884f342f0f87a2c1b354df2cc51847be8147ec1c15bacec00dce291e",
+        "target_file": "services/taloa/task-authorization-envelope.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/taloa/task-authorization-envelope.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "PASS"
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/universal-overlay/twins/steps/TALOA-S64-AUTH-ENVELOPE-001.exact",
+          "content_sha256": "cc127a29884f342f0f87a2c1b354df2cc51847be8147ec1c15bacec00dce291e"
+        }
+      },
+      "shipped_at": "2026-08-13T07:58:11.892Z"
     },
     {
       "status": "pending",
