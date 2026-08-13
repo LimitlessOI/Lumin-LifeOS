@@ -4153,6 +4153,20 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null
+    },
+    {
+      "id": "step-5",
+      "status": "pending",
+      "target_file": "native/macos-overlay/ApplicationContextMonitor.swift",
+      "task": "Implement macOS active application context monitor",
+      "spec": "Develop a native Swift component for the macOS overlay that continuously monitors the currently active application and its essential context (e.g., bundle ID, window title), making this information available for the overlay system.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "class ApplicationContextMonitor"
+      ],
+      "design_review_flagged": true
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
