@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T23:50:14.361Z",
+  "generated_at": "2026-08-13T23:51:59.097Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13593,
+  "file_count": 13594,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -95206,6 +95206,16 @@
       "bytes": 1021,
       "mtime": "2026-08-13T08:19:48.319Z",
       "indexed_at": "2026-08-13T08:19:48.319Z",
+      "ssot": [
+        "docs/products/collectibles/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/collectibles/adapters/payment-adapter.js",
+      "synopsis": "Exports createPaymentAdapterRegistry — services/collectibles/adapters/payment-adapter.js.",
+      "bytes": 2109,
+      "mtime": "2026-08-13T23:51:59.097Z",
+      "indexed_at": "2026-08-13T23:51:59.097Z",
       "ssot": [
         "docs/products/collectibles/PRODUCT_HOME.md"
       ]

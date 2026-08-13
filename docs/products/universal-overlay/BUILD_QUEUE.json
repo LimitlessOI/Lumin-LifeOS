@@ -7404,8 +7404,8 @@
     {
       "status": "pending",
       "founder_gated": false,
-      "attempts": 1,
-      "action_type": "author_then_write",
+      "attempts": 2,
+      "action_type": "write_file_exact",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
@@ -7430,15 +7430,56 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-13T23:50:53.470Z",
+      "last_attempt_at": "2026-08-13T23:51:53.356Z",
       "last_error": "AIC_GATE_FAILURE",
-      "started_at": "2026-08-13T23:50:53.409Z",
+      "started_at": "2026-08-13T23:51:53.288Z",
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
       "park_until": null,
       "heal_unblocked": true,
-      "heal_reason": "collectibles_never_stop_heal"
+      "heal_reason": "collectibles_never_stop_heal",
+      "same_signature_count": 1,
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/collectibles/adapters/payment-adapter.js",
+          "exports": [
+            "createPaymentAdapterRegistry"
+          ],
+          "assertion_id": "expected_exports:services/collectibles/adapters/payment-adapter.js"
+        }
+      ],
+      "failure_signature": "AIC_GATE_FAILURE",
+      "escalation_class": "same_signature_repeat",
+      "escalation_required": false,
+      "escalation_note": null,
+      "exact_inputs": {
+        "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V3-PAYMENT-ADAPTER-001.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-08-13T23:51:56.264Z",
+        "shipped_at": "2026-08-13T23:51:56.264Z",
+        "commit_sha": null,
+        "content_sha256": "2080c6fdc90c861c4387ed505e3e192226f12f5224eadf2389a1229dc55db309",
+        "target_file": "services/collectibles/adapters/payment-adapter.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/collectibles/adapters/payment-adapter.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "PASS"
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V3-PAYMENT-ADAPTER-001.exact",
+          "content_sha256": "2080c6fdc90c861c4387ed505e3e192226f12f5224eadf2389a1229dc55db309"
+        }
+      },
+      "shipped_at": "2026-08-13T23:51:56.264Z"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
