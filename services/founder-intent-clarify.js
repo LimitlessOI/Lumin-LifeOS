@@ -12,6 +12,8 @@ import { expandFounderBuildTask } from './founder-chair-intent.js';
 
 const OUTCOME_MARKERS = /\b(so that|when i|on open|when open|visible|show|load|auto-?load|fix|error|broken|not working|daily|top-?3|debrief|color|yellow|nav|strip|button|wire|connect|working|usability)\b/i;
 const BUILD_VERB = /\b(fix|change|update|add|remove|create|make|build|implement|wire|ship|get it working|make it work)\b/i;
+const AMBIGUOUS_PHRASES = /\b(general|overall|some parts|a bit|something like|make it better|improve it|tweak|adjust|refine)\b/i;
+const CONTEXT_HINTS = /\b(current page|this section|the [a-z]+-?bar|the form|the table|the list|the card|the modal|the dialog)\b/i;
 
 export function isDirectExecuteOrder(text = '') {
   return /^\s*(do|execute|run)\s*:/i.test(String(text || '').trim());
@@ -129,6 +131,34 @@ export function assessFounderBuildClarity(cleanedInput = '', expandedTask = '') 
     assumptions.push(`Assumption: I would edit \`${resolvedTarget}\` — you did not name a file.`);
   }
 
+  // New ambiguity detection: Vague language
+  if (AMBIGUOUS_PHRASES.test(text) && !OUTCOME_MARKERS.test(text)) {
+    assumptions.push('Assumption: your request uses vague terms. I need more specific details about what "better" or "tweak" means.');
+    options.push({
+      id: 'D',
+      label: 'Provide specific criteria (e.g., "make it 20% faster", "change color to blue")',
+      channel: 'clarification',
+      suggested_task: `How specifically should I "${text.match(AMBIGUOUS_PHRASES)?.[0]}"?`,
+    });
+  }
+
+  // New ambiguity detection: Contextual hints but no clear target or outcome
+  if (CONTEXT_HINTS.test(text) && !resolvedTarget && !OUTCOME_MARKERS.test(text)) {
+    assumptions.push('Assumption: you mentioned a UI element (e.g., "the form") but not where it is or what to do with it.');
+    options.push({
+      id: 'E',
+      label: 'Specify the exact file or component containing the UI element.',
+      channel: 'clarification',
+      suggested_task: `Which file contains "${text.match(CONTEXT_HINTS)?.[0]}"?`,
+    });
+    options.push({
+      id: 'F',
+      label: 'Describe the desired outcome for the UI element (e.g., "make the form submit faster").',
+      channel: 'clarification',
+      suggested_task: `What is the desired outcome for "${text.match(CONTEXT_HINTS)?.[0]}"?`,
+    });
+  }
+
   if (!OUTCOME_MARKERS.test(text) && BUILD_VERB.test(text)) {
     assumptions.push('Assumption: success criteria are unclear — I do not know what "done" looks like yet.');
   }
@@ -161,13 +191,15 @@ export function assessFounderBuildClarity(cleanedInput = '', expandedTask = '') 
     assumptions.length >= 2
     || (resolvedTarget && !explicitPath && !bareOverlay)
     || !resolvedTarget
+    || AMBIGUOUS_PHRASES.test(text)
+    || CONTEXT_HINTS.test(text)
   );
 
   return {
     needs_clarify,
     paraphrase: paraphraseFounderAsk(text),
     assumptions,
-    options: options.slice(0, 4),
+    options: options.slice(0, 4), // Limit options to a reasonable number
     inferred_target: resolvedTarget || null,
   };
 }
@@ -181,7 +213,7 @@ export function formatClarifySummary(clarity = {}) {
     ...(clarity.assumptions || []).map((a) => `• ${a}`),
   ];
   if (clarity.options?.length) {
-    lines.push('', 'Pick one (reply with A, B, or C — or rewrite the ask):');
+    lines.push('', 'Pick one (reply with A, B, C, etc. — or rewrite the ask):');
     for (const opt of clarity.options) {
       lines.push(`  ${opt.id}) ${opt.label}`);
     }
