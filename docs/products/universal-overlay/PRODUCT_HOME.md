@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/universal-overlay/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-08-12 — Phase 1 construction 15/15 on main; badge Chair + native hold-to-talk marked done. Not founder-usable yet: Phase 1 services have no live route callers; Overlay Layer A/B still unregistered-not-implemented. factory-2 is looping, native unchanged. |
+| **Last Updated** | 2026-08-12 — Overlay re-queued: TALOA-WIRE-HOST-001/REGISTER pending so factory-1 cannot skip to LifeOS. factory-2 compiles OverlayHostPing. factory-3 registered idle (enable switch). Layer A script exists; host 404 is a SENTRY finding until the route ships. |
 
 ---
 ---
@@ -338,14 +338,16 @@ User on insurance portal
 | Field | Value |
 |---|---|
 | **Lane log** | `docs/CONTINUITY_LOG.md` (cross-cutting) |
-| **Next build** | Wire Phase 1 `services/taloa/*` into a real founder-visible path (routes + native/Chair). Overlay Layer A/B scripts are still `REGISTERED_NOT_IMPLEMENTED`. factory-2 has zero pending native steps. |
-| **Known gaps** | Signed iOS `.ipa` blocked on Apple Developer cert + UDID (PWA works today). Phase 1 stubs are not founder-usable. |
-| **⚠️ IN PROGRESS** | factory-2 LaunchAgent `com.lumin.factory-2-lane` must stay loaded; factory-1 must not ship `native/macos-overlay/`. |
+| **Next build** | factory-1: TALOA-WIRE-HOST-001 then REGISTER (live caller for createOverlayHostService). factory-2: LaunchAgent compiles OverlayHostPing. factory-3 stays idle until `npm run builderos:factory:enable -- --factory factory-3`. Layer B still unimplemented. |
+| **Known gaps** | Signed iOS `.ipa` blocked on Apple Developer cert + UDID (PWA works today). Phase 1 host is not founder-usable until WIRE-HOST ships. Layer B still `REGISTERED_NOT_IMPLEMENTED`. |
+| **⚠️ IN PROGRESS** | Overlay never-stop: both factories on overlay. factory-2 LaunchAgent `com.lumin.factory-2-lane` must stay loaded. Do not ship `native/macos-overlay/` from factory-1. |
 | **How to load extension in Chrome** | Go to `chrome://extensions` → Enable Developer Mode → Load Unpacked → select the `extension/` folder in this repo |
 
 ---
 
 ## Change Receipts
+
+| 2026-08-12 | **Overlay stopped because the queue had no buildable overlay step, so the loop moved to LifeOS.** Pending JS hold-to-talk (`step-2`/`step-4`) depended on blocked `step-1`; `selectNextStep` returned null; `discoverBuildQueueWork` skipped overlay. Skipped the dead JS PTT path (native badge voice already replaced it). Queued `TALOA-WIRE-HOST-001` + `REGISTER` so factory-1 has a real caller for `createOverlayHostService`. factory-2 compiles `OverlayHostPing.swift` (pings `/lifeos` + overlay-host health into taloa.log). SENTRY Layer A script now exists — host 404 is a finding with that proposed_solution, not a pass. factory-3 is registered idle: `npm run builderos:factory:enable -- --factory factory-3` is the switch (provision + `public/overlay/` owns + LaunchAgent); `--idle` unloads the agent and keeps the worktree. | Founder: overlay is not to stop; both factories; keep an eye on SENTRY; make sure two is working; three should be a switch we can flip instantly and leave idle. | After deploy, never-stop next overlay step must be `TALOA-WIRE-HOST-001`, not a LifeOS queue-status commit. `launchctl list com.lumin.factory-2-lane` must be running. Layer A: `npm run sentry:overlay:layer-a`. |
 
 | 2026-08-12 | **Progress report (observed, not a new build).** Origin queue: TALOA-P1-001…015 all `done`; `TALOA-BADGE-CHAIR-001` and `TALOA-BADGE-VOICE-001` `done`. Four leftover non-Phase-1 rows: two `STEP_STATUS_FORBIDDEN` blocks (`moduleRouter.js`, `holdToTalkService.js`) and two pending JS hold-to-talk files the native badge path replaced. factory-2 LaunchAgent is running (PID live); last native compile 21:51Z, then `native_unchanged` / `pending_owned: []`. Production `/builder/ready` serves `0cf9fc4d7548` (handoff commit `b775c40d` is an ancestor). Overlay Layer A/B remain `REGISTERED_NOT_IMPLEMENTED`. Phase 1 services exist on disk with **no route callers** — construction ≠ usable. | Founder asked how overlay is actually doing after the SENTRY handoff ship. | Queue + factory-2 log + production ready SHA. |
 

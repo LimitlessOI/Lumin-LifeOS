@@ -302,6 +302,7 @@ DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
     ScreenControl.requestScreenRecording()
     TaloaLog.write("app.screen_recording_requested", "granted_after_request=\(ScreenControl.screenRecordingGranted())")
 }
+OverlayHostPing.start()
 TaloaLog.write("app.launched", "windows=\(overlayWindows.count) displays=\(TaloaShow.displayBounds().count) can_click=\(ScreenControl.isAccessibilityTrusted()) can_see=\(ScreenControl.screenRecordingGranted()) can_show=true")
 for display in TaloaShow.displayBounds() {
     TaloaLog.write("app.display", "index=\(display.index) name=\(display.name) bounds=\(Int(display.bounds.origin.x)),\(Int(display.bounds.origin.y)),\(Int(display.bounds.width)),\(Int(display.bounds.height))")

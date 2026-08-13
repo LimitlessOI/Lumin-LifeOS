@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-12T23:45:57.703Z",
+  "generated_at": "2026-08-13T00:02:11.564Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13433,
+  "file_count": 13440,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21757,9 +21757,9 @@
     {
       "path": "builderos-reboot/governance/SENTRY_PRODUCT_REGISTRY.json",
       "synopsis": "BuilderOS artifact — SENTRY PRODUCT REGISTRY.",
-      "bytes": 4507,
-      "mtime": "2026-08-12T04:41:47.841Z",
-      "indexed_at": "2026-08-12T04:41:47.841Z",
+      "bytes": 0,
+      "mtime": "2026-08-13T00:02:11.564Z",
+      "indexed_at": "2026-08-13T00:02:11.564Z",
       "synopsis_index_only": true
     },
     {
@@ -32801,13 +32801,17 @@
     },
     {
       "path": "config/factory-registry.js",
-      "synopsis": "Factory identity and allocation policy. Factories are PEERS: neither",
-      "bytes": 4141,
-      "mtime": "2026-08-12T02:31:59.207Z",
-      "indexed_at": "2026-08-12T02:34:28.525Z",
-      "ssot": [
-        "docs/products/builderos/PRODUCT_HOME.md"
-      ]
+      "synopsis": "Configuration — Factory Registry.",
+      "bytes": 0,
+      "mtime": "2026-08-13T00:02:11.564Z",
+      "indexed_at": "2026-08-13T00:02:11.564Z"
+    },
+    {
+      "path": "config/factory-slots.js",
+      "synopsis": "Configuration — Factory Slots.",
+      "bytes": 0,
+      "mtime": "2026-08-13T00:02:11.564Z",
+      "indexed_at": "2026-08-13T00:02:11.564Z"
     },
     {
       "path": "config/factory-workspace.js",
@@ -41217,8 +41221,8 @@
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Documentation — CONTINUITY LOG.",
       "bytes": 0,
-      "mtime": "2026-08-12T23:45:57.703Z",
-      "indexed_at": "2026-08-12T23:45:57.703Z"
+      "mtime": "2026-08-13T00:02:11.564Z",
+      "indexed_at": "2026-08-13T00:02:11.564Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -41506,6 +41510,13 @@
       "bytes": 1216,
       "mtime": "2026-08-12T19:52:26.515Z",
       "indexed_at": "2026-08-12T19:52:26.515Z"
+    },
+    {
+      "path": "docs/conversation_dumps/2026-08-12-overlay-never-stop-factory-n-switch.md",
+      "synopsis": "Documentation — 2026 08 12 Overlay Never Stop Factory N Switch.",
+      "bytes": 0,
+      "mtime": "2026-08-13T00:02:11.564Z",
+      "indexed_at": "2026-08-13T00:02:11.564Z"
     },
     {
       "path": "docs/conversation_dumps/by-product/sessions/2a4739f2/BUILDEROS-AUTONOMOUS.md",
@@ -43788,8 +43799,8 @@
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Documentation — PRODUCT HOME.",
       "bytes": 0,
-      "mtime": "2026-08-12T23:45:57.703Z",
-      "indexed_at": "2026-08-12T23:45:57.703Z"
+      "mtime": "2026-08-13T00:02:11.564Z",
+      "indexed_at": "2026-08-13T00:02:11.564Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -45734,6 +45745,13 @@
       "indexed_at": "2026-08-12T22:30:50.776Z"
     },
     {
+      "path": "docs/products/universal-overlay/conversations/2026-08-12-overlay-never-stop-factory-n-switch.md",
+      "synopsis": "Documentation — 2026 08 12 Overlay Never Stop Factory N Switch.",
+      "bytes": 0,
+      "mtime": "2026-08-13T00:02:11.564Z",
+      "indexed_at": "2026-08-13T00:02:11.564Z"
+    },
+    {
       "path": "docs/products/universal-overlay/conversations/2026-08-12-overlay-progress-after-handoff.md",
       "synopsis": "Documentation — 2026 08 12 Overlay Progress After Handoff.",
       "bytes": 0,
@@ -45766,8 +45784,8 @@
       "path": "docs/products/universal-overlay/PRODUCT_HOME.md",
       "synopsis": "Documentation — PRODUCT HOME.",
       "bytes": 0,
-      "mtime": "2026-08-12T23:45:57.703Z",
-      "indexed_at": "2026-08-12T23:45:57.703Z"
+      "mtime": "2026-08-13T00:02:11.564Z",
+      "indexed_at": "2026-08-13T00:02:11.564Z"
     },
     {
       "path": "docs/products/universal-overlay/SEND_PACKET_FLUID_UI_AND_TWO_FACTORIES_2026-08-11.md",
@@ -68587,8 +68605,8 @@
       "path": "native/macos-overlay/build.sh",
       "synopsis": "Shell script — Build.",
       "bytes": 0,
-      "mtime": "2026-08-12T22:21:35.412Z",
-      "indexed_at": "2026-08-12T22:21:35.412Z"
+      "mtime": "2026-08-13T00:02:11.564Z",
+      "indexed_at": "2026-08-13T00:02:11.564Z"
     },
     {
       "path": "native/macos-overlay/demos/capability-tour.json",
@@ -68673,8 +68691,8 @@
       "path": "package.json",
       "synopsis": "JSON data/config — package.json.",
       "bytes": 0,
-      "mtime": "2026-08-12T23:04:01.649Z",
-      "indexed_at": "2026-08-12T23:04:01.649Z",
+      "mtime": "2026-08-13T00:02:11.564Z",
+      "indexed_at": "2026-08-13T00:02:11.564Z",
       "synopsis_index_only": true
     },
     {
@@ -69297,6 +69315,14 @@
       "bytes": 1194,
       "mtime": "2026-08-12T02:31:27.912Z",
       "indexed_at": "2026-08-12T02:34:28.525Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/FACTORY_SLOT_STATE.json",
+      "synopsis": "Product receipt — FACTORY SLOT STATE.",
+      "bytes": 0,
+      "mtime": "2026-08-13T00:02:11.564Z",
+      "indexed_at": "2026-08-13T00:02:11.564Z",
       "synopsis_index_only": true
     },
     {
@@ -77251,13 +77277,10 @@
     },
     {
       "path": "scripts/factory-allocation.mjs",
-      "synopsis": "Deterministic slice→factory allocation over an authorized manufacturing",
-      "bytes": 15218,
-      "mtime": "2026-08-12T21:12:45.323Z",
-      "indexed_at": "2026-08-12T21:12:45.323Z",
-      "ssot": [
-        "docs/products/builderos/PRODUCT_HOME.md"
-      ]
+      "synopsis": "Script — Factory Allocation.",
+      "bytes": 0,
+      "mtime": "2026-08-13T00:02:11.564Z",
+      "indexed_at": "2026-08-13T00:02:11.564Z"
     },
     {
       "path": "scripts/factory-ci.mjs",
@@ -77278,6 +77301,13 @@
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "scripts/factory-slot.mjs",
+      "synopsis": "Script — Factory Slot.",
+      "bytes": 0,
+      "mtime": "2026-08-13T00:02:11.564Z",
+      "indexed_at": "2026-08-13T00:02:11.564Z"
     },
     {
       "path": "scripts/fcla-arc-pack.mjs",
@@ -78872,13 +78902,10 @@
     },
     {
       "path": "scripts/plan-two-factory-build.mjs",
-      "synopsis": "Produces the two-factory manufacturing plan — how the project is",
-      "bytes": 16546,
-      "mtime": "2026-08-12T21:12:45.323Z",
-      "indexed_at": "2026-08-12T21:12:45.323Z",
-      "ssot": [
-        "docs/products/builderos/PRODUCT_HOME.md"
-      ]
+      "synopsis": "Script — Plan Two Factory Build.",
+      "bytes": 0,
+      "mtime": "2026-08-13T00:02:11.564Z",
+      "indexed_at": "2026-08-13T00:02:11.564Z"
     },
     {
       "path": "scripts/pm2-setup.sh",
@@ -79034,13 +79061,10 @@
     },
     {
       "path": "scripts/provision-factory.mjs",
-      "synopsis": "Provisions a factory as a REAL execution lane by creating its own",
-      "bytes": 5138,
-      "mtime": "2026-08-12T02:31:19.398Z",
-      "indexed_at": "2026-08-12T02:34:28.525Z",
-      "ssot": [
-        "docs/products/builderos/PRODUCT_HOME.md"
-      ]
+      "synopsis": "Script — Provision Factory.",
+      "bytes": 0,
+      "mtime": "2026-08-13T00:02:11.564Z",
+      "indexed_at": "2026-08-13T00:02:11.564Z"
     },
     {
       "path": "scripts/railway_verification.mjs",
@@ -79335,8 +79359,8 @@
       "path": "scripts/run-factory-lane.mjs",
       "synopsis": "Script — Run Factory Lane.",
       "bytes": 0,
-      "mtime": "2026-08-12T22:21:35.412Z",
-      "indexed_at": "2026-08-12T22:21:35.412Z"
+      "mtime": "2026-08-13T00:02:11.564Z",
+      "indexed_at": "2026-08-13T00:02:11.564Z"
     },
     {
       "path": "scripts/run-foundation-pipeline.mjs",
@@ -79783,13 +79807,10 @@
     },
     {
       "path": "scripts/run-overlay-lifecycle-exam.mjs",
-      "synopsis": "Drives the frozen Overlay fixture through the whole governed loop —",
-      "bytes": 31039,
-      "mtime": "2026-08-12T04:41:47.841Z",
-      "indexed_at": "2026-08-12T04:41:47.841Z",
-      "ssot": [
-        "docs/products/builderos/PRODUCT_HOME.md"
-      ]
+      "synopsis": "Script — Run Overlay Lifecycle Exam.",
+      "bytes": 0,
+      "mtime": "2026-08-13T00:02:11.564Z",
+      "indexed_at": "2026-08-13T00:02:11.564Z"
     },
     {
       "path": "scripts/run-overlay-regression-exam.mjs",
@@ -80065,6 +80086,13 @@
       "bytes": 0,
       "mtime": "2026-08-12T23:45:57.703Z",
       "indexed_at": "2026-08-12T23:45:57.703Z"
+    },
+    {
+      "path": "scripts/sentry-overlay-layer-a.mjs",
+      "synopsis": "Script — Sentry Overlay Layer A.",
+      "bytes": 0,
+      "mtime": "2026-08-13T00:02:11.564Z",
+      "indexed_at": "2026-08-13T00:02:11.564Z"
     },
     {
       "path": "scripts/sentry-prealpha-gate.mjs",
@@ -104274,10 +104302,10 @@
     },
     {
       "path": "tests/factory-allocation.test.js",
-      "synopsis": "Proves two-factory operation in both modes the founder asked for —",
-      "bytes": 16392,
-      "mtime": "2026-08-12T21:12:45.323Z",
-      "indexed_at": "2026-08-12T21:12:45.323Z"
+      "synopsis": "js — tests/factory-allocation.test.js.",
+      "bytes": 0,
+      "mtime": "2026-08-13T00:02:11.564Z",
+      "indexed_at": "2026-08-13T00:02:11.564Z"
     },
     {
       "path": "tests/factory-authoring-model-rotation.test.js",
@@ -104292,6 +104320,13 @@
       "bytes": 1349,
       "mtime": "2026-07-28T17:47:22.581Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "tests/factory-slots.test.js",
+      "synopsis": "js — tests/factory-slots.test.js.",
+      "bytes": 0,
+      "mtime": "2026-08-13T00:02:11.564Z",
+      "indexed_at": "2026-08-13T00:02:11.564Z"
     },
     {
       "path": "tests/fcla-engines-smoke.test.mjs",

@@ -1,5 +1,11 @@
 <!-- SYNOPSIS: Documentation — CONTINUITY LOG. -->
 
+## 2026-08-12 — Overlay stopped because the queue was empty of buildable overlay work
+
+Adam: the overlay is not to stop; both factories; Cursor watches SENTRY; factory-2 must be working; factory-3 should be a switch we can flip on instantly and leave idle.
+
+Root cause: leftover JS hold-to-talk steps were pending but unrunnable (`step-2` depends on blocked `step-1`), so `selectNextStep` returned null and the governed loop shipped LifeOS. Closed by skipping that dead path, queueing `TALOA-WIRE-HOST-001` (live caller for Phase 1), OverlayHostPing on factory-2, Layer A so SENTRY can actually probe overlay, and registering factory-3 idle (`builderos:factory:enable` / `:idle`).
+
 ## 2026-08-12 — Disagreement is the consensus protocol, not a vote
 
 Adam: if SENTRY and Conductor do not agree, they did not use the proper consensus protocol — it is not a tie and not a majority. 100% consensus. Combine pieces; the answer may be E. Argue both sides. Unintended consequences + and -. Add more models if needed, still unanimous. First handoff had dissent → officer_panel; that was wrong. Now `consensus_protocol`. Overlay: Phase 1 15/15 constructed, not wired; factory-2 looping with nothing native pending; Layer A/B still not implemented.

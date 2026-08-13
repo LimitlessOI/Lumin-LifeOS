@@ -28,7 +28,7 @@ import { allocate } from './factory-allocation.mjs';
 import { ownerFor } from '../config/lane-assignment.js';
 import { REQUIRED_CONSENSUS_OFFICES } from '../config/manufacturing-plan-schema.js';
 import { detectInventions } from '../services/blueprint-invention-detector.js';
-import { activeFactories } from '../config/factory-registry.js';
+import { dispatchingFactories } from '../config/factory-registry.js';
 import { stepDependencies } from '../config/step-dependencies.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -62,7 +62,7 @@ function steps0(blueprint) {
 
 export function planTwoFactoryBuild() {
   const { session, blueprint, planning_from } = loadBlueprint();
-  const factories = activeFactories().map((f) => f.factory_id);
+  const factories = dispatchingFactories().map((f) => f.factory_id);
   if (factories.length < 2) {
     return { ok: false, reason: `only ${factories.length} healthy factory lane(s) — nothing to split` };
   }

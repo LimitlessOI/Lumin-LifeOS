@@ -25,7 +25,7 @@ import {
   ISOLATION_RULES,
   FACTORY_HIERARCHY,
   isKnownFactory,
-  activeFactories,
+  dispatchingFactories,
 } from '../config/factory-registry.js';
 
 import { BLOCKER_ORIGIN } from './plan-topology.mjs';
@@ -129,7 +129,7 @@ export function loadHealthProofs(receiptPath = HEALTH_RECEIPT, { now = Date.now(
 }
 
 export function allocate(plan, {
-  factories = activeFactories(),
+  factories = dispatchingFactories(),
   profiles = [],
   mode = ALLOCATION_MODE.PARALLEL_SPLIT,
   redundancy_for_high_risk = true,

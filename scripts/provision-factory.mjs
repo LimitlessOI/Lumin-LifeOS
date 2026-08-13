@@ -31,7 +31,7 @@ function git(args, cwd = REPO_ROOT) {
 
 export function provisionFactory(factoryId, { branch = null } = {}) {
   if (!isKnownFactory(factoryId)) {
-    throw new Error(`unknown_factory:${factoryId} — register it in config/factory-registry.js first`);
+    throw new Error(`unknown_factory:${factoryId} — register it with npm run builderos:factory:enable -- --factory ${factoryId}`);
   }
   if (String(factoryId) === PRIMARY_FACTORY_ID) {
     return { factory_id: factoryId, action: 'none', reason: 'the primary lane is the repository itself' };

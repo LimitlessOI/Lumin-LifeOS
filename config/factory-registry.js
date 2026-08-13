@@ -15,27 +15,38 @@
  */
 import { CAPABILITY_DIMENSIONS } from './trust-scoring.js';
 import { isProvisioned, workspaceRootFor } from './factory-workspace.js';
+import { registeredFactoryIds, dispatchingFactoryIds as slotDispatchingIds } from './factory-slots.js';
+import { loadLaneAssignment } from './lane-assignment.js';
+
+function noteFor(factoryId) {
+  if (factoryId === 'factory-1') {
+    return 'The existing governed factory, and the repository working tree itself. Historical ledger rows belong to it.';
+  }
+  if (factoryId === 'factory-2') {
+    return 'Second lane. Provisioned as its own git worktree so it has an independent index — two factories sharing one index is the git-lock and staging-contamination failure this repo has already hit.';
+  }
+  return `Registered slot. Idle until enabled. Flip on with npm run builderos:factory:enable -- --factory ${factoryId}; idle with --idle (worktree stays).`;
+}
+
+function identityFor(factoryId) {
+  return Object.freeze({
+    factory_id: factoryId,
+    kind: 'governed_codegen',
+    entrypoint: '/factory/ship-queue',
+    note: noteFor(factoryId),
+  });
+}
 
 /**
  * Identity only. A factory declares who it is here; whether it can actually
  * build is answered by `factoryStatus()` against the filesystem, because a
  * config field claiming `active` is precisely the dormant-enforcement pattern
  * this repair exists to eliminate.
+ *
+ * factory-3 is registered idle so accelerating to three is a switch, not a
+ * rewrite. factory-4+ is `npm run builderos:factory:enable -- --factory factory-N`.
  */
-export const FACTORIES = Object.freeze([
-  Object.freeze({
-    factory_id: 'factory-1',
-    kind: 'governed_codegen',
-    entrypoint: '/factory/ship-queue',
-    note: 'The existing governed factory, and the repository working tree itself. Historical ledger rows belong to it.',
-  }),
-  Object.freeze({
-    factory_id: 'factory-2',
-    kind: 'governed_codegen',
-    entrypoint: '/factory/ship-queue',
-    note: 'Second lane. Provisioned as its own git worktree so it has an independent index — two factories sharing one index is the git-lock and staging-contamination failure this repo has already hit.',
-  }),
-]);
+export const FACTORIES = Object.freeze(registeredFactoryIds().map(identityFor));
 
 /** Capacity is observed, never declared. */
 export function factoryStatus(factoryId) {
@@ -75,11 +86,25 @@ export const HIGH_RISK_MARKERS = Object.freeze([
 ]);
 
 export function activeFactories() {
-  return FACTORIES.filter((f) => factoryStatus(f.factory_id) === 'active');
+  return knownFactoryIds()
+    .map(identityFor)
+    .filter((f) => factoryStatus(f.factory_id) === 'active');
+}
+
+/**
+ * Allocation and manufacturing plans use this, not `activeFactories()`.
+ * A provisioned-but-idle slot (worktree kept, owns cleared) must not receive
+ * slices. factory-1 always dispatches; others only when LANE_ASSIGNMENT has owns.
+ */
+export function dispatchingFactories() {
+  const dispatching = new Set(slotDispatchingIds(loadLaneAssignment()));
+  return knownFactoryIds()
+    .map(identityFor)
+    .filter((f) => dispatching.has(f.factory_id) && factoryStatus(f.factory_id) === 'active');
 }
 
 export function knownFactoryIds() {
-  return FACTORIES.map((f) => f.factory_id);
+  return registeredFactoryIds();
 }
 
 export function isKnownFactory(id) {

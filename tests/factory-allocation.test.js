@@ -355,7 +355,8 @@ test('challenging yourself is self-detection, not peer review', () => {
 
 test('an unknown identity can neither challenge nor be challenged', () => {
   assert.equal(raisePeerChallenge({ challenger: 'ghost', subject: 'factory-1', claim: 'x', evidence: 'y' }).accepted, false);
-  assert.ok(knownFactoryIds().length >= 2);
+  assert.ok(knownFactoryIds().length >= 3);
+  assert.ok(knownFactoryIds().includes('factory-3'));
 });
 
 test('the architecture reaches N factories without redesign', () => {

@@ -41,13 +41,13 @@ import { applyEscalationGate } from './escalation-gate.mjs';
 import { resolveDeterministically } from './deterministic-repair.mjs';
 import { applyInternalResolutions } from './apply-internal-resolutions.mjs';
 import { loadSchemaDecisionArtifact } from './schema-decision-artifact.mjs';
-import { activeFactories } from '../config/factory-registry.js';
+import { dispatchingFactories } from '../config/factory-registry.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const FIXTURE_DIR = 'docs/products/builderos/fixtures/intake-regression-2026-08-11';
 const SESSION_REL = `${FIXTURE_DIR}/SESSION_000146ae_ready_invented_architecture.json`;
 const RECEIPT_REL = 'products/receipts/OVERLAY_LIFECYCLE_EXAM_RECEIPT.json';
-const FACTORIES = activeFactories().map((f) => f.factory_id);
+const FACTORIES = dispatchingFactories().map((f) => f.factory_id);
 const BRIDGE_REL = 'builderos-reboot/governance/TERMINOLOGY_BRIDGE.json';
 
 function read(rel) {
