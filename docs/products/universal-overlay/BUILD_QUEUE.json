@@ -6674,9 +6674,9 @@
       "shipped_via": "governed_ship_queue"
     },
     {
-      "status": "pending",
+      "status": "blocked",
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "action_type": "author_then_write",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
@@ -6698,7 +6698,14 @@
         "household",
         "role"
       ],
-      "blueprint_step_id": "COLLECTIBLES-V1-HOUSEHOLD-001"
+      "blueprint_step_id": "COLLECTIBLES-V1-HOUSEHOLD-001",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-08-13T21:28:58.637Z",
+      "last_error": "GROUNDING_FAIL: missing_sql_table: household_memberships",
+      "started_at": "2026-08-13T21:28:52.990Z",
+      "heal_reason": "attach_convention_sealed_exact"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
