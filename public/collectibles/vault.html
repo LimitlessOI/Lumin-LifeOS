@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: HTML page: Your Collectibles Vault -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Collectibles Vault</title>
+    <style>
+        body { font-family: sans-serif; margin: 0; padding: 0; background-color: #f4f7f6; color: #333; }
+        .container { max-width: 1200px; margin: 20px auto; padding: 20px; background-color: #fff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        header { text-align: center; margin-bottom: 40px; }
+        header h1 { color: #2c3e50; font-size: 2.5em; margin-bottom: 10px; }
+        header p { color: #666; font-size: 1.1em; }
+        .cta-section { text-align: center; margin-bottom: 40px; padding: 30px; background-color: #e8f5e9; border-radius: 8px; border: 1px dashed #a5d6a7; }
+        .cta-section h2 { color: #2e7d32; margin-bottom: 15px; }
+        .cta-section button { background-color: #4caf50; color: white; padding: 12px 25px; border: none; border-radius: 5px; font-size: 1.1em; cursor: pointer; transition: background-color 0.3s ease; }
+        .cta-section button:hover { background-color: #43a047; }
+        .content-area { display: grid; grid-template-columns: 1fr 300px; gap: 40px; }
+        .main-content { }
+        .sidebar { background-color: #f9f9f9; padding: 20px; border-radius: 8px; border: 1px solid #eee; }
+        .sidebar h3 { color: #2c3e50; margin-top: 0; margin-bottom: 20px; }
+        .review-item { margin-bottom: 15px; padding: 10px; border: 1px solid #ffe0b2; background-color: #fff3e0; border-radius: 5px; }
+        .review-item p { margin: 0; font-size: 0.9em; }
+        .review-item a { color: #fb8c00; text-decoration: none; font-weight: bold; }
+        .review-item a:hover { text-decoration: underline; }
+        .collectible-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        .collectible-item { background-color: #fff; border: 1px solid #ddd; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.08); transition: transform 0.2s ease; }
+        .collectible-item:hover { transform: translateY(-5px); }
+        .collectible-item img { width: 100%; height: 200px; object-fit: cover; display: block; background-color: #eee; }
+        .collectible-info { padding: 15px; }
+        .collectible-info h4 { margin-top: 0; margin-bottom: 8px; color: #2c3e50; font-size: 1.2em; }
+        .collectible-info p { margin: 0; color: #666; font-size: 0.9em; line-height: 1.4; }
+        .empty-state, .error-state { text-align: center; padding: 50px; background-color: #fff; border-radius: 8px; border: 1px dashed #ccc; margin-top: 30px; }
+        .empty-state h2, .error-state h2 { color: #7f8c8d; margin-bottom: 15px; }
+        .empty-state p, .error-state p { color: #999; font-size: 1.1em; }
+        .error-state { border-color: #ef9a9a; background-color: #ffebee; }
+        .error-state h2 { color: #c62828; }
+        .error-state button { background-color: #ef5350; margin-top: 20px; }
+        .error-state button:hover { background-color: #e53935; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Your Collectibles Vault</h1>
+            <p>A curated space for your unique treasures.</p>
+        </header>
+
+        <div class="cta-section">
+            <h2>Capture Your Next Piece</h2>
+            <p>Ready to add a new collectible to your vault? It's quick and easy.</p>
+            <button onclick="window.location.href='/capture'">Add New Collectible</button>
+        </div>
+
+        <div class="content-area">
+            <div class="main-content">
+                <h2>Browse Your Collection</h2>
+                <div id="collectible-display">
+                    <!-- Collectibles will be loaded here -->
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <h3>Needs Review</h3>
+                <div id="needs-review-list">
+                    <!-- Items needing review will be loaded here -->
+                    <div class="review-item">
+                        <p><strong>Pending Details:</strong> "Vintage Watch"</p>
+                        <p><a href="/review/123">Complete Details</a></p>
+                    </div>
+                    <div class="review-item">
+                        <p><strong>Missing Photo:</strong> "Family Heirloom Locket"</p>
+                        <p><a href="/review/124">Add Photo</a></p>
+                    </div>
+                    <div class="review-item">
+                        <p><strong>Valuation Pending:</strong> "Rare Coin Set"</p>
+                        <p><a href="/review/125">Request Valuation</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const collectibleDisplay = document.getElementById('collectible-display');
+            const needsReviewList = document.getElementById('needs-review-list');
+
+            const renderEmptyState = () => {
+                collectibleDisplay.innerHTML = `
+                    <div class="empty-state">
+                        <h2>Your Vault is Empty... for now!</h2>
+                        <p>It looks like you haven't added any collectibles yet. Start building your collection!</p>
+                        <button onclick="window.location.href='/capture'">Add Your First Collectible</button>
+                    </div>
+                `;
+            };
+
+            const renderErrorState = (message = "Something went wrong loading your collectibles.") => {
+                collectibleDisplay.innerHTML = `
+                    <div class="error-state">
+                        <h2>Oh no, an issue occurred!</h2>
+                        <p>${message} Please try again later.</p>
+                        <button onclick="window.location.reload()">Reload Page</button>
+                    </div>
+                `;
+            };
+
+            const fetchCollectibles = async () => {
+                try {
+                    const response = await fetch('/api/v1/collectibles/twins');
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    const data = await response.json();
+
+                    if (data.collectibles && data.collectibles.length > 0) {
+                        collectibleDisplay.innerHTML = '<div class="collectible-grid"></div>';
+                        const grid = collectibleDisplay.querySelector('.collectible-grid');
+                        data.collectibles.forEach(collectible => {
+                            const item = document.createElement('div');
+                            item.className = 'collectible-item';
+                            item.innerHTML = `
+                                <a href="/collectible/${collectible.id}">
+                                    <img src="${collectible.imageUrl || '/placeholder.jpg'}" alt="${collectible.name}">
+                                    <div class="collectible-info">
+                                        <h4>${collectible.name}</h4>
+                                        <p>${collectible.description || 'No description provided.'}</p>
+                                    </div>
+                                </a>
+                            `;
+                            grid.appendChild(item);
+                        });
+                    } else {
+                        renderEmptyState();
+                    }
+
+                    // For 'Needs Review' section, assuming data.needsReview is available or a separate endpoint
+                    if (data.needsReview && data.needsReview.length > 0) {
+                        needsReviewList.innerHTML = ''; // Clear static examples if dynamic data exists
+                        data.needsReview.forEach(item => {
+                            const reviewItem = document.createElement('div');
+                            reviewItem.className = 'review-item';
+                            reviewItem.innerHTML = `
+                                <p><strong>${item.status}:</strong> "${item.name}"</p>
+                                <p><a href="/review/${item.id}">${item.actionText}</a></p>
+                            `;
+                            needsReviewList.appendChild(reviewItem);
+                        });
+                    } else if (needsReviewList.children.length === 0) {
+                        needsReviewList.innerHTML = '<p style="color:#777; font-size:0.9em;">No items currently require your review.</p>';
+                    }
+
+                } catch (error) {
+                    console.error('Failed to fetch collectibles:', error);
+                    renderErrorState(`Could not load your collectibles. (${error.message})`);
+                }
+            };
+
+            fetchCollectibles();
+        });
+    </script>
+</body>
+</html>

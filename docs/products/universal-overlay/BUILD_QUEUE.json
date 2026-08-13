@@ -5744,54 +5744,52 @@
         "resolveReview"
       ],
       "blueprint_step_id": "COLLECTIBLES-V1-REVIEW-QUEUE-001",
-      "exact_inputs": {
-        "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V1-REVIEW-QUEUE-001.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-08-13T20:42:58.650Z",
-        "shipped_at": "2026-08-13T20:42:58.650Z",
-        "commit_sha": null,
-        "content_sha256": "c2ff6edc2b1607350435c9b76ca206d92aae0bbfd36e55b1ea5a07a9c930d6ab",
-        "target_file": "services/collectibles/review-queue.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "services/collectibles/review-queue.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "grounding": {
-          "status": "PASS"
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V1-REVIEW-QUEUE-001.exact",
-          "content_sha256": "c2ff6edc2b1607350435c9b76ca206d92aae0bbfd36e55b1ea5a07a9c930d6ab"
-        }
-      },
-      "shipped_at": "2026-08-13T20:43:07.217Z",
       "commit_sha": "bf2bd06b90ab2b84cc1714b43a246c3c691482dc",
       "built_sha": null,
       "proof": null,
       "last_attempt_at": "2026-08-13T20:42:53.421Z",
       "last_error": null,
-      "revive_count": 0,
       "started_at": "2026-08-13T20:42:53.421Z",
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
       "park_until": null,
-      "heal_unblocked": false,
+      "heal_unblocked": true,
       "heal_reason": "collectibles_never_stop_queue_heal",
+      "escalation_required": false,
+      "exact_inputs": {
+        "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V1-REVIEW-QUEUE-001.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V1-REVIEW-QUEUE-001.exact"
+        }
+      },
+      "same_signature_count": 0,
+      "skip_reason": null,
+      "revive_count": 0,
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/collectibles/review-queue.js",
+          "exports": [
+            "createReviewQueueService"
+          ],
+          "assertion_id": "expected_exports:services/collectibles/review-queue.js"
+        }
+      ],
       "duration_ms": 13796,
       "tokens_used": 0,
-      "shipped_via": "governed_ship_queue"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-08-13T20:43:07.217Z"
     },
     {
       "status": "pending",
       "founder_gated": false,
       "attempts": 0,
-      "action_type": "author_then_write",
+      "action_type": "write_file_exact",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
@@ -5809,7 +5807,33 @@
         "/api/v1/collectibles",
         "Needs Review"
       ],
-      "blueprint_step_id": "COLLECTIBLES-V1-VAULT-UI-001"
+      "blueprint_step_id": "COLLECTIBLES-V1-VAULT-UI-001",
+      "exact_inputs": {
+        "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V1-VAULT-UI-001.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-08-13T20:44:03.399Z",
+        "shipped_at": "2026-08-13T20:44:03.399Z",
+        "commit_sha": null,
+        "content_sha256": "8ea612022f0f6b9847c667ad8572068e0111792d24a52879d2c901fd17d13ddc",
+        "target_file": "public/collectibles/vault.html",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "public/collectibles/vault.html",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "PASS"
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V1-VAULT-UI-001.exact",
+          "content_sha256": "8ea612022f0f6b9847c667ad8572068e0111792d24a52879d2c901fd17d13ddc"
+        }
+      },
+      "shipped_at": "2026-08-13T20:44:03.399Z"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",

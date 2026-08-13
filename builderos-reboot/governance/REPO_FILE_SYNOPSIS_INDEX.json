@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T20:43:01.829Z",
+  "generated_at": "2026-08-13T20:44:06.674Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13579,
+  "file_count": 13580,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -71528,6 +71528,13 @@
       "bytes": 11283,
       "mtime": "2026-06-26T20:28:33.495Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "public/collectibles/vault.html",
+      "synopsis": "HTML page: Your Collectibles Vault",
+      "bytes": 9026,
+      "mtime": "2026-08-13T20:44:06.674Z",
+      "indexed_at": "2026-08-13T20:44:06.674Z"
     },
     {
       "path": "public/commitments/dashboard.html",
