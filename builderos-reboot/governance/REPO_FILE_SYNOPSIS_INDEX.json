@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T23:35:32.577Z",
+  "generated_at": "2026-08-13T23:45:47.096Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13591,
+  "file_count": 13592,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -105318,6 +105318,13 @@
       "ssot": [
         "docs/products/collectibles/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "tests/collectibles-v2-acceptance.test.js",
+      "synopsis": "In a real scenario, these would be proper imports from your application's modules.",
+      "bytes": 8691,
+      "mtime": "2026-08-13T23:45:47.096Z",
+      "indexed_at": "2026-08-13T23:45:47.096Z"
     },
     {
       "path": "tests/completion-overclaim-guard.test.js",

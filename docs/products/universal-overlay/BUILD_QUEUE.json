@@ -7239,8 +7239,8 @@
     {
       "status": "pending",
       "founder_gated": false,
-      "attempts": 2,
-      "action_type": "author_then_write",
+      "attempts": 3,
+      "action_type": "write_file_exact",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
@@ -7262,9 +7262,9 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-13T23:37:07.017Z",
-      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/local/bin/node --input-type=module -e import \"file:///usr/src/app/tests/.factory-import-check-1786664226972-1.mjs\";\nno",
-      "started_at": "2026-08-13T23:35:53.146Z",
+      "last_attempt_at": "2026-08-13T23:45:25.549Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing:createWantGraphService; behavior_assertion: missing:createInvisibleListingService; behavior_assertion: missing:createOfferInboxService; behavior_assertion_failed; behavior_proof",
+      "started_at": "2026-08-13T23:44:52.639Z",
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
@@ -7281,7 +7281,37 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "skip_reason": null,
-      "escalation_required": false
+      "escalation_required": false,
+      "same_signature_count": 1,
+      "failure_signature": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing:createWantGraphService; behavior_assertion: missing:createInvisibleListingService; behavior_assertion: missing:createOffe",
+      "escalation_class": "evidence_gap",
+      "escalation_note": null,
+      "exact_inputs": {
+        "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V2-ACCEPTANCE-001.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-08-13T23:45:44.282Z",
+        "shipped_at": "2026-08-13T23:45:44.282Z",
+        "commit_sha": null,
+        "content_sha256": "b6b4bfbb002d32f41bd629d01817b821e08570f19373fae81e88f231814a5593",
+        "target_file": "tests/collectibles-v2-acceptance.test.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "tests/collectibles-v2-acceptance.test.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "PASS"
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V2-ACCEPTANCE-001.exact",
+          "content_sha256": "b6b4bfbb002d32f41bd629d01817b821e08570f19373fae81e88f231814a5593"
+        }
+      },
+      "shipped_at": "2026-08-13T23:45:44.282Z"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
