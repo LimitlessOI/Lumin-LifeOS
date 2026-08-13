@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/site-builder/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-08-13 — WRM operator SMTP catch-up prefers GMAIL_SIGNUP app password (WORK_EMAIL is not an app password). |
+| **Last Updated** | 2026-08-13 — WRM consults: email only real maternity leads; suppress VA/MAVIS and Russian quote spam. |
 
 ---
 
@@ -343,6 +343,8 @@ Founder directive: review every revenue blueprint for gaps against real competit
 **Chair status:** the deliverability gap is `approved` (infrastructure/config, no founder judgment needed) — Architect should queue it. The REFACTOR PLAN items and before/after idea are `escalate_to_founder` (product-direction calls, not purely technical).
 
 ## Change Receipts
+
+| 2026-08-13 | **Weed WRM spam; email only real consults.** Live backlog: 6 spam (MAVIS/Virtual Hand/WorkMatrixx/Helpdesk + two Russian quote templates), 5 real (Tynija, Sarah willman, katey cloud, Blaine Reyes, Miranda Smith). Form still stores spam (never lose a lead) but does not email it (`spam_suppressed`). `POST /consult/suppress-spam` stamps the backlog. | Founder: send only the real ones and weed out the spam. | `node --test tests/wrm-consult-spam.test.js`; real-only digest to Maternity@. |
 
 | 2026-08-13 | **11 stored WRM consults sent to `Maternity@wellroundedmomma.com`.** Gmail SMTP accepted them at 16:33 UTC; production rows marked `emailed=true`. Skipped probes/funnel audits/system tests. Railway still cannot send new form mail (Postmark dead; container SMTP blocked). | Founder: email the consults through the system; stop Google-login theater. | Live leads list: ids 5–14 and 17 emailed=true with catch-up note. |
 

@@ -26,6 +26,34 @@ function esc(str) {
     .replace(/"/g, "&quot;");
 }
 
+const SPAM_EMAIL_DOMAINS = [
+  "virtualhandsupport.com",
+  "parallelaid.com",
+  "virtualhelpdesk.pro",
+];
+
+export function isWrmConsultSpam(lead = {}) {
+  const email = String(lead.email || "").trim().toLowerCase();
+  const message = String(lead.message || "");
+  const domain = email.includes("@") ? email.slice(email.lastIndexOf("@") + 1) : "";
+  if (SPAM_EMAIL_DOMAINS.includes(domain)) {
+    return { spam: true, reason: "known_spam_domain" };
+  }
+  if (/Virtual Hand Support|WorkMatrixx|Virtual Helpdesk Pro/i.test(message)) {
+    return { spam: true, reason: "va_vendor_pitch" };
+  }
+  if (/\bMAVIS\b/i.test(message) && /Reply YES/i.test(message)) {
+    return { spam: true, reason: "mavis_va_pitch" };
+  }
+  if (/Reply YES for a quick Zoom/i.test(message) && /STOP to opt out/i.test(message)) {
+    return { spam: true, reason: "yes_stop_pitch" };
+  }
+  if (/Нужен расчёт/i.test(message) && /@(bk\.ru|yandex\.ru)\b/i.test(email)) {
+    return { spam: true, reason: "ru_quote_template" };
+  }
+  return { spam: false, reason: null };
+}
+
 function buildConsultBody({ name, phone, email, preferredTime, message, leadId, forwardedFor }) {
   const banner = forwardedFor
     ? `<p style="font-family:Arial,sans-serif;background:#fff6ec;border:1px solid #e6cba8;padding:10px 12px;border-radius:8px;font-size:13px">
@@ -206,6 +234,20 @@ export function registerWrmConsultRoutes(app, deps = {}) {
         logger.error?.("[WRM] consult DB capture failed", { error: dbErr.message });
       }
 
+      const spam = isWrmConsultSpam({ name, email, message });
+      if (spam.spam) {
+        if (pool && leadId) {
+          pool
+            .query(`UPDATE wrm_consult_leads SET emailed=false, email_error=$1 WHERE id=$2`, [
+              `spam_suppressed: ${spam.reason}`.slice(0, 300),
+              leadId,
+            ])
+            .catch(() => {});
+        }
+        logger.warn?.("[WRM] consult stored, email suppressed as spam", { leadId, reason: spam.reason });
+        return res.json({ ok: true });
+      }
+
       const emailResult = await sendConsultEmail(notifier, {
         name,
         phone,
@@ -351,6 +393,29 @@ export function registerWrmConsultRoutes(app, deps = {}) {
     }
   });
 
+  router.post("/consult/suppress-spam", guard, async (req, res) => {
+    try {
+      await ensureSchema();
+      if (!pool) return res.status(503).json({ ok: false, error: "no_pool" });
+      const r = await pool.query(
+        `SELECT id, name, email, message FROM wrm_consult_leads ORDER BY id ASC LIMIT 500`
+      );
+      const suppressed = [];
+      for (const row of r.rows) {
+        const spam = isWrmConsultSpam(row);
+        if (!spam.spam) continue;
+        await pool.query(`UPDATE wrm_consult_leads SET email_error=$1 WHERE id=$2`, [
+          `spam_suppressed: ${spam.reason}`.slice(0, 300),
+          row.id,
+        ]);
+        suppressed.push({ id: row.id, name: row.name, reason: spam.reason });
+      }
+      return res.json({ ok: true, suppressed: suppressed.length, leads: suppressed });
+    } catch (err) {
+      return res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
   router.post("/consult/retry-unsent", guard, async (req, res) => {
     try {
       await ensureSchema();
@@ -360,11 +425,21 @@ export function registerWrmConsultRoutes(app, deps = {}) {
          FROM wrm_consult_leads
          WHERE emailed IS NOT TRUE
            AND name NOT ILIKE 'PROBE-%'
+           AND (email_error IS NULL OR email_error NOT ILIKE 'spam_suppressed%')
          ORDER BY id ASC
          LIMIT 50`
       );
       const results = [];
       for (const row of r.rows) {
+        const spam = isWrmConsultSpam({ name: row.name, email: row.email, message: row.message });
+        if (spam.spam) {
+          await pool.query(`UPDATE wrm_consult_leads SET emailed=false, email_error=$1 WHERE id=$2`, [
+            `spam_suppressed: ${spam.reason}`.slice(0, 300),
+            row.id,
+          ]);
+          results.push({ id: row.id, sent: false, skipped: "spam", reason: spam.reason });
+          continue;
+        }
         const emailResult = await sendConsultEmail(notifier, {
           name: row.name,
           phone: row.phone,
