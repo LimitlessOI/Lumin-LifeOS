@@ -5453,15 +5453,17 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-13T16:38:27.367Z",
-      "last_error": "artifact_missing_after_ship: artifact_proof_failed: missing:identity_status",
+      "last_attempt_at": "2026-08-13T16:39:57.549Z",
+      "last_error": "hidden_dependency",
       "revive_count": 0,
-      "started_at": "2026-08-13T16:38:10.456Z",
+      "started_at": "2026-08-13T16:39:57.491Z",
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
       "heal_unblocked": true,
-      "heal_reason": "collectibles_cite_one_queue_twin"
+      "heal_reason": "collectibles_cite_one_queue_twin",
+      "duration_ms": 1000,
+      "tokens_used": 0
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
