@@ -7696,19 +7696,24 @@
     },
     {
       "id": "step2-create-founder-chair-intent-service",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/founder-chair-intent.js",
       "task": "Create founder chair intent classification service",
       "spec": "Create 'services/founder-chair-intent.js' to encapsulate logic for classifying founder prompts into correct workflow lanes, specifically handling 'drawer_direct_build' prompts. It must export a function `classifyFounderPrompt` that takes a prompt and returns a classification.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "classifyFounderPrompt"
       ],
       "file_contains": [
         "export function classifyFounderPrompt("
-      ]
+      ],
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-08-13T01:40:12.453Z",
+      "last_error": "NOT_ON_BLUEPRINT"
     }
   ],
   "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
