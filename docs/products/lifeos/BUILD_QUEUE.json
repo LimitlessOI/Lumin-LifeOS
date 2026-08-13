@@ -7245,10 +7245,10 @@
       },
       "exactness": {
         "sealed": true,
-        "sealed_at": "2026-08-13T00:40:49.943Z",
-        "shipped_at": "2026-08-13T00:40:49.943Z",
+        "sealed_at": "2026-08-13T00:22:04.905Z",
+        "shipped_at": "2026-08-13T00:22:04.905Z",
         "commit_sha": null,
-        "content_sha256": "ba5e1ede043a1a24f0535579754babf92260f15cd37c3869c4e13a43df4f5989",
+        "content_sha256": "0cbe40da15cec05b2d8d0111df95c44631a8c10a08222dd8ceeb6429a6c8fbf7",
         "target_file": "services/founder-intent-clarify.js",
         "reverse": {
           "mode": "delete_file",
@@ -7262,12 +7262,13 @@
         "rebuild": {
           "action_type": "write_file_exact",
           "content_source_path": "docs/products/lifeos/twins/steps/founder-intent-clarify-service.exact",
-          "content_sha256": "ba5e1ede043a1a24f0535579754babf92260f15cd37c3869c4e13a43df4f5989"
+          "content_sha256": "0cbe40da15cec05b2d8d0111df95c44631a8c10a08222dd8ceeb6429a6c8fbf7"
         }
       },
-      "shipped_at": "2026-08-13T00:40:49.943Z",
+      "shipped_at": "2026-08-13T00:40:57.721Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
-      "blueprint_step_id": "founder-intent-clarify-service"
+      "blueprint_step_id": "founder-intent-clarify-service",
+      "shipped_via": "governed_ship_queue"
     },
     {
       "id": "chair-intent-signals-service",
@@ -7319,10 +7320,10 @@
       },
       "exactness": {
         "sealed": true,
-        "sealed_at": "2026-08-13T00:25:04.047Z",
-        "shipped_at": "2026-08-13T00:25:04.047Z",
+        "sealed_at": "2026-08-13T00:41:17.574Z",
+        "shipped_at": "2026-08-13T00:41:17.574Z",
         "commit_sha": null,
-        "content_sha256": "edd3a2da4969c11e7bfd6f57fb8e2fe18250b460ae7656cc98b9e8ae04960867",
+        "content_sha256": "a969c5a10b4e10cf6f6e9f548f0e9b0e20ebd7df7712aee9a5c1412ee13da3a2",
         "target_file": "services/chair-intent-signals.js",
         "reverse": {
           "mode": "delete_file",
@@ -7336,10 +7337,10 @@
         "rebuild": {
           "action_type": "write_file_exact",
           "content_source_path": "docs/products/lifeos/twins/steps/chair-intent-signals-service.exact",
-          "content_sha256": "edd3a2da4969c11e7bfd6f57fb8e2fe18250b460ae7656cc98b9e8ae04960867"
+          "content_sha256": "a969c5a10b4e10cf6f6e9f548f0e9b0e20ebd7df7712aee9a5c1412ee13da3a2"
         }
       },
-      "shipped_at": "2026-08-13T00:25:04.047Z",
+      "shipped_at": "2026-08-13T00:41:17.574Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "chair-intent-signals-service"
     }
