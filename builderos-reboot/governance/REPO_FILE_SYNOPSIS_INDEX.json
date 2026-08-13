@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T08:19:48.319Z",
+  "generated_at": "2026-08-13T08:37:03.253Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13547,
+  "file_count": 13549,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -44831,8 +44831,8 @@
       "path": "docs/products/collectibles/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Collectibles (LimitlessOS)",
       "bytes": 8030,
-      "mtime": "2026-08-13T08:19:48.319Z",
-      "indexed_at": "2026-08-13T08:19:48.319Z"
+      "mtime": "2026-08-13T08:37:03.253Z",
+      "indexed_at": "2026-08-13T08:37:03.253Z"
     },
     {
       "path": "docs/products/collectibles/SCHEMA_CONTRACTS.md",
@@ -46497,8 +46497,8 @@
       "path": "docs/products/universal-overlay/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Universal Overlay",
       "bytes": 122729,
-      "mtime": "2026-08-13T08:17:24.076Z",
-      "indexed_at": "2026-08-13T08:17:24.076Z"
+      "mtime": "2026-08-13T08:37:03.253Z",
+      "indexed_at": "2026-08-13T08:37:03.253Z"
     },
     {
       "path": "docs/products/universal-overlay/SEND_PACKET_FLUID_UI_AND_TWO_FACTORIES_2026-08-11.md",
@@ -73811,6 +73811,16 @@
       ]
     },
     {
+      "path": "routes/collectibles-routes.js",
+      "synopsis": "Collectibles capture/list route scaffold.",
+      "bytes": 1463,
+      "mtime": "2026-08-13T08:37:03.253Z",
+      "indexed_at": "2026-08-13T08:37:03.253Z",
+      "ssot": [
+        "docs/products/collectibles/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "routes/command-center-mode-routes.js",
       "synopsis": "Registers CommandCenterModeRoutes routes/handlers (routes/command-center-mode-routes.js).",
       "bytes": 2230,
@@ -80854,6 +80864,16 @@
       "bytes": 4297,
       "mtime": "2026-08-13T05:59:55.710Z",
       "indexed_at": "2026-08-13T06:44:07.157Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/sentry-overlay-layer-b.mjs",
+      "synopsis": "SO-002 Layer B human-sim gate for universal-overlay.",
+      "bytes": 1929,
+      "mtime": "2026-08-13T08:37:03.253Z",
+      "indexed_at": "2026-08-13T08:37:03.253Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
