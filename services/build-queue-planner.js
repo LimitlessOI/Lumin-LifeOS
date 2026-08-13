@@ -10,6 +10,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { STEP_STATUS } from './product-build-orchestrator.js';
+import { LIVE_BUILD_QUEUE_PRODUCT, SECOND_QUEUE_FORBIDDEN } from './build-queue-core.js';
 import { parseRouteDeclaration } from '../factory-staging/factory-core/bpb/build-queue-step-adapter.js';
 import { stepDependencies } from '../config/step-dependencies.js';
 
@@ -479,6 +480,11 @@ export async function planBuildQueue({
   logger = console,
 } = {}) {
   if (!productId) return null;
+  if (String(productId) !== LIVE_BUILD_QUEUE_PRODUCT) {
+    throw new Error(
+      `${SECOND_QUEUE_FORBIDDEN}: planBuildQueue refused '${productId}'. Only ${LIVE_BUILD_QUEUE_PRODUCT} may have a live BUILD_QUEUE. Archived queues live at docs/history/product-build-queues/. This is supposed to break.`,
+    );
+  }
   // extraBacklog carries non-doc-sourced work (e.g. SENTRY self-fix findings)
   // that must also be planned into concrete target_file steps. It is merged with
   // the documented backlog and de-duplicated; still purely additive, never fabricated.

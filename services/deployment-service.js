@@ -570,8 +570,13 @@ export function createDeploymentService(deps) {
     if (!Array.isArray(fileEntries) || !fileEntries.length) {
       throw new Error('commitManyToGitHub requires at least one file');
     }
-    assertSecurityInvariants(fileEntries, 'commitManyToGitHub');
-    assertFilePlacementAndBlueprintAuthority(fileEntries, message, 'commitManyToGitHub');
+    const isDeleteEntry = (entry) => entry && (entry.delete === true || entry.op === 'delete');
+    const writes = fileEntries.filter((e) => !isDeleteEntry(e));
+    const deletes = fileEntries.filter(isDeleteEntry);
+    if (writes.length) {
+      assertSecurityInvariants(writes, 'commitManyToGitHub');
+      assertFilePlacementAndBlueprintAuthority(writes, message, 'commitManyToGitHub');
+    }
 
     const targetBranch = branch || GITHUB_DEPLOY_BRANCH || 'main';
     const [owner, repo] = GITHUB_REPO.split('/');
@@ -584,8 +589,14 @@ export function createDeploymentService(deps) {
     const tree = [];
     const paths = [];
     const committedForIndex = [];
+    for (const entry of deletes) {
+      const normalizedPath = normalizeRepoRelativePath(entry.path || entry.target_file);
+      assertNotBuilderBlockedPath(normalizedPath, 'commitManyToGitHub');
+      tree.push({ path: normalizedPath, mode: '100644', type: 'blob', sha: null });
+      paths.push(normalizedPath);
+    }
     const BINARY_PATH = /\.(png|jpe?g|gif|webp|ico|woff2?|ttf|eot|pdf|mp4|mov|zip|wasm)$/i;
-    for (const entry of fileEntries) {
+    for (const entry of writes) {
       const normalizedPath = normalizeRepoRelativePath(entry.path || entry.target_file);
       let content = String(entry.content ?? entry.output ?? '');
       paths.push(normalizedPath);

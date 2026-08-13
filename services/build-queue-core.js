@@ -1,6 +1,7 @@
 /**
- * SYNOPSIS: Shared BUILD_QUEUE.json primitives (STEP_STATUS, loadBuildQueue,
- * normalizeQueue, evaluateStepExpectations) extracted out of
+ * SYNOPSIS: Shared BUILD_QUEUE.json primitives plus the one-queue lock:
+ * only universal-overlay may live under docs/products/<id>/BUILD_QUEUE.json.
+ * Other paths throw SECOND_QUEUE_FORBIDDEN. Extracted out of
  * product-build-orchestrator.js so it and scripts/build-queue-drift-repair.mjs
  * can both depend on this instead of on each other. Pure extraction, no
  * behavior change -- fixes a real `madge --circular` failure (2026-08-10):
@@ -28,6 +29,60 @@ export const STEP_STATUS = Object.freeze({
   FOUNDER_GATED: 'founder_gated',
 });
 
+export const LIVE_BUILD_QUEUE_PRODUCT = 'universal-overlay';
+export const SECOND_QUEUE_FORBIDDEN = 'SECOND_QUEUE_FORBIDDEN';
+
+export function liveQueuePathForbidden(filePath) {
+  const rel = String(filePath || '').replace(/\\/g, '/');
+  const product = rel.match(/docs\/products\/([^/]+)\/BUILD_QUEUE\.json$/);
+  if (product && product[1] !== LIVE_BUILD_QUEUE_PRODUCT) return product[1];
+  const project = rel.match(/docs\/projects\/([^/]+(?:\/[^/]+)?)\/BUILD_QUEUE\.json$/);
+  if (project) return project[1];
+  const archived = rel.match(/docs\/history\/product-build-queues\/([^/]+)\/BUILD_QUEUE\.json$/);
+  if (archived) return `archived:${archived[1]}`;
+  return null;
+}
+
+export function assertLiveBuildQueuePath(filePath) {
+  const other = liveQueuePathForbidden(filePath);
+  if (!other) return;
+  throw new Error(
+    `${SECOND_QUEUE_FORBIDDEN}: the only live BUILD_QUEUE is docs/products/${LIVE_BUILD_QUEUE_PRODUCT}/BUILD_QUEUE.json. Refused '${other}'. Archived at docs/history/product-build-queues/. This is supposed to break.`,
+  );
+}
+
+export function listForbiddenLiveQueueFiles(root = ROOT) {
+  const found = [];
+  const productsDir = path.join(root, 'docs/products');
+  try {
+    for (const name of fs.readdirSync(productsDir, { withFileTypes: true })) {
+      if (!name.isDirectory()) continue;
+      const p = path.join(productsDir, name.name, 'BUILD_QUEUE.json');
+      if (name.name !== LIVE_BUILD_QUEUE_PRODUCT && fs.existsSync(p)) found.push(path.relative(root, p));
+    }
+  } catch { /* missing products dir */ }
+  const projectsDir = path.join(root, 'docs/projects');
+  try {
+    const walk = (dir) => {
+      for (const name of fs.readdirSync(dir, { withFileTypes: true })) {
+        const abs = path.join(dir, name.name);
+        if (name.isDirectory()) walk(abs);
+        else if (name.name === 'BUILD_QUEUE.json') found.push(path.relative(root, abs));
+      }
+    };
+    if (fs.existsSync(projectsDir)) walk(projectsDir);
+  } catch { /* missing */ }
+  return found;
+}
+
+export function assertNoSecondLiveQueueOnDisk(root = ROOT) {
+  const extra = listForbiddenLiveQueueFiles(root);
+  if (!extra.length) return;
+  throw new Error(
+    `${SECOND_QUEUE_FORBIDDEN}: extra live queues on disk:\n${extra.join('\n')}\nOnly docs/products/${LIVE_BUILD_QUEUE_PRODUCT}/BUILD_QUEUE.json may exist. Move the rest to docs/history/product-build-queues/.`,
+  );
+}
+
 /**
  * Locate a product's BUILD_QUEUE.json from its id. Deterministic, no network.
  */
@@ -39,6 +94,7 @@ export function loadBuildQueue(productId, { root = ROOT } = {}) {
   const p = productId.endsWith('.json')
     ? productId
     : path.join(root, 'docs/products', String(productId), 'BUILD_QUEUE.json');
+  assertLiveBuildQueuePath(p);
   const raw = JSON.parse(fs.readFileSync(p, 'utf8'));
   return normalizeQueue(raw, p);
 }

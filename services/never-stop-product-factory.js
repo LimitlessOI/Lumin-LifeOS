@@ -10,7 +10,7 @@ import { getActiveQueueItem, isQueueItemIncomplete } from './bp-priority-complet
 import { loadPointBTarget } from './point-b-target-lite.js';
 import { executeIntakeBlueprint } from './intake-blueprint-executor.js';
 import { SOCIALMEDIAOS_INTAKE_SESSION } from './lifeos-mission-pipeline-executor.js';
-import { loadBuildQueue, normalizeQueue, selectNextStep, runNextStep, persistQueue, queueSummary, queuePathForProduct, reviveStaleBlockedSteps, evaluateModuleHealthForStep, evaluateStepExpectations, STEP_STATUS, skipNonBlueprintSlices } from './product-build-orchestrator.js';
+import { loadBuildQueue, normalizeQueue, selectNextStep, runNextStep, persistQueue, queueSummary, queuePathForProduct, reviveStaleBlockedSteps, evaluateModuleHealthForStep, evaluateStepExpectations, STEP_STATUS, skipNonBlueprintSlices, LIVE_BUILD_QUEUE_PRODUCT, assertNoSecondLiveQueueOnDisk } from './product-build-orchestrator.js';
 import { proveDeployServesSha, waitForDeploySha } from './deploy-truth.js';
 import { enforceClaim, toWatchlist } from './truth-ladder.js';
 import { extractCorpusBacklog, backlogSignature, planBuildQueue } from './build-queue-planner.js';
@@ -456,6 +456,7 @@ export async function mapConcurrent(items, limit, fn) {
  * them one at a time.
  */
 export function discoverBuildQueueWork() {
+  assertNoSecondLiveQueueOnDisk();
   const productsDir = path.join(ROOT, 'docs/products');
   const found = [];
   let productIds = [];
@@ -504,6 +505,7 @@ export function discoverBuildQueueWork() {
  * a lagging container checkout cannot re-select an already-done step.
  */
 export async function discoverBuildQueueWorkFresh() {
+  assertNoSecondLiveQueueOnDisk();
   const productsDir = path.join(ROOT, 'docs/products');
   const found = [];
   let productIds = [];
@@ -566,7 +568,10 @@ export function discoverPlanWork() {
     return found;
   }
   const priorityList = loadProductPriority();
+  const exclusiveId = loadExclusiveHoldProduct();
+  if (exclusiveId) productIds = [exclusiveId];
   for (const productId of productIds) {
+    if (productId !== LIVE_BUILD_QUEUE_PRODUCT) continue;
     const homePath = path.join(productsDir, productId, 'PRODUCT_HOME.md');
     if (!fs.existsSync(homePath)) continue;
     let backlog = [];
@@ -820,6 +825,7 @@ export function discoverSentryFixWork() {
     const feedRel = String(product?.findingsFeed || '');
     const queueDir = sentryProductQueueDir(product?.ssot);
     if (!feedRel || !queueDir) continue;
+    if (queueDir !== LIVE_BUILD_QUEUE_PRODUCT) continue;
     let feed;
     try {
       feed = JSON.parse(fs.readFileSync(path.join(ROOT, feedRel), 'utf8'));

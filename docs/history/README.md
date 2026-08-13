@@ -25,6 +25,7 @@ When truth consolidates into one canonical home, the old file is not deleted bli
 - `products/` — retired cross-product specs (COMPLETE_PRODUCT_SPEC, etc.)
 - `builderos/` — superseded BuilderOS alpha blueprint + change receipts
 - `legacy-history-salvage/` — pre-archive inventory and migration receipts for retired authority files
+- `product-build-queues/` — **DEAD.** Every non-overlay `BUILD_QUEUE.json` moved here 2026-08-12. Not live. Loading one as a queue throws `SECOND_QUEUE_FORBIDDEN`. The only live queue is `docs/products/universal-overlay/BUILD_QUEUE.json`.
 
 ## What is still live (not here)
 
@@ -33,4 +34,5 @@ When truth consolidates into one canonical home, the old file is not deleted bli
 | Constitutional law (ONE file) | `docs/constitution/NORTH_STAR_SSOT.md` |
 | Operational companion | `docs/SSOT_COMPANION.md` |
 | Product law | `docs/products/<id>/PRODUCT_HOME.md` |
-| Build queue | `builderos-reboot/BP_PRIORITY.json` |
+| Overlay product build queue (the only one) | `docs/products/universal-overlay/BUILD_QUEUE.json` |
+| Mission scheduler history | `builderos-reboot/BP_PRIORITY.json` |

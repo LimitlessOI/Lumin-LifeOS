@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/universal-overlay/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-08-12 — Constitutional lock: one overlay queue, print slices only. REGISTER pending; invented col001 skipped. |
+| **Last Updated** | 2026-08-12 — Only live BUILD_QUEUE. All other product queues archived. REGISTER pending; invented col001 skipped. |
 
 ---
 ---
@@ -338,7 +338,7 @@ User on insurance portal
 | Field | Value |
 |---|---|
 | **Lane log** | `docs/CONTINUITY_LOG.md` (cross-cutting) |
-| **Next build** | factory-1: `TALOA-S64-CAPREG-REGISTER-001` only — then the next print slice. No LifeOS. No invented col001. factory-2 LaunchAgent stays loaded. factory-3 stays idle. |
+| **Next build** | factory-1: `TALOA-S64-CAPREG-REGISTER-001` only — then the next print slice. No LifeOS queue. No invented col001. Other product queues are in `docs/history/product-build-queues/` and must stay there. factory-2 LaunchAgent stays loaded. factory-3 stays idle. |
 | **Known gaps** | Signed iOS `.ipa` blocked on Apple Developer cert + UDID (PWA works today). Gate 0 item 1 (rotate previously-exposed COMMAND_CENTER_KEY) is founder-at-source, not a missing program. Layer B still `REGISTERED_NOT_IMPLEMENTED`. |
 | **⚠️ IN PROGRESS** | Overlay never-stop: both factories on overlay. factory-2 LaunchAgent `com.lumin.factory-2-lane` must stay loaded. Do not ship `native/macos-overlay/` from factory-1. |
 | **How to load extension in Chrome** | Go to `chrome://extensions` → Enable Developer Mode → Load Unpacked → select the `extension/` folder in this repo |
@@ -346,6 +346,8 @@ User on insurance portal
 ---
 
 ## Change Receipts
+
+| 2026-08-12 | **Every other product's BUILD_QUEUE was moved to archive.** Founder: one queue only; shut the others down and move them; relying code must break. Live path gone. This queue is the only one `loadBuildQueue` will open. | Founder: there can only be one; move them; break noticeably. | Old files at `docs/history/product-build-queues/<id>/BUILD_QUEUE.json`. |
 
 | 2026-08-12 | **Constitutional lock: one queue, print slices only.** Founder: the system is not allowed to choose; it takes the next overlay-blueprint slice and hands it to the factory. Invented `col001-*` skipped off_print. `TALOA-S64-CAPREG-REGISTER-001` pending. Capreg route glued into auto-register so the already-shipped file can mount. | Founder: one queue; slices of the BP only; no choices; wasting tokens. | Next factory handoff is REGISTER, then the next §64 slice. |
 

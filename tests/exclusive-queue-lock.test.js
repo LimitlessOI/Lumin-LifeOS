@@ -9,8 +9,17 @@ import {
   skipNonBlueprintSlices,
   selectNextStep,
   STEP_STATUS,
+  loadBuildQueue,
+  listForbiddenLiveQueueFiles,
+  assertNoSecondLiveQueueOnDisk,
 } from '../services/product-build-orchestrator.js';
-import { holdToExclusiveProduct } from '../services/never-stop-product-factory.js';
+import { holdToExclusiveProduct, discoverSentryFixWork } from '../services/never-stop-product-factory.js';
+import { planBuildQueue } from '../services/build-queue-planner.js';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 test('isBlueprintSlice accepts print ids and refuses invented col001', () => {
   assert.equal(isBlueprintSlice({ id: 'TALOA-S64-CAPREG-REGISTER-001' }, 'universal-overlay'), true);
@@ -56,4 +65,34 @@ test('holdToExclusiveProduct never falls through to LifeOS', () => {
   ];
   const held = holdToExclusiveProduct(items, 'universal-overlay', { steps: [] });
   assert.deepEqual(held.map((i) => i.product_id), ['universal-overlay']);
+});
+
+test('loadBuildQueue(lifeos) throws SECOND_QUEUE_FORBIDDEN — the live file is gone', () => {
+  assert.equal(fs.existsSync(path.join(ROOT, 'docs/products/lifeos/BUILD_QUEUE.json')), false);
+  assert.throws(() => loadBuildQueue('lifeos'), /SECOND_QUEUE_FORBIDDEN/);
+  assert.throws(() => loadBuildQueue('builderos'), /SECOND_QUEUE_FORBIDDEN/);
+  assert.throws(
+    () => loadBuildQueue(path.join(ROOT, 'docs/history/product-build-queues/lifeos/BUILD_QUEUE.json')),
+    /SECOND_QUEUE_FORBIDDEN/,
+  );
+});
+
+test('the only live product queue on disk is overlay', () => {
+  assert.deepEqual(listForbiddenLiveQueueFiles(), []);
+  assert.doesNotThrow(() => assertNoSecondLiveQueueOnDisk());
+  const overlay = loadBuildQueue('universal-overlay');
+  assert.equal(overlay.product_id, 'universal-overlay');
+});
+
+test('planBuildQueue refuses every product except overlay', async () => {
+  await assert.rejects(
+    () => planBuildQueue({ productId: 'lifeos', homeText: '- [ ] fake', callModel: async () => '{}' }),
+    /SECOND_QUEUE_FORBIDDEN/,
+  );
+});
+
+test('discoverSentryFixWork never enrolls a second product queue', () => {
+  const items = discoverSentryFixWork();
+  assert.ok(Array.isArray(items));
+  assert.ok(!items.some((i) => i.product_id && i.product_id !== 'universal-overlay'));
 });

@@ -13,6 +13,7 @@ import {
   writeApprovedFindingToBlueprint,
   runArchitectPass,
 } from '../services/architect-blueprint-writer.js';
+import { SECOND_QUEUE_FORBIDDEN } from '../services/product-build-orchestrator.js';
 
 function makeFixtureRoot(initialSteps = []) {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'architect-fixture-'));
@@ -74,7 +75,7 @@ test('buildQueueStepFromFinding: returns null for a finding Chair did not approv
   assert.equal(buildQueueStepFromFinding(finding), null);
 });
 
-test('writeApprovedFindingToBlueprint: writes a real step into an isolated fixture queue, prepended so it ships next', () => {
+test('writeApprovedFindingToBlueprint: writing onto the archived builderos queue throws SECOND_QUEUE_FORBIDDEN', () => {
   const root = makeFixtureRoot([{ id: 'existing-step', status: 'pending', target_file: 'x.js', task: 'old work', spec: 's', depends_on: [], founder_gated: false }]);
   try {
     const finding = {
@@ -84,20 +85,16 @@ test('writeApprovedFindingToBlueprint: writes a real step into an isolated fixtu
       summary: 'migrate.yml fails instantly',
       proposed_solution: 'remove stray markdown fences',
     };
-    const result = writeApprovedFindingToBlueprint(finding, { root });
-    assert.equal(result.written, true);
-    assert.equal(result.product_id, 'builderos');
-
-    const onDisk = JSON.parse(fs.readFileSync(path.join(root, 'docs/products/builderos/BUILD_QUEUE.json'), 'utf8'));
-    assert.equal(onDisk.steps.length, 2);
-    assert.equal(onDisk.steps[0].finding_id, finding.id, 'new urgent step must be prepended, not appended behind older work');
-    assert.equal(onDisk.steps[1].id, 'existing-step');
+    assert.throws(
+      () => writeApprovedFindingToBlueprint(finding, { root }),
+      (err) => String(err?.message || '').includes(SECOND_QUEUE_FORBIDDEN),
+    );
   } finally {
     fs.rmSync(root, { recursive: true, force: true });
   }
 });
 
-test('writeApprovedFindingToBlueprint: does not duplicate a step for a finding already queued', () => {
+test('writeApprovedFindingToBlueprint: does not quietly retarget a second queue', () => {
   const root = makeFixtureRoot();
   try {
     const finding = {
@@ -107,14 +104,10 @@ test('writeApprovedFindingToBlueprint: does not duplicate a step for a finding a
       summary: 's',
       proposed_solution: 'a real fix',
     };
-    const first = writeApprovedFindingToBlueprint(finding, { root });
-    assert.equal(first.written, true);
-    const second = writeApprovedFindingToBlueprint(finding, { root });
-    assert.equal(second.written, false);
-    assert.equal(second.reason, 'already_queued');
-
-    const onDisk = JSON.parse(fs.readFileSync(path.join(root, 'docs/products/builderos/BUILD_QUEUE.json'), 'utf8'));
-    assert.equal(onDisk.steps.length, 1, 'must not duplicate');
+    assert.throws(
+      () => writeApprovedFindingToBlueprint(finding, { root }),
+      (err) => String(err?.message || '').includes(SECOND_QUEUE_FORBIDDEN),
+    );
   } finally {
     fs.rmSync(root, { recursive: true, force: true });
   }
@@ -132,7 +125,7 @@ test('writeApprovedFindingToBlueprint: an unwritable finding type is reported ho
   }
 });
 
-test('runArchitectPass: processes a mixed list, only touching approved findings, labeling each honestly', () => {
+test('runArchitectPass: a Chair-approved workflow finding against the archived builderos queue throws SECOND_QUEUE_FORBIDDEN', () => {
   const root = makeFixtureRoot();
   try {
     const findings = [
@@ -140,11 +133,10 @@ test('runArchitectPass: processes a mixed list, only touching approved findings,
       { id: 'ci_health:x:abc', check: 'ci_health', chair_status: 'approved', summary: 's', proposed_solution: 'a real fix' },
       { id: 'empty_backlog:lifeos', check: 'product_backlog', chair_status: 'escalate_to_founder', summary: 's', proposed_solution: 'a real fix' },
     ];
-    const result = runArchitectPass(findings, { root });
-
-    assert.equal(result[0].architect_status, 'queued_to_blueprint');
-    assert.equal(result[1].architect_status, 'needs_manual_targeting');
-    assert.equal(result[2].architect_status, undefined, 'Architect must not touch a finding Chair did not approve');
+    assert.throws(
+      () => runArchitectPass(findings, { root }),
+      (err) => String(err?.message || '').includes(SECOND_QUEUE_FORBIDDEN),
+    );
   } finally {
     fs.rmSync(root, { recursive: true, force: true });
   }

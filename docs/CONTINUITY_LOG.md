@@ -1,5 +1,13 @@
 <!-- SYNOPSIS: Documentation — CONTINUITY LOG. -->
 
+## 2026-08-12 — Other queues moved to archive (there can only be one)
+
+Adam: if there are other queues we don't want, shut them down, move them into the archive folder; if something relies on them, it must break noticeably. 39 `BUILD_QUEUE.json` files moved to `docs/history/product-build-queues/`. The only live queue is overlay. `loadBuildQueue` / `planBuildQueue` throw `SECOND_QUEUE_FORBIDDEN`. No shims.
+
+## 2026-08-12 — Collectibles master blueprint ready for consensus
+
+Authored authoritative LimitlessOS Collectibles blueprint under `docs/products/collectibles/` (docs only — no product code). Twin law, V1–V10, schema/API/state machines, trust/privacy, partners, adapters, 30 adversarial sims, acceptance gates, audits. Status: **BLUEPRINT_READY_FOR_CONSENSUS**. Bootstraps from LifeOS MTG cataloger via Category Adapter. Next: consensus → V1 mission pack. Capture: `docs/products/collectibles/conversations/2026-08-12-collectibles-master-blueprint.md`.
+
 ## 2026-08-12 — One queue, print slices only (founder: the system may not choose)
 
 Adam: the system can only build from one queue; that queue can only take slices of the overlay blueprint; it is not allowed to make a single choice; next slice → factory. The loop choosing LifeOS and inventing col001 was a constitutional failure, not a ranking miss. Enforced in never-stop + selectNextStep. REGISTER pending. Invented steps skipped.
