@@ -7396,7 +7396,7 @@
       "proof": null,
       "last_attempt_at": "2026-08-13T02:22:24.707Z",
       "last_error": "STEP_STATUS_FORBIDDEN",
-      "same_signature_count": 1,
+      "same_signature_count": 2,
       "behavior_assertions": [
         {
           "type": "exports_smoke",
@@ -7502,10 +7502,10 @@
       },
       "exactness": {
         "sealed": true,
-        "sealed_at": "2026-08-13T01:04:14.446Z",
-        "shipped_at": "2026-08-13T01:04:14.446Z",
+        "sealed_at": "2026-08-13T02:22:35.751Z",
+        "shipped_at": "2026-08-13T02:22:35.751Z",
         "commit_sha": null,
-        "content_sha256": "5ceddf76bfc273108fcde83d1808d3dd8d04812f01dea00a713ab95deb2e2655",
+        "content_sha256": "2f131859764d4d91b18d89b97d75a1c347bb3e1f1f8beff95da42d1e4ef92d21",
         "target_file": "services/founder-chair-intent.js",
         "reverse": {
           "mode": "delete_file",
@@ -7519,10 +7519,10 @@
         "rebuild": {
           "action_type": "write_file_exact",
           "content_source_path": "docs/products/lifeos/twins/steps/lifeos-build-fix-2.exact",
-          "content_sha256": "5ceddf76bfc273108fcde83d1808d3dd8d04812f01dea00a713ab95deb2e2655"
+          "content_sha256": "2f131859764d4d91b18d89b97d75a1c347bb3e1f1f8beff95da42d1e4ef92d21"
         }
       },
-      "shipped_at": "2026-08-13T01:04:14.446Z",
+      "shipped_at": "2026-08-13T02:22:35.751Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-build-fix-2",
       "commit_sha": null,
