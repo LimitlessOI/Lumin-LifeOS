@@ -6556,7 +6556,7 @@
     {
       "status": "pending",
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "action_type": "author_then_write",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
@@ -6576,7 +6576,16 @@
         "needs_review",
         "/api/v1/collectibles"
       ],
-      "blueprint_step_id": "COLLECTIBLES-V1-DOSSIER-001"
+      "blueprint_step_id": "COLLECTIBLES-V1-DOSSIER-001",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-08-13T20:47:53.205Z",
+      "last_error": null,
+      "started_at": "2026-08-13T20:47:53.185Z",
+      "demoted": false,
+      "heal_unblocked": true,
+      "heal_reason": "collectibles_cite_one_queue_twin"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
