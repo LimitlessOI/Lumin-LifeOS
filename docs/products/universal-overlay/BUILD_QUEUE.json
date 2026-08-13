@@ -4373,7 +4373,7 @@
       "commit_sha": "2e693d71332d0fa191d82440cb229d5dac507c32",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-08-13T08:11:35.677Z",
       "last_error": null,
       "last_attempt": null,
       "revive_count": 0,
@@ -4394,7 +4394,7 @@
       "failure_signature": null,
       "heal_unblocked": false,
       "heal_reason": "sealed_exact_identity_status_2026-08-13",
-      "started_at": "2026-08-13T07:51:44.070Z",
+      "started_at": "2026-08-13T08:11:35.677Z",
       "escalation_class": "same_signature_repeat",
       "exact_inputs": {
         "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V1-TWIN-SERVICE-001.exact"
@@ -4421,10 +4421,10 @@
           "content_sha256": "0bb7f0ed7f1137db7e5175d9df448ac00f596ffd61a4cf18bfb62ae284a6470f"
         }
       },
+      "duration_ms": 17020,
       "tokens_used": 0,
-      "duration_ms": 5000,
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-08-13T08:11:52.697Z"
+      "shipped_at": "2026-08-13T08:11:52.697Z",
+      "shipped_via": "governed_ship_queue"
     },
     {
       "id": "COLLECTIBLES-V1-MTG-ADAPTER-001",
@@ -4889,8 +4889,8 @@
       },
       "exactness": {
         "sealed": true,
-        "sealed_at": "2026-08-13T08:15:35.280Z",
-        "shipped_at": "2026-08-13T08:15:35.280Z",
+        "sealed_at": "2026-08-13T08:16:12.850Z",
+        "shipped_at": "2026-08-13T08:16:12.850Z",
         "commit_sha": null,
         "content_sha256": "9d313427884d2fd6599ce511275726c1940c5838d80b3fad32d77084bef43642",
         "target_file": "services/taloa/template-replay-service.js",
@@ -4909,7 +4909,7 @@
           "content_sha256": "9d313427884d2fd6599ce511275726c1940c5838d80b3fad32d77084bef43642"
         }
       },
-      "shipped_at": "2026-08-13T08:15:35.280Z"
+      "shipped_at": "2026-08-13T08:16:12.850Z"
     },
     {
       "status": "pending",
