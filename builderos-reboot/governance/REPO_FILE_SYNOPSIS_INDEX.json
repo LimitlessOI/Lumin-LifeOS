@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T06:55:36.341Z",
+  "generated_at": "2026-08-13T07:03:21.230Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13534,
+  "file_count": 13536,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -32963,9 +32963,9 @@
     {
       "path": "config/lane-assignment.js",
       "synopsis": "Who writes which files. Conductor + Architect freeze this so two",
-      "bytes": 3614,
-      "mtime": "2026-08-13T05:03:17.278Z",
-      "indexed_at": "2026-08-13T05:03:17.278Z",
+      "bytes": 4200,
+      "mtime": "2026-08-13T07:03:21.230Z",
+      "indexed_at": "2026-08-13T07:03:21.230Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -41266,9 +41266,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Documentation — CONTINUITY LOG.",
-      "bytes": 199837,
-      "mtime": "2026-08-13T06:55:36.341Z",
-      "indexed_at": "2026-08-13T06:55:36.341Z"
+      "bytes": 200411,
+      "mtime": "2026-08-13T07:03:21.230Z",
+      "indexed_at": "2026-08-13T07:03:21.230Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -41605,6 +41605,13 @@
       "bytes": 1122,
       "mtime": "2026-08-13T05:59:55.590Z",
       "indexed_at": "2026-08-13T06:44:07.157Z"
+    },
+    {
+      "path": "docs/conversation_dumps/2026-08-13-builderos-observation-order-selfheal.md",
+      "synopsis": "Twin intake — BuilderOS observation / self-heal (2026-08-13)",
+      "bytes": 775,
+      "mtime": "2026-08-13T07:03:21.230Z",
+      "indexed_at": "2026-08-13T07:03:21.230Z"
     },
     {
       "path": "docs/conversation_dumps/2026-08-13-hard-gate-print-invention.md",
@@ -44188,6 +44195,13 @@
       "indexed_at": "2026-08-13T06:44:07.157Z"
     },
     {
+      "path": "docs/products/builderos/conversations/2026-08-13-builderos-observation-order-selfheal.md",
+      "synopsis": "BuilderOS observation — right work, right order, self-heal",
+      "bytes": 2348,
+      "mtime": "2026-08-13T07:03:21.230Z",
+      "indexed_at": "2026-08-13T07:03:21.230Z"
+    },
+    {
       "path": "docs/products/builderos/conversations/2026-08-13-one-queue-multi-factory-multi-project.md",
       "synopsis": "2026-08-13 — Founder: one queue, multi-factory, multi-project from BPs",
       "bytes": 1019,
@@ -44293,9 +44307,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 580212,
-      "mtime": "2026-08-13T06:55:36.341Z",
-      "indexed_at": "2026-08-13T06:55:36.341Z"
+      "bytes": 580781,
+      "mtime": "2026-08-13T07:03:21.230Z",
+      "indexed_at": "2026-08-13T07:03:21.230Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -46454,9 +46468,9 @@
     {
       "path": "docs/products/universal-overlay/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Universal Overlay",
-      "bytes": 121585,
-      "mtime": "2026-08-13T06:41:35.757Z",
-      "indexed_at": "2026-08-13T06:48:47.620Z"
+      "bytes": 121942,
+      "mtime": "2026-08-13T07:03:21.230Z",
+      "indexed_at": "2026-08-13T07:03:21.230Z"
     },
     {
       "path": "docs/products/universal-overlay/SEND_PACKET_FLUID_UI_AND_TWO_FACTORIES_2026-08-11.md",
@@ -105414,9 +105428,9 @@
     {
       "path": "tests/lane-assignment.test.js",
       "synopsis": "Lane ownership is the dispatch rule, not a receipt on disk.",
-      "bytes": 4911,
-      "mtime": "2026-08-13T05:59:55.756Z",
-      "indexed_at": "2026-08-13T06:44:07.157Z"
+      "bytes": 5366,
+      "mtime": "2026-08-13T07:03:21.230Z",
+      "indexed_at": "2026-08-13T07:03:21.230Z"
     },
     {
       "path": "tests/learningStyleDetector.test.js",

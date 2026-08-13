@@ -347,6 +347,8 @@ User on insurance portal
 
 ## Change Receipts
 
+| 2026-08-13 | **ANDROID-BODY + WIRE claimed done; next print is macOS perception.** Body adapter + `makeAndroidBody` on HEAD (`0db441c` / `cf51b3bcd2`). Wire had false `artifact_missing_after_ship` after ship. Collectibles V1 still pending on this queue for factory-3. | Observation heal + print advance. | Next enroll `TALOA-S64-MACOS-PERCEPTION-001`. |
+
 | 2026-08-13 | **Hard gate so overlay cannot stop inventing instead of printing.** Invented `register-*.mjs` / leftover `step-5` skipped `off_print`. `TALOA-S64-CAPREG-REGISTER-001` marked done (capreg already mounted live). Next sealed slice enrolled: `TALOA-S64-ANDROID-BODY-001`. Collectibles remain on this queue but are not shippable until overlay print closes. | Founder: it stopped; I keep asking and it is not done; make it impossible not to do what I asked. | Queue next step `TALOA-S64-ANDROID-BODY-001`. |
 
 | 2026-08-13 | **Collectibles V1 BP slices enrolled on this queue (honest).** Docs claimed enrollment earlier; steps were missing on tip. Added `COLLECTIBLES-V1-*` with `product_id: collectibles` + MASTER_BLUEPRINT `source`. `multi_project: true`. factory-3 owns those targets. | Founder: one queue; multi-factory; multi-project from BPs. | factory-3 plan → `COLLECTIBLES-V1-ADAPTER-INTERFACE-001` |

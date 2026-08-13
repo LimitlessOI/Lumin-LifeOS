@@ -14,14 +14,30 @@ const ASSIGNMENT_PATH = path.join(ROOT, 'products/receipts/LANE_ASSIGNMENT.json'
 const PRIMARY = 'factory-1';
 
 /**
- * Hard floor when LANE_ASSIGNMENT.json is missing.
- * factory-3 (public/overlay/) is NOT in the fallback — enabling it writes the
- * receipt. If factory-3 is idled (owns:[]), unmatched public/overlay paths
- * default to factory-1 so manufacturing does not stall on a parked lane.
+ * Hard floor when LANE_ASSIGNMENT.json is missing (e.g. Docker image omitted the
+ * receipt). factory-3 Collectibles owns MUST stay here — tip ship with
+ * factory_id=factory-3 is otherwise empty while Collectibles steps sit pending
+ * under factory-1's broad `services/` prefix (proven 2026-08-13).
+ * If factory-3 is deliberately idled (owns:[] in the live receipt), longest
+ * prefix still falls through to factory-1 for unmatched paths.
  */
+export const COLLECTIBLES_FALLBACK_OWNS = Object.freeze([
+  'services/collectibles/',
+  'services/mtg-card-',
+  'routes/collectibles-',
+  'routes/mtg-cards-',
+  'public/collectibles/',
+  'public/mtg-cards-',
+  'docs/products/collectibles/',
+  'builderos-reboot/MISSIONS/PRODUCT-COLLECTIBLES-',
+  'tests/collectibles-',
+  'tests/mtg-card-',
+]);
+
 export const FALLBACK_LANES = Object.freeze([
   Object.freeze({ factory_id: 'factory-1', owns: Object.freeze(['services/', 'routes/', 'db/migrations/', 'builderos-reboot/MISSIONS/']) }),
   Object.freeze({ factory_id: 'factory-2', owns: Object.freeze(['native/macos-overlay/']) }),
+  Object.freeze({ factory_id: 'factory-3', owns: COLLECTIBLES_FALLBACK_OWNS }),
 ]);
 
 export function loadLaneAssignment(filePath = ASSIGNMENT_PATH) {

@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Documentation — CONTINUITY LOG. -->
 
+## 2026-08-13 — BuilderOS observation: factory-3 empty because tip lacked lane receipt
+
+Founder: observe BuilderOS — right work, right order, quality, self-heal. Tip healthy on `5e4969` but `factory_id=factory-3` → `no_shippable_steps` while Collectibles twin/mtg pending. Root: `.dockerignore` excluded `products/receipts/LANE_ASSIGNMENT.json`, tip FALLBACK had no factory-3 owns. Fix: allowlist receipt + FALLBACK Collectibles owns. ANDROID-BODY/WIRE done (wire false-blocked). Next overlay: macOS perception (factory-2). factory-3 should ship twin after redeploy.
+
 ## 2026-08-13 — BuilderOS observation: tip down, queue order OK
 
 Observed: tip health 503 database error (Neon still answers from local). Builder routes 404 — factory-1 never-stop dead. Queue order correct (next overlay print ANDROID-BODY; Collectibles twin/mtg pending; no inventions). SENTRY findings stale (July). Local factory watchdog extended to probe tip (`tip_manufacturing_down`). Blocker: Railway vault DATABASE_URL / service restart — no RAILWAY_TOKEN in shell.

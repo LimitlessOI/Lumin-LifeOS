@@ -112,6 +112,11 @@ products/
 !products/receipts/LIFERE_AGENT_ALPHA.json
 !products/receipts/OVERLAY_ALPHA_BATTERY.json
 !products/receipts/LIFEOS_ALPHA_BREAK_IT.json
+# Lane ownership dispatch. Without this, Railway falls back to FALLBACK_LANES and
+# factory-3 Collectibles owns disappear → ship-queue factory_id=factory-3 returns
+# no_shippable_steps while Collectibles pending (proven 2026-08-13).
+!products/receipts/LANE_ASSIGNMENT.json
+!products/receipts/FACTORY_SLOT_STATE.json
 # never-stop loop reads per-product SENTRY feeds at boot (discoverSentryFixWork)
 # via SENTRY_PRODUCT_REGISTRY findingsFeed paths — they MUST ship in the image or
 # the loop silently finds no self-fix work and never builds the SENTRY defects.

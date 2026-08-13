@@ -106,6 +106,13 @@ test('empty assignment still routes native to factory-2 via FALLBACK_LANES', () 
   assert.equal(ownerFor('services/taloa/overlay-host-service.js', { lanes: [] }), 'factory-1');
 });
 
+test('empty assignment routes Collectibles to factory-3 via FALLBACK_LANES', () => {
+  assert.equal(ownerFor('services/collectibles/twin-service.js', { lanes: [] }), 'factory-3');
+  assert.equal(ownerFor('routes/collectibles-routes.js', { lanes: [] }), 'factory-3');
+  assert.equal(ownerFor('tests/collectibles-v1-foundation.test.js', { lanes: [] }), 'factory-3');
+  assert.equal(ownerFor('services/mtg-card-vision.js', { lanes: [] }), 'factory-3');
+});
+
 test('queueForThisFactory hides other-lane pending so factory-1 can still pick later backend steps', () => {
   const visible = queueForThisFactory(
     {

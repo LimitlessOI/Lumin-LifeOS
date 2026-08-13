@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/builderos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-08-13 — PRINT_INVENTION_FORBIDDEN: overlay queue cannot invent slices; Collectibles wait while overlay print is open. |
+| **Last Updated** | 2026-08-13 — Tip was missing LANE_ASSIGNMENT in Docker; factory-3 Collectibles ship was empty. Fixed. |
 ### Related docs (this product)
 
 | Doc | Path |
@@ -35,6 +35,8 @@
 ---
 
 ## Change Receipts
+| 2026-08-13 | **Tip Docker omitted LANE_ASSIGNMENT → factory-3 owned nothing.** Live: Collectibles pending, local plan runnable, tip `factory_id=factory-3` → `no_shippable_steps`. Root: `.dockerignore` excluded `products/` and never allowlisted the receipt; tip used FALLBACK without factory-3. Fix: ship `LANE_ASSIGNMENT.json` + `FACTORY_SLOT_STATE.json` in the image; FALLBACK now includes Collectibles owns for factory-3. Claimed false-blocked ANDROID-BODY-WIRE (`makeAndroidBody` already on HEAD). | Founder: observe BuilderOS; right work/order; find+fix. | `tests/lane-assignment.test.js` Collectibles FALLBACK |
+
 | 2026-08-13 | **Collectibles parallel again + tip probe on factory lanes.** Observation: tip recovered; factory-3 no_shippable because selectShippableSteps held Collectibles behind overlay print. Removed hold (selectNextStep still prefers overlay). Tip probe on factory-2/3. | Founder observation order. | tests/exclusive-queue-lock + system-watchdog-tip |
 
 | 2026-08-13 | **Local factory watchdog now probes tip.** Tip-hosted SENTRY cannot see tip death (DB error → routes 404). factory-2/3 lanes probe `/health` + `/builder/ready` each tick and emit `tip_manufacturing_down` with a Railway DATABASE_URL/restart solution. | Founder: observe BuilderOS; find issues; fix them. | `tests/system-watchdog-tip.test.js` |
@@ -1018,7 +1020,7 @@ Until this is implemented, trust escalation remains a constitutional requirement
 
 ## Agent Handoff Notes
 
-**2026-08-13 now:** Overlay print is sealed. Next factory step is `TALOA-S64-ANDROID-BODY-001`. Invented register scripts / leftover `step-5` are `off_print`. Collectibles wait until overlay print closes. Planner cannot invent overlay steps (`PRINT_INVENTION_FORBIDDEN`). Spend surface: `/api/v1/builderos/control-plane/spend-outcomes` on founder-runtime after this deploy.
+**2026-08-13 now:** ANDROID-BODY + WIRE done. Next overlay print enroll: `TALOA-S64-MACOS-PERCEPTION-001` (factory-2). Collectibles twin/mtg/routes/acceptance pending on same queue (factory-3). Tip must include `LANE_ASSIGNMENT.json` or FALLBACK factory-3 owns — else Collectibles ship is empty. `PRINT_INVENTION_FORBIDDEN` still sealed.
 
 BuilderOS is live and shipping. `GOVERNED_FACTORY_ONLY` is active; the legacy `never-stop` loop is correctly fenced off.
 
