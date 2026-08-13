@@ -5637,7 +5637,7 @@
       "shipped_via": "governed_ship_queue"
     },
     {
-      "status": "pending",
+      "status": "done",
       "founder_gated": false,
       "attempts": 0,
       "action_type": "write_file_exact",
@@ -5665,14 +5665,14 @@
         "needs_review"
       ],
       "blueprint_step_id": "COLLECTIBLES-V1-CAPTURE-API-001",
-      "commit_sha": null,
+      "commit_sha": "33df964c9fbb764989046d119250ed6041276024",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 0b is < 30% of existing 1463b. underlying: import_resolution_failed:openai_builder_mini: Command failed: /usr/local/bin/node --input-type=module -e import \"file:///usr",
-      "started_at": "2026-08-13T20:08:53.027Z",
+      "last_attempt_at": "2026-08-13T20:22:53.350Z",
+      "last_error": null,
+      "started_at": "2026-08-13T20:22:53.350Z",
       "last_attempt": null,
-      "revive_count": 8,
+      "revive_count": 0,
       "revived_at": "2026-08-13T20:22:53.342Z",
       "no_op": null,
       "pre_existing": null,
@@ -5713,8 +5713,37 @@
       },
       "heal_reason": "attach_convention_sealed_exact",
       "tokens_used": 0,
-      "duration_ms": 1000,
-      "shipped_at": "2026-08-13T20:22:53.440Z"
+      "duration_ms": 8582,
+      "shipped_at": "2026-08-13T20:23:01.931Z",
+      "shipped_via": "governed_ship_queue",
+      "heal_unblocked": false
+    },
+    {
+      "status": "pending",
+      "founder_gated": false,
+      "attempts": 0,
+      "action_type": "author_then_write",
+      "product_id": "collectibles",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "mission_id": "PRODUCT-universal-overlay",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
+      "depends_on": [
+        "COLLECTIBLES-V1-TWIN-STORE-001"
+      ],
+      "id": "COLLECTIBLES-V1-REVIEW-QUEUE-001",
+      "target_file": "services/collectibles/review-queue.js",
+      "sandbox_boundary": "services/collectibles/**",
+      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createReviewQueueService({ pool, logger }) with listNeedsReview(ownerUserId) and resolveReview(twinId, correction). Corrections persist + audit. ES module.",
+      "spec": "MASTER_BLUEPRINT Needs Review workflow; API_CONTRACTS §3.",
+      "expected_exports": [
+        "createReviewQueueService"
+      ],
+      "file_contains": [
+        "createReviewQueueService",
+        "needs_review",
+        "resolveReview"
+      ],
+      "blueprint_step_id": "COLLECTIBLES-V1-REVIEW-QUEUE-001"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
