@@ -815,6 +815,22 @@
       "added_real_lines": 36,
       "justification": "orchestration glue only — mergeQueueRuntimeStatus prefers GitHub heal_unblocked pending over stale Railway skipped/demoted; bp-priority resolveAcceptanceScriptRel accepts direct node *.mjs commands; verify-universaloverlay wires finishBpAcceptance. Not new product modules for codegen.\nCo-authored-by: Cursor <cursoragent@cursor.com>",
       "commit_message_excerpt": "GAP-FILL: one-queue heal_unblocked — tip execute-batch 404/503; Collectibles unskip must stick"
+    },
+    {
+      "at": "2026-08-13T06:49:34.793Z",
+      "file": "services/build-queue-planner.js",
+      "is_new_file": false,
+      "added_real_lines": 16,
+      "justification": "orchestration/glue only — skip invented steps, enroll the next sealed §64 slice, throw PRINT_INVENTION_FORBIDDEN. No new service module. The factory was the bug (it invented register scripts instead of taking the print).\nCo-authored-by: Cursor <cursoragent@cursor.com>",
+      "commit_message_excerpt": "GAP-FILL: hard-gate overlay print so the factory cannot invent slices. Tip execute-batch and /ready are 404 because founder routes never mounted (DB degraded); no factory path can land this gate until"
+    },
+    {
+      "at": "2026-08-13T06:49:34.793Z",
+      "file": "services/product-build-orchestrator.js",
+      "is_new_file": false,
+      "added_real_lines": 42,
+      "justification": "orchestration/glue only — skip invented steps, enroll the next sealed §64 slice, throw PRINT_INVENTION_FORBIDDEN. No new service module. The factory was the bug (it invented register scripts instead of taking the print).\nCo-authored-by: Cursor <cursoragent@cursor.com>",
+      "commit_message_excerpt": "GAP-FILL: hard-gate overlay print so the factory cannot invent slices. Tip execute-batch and /ready are 404 because founder routes never mounted (DB degraded); no factory path can land this gate until"
     }
   ]
 }
