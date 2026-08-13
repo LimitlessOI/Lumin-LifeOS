@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T21:06:42.091Z",
+  "generated_at": "2026-08-13T21:27:55.554Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13589,
   "files": [
@@ -95240,8 +95240,8 @@
       "path": "services/collectibles/location-service.js",
       "synopsis": "Binder GPS / location records for CollectibleTwins.",
       "bytes": 2502,
-      "mtime": "2026-08-13T20:50:44.207Z",
-      "indexed_at": "2026-08-13T20:50:44.207Z",
+      "mtime": "2026-08-13T21:27:55.554Z",
+      "indexed_at": "2026-08-13T21:27:55.554Z",
       "ssot": [
         "docs/products/collectibles/PRODUCT_HOME.md"
       ]

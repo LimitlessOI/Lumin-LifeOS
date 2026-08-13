@@ -6603,7 +6603,8 @@
       },
       "tokens_used": 0,
       "duration_ms": 1000,
-      "completed_at": "2026-08-13T21:06:32.514Z"
+      "completed_at": "2026-08-13T21:06:32.514Z",
+      "same_signature_count": 0
     },
     {
       "status": "pending",
@@ -6641,7 +6642,32 @@
       "skip_reason": null,
       "escalation_required": false,
       "revive_count": 0,
-      "last_error": null
+      "last_error": null,
+      "same_signature_count": 0,
+      "heal_reason": "promote_sealed_exact_on_thrash",
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-08-13T21:27:53.009Z",
+        "shipped_at": "2026-08-13T21:27:53.009Z",
+        "commit_sha": null,
+        "content_sha256": "cd2dc6582179f2eb50f69e567ee8c8d9dc4f49b0bd8a680e43449b4744bfd9ef",
+        "target_file": "services/collectibles/location-service.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/collectibles/location-service.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "PASS"
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V1-LOCATION-API-001.exact",
+          "content_sha256": "cd2dc6582179f2eb50f69e567ee8c8d9dc4f49b0bd8a680e43449b4744bfd9ef"
+        }
+      },
+      "shipped_at": "2026-08-13T21:27:53.009Z"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
