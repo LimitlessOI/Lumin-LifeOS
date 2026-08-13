@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T05:18:40.749Z",
+  "generated_at": "2026-08-13T05:21:04.532Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13468,
+  "file_count": 13469,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -94396,6 +94396,16 @@
       "indexed_at": "2026-08-01T20:04:05.828Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/collectibles/category-adapter.js",
+      "synopsis": "Exports createCategoryAdapterRegistry — services/collectibles/category-adapter.js.",
+      "bytes": 2928,
+      "mtime": "2026-08-13T05:21:04.532Z",
+      "indexed_at": "2026-08-13T05:21:04.532Z",
+      "ssot": [
+        "docs/products/collectibles/PRODUCT_HOME.md"
       ]
     },
     {
