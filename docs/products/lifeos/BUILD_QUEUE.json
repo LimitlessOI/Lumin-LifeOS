@@ -7693,6 +7693,22 @@
       "shipped_at": "2026-08-13T01:21:52.579Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-direct-build-smoke-test-ssot-tag"
+    },
+    {
+      "id": "step2-create-founder-chair-intent-service",
+      "status": "pending",
+      "target_file": "services/founder-chair-intent.js",
+      "task": "Create founder chair intent classification service",
+      "spec": "Create 'services/founder-chair-intent.js' to encapsulate logic for classifying founder prompts into correct workflow lanes, specifically handling 'drawer_direct_build' prompts. It must export a function `classifyFounderPrompt` that takes a prompt and returns a classification.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "classifyFounderPrompt"
+      ],
+      "file_contains": [
+        "export function classifyFounderPrompt("
+      ]
     }
   ],
   "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
