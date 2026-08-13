@@ -15,7 +15,7 @@
   "steps": [
     {
       "id": "COLLECTIBLES-V1-ADAPTER-INTERFACE-001",
-      "status": "pending",
+      "status": "done",
       "attempts": 0,
       "title": "CategoryAdapter interface module",
       "target_file": "services/collectibles/category-adapter.js",
@@ -72,7 +72,8 @@
           "content_sha256": "437fa31d35fd125572d10f00f558e742c8c6007838015d831bc8e04ecf14f9c9"
         }
       },
-      "shipped_at": "2026-08-13T05:21:01.275Z"
+      "shipped_at": "2026-08-13T05:21:01.275Z",
+      "commit_sha": "4734b6c95a34a72d78b0ff12cfc73eab3c9da585"
     },
     {
       "id": "COLLECTIBLES-V1-TWIN-SERVICE-001",
