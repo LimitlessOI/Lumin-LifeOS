@@ -7485,9 +7485,9 @@
       "shipped_via": "governed_ship_queue"
     },
     {
-      "status": "pending",
+      "status": "done",
       "founder_gated": false,
-      "attempts": 2,
+      "attempts": 0,
       "action_type": "write_file_exact",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
@@ -7523,8 +7523,8 @@
       ],
       "started_at": "2026-08-13T23:55:53.072Z",
       "last_attempt_at": "2026-08-13T23:55:53.148Z",
-      "last_error": "codegen_authoring_failed:collectibles_never_stop_heal",
-      "commit_sha": null,
+      "last_error": null,
+      "commit_sha": "e0f9763af04e43b7610e9bac68ed4e97b1f02159",
       "built_sha": null,
       "proof": null,
       "failure_signature": "hidden_dependency",
@@ -7535,7 +7535,7 @@
       "escalation_required": false,
       "escalation_note": null,
       "park_until": null,
-      "heal_unblocked": true,
+      "heal_unblocked": false,
       "heal_reason": "collectibles_never_stop_heal",
       "exactness": {
         "sealed": true,
@@ -7559,14 +7559,40 @@
           "content_sha256": "90a9f8ecca27988c257d31463d6ad0cbbc79cd61464e05f713eb05a3b4e5e2ae"
         }
       },
-      "shipped_at": "2026-08-13T23:55:59.157Z",
+      "shipped_at": "2026-08-13T23:56:06.086Z",
       "skip_reason": null,
       "revive_count": 0,
       "tokens_used": 0,
-      "duration_ms": 1000,
+      "duration_ms": 13016,
       "exact_inputs": {
         "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V3-SHIPPING-001.exact"
-      }
+      },
+      "shipped_via": "governed_ship_queue"
+    },
+    {
+      "status": "pending",
+      "founder_gated": false,
+      "attempts": 0,
+      "action_type": "author_then_write",
+      "product_id": "collectibles",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "mission_id": "PRODUCT-universal-overlay",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
+      "depends_on": [
+        "COLLECTIBLES-V3-PAYMENT-ADAPTER-001",
+        "COLLECTIBLES-V3-SHIPPING-001"
+      ],
+      "id": "COLLECTIBLES-V3-ACCEPTANCE-001",
+      "target_file": "tests/collectibles-v3-acceptance.test.js",
+      "sandbox_boundary": "tests/**",
+      "task": "node:test reachability for transaction + payment adapter + shipping. Assert no fund-holding paths.",
+      "spec": "VERSION_ACCEPTANCE_GATES V3 structure.",
+      "file_contains": [
+        "createTransactionService",
+        "createPaymentAdapterRegistry",
+        "createShippingTrackingService"
+      ],
+      "blueprint_step_id": "COLLECTIBLES-V3-ACCEPTANCE-001"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
