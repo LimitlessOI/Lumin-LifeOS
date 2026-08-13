@@ -4755,7 +4755,7 @@
       "started_at": "2026-08-13T08:06:19.022Z",
       "blocker_class": null,
       "park_until": null,
-      "heal_unblocked": true,
+      "heal_unblocked": false,
       "heal_reason": "authority_table_is_agent_task_authority_2026-08-13",
       "demoted": false,
       "demote_reason": null,
@@ -4912,7 +4912,7 @@
       "same_signature_count": 0
     },
     {
-      "status": "pending",
+      "status": "done",
       "founder_gated": false,
       "attempts": 0,
       "action_type": "write_file_exact",
@@ -4934,13 +4934,13 @@
         "verify"
       ],
       "blueprint_step_id": "TALOA-S64-MACOS-BODY-001",
-      "commit_sha": null,
+      "commit_sha": "7617bd0b1b52ee45681cbc5f16d64e5afdcfc095",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-13T07:47:40.130Z",
+      "last_attempt_at": "2026-08-13T08:06:34.464Z",
       "last_error": null,
-      "started_at": "2026-08-13T07:47:40.119Z",
-      "heal_unblocked": true,
+      "started_at": "2026-08-13T08:06:34.464Z",
+      "heal_unblocked": false,
       "heal_reason": "clear_false_NOT_ON_BLUEPRINT_2026-08-13",
       "blocker_class": null,
       "park_until": null,
@@ -5054,9 +5054,9 @@
           "content_sha256": "4d34e1d2088564f729449f9b6b721c4a8d8c39af99ea08473b423725ace1947e"
         }
       },
-      "shipped_at": "2026-08-13T08:06:39.931Z",
+      "shipped_at": "2026-08-13T08:06:45.767Z",
       "tokens_used": 0,
-      "duration_ms": 15000,
+      "duration_ms": 11303,
       "shipped_via": "governed_ship_queue",
       "failure_signature": null
     }
