@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T08:17:24.076Z",
+  "generated_at": "2026-08-13T08:19:36.780Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13545,
+  "file_count": 13546,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -102254,6 +102254,16 @@
       "indexed_at": "2026-08-12T19:58:41.095Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/taloa/prompt-injection-authority-gate.js",
+      "synopsis": "Exports assertObservationIsNotAuthority — services/taloa/prompt-injection-authority-gate.js.",
+      "bytes": 1527,
+      "mtime": "2026-08-13T08:19:36.780Z",
+      "indexed_at": "2026-08-13T08:19:36.780Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md Overlay print §64 item 8"
       ]
     },
     {
