@@ -4304,8 +4304,8 @@
     {
       "id": "COLLECTIBLES-V1-MTG-ADAPTER-001",
       "product_id": "collectibles",
-      "status": "pending",
-      "attempts": 0,
+      "status": "blocked",
+      "attempts": 1,
       "target_file": "services/collectibles/adapters/mtg-adapter.js",
       "action_type": "author_then_write",
       "depends_on": [
@@ -4342,7 +4342,7 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-08-13T06:08:31.638Z",
       "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/local/bin/node --input-type=module -e import \"file:///usr/src/app/services/collectibles/adapters/.factory-import-check",
       "last_attempt": null,
       "revive_count": 1,
