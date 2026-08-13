@@ -1,7 +1,7 @@
 /**
  * SYNOPSIS: Direct build smoke test for the LifeOS platform.
  * @ssot docs/products/builderos/PRODUCT_HOME.md
- * @ssot
+ * @ssot scripts/lifeos-direct-build-smoke-test.mjs
  *
  * Verifies basic build system functionality by exporting a simple,
  * self-contained function that returns a predefined success object.

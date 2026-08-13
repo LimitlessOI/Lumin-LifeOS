@@ -7031,7 +7031,7 @@
     },
     {
       "id": "101",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "scripts/lifeos-direct-build-smoke-test.mjs",
       "task": "Add @ssot JSDoc tag to resolve FILE_PLACEMENT_VIOLATION",
       "spec": "Ensure the file scripts/lifeos-direct-build-smoke-test.mjs contains the required '@ssot' JSDoc tag at the top level to resolve build refusal.",
@@ -7051,9 +7051,9 @@
       "revived_at": "2026-08-13T01:24:29.447Z",
       "no_op": null,
       "pre_existing": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:STEP_STATUS_FORBIDDEN",
+      "demoted_at": "2026-08-13T01:33:04.123Z",
       "park_until": null,
       "blocker_class": null,
       "claim_level": null,
@@ -7139,7 +7139,7 @@
     },
     {
       "id": "2-create-founder-chair-intent-service",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "services/founder-chair-intent.js",
       "task": "Create founder chair intent service",
       "spec": "Implement and export classifyFounderChairIntent to categorize founder messages, specifically identifying 'drawer_direct_build' commands for workflow routing instead of generating essay text.",
@@ -7159,9 +7159,9 @@
       "revived_at": "2026-08-13T01:25:12.654Z",
       "no_op": null,
       "pre_existing": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:STEP_STATUS_FORBIDDEN",
+      "demoted_at": "2026-08-13T01:33:04.123Z",
       "park_until": null,
       "blocker_class": null,
       "claim_level": null,
@@ -7181,7 +7181,7 @@
     },
     {
       "id": "founder-chair-intent-service",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "services/founder-chair-intent.js",
       "task": "Create service for founder chat intent handling",
       "spec": "This service should contain the core logic for identifying the founder's intent from a message, specifically handling the 'drawer_direct_build' workflow. It will export a function 'classifyFounderIntent'.",
@@ -7204,9 +7204,9 @@
       "revived_at": "2026-08-13T01:28:39.652Z",
       "no_op": null,
       "pre_existing": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:STEP_STATUS_FORBIDDEN",
+      "demoted_at": "2026-08-13T01:33:04.123Z",
       "park_until": null,
       "blocker_class": null,
       "claim_level": null,
@@ -7396,7 +7396,7 @@
       "proof": null,
       "last_attempt_at": "2026-08-13T01:33:04.319Z",
       "last_error": "STEP_STATUS_FORBIDDEN",
-      "same_signature_count": 0,
+      "same_signature_count": 1,
       "behavior_assertions": [
         {
           "type": "exports_smoke",
@@ -7419,7 +7419,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "failure_signature": "STEP_STATUS_FORBIDDEN",
+      "escalation_class": "same_signature_repeat"
     },
     {
       "id": "lifeos-build-fix-1",
@@ -7451,7 +7453,36 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/lifeos/twins/steps/lifeos-build-fix-1.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-08-13T01:33:13.298Z",
+        "shipped_at": "2026-08-13T01:33:13.298Z",
+        "commit_sha": null,
+        "content_sha256": "07adb39c9da57fd6256a2240188935e1cbdca65694333ebacd4da81d5e3fa909",
+        "target_file": "scripts/lifeos-direct-build-smoke-test.mjs",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "scripts/lifeos-direct-build-smoke-test.mjs",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "PASS"
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/lifeos/twins/steps/lifeos-build-fix-1.exact",
+          "content_sha256": "07adb39c9da57fd6256a2240188935e1cbdca65694333ebacd4da81d5e3fa909"
+        }
+      },
+      "shipped_at": "2026-08-13T01:33:13.298Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-build-fix-1"
     },
     {
       "id": "lifeos-build-fix-2",
