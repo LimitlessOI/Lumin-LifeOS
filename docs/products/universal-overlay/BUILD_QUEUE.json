@@ -6735,14 +6735,14 @@
       "escalation_required": false,
       "escalation_note": null,
       "park_until": null,
-      "heal_unblocked": false,
+      "heal_unblocked": true,
       "failure_signature": "artifact_missing_after_ship: artifact_proof_failed: missing:role",
       "escalation_class": "fake_green_attempt",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-08-13T21:30:08.722Z"
     },
     {
-      "status": "blocked",
+      "status": "pending",
       "founder_gated": false,
       "attempts": 1,
       "action_type": "write_file_exact",
@@ -6772,10 +6772,10 @@
       },
       "exactness": {
         "sealed": true,
-        "sealed_at": "2026-08-13T21:30:56.648Z",
-        "shipped_at": "2026-08-13T21:30:56.648Z",
+        "sealed_at": "2026-08-13T21:31:54.851Z",
+        "shipped_at": "2026-08-13T21:31:54.851Z",
         "commit_sha": null,
-        "content_sha256": "92ff0944baa1ecd6ae05fe20d5e35626fd6f3b04551c8edbe6e37204546f7506",
+        "content_sha256": "63933ed8fedefb7641df233ecfa7df66499defd9910d2bbd6e63d26f4bca5aab",
         "target_file": "services/collectibles/guest-claim-service.js",
         "reverse": {
           "mode": "delete_file",
@@ -6789,16 +6789,39 @@
         "rebuild": {
           "action_type": "write_file_exact",
           "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V1-GUEST-CLAIM-001.exact",
-          "content_sha256": "92ff0944baa1ecd6ae05fe20d5e35626fd6f3b04551c8edbe6e37204546f7506"
+          "content_sha256": "63933ed8fedefb7641df233ecfa7df66499defd9910d2bbd6e63d26f4bca5aab"
         }
       },
-      "shipped_at": "2026-08-13T21:30:56.648Z",
+      "shipped_at": "2026-08-13T21:31:54.851Z",
+      "same_signature_count": 1,
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/collectibles/guest-claim-service.js",
+          "exports": [
+            "createGuestClaimService"
+          ],
+          "assertion_id": "expected_exports:services/collectibles/guest-claim-service.js"
+        }
+      ],
+      "started_at": "2026-08-13T21:31:53.027Z",
+      "last_attempt_at": "2026-08-13T21:31:53.091Z",
+      "last_error": "AIC_GATE_FAILURE",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-13T21:31:53.091Z",
-      "last_error": "AIC_GATE_FAILURE",
-      "started_at": "2026-08-13T21:31:53.027Z"
+      "failure_signature": "AIC_GATE_FAILURE",
+      "escalation_class": "same_signature_repeat",
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "escalation_required": false,
+      "escalation_note": null,
+      "park_until": null,
+      "heal_unblocked": true,
+      "tokens_used": 0,
+      "duration_ms": 1000,
+      "heal_reason": "collectibles_never_stop_heal"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
