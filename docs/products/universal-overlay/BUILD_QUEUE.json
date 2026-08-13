@@ -226,7 +226,7 @@
       "expected_exports": [
         "routeUIContext"
       ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": null,
       "shipped_at": "2026-07-15T22:13:12.909Z",
       "commit_sha": null,
@@ -349,7 +349,7 @@
       "expected_exports": [
         "adaptLayoutPreferences"
       ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": null,
       "shipped_at": "2026-07-15T22:17:14.890Z",
       "commit_sha": "fa2519b6c14b3c4e89dfc5f4743263910d45f808",
@@ -466,7 +466,7 @@
         "method": "POST",
         "path": "/api/v1/lifeos/page-summarization"
       },
-      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "behavior_assertions": [
         {
           "type": "exports_smoke",
@@ -519,7 +519,7 @@
         "48px",
         "128px"
       ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": null,
       "shipped_at": "2026-07-15T22:23:49.799Z",
       "commit_sha": "4dec1b1e2b6d8e1fa45755527339dcb700ebd7c0",
@@ -542,7 +542,7 @@
       "depends_on": [],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:30:12.087Z",
       "commit_sha": "2250a6752e7c3c01d6cb88b96754223aaaf0425a",
@@ -1321,7 +1321,7 @@
       "mission_id": "PRODUCT-universal-overlay",
       "same_signature_count": 0,
       "demoted": false,
-      "last_error": "route module not auto-registered \u2014 add {\"path\":\"routes/firefoxExtension.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
+      "last_error": "route module not auto-registered — add {\"path\":\"routes/firefoxExtension.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
       "heal_unblocked": true,
       "last_attempt_at": "2026-08-01T14:26:54.455Z",
       "blocker_class": "BLOCKED_TOOLING",
@@ -3338,7 +3338,7 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "skip_reason": "native_badge_voice_supersedes_js_hold_to_talk \u2014 TALOA-BADGE-VOICE-001 records on the badge; JS holdToTalkBadge.js cannot start getUserMedia in a hidden WKWebView.",
+      "skip_reason": "native_badge_voice_supersedes_js_hold_to_talk — TALOA-BADGE-VOICE-001 records on the badge; JS holdToTalkBadge.js cannot start getUserMedia in a hidden WKWebView.",
       "skipped_at": "2026-08-12T23:55:00.000Z",
       "same_signature_count": 0
     },
@@ -3361,7 +3361,7 @@
         "path": "/api/v1/overlay/hold-to-talk"
       },
       "design_review_flagged": true,
-      "skip_reason": "native_badge_voice_supersedes_js_hold_to_talk \u2014 TALOA-BADGE-VOICE-001 records on the badge; JS holdToTalkBadge.js cannot start getUserMedia in a hidden WKWebView.",
+      "skip_reason": "native_badge_voice_supersedes_js_hold_to_talk — TALOA-BADGE-VOICE-001 records on the badge; JS holdToTalkBadge.js cannot start getUserMedia in a hidden WKWebView.",
       "skipped_at": "2026-08-12T23:55:00.000Z",
       "same_signature_count": 0
     },
@@ -3377,7 +3377,7 @@
       "founder_gated": false,
       "attempts": 0,
       "design_review_flagged": true,
-      "skip_reason": "native_badge_voice_supersedes_js_hold_to_talk \u2014 TALOA-BADGE-VOICE-001 records on the badge; JS holdToTalkBadge.js cannot start getUserMedia in a hidden WKWebView.",
+      "skip_reason": "native_badge_voice_supersedes_js_hold_to_talk — TALOA-BADGE-VOICE-001 records on the badge; JS holdToTalkBadge.js cannot start getUserMedia in a hidden WKWebView.",
       "skipped_at": "2026-08-12T23:55:00.000Z",
       "same_signature_count": 0
     },
@@ -3433,7 +3433,7 @@
       "proof": null,
       "last_attempt_at": "2026-08-13T01:59:15.997Z",
       "last_error": null,
-      "skip_reason": "off_print \u2014 not in the uploaded Taloa program; Gate 0 forbids route mounting.",
+      "skip_reason": "off_print — not in the uploaded Taloa program; Gate 0 forbids route mounting.",
       "skipped_at": "2026-08-13T02:05:00.000Z",
       "last_attempt": null,
       "revive_count": 6,
@@ -3454,8 +3454,8 @@
       "id": "TALOA-WIRE-HOST-REGISTER-001",
       "status": "skipped",
       "target_file": "config/auto-registered-product-modules.json",
-      "task": "Add an enabled auto-register entry so TALOA-WIRE-HOST-001 actually mounts on the founder-builder lane. Append exactly one module object: {\"path\":\"routes/taloa-overlay-host-routes.js\",\"register\":\"registerTaloaOverlayHostRoutes\",\"mount_path\":\"/api/v1/taloa/overlay-host\",\"enabled\":true,\"note\":\"Overlay host health \u2014 Phase 1 createOverlayHostService live caller.\"}. Do not disable or rewrite unrelated entries. Do not edit server.js.",
-      "spec": "Add an enabled auto-register entry so TALOA-WIRE-HOST-001 actually mounts on the founder-builder lane. Append exactly one module object: {\"path\":\"routes/taloa-overlay-host-routes.js\",\"register\":\"registerTaloaOverlayHostRoutes\",\"mount_path\":\"/api/v1/taloa/overlay-host\",\"enabled\":true,\"note\":\"Overlay host health \u2014 Phase 1 createOverlayHostService live caller.\"}. Do not disable or rewrite unrelated entries. Do not edit server.js.",
+      "task": "Add an enabled auto-register entry so TALOA-WIRE-HOST-001 actually mounts on the founder-builder lane. Append exactly one module object: {\"path\":\"routes/taloa-overlay-host-routes.js\",\"register\":\"registerTaloaOverlayHostRoutes\",\"mount_path\":\"/api/v1/taloa/overlay-host\",\"enabled\":true,\"note\":\"Overlay host health — Phase 1 createOverlayHostService live caller.\"}. Do not disable or rewrite unrelated entries. Do not edit server.js.",
+      "spec": "Add an enabled auto-register entry so TALOA-WIRE-HOST-001 actually mounts on the founder-builder lane. Append exactly one module object: {\"path\":\"routes/taloa-overlay-host-routes.js\",\"register\":\"registerTaloaOverlayHostRoutes\",\"mount_path\":\"/api/v1/taloa/overlay-host\",\"enabled\":true,\"note\":\"Overlay host health — Phase 1 createOverlayHostService live caller.\"}. Do not disable or rewrite unrelated entries. Do not edit server.js.",
       "depends_on": [
         "TALOA-WIRE-HOST-001"
       ],
@@ -3481,7 +3481,7 @@
       "blueprint_step_id": "TALOA-WIRE-HOST-REGISTER-001",
       "mission_id": "PRODUCT-universal-overlay",
       "last_error": null,
-      "skip_reason": "off_print \u2014 depends on TALOA-WIRE-HOST-001.",
+      "skip_reason": "off_print — depends on TALOA-WIRE-HOST-001.",
       "skipped_at": "2026-08-13T02:05:00.000Z",
       "demoted": false,
       "same_signature_count": 0
@@ -3540,11 +3540,11 @@
       "built_sha": null,
       "proof": null,
       "last_error": null,
-      "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md \u00a764 / \u00a745a / \u00a715 / \u00a744a",
+      "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md §64 / §45a / §15 / §44a",
       "id": "TALOA-S64-CAPREG-COL-001",
       "target_file": "db/migrations/20260813_overlay_devices_capabilities.sql",
-      "task": "The file MUST begin with a SQL comment line exactly \"-- @ssot docs/products/universal-overlay/PRODUCT_HOME.md\". This migration creates NO new table. DeviceRegistry is overlay_devices (TALOA-P1-006, blueprint \u00a744a). Add the capabilities column the Capability Registry (\u00a715) stores on that canonical store: ALTER TABLE overlay_devices ADD COLUMN IF NOT EXISTS capabilities JSONB NOT NULL DEFAULT '{}'::jsonb; Do NOT CREATE TABLE. Do NOT DROP. Do NOT invent a second devices/capabilities table.",
-      "spec": "The file MUST begin with a SQL comment line exactly \"-- @ssot docs/products/universal-overlay/PRODUCT_HOME.md\". This migration creates NO new table. DeviceRegistry is overlay_devices (TALOA-P1-006, blueprint \u00a744a). Add the capabilities column the Capability Registry (\u00a715) stores on that canonical store: ALTER TABLE overlay_devices ADD COLUMN IF NOT EXISTS capabilities JSONB NOT NULL DEFAULT '{}'::jsonb; Do NOT CREATE TABLE. Do NOT DROP. Do NOT invent a second devices/capabilities table.",
+      "task": "The file MUST begin with a SQL comment line exactly \"-- @ssot docs/products/universal-overlay/PRODUCT_HOME.md\". This migration creates NO new table. DeviceRegistry is overlay_devices (TALOA-P1-006, blueprint §44a). Add the capabilities column the Capability Registry (§15) stores on that canonical store: ALTER TABLE overlay_devices ADD COLUMN IF NOT EXISTS capabilities JSONB NOT NULL DEFAULT '{}'::jsonb; Do NOT CREATE TABLE. Do NOT DROP. Do NOT invent a second devices/capabilities table.",
+      "spec": "The file MUST begin with a SQL comment line exactly \"-- @ssot docs/products/universal-overlay/PRODUCT_HOME.md\". This migration creates NO new table. DeviceRegistry is overlay_devices (TALOA-P1-006, blueprint §44a). Add the capabilities column the Capability Registry (§15) stores on that canonical store: ALTER TABLE overlay_devices ADD COLUMN IF NOT EXISTS capabilities JSONB NOT NULL DEFAULT '{}'::jsonb; Do NOT CREATE TABLE. Do NOT DROP. Do NOT invent a second devices/capabilities table.",
       "depends_on": [
         "TALOA-P1-006"
       ],
@@ -3620,11 +3620,11 @@
       "built_sha": null,
       "proof": null,
       "last_error": null,
-      "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md \u00a764 / \u00a745a / \u00a715 / \u00a744a",
+      "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md §64 / §45a / §15 / §44a",
       "id": "TALOA-S64-CAPREG-001",
       "target_file": "services/taloa/capability-registry-service.js",
-      "task": "The file MUST begin with a JSDoc block comment containing a line exactly \"@ssot docs/products/universal-overlay/PRODUCT_HOME.md\". Capability Registry from the uploaded overlay print \u00a715, persisted on DeviceRegistry (overlay_devices), not a new table. Export exactly: export function createCapabilityRegistryService({ pool, logger }). The service MUST expose reportCapabilities({ body_id, capabilities, reported_at }) which UPSERTs overlay_devices on device_key = body_id, writing platform from capabilities if present, last_seen_at = now(), capabilities = the JSON object. It MUST expose getCapabilities(body_id) which SELECTs that row and returns it or null. CALL pool.query. Do not invent a new table. ES module. No top-level timers or model calls. Do not edit server.js.",
-      "spec": "The file MUST begin with a JSDoc block comment containing a line exactly \"@ssot docs/products/universal-overlay/PRODUCT_HOME.md\". Capability Registry from the uploaded overlay print \u00a715, persisted on DeviceRegistry (overlay_devices), not a new table. Export exactly: export function createCapabilityRegistryService({ pool, logger }). The service MUST expose reportCapabilities({ body_id, capabilities, reported_at }) which UPSERTs overlay_devices on device_key = body_id, writing platform from capabilities if present, last_seen_at = now(), capabilities = the JSON object. It MUST expose getCapabilities(body_id) which SELECTs that row and returns it or null. CALL pool.query. Do not invent a new table. ES module. No top-level timers or model calls. Do not edit server.js.",
+      "task": "The file MUST begin with a JSDoc block comment containing a line exactly \"@ssot docs/products/universal-overlay/PRODUCT_HOME.md\". Capability Registry from the uploaded overlay print §15, persisted on DeviceRegistry (overlay_devices), not a new table. Export exactly: export function createCapabilityRegistryService({ pool, logger }). The service MUST expose reportCapabilities({ body_id, capabilities, reported_at }) which UPSERTs overlay_devices on device_key = body_id, writing platform from capabilities if present, last_seen_at = now(), capabilities = the JSON object. It MUST expose getCapabilities(body_id) which SELECTs that row and returns it or null. CALL pool.query. Do not invent a new table. ES module. No top-level timers or model calls. Do not edit server.js.",
+      "spec": "The file MUST begin with a JSDoc block comment containing a line exactly \"@ssot docs/products/universal-overlay/PRODUCT_HOME.md\". Capability Registry from the uploaded overlay print §15, persisted on DeviceRegistry (overlay_devices), not a new table. Export exactly: export function createCapabilityRegistryService({ pool, logger }). The service MUST expose reportCapabilities({ body_id, capabilities, reported_at }) which UPSERTs overlay_devices on device_key = body_id, writing platform from capabilities if present, last_seen_at = now(), capabilities = the JSON object. It MUST expose getCapabilities(body_id) which SELECTs that row and returns it or null. CALL pool.query. Do not invent a new table. ES module. No top-level timers or model calls. Do not edit server.js.",
       "depends_on": [
         "TALOA-S64-CAPREG-COL-001"
       ],
@@ -3673,11 +3673,11 @@
       "built_sha": null,
       "proof": null,
       "last_error": null,
-      "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md \u00a764 / \u00a745a / \u00a715 / \u00a744a",
+      "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md §64 / §45a / §15 / §44a",
       "id": "TALOA-S64-CAPREG-ROUTE-001",
       "target_file": "routes/taloa-capability-registry-routes.js",
-      "task": "The file MUST begin with a JSDoc block comment containing a line exactly \"@ssot docs/products/universal-overlay/PRODUCT_HOME.md\". Live HTTP surface for the Capability Registry (\u00a715). Export exactly: export function registerTaloaCapabilityRegistryRoutes(app, deps). Import createCapabilityRegistryService from \"../services/taloa/capability-registry-service.js\" and CALL it. Mount POST /api/v1/capabilities/report and GET /api/v1/capabilities/report behind deps.requireKey. POST body is { body_id, capabilities, reported_at } matching the \u00a715 JSON shape (body_id, reported_at, capabilities object). GET returns the stored DeviceRegistry row for query body_id. Do not invent a new table. Do not edit server.js. ES module. No top-level timers or model calls.",
-      "spec": "The file MUST begin with a JSDoc block comment containing a line exactly \"@ssot docs/products/universal-overlay/PRODUCT_HOME.md\". Live HTTP surface for the Capability Registry (\u00a715). Export exactly: export function registerTaloaCapabilityRegistryRoutes(app, deps). Import createCapabilityRegistryService from \"../services/taloa/capability-registry-service.js\" and CALL it. Mount POST /api/v1/capabilities/report and GET /api/v1/capabilities/report behind deps.requireKey. POST body is { body_id, capabilities, reported_at } matching the \u00a715 JSON shape (body_id, reported_at, capabilities object). GET returns the stored DeviceRegistry row for query body_id. Do not invent a new table. Do not edit server.js. ES module. No top-level timers or model calls.",
+      "task": "The file MUST begin with a JSDoc block comment containing a line exactly \"@ssot docs/products/universal-overlay/PRODUCT_HOME.md\". Live HTTP surface for the Capability Registry (§15). Export exactly: export function registerTaloaCapabilityRegistryRoutes(app, deps). Import createCapabilityRegistryService from \"../services/taloa/capability-registry-service.js\" and CALL it. Mount POST /api/v1/capabilities/report and GET /api/v1/capabilities/report behind deps.requireKey. POST body is { body_id, capabilities, reported_at } matching the §15 JSON shape (body_id, reported_at, capabilities object). GET returns the stored DeviceRegistry row for query body_id. Do not invent a new table. Do not edit server.js. ES module. No top-level timers or model calls.",
+      "spec": "The file MUST begin with a JSDoc block comment containing a line exactly \"@ssot docs/products/universal-overlay/PRODUCT_HOME.md\". Live HTTP surface for the Capability Registry (§15). Export exactly: export function registerTaloaCapabilityRegistryRoutes(app, deps). Import createCapabilityRegistryService from \"../services/taloa/capability-registry-service.js\" and CALL it. Mount POST /api/v1/capabilities/report and GET /api/v1/capabilities/report behind deps.requireKey. POST body is { body_id, capabilities, reported_at } matching the §15 JSON shape (body_id, reported_at, capabilities object). GET returns the stored DeviceRegistry row for query body_id. Do not invent a new table. Do not edit server.js. ES module. No top-level timers or model calls.",
       "depends_on": [
         "TALOA-S64-CAPREG-001"
       ],
@@ -3743,21 +3743,21 @@
       "shipped_at": "2026-08-13T02:12:39.360Z"
     },
     {
-      "status": "pending",
+      "status": "blocked",
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "action_type": "author_then_write",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_error": null,
-      "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md \u00a764 / \u00a745a / \u00a715 / \u00a744a",
+      "last_error": "github_commit_failed_after_local_ship",
+      "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md §64 / §45a / §15 / §44a",
       "id": "TALOA-S64-CAPREG-REGISTER-001",
       "target_file": "config/auto-registered-product-modules.json",
-      "task": "Add an enabled auto-register entry so TALOA-S64-CAPREG-ROUTE-001 mounts. Append exactly one module object: {\"path\":\"routes/taloa-capability-registry-routes.js\",\"register\":\"registerTaloaCapabilityRegistryRoutes\",\"mount_path\":\"/api/v1/capabilities\",\"enabled\":true,\"note\":\"Overlay Capability Registry \u00a715 on DeviceRegistry overlay_devices.\"}. Do not disable or rewrite unrelated entries. Do not edit server.js.",
-      "spec": "Add an enabled auto-register entry so TALOA-S64-CAPREG-ROUTE-001 mounts. Append exactly one module object: {\"path\":\"routes/taloa-capability-registry-routes.js\",\"register\":\"registerTaloaCapabilityRegistryRoutes\",\"mount_path\":\"/api/v1/capabilities\",\"enabled\":true,\"note\":\"Overlay Capability Registry \u00a715 on DeviceRegistry overlay_devices.\"}. Do not disable or rewrite unrelated entries. Do not edit server.js.",
+      "task": "Add an enabled auto-register entry so TALOA-S64-CAPREG-ROUTE-001 mounts. Append exactly one module object: {\"path\":\"routes/taloa-capability-registry-routes.js\",\"register\":\"registerTaloaCapabilityRegistryRoutes\",\"mount_path\":\"/api/v1/capabilities\",\"enabled\":true,\"note\":\"Overlay Capability Registry §15 on DeviceRegistry overlay_devices.\"}. Do not disable or rewrite unrelated entries. Do not edit server.js.",
+      "spec": "Add an enabled auto-register entry so TALOA-S64-CAPREG-ROUTE-001 mounts. Append exactly one module object: {\"path\":\"routes/taloa-capability-registry-routes.js\",\"register\":\"registerTaloaCapabilityRegistryRoutes\",\"mount_path\":\"/api/v1/capabilities\",\"enabled\":true,\"note\":\"Overlay Capability Registry §15 on DeviceRegistry overlay_devices.\"}. Do not disable or rewrite unrelated entries. Do not edit server.js.",
       "depends_on": [
         "TALOA-S64-CAPREG-ROUTE-001"
       ],
@@ -3779,7 +3779,7 @@
       ],
       "blueprint_step_id": "TALOA-S64-CAPREG-REGISTER-001",
       "same_signature_count": 0,
-      "last_attempt_at": "2026-08-13T03:40:13.809Z",
+      "last_attempt_at": "2026-08-13T04:05:27.307Z",
       "last_attempt": null,
       "revive_count": 6,
       "revived_at": "2026-08-13T03:40:13.614Z",
@@ -3800,7 +3800,7 @@
       "id": "TALOA-G0-SCANNERS-001",
       "status": "done",
       "target_file": "scripts/run-secret-scan-staged.mjs",
-      "task": "Wire existing secretScannerService.js into the real pre-commit hook (blueprint \u00a745a Gate 0 item 7). Do not invent a second scanner.",
+      "task": "Wire existing secretScannerService.js into the real pre-commit hook (blueprint §45a Gate 0 item 7). Do not invent a second scanner.",
       "spec": "githooks/pre-commit calls scripts/run-secret-scan-staged.mjs which imports scanSecrets from services/secretScannerService.js.",
       "depends_on": [],
       "founder_gated": false,
@@ -3813,7 +3813,7 @@
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "TALOA-G0-SCANNERS-001",
       "mission_id": "PRODUCT-universal-overlay",
-      "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md \u00a745a item 7",
+      "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md §45a item 7",
       "shipped_via": "conductor_script",
       "shipped_at": "2026-08-13T00:35:00.000Z",
       "proof": "SO-001 allows scripts/CI. Live caller is githooks/pre-commit section 0b.",
@@ -3824,7 +3824,7 @@
       "status": "skipped",
       "target_file": "services/taloa/capability-collection-001-registration-service.js",
       "task": "Implement capability collection registration for TALOA-S64-CAPREG-COL-001",
-      "spec": "This service will expose a function `registerCollection001(print15Data)` that processes the input `print15Data` (representing 'print \u00a715' as structured data) and calls functions from the existing `services/taloa/capability-registry-service.js` to store the derived capabilities, ultimately impacting `overlay_devices`. It should contain basic validation for the `print15Data` structure relevant to 'TALOA-S64-CAPREG-COL-001'.",
+      "spec": "This service will expose a function `registerCollection001(print15Data)` that processes the input `print15Data` (representing 'print §15' as structured data) and calls functions from the existing `services/taloa/capability-registry-service.js` to store the derived capabilities, ultimately impacting `overlay_devices`. It should contain basic validation for the `print15Data` structure relevant to 'TALOA-S64-CAPREG-COL-001'.",
       "depends_on": [],
       "founder_gated": false,
       "attempts": 1,
@@ -3854,14 +3854,14 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "skip_reason": "off_print \u2014 queue may only carry slices of the uploaded overlay blueprint"
+      "skip_reason": "off_print — queue may only carry slices of the uploaded overlay blueprint"
     },
     {
       "id": "col001-reg-route",
       "status": "skipped",
       "target_file": "routes/taloa-capability-collection-001-routes.js",
       "task": "Expose API endpoint for TALOA-S64-CAPREG-COL-001 capability collection registration",
-      "spec": "Create a POST endpoint `/taloa/capabilities/collections/S64-CAPREG-COL-001` that accepts `print \u00a715` data in the request body. This endpoint will validate the incoming data and call the `registerCollection001` function from `services/taloa/capability-collection-001-registration-service.js`. The module must export a `registerRoutes` function that takes an `app` (express instance) and `deps` object.",
+      "spec": "Create a POST endpoint `/taloa/capabilities/collections/S64-CAPREG-COL-001` that accepts `print §15` data in the request body. This endpoint will validate the incoming data and call the `registerCollection001` function from `services/taloa/capability-collection-001-registration-service.js`. The module must export a `registerRoutes` function that takes an `app` (express instance) and `deps` object.",
       "depends_on": [
         "col001-reg-service"
       ],
@@ -3881,7 +3881,7 @@
         "req.body",
         "res.status"
       ],
-      "skip_reason": "off_print \u2014 queue may only carry slices of the uploaded overlay blueprint",
+      "skip_reason": "off_print — queue may only carry slices of the uploaded overlay blueprint",
       "last_error": null
     }
   ],
