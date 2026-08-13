@@ -4334,8 +4334,8 @@
     {
       "id": "COLLECTIBLES-V1-TWIN-SERVICE-001",
       "product_id": "collectibles",
-      "status": "blocked",
-      "attempts": 1,
+      "status": "done",
+      "attempts": 0,
       "target_file": "services/collectibles/twin-service.js",
       "action_type": "write_file_exact",
       "depends_on": [
@@ -4370,11 +4370,11 @@
         }
       ],
       "same_signature_count": 1,
-      "commit_sha": null,
+      "commit_sha": "2e693d71332d0fa191d82440cb229d5dac507c32",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-13T08:11:26.106Z",
-      "last_error": "STEP_STATUS_FORBIDDEN",
+      "last_attempt_at": "2026-08-13T08:11:35.677Z",
+      "last_error": null,
       "last_attempt": null,
       "revive_count": 0,
       "revived_at": "2026-08-13T06:17:39.524Z",
@@ -4392,9 +4392,9 @@
       "escalation_note": null,
       "skip_reason": null,
       "failure_signature": "STEP_STATUS_FORBIDDEN",
-      "heal_unblocked": true,
+      "heal_unblocked": false,
       "heal_reason": "sealed_exact_identity_status_2026-08-13",
-      "started_at": "2026-08-13T08:11:26.083Z",
+      "started_at": "2026-08-13T08:11:35.677Z",
       "escalation_class": "same_signature_repeat",
       "exact_inputs": {
         "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V1-TWIN-SERVICE-001.exact"
@@ -4421,7 +4421,10 @@
           "content_sha256": "ca58970497dbb429b3ca30fd877e93239068e612df47cba12f43e738f2857918"
         }
       },
-      "shipped_at": "2026-08-13T08:11:44.443Z"
+      "shipped_at": "2026-08-13T08:11:52.697Z",
+      "duration_ms": 17020,
+      "tokens_used": 0,
+      "shipped_via": "governed_ship_queue"
     },
     {
       "id": "COLLECTIBLES-V1-MTG-ADAPTER-001",
