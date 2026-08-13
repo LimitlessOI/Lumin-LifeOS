@@ -7154,9 +7154,9 @@
       "shipped_via": "governed_ship_queue"
     },
     {
-      "status": "pending",
+      "status": "done",
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "action_type": "write_file_exact",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
@@ -7192,8 +7192,8 @@
       ],
       "started_at": "2026-08-13T23:29:53.142Z",
       "last_attempt_at": "2026-08-13T23:29:53.208Z",
-      "last_error": "AIC_GATE_FAILURE",
-      "commit_sha": null,
+      "last_error": null,
+      "commit_sha": "e5a77f933cbdc9f7f6a602075524561b87011a34",
       "built_sha": null,
       "proof": null,
       "failure_signature": "AIC_GATE_FAILURE",
@@ -7204,7 +7204,7 @@
       "escalation_required": false,
       "escalation_note": null,
       "park_until": null,
-      "heal_unblocked": true,
+      "heal_unblocked": false,
       "heal_reason": "collectibles_never_stop_heal",
       "exact_inputs": {
         "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V2-OFFER-INBOX-001.exact"
@@ -7231,7 +7231,34 @@
           "content_sha256": "5fc096b2565f58bb149ec2b4815bc50cc45e86f587b913b00c16deb757b2fc85"
         }
       },
-      "shipped_at": "2026-08-13T23:30:02.053Z"
+      "shipped_at": "2026-08-13T23:30:10.124Z",
+      "duration_ms": 16984,
+      "tokens_used": 0,
+      "shipped_via": "governed_ship_queue"
+    },
+    {
+      "status": "pending",
+      "founder_gated": false,
+      "attempts": 0,
+      "action_type": "author_then_write",
+      "product_id": "collectibles",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "mission_id": "PRODUCT-universal-overlay",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
+      "depends_on": [
+        "COLLECTIBLES-V2-OFFER-INBOX-001"
+      ],
+      "id": "COLLECTIBLES-V2-ACCEPTANCE-001",
+      "target_file": "tests/collectibles-v2-acceptance.test.js",
+      "sandbox_boundary": "tests/**",
+      "task": "node:test reachability for want-graph + invisible-listing + offer-inbox. Assert live imports/calls.",
+      "spec": "VERSION_ACCEPTANCE_GATES V2 — collector can receive offer without active listing (structure).",
+      "file_contains": [
+        "createWantGraphService",
+        "createInvisibleListingService",
+        "createOfferInboxService"
+      ],
+      "blueprint_step_id": "COLLECTIBLES-V2-ACCEPTANCE-001"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
