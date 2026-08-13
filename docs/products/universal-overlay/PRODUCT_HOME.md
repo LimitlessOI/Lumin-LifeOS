@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/universal-overlay/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-08-12 — SENTRY must_include fix + CAPREG-COL unblocked so the factory can keep walking the uploaded print. |
+| **Last Updated** | 2026-08-12 — Constitutional lock: one overlay queue, print slices only. REGISTER pending; invented col001 skipped. |
 
 ---
 ---
@@ -338,7 +338,7 @@ User on insurance portal
 | Field | Value |
 |---|---|
 | **Lane log** | `docs/CONTINUITY_LOG.md` (cross-cutting) |
-| **Next build** | factory-1: TALOA-S64-CAPREG-COL-001 → service → route → register — Capability Registry from the uploaded print §15, stored on DeviceRegistry `overlay_devices`. factory-2: LaunchAgent stays loaded. factory-3 stays idle. |
+| **Next build** | factory-1: `TALOA-S64-CAPREG-REGISTER-001` only — then the next print slice. No LifeOS. No invented col001. factory-2 LaunchAgent stays loaded. factory-3 stays idle. |
 | **Known gaps** | Signed iOS `.ipa` blocked on Apple Developer cert + UDID (PWA works today). Gate 0 item 1 (rotate previously-exposed COMMAND_CENTER_KEY) is founder-at-source, not a missing program. Layer B still `REGISTERED_NOT_IMPLEMENTED`. |
 | **⚠️ IN PROGRESS** | Overlay never-stop: both factories on overlay. factory-2 LaunchAgent `com.lumin.factory-2-lane` must stay loaded. Do not ship `native/macos-overlay/` from factory-1. |
 | **How to load extension in Chrome** | Go to `chrome://extensions` → Enable Developer Mode → Load Unpacked → select the `extension/` folder in this repo |
@@ -346,6 +346,10 @@ User on insurance portal
 ---
 
 ## Change Receipts
+
+| 2026-08-12 | **Constitutional lock: one queue, print slices only.** Founder: the system is not allowed to choose; it takes the next overlay-blueprint slice and hands it to the factory. Invented `col001-*` skipped off_print. `TALOA-S64-CAPREG-REGISTER-001` pending. Capreg route glued into auto-register so the already-shipped file can mount. | Founder: one queue; slices of the BP only; no choices; wasting tokens. | Next factory handoff is REGISTER, then the next §64 slice. |
+
+| 2026-08-12 | **Full overlay build audit (observed, not a new build).** Origin/production `775f6b3466`. Factory-1 *did* manufacture overlay today: 15 governed ships (P1-001…015 plus CAPREG-COL/001/ROUTE at 7:12pm). REGISTER blocked `STEP_STATUS_FORBIDDEN`; live `GET /api/v1/capabilities/report` 404; planner invented `col001-reg-*`. factory-2 ticking, `native_unchanged`. 427 commits noon–8:25pm: 287 LifeOS status, 61 overlay status, 15 overlay governed. | Founder: has the system been building the overlay? full audit. | Capture `docs/products/universal-overlay/conversations/2026-08-12-overlay-build-audit.md`. Next print step is REGISTER, not invented col001. |
 
 | 2026-08-12 | **SENTRY false-failed CAPREG-COL (`must_include` ignored), blocked overlay, loop ran LifeOS.** Fixed in BuilderOS. This queue: CAPREG-COL pending again; WIRE-HOST stays off-print skipped and will not be revived. | Founder: fix the system, never stop, fix SENTRY. | Next overlay step `TALOA-S64-CAPREG-COL-001`. |
 

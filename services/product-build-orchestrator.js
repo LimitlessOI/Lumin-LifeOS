@@ -135,6 +135,31 @@ export function depSatisfiedForSelect(depId, doneIds, queue, consumingStep) {
  * failed functional proof for missing auto-registration, prefer the pending
  * auto-register config sibling instead of rebuilding the route forever.
  */
+export const OVERLAY_PRINT_SLICE_ID = /^(TALOA-S64-|TALOA-P1-|TALOA-G0-|TALOA-BADGE-|TALOA-NATIVE-|TALOA-SENTRY-)/;
+export const OVERLAY_PRINT_SOURCE = /TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT/i;
+
+/** Queue may only hand the factory a slice of the uploaded overlay print. Anything else is invention. */
+export function isBlueprintSlice(step, productId) {
+  if (productId && productId !== 'universal-overlay') return true;
+  const id = String(step?.id || '');
+  if (OVERLAY_PRINT_SLICE_ID.test(id)) return true;
+  if (OVERLAY_PRINT_SOURCE.test(String(step?.source || ''))) return true;
+  return false;
+}
+
+export function skipNonBlueprintSlices(queue) {
+  const skipped = [];
+  if (!queue || queue.product_id !== 'universal-overlay' || !Array.isArray(queue.steps)) return skipped;
+  for (const step of queue.steps) {
+    if (step.status === STEP_STATUS.DONE || step.status === STEP_STATUS.SKIPPED) continue;
+    if (isBlueprintSlice(step, queue.product_id)) continue;
+    step.status = STEP_STATUS.SKIPPED;
+    step.skip_reason = 'off_print — queue may only carry slices of the uploaded overlay blueprint';
+    skipped.push(step.id);
+  }
+  return skipped;
+}
+
 export function selectNextStep(queue) {
   const doneIds = new Set(queue.steps.filter((s) => s.status === STEP_STATUS.DONE).map((s) => s.id));
   const gated = queue.steps.filter((s) => {
@@ -145,6 +170,7 @@ export function selectNextStep(queue) {
   function consider(step) {
     if (TERMINAL.has(step.status)) return null;
     if (step.demoted === true || step.status === STEP_STATUS.SKIPPED) return null;
+    if (queue.product_id === 'universal-overlay' && !isBlueprintSlice(step, queue.product_id)) return null;
     if (isHumanHold(step)) return null;
     if (step.status === STEP_STATUS.FOUNDER_GATED && !isHumanHold(step)) {
       step.status = STEP_STATUS.PENDING;
@@ -306,6 +332,7 @@ export function reviveStaleBlockedSteps(queue, {
     const sentryBlock = /SENTRY_FAILED|behavior_assertion_failed|behavior_proof/i.test(
       String(step.last_error || ''),
     );
+    const statusForbiddenBlock = /STEP_STATUS_FORBIDDEN/i.test(String(step.last_error || ''));
     const verifyThrash = /^verify_exit_/i.test(String(step.last_error || ''));
     // Cap thrash hard. Same error after budget → SKIPPED (terminal), stop burning tokens.
     const effectiveMax = (autoRegBlock || artifactToolingBlock || sentryBlock) ? maxRevives + 3 : maxRevives;
@@ -327,7 +354,7 @@ export function reviveStaleBlockedSteps(queue, {
         return rDeps.includes(step.id);
       });
       if (!registerDone) continue;
-    } else if (waited < cooldownMs && !artifactToolingBlock && !sentryBlock) {
+    } else if (waited < cooldownMs && !artifactToolingBlock && !sentryBlock && !statusForbiddenBlock) {
       continue;
     }
     if (artifactToolingBlock && waited < Math.min(cooldownMs, 60_000)) continue;

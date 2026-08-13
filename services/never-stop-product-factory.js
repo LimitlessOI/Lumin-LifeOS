@@ -10,7 +10,7 @@ import { getActiveQueueItem, isQueueItemIncomplete } from './bp-priority-complet
 import { loadPointBTarget } from './point-b-target-lite.js';
 import { executeIntakeBlueprint } from './intake-blueprint-executor.js';
 import { SOCIALMEDIAOS_INTAKE_SESSION } from './lifeos-mission-pipeline-executor.js';
-import { loadBuildQueue, normalizeQueue, selectNextStep, runNextStep, persistQueue, queueSummary, queuePathForProduct, reviveStaleBlockedSteps, evaluateModuleHealthForStep, evaluateStepExpectations, STEP_STATUS } from './product-build-orchestrator.js';
+import { loadBuildQueue, normalizeQueue, selectNextStep, runNextStep, persistQueue, queueSummary, queuePathForProduct, reviveStaleBlockedSteps, evaluateModuleHealthForStep, evaluateStepExpectations, STEP_STATUS, skipNonBlueprintSlices } from './product-build-orchestrator.js';
 import { proveDeployServesSha, waitForDeploySha } from './deploy-truth.js';
 import { enforceClaim, toWatchlist } from './truth-ladder.js';
 import { extractCorpusBacklog, backlogSignature, planBuildQueue } from './build-queue-planner.js';
@@ -75,6 +75,42 @@ export function loadProductPriority() {
   } catch {
     return [];
   }
+}
+
+const PRINT_STEP_ID = /^(TALOA-S64-|TALOA-P1-|TALOA-G0-|TALOA-BADGE-|TALOA-NATIVE-|TALOA-SENTRY-)/;
+
+/**
+ * Founder money lock. `exclusive_until_complete` in PRODUCT_BUILD_PRIORITY.json
+ * (falls back to priority[0]). While that product still has unfinished print
+ * steps, the loop may not select any other product. Ranking is not a suggestion.
+ */
+export function loadExclusiveHoldProduct() {
+  try {
+    const raw = JSON.parse(fs.readFileSync(PRODUCT_PRIORITY_PATH, 'utf8'));
+    const named = typeof raw.exclusive_until_complete === 'string'
+      ? raw.exclusive_until_complete.trim()
+      : '';
+    if (named) return named;
+    const list = Array.isArray(raw.priority) ? raw.priority.filter((id) => typeof id === 'string') : [];
+    return list[0] || null;
+  } catch {
+    return null;
+  }
+}
+
+export function exclusivePrintWorkOpen(queue) {
+  if (!queue || !Array.isArray(queue.steps)) return false;
+  return queue.steps.some((s) => {
+    if (!PRINT_STEP_ID.test(String(s.id || ''))) return false;
+    if (s.status === STEP_STATUS.DONE || s.status === STEP_STATUS.SKIPPED) return false;
+    if (String(s.skip_reason || '').startsWith('off_print')) return false;
+    return true;
+  });
+}
+
+export function holdToExclusiveProduct(items, exclusiveId, _exclusiveQueue) {
+  if (!exclusiveId) return items || [];
+  return (items || []).filter((i) => (i?.product_id || i?.product) === exclusiveId);
 }
 
 /**
@@ -431,11 +467,16 @@ export function discoverBuildQueueWork() {
     return found;
   }
   const priorityList = loadProductPriority();
+  const exclusiveId = loadExclusiveHoldProduct();
+  if (exclusiveId) productIds = [exclusiveId];
+  let exclusiveQueue = null;
   for (const productId of productIds) {
     const queuePath = path.join(productsDir, productId, 'BUILD_QUEUE.json');
     if (!fs.existsSync(queuePath)) continue;
     try {
       const queue = loadBuildQueue(productId);
+      skipNonBlueprintSlices(queue);
+      if (productId === exclusiveId) exclusiveQueue = queue;
       // Do NOT revive on discover — revive mutates blocked→pending and schedules
       // thrashers ahead of real pending blueprint steps. Revive only at execute.
       const { step } = selectNextStep(queueForThisFactory(queue));
@@ -455,7 +496,7 @@ export function discoverBuildQueueWork() {
       log({ event: 'build_queue_parse_error', product_id: productId, error: e.message });
     }
   }
-  return found;
+  return holdToExclusiveProduct(found, exclusiveId, exclusiveQueue);
 }
 
 /**
@@ -474,16 +515,19 @@ export async function discoverBuildQueueWorkFresh() {
     return found;
   }
   const priorityList = loadProductPriority();
+  const exclusiveId = loadExclusiveHoldProduct();
+  if (exclusiveId) productIds = [exclusiveId];
+  let exclusiveQueue = null;
   for (const productId of productIds) {
     const queuePath = path.join(productsDir, productId, 'BUILD_QUEUE.json');
     if (!fs.existsSync(queuePath)) continue;
     try {
       const queue = await loadBuildQueuePreferRemote(productId);
-      // Top-priority product (overlay): revive SENTRY_FAILED immediately so
-      // discover still returns overlay work instead of falling through to LifeOS.
-      if (productId === priorityList[0]) {
+      skipNonBlueprintSlices(queue);
+      if (productId === priorityList[0] || productId === exclusiveId) {
         reviveStaleBlockedSteps(queue);
       }
+      if (productId === exclusiveId) exclusiveQueue = queue;
       const { step } = selectNextStep(queueForThisFactory(queue));
       if (step) {
         found.push({
@@ -501,7 +545,7 @@ export async function discoverBuildQueueWorkFresh() {
       log({ event: 'build_queue_parse_error', product_id: productId, error: e.message });
     }
   }
-  return found;
+  return holdToExclusiveProduct(found, exclusiveId, exclusiveQueue);
 }
 
 /**
@@ -922,7 +966,14 @@ export async function discoverProductExpansionWork(options = {}) {
   }
 
   items.sort((a, b) => a.priority - b.priority);
-  return items;
+  const exclusiveId = loadExclusiveHoldProduct();
+  let exclusiveQueue = null;
+  try {
+    if (exclusiveId) exclusiveQueue = loadBuildQueue(exclusiveId);
+  } catch {
+    exclusiveQueue = null;
+  }
+  return holdToExclusiveProduct(items, exclusiveId, exclusiveQueue);
 }
 
 export async function countProductWork(options = {}) {
@@ -1856,8 +1907,23 @@ export async function runProductExpansionLanes(options = {}) {
 
   const discover = options.discoverFn || discoverBuildQueueWorkFresh;
   const workRaw = await Promise.resolve(discover());
-  // Financial priority first — never burn all lanes on low-priority thrashers.
-  const work = [...workRaw].sort((a, b) => (a.priority || 99) - (b.priority || 99)).slice(0, Math.max(1, concurrency));
+  let held = workRaw;
+  let laneCap = Math.max(1, concurrency);
+  if (!options.discoverFn) {
+    const exclusiveId = loadExclusiveHoldProduct();
+    let exclusiveQueue = null;
+    try {
+      if (exclusiveId) exclusiveQueue = loadBuildQueue(exclusiveId);
+    } catch {
+      exclusiveQueue = null;
+    }
+    held = holdToExclusiveProduct(workRaw, exclusiveId, exclusiveQueue);
+    if (exclusiveId) laneCap = 1;
+  }
+  const ranked = [...held].sort((a, b) => (a.priority || 99) - (b.priority || 99));
+  const work = (!options.discoverFn && loadExclusiveHoldProduct())
+    ? ranked.slice(0, 1)
+    : ranked;
   if (!work.length) {
     log({ event: 'expansion_lanes_empty' });
     return { ok: true, lanes: 0, built: 0, live: 0, detail: 'no_build_queue_work' };

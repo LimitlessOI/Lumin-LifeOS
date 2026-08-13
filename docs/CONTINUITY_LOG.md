@@ -1,5 +1,13 @@
 <!-- SYNOPSIS: Documentation — CONTINUITY LOG. -->
 
+## 2026-08-12 — One queue, print slices only (founder: the system may not choose)
+
+Adam: the system can only build from one queue; that queue can only take slices of the overlay blueprint; it is not allowed to make a single choice; next slice → factory. The loop choosing LifeOS and inventing col001 was a constitutional failure, not a ranking miss. Enforced in never-stop + selectNextStep. REGISTER pending. Invented steps skipped.
+
+## 2026-08-12 — Overlay build audit (founder asked: has the system been building?)
+
+Yes. Factory-1 shipped 15 governed overlay commits today (Phase 1 001–015, then §15 CAPREG column/service/route at 7:12pm: `b5229280a0` / `e534798a4a` / `fa4f595373`). Production `/ready` is `775f6b3466` = origin/main. It is not finishing the print: REGISTER blocked `STEP_STATUS_FORBIDDEN`, live `GET /api/v1/capabilities/report` 404, planner invented `col001-*`, factory-2 looping `native_unchanged`. 287 LifeOS status ticks vs 15 overlay ships in the same window. Capture: `docs/products/universal-overlay/conversations/2026-08-12-overlay-build-audit.md`.
+
 ## 2026-08-12 — Fix SENTRY + never-stop: must_include was a false fail
 
 Adam: fix the system, make sure it never stops, fix SENTRY. SENTRY `file_contains` ignored BUILD_QUEUE `must_include`, so CAPREG-COL failed `behavior_assertion_failed` with no file shipped. One BLOCKED + 15m cooldown and the loop built LifeOS. Fix: honor must_include; revive SENTRY_FAILED immediately; do not revive `off_print` steps.

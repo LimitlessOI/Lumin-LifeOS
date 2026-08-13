@@ -167,6 +167,23 @@ test('reviveStaleBlockedSteps does not revive off_print skipped steps even if re
   assert.equal(q.steps[0].status, STEP_STATUS.BLOCKED);
 });
 
+test('reviveStaleBlockedSteps revives STEP_STATUS_FORBIDDEN immediately so overlay does not wait 15m', () => {
+  const q = makeQueue([
+    {
+      id: 'TALOA-S64-CAPREG-REGISTER-001',
+      target_file: 'config/auto-registered-product-modules.json',
+      task: 't',
+      status: STEP_STATUS.BLOCKED,
+      last_error: 'STEP_STATUS_FORBIDDEN',
+      last_attempt_at: new Date().toISOString(),
+      attempts: 1,
+    },
+  ]);
+  const revived = reviveStaleBlockedSteps(q);
+  assert.deepEqual(revived, ['TALOA-S64-CAPREG-REGISTER-001']);
+  assert.equal(q.steps[0].status, STEP_STATUS.PENDING);
+});
+
 test('reviveStaleBlockedSteps revives SENTRY_FAILED immediately so overlay does not wait 15m', () => {
   const q = makeQueue([
     {

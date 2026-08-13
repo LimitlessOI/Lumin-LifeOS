@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/builderos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-08-12 — SENTRY file_contains honors must_include; SENTRY_FAILED revives immediately so overlay never waits 15m for LifeOS. |
+| **Last Updated** | 2026-08-12 — One overlay queue, blueprint slices only. Loop may not choose LifeOS or invent steps. |
 ### Related docs (this product)
 
 | Doc | Path |
@@ -35,6 +35,8 @@
 ---
 
 ## Change Receipts
+| 2026-08-12 | **The loop was choosing LifeOS and inventing col001 steps. That is forbidden.** Founder: one queue; that queue may only take slices of the overlay blueprint; no choices; next slice → factory. Enforced: `exclusive_until_complete` + discover only overlay; `isBlueprintSlice` / `skipNonBlueprintSlices` refuse invented ids; lanes cap 1; `STEP_STATUS_FORBIDDEN` revives immediately. Invented `col001-*` skipped off_print. REGISTER pending. Capreg route auto-registered so the already-shipped file mounts. | Founder: personally responsible; system cannot do what it wants; wasting tokens; nothing constitutionally enforced. | Next factory step is `TALOA-S64-CAPREG-REGISTER-001` then the next print slice. LifeOS must not appear in discover. |
+
 | 2026-08-12 | **SENTRY was false-failing overlay, then the loop left overlay for 15 minutes.** `file_contains` only checked `substring`, so BUILD_QUEUE `must_include` arrays always failed (`behavior_assertion_failed`). First fail marked BLOCKED; 15m cooldown; LifeOS shipped instead. Fix: SENTRY honors `must_include`; SENTRY_FAILED revives immediately; `off_print` steps are not revived. Unblocked `TALOA-S64-CAPREG-COL-001`. | Founder: fix the system, make sure it never stops, fix SENTRY. | `node --test tests/sentry-file-contains.test.js tests/product-build-orchestrator.test.js` |
 | 2026-08-12 | **Product-queue twins were requesting `skip_intake_gate` over HTTP-shaped body, which execute-step denies unless `FACTORY_ALLOW_SKIP_INTAKE_GATE` is on.** Overlay `TALOA-WIRE-HOST-001` hit `AIC_GATE_FAILURE` after one attempt and the loop fell back to LifeOS. Fix: `/factory/ship-queue` passes `trustedIntakeSkip` in-process after `blueprintFollowClaim` proves a product twin; HTTP `POST /factory/execute-step` still cannot skip. Unblocked WIRE-HOST to pending. | Founder: overlay never stops; if BuilderOS finds an issue and does not fix itself, fix the fixer. | `node scripts/deliberation-governance-behavior.mjs` (skip denied without env; trusted skip is not that denial). |
 | 2026-08-12 | **Factory-N is a switch.** Overlay stopped because `selectNextStep` had nothing buildable (JS hold-to-talk deps blocked) so the governed loop shipped LifeOS. Closed: skip that dead path, queue `TALOA-WIRE-HOST-001` for factory-1, native ping for factory-2. `config/factory-slots.js` registers factory-3 idle. `npm run builderos:factory:enable -- --factory factory-3` provisions + assigns `public/overlay/` + loads `com.lumin.factory-3-lane`. `--idle` unloads the agent and keeps the worktree. factory-4+ is `--register-next` then `--enable` — no FACTORIES array edit. Allocation uses `dispatchingFactories()` so an idle provisioned slot gets no slices. LaunchAgent and tick path are parameterized by `FACTORY_ID`. | Founder: overlay never stops; both factories; SENTRY watching; two working; three ready to flip on instantly and leave idle if withdrawn. | `node --test tests/factory-slots.test.js`; `npm run builderos:factory:slots`. |

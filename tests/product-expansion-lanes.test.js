@@ -106,10 +106,11 @@ test('productRankFraction: unlisted always sort after listed, more mature first'
   assert.ok(unlistedRich >= 0.01, 'never crosses into the listed range');
 });
 
-test('loadProductPriority reads the founder-owned list and includes lifeos first', () => {
+test('loadProductPriority reads the founder-owned list with overlay exclusive first', () => {
   const list = loadProductPriority();
   assert.ok(Array.isArray(list));
-  assert.equal(list[0], 'lifeos');
+  assert.equal(list[0], 'universal-overlay');
+  assert.ok(list.includes('lifeos'));
   assert.ok(list.includes('site-builder'));
 });
 
