@@ -58,7 +58,8 @@
       "blocker_resolution": null,
       "same_signature_count": 0,
       "completed_at": "2026-08-01T19:57:38.107Z",
-      "repair_note": "artifact_proof_pass_at_repair_scan"
+      "repair_note": "artifact_proof_pass_at_repair_scan",
+      "heal_unblocked": false
     },
     {
       "id": "2",
@@ -111,7 +112,8 @@
       "blocker_resolution": null,
       "same_signature_count": 0,
       "completed_at": "2026-08-01T19:57:38.108Z",
-      "repair_note": "artifact_proof_pass_at_repair_scan"
+      "repair_note": "artifact_proof_pass_at_repair_scan",
+      "heal_unblocked": false
     },
     {
       "id": "3",
@@ -160,7 +162,8 @@
           "content_sha256": "a438e717cf3bc4e66f9b482d187ee30e766c0925405b5f2a213afe19eee5787d"
         }
       },
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": false
     },
     {
       "id": "4",
@@ -212,7 +215,8 @@
       "mission_id": "PRODUCT-universal-overlay",
       "same_signature_count": 0,
       "completed_at": "2026-08-01T19:57:38.109Z",
-      "repair_note": "artifact_proof_pass_at_repair_scan"
+      "repair_note": "artifact_proof_pass_at_repair_scan",
+      "heal_unblocked": false
     },
     {
       "id": "5",
@@ -336,7 +340,8 @@
           "content_sha256": "0cda0f3c9ed58a621012a1de5b01552fd0be7bb9836ddeda44c672854b98154e"
         }
       },
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": false
     },
     {
       "id": "7",
@@ -376,7 +381,8 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "completed_at": "2026-08-01T02:32:22.936Z",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": false
     },
     {
       "id": "8",
@@ -416,7 +422,8 @@
       "reaudit_reset_at": "2026-07-30T18:55:06.758Z",
       "same_signature_count": 1,
       "failure_signature": "artifact_proof|BLOCKED_TOOLING|artifact_proof_failed: CREATE TABLE IF NOT EXISTS flourishing_prefs",
-      "completed_at": "2026-08-01T02:36:13.159Z"
+      "completed_at": "2026-08-01T02:36:13.159Z",
+      "heal_unblocked": false
     },
     {
       "id": "9",
@@ -449,7 +456,8 @@
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "9",
       "mission_id": "PRODUCT-universal-overlay",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": false
     },
     {
       "id": "10",
@@ -503,7 +511,8 @@
       "mission_id": "PRODUCT-universal-overlay",
       "reaudit_reset_at": "2026-07-30T18:55:06.758Z",
       "same_signature_count": 0,
-      "completed_at": "2026-08-01T02:40:35.050Z"
+      "completed_at": "2026-08-01T02:40:35.050Z",
+      "heal_unblocked": false
     },
     {
       "id": "11",
@@ -532,7 +541,8 @@
       "reaudit_reset_at": "2026-07-30T18:55:06.758Z",
       "same_signature_count": 0,
       "last_attempt_at": "2026-08-01T02:40:48.597Z",
-      "completed_at": "2026-08-01T02:42:56.123Z"
+      "completed_at": "2026-08-01T02:42:56.123Z",
+      "heal_unblocked": false
     },
     {
       "id": "12",
@@ -550,7 +560,8 @@
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "12",
       "mission_id": "PRODUCT-universal-overlay",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": false
     },
     {
       "id": "universal-overlay-1",
@@ -585,7 +596,8 @@
       "reaudit_reset_at": "2026-07-30T18:55:06.758Z",
       "same_signature_count": 0,
       "last_attempt_at": "2026-08-01T02:43:10.315Z",
-      "completed_at": "2026-08-01T02:43:27.308Z"
+      "completed_at": "2026-08-01T02:43:27.308Z",
+      "heal_unblocked": false
     },
     {
       "id": "universal-overlay-2",
@@ -632,7 +644,8 @@
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "universal-overlay-2",
       "mission_id": "PRODUCT-universal-overlay",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": false
     },
     {
       "id": "universal-overlay-3",
@@ -679,7 +692,8 @@
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "universal-overlay-3",
       "mission_id": "PRODUCT-universal-overlay",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": false
     },
     {
       "id": "universal-overlay-4",
@@ -699,7 +713,8 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T22:28:16.704Z",
       "commit_sha": "e81ecc31d53a2170382b62a513240506f14cc5bb",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": false
     },
     {
       "id": "universal-overlay-5",
@@ -736,7 +751,8 @@
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-18T00:22:21.315Z",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": false
     },
     {
       "id": "universal-overlay-6",
@@ -756,7 +772,8 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T23:04:05.760Z",
       "commit_sha": "9afe29863ede6b5adf1e6b3ef989a6d9b944235c",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": false
     },
     {
       "id": "universal-overlay-7",
@@ -776,7 +793,8 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T23:22:21.534Z",
       "commit_sha": "cbb86fd345662db703933efa05683c2eb00241d9",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": false
     },
     {
       "id": "universal-overlay-8",
@@ -797,7 +815,8 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T23:25:39.163Z",
       "commit_sha": "610db38aa31607e5d40b0203c28eb0077e5a84dc",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": false
     },
     {
       "id": "universal-overlay-9",
@@ -853,7 +872,8 @@
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "universal-overlay-10",
       "mission_id": "PRODUCT-universal-overlay",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": false
     },
     {
       "id": "universal-overlay-11",
@@ -886,7 +906,8 @@
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "universal-overlay-11",
       "mission_id": "PRODUCT-universal-overlay",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": false
     },
     {
       "id": "universal-overlay-12",
@@ -919,7 +940,8 @@
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "universal-overlay-12",
       "mission_id": "PRODUCT-universal-overlay",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": false
     },
     {
       "id": "universal-overlay-step1",
@@ -972,7 +994,8 @@
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "universal-overlay-step1",
       "mission_id": "PRODUCT-universal-overlay",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": false
     },
     {
       "id": "universal-overlay-step2",
@@ -1010,7 +1033,8 @@
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "universal-overlay-step2",
       "mission_id": "PRODUCT-universal-overlay",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": false
     },
     {
       "id": "universal-overlay-step3",
@@ -1048,7 +1072,8 @@
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "universal-overlay-step3",
       "mission_id": "PRODUCT-universal-overlay",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": false
     },
     {
       "id": "universal-overlay-step4",
@@ -1083,7 +1108,8 @@
       "shipped_at": "2026-07-17T23:58:24.943Z",
       "commit_sha": "0288b02c0286bbca143ae4962e4680eafc00d7d9",
       "same_signature_count": 0,
-      "completed_at": "2026-08-01T06:00:07.775Z"
+      "completed_at": "2026-08-01T06:00:07.775Z",
+      "heal_unblocked": false
     },
     {
       "id": "universal-overlay-step5",
@@ -1121,7 +1147,8 @@
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "universal-overlay-step5",
       "mission_id": "PRODUCT-universal-overlay",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": false
     },
     {
       "id": "universal-overlay-step6",
@@ -1160,7 +1187,7 @@
       "same_signature_count": 0,
       "demoted": false,
       "last_error": "artifact_proof_failed: opt-in session replay",
-      "heal_unblocked": true,
+      "heal_unblocked": false,
       "last_attempt_at": "2026-08-01T14:19:20.750Z",
       "completed_at": "2026-08-01T14:19:33.643Z"
     },
@@ -1283,7 +1310,8 @@
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "universal-overlay-step9",
       "mission_id": "PRODUCT-universal-overlay",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": false
     },
     {
       "id": "universal-overlay-step10",
@@ -1323,7 +1351,7 @@
       "same_signature_count": 0,
       "demoted": false,
       "last_error": "route module not auto-registered — add {\"path\":\"routes/firefoxExtension.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
-      "heal_unblocked": true,
+      "heal_unblocked": false,
       "last_attempt_at": "2026-08-01T14:26:54.455Z",
       "blocker_class": "BLOCKED_TOOLING",
       "completed_at": "2026-08-01T14:26:55.021Z"
@@ -1346,7 +1374,8 @@
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "universal-overlay-step11",
       "mission_id": "PRODUCT-universal-overlay",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": false
     },
     {
       "id": "universal-overlay-step12",
@@ -1384,7 +1413,8 @@
       "blocker_resolution": null,
       "same_signature_count": 0,
       "completed_at": "2026-08-01T19:57:38.115Z",
-      "repair_note": "artifact_proof_pass_at_repair_scan"
+      "repair_note": "artifact_proof_pass_at_repair_scan",
+      "heal_unblocked": false
     },
     {
       "id": "step1",
@@ -1431,7 +1461,8 @@
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-18T02:29:33.267Z",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": false
     },
     {
       "id": "step2",
@@ -1463,7 +1494,8 @@
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-18T02:33:39.048Z",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": false
     },
     {
       "id": "step3",
@@ -1494,7 +1526,8 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-18T02:16:42.201Z",
       "commit_sha": "8a6f60476811b05cae0ce5e16b1de1bfec02281b",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": false
     },
     {
       "id": "step4",
@@ -1538,7 +1571,8 @@
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-18T04:06:44.502Z",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": false
     },
     {
       "id": "step5",
@@ -1571,7 +1605,8 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-18T04:09:15.734Z",
       "commit_sha": "33617c0f1db03d3af44a756364814d27e20b2e92",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": false
     },
     {
       "id": "01",
@@ -1615,7 +1650,8 @@
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-18T04:58:06.673Z",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": false
     },
     {
       "id": "02",
@@ -1649,7 +1685,8 @@
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-18T05:00:51.610Z",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": false
     },
     {
       "id": "03",
@@ -1682,7 +1719,8 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-18T05:02:45.749Z",
       "commit_sha": "2d172ed72deac1854f091f3b0305825f3612d2aa",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": false
     },
     {
       "id": "04",
@@ -1726,7 +1764,8 @@
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-18T14:31:32.769Z",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": false
     },
     {
       "id": "05",
@@ -1762,7 +1801,8 @@
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-18T14:49:24.235Z",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": false
     },
     {
       "id": "06",
@@ -1777,7 +1817,8 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-18T14:17:34.680Z",
       "commit_sha": "18ec4048cf729c8711ce237986db0c79b0130b70",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": false
     },
     {
       "id": "step6",
@@ -1810,7 +1851,8 @@
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-18T15:44:23.388Z",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": false
     },
     {
       "id": "step7",
@@ -1844,7 +1886,8 @@
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-18T15:54:12.999Z",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": false
     },
     {
       "id": "step8",
@@ -1890,7 +1933,8 @@
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-18T16:10:38.272Z",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": false
     },
     {
       "id": "step9",
@@ -1923,7 +1967,8 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-18T16:12:31.743Z",
       "commit_sha": "45f677f5135d4f363dd2830e38fcf44866ba9492",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": false
     },
     {
       "id": "step10",
@@ -1950,7 +1995,8 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-18T15:42:22.634Z",
       "commit_sha": "c7477fd9efc5cfdab1fe9e6fd813ee457da92dbf",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": false
     },
     {
       "id": "step11",
@@ -1983,7 +2029,8 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-18T15:45:21.586Z",
       "commit_sha": "95564b8897f7fc529486f8e21d42083e418ebbc7",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": false
     },
     {
       "id": "step12",
@@ -2019,7 +2066,8 @@
       "blocker_resolution": null,
       "same_signature_count": 0,
       "completed_at": "2026-08-01T19:57:38.115Z",
-      "repair_note": "artifact_proof_pass"
+      "repair_note": "artifact_proof_pass",
+      "heal_unblocked": false
     },
     {
       "id": "s1",
@@ -2054,7 +2102,8 @@
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-18T20:05:44.884Z",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": false
     },
     {
       "id": "s2",
@@ -2113,7 +2162,8 @@
       "demote_reason": null,
       "demoted_at": null,
       "commit_sha": "06ac85c70884f0b36470dd8e5cc896ce6d58fe61",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": false
     },
     {
       "id": "s3",
@@ -2146,7 +2196,8 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-18T20:09:22.091Z",
       "commit_sha": "4519d425c8fd51fb198e5af6ebad395290ab4572",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": false
     },
     {
       "id": "s4",
@@ -2182,7 +2233,8 @@
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-18T20:10:16.833Z",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": false
     },
     {
       "id": "s5",
@@ -2217,7 +2269,8 @@
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-18T20:11:09.035Z",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": false
     },
     {
       "id": "s6",
@@ -2246,7 +2299,8 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-18T20:11:20.732Z",
       "commit_sha": "6575707a8692d2086d05deaf1c08fdc0819e623f",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": false
     },
     {
       "id": "s7",
@@ -2279,7 +2333,8 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-18T20:12:12.702Z",
       "commit_sha": "3d29447c7ed1b747d0def5a8945e184c5b673caa",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": false
     },
     {
       "id": "s8",
@@ -2340,7 +2395,8 @@
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "s8",
       "shipped_via": "governed_ship_queue",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": false
     },
     {
       "id": "07",
@@ -2398,7 +2454,8 @@
       "unsolved": true,
       "escalation_required": true,
       "escalation_note": "HARD GATE: 3+ identical failures (codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/local/bin/node --input-type=module -e import \"file:///usr/src/app/routes). Automatic revival is disabled for this step until escalation_required is explicitly cleared by a real escalation action (external research + a second model, per founder directive 2026-07-26) -- this step will NOT auto-revive on its own again.",
-      "completed_at": "2026-08-01T05:49:33.715Z"
+      "completed_at": "2026-08-01T05:49:33.715Z",
+      "heal_unblocked": false
     },
     {
       "id": "08",
@@ -2415,7 +2472,8 @@
       "same_signature_count": 0,
       "commit_sha": "87a5d9b8b0eaed0d5e2a510f2c725316bcf55fbe",
       "last_attempt_at": "2026-08-01T05:49:47.294Z",
-      "completed_at": "2026-08-01T05:51:51.998Z"
+      "completed_at": "2026-08-01T05:51:51.998Z",
+      "heal_unblocked": false
     },
     {
       "id": "TALOA-P1-001",
@@ -2463,7 +2521,8 @@
       ],
       "source": "TALOA-OVERLAY-P1-0001 sealed Phase 1",
       "commit_sha": "d81e33939bd9e148995e92efbc2808ee691c4f70",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": false
     },
     {
       "id": "TALOA-P1-002",
@@ -2511,7 +2570,8 @@
       ],
       "source": "TALOA-OVERLAY-P1-0001 sealed Phase 1",
       "commit_sha": "d81e33939bd9e148995e92efbc2808ee691c4f70",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": false
     },
     {
       "id": "TALOA-P1-003",
@@ -2559,7 +2619,8 @@
       ],
       "source": "TALOA-OVERLAY-P1-0001 sealed Phase 1",
       "commit_sha": "d81e33939bd9e148995e92efbc2808ee691c4f70",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": false
     },
     {
       "id": "TALOA-P1-004",
@@ -2607,7 +2668,8 @@
       ],
       "source": "TALOA-OVERLAY-P1-0001 sealed Phase 1",
       "commit_sha": "d81e33939bd9e148995e92efbc2808ee691c4f70",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": false
     },
     {
       "id": "TALOA-P1-005",
@@ -2674,7 +2736,8 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-08-12T19:46:31.046Z"
+      "shipped_at": "2026-08-12T19:46:31.046Z",
+      "heal_unblocked": false
     },
     {
       "id": "TALOA-P1-006",
@@ -2741,7 +2804,8 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-08-12T19:46:31.046Z"
+      "shipped_at": "2026-08-12T19:46:31.046Z",
+      "heal_unblocked": false
     },
     {
       "id": "TALOA-P1-007",
@@ -2808,7 +2872,8 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-08-12T19:46:31.046Z"
+      "shipped_at": "2026-08-12T19:46:31.046Z",
+      "heal_unblocked": false
     },
     {
       "id": "TALOA-P1-008",
@@ -2865,7 +2930,8 @@
       "blocker_class": null,
       "demoted": false,
       "demote_reason": null,
-      "unblock_evidence": "commit 9b227dc9d6 is on origin/main and added this file; the compare API was read before the push propagated"
+      "unblock_evidence": "commit 9b227dc9d6 is on origin/main and added this file; the compare API was read before the push propagated",
+      "heal_unblocked": false
     },
     {
       "id": "TALOA-P1-009",
@@ -2912,7 +2978,8 @@
       ],
       "source": "TALOA-OVERLAY-P1-0001 sealed Phase 1",
       "same_signature_count": 0,
-      "commit_sha": "29d7adb4396d2f43a0b04c46529203aee8046f42"
+      "commit_sha": "29d7adb4396d2f43a0b04c46529203aee8046f42",
+      "heal_unblocked": false
     },
     {
       "id": "TALOA-P1-010",
@@ -2959,7 +3026,8 @@
       ],
       "source": "TALOA-OVERLAY-P1-0001 sealed Phase 1",
       "same_signature_count": 0,
-      "commit_sha": "1a772d69e1433210fbe2fc7e6cb4c6775dbbbee8"
+      "commit_sha": "1a772d69e1433210fbe2fc7e6cb4c6775dbbbee8",
+      "heal_unblocked": false
     },
     {
       "id": "TALOA-P1-011",
@@ -3008,7 +3076,8 @@
       ],
       "source": "TALOA-OVERLAY-P1-0001 sealed Phase 1",
       "same_signature_count": 0,
-      "commit_sha": "459cac91e93a75e13a943b273fdf837510a767e0"
+      "commit_sha": "459cac91e93a75e13a943b273fdf837510a767e0",
+      "heal_unblocked": false
     },
     {
       "id": "TALOA-P1-012",
@@ -3066,7 +3135,8 @@
       "last_error": null,
       "demoted": false,
       "demote_reason": null,
-      "blocker_class": null
+      "blocker_class": null,
+      "heal_unblocked": false
     },
     {
       "id": "TALOA-P1-013",
@@ -3116,7 +3186,8 @@
       "same_signature_count": 0,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-08-12T21:39:03.929Z",
-      "commit_sha": "c2e8f5c81b200eb43bfe94d94e3c4cadb6c5521a"
+      "commit_sha": "c2e8f5c81b200eb43bfe94d94e3c4cadb6c5521a",
+      "heal_unblocked": false
     },
     {
       "id": "TALOA-P1-014",
@@ -3164,7 +3235,8 @@
       ],
       "source": "TALOA-OVERLAY-P1-0001 sealed Phase 1",
       "same_signature_count": 0,
-      "commit_sha": "a8853d0de7637cc8a5cf53f83f38f4c2f110ff59"
+      "commit_sha": "a8853d0de7637cc8a5cf53f83f38f4c2f110ff59",
+      "heal_unblocked": false
     },
     {
       "id": "TALOA-P1-015",
@@ -3231,7 +3303,8 @@
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-08-12T19:55:01.919Z",
-      "unblock_evidence": "commit 9b227dc9d6 is on origin/main and added this file; the compare API was read before the push propagated"
+      "unblock_evidence": "commit 9b227dc9d6 is on origin/main and added this file; the compare API was read before the push propagated",
+      "heal_unblocked": false
     },
     {
       "id": "TALOA-BADGE-CHAIR-001",
@@ -3267,7 +3340,8 @@
       "proof": "file_contains installWebViewIfNeeded/chairReady/openChairDrawer on origin/main; factory-1 had falsely blocked this as NOT_ON_BLUEPRINT because it shipped a factory-2 file through ship-queue against the Phase 1 twin",
       "last_attempt_at": "2026-08-12T21:39:26.697Z",
       "last_error": null,
-      "unblock_evidence": "NOT_ON_BLUEPRINT was a false failure: the step is local_lane native work, not a TALOA-P1-NNN twin id. Code landed in e2fb6e275e."
+      "unblock_evidence": "NOT_ON_BLUEPRINT was a false failure: the step is local_lane native work, not a TALOA-P1-NNN twin id. Code landed in e2fb6e275e.",
+      "heal_unblocked": false
     },
     {
       "id": "TALOA-BADGE-VOICE-001",
@@ -3306,7 +3380,8 @@
       "last_attempt_at": "2026-08-12T21:51:22.919Z",
       "last_error": null,
       "unblock_evidence": "Same false NOT_ON_BLUEPRINT class as TALOA-BADGE-CHAIR-001. Code is on main; factory-2 binary built 2026-08-12T21:51:36Z.",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": false
     },
     {
       "id": "step-1",
@@ -3507,7 +3582,8 @@
       "shipped_via": "conductor_native_glue",
       "shipped_at": "2026-08-12T23:55:00.000Z",
       "proof": "Conductor authored native keep-alive (SO-001 allows native/). factory-2 LaunchAgent compiles on next native tree change.",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": false
     },
     {
       "id": "TALOA-SENTRY-LAYER-A-001",
@@ -3528,7 +3604,8 @@
       "shipped_via": "conductor_script",
       "shipped_at": "2026-08-12T23:55:00.000Z",
       "proof": "SO-001 allows scripts/CI. Layer B remains REGISTERED_NOT_IMPLEMENTED.",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": false
     },
     {
       "status": "done",
@@ -3608,7 +3685,8 @@
         }
       },
       "shipped_at": "2026-08-13T02:12:02.178Z",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": false
     },
     {
       "status": "done",
@@ -3661,7 +3739,8 @@
       "blueprint_step_id": "TALOA-S64-CAPREG-001",
       "same_signature_count": 0,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-08-13T02:12:29.737Z"
+      "shipped_at": "2026-08-13T02:12:29.737Z",
+      "heal_unblocked": false
     },
     {
       "status": "done",
@@ -3741,7 +3820,8 @@
           "content_sha256": "6b9f823281984262dc04c52bcf704f7ad6906db6270adf64c30aec3a9eba206f"
         }
       },
-      "shipped_at": "2026-08-13T02:12:39.360Z"
+      "shipped_at": "2026-08-13T02:12:39.360Z",
+      "heal_unblocked": false
     },
     {
       "status": "done",
@@ -3797,7 +3877,8 @@
       "escalation_required": false,
       "failure_signature": null,
       "completed_at": "2026-08-13T06:36:12.188Z",
-      "done_reason": "already mounted live at /api/v1/capabilities; github_commit_failed was a false block"
+      "done_reason": "already mounted live at /api/v1/capabilities; github_commit_failed was a false block",
+      "heal_unblocked": false
     },
     {
       "id": "TALOA-G0-SCANNERS-001",
@@ -3820,7 +3901,8 @@
       "shipped_via": "conductor_script",
       "shipped_at": "2026-08-13T00:35:00.000Z",
       "proof": "SO-001 allows scripts/CI. Live caller is githooks/pre-commit section 0b.",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "heal_unblocked": false
     },
     {
       "id": "col001-reg-service",
@@ -4246,7 +4328,8 @@
         }
       },
       "shipped_at": "2026-08-13T06:01:56.952Z",
-      "commit_sha": "f80a2bbd77f46d4e7cf145a865ef22c448704033"
+      "commit_sha": "f80a2bbd77f46d4e7cf145a865ef22c448704033",
+      "heal_unblocked": false
     },
     {
       "id": "COLLECTIBLES-V1-TWIN-SERVICE-001",
@@ -4501,7 +4584,8 @@
       "same_signature_count": 0,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-08-13T06:53:58.348Z",
-      "commit_sha": "0db441c4acd473be015881a9e2a584aec310fc28"
+      "commit_sha": "0db441c4acd473be015881a9e2a584aec310fc28",
+      "heal_unblocked": false
     },
     {
       "status": "done",
@@ -4575,7 +4659,7 @@
       },
       "last_attempt_at": "2026-08-13T06:54:16.061Z",
       "last_error": null,
-      "heal_unblocked": true,
+      "heal_unblocked": false,
       "heal_reason": "observation_claim_wire_export_present_2026-08-13",
       "same_signature_count": 0
     },
@@ -4637,11 +4721,11 @@
       "duration_ms": 15745,
       "tokens_used": 0,
       "shipped_via": "governed_ship_queue",
-      "heal_unblocked": true,
+      "heal_unblocked": false,
       "heal_reason": "native_swift_tokens_0_claim_2026-08-13"
     },
     {
-      "status": "pending",
+      "status": "done",
       "founder_gated": false,
       "attempts": 0,
       "action_type": "write_file_exact",
@@ -4663,15 +4747,15 @@
         "@ssot docs/products/universal-overlay/PRODUCT_HOME.md"
       ],
       "blueprint_step_id": "TALOA-S64-AUTH-ENVELOPE-001",
-      "commit_sha": null,
+      "commit_sha": "b860a562d827f03912f41ad4fd208fbc06b05af1",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-13T07:45:23.034Z",
+      "last_attempt_at": "2026-08-13T08:06:19.022Z",
       "last_error": null,
-      "started_at": "2026-08-13T07:45:18.369Z",
+      "started_at": "2026-08-13T08:06:19.022Z",
       "blocker_class": null,
       "park_until": null,
-      "heal_unblocked": true,
+      "heal_unblocked": false,
       "heal_reason": "authority_table_is_agent_task_authority_2026-08-13",
       "demoted": false,
       "demote_reason": null,
@@ -4717,8 +4801,8 @@
           "content_sha256": "39d843ccdbcc0ca4dd495e881aec90b4b4f8b2c9bd7e8c6b30b733095ede83b0"
         }
       },
-      "shipped_at": "2026-08-13T08:06:22.617Z",
-      "duration_ms": 12850,
+      "shipped_at": "2026-08-13T08:06:31.854Z",
+      "duration_ms": 12832,
       "tokens_used": 0,
       "shipped_via": "governed_ship_queue"
     },
