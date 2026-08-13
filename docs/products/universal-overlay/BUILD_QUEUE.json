@@ -4251,8 +4251,8 @@
     {
       "id": "COLLECTIBLES-V1-TWIN-SERVICE-001",
       "product_id": "collectibles",
-      "status": "blocked",
-      "attempts": 1,
+      "status": "pending",
+      "attempts": 0,
       "target_file": "services/collectibles/twin-service.js",
       "action_type": "author_then_write",
       "depends_on": [
@@ -4290,8 +4290,8 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-13T07:58:06.970Z",
-      "last_error": "github_commit_failed_after_local_ship",
+      "last_attempt_at": null,
+      "last_error": null,
       "last_attempt": null,
       "revive_count": 0,
       "revived_at": "2026-08-13T06:17:39.524Z",
@@ -4311,7 +4311,7 @@
       "failure_signature": "github_commit_failed_after_local_ship",
       "heal_unblocked": true,
       "heal_reason": "identity_status_needle_2026-08-13",
-      "started_at": "2026-08-13T07:58:00.516Z",
+      "started_at": "2026-08-13T07:51:44.070Z",
       "escalation_class": "same_signature_repeat"
     },
     {
