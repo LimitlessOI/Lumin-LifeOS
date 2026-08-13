@@ -121,3 +121,38 @@ export function classifyFounderIntent(prompt = '', ctx = {}) {
 
   return { intent: 'unknown', lane: 'default', source: 'fallback' };
 }
+
+/**
+ * Classifies the founder's build intent, specifically 'drawer_direct_build' vs. 'counsel/essay text'.
+ * Uses callCouncilMember for AI-driven classification.
+ * @param {string} prompt The founder's natural language prompt.
+ * @param {object} ctx Context object, expected to contain `callCouncilMember` function.
+ * @returns {object} A structured object indicating the classified intent, e.g., { intent: 'drawer_direct_build', lane: 'workflow-content' }
+ */
+export async function classifyFounderBuildIntent(prompt = '', ctx = {}) {
+  const p = String(prompt || '').trim();
+
+  if (typeof ctx?.callCouncilMember !== 'function') {
+    console.warn('classifyFounderBuildIntent: callCouncilMember function not provided in context.');
+    return { intent: 'unknown', lane: 'default', source: 'missing_council_member' };
+  }
+
+  try {
+    const councilResult = await ctx.callCouncilMember('founder_intent_classifier', p);
+
+    const intent = councilResult?.intent || 'unknown';
+    const lane = (intent === 'drawer_direct_build' || intent === 'build_async') ? 'workflow-content' : 'counsel/essay';
+    const channel = (intent === 'drawer_direct_build' || intent === 'build_async') ? 'build_async' : 'counsel';
+
+    return {
+      intent,
+      lane,
+      channel,
+      source: 'council_founder_intent_classifier',
+      rawCouncilResult: councilResult, // For debugging/transparency
+    };
+  } catch (error) {
+    console.error('Error classifying founder build intent with Council Member:', error);
+    return { intent: 'unknown', lane: 'default', source: 'council_error', error: error.message };
+  }
+}
