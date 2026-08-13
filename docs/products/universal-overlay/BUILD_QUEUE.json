@@ -5854,9 +5854,9 @@
       "shipped_via": "governed_ship_queue"
     },
     {
-      "status": "pending",
+      "status": "blocked",
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "action_type": "write_file_exact",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
@@ -5879,9 +5879,9 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing:/api/v1/collectibles; behavior_assertion_failed; behavior_proof",
-      "started_at": "2026-08-13T20:44:52.290Z",
+      "last_attempt_at": "2026-08-13T20:46:17.266Z",
+      "last_error": "SLICE_COST_UNTRACKED: tokens_used required on every built slice (0 allowed for exact/no-codegen)",
+      "started_at": "2026-08-13T20:45:53.450Z",
       "same_signature_count": 0,
       "revive_count": 1,
       "revived_at": "2026-08-13T20:45:53.421Z",
@@ -6545,7 +6545,8 @@
           "content_sha256": "19fb7255d0965b1d7a62f8748aeff11393818462a466ccd5defc9cb61d25bde7"
         }
       },
-      "shipped_at": "2026-08-13T20:46:09.413Z"
+      "shipped_at": "2026-08-13T20:46:09.413Z",
+      "duration_ms": 23815
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
