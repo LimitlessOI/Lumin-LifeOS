@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T23:18:25.428Z",
+  "generated_at": "2026-08-13T23:25:08.819Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13590,
+  "file_count": 13591,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -39475,6 +39475,13 @@
       "indexed_at": "2026-08-13T20:32:30.627Z"
     },
     {
+      "path": "db/migrations/20260813_collectibles_wants_v2_swap_physical.sql",
+      "synopsis": "Fixes 20260813_collectibles_wants_v2.sql. That migration made",
+      "bytes": 2349,
+      "mtime": "2026-08-13T23:24:20.474Z",
+      "indexed_at": "2026-08-13T23:25:08.819Z"
+    },
+    {
       "path": "db/migrations/20260813_collectibles_wants_v2.sql",
       "synopsis": "Collectibles V2 Want Graph — canonical `wants` table (SCHEMA_CONTRACTS.md §11)",
       "bytes": 1027,
@@ -44426,9 +44433,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 589996,
-      "mtime": "2026-08-13T23:18:17.536Z",
-      "indexed_at": "2026-08-13T23:18:25.428Z"
+      "bytes": 591629,
+      "mtime": "2026-08-13T23:24:56.154Z",
+      "indexed_at": "2026-08-13T23:25:08.819Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -44958,9 +44965,9 @@
     {
       "path": "docs/products/collectibles/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Collectibles (LimitlessOS)",
-      "bytes": 10327,
-      "mtime": "2026-08-13T23:18:17.536Z",
-      "indexed_at": "2026-08-13T23:18:25.428Z"
+      "bytes": 10338,
+      "mtime": "2026-08-13T23:24:36.270Z",
+      "indexed_at": "2026-08-13T23:25:08.819Z"
     },
     {
       "path": "docs/products/collectibles/SCHEMA_CONTRACTS.md",
