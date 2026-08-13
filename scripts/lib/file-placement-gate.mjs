@@ -201,8 +201,9 @@ export function evaluateFilePlacement(fileEntries, repoRoot = ROOT, { trackedSet
     if (!rel.endsWith('BUILD_QUEUE.json')) continue;
     if (entry?.delete === true || entry?.op === 'delete' || entry?.sha === null) continue;
     if (!isLiveQueueLocation(rel)) continue;
-    const isNew = !tracked.has(rel);
-    if (!isCanonicalLiveQueuePath(rel) || isNew) {
+    // Canonical manufacturing queue may always be updated (even if trackedSet is
+    // incomplete on Railway). Every other live-location BUILD_QUEUE.json is forbidden.
+    if (!isCanonicalLiveQueuePath(rel)) {
       findings.push({
         path: rel,
         severity: 'error',

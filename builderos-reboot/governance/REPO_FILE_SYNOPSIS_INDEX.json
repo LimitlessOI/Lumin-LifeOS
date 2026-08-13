@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T05:23:57.945Z",
+  "generated_at": "2026-08-13T05:25:30.116Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13474,
   "files": [
@@ -43868,8 +43868,8 @@
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
       "bytes": 575950,
-      "mtime": "2026-08-13T05:23:57.945Z",
-      "indexed_at": "2026-08-13T05:23:57.945Z"
+      "mtime": "2026-08-13T05:25:30.116Z",
+      "indexed_at": "2026-08-13T05:25:30.116Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -78000,9 +78000,9 @@
     {
       "path": "scripts/lib/file-placement-gate.mjs",
       "synopsis": "File-placement authority gate — blocks new protected source files",
-      "bytes": 9214,
-      "mtime": "2026-08-13T05:23:57.945Z",
-      "indexed_at": "2026-08-13T05:23:57.945Z",
+      "bytes": 9338,
+      "mtime": "2026-08-13T05:25:30.116Z",
+      "indexed_at": "2026-08-13T05:25:30.116Z",
       "ssot": [
         "tag pointing to a registered product home or approved",
         "docs/products/builderos/PRODUCT_HOME.md"
@@ -93216,9 +93216,9 @@
     {
       "path": "services/build-queue-core.js",
       "synopsis": "Shared BUILD_QUEUE.json primitives plus the one-queue lock:",
-      "bytes": 14468,
-      "mtime": "2026-08-13T05:23:57.945Z",
-      "indexed_at": "2026-08-13T05:23:57.945Z",
+      "bytes": 14419,
+      "mtime": "2026-08-13T05:25:30.116Z",
+      "indexed_at": "2026-08-13T05:25:30.116Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

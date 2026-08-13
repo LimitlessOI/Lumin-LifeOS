@@ -117,8 +117,7 @@ export function assertNoNewBuildQueueInCommit(fileEntries, { trackedSet = new Se
     if (!rel.endsWith('BUILD_QUEUE.json')) continue;
     if (!isLiveQueueLocation(rel) && !rel.endsWith('/BUILD_QUEUE.json')) continue;
     if (!isLiveQueueLocation(rel)) continue;
-    const isNew = !trackedSet.has(rel);
-    if (!isCanonicalLiveQueuePath(rel) || isNew) {
+    if (!isCanonicalLiveQueuePath(rel)) {
       blocked.push(rel);
     }
   }
