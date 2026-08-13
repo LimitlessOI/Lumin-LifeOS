@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T07:50:32.102Z",
+  "generated_at": "2026-08-13T07:51:00.361Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13542,
   "files": [
@@ -33101,9 +33101,9 @@
     {
       "path": "config/overlay-print-sequence.js",
       "synopsis": "Sealed overlay manufacturing sequence — the factory may not invent",
-      "bytes": 9385,
-      "mtime": "2026-08-13T07:43:24.720Z",
-      "indexed_at": "2026-08-13T07:43:24.720Z",
+      "bytes": 9417,
+      "mtime": "2026-08-13T07:51:00.361Z",
+      "indexed_at": "2026-08-13T07:51:00.361Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md",
         "docs/products/universal-overlay/PRODUCT_HOME.md\". Overlay print §64 item 3: Android Universal Body adapter. Export exactly: export function createAndroidBodyAdapter(deps). Return { observe(scope), act(action), verify(goal, expected) }. observe MUST call deps.dumpVisibleText (injected) then CALL redactObservation from \"../drive-sensitive-content-filter.js\" on that text before returning. act MUST call deps.enqueueCommand. verify MUST use independent evidence from a fresh observe(). Do NOT rebuild runBrowserGoal. Do NOT invent a table. ES module. Do not edit server.js.',"
@@ -44336,8 +44336,8 @@
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
       "bytes": 582391,
-      "mtime": "2026-08-13T07:47:55.151Z",
-      "indexed_at": "2026-08-13T07:47:55.151Z"
+      "mtime": "2026-08-13T07:51:00.361Z",
+      "indexed_at": "2026-08-13T07:51:00.361Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",

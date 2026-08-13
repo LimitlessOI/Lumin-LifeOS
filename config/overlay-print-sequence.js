@@ -76,7 +76,7 @@ export const OVERLAY_PRINT_SEQUENCE = Object.freeze([
     id: 'TALOA-S64-AUTH-ENVELOPE-001',
     target_file: 'services/taloa/task-authorization-envelope.js',
     sandbox_boundary: 'services/taloa/**',
-    task: 'JSDoc @ssot docs/products/universal-overlay/PRODUCT_HOME.md. Overlay print §64 item 6: Task Authorization Envelope. Export createTaskAuthorizationEnvelope({ pool, logger }). Persist on existing authority ledger — do not invent a table.',
+    task: 'JSDoc @ssot docs/products/universal-overlay/PRODUCT_HOME.md. Overlay print §64 item 6: Task Authorization Envelope. Export createTaskAuthorizationEnvelope({ pool, logger }). Persist on existing agent_task_authority — do not invent a table. Do not import types/logger.',
     spec: 'Blueprint §23. Reuse authority_ledger (TALOA-P1-002).',
     expected_exports: ['createTaskAuthorizationEnvelope'],
     file_contains: ['createTaskAuthorizationEnvelope', 'authority_ledger'],
