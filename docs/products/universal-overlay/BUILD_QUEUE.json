@@ -4502,9 +4502,9 @@
       "commit_sha": "0db441c4acd473be015881a9e2a584aec310fc28"
     },
     {
-      "status": "pending",
+      "status": "blocked",
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "action_type": "write_file_exact",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
@@ -4562,7 +4562,12 @@
           "content_sha256": "f4d99ad6e76f8e8405b57989bb0e2ee0c8c7ec6adca69c1a5085726f791e1623"
         }
       },
-      "shipped_at": "2026-08-13T06:54:09.126Z"
+      "shipped_at": "2026-08-13T06:54:09.126Z",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-08-13T06:54:16.061Z",
+      "last_error": "artifact_missing_after_ship: artifact_proof_failed: missing_exports:makeAndroidBody"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
