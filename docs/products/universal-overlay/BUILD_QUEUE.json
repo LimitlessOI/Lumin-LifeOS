@@ -3521,16 +3521,16 @@
       "proof": "SO-001 allows scripts/CI. Layer B remains REGISTERED_NOT_IMPLEMENTED."
     },
     {
-      "status": "pending",
+      "status": "blocked",
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "action_type": "author_then_write",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_error": "NOT_ON_BLUEPRINT",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion_failed; behavior_proof",
       "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md §64 / §45a / §15 / §44a",
       "id": "TALOA-S64-CAPREG-COL-001",
       "target_file": "db/migrations/20260813_overlay_devices_capabilities.sql",
@@ -3558,7 +3558,7 @@
         }
       ],
       "blueprint_step_id": "TALOA-S64-CAPREG-COL-001",
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-08-13T00:54:11.095Z",
       "last_attempt": null,
       "revive_count": 1,
       "revived_at": "2026-08-13T00:52:25.995Z",
