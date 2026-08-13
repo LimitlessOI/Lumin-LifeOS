@@ -4641,9 +4641,9 @@
       "heal_reason": "native_swift_tokens_0_claim_2026-08-13"
     },
     {
-      "status": "pending",
+      "status": "blocked",
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "action_type": "author_then_write",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
@@ -4666,9 +4666,9 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-13T07:45:23.034Z",
-      "last_error": null,
-      "started_at": "2026-08-13T07:45:18.369Z",
+      "last_attempt_at": "2026-08-13T07:56:08.088Z",
+      "last_error": "github_commit_failed_after_local_ship",
+      "started_at": "2026-08-13T07:56:03.183Z",
       "blocker_class": null,
       "park_until": null,
       "heal_unblocked": true,
@@ -4679,7 +4679,7 @@
       "skip_reason": null,
       "escalation_required": false,
       "revive_count": 0,
-      "same_signature_count": 0,
+      "same_signature_count": 1,
       "behavior_assertions": [
         {
           "type": "exports_smoke",
@@ -4689,7 +4689,9 @@
           ],
           "assertion_id": "expected_exports:services/taloa/task-authorization-envelope.js"
         }
-      ]
+      ],
+      "failure_signature": "github_commit_failed_after_local_ship",
+      "escalation_class": "same_signature_repeat"
     },
     {
       "status": "pending",
@@ -4841,8 +4843,8 @@
       },
       "exactness": {
         "sealed": true,
-        "sealed_at": "2026-08-13T07:55:30.545Z",
-        "shipped_at": "2026-08-13T07:55:30.545Z",
+        "sealed_at": "2026-08-13T07:56:30.243Z",
+        "shipped_at": "2026-08-13T07:56:30.243Z",
         "commit_sha": null,
         "content_sha256": "4d34e1d2088564f729449f9b6b721c4a8d8c39af99ea08473b423725ace1947e",
         "target_file": "native/macos-overlay/MacOsBodyAdapter.swift",
@@ -4939,7 +4941,7 @@
           "content_sha256": "4d34e1d2088564f729449f9b6b721c4a8d8c39af99ea08473b423725ace1947e"
         }
       },
-      "shipped_at": "2026-08-13T07:55:30.545Z"
+      "shipped_at": "2026-08-13T07:56:30.243Z"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
