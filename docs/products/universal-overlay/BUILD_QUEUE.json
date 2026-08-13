@@ -5637,9 +5637,9 @@
       "shipped_via": "governed_ship_queue"
     },
     {
-      "status": "pending",
+      "status": "blocked",
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "action_type": "author_then_write",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
@@ -5664,7 +5664,13 @@
         "createMediaEvidenceStore",
         "needs_review"
       ],
-      "blueprint_step_id": "COLLECTIBLES-V1-CAPTURE-API-001"
+      "blueprint_step_id": "COLLECTIBLES-V1-CAPTURE-API-001",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-08-13T18:52:45.774Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 0b is < 30% of existing 1463b. underlying: import_resolution_failed:openai_builder_mini: Command failed: /usr/local/bin/node --input-type=module -e import \"file:///usr",
+      "started_at": "2026-08-13T18:52:00.441Z"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
