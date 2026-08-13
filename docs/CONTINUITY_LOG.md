@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Documentation — CONTINUITY LOG. -->
 
+## 2026-08-13 — Collectibles queue twin fixed (factory-3 can load)
+
+Factory-3 was seeing pending Collectibles steps then returning `no_shippable_steps` because tip could not parse the queue: wrong schema (`build_queue_v1` vs required `product_build_queue_v1`) and missing `task` / registered twin ids. Repaired `docs/products/collectibles/BUILD_QUEUE.json` as `PRODUCT-COLLECTIBLES-BUILD-QUEUE-TWIN-V1`. Overlay stays factory-1/2; Collectibles stays factory-3.
+
 ## 2026-08-12 — factory-3 is Collectibles (not overlay)
 
 Adam correction: the third factory is for Collectibles, not overlay. Reassigned factory-3 owns to `services/collectibles/` + mtg bootstrap + collectibles routes/public/docs. Opened `docs/products/collectibles/BUILD_QUEUE.json` (V1 foundation steps). Live-queue lock now allows overlay + collectibles only. factory-1/2 stay overlay. LaunchAgent `com.lumin.factory-3-lane` ships via tip `factory_id=factory-3`.

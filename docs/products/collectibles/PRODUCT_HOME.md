@@ -16,7 +16,7 @@
 | **Blueprint status** | `BLUEPRINT_READY_FOR_CONSENSUS` |
 | **Factory lane** | `factory-3` (`com.lumin.factory-3-lane`) |
 | **Build queue** | `docs/products/collectibles/BUILD_QUEUE.json` |
-| **Last Updated** | 2026-08-12 — factory-3 assigned to Collectibles; V1 BUILD_QUEUE opened; manufacturing lane live. Prior: monetization resolved; master blueprint. |
+| **Last Updated** | 2026-08-13 — BUILD_QUEUE twin repaired (`product_build_queue_v1` + `PRODUCT-COLLECTIBLES-BUILD-QUEUE-TWIN-V1`) so factory-3 can load/ship. Prior: factory-3 lane + V1 slices. |
 
 ---
 
@@ -49,7 +49,7 @@ Marketplace, Arena, insurance, and partner custody consume authorized projection
 | Master blueprint | Authored 2026-08-12 — ready for consensus |
 | Runtime product code | Not started under `collectibles` ownership |
 | Bootstrap source | LifeOS MTG cataloger (adapter seed) |
-| Manufacturing | Blocked until consensus + V1 mission pack |
+| Manufacturing | factory-3 live on V1 BUILD_QUEUE twin (foundation slices) |
 
 ### Bootstrap assets (LifeOS-owned until migration)
 
@@ -101,7 +101,7 @@ Every version must be independently valuable. Do not manufacture later versions 
 
 ## Agent handoff
 
-**Next:** Consensus review → V1 mission pack (`PRODUCT-COLLECTIBLES-V1-VAULT-0001` or equivalent) → migrate/generalize MTG cataloger into CollectibleTwin + MTG adapter.
+**Next:** Factory-3 ships `COLLECTIBLES-V1-ADAPTER-INTERFACE-001` → twin service → MTG adapter → routes → acceptance. Consensus still open for broader V2+; V1 foundation is manufacturing now.
 
 **Do not:** Invent product architecture during manufacturing; invent MarketplaceCard / ArenaCard identities; treat play entitlement as IP permission; auto-list without permission; optimize Vault for engagement spam.
 
@@ -109,6 +109,7 @@ Every version must be independently valuable. Do not manufacture later versions 
 
 | Date | What | Why | Evidence | Next |
 |---|---|---|---|---|
+| 2026-08-13 | **Collectibles BUILD_QUEUE twin repaired.** Root cause of factory-3 `no_shippable_steps`: schema was `build_queue_v1` (loader requires `product_build_queue_v1`) and steps lacked `task` + registered `blueprint_id`. Fixed as `PRODUCT-COLLECTIBLES-BUILD-QUEUE-TWIN-V1` with mission `PRODUCT-collectibles`. | Founder: Collectibles must work on factory-3. | `docs/products/collectibles/BUILD_QUEUE.json` | Tip redeploy → factory-3 ship adapter interface |
 | 2026-08-12 | **factory-3 = Collectibles manufacturing lane.** Owns `services/collectibles/`, mtg-card bootstrap, collectibles routes/public/docs. V1 BUILD_QUEUE opened (adapter → twin → mtg adapter → routes → acceptance). Overlay stays factory-1/2. Live-queue lock carved to allow overlay + collectibles only. | Founder: 3rd will not be for overlay but Collectibles; want it working. | `LANE_ASSIGNMENT.json` + `BUILD_QUEUE.json` + LaunchAgent | Factory-3 ship of `COLLECTIBLES-V1-ADAPTER-INTERFACE-001` |
 | 2026-08-12 | **Monetization section resolved** after founder merge: constitutional fee-display law; V1 range vs V3+ expected net; no secret listing; hard non-monetization list; V2 Quiet Matching not locked as paid premium — basic matching must not be degraded for subscription pressure; recommendation-integrity rule. | Founder: ~90–95% consensus with Cursor draft; adopt sharper prohibitions; unlock V2 premium-matching assumption. | `MONETIZATION.md` + MASTER §13 + FD-R9/R10/FD-M2 | Consensus → V1 mission pack |
 | 2026-08-12 | Master blueprint set authored under `docs/products/collectibles/`; status `BLUEPRINT_READY_FOR_CONSENSUS`. No product code. | Founder mandate: convert completed brainstorm into implementation-ready blueprint; two-builder behavioral equivalence. | Document tree + `AUDIT_RECEIPT.md` | Consensus → V1 mission pack |
