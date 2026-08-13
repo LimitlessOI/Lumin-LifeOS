@@ -84,3 +84,35 @@ test('never downgrades a repo done step to stale mem pending', () => {
   assert.equal(s2.commit_sha, 'abc');
   assert.equal(s2.attempts, 1);
 });
+
+test('repo heal_unblocked pending beats stale mem skipped/demoted', () => {
+  const repo = {
+    steps: [{
+      id: 'COLLECTIBLES-V1-TWIN-SERVICE-001',
+      status: 'pending',
+      heal_unblocked: true,
+      revive_count: 0,
+      demoted: false,
+      last_error: null,
+      task: 'Author twin',
+    }],
+  };
+  const mem = {
+    steps: [{
+      id: 'COLLECTIBLES-V1-TWIN-SERVICE-001',
+      status: 'skipped',
+      revive_count: 6,
+      demoted: true,
+      demote_reason: 'revive_exhausted:STEP_STATUS_FORBIDDEN',
+      last_error: 'STEP_STATUS_FORBIDDEN',
+      task: 'Author twin',
+    }],
+  };
+  const merged = mergeQueueRuntimeStatus(repo, mem);
+  const step = merged.steps.find((s) => s.id === 'COLLECTIBLES-V1-TWIN-SERVICE-001');
+  assert.equal(step.status, 'pending');
+  assert.equal(step.demoted, false);
+  assert.equal(step.heal_unblocked, true);
+  assert.equal(step.revive_count, 0);
+  assert.equal(step.last_error, null);
+});

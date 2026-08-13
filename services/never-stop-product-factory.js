@@ -10,7 +10,7 @@ import { getActiveQueueItem, isQueueItemIncomplete } from './bp-priority-complet
 import { loadPointBTarget } from './point-b-target-lite.js';
 import { executeIntakeBlueprint } from './intake-blueprint-executor.js';
 import { SOCIALMEDIAOS_INTAKE_SESSION } from './lifeos-mission-pipeline-executor.js';
-import { loadBuildQueue, normalizeQueue, selectNextStep, runNextStep, persistQueue, queueSummary, queuePathForProduct, reviveStaleBlockedSteps, evaluateModuleHealthForStep, evaluateStepExpectations, STEP_STATUS, skipNonBlueprintSlices, LIVE_BUILD_QUEUE_PRODUCT, assertNoSecondLiveQueueOnDisk } from './product-build-orchestrator.js';
+import { loadBuildQueue, normalizeQueue, selectNextStep, runNextStep, persistQueue, queueSummary, queuePathForProduct, reviveStaleBlockedSteps, evaluateModuleHealthForStep, evaluateStepExpectations, STEP_STATUS, skipNonBlueprintSlices, prepareOverlayManufacturingQueue, LIVE_BUILD_QUEUE_PRODUCT, assertNoSecondLiveQueueOnDisk, overlayPrintStillOpen } from './product-build-orchestrator.js';
 import { proveDeployServesSha, waitForDeploySha } from './deploy-truth.js';
 import { enforceClaim, toWatchlist } from './truth-ladder.js';
 import { extractCorpusBacklog, backlogSignature, planBuildQueue } from './build-queue-planner.js';
@@ -99,13 +99,7 @@ export function loadExclusiveHoldProduct() {
 }
 
 export function exclusivePrintWorkOpen(queue) {
-  if (!queue || !Array.isArray(queue.steps)) return false;
-  return queue.steps.some((s) => {
-    if (!PRINT_STEP_ID.test(String(s.id || ''))) return false;
-    if (s.status === STEP_STATUS.DONE || s.status === STEP_STATUS.SKIPPED) return false;
-    if (String(s.skip_reason || '').startsWith('off_print')) return false;
-    return true;
-  });
+  return overlayPrintStillOpen(queue);
 }
 
 export function holdToExclusiveProduct(items, exclusiveId, _exclusiveQueue) {
@@ -476,7 +470,12 @@ export function discoverBuildQueueWork() {
     if (!fs.existsSync(queuePath)) continue;
     try {
       const queue = loadBuildQueue(productId);
-      skipNonBlueprintSlices(queue);
+      if (productId === LIVE_BUILD_QUEUE_PRODUCT) {
+        const { skipped, enrolled } = prepareOverlayManufacturingQueue(queue);
+        if ((skipped && skipped.length) || enrolled) persistQueue(queue);
+      } else {
+        skipNonBlueprintSlices(queue);
+      }
       if (productId === exclusiveId) exclusiveQueue = queue;
       // Do NOT revive on discover — revive mutates blocked→pending and schedules
       // thrashers ahead of real pending blueprint steps. Revive only at execute.
@@ -525,7 +524,12 @@ export async function discoverBuildQueueWorkFresh() {
     if (!fs.existsSync(queuePath)) continue;
     try {
       const queue = await loadBuildQueuePreferRemote(productId);
-      skipNonBlueprintSlices(queue);
+      if (productId === LIVE_BUILD_QUEUE_PRODUCT) {
+        const { skipped, enrolled } = prepareOverlayManufacturingQueue(queue);
+        if ((skipped && skipped.length) || enrolled) persistQueue(queue);
+      } else {
+        skipNonBlueprintSlices(queue);
+      }
       if (productId === priorityList[0] || productId === exclusiveId) {
         reviveStaleBlockedSteps(queue);
       }
@@ -592,6 +596,11 @@ export function discoverPlanWork() {
     // non-gated work — re-plans from its corpus when new work has been documented.
     let queue;
     try { queue = loadBuildQueue(productId); } catch { continue; }
+    if (productId === LIVE_BUILD_QUEUE_PRODUCT) {
+      const { skipped, enrolled } = prepareOverlayManufacturingQueue(queue);
+      if ((skipped && skipped.length) || enrolled) persistQueue(queue);
+      continue;
+    }
     const steps = Array.isArray(queue.steps) ? queue.steps : [];
     if (steps.length === 0) continue;
     const allDone = steps.every((s) => s.status === STEP_STATUS.DONE);
@@ -1070,6 +1079,7 @@ const STATUS_RANK = Object.freeze({
   building: 1,
   blocked: 2,
   founder_gated: 3,
+  skipped: 3,
   done: 4,
   complete: 4,
 });
@@ -1109,6 +1119,25 @@ export function mergeQueueRuntimeStatus(repoQueue, memQueue) {
     // be downgraded by a stale in-memory pending snapshot.
     const memRevived = (memStep.revive_count || 0) > (repoStep.revive_count || 0);
     const healDowngrade = memStep.heal_unblocked === true && memStep.status === STEP_STATUS.PENDING;
+    // Founder/heal unskip on GitHub (repo pending + heal_unblocked) must beat a
+    // stale container skipped/blocked/demoted copy — otherwise one-queue multi-
+    // project resets never take effect on Railway.
+    const repoHealPending =
+      repoStep.heal_unblocked === true
+      && String(repoStep.status || '').toLowerCase() === STEP_STATUS.PENDING;
+    if (repoHealPending) {
+      return {
+        ...repoStep,
+        heal_unblocked: true,
+        demoted: false,
+        demote_reason: null,
+        demoted_at: null,
+        skip_reason: null,
+        escalation_required: false,
+        revive_count: typeof repoStep.revive_count === 'number' ? repoStep.revive_count : 0,
+        last_error: repoStep.last_error ?? null,
+      };
+    }
     // Stale mem pending/building must not clobber a more-advanced repo status,
     // unless the self-healer has proven the repo status is a false-done.
     if (repoRank > memRank && !(memRevived && repoStep.status === STEP_STATUS.BLOCKED) && !healDowngrade) {

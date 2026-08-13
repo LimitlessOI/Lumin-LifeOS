@@ -216,7 +216,7 @@
     },
     {
       "id": "5",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "public/overlay/moduleRouter.js",
       "task": "build fluid UI context router",
       "spec": "Route UI context based on URL patterns for assembled view logic.",
@@ -257,7 +257,8 @@
       "escalation_required": true,
       "escalation_note": "M2PT-005B retroactive re-triage: stuck in revive-thrash before same_signature_count tracking was fixed (b3d9c838e). revive_count was already >=3 under the old broken tracking -- escalating directly rather than letting it silently re-thrash for several more cycles once never-stop resumes.",
       "escalated_by": "path-to-ten-retriage-stuck-steps.mjs",
-      "escalated_at": "2026-07-31T18:40:13.631Z"
+      "escalated_at": "2026-07-31T18:40:13.631Z",
+      "skip_reason": "off_print — one queue may only carry slices pulled from authorized product blueprints"
     },
     {
       "id": "6",
@@ -3743,7 +3744,7 @@
       "shipped_at": "2026-08-13T02:12:39.360Z"
     },
     {
-      "status": "skipped",
+      "status": "done",
       "founder_gated": false,
       "attempts": 1,
       "action_type": "author_then_write",
@@ -3785,7 +3786,7 @@
       "revived_at": "2026-08-13T03:40:13.614Z",
       "no_op": null,
       "pre_existing": null,
-      "demoted": true,
+      "demoted": false,
       "demote_reason": "revive_exhausted:github_commit_failed_after_local_ship",
       "demoted_at": "2026-08-13T06:01:52.986Z",
       "park_until": null,
@@ -3794,7 +3795,9 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "escalation_required": false,
-      "failure_signature": null
+      "failure_signature": null,
+      "completed_at": "2026-08-13T06:36:12.188Z",
+      "done_reason": "already mounted live at /api/v1/capabilities; github_commit_failed was a false block"
     },
     {
       "id": "TALOA-G0-SCANNERS-001",
@@ -4133,7 +4136,7 @@
     },
     {
       "id": "taloa-capreg-001",
-      "status": "pending",
+      "status": "skipped",
       "target_file": "scripts/register-taloa-s64-capreg.mjs",
       "task": "Register specific TALOA capability TALOA-S64-CAPREG-REGISTER-001",
       "spec": "Create a Node.js script to programmatically register the TALOA capability 'TALOA-S64-CAPREG-REGISTER-001' by importing and calling the 'registerCapability' function from the existing 'services/taloa/capability-registry-service.js'. The script should execute and ensure the capability is persisted in the database via the service.",
@@ -4162,11 +4165,12 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "skip_reason": "off_print — one queue may only carry slices pulled from authorized product blueprints"
     },
     {
       "id": "step-5",
-      "status": "pending",
+      "status": "skipped",
       "target_file": "native/macos-overlay/ApplicationContextMonitor.swift",
       "task": "Implement macOS active application context monitor",
       "spec": "Develop a native Swift component for the macOS overlay that continuously monitors the currently active application and its essential context (e.g., bundle ID, window title), making this information available for the overlay system.",
@@ -4177,7 +4181,8 @@
         "class ApplicationContextMonitor"
       ],
       "design_review_flagged": true,
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "skip_reason": "off_print — one queue may only carry slices pulled from authorized product blueprints"
     },
     {
       "id": "COLLECTIBLES-V1-ADAPTER-INTERFACE-001",
@@ -4246,8 +4251,8 @@
     {
       "id": "COLLECTIBLES-V1-TWIN-SERVICE-001",
       "product_id": "collectibles",
-      "status": "skipped",
-      "attempts": 1,
+      "status": "pending",
+      "attempts": 0,
       "target_file": "services/collectibles/twin-service.js",
       "action_type": "author_then_write",
       "depends_on": [
@@ -4285,16 +4290,16 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-13T06:17:39.615Z",
-      "last_error": "STEP_STATUS_FORBIDDEN",
+      "last_attempt_at": null,
+      "last_error": null,
       "last_attempt": null,
-      "revive_count": 6,
+      "revive_count": 0,
       "revived_at": "2026-08-13T06:17:39.524Z",
       "no_op": null,
       "pre_existing": null,
-      "demoted": true,
-      "demote_reason": "revive_exhausted:STEP_STATUS_FORBIDDEN",
-      "demoted_at": "2026-08-13T06:24:01.079Z",
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
       "park_until": null,
       "blocker_class": null,
       "claim_level": null,
@@ -4303,13 +4308,15 @@
       "escalation_required": false,
       "escalation_note": null,
       "skip_reason": null,
-      "failure_signature": null
+      "failure_signature": null,
+      "heal_unblocked": true,
+      "heal_reason": "founder_one_queue_unskip_2026-08-13"
     },
     {
       "id": "COLLECTIBLES-V1-MTG-ADAPTER-001",
       "product_id": "collectibles",
-      "status": "blocked",
-      "attempts": 1,
+      "status": "pending",
+      "attempts": 0,
       "target_file": "services/collectibles/adapters/mtg-adapter.js",
       "action_type": "author_then_write",
       "depends_on": [
@@ -4346,11 +4353,11 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-13T06:31:41.864Z",
-      "last_error": "STEP_STATUS_FORBIDDEN",
+      "last_attempt_at": null,
+      "last_error": null,
       "last_attempt": null,
-      "revive_count": 6,
-      "revived_at": "2026-08-13T06:31:41.734Z",
+      "revive_count": 0,
+      "revived_at": "2026-08-13T06:28:36.702Z",
       "no_op": null,
       "pre_existing": null,
       "demoted": false,
@@ -4364,7 +4371,9 @@
       "escalation_required": false,
       "escalation_note": null,
       "skip_reason": null,
-      "failure_signature": null
+      "failure_signature": null,
+      "heal_unblocked": true,
+      "heal_reason": "founder_one_queue_unskip_2026-08-13"
     },
     {
       "id": "COLLECTIBLES-V1-ROUTES-001",
@@ -4439,6 +4448,54 @@
           ]
         }
       ],
+      "same_signature_count": 0
+    },
+    {
+      "status": "pending",
+      "founder_gated": false,
+      "attempts": 0,
+      "action_type": "author_then_write",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "mission_id": "PRODUCT-universal-overlay",
+      "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md §64",
+      "depends_on": [],
+      "id": "TALOA-S64-ANDROID-BODY-001",
+      "target_file": "services/taloa/android-body-adapter.js",
+      "sandbox_boundary": "services/taloa/**",
+      "task": "The file MUST begin with a JSDoc block comment containing a line exactly \"@ssot docs/products/universal-overlay/PRODUCT_HOME.md\". Overlay print §64 item 3: Android Universal Body adapter. Export exactly: export function createAndroidBodyAdapter(deps). Return { observe(scope), act(action), verify(goal, expected) }. observe MUST call deps.dumpVisibleText (injected) then CALL redactObservation from \"../drive-sensitive-content-filter.js\" on that text before returning. act MUST call deps.enqueueCommand. verify MUST use independent evidence from a fresh observe(). Do NOT rebuild runBrowserGoal. Do NOT invent a table. ES module. Do not edit server.js.",
+      "spec": "Reuse dumpVisibleText, enqueueCommand, redactObservation as injected deps. This file is only the Android Body observe/act/verify adapter.",
+      "expected_exports": [
+        "createAndroidBodyAdapter"
+      ],
+      "file_contains": [
+        "createAndroidBodyAdapter",
+        "redactObservation",
+        "dumpVisibleText",
+        "enqueueCommand"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/taloa/android-body-adapter.js",
+          "exports": [
+            "createAndroidBodyAdapter"
+          ],
+          "assertion_id": "expected_exports:services/taloa/android-body-adapter.js"
+        },
+        {
+          "type": "file_contains",
+          "path": "services/taloa/android-body-adapter.js",
+          "must_include": [
+            "redactObservation",
+            "observe",
+            "act",
+            "verify"
+          ],
+          "assertion_id": "reachability:android-body-observe-act-verify"
+        }
+      ],
+      "route": null,
+      "blueprint_step_id": "TALOA-S64-ANDROID-BODY-001",
       "same_signature_count": 0
     }
   ],

@@ -185,10 +185,18 @@ function readJsonFile(full) {
 }
 
 function resolveAcceptanceScriptRel(root, acceptanceCommand) {
+  if (!acceptanceCommand) return null;
+  const cmd = String(acceptanceCommand).trim();
+  // Direct node script form (used by some overlay BP rows).
+  const direct = cmd.match(/^node\s+(\S+\.mjs)\b/);
+  if (direct) {
+    const rel = direct[1].replace(/^\.\//, '');
+    return fs.existsSync(path.join(root, rel)) ? rel : null;
+  }
   const pkgPath = path.join(root, 'package.json');
-  if (!fs.existsSync(pkgPath) || !acceptanceCommand) return null;
+  if (!fs.existsSync(pkgPath)) return null;
   const pkg = readJsonFile(pkgPath);
-  const match = String(acceptanceCommand).match(/npm run (\S+)/);
+  const match = cmd.match(/npm run (\S+)/);
   if (!match) return null;
   const def = pkg.scripts?.[match[1]];
   if (!def) return null;

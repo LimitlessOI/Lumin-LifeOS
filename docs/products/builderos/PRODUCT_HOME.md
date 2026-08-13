@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/builderos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-08-13 — One queue manages multiple factories + projects (BP slices); no second Collectibles queue. Prior: NEW_QUEUE_FORBIDDEN hard gate. |
+| **Last Updated** | 2026-08-13 — PRINT_INVENTION_FORBIDDEN: overlay queue cannot invent slices; Collectibles wait while overlay print is open. |
 ### Related docs (this product)
 
 | Doc | Path |
@@ -35,6 +35,14 @@
 ---
 
 ## Change Receipts
+| 2026-08-13 | **BP acceptance resolver accepts `node scripts/*.mjs`.** TALOA-OVERLAY-P1 used a direct node command; guardrails only resolved `npm run`. Fixed + wired finishBpAcceptance into verify-universaloverlay so commits are not blocked by a pre-existing queue row. | Tip outage + one-queue heal ship. | `services/bp-priority-sync.js` |
+
+| 2026-08-13 | **Hard gate: the factory cannot invent the next overlay slice, and cannot ship Collectibles while overlay print is open.** Root cause of "it stopped": `isBlueprintSlice` treated any `source` citing the Taloa print as on-print (invented `register-*.mjs` clones); persist did not skip/enroll; discover never enrolled the next sealed §64 item so `selectNextStep` returned null and the planner invented more scripts. Closed: sealed `OVERLAY_PRINT_SEQUENCE`; `PRINT_INVENTION_FORBIDDEN` on persist; planner never calls a model for overlay; discover enrolls then continues; Collectibles hold restored in `selectShippableSteps`. Slice `duration_ms`/`tokens_used` stamped; founder-runtime mounts `/api/v1/builderos/control-plane/spend-outcomes`. | Founder: it stopped; keep asking and it is not done; hard-gate so it is impossible not to do what I asked. | `node --test tests/exclusive-queue-lock.test.js` 19/19. Next shippable step `TALOA-S64-ANDROID-BODY-001`. |
+
+| 2026-08-13 | **(reversed same day)** Collectibles may ship while overlay print is open. That let factory-3 ship Collectibles and overlay stall. Overlay exclusivity restored. Queue-merge `heal_unblocked` still applies to overlay print slices, not to Collectibles jumping the print. | Founder: overlay first; do what I asked. | `selectShippableSteps` holds Collectibles again while `overlayPrintStillOpen`. |
+
+| 2026-08-13 | **Queue merge honors repo heal_unblocked.** Stale Railway skipped/demoted was overwriting GitHub unskips of Collectibles twin (one-queue multi-project). `heal_unblocked` pending on repo now wins. | Founder: one queue; Collectibles must keep manufacturing. | `tests/never-stop-queue-merge.test.js` |
+
 | 2026-08-13 | **One-queue law reaffirmed + Collectibles thrash fixed.** Founder: do not start a new queue; one queue manages multiple factories and more than one project; pulls from BPs. factory-3 LaunchAgent was still resolving `product_id=collectibles` (stale process) → `queue_missing`. Reloaded to `universal-overlay`. Twin step was near revive_exhausted on self-referential `STEP_STATUS_FORBIDDEN`; truth-ladder now treats that meta-block as actionable; twin+mtg reset to pending. | Founder: one queue / multi-factory / multi-project from BPs. | `truth-ladder.js` + factory-3 tick `product_id:universal-overlay` |
 
 | 2026-08-13 | **Collectibles may ship while overlay print is open.** `selectShippableSteps` was holding all Collectibles slices behind `overlayPrintStillOpen`, so factory-3 returned `no_shippable_steps` after adapter. Removed that hold on the governed path; factory-1 never-stop still prefers overlay via `selectNextStep`. | Founder: one queue manages multiple factories + projects from BPs (parallel). | `build-queue-step-adapter.js` + exclusive-queue test |
@@ -1006,7 +1014,9 @@ Until this is implemented, trust escalation remains a constitutional requirement
 
 ## Agent Handoff Notes
 
-**2026-08-12 now:** One live queue (overlay). No new queue may ever be minted — `NEW_QUEUE_FORBIDDEN` on persist/plan/generate/GitHub commit/pre-commit. Archived queues stay in `docs/history/product-build-queues/`. Next factory step is still `TALOA-S64-CAPREG-REGISTER-001`.
+**2026-08-13 now:** Overlay print is sealed. Next factory step is `TALOA-S64-ANDROID-BODY-001`. Invented register scripts / leftover `step-5` are `off_print`. Collectibles wait until overlay print closes. Planner cannot invent overlay steps (`PRINT_INVENTION_FORBIDDEN`). Spend surface: `/api/v1/builderos/control-plane/spend-outcomes` on founder-runtime after this deploy.
+
+BuilderOS is live and shipping. `GOVERNED_FACTORY_ONLY` is active; the legacy `never-stop` loop is correctly fenced off.
 
 BuilderOS is live and shipping. `GOVERNED_FACTORY_ONLY` is active; the legacy `never-stop` loop is correctly fenced off. The `governed-autonomous-shipping-loop` treats each product's `BUILD_QUEUE.json` as the executable blueprint and orders products by `PRODUCT_BUILD_PRIORITY.json` (LifeOS first). The latest fix hardens the governed codegen path: `routes/factory-mount-routes.js` `codegenRunner` calls `callCouncilMember` with `taskType: 'codegen'`, `product_lane: 'builderos'`, and `useCache: false`, so the truth-envelope skips the generated code and `services/response-cache.js` cannot reuse a poisoned empty cache entry. `factory-staging/factory-core/builder/authoring.js` `DEFAULT_CODEGEN_TIERS` now reuses `config/task-model-routing.js` `TRUSTED_FALLBACK_MODELS` (strong-first, provider-diverse). `docs/products/command-center/BUILD_QUEUE.json` `s3` spec lists allowed mode enum values. The loop only stops for token/budget exhaustion or SENTRY/governance failure. `GET /api/v1/lifeos/never-stop/status` exposes `governed_status` with `totalRuns`, `lastShipped`, and `lastCommitSha`. Next: after commit/push/redeploy, force a BuilderOS tick and verify `totalRuns`/`lastShipped` increments while `lifeos` `lifeos-admin-3` (`routes/command-center-mode-routes.js`) ships. The command-center admin surface is now part of the `lifeos` blueprint; `command-center` is deprecated as a standalone product. Continue through the remaining blueprint steps across all products once the queue is moving.
 

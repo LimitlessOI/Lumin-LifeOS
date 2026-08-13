@@ -799,6 +799,14 @@
       "added_real_lines": 96,
       "justification": "config/trust-scoring.js is deliberately policy, not\nlogic -- what to reward is a founder decision, and it is pure functions with no\nI/O so every incentive claim is executable rather than prose. The ledger change is\nthin persistence that computes nothing itself, and the write-back site in\nexecute-mission.mjs is glue at an existing call site. Independent proof,\nreproducible without me: node --test tests/trust-scoring.test.js (15/15), each\nassertion being a rule the founder stated rather than a code path I liked.\n\nINTENT DRIFT: none.\n\nThe ledger closed at dispatch: it recorded that a model was asked to build\nsomething and whether the dispatch looked fine, then never learned whether the\nthing worked. That is why trust_adjustment.delta had a name in\nDEPARTMENT_ROLE_CONTRACT.json, no writer and no reader -- a prediction could be\nscored and change nothing about future allocation.\n\nReality was already scored two lines above the new write-back in\nexecute-mission.mjs. The outcome now reaches the ledger row that produced the\nwork, and lands in the run receipt unconditionally so the evidence survives with\nno database reachable. No parallel store was introduced and no second scoreboard\nwas built, per the founder's explicit instruction.\n\nThe incentives are executable, not aspirational:\n- Reality outweighs every leading indicator; a test asserts no other weight can\n  exceed it, so a proxy metric can never dominate the outcome it predicts.\n- self_caught_defect (+4) strictly beats escaped_defect (-5). If hiding ever beat\n  self-reporting the scoreboard would teach factories to defend their output.\n- Concealment is a trustworthiness event, not a capability event: different class,\n  -25, and one proven instance disqualifies for high-stakes allocation rather than\n  being averaged away by 499 good builds.\n- Efficiency applies only after correctness. A cheap wrong answer cannot outscore\n  a costly right one, asserted directly.\n- bugs_fixed, lines_of_code, files_changed, missions_complete",
       "commit_message_excerpt": "GAP-FILL: close the Reality->Trust loop; scored outcomes now change who gets the next job"
+    },
+    {
+      "at": "2026-08-13T06:40:40.208Z",
+      "file": "services/never-stop-product-factory.js",
+      "is_new_file": false,
+      "added_real_lines": 36,
+      "justification": "orchestration glue in never-stop mergeQueueRuntimeStatus only — prefers GitHub heal_unblocked pending over stale Railway skipped/demoted so founder one-queue unskips take effect; not a new product module codegen should invent.\nCo-authored-by: Cursor <cursoragent@cursor.com>",
+      "commit_message_excerpt": "GAP-FILL: one-queue heal_unblocked — Collectibles unskip sticks past Railway mem"
     }
   ]
 }
