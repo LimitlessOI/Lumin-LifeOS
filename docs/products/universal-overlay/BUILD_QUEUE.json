@@ -7317,9 +7317,9 @@
       "shipped_via": "governed_ship_queue"
     },
     {
-      "status": "pending",
+      "status": "done",
       "founder_gated": false,
-      "attempts": 3,
+      "attempts": 0,
       "action_type": "write_file_exact",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
@@ -7342,17 +7342,17 @@
         "do not hold"
       ],
       "blueprint_step_id": "COLLECTIBLES-V3-TRANSACTION-001",
-      "commit_sha": null,
+      "commit_sha": "4919a220b8277121e8132d8faabd776dd61a6b86",
       "built_sha": null,
       "proof": null,
       "last_attempt_at": "2026-08-13T23:49:53.565Z",
-      "last_error": "STEP_STATUS_FORBIDDEN",
+      "last_error": null,
       "started_at": "2026-08-13T23:49:53.532Z",
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
       "park_until": null,
-      "heal_unblocked": true,
+      "heal_unblocked": false,
       "heal_reason": "collectibles_never_stop_heal",
       "same_signature_count": 1,
       "skip_reason": null,
@@ -7396,7 +7396,37 @@
           "content_sha256": "19be79647eadf08efc0dac8c79d9fa62ed5cd5b08155ef4ee4dc28a9d218283b"
         }
       },
-      "shipped_at": "2026-08-13T23:50:10.996Z"
+      "shipped_at": "2026-08-13T23:50:18.273Z",
+      "duration_ms": 24744,
+      "tokens_used": 0,
+      "shipped_via": "governed_ship_queue"
+    },
+    {
+      "status": "pending",
+      "founder_gated": false,
+      "attempts": 0,
+      "action_type": "author_then_write",
+      "product_id": "collectibles",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "mission_id": "PRODUCT-universal-overlay",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
+      "depends_on": [
+        "COLLECTIBLES-V3-TRANSACTION-001"
+      ],
+      "id": "COLLECTIBLES-V3-PAYMENT-ADAPTER-001",
+      "target_file": "services/collectibles/adapters/payment-adapter.js",
+      "sandbox_boundary": "services/collectibles/**",
+      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createPaymentAdapterRegistry() — third-party held-funds abstraction only. Fail-closed if no provider. ES module.",
+      "spec": "EXTERNAL_ADAPTERS payments; never invent in-house custody of funds.",
+      "expected_exports": [
+        "createPaymentAdapterRegistry"
+      ],
+      "file_contains": [
+        "createPaymentAdapterRegistry",
+        "held-funds",
+        "fail-closed"
+      ],
+      "blueprint_step_id": "COLLECTIBLES-V3-PAYMENT-ADAPTER-001"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
