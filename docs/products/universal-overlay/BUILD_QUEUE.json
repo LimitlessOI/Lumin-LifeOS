@@ -6909,9 +6909,9 @@
       "shipped_via": "governed_ship_queue"
     },
     {
-      "status": "pending",
+      "status": "done",
       "founder_gated": false,
-      "attempts": 2,
+      "attempts": 0,
       "action_type": "write_file_exact",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
@@ -6937,19 +6937,19 @@
         "layer-b"
       ],
       "blueprint_step_id": "COLLECTIBLES-V1-LAYER-B-001",
-      "commit_sha": null,
+      "commit_sha": "6db74e720a75786830b15d6e340cb838a38389ae",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-13T21:34:17.618Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing:layer-b; behavior_assertion_failed; behavior_proof",
-      "started_at": "2026-08-13T21:33:53.418Z",
+      "last_attempt_at": "2026-08-13T22:22:53.554Z",
+      "last_error": null,
+      "started_at": "2026-08-13T22:22:53.554Z",
       "heal_reason": "collectibles_never_stop_heal",
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
       "park_until": null,
-      "heal_unblocked": true,
-      "duration_ms": 1000,
+      "heal_unblocked": false,
+      "duration_ms": 9036,
       "tokens_used": 0,
       "skip_reason": null,
       "escalation_required": false,
@@ -6980,7 +6980,36 @@
           "content_sha256": "ca755edd66c2f82264d635a61989111cc3af14845e1af24b7b7103851c29634a"
         }
       },
-      "shipped_at": "2026-08-13T22:22:53.722Z"
+      "shipped_at": "2026-08-13T22:23:02.589Z",
+      "shipped_via": "governed_ship_queue"
+    },
+    {
+      "status": "pending",
+      "founder_gated": false,
+      "attempts": 0,
+      "action_type": "author_then_write",
+      "product_id": "collectibles",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "mission_id": "PRODUCT-universal-overlay",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
+      "depends_on": [
+        "COLLECTIBLES-V1-LAYER-B-001"
+      ],
+      "id": "COLLECTIBLES-V2-WANT-GRAPH-001",
+      "target_file": "services/collectibles/want-graph.js",
+      "sandbox_boundary": "services/collectibles/**",
+      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createWantGraphService({ pool }) — Want/Watch/Love/Need-for-deck/Need-for-set persistent wants. No auto-list. ES module.",
+      "spec": "MASTER_BLUEPRINT V2 Want Graph.",
+      "expected_exports": [
+        "createWantGraphService"
+      ],
+      "file_contains": [
+        "createWantGraphService",
+        "want",
+        "watch",
+        "need-for"
+      ],
+      "blueprint_step_id": "COLLECTIBLES-V2-WANT-GRAPH-001"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
