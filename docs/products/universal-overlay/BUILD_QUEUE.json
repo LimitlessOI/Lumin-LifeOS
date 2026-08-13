@@ -3819,13 +3819,13 @@
     },
     {
       "id": "col001-reg-service",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/taloa/capability-collection-001-registration-service.js",
       "task": "Implement capability collection registration for TALOA-S64-CAPREG-COL-001",
       "spec": "This service will expose a function `registerCollection001(print15Data)` that processes the input `print15Data` (representing 'print §15' as structured data) and calls functions from the existing `services/taloa/capability-registry-service.js` to store the derived capabilities, ultimately impacting `overlay_devices`. It should contain basic validation for the `print15Data` structure relevant to 'TALOA-S64-CAPREG-COL-001'.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerCollection001"
       ],
@@ -3833,7 +3833,12 @@
         "import { registerCapability } from './capability-registry-service.js';",
         "registerCollection001",
         "print15Data"
-      ]
+      ],
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-08-13T02:29:43.163Z",
+      "last_error": "NOT_ON_BLUEPRINT"
     },
     {
       "id": "col001-reg-route",
