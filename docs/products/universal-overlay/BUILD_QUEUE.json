@@ -5470,9 +5470,9 @@
       "shipped_via": "governed_ship_queue"
     },
     {
-      "status": "pending",
+      "status": "done",
       "founder_gated": false,
-      "attempts": 2,
+      "attempts": 0,
       "action_type": "write_file_exact",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
@@ -5518,16 +5518,16 @@
           "content_sha256": "d212e3d1cffc9f33adb9101ed2187e768ffd329faa76038624fcf46dfc06fc97"
         }
       },
-      "shipped_at": "2026-08-13T17:03:09.756Z",
-      "commit_sha": null,
+      "shipped_at": "2026-08-13T17:03:16.865Z",
+      "commit_sha": "81b3713ba2d13dc04f975f2a33b76d100d6a1dc3",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-13T17:02:00.148Z",
+      "last_attempt_at": "2026-08-13T17:02:57.520Z",
       "last_error": null,
-      "started_at": "2026-08-13T17:02:00.051Z",
+      "started_at": "2026-08-13T17:02:57.520Z",
       "demoted": false,
-      "heal_unblocked": true,
-      "heal_reason": "collectibles_clear_missing_exact_to_author",
+      "heal_unblocked": false,
+      "heal_reason": "collectibles_cite_one_queue_twin",
       "demote_reason": null,
       "demoted_at": null,
       "skip_reason": null,
@@ -5548,7 +5548,37 @@
       "escalation_class": "same_signature_repeat",
       "exact_inputs": {
         "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V1-TWIN-STORE-001.exact"
-      }
+      },
+      "duration_ms": 19345,
+      "tokens_used": 0,
+      "shipped_via": "governed_ship_queue"
+    },
+    {
+      "status": "pending",
+      "founder_gated": false,
+      "attempts": 0,
+      "action_type": "author_then_write",
+      "product_id": "collectibles",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "mission_id": "PRODUCT-universal-overlay",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
+      "depends_on": [
+        "COLLECTIBLES-V1-SCHEMA-TWINS-001"
+      ],
+      "id": "COLLECTIBLES-V1-MEDIA-EVIDENCE-001",
+      "target_file": "services/collectibles/media-evidence.js",
+      "sandbox_boundary": "services/collectibles/**",
+      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createMediaEvidenceStore({ pool, logger }) — persistMedia, getMedia, listMediaForTwin against media_evidence. postgres_bytea OK for V1. sha256 required. ES module.",
+      "spec": "SCHEMA_CONTRACTS media_evidence; API_CONTRACTS media.",
+      "expected_exports": [
+        "createMediaEvidenceStore"
+      ],
+      "file_contains": [
+        "createMediaEvidenceStore",
+        "media_evidence",
+        "sha256"
+      ],
+      "blueprint_step_id": "COLLECTIBLES-V1-MEDIA-EVIDENCE-001"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
