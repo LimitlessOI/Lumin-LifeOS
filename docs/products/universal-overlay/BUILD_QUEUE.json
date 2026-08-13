@@ -3816,6 +3816,50 @@
       "shipped_at": "2026-08-13T00:35:00.000Z",
       "proof": "SO-001 allows scripts/CI. Live caller is githooks/pre-commit section 0b.",
       "same_signature_count": 0
+    },
+    {
+      "id": "col001-reg-service",
+      "status": "pending",
+      "target_file": "services/taloa/capability-collection-001-registration-service.js",
+      "task": "Implement capability collection registration for TALOA-S64-CAPREG-COL-001",
+      "spec": "This service will expose a function `registerCollection001(print15Data)` that processes the input `print15Data` (representing 'print §15' as structured data) and calls functions from the existing `services/taloa/capability-registry-service.js` to store the derived capabilities, ultimately impacting `overlay_devices`. It should contain basic validation for the `print15Data` structure relevant to 'TALOA-S64-CAPREG-COL-001'.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerCollection001"
+      ],
+      "file_contains": [
+        "import { registerCapability } from './capability-registry-service.js';",
+        "registerCollection001",
+        "print15Data"
+      ]
+    },
+    {
+      "id": "col001-reg-route",
+      "status": "pending",
+      "target_file": "routes/taloa-capability-collection-001-routes.js",
+      "task": "Expose API endpoint for TALOA-S64-CAPREG-COL-001 capability collection registration",
+      "spec": "Create a POST endpoint `/taloa/capabilities/collections/S64-CAPREG-COL-001` that accepts `print §15` data in the request body. This endpoint will validate the incoming data and call the `registerCollection001` function from `services/taloa/capability-collection-001-registration-service.js`. The module must export a `registerRoutes` function that takes an `app` (express instance) and `deps` object.",
+      "depends_on": [
+        "col001-reg-service"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/taloa/capabilities/collections/S64-CAPREG-COL-001"
+      },
+      "file_contains": [
+        "import { registerCollection001 } from '../services/taloa/capability-collection-001-registration-service.js';",
+        "registerRoutes",
+        "app.post",
+        "req.body",
+        "res.status"
+      ]
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
