@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T07:58:30.718Z",
+  "generated_at": "2026-08-13T08:00:15.584Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13543,
   "files": [
@@ -102270,8 +102270,8 @@
       "path": "services/taloa/task-authorization-envelope.js",
       "synopsis": "Service module — Task Authorization Envelope.",
       "bytes": 2325,
-      "mtime": "2026-08-13T07:58:30.718Z",
-      "indexed_at": "2026-08-13T07:58:30.718Z",
+      "mtime": "2026-08-13T08:00:15.584Z",
+      "indexed_at": "2026-08-13T08:00:15.584Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md Overlay print §64 item 6: Task Authorization Envelope.",
         "docs/products/universal-overlay/PRODUCT_HOME.md Overlay print §64 item 6: Task Authorization Envelope."
