@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T23:30:05.046Z",
+  "generated_at": "2026-08-13T23:35:32.577Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13594,
+  "file_count": 13591,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21678,9 +21678,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 4119093,
-      "mtime": "2026-08-13T15:34:57.333Z",
-      "indexed_at": "2026-08-13T15:35:25.395Z"
+      "bytes": 4130417,
+      "mtime": "2026-08-13T23:35:19.735Z",
+      "indexed_at": "2026-08-13T23:35:32.577Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -45796,9 +45796,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 869940,
-      "mtime": "2026-08-13T06:42:54.185Z",
-      "indexed_at": "2026-08-13T06:48:47.620Z"
+      "bytes": 871848,
+      "mtime": "2026-08-13T23:35:07.435Z",
+      "indexed_at": "2026-08-13T23:35:19.655Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -95251,16 +95251,6 @@
       ]
     },
     {
-      "path": "services/collectibles/invisible-listing.js",
-      "synopsis": "Exports createInvisibleListingService — services/collectibles/invisible-listing.js.",
-      "bytes": 2984,
-      "mtime": "2026-08-13T23:29:01.463Z",
-      "indexed_at": "2026-08-13T23:29:01.463Z",
-      "ssot": [
-        "docs/products/collectibles/PRODUCT_HOME.md"
-      ]
-    },
-    {
       "path": "services/collectibles/location-service.js",
       "synopsis": "Binder GPS / location records for CollectibleTwins.",
       "bytes": 2502,
@@ -95279,16 +95269,6 @@
       "ssot": [
         "docs/products/collectibles/PRODUCT_HOME.md",
         "SCHEMA_CONTRACTS media_evidence"
-      ]
-    },
-    {
-      "path": "services/collectibles/offer-inbox.js",
-      "synopsis": "Exports createOfferInboxService — services/collectibles/offer-inbox.js.",
-      "bytes": 5161,
-      "mtime": "2026-08-13T23:30:05.046Z",
-      "indexed_at": "2026-08-13T23:30:05.046Z",
-      "ssot": [
-        "docs/products/collectibles/PRODUCT_HOME.md"
       ]
     },
     {
@@ -95317,16 +95297,6 @@
       "bytes": 10346,
       "mtime": "2026-08-13T17:03:12.832Z",
       "indexed_at": "2026-08-13T17:03:12.832Z",
-      "ssot": [
-        "docs/products/collectibles/PRODUCT_HOME.md"
-      ]
-    },
-    {
-      "path": "services/collectibles/want-graph.js",
-      "synopsis": "Exports createWantGraphService — services/collectibles/want-graph.js.",
-      "bytes": 7356,
-      "mtime": "2026-08-13T23:27:12.222Z",
-      "indexed_at": "2026-08-13T23:27:12.222Z",
       "ssot": [
         "docs/products/collectibles/PRODUCT_HOME.md"
       ]
@@ -100276,9 +100246,9 @@
     {
       "path": "services/mtg-card-vision.js",
       "synopsis": "Identifies Magic: The Gathering card(s) (name, set, foil, condition",
-      "bytes": 11105,
-      "mtime": "2026-08-12T19:52:26.515Z",
-      "indexed_at": "2026-08-12T19:52:26.515Z",
+      "bytes": 12854,
+      "mtime": "2026-08-13T23:32:06.229Z",
+      "indexed_at": "2026-08-13T23:35:19.655Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
