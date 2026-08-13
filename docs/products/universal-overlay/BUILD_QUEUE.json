@@ -5854,9 +5854,9 @@
       "shipped_via": "governed_ship_queue"
     },
     {
-      "status": "pending",
+      "status": "blocked",
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "action_type": "author_then_write",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
@@ -5875,7 +5875,13 @@
         "era",
         "/api/v1/collectibles"
       ],
-      "blueprint_step_id": "COLLECTIBLES-V1-ERA-WALL-001"
+      "blueprint_step_id": "COLLECTIBLES-V1-ERA-WALL-001",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-08-13T20:44:58.630Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing:/api/v1/collectibles; behavior_assertion_failed; behavior_proof",
+      "started_at": "2026-08-13T20:44:52.290Z"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
