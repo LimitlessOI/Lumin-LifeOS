@@ -4251,8 +4251,8 @@
     {
       "id": "COLLECTIBLES-V1-TWIN-SERVICE-001",
       "product_id": "collectibles",
-      "status": "pending",
-      "attempts": 0,
+      "status": "blocked",
+      "attempts": 1,
       "target_file": "services/collectibles/twin-service.js",
       "action_type": "author_then_write",
       "depends_on": [
@@ -4286,12 +4286,12 @@
           ]
         }
       ],
-      "same_signature_count": 0,
+      "same_signature_count": 1,
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
-      "last_error": null,
+      "last_attempt_at": "2026-08-13T07:51:55.599Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing:owned_; behavior_assertion_failed; behavior_proof",
       "last_attempt": null,
       "revive_count": 0,
       "revived_at": "2026-08-13T06:17:39.524Z",
@@ -4308,9 +4308,11 @@
       "escalation_required": false,
       "escalation_note": null,
       "skip_reason": null,
-      "failure_signature": null,
+      "failure_signature": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing:owned_; behavior_assertion_failed; behavior_proof",
       "heal_unblocked": true,
-      "heal_reason": "founder_one_queue_unskip_2026-08-13"
+      "heal_reason": "founder_one_queue_unskip_2026-08-13",
+      "started_at": "2026-08-13T07:51:44.070Z",
+      "escalation_class": "evidence_gap"
     },
     {
       "id": "COLLECTIBLES-V1-MTG-ADAPTER-001",
@@ -4676,7 +4678,18 @@
       "demoted_at": null,
       "skip_reason": null,
       "escalation_required": false,
-      "revive_count": 0
+      "revive_count": 0,
+      "same_signature_count": 0,
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/taloa/task-authorization-envelope.js",
+          "exports": [
+            "createTaskAuthorizationEnvelope"
+          ],
+          "assertion_id": "expected_exports:services/taloa/task-authorization-envelope.js"
+        }
+      ]
     },
     {
       "status": "pending",
@@ -4715,7 +4728,18 @@
       "demoted_at": null,
       "skip_reason": null,
       "escalation_required": false,
-      "revive_count": 0
+      "revive_count": 0,
+      "same_signature_count": 0,
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/taloa/template-replay-service.js",
+          "exports": [
+            "createTemplateReplayService"
+          ],
+          "assertion_id": "expected_exports:services/taloa/template-replay-service.js"
+        }
+      ]
     },
     {
       "status": "pending",
@@ -4737,7 +4761,18 @@
       "file_contains": [
         "assertObservationIsNotAuthority"
       ],
-      "blueprint_step_id": "TALOA-S64-PROMPT-INJECT-001"
+      "blueprint_step_id": "TALOA-S64-PROMPT-INJECT-001",
+      "same_signature_count": 0,
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/taloa/prompt-injection-authority-gate.js",
+          "exports": [
+            "assertObservationIsNotAuthority"
+          ],
+          "assertion_id": "expected_exports:services/taloa/prompt-injection-authority-gate.js"
+        }
+      ]
     },
     {
       "status": "pending",
@@ -4758,13 +4793,14 @@
         "proposed_solution",
         "layer-b"
       ],
-      "blueprint_step_id": "TALOA-S64-SENTRY-LAYER-B-001"
+      "blueprint_step_id": "TALOA-S64-SENTRY-LAYER-B-001",
+      "same_signature_count": 0
     },
     {
       "status": "pending",
       "founder_gated": false,
       "attempts": 0,
-      "action_type": "author_then_write",
+      "action_type": "write_file_exact",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
       "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md §64",
@@ -4798,7 +4834,34 @@
       "demoted_at": null,
       "skip_reason": null,
       "escalation_required": false,
-      "revive_count": 0
+      "revive_count": 0,
+      "same_signature_count": 0,
+      "exact_inputs": {
+        "content_source_path": "docs/products/universal-overlay/twins/steps/TALOA-S64-MACOS-BODY-001.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-08-13T07:52:03.375Z",
+        "shipped_at": "2026-08-13T07:52:03.375Z",
+        "commit_sha": null,
+        "content_sha256": "11c795a30308e74da73150edaf8db3c211f5598a0d7cc45aade1bcdb21e76ce8",
+        "target_file": "native/macos-overlay/MacOsBodyAdapter.swift",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "native/macos-overlay/MacOsBodyAdapter.swift",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "PASS"
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/universal-overlay/twins/steps/TALOA-S64-MACOS-BODY-001.exact",
+          "content_sha256": "11c795a30308e74da73150edaf8db3c211f5598a0d7cc45aade1bcdb21e76ce8"
+        }
+      },
+      "shipped_at": "2026-08-13T07:52:03.375Z"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
