@@ -35,6 +35,8 @@
 ---
 
 ## Change Receipts
+| 2026-08-13 | **Collectibles may ship while overlay print is open.** `selectShippableSteps` was holding all Collectibles slices behind `overlayPrintStillOpen`, so factory-3 returned `no_shippable_steps` after adapter. Removed that hold on the governed path; factory-1 never-stop still prefers overlay via `selectNextStep`. | Founder: one queue manages multiple factories + projects from BPs (parallel). | `build-queue-step-adapter.js` + exclusive-queue test |
+
 | 2026-08-13 | **Collectibles V1 slices now actually on the one queue.** Law was already tip-correct; enrollment was a docs claim without steps. Enrolled `COLLECTIBLES-V1-*` into overlay BUILD_QUEUE; factory-3 plan picks adapter interface. | Founder: one queue; multi-factory; multi-project from BPs. | factory-3 `COLLECTIBLES-V1-ADAPTER-INTERFACE-001` |
 
 | 2026-08-13 | **One queue manages multiple factories + projects — pulled from BPs.** Founder correction: do not mint a Collectibles queue. Reverted the second-queue carve-out. Factories filter by owns. Mistaken `docs/products/collectibles/BUILD_QUEUE.json` archived. | Founder: we do not start a new queue; one queue manages multiple factories and more than one project; it pulls from the BPs. | `config/live-build-queue.js` + exclusive-queue tests |

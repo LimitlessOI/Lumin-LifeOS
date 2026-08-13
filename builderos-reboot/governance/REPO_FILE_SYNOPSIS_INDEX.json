@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T06:02:00.751Z",
+  "generated_at": "2026-08-13T06:08:06.203Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13477,
   "files": [
@@ -41246,9 +41246,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Documentation — CONTINUITY LOG.",
-      "bytes": 198120,
-      "mtime": "2026-08-13T06:01:06.579Z",
-      "indexed_at": "2026-08-13T06:01:06.579Z"
+      "bytes": 198164,
+      "mtime": "2026-08-13T06:08:06.203Z",
+      "indexed_at": "2026-08-13T06:08:06.203Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -43874,9 +43874,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 576165,
-      "mtime": "2026-08-13T06:01:06.579Z",
-      "indexed_at": "2026-08-13T06:01:06.579Z"
+      "bytes": 576627,
+      "mtime": "2026-08-13T06:08:06.203Z",
+      "indexed_at": "2026-08-13T06:08:06.203Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -66393,9 +66393,9 @@
     {
       "path": "factory-staging/factory-core/bpb/build-queue-step-adapter.js",
       "synopsis": "STEP 5e — adapt a per-product docs/products/<id>/BUILD_QUEUE.json step",
-      "bytes": 17095,
-      "mtime": "2026-08-13T05:23:57.945Z",
-      "indexed_at": "2026-08-13T05:23:57.945Z",
+      "bytes": 17388,
+      "mtime": "2026-08-13T06:08:06.203Z",
+      "indexed_at": "2026-08-13T06:08:06.203Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -104562,9 +104562,9 @@
     {
       "path": "tests/exclusive-queue-lock.test.js",
       "synopsis": "One overlay queue, blueprint slices only — the factory may not choose.",
-      "bytes": 6856,
-      "mtime": "2026-08-13T05:23:57.945Z",
-      "indexed_at": "2026-08-13T05:23:57.945Z",
+      "bytes": 9278,
+      "mtime": "2026-08-13T06:08:06.203Z",
+      "indexed_at": "2026-08-13T06:08:06.203Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

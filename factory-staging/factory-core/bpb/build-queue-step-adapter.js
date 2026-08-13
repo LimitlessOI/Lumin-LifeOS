@@ -359,6 +359,10 @@ export function selectShippableSteps(queue) {
     if (s.status === STEP_STATUS.DONE || s.status === STEP_STATUS.BLOCKED || s.status === STEP_STATUS.SKIPPED || s.status === STEP_STATUS.FAILED) return false;
     if (isHumanHold(s)) return false;
     if (queue?.product_id === 'universal-overlay' && !isBlueprintSlice(s, queue.product_id)) return false;
+    // Do NOT hold Collectibles behind overlayPrintStillOpen here. One queue +
+    // multiple factories means factory-3 ships Collectibles BP slices while
+    // factory-1 continues the overlay print. The never-stop/selectNextStep path
+    // still prefers overlay for factory-1 exclusivity.
     const deps = Array.isArray(s.depends_on) ? s.depends_on : [];
     return deps.every((d) => depSatisfiedForSelect(d, doneIds, queue, s));
   });

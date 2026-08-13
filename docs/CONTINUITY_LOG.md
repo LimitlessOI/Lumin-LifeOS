@@ -1,8 +1,8 @@
 <!-- SYNOPSIS: Documentation — CONTINUITY LOG. -->
 
-## 2026-08-13 — One queue multi-project: Collectibles V1 slices actually enrolled
+## 2026-08-13 — One queue multi-project: Collectibles parallel with overlay
 
-Adam: do not start a new queue; one queue manages multiple factories and more than one project; it pulls from the BPs. Law was already on tip; missing piece was enrolling `COLLECTIBLES-V1-*` onto `docs/products/universal-overlay/BUILD_QUEUE.json`. factory-3 plans `COLLECTIBLES-V1-ADAPTER-INTERFACE-001` from that file. No second Collectibles queue.
+Adam: do not start a new queue; one queue manages multiple factories and more than one project; it pulls from the BPs. Enrolled `COLLECTIBLES-V1-*` on the one manufacturing queue. Adapter shipped (`f80a2bb`). Governed path was still holding Collectibles behind `overlayPrintStillOpen` — removed so factory-3 can ship twin/MTG/routes while factory-1 continues overlay. No second Collectibles queue.
 
 ## 2026-08-12 — BuilderOS observation report (founder asked: what is it building, when done, slice time, token spend)
 

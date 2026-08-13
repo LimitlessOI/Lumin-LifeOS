@@ -8,6 +8,10 @@ import {
   isBlueprintSlice,
   skipNonBlueprintSlices,
   selectNextStep,
+  persistQueue,
+  enrollNextOverlayPrintSlice,
+  overlayPrintStillOpen,
+  PRINT_INVENTION_FORBIDDEN,
   STEP_STATUS,
   loadBuildQueue,
   listForbiddenLiveQueueFiles,
@@ -29,9 +33,10 @@ test('isBlueprintSlice accepts print ids and refuses invented col001', () => {
   assert.equal(isBlueprintSlice({
     id: 'anything',
     source: 'TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md §64',
-  }, 'universal-overlay'), true);
+  }, 'universal-overlay'), false);
+  assert.equal(isBlueprintSlice({ id: 'register-taloa-s64-capability' }, 'universal-overlay'), false);
   assert.equal(isBlueprintSlice({ id: 'col001-reg-service' }, 'universal-overlay'), false);
-  assert.equal(isBlueprintSlice({ id: 'lifeos-s1' }, 'lifeos'), true);
+  assert.equal(isBlueprintSlice({ id: 'lifeos-s1' }, 'lifeos'), false);
   assert.equal(isBlueprintSlice({
     id: 'COLLECTIBLES-V1-ADAPTER-INTERFACE-001',
     product_id: 'collectibles',
@@ -105,6 +110,66 @@ test('one queue may carry Collectibles BP slices without a second queue file', (
   for (const s of collectibles) {
     assert.equal(isBlueprintSlice(s, 'universal-overlay'), true, s.id);
   }
+});
+
+test('Collectibles wait while overlay print remains — overlay exclusive_until_complete', async () => {
+  const { selectShippableSteps } = await import('../factory-staging/factory-core/bpb/build-queue-step-adapter.js');
+  const queue = {
+    product_id: 'universal-overlay',
+    steps: [
+      {
+        id: 'TALOA-S64-ANDROID-BODY-001',
+        status: STEP_STATUS.PENDING,
+        target_file: 'services/taloa/android-body-adapter.js',
+        depends_on: [],
+      },
+      {
+        id: 'COLLECTIBLES-V1-TWIN-SERVICE-001',
+        product_id: 'collectibles',
+        status: STEP_STATUS.PENDING,
+        target_file: 'services/collectibles/twin-service.js',
+        source: 'docs/products/collectibles/MASTER_BLUEPRINT.md — V1',
+        depends_on: [],
+      },
+    ],
+  };
+  assert.equal(overlayPrintStillOpen(queue), true);
+  const { step } = selectNextStep(queue);
+  assert.equal(step.id, 'TALOA-S64-ANDROID-BODY-001');
+  const shippable = selectShippableSteps(queue);
+  assert.deepEqual(shippable.map((s) => s.id), ['TALOA-S64-ANDROID-BODY-001']);
+});
+
+test('invented register scripts are not print slices even with blueprint source', () => {
+  const queue = {
+    product_id: 'universal-overlay',
+    steps: [
+      {
+        id: 'register-taloa-s64-capability',
+        status: STEP_STATUS.PENDING,
+        source: 'TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md §64',
+        target_file: 'scripts/registerTaloaS64Capability.mjs',
+        depends_on: [],
+      },
+      {
+        id: 'TALOA-S64-ANDROID-BODY-001',
+        status: STEP_STATUS.PENDING,
+        target_file: 'services/taloa/android-body-adapter.js',
+        depends_on: [],
+      },
+    ],
+  };
+  skipNonBlueprintSlices(queue);
+  assert.equal(queue.steps[0].status, STEP_STATUS.SKIPPED);
+  const { step } = selectNextStep(queue);
+  assert.equal(step.id, 'TALOA-S64-ANDROID-BODY-001');
+});
+
+test('enrollNextOverlayPrintSlice adds the sealed Android Body adapter', () => {
+  const queue = { product_id: 'universal-overlay', steps: [] };
+  const id = enrollNextOverlayPrintSlice(queue);
+  assert.equal(id, 'TALOA-S64-ANDROID-BODY-001');
+  assert.equal(queue.steps[0].target_file, 'services/taloa/android-body-adapter.js');
 });
 
 test('planBuildQueue refuses every product except overlay', async () => {
