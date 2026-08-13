@@ -6712,28 +6712,13 @@
       },
       "exactness": {
         "sealed": true,
-        "sealed_at": "2026-08-13T21:30:01.836Z",
-        "shipped_at": "2026-08-13T21:30:01.836Z",
-        "commit_sha": null,
-        "content_sha256": "f9628fe42a87383d4c77b3e9d975e60298cb4d5a2c851f020f139420d59ecae3",
-        "target_file": "services/collectibles/household-service.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "services/collectibles/household-service.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "grounding": {
-          "status": "PASS"
-        },
         "rebuild": {
           "action_type": "write_file_exact",
-          "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V1-HOUSEHOLD-001.exact",
-          "content_sha256": "f9628fe42a87383d4c77b3e9d975e60298cb4d5a2c851f020f139420d59ecae3"
+          "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V1-HOUSEHOLD-001.exact"
         }
       },
       "tokens_used": 0,
-      "duration_ms": 15511,
+      "duration_ms": 15507,
       "behavior_assertions": [
         {
           "type": "exports_smoke",
@@ -6750,17 +6735,17 @@
       "escalation_required": false,
       "escalation_note": null,
       "park_until": null,
-      "heal_unblocked": false,
+      "heal_unblocked": true,
       "failure_signature": "artifact_missing_after_ship: artifact_proof_failed: missing:role",
       "escalation_class": "fake_green_attempt",
-      "shipped_at": "2026-08-13T21:30:08.722Z",
-      "shipped_via": "governed_ship_queue"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-08-13T21:30:08.722Z"
     },
     {
       "status": "pending",
       "founder_gated": false,
       "attempts": 0,
-      "action_type": "author_then_write",
+      "action_type": "write_file_exact",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
@@ -6781,7 +6766,33 @@
         "guest_claim",
         "claim"
       ],
-      "blueprint_step_id": "COLLECTIBLES-V1-GUEST-CLAIM-001"
+      "blueprint_step_id": "COLLECTIBLES-V1-GUEST-CLAIM-001",
+      "exact_inputs": {
+        "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V1-GUEST-CLAIM-001.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-08-13T21:30:56.648Z",
+        "shipped_at": "2026-08-13T21:30:56.648Z",
+        "commit_sha": null,
+        "content_sha256": "92ff0944baa1ecd6ae05fe20d5e35626fd6f3b04551c8edbe6e37204546f7506",
+        "target_file": "services/collectibles/guest-claim-service.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/collectibles/guest-claim-service.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "PASS"
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V1-GUEST-CLAIM-001.exact",
+          "content_sha256": "92ff0944baa1ecd6ae05fe20d5e35626fd6f3b04551c8edbe6e37204546f7506"
+        }
+      },
+      "shipped_at": "2026-08-13T21:30:56.648Z"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
