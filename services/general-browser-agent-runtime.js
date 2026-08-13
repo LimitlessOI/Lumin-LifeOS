@@ -3,6 +3,8 @@
  * @ssot docs/products/tc-service/PRODUCT_HOME.md
  */
 
+import { createAndroidBodyAdapter } from "./taloa/android-body-adapter.js";
+
 export async function observePage(session, opts = {}) {
     try {
         const url = await session.currentUrl() || session.page.url();
@@ -133,4 +135,8 @@ export async function executeAction(session, action) {
     } catch (error) {
         return { ok: false, error: error?.message || String(error) };
     }
+}
+
+export function makeAndroidBody(deps) {
+    return createAndroidBodyAdapter(deps);
 }
