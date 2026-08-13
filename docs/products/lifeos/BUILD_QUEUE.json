@@ -7497,8 +7497,8 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-13T01:04:21.788Z",
-      "last_error": "artifact_missing_after_ship: artifact_proof_failed: missing_exports:classifyFounderIntent",
+      "last_attempt_at": "2026-08-13T01:19:47.575Z",
+      "last_error": "STEP_STATUS_FORBIDDEN",
       "same_signature_count": 0,
       "behavior_assertions": [
         {
@@ -7509,7 +7509,20 @@
           ],
           "assertion_id": "expected_exports:services/founder-chair-intent.js"
         }
-      ]
+      ],
+      "last_attempt": null,
+      "revive_count": 1,
+      "revived_at": "2026-08-13T01:19:47.228Z",
+      "no_op": null,
+      "pre_existing": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "lifeos-founder-chair-intent-service-create",
