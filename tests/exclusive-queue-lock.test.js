@@ -12,9 +12,12 @@ import {
   loadBuildQueue,
   listForbiddenLiveQueueFiles,
   assertNoSecondLiveQueueOnDisk,
+  assertNoNewBuildQueueInCommit,
+  NEW_QUEUE_FORBIDDEN,
 } from '../services/product-build-orchestrator.js';
-import { holdToExclusiveProduct, discoverSentryFixWork } from '../services/never-stop-product-factory.js';
+import { holdToExclusiveProduct, discoverSentryFixWork, discoverPlanWork } from '../services/never-stop-product-factory.js';
 import { planBuildQueue } from '../services/build-queue-planner.js';
+import { evaluateFilePlacement } from '../scripts/lib/file-placement-gate.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -95,4 +98,37 @@ test('discoverSentryFixWork never enrolls a second product queue', () => {
   const items = discoverSentryFixWork();
   assert.ok(Array.isArray(items));
   assert.ok(!items.some((i) => i.product_id && i.product_id !== 'universal-overlay'));
+});
+
+test('discoverPlanWork never mints a queue for a product that does not have one', () => {
+  const items = discoverPlanWork();
+  assert.ok(Array.isArray(items));
+  assert.ok(!items.some((i) => /no BUILD_QUEUE yet/.test(i.detail || '')));
+});
+
+test('assertNoNewBuildQueueInCommit refuses a new lifeos queue even if overlay is also in the batch', () => {
+  const tracked = new Set(['docs/products/universal-overlay/BUILD_QUEUE.json']);
+  assert.throws(
+    () => assertNoNewBuildQueueInCommit([
+      { path: 'docs/products/lifeos/BUILD_QUEUE.json', content: '{}' },
+    ], { trackedSet: tracked }),
+    /NEW_QUEUE_FORBIDDEN/,
+  );
+  assert.doesNotThrow(() => assertNoNewBuildQueueInCommit([
+    { path: 'docs/products/universal-overlay/BUILD_QUEUE.json', content: '{}' },
+  ], { trackedSet: tracked }));
+});
+
+test('file-placement gate refuses minting a second BUILD_QUEUE.json', () => {
+  const tracked = new Set(['docs/products/universal-overlay/BUILD_QUEUE.json']);
+  const blocked = evaluateFilePlacement([
+    { path: 'docs/products/salesos/BUILD_QUEUE.json', content: '{"schema":"product_build_queue_v1"}' },
+  ], undefined, { trackedSet: tracked });
+  assert.equal(blocked.ok, false);
+  assert.ok(blocked.findings.some((f) => f.kind === NEW_QUEUE_FORBIDDEN));
+
+  const overlayUpdate = evaluateFilePlacement([
+    { path: 'docs/products/universal-overlay/BUILD_QUEUE.json', content: '{"schema":"product_build_queue_v1"}' },
+  ], undefined, { trackedSet: tracked });
+  assert.equal(overlayUpdate.ok, true);
 });

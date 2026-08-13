@@ -18,6 +18,9 @@
 - `loadBuildQueue` / `persistQueue` / `planBuildQueue` throw `SECOND_QUEUE_FORBIDDEN`
 - Discover will not recreate a second queue
 
-## Status
+## Follow-up (same night)
 
-Enforced in `services/build-queue-core.js` + never-stop discover/plan + planner.
+Adam: *and i want a hard gate in place that no new queues can be created ever*
+
+Enforced: `NEW_QUEUE_FORBIDDEN` at persist, planner, generate-from-home, GitHub commit (`evaluateFilePlacement` + `commitManyToGitHub`), and pre-commit disk scan. Discover will not enroll a missing queue. Overlay may be updated; minting a second file throws.
+

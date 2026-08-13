@@ -583,18 +583,8 @@ export function discoverPlanWork() {
     } catch { backlog = []; }
     if (backlog.length === 0) continue;
 
-    // NEW-PRODUCT ENROLL: folder has documented work but no queue yet.
+    // Never mint a BUILD_QUEUE. There is one queue; it already exists.
     if (!fs.existsSync(queuePathForProduct(productId))) {
-      found.push({
-        id: `plan_build_queue_${productId}`,
-        kind: 'plan_build_queue',
-        priority: 5 + productRankFraction(productId, priorityList, backlog.length),
-        product: productId,
-        product_id: productId,
-        home_path: homePath,
-        corpus_sources: sources.map((s) => s.path),
-        detail: `${backlog.length} documented item(s) across ${sources.length || 1} source(s), no BUILD_QUEUE yet`,
-      });
       continue;
     }
 
@@ -690,9 +680,7 @@ export async function runPlanBuildQueue(task, { callModel, logger } = {}) {
           sentry_unplannable_at: new Date().toISOString(),
           sentry_unplannable_reason: planReason?.msg || 'plan_produced_no_queue',
         };
-        const queuePath = queuePathForProduct(task.product_id);
-        fs.mkdirSync(path.dirname(queuePath), { recursive: true });
-        fs.writeFileSync(queuePath, `${JSON.stringify(stamped, null, 2)}\n`);
+        persistQueue(stamped);
         let stampCommitted = null;
         try {
           const committed = await commitQueueStatusToRepo(stamped, `sentry-stamp:${task.product_id}`);
@@ -726,9 +714,7 @@ export async function runPlanBuildQueue(task, { callModel, logger } = {}) {
   // findings next cycle (WASTE-SAFE) — only clears when the gate emits new findings.
   if (task.sentry_signature) planned.queue.sentry_signature = task.sentry_signature;
   if (!planned.queue.product_id) planned.queue.product_id = task.product_id;
-  const queuePath = queuePathForProduct(task.product_id);
-  fs.mkdirSync(path.dirname(queuePath), { recursive: true });
-  fs.writeFileSync(queuePath, `${JSON.stringify(planned.queue, null, 2)}\n`);
+  persistQueue(planned.queue);
   // DURABILITY (same fix build steps already have at commitQueueStatusToRepo):
   // fs.writeFileSync only lands on the container's LOCAL filesystem. A redeploy
   // (triggered by any build step's deploy-proof) restarts from a fresh git

@@ -9,7 +9,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { loadBuildQueue, evaluateStepExpectations, STEP_STATUS } from '../services/build-queue-core.js';
+import { loadBuildQueue, evaluateStepExpectations, STEP_STATUS, assertBuildQueueMayBeWritten } from '../services/build-queue-core.js';
 import { stepDependencies } from '../config/step-dependencies.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -537,7 +537,9 @@ async function run(options) {
 
     if (queueDirty && !options.dryRun) {
       try {
-        writeJson(path.join(PRODUCTS_DIR, product, 'BUILD_QUEUE.json'), queue);
+        const qp = path.join(PRODUCTS_DIR, product, 'BUILD_QUEUE.json');
+        assertBuildQueueMayBeWritten(qp, { creating: !fs.existsSync(qp) });
+        writeJson(qp, queue);
       } catch (err) {
         console.error(`[drift-repair] could not write ${product} BUILD_QUEUE:`, err.message);
       }

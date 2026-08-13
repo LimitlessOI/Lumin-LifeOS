@@ -9,7 +9,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { loadBuildQueue, evaluateStepExpectations, STEP_STATUS, normalizeQueue } from '../services/product-build-orchestrator.js';
+import { loadBuildQueue, evaluateStepExpectations, STEP_STATUS, normalizeQueue, assertBuildQueueMayBeWritten } from '../services/product-build-orchestrator.js';
 import { commitQueueStatusToRepo, loadBuildQueuePreferRemote } from '../services/never-stop-product-factory.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -73,6 +73,7 @@ async function healQueue(productId) {
 
   queue.updated_at = new Date().toISOString();
   const localPath = path.join(PRODUCTS_DIR, productId, 'BUILD_QUEUE.json');
+  assertBuildQueueMayBeWritten(localPath, { creating: !fs.existsSync(localPath) });
   fs.writeFileSync(localPath, `${JSON.stringify(normalizeQueue(queue, localPath), null, 2)}\n`);
   const commit = await commitQueueStatusToRepo(queue, 'self-heal');
   return { productId, changed: true, claimed, unblocked, unDemoted, commit };

@@ -9,6 +9,12 @@ import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 import { execSync } from 'node:child_process';
 import { extractSsotTag } from './product-home-enforce.mjs';
+import {
+  LIVE_BUILD_QUEUE_REL,
+  NEW_QUEUE_FORBIDDEN,
+  isCanonicalLiveQueuePath,
+  isLiveQueueLocation,
+} from '../../config/live-build-queue.js';
 
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 const ROOT = path.resolve(__dirname, '..', '..');
@@ -189,6 +195,23 @@ export function evaluateFilePlacement(fileEntries, repoRoot = ROOT, { trackedSet
   const isGapFillApproved =
     String(commitMessage).startsWith('GAP-FILL:') &&
     /PLACEMENT_APPROVED:/i.test(commitMessage);
+
+  for (const entry of entries) {
+    const rel = normalize(entry?.path || entry?.target_file || '');
+    if (!rel.endsWith('BUILD_QUEUE.json')) continue;
+    if (entry?.delete === true || entry?.op === 'delete' || entry?.sha === null) continue;
+    if (!isLiveQueueLocation(rel)) continue;
+    const isNew = !tracked.has(rel);
+    if (!isCanonicalLiveQueuePath(rel) || isNew) {
+      findings.push({
+        path: rel,
+        severity: 'error',
+        kind: NEW_QUEUE_FORBIDDEN,
+        reason: `No new BUILD_QUEUE.json may ever be created. Only updates to ${LIVE_BUILD_QUEUE_REL} are legal. Refused '${rel}'. This is supposed to break.`,
+        proposed_solution: `Do not mint a queue. Put work on ${LIVE_BUILD_QUEUE_REL}. Archived queues stay in docs/history/product-build-queues/.`,
+      });
+    }
+  }
 
   for (const entry of entries) {
     const rel = normalize(entry?.path || entry?.target_file || '');

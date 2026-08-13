@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/builderos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-08-12 — Second queues archived. Only overlay `BUILD_QUEUE.json` is live; anything else throws `SECOND_QUEUE_FORBIDDEN`. |
+| **Last Updated** | 2026-08-12 — Hard gate: no new BUILD_QUEUE.json may ever be created (`NEW_QUEUE_FORBIDDEN`). Overlay may be updated only. |
 ### Related docs (this product)
 
 | Doc | Path |
@@ -35,6 +35,8 @@
 ---
 
 ## Change Receipts
+| 2026-08-12 | **Hard gate: no new BUILD_QUEUE.json may ever be created.** Founder: there can only be one, and nothing may mint another. `NEW_QUEUE_FORBIDDEN` on persist/plan/generate/commit/pre-commit. Discover will not enroll a missing queue. Overlay file may be updated; minting even overlay from nothing is refused. | Founder: hard gate; no new queues can be created ever. | `node --test tests/exclusive-queue-lock.test.js tests/generate-build-queue-from-home.test.js` |
+
 | 2026-08-12 | **There can only be one queue. The others were moved, not stubbed.** Founder: shut other queues down, put them in the archive folder, and if something still relies on them, let it break noticeably. 39 live `BUILD_QUEUE.json` files (every product except overlay, plus two project queues) moved to `docs/history/product-build-queues/`. `loadBuildQueue` / `persistQueue` / `planBuildQueue` throw `SECOND_QUEUE_FORBIDDEN` for anything else, including archived paths. Discover will not recreate them. No shims at the old paths. | Founder: there can only be one; move them; I want relying code to break. | `node --test tests/exclusive-queue-lock.test.js tests/architect-blueprint-writer.test.js tests/never-stop-sentry-fix.test.js` |
 
 | 2026-08-12 | **The loop was choosing LifeOS and inventing col001 steps. That is forbidden.** Founder: one queue; that queue may only take slices of the overlay blueprint; no choices; next slice → factory. Enforced: `exclusive_until_complete` + discover only overlay; `isBlueprintSlice` / `skipNonBlueprintSlices` refuse invented ids; lanes cap 1; `STEP_STATUS_FORBIDDEN` revives immediately. Invented `col001-*` skipped off_print. REGISTER pending. Capreg route auto-registered so the already-shipped file mounts. | Founder: personally responsible; system cannot do what it wants; wasting tokens; nothing constitutionally enforced. | Next factory step is `TALOA-S64-CAPREG-REGISTER-001` then the next print slice. LifeOS must not appear in discover. |
@@ -994,7 +996,7 @@ Until this is implemented, trust escalation remains a constitutional requirement
 
 ## Agent Handoff Notes
 
-**2026-08-12 now:** There is one live `BUILD_QUEUE.json` — overlay. Every other product/project queue was moved to `docs/history/product-build-queues/`. `loadBuildQueue('lifeos')` and Architect writes to `builderos` throw `SECOND_QUEUE_FORBIDDEN`. Next factory step is still `TALOA-S64-CAPREG-REGISTER-001`. factory-2 LaunchAgent stays loaded. factory-3 stays idle. SENTRY still never builds.
+**2026-08-12 now:** One live queue (overlay). No new queue may ever be minted — `NEW_QUEUE_FORBIDDEN` on persist/plan/generate/GitHub commit/pre-commit. Archived queues stay in `docs/history/product-build-queues/`. Next factory step is still `TALOA-S64-CAPREG-REGISTER-001`.
 
 BuilderOS is live and shipping. `GOVERNED_FACTORY_ONLY` is active; the legacy `never-stop` loop is correctly fenced off. The `governed-autonomous-shipping-loop` treats each product's `BUILD_QUEUE.json` as the executable blueprint and orders products by `PRODUCT_BUILD_PRIORITY.json` (LifeOS first). The latest fix hardens the governed codegen path: `routes/factory-mount-routes.js` `codegenRunner` calls `callCouncilMember` with `taskType: 'codegen'`, `product_lane: 'builderos'`, and `useCache: false`, so the truth-envelope skips the generated code and `services/response-cache.js` cannot reuse a poisoned empty cache entry. `factory-staging/factory-core/builder/authoring.js` `DEFAULT_CODEGEN_TIERS` now reuses `config/task-model-routing.js` `TRUSTED_FALLBACK_MODELS` (strong-first, provider-diverse). `docs/products/command-center/BUILD_QUEUE.json` `s3` spec lists allowed mode enum values. The loop only stops for token/budget exhaustion or SENTRY/governance failure. `GET /api/v1/lifeos/never-stop/status` exposes `governed_status` with `totalRuns`, `lastShipped`, and `lastCommitSha`. Next: after commit/push/redeploy, force a BuilderOS tick and verify `totalRuns`/`lastShipped` increments while `lifeos` `lifeos-admin-3` (`routes/command-center-mode-routes.js`) ships. The command-center admin surface is now part of the `lifeos` blueprint; `command-center` is deprecated as a standalone product. Continue through the remaining blueprint steps across all products once the queue is moving.
 

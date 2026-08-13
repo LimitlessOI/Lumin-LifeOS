@@ -26,12 +26,16 @@ export {
   normalizeQueue,
   evaluateStepExpectations,
   LIVE_BUILD_QUEUE_PRODUCT,
+  LIVE_BUILD_QUEUE_REL,
   SECOND_QUEUE_FORBIDDEN,
+  NEW_QUEUE_FORBIDDEN,
   assertLiveBuildQueuePath,
+  assertBuildQueueMayBeWritten,
+  assertNoNewBuildQueueInCommit,
   assertNoSecondLiveQueueOnDisk,
   listForbiddenLiveQueueFiles,
 } from './build-queue-core.js';
-import { STEP_STATUS, queuePathForProduct, evaluateStepExpectations, assertLiveBuildQueuePath } from './build-queue-core.js';
+import { STEP_STATUS, queuePathForProduct, evaluateStepExpectations, assertBuildQueueMayBeWritten } from './build-queue-core.js';
 import { stepDependencies } from '../config/step-dependencies.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -444,7 +448,7 @@ export function queueSummary(queue) {
 
 export function persistQueue(queue, { root = ROOT } = {}) {
   const p = queue._sourcePath || queuePathForProduct(queue.product_id);
-  assertLiveBuildQueuePath(p);
+  assertBuildQueueMayBeWritten(p, { creating: !fs.existsSync(p) });
   const { _sourcePath, ...clean } = queue;
   fs.writeFileSync(p, `${JSON.stringify(clean, null, 2)}\n`);
   return p;

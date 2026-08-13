@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/universal-overlay/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-08-12 — Only live BUILD_QUEUE. All other product queues archived. REGISTER pending; invented col001 skipped. |
+| **Last Updated** | 2026-08-12 — factory-3 enabled for overlay (`public/overlay/`). Prior: hard gate — no new BUILD_QUEUE may ever be created. |
 
 ---
 ---
@@ -338,14 +338,18 @@ User on insurance portal
 | Field | Value |
 |---|---|
 | **Lane log** | `docs/CONTINUITY_LOG.md` (cross-cutting) |
-| **Next build** | factory-1: `TALOA-S64-CAPREG-REGISTER-001` only — then the next print slice. No LifeOS queue. No invented col001. Other product queues are in `docs/history/product-build-queues/` and must stay there. factory-2 LaunchAgent stays loaded. factory-3 stays idle. |
+| **Next build** | factory-1: next overlay print slice (services/routes). factory-2: native/macos-overlay. factory-3: **enabled** — owns `public/overlay/` (`com.lumin.factory-3-lane` ticking). No LifeOS queue. No invented col001. Other product queues stay in `docs/history/product-build-queues/`. |
 | **Known gaps** | Signed iOS `.ipa` blocked on Apple Developer cert + UDID (PWA works today). Gate 0 item 1 (rotate previously-exposed COMMAND_CENTER_KEY) is founder-at-source, not a missing program. Layer B still `REGISTERED_NOT_IMPLEMENTED`. |
-| **⚠️ IN PROGRESS** | Overlay never-stop: both factories on overlay. factory-2 LaunchAgent `com.lumin.factory-2-lane` must stay loaded. Do not ship `native/macos-overlay/` from factory-1. |
+| **⚠️ IN PROGRESS** | Overlay never-stop on **three** factories: factory-1 backend, factory-2 native (`com.lumin.factory-2-lane`), factory-3 web shell (`com.lumin.factory-3-lane` → `public/overlay/`). Do not ship native or public/overlay from factory-1. |
 | **How to load extension in Chrome** | Go to `chrome://extensions` → Enable Developer Mode → Load Unpacked → select the `extension/` folder in this repo |
 
 ---
 
 ## Change Receipts
+
+| 2026-08-12 | **factory-3 enabled for overlay.** factory-1 + factory-2 were already on overlay, so flipped the switch: provisioned `/Users/adamhopkins/Projects/Lumin-LifeOS-factory-3`, owns `public/overlay/`, LaunchAgent `com.lumin.factory-3-lane` loaded and ticking. Collectibles stays behind overlay exclusivity. | Founder: overlay first; if both factories used, make a 3rd. | `npm run builderos:factory:slots` shows factory-3 dispatching; log ticks `pending_owned: []` until a `public/overlay/` queue slice exists. |
+
+| 2026-08-12 | **Hard gate: no new BUILD_QUEUE.json may ever be created.** Overlay queue may be updated. Minting any other queue — or recreating this one from nothing — throws `NEW_QUEUE_FORBIDDEN` at persist, planner, generate, GitHub commit, and pre-commit. | Founder: hard gate; no new queues can be created ever. | `config/live-build-queue.js` |
 
 | 2026-08-12 | **Every other product's BUILD_QUEUE was moved to archive.** Founder: one queue only; shut the others down and move them; relying code must break. Live path gone. This queue is the only one `loadBuildQueue` will open. | Founder: there can only be one; move them; break noticeably. | Old files at `docs/history/product-build-queues/<id>/BUILD_QUEUE.json`. |
 

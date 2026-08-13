@@ -1,5 +1,13 @@
 <!-- SYNOPSIS: Documentation — CONTINUITY LOG. -->
 
+## 2026-08-12 — Overlay first; factory-3 enabled
+
+Adam: overlay first priority; if both factories already used, make a third. Confirmed factory-1 (backend) + factory-2 (native) already on overlay → enabled factory-3 via `npm run builderos:factory:enable -- --factory factory-3`. Owns `public/overlay/`; worktree `/Users/adamhopkins/Projects/Lumin-LifeOS-factory-3`; LaunchAgent `com.lumin.factory-3-lane` loaded and ticking. Idle until BUILD_QUEUE has pending `public/overlay/` slices. Collectibles waits behind overlay exclusivity.
+
+## 2026-08-12 — Hard gate: no new queues may ever be created
+
+Adam: put a hard gate in place so no new queues can be created, ever. `NEW_QUEUE_FORBIDDEN` on persist, planner, generate-from-home, GitHub commit, and pre-commit. Discover will not enroll a missing queue. Overlay may be updated; minting a second file throws.
+
 ## 2026-08-12 — Other queues moved to archive (there can only be one)
 
 Adam: if there are other queues we don't want, shut them down, move them into the archive folder; if something relies on them, it must break noticeably. 39 `BUILD_QUEUE.json` files moved to `docs/history/product-build-queues/`. The only live queue is overlay. `loadBuildQueue` / `planBuildQueue` throw `SECOND_QUEUE_FORBIDDEN`. No shims.

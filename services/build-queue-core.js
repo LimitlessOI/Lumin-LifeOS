@@ -17,6 +17,24 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { execFileSync } from 'node:child_process';
 import { authorAssertionsFromSpec } from '../factory-staging/factory-core/bpb/author-assertions.js';
 import { runBehaviorAssertions } from '../factory-staging/factory-core/sentry/behavior-assertions.js';
+import {
+  LIVE_BUILD_QUEUE_PRODUCT,
+  LIVE_BUILD_QUEUE_REL,
+  SECOND_QUEUE_FORBIDDEN,
+  NEW_QUEUE_FORBIDDEN,
+  isCanonicalLiveQueuePath,
+  isLiveQueueLocation,
+  normalizeQueueRel,
+} from '../config/live-build-queue.js';
+
+export {
+  LIVE_BUILD_QUEUE_PRODUCT,
+  LIVE_BUILD_QUEUE_REL,
+  SECOND_QUEUE_FORBIDDEN,
+  NEW_QUEUE_FORBIDDEN,
+  isCanonicalLiveQueuePath,
+  isLiveQueueLocation,
+};
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -28,9 +46,6 @@ export const STEP_STATUS = Object.freeze({
   SKIPPED: 'skipped',
   FOUNDER_GATED: 'founder_gated',
 });
-
-export const LIVE_BUILD_QUEUE_PRODUCT = 'universal-overlay';
-export const SECOND_QUEUE_FORBIDDEN = 'SECOND_QUEUE_FORBIDDEN';
 
 export function liveQueuePathForbidden(filePath) {
   const rel = String(filePath || '').replace(/\\/g, '/');
@@ -80,6 +95,34 @@ export function assertNoSecondLiveQueueOnDisk(root = ROOT) {
   if (!extra.length) return;
   throw new Error(
     `${SECOND_QUEUE_FORBIDDEN}: extra live queues on disk:\n${extra.join('\n')}\nOnly docs/products/${LIVE_BUILD_QUEUE_PRODUCT}/BUILD_QUEUE.json may exist. Move the rest to docs/history/product-build-queues/.`,
+  );
+}
+
+export function assertBuildQueueMayBeWritten(filePath, { creating = false } = {}) {
+  assertLiveBuildQueuePath(filePath);
+  if (!creating) return;
+  throw new Error(
+    `${NEW_QUEUE_FORBIDDEN}: refused to mint '${normalizeQueueRel(filePath)}'. No new BUILD_QUEUE.json may ever be created. The only live queue already exists at ${LIVE_BUILD_QUEUE_REL}. This is supposed to break.`,
+  );
+}
+
+export function assertNoNewBuildQueueInCommit(fileEntries, { trackedSet = new Set() } = {}) {
+  const entries = Array.isArray(fileEntries) ? fileEntries : [];
+  const blocked = [];
+  for (const entry of entries) {
+    if (!entry || entry.delete === true || entry.op === 'delete' || entry.sha === null) continue;
+    const rel = normalizeQueueRel(entry.path || entry.target_file || '');
+    if (!rel.endsWith('BUILD_QUEUE.json')) continue;
+    if (!isLiveQueueLocation(rel) && !rel.endsWith('/BUILD_QUEUE.json')) continue;
+    if (!isLiveQueueLocation(rel)) continue;
+    const isNew = !trackedSet.has(rel);
+    if (!isCanonicalLiveQueuePath(rel) || isNew) {
+      blocked.push(rel);
+    }
+  }
+  if (!blocked.length) return;
+  throw new Error(
+    `${NEW_QUEUE_FORBIDDEN}: commit refused — no new BUILD_QUEUE.json may ever be created. Refused:\n${blocked.join('\n')}\nOnly updates to ${LIVE_BUILD_QUEUE_REL} are legal. This is supposed to break.`,
   );
 }
 

@@ -144,24 +144,23 @@ test('assertSafeQueueWrite blocks dropping or demoting done steps', () => {
   assert.equal(assertSafeQueueWrite(existing, keep).ok, true);
 });
 
-test('generateBuildQueueFromHome dry-run validates without writing', async () => {
+test('generateBuildQueueFromHome refuses to mint any queue that is not the live overlay file', async () => {
   await withTempProduct(HOME, null, async ({ root, productId }) => {
+    await assert.rejects(
+      () => generateBuildQueueFromHome({
+        productId,
+        root,
+        deterministic: true,
+        dryRun: true,
+      }),
+      /SECOND_QUEUE_FORBIDDEN|NEW_QUEUE_FORBIDDEN/,
+    );
     const { queuePath } = productPaths(productId, root);
-    const res = await generateBuildQueueFromHome({
-      productId,
-      root,
-      deterministic: true,
-      dryRun: true,
-    });
-    assert.equal(res.ok, true);
-    assert.equal(res.wrote, false);
-    assert.equal(res.detail, 'validated_dry_run');
     assert.equal(fs.existsSync(queuePath), false);
-    assert.equal(validatePlannedQueue(res.queue).ok, true);
   });
 });
 
-test('generateBuildQueueFromHome writes BUILD_QUEUE.json and preserves done steps', async () => {
+test('generateBuildQueueFromHome will not write a second product queue even if one already sits in the fixture', async () => {
   const existing = {
     schema: 'product_build_queue_v1',
     product_id: 'fixture-product',
@@ -178,38 +177,15 @@ test('generateBuildQueueFromHome writes BUILD_QUEUE.json and preserves done step
     ],
   };
   await withTempProduct(HOME, existing, async ({ root, productId }) => {
-    const res = await generateBuildQueueFromHome({
-      productId,
-      root,
-      deterministic: true,
-      write: true,
-    });
-    assert.equal(res.ok, true);
-    assert.equal(res.wrote, true);
-    const onDisk = JSON.parse(fs.readFileSync(res.queuePath, 'utf8'));
-    assert.equal(onDisk.schema, 'product_build_queue_v1');
-    assert.equal(onDisk.verify_script, 'scripts/noop.mjs');
-    const done = onDisk.steps.find((s) => s.id === 'already-done');
-    assert.equal(done.status, 'done');
-    assert.ok(onDisk.steps.length > 1, 'appended new intention steps');
-    // done file must not be re-queued as a new pending step
-    const redo = onDisk.steps.filter(
-      (s) => s.target_file === 'services/email-templates.js' && s.status !== 'done',
+    await assert.rejects(
+      () => generateBuildQueueFromHome({
+        productId,
+        root,
+        deterministic: true,
+        write: true,
+      }),
+      /SECOND_QUEUE_FORBIDDEN|NEW_QUEUE_FORBIDDEN/,
     );
-    assert.equal(redo.length, 0);
-  });
-});
-
-test('generateBuildQueueFromHome fails closed: no backlog', async () => {
-  await withTempProduct('# Title\n## Current State\n- just status\n', null, async ({ root, productId }) => {
-    const res = await generateBuildQueueFromHome({
-      productId,
-      root,
-      deterministic: true,
-      dryRun: true,
-    });
-    assert.equal(res.ok, false);
-    assert.equal(res.detail, 'no_backlog');
   });
 });
 
@@ -241,17 +217,6 @@ test('generateBuildQueueFromHome preserves unrelated done steps on append', asyn
     ],
   };
   assert.equal(assertSafeQueueWrite(existing, badNext).ok, false);
-
-  await withTempProduct(HOME, existing, async ({ root, productId }) => {
-    const res = await generateBuildQueueFromHome({
-      productId,
-      root,
-      deterministic: true,
-      write: true,
-    });
-    assert.equal(res.ok, true);
-    assert.ok(res.queue.steps.some((s) => s.id === 'ghost-done' && s.status === 'done'));
-  });
 });
 
 test('parseArgs reads product + flags', () => {

@@ -18,6 +18,7 @@ import {
   shouldFlagDesignReview,
 } from '../services/build-queue-planner.js';
 import { STEP_STATUS } from '../services/product-build-orchestrator.js';
+import { assertBuildQueueMayBeWritten } from '../services/build-queue-core.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const MAX_STEPS = 12;
@@ -215,6 +216,7 @@ export async function generateBuildQueueFromHome(opts = {}) {
   }
   const root = opts.root || ROOT;
   const { homePath, queuePath } = productPaths(productId, root);
+  assertBuildQueueMayBeWritten(queuePath, { creating: !fs.existsSync(queuePath) });
 
   let homeText = opts.homeText;
   if (homeText == null) {

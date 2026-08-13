@@ -39,6 +39,7 @@ import {
   evaluateFilePlacement,
   formatFilePlacementFindings,
 } from '../scripts/lib/file-placement-gate.mjs';
+import { assertNoNewBuildQueueInCommit } from './build-queue-core.js';
 import { extractSsotTag } from '../scripts/lib/product-home-enforce.mjs';
 import { BLOCKED_WRITE_PATHS, ROUTE_REGISTRATION_FILE } from '../config/builder-safe-scope.js';
 
@@ -184,6 +185,7 @@ function assertFilePlacementAndBlueprintAuthority(fileEntries, message, label = 
       `${label} BLOCKED: file-placement authority violation — refusing to push.\n${formatFilePlacementFindings(placement.findings)}`,
     );
   }
+  assertNoNewBuildQueueInCommit(normalizedEntries, { trackedSet: getGitTrackedFilesSet(REPO_ROOT) });
 
   const tracked = getGitTrackedFilesSet(REPO_ROOT);
   const bpProductIds = loadBpPriorityProductIds(REPO_ROOT);
