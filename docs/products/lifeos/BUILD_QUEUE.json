@@ -7394,7 +7394,7 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-13T02:05:28.428Z",
+      "last_attempt_at": "2026-08-13T02:22:24.707Z",
       "last_error": "STEP_STATUS_FORBIDDEN",
       "same_signature_count": 1,
       "behavior_assertions": [
@@ -7408,8 +7408,8 @@
         }
       ],
       "last_attempt": null,
-      "revive_count": 5,
-      "revived_at": "2026-08-13T02:05:28.291Z",
+      "revive_count": 6,
+      "revived_at": "2026-08-13T02:22:24.570Z",
       "no_op": null,
       "pre_existing": null,
       "demoted": false,
@@ -7486,13 +7486,13 @@
     },
     {
       "id": "lifeos-build-fix-2",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/founder-chair-intent.js",
       "task": "Implement founder chat intent classification service",
       "spec": "Create a new service exporting 'classifyFounderIntent' that, when given a founder chat prompt, correctly identifies 'drawer_direct_build' and classifies it into the 'workflow-content' lane.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "classifyFounderIntent"
       ],
@@ -7528,7 +7528,7 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-13T02:07:15.888Z",
+      "last_attempt_at": null,
       "last_error": "STEP_STATUS_FORBIDDEN",
       "same_signature_count": 1,
       "behavior_assertions": [
@@ -7542,8 +7542,8 @@
         }
       ],
       "last_attempt": null,
-      "revive_count": 4,
-      "revived_at": "2026-08-13T02:07:15.719Z",
+      "revive_count": 5,
+      "revived_at": "2026-08-13T02:22:24.570Z",
       "no_op": null,
       "pre_existing": null,
       "demoted": false,
