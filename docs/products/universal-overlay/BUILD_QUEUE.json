@@ -4522,8 +4522,8 @@
     {
       "id": "COLLECTIBLES-V1-ROUTES-001",
       "product_id": "collectibles",
-      "status": "pending",
-      "attempts": 0,
+      "status": "blocked",
+      "attempts": 1,
       "target_file": "routes/collectibles-routes.js",
       "action_type": "author_then_write",
       "depends_on": [
@@ -4558,7 +4558,13 @@
           ]
         }
       ],
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-08-13T08:35:57.560Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/local/bin/node --input-type=module -e import \"file:///usr/src/app/routes/.factory-import-check-1786610157516-1.mjs\";\nn",
+      "started_at": "2026-08-13T08:35:29.386Z"
     },
     {
       "id": "COLLECTIBLES-V1-ACCEPTANCE-001",
