@@ -4,8 +4,13 @@
  * docs/products/collectibles/PRINT_SEQUENCE.json (Cursor must not author print).
  * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { PRINT_INVENTION_FORBIDDEN } from './live-build-queue.js';
 import { loadSealedPrintSequence } from '../services/architect-print-seal.js';
+
+const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 export const OVERLAY_PRINT_SLICE_ID = /^(TALOA-S64-|TALOA-P1-|TALOA-G0-|TALOA-BADGE-|TALOA-NATIVE-|TALOA-SENTRY-)/;
 export const OVERLAY_PRINT_SOURCE = 'TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md';
@@ -216,6 +221,8 @@ export function enrollNextCollectiblesPrintSlice(queue) {
 /**
  * Heal Collectibles steps blocked on missing PRODUCT-COLLECTIBLES twin or a
  * sealed exact path that was claimed without the file on disk.
+ * If the .exact file is absent, fall back to author_then_write — do not keep
+ * pointing at a missing exact (that re-creates hidden_dependency forever).
  */
 export function healCollectiblesBlueprintAuthority(queue) {
   const healed = [];
@@ -231,17 +238,23 @@ export function healCollectiblesBlueprintAuthority(queue) {
     step.blueprint_step_id = step.id;
     step.product_id = step.product_id || 'collectibles';
     if (!step.source) step.source = COLLECTIBLES_SOURCE;
-    // Prefer sealed exact under twins/steps/<id>.exact when present.
     const exactRel = `docs/products/universal-overlay/twins/steps/${step.id}.exact`;
-    step.action_type = 'write_file_exact';
-    step.exact_inputs = { content_source_path: exactRel };
+    if (fs.existsSync(path.join(REPO_ROOT, exactRel))) {
+      step.action_type = 'write_file_exact';
+      step.exact_inputs = { content_source_path: exactRel };
+      step.heal_reason = 'collectibles_restore_sealed_exact';
+    } else {
+      step.action_type = 'author_then_write';
+      delete step.exact_inputs;
+      if (step.exactness) step.exactness = { ...(step.exactness || {}), sealed: false };
+      step.heal_reason = missingExact
+        ? 'collectibles_clear_missing_exact_to_author'
+        : 'collectibles_cite_one_queue_twin';
+    }
     step.status = 'pending';
     step.last_error = null;
     step.demoted = false;
     step.heal_unblocked = true;
-    step.heal_reason = missingExact
-      ? 'collectibles_restore_sealed_exact'
-      : 'collectibles_cite_one_queue_twin';
     healed.push(step.id);
   }
   return healed;

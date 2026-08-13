@@ -3,9 +3,14 @@
  * Converts known overnight thrash classes into machine-closed retries.
  * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 export const AUTHOR_THRASH_RE =
-  /codegen_authoring_failed|import_resolution_failed|codegen_empty|codegen_threw|SENTRY_FAILED|behavior_assertion_failed|behavior_proof|github_commit_failed|SLICE_COST_UNTRACKED/i;
+  /codegen_authoring_failed|import_resolution_failed|codegen_empty|codegen_threw|SENTRY_FAILED|behavior_assertion_failed|behavior_proof|github_commit_failed|SLICE_COST_UNTRACKED|hidden_dependency/i;
 
 /**
  * Resolve a sealed exact source path from a BUILD_QUEUE step (if any).
@@ -31,6 +36,17 @@ export function promoteSealedExactOnThrash(step) {
   if (!step || typeof step !== 'object') return { promoted: false, reason: 'no_step' };
   const source = sealedExactSourcePath(step);
   if (!source) return { promoted: false, reason: 'no_sealed_exact' };
+  // Never promote to a missing exact — that is the hidden_dependency thrash.
+  if (!fs.existsSync(path.join(REPO_ROOT, source))) {
+    if (/hidden_dependency|Missing source file/i.test(String(step.last_error || ''))) {
+      step.action_type = 'author_then_write';
+      delete step.exact_inputs;
+      if (step.exactness) step.exactness = { ...(step.exactness || {}), sealed: false };
+      step.heal_reason = 'demote_missing_exact_to_author';
+      return { promoted: false, reason: 'exact_missing_demoted_to_author', source };
+    }
+    return { promoted: false, reason: 'exact_file_missing', source };
+  }
   const err = String(step.last_error || step.failure_signature || '');
   const thrashing = AUTHOR_THRASH_RE.test(err)
     || Number(step.same_signature_count || 0) >= 1
