@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T08:16:16.059Z",
+  "generated_at": "2026-08-13T08:17:24.076Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13545,
   "files": [
@@ -44831,8 +44831,8 @@
       "path": "docs/products/collectibles/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Collectibles (LimitlessOS)",
       "bytes": 8030,
-      "mtime": "2026-08-13T08:12:55.302Z",
-      "indexed_at": "2026-08-13T08:12:55.302Z"
+      "mtime": "2026-08-13T08:17:24.076Z",
+      "indexed_at": "2026-08-13T08:17:24.076Z"
     },
     {
       "path": "docs/products/collectibles/SCHEMA_CONTRACTS.md",
@@ -46497,8 +46497,8 @@
       "path": "docs/products/universal-overlay/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Universal Overlay",
       "bytes": 122729,
-      "mtime": "2026-08-13T08:11:12.649Z",
-      "indexed_at": "2026-08-13T08:11:12.649Z"
+      "mtime": "2026-08-13T08:17:24.076Z",
+      "indexed_at": "2026-08-13T08:17:24.076Z"
     },
     {
       "path": "docs/products/universal-overlay/SEND_PACKET_FLUID_UI_AND_TWO_FACTORIES_2026-08-11.md",
