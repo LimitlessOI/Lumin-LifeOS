@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T08:19:36.780Z",
+  "generated_at": "2026-08-13T08:19:48.319Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13546,
+  "file_count": 13547,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -44831,8 +44831,8 @@
       "path": "docs/products/collectibles/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Collectibles (LimitlessOS)",
       "bytes": 8030,
-      "mtime": "2026-08-13T08:17:24.076Z",
-      "indexed_at": "2026-08-13T08:17:24.076Z"
+      "mtime": "2026-08-13T08:19:48.319Z",
+      "indexed_at": "2026-08-13T08:19:48.319Z"
     },
     {
       "path": "docs/products/collectibles/SCHEMA_CONTRACTS.md",
@@ -94971,6 +94971,16 @@
       "indexed_at": "2026-08-01T20:04:05.828Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/collectibles/adapters/mtg-adapter.js",
+      "synopsis": "MTG CategoryAdapter wrapping existing LifeOS vision/pricing modules.",
+      "bytes": 1021,
+      "mtime": "2026-08-13T08:19:48.319Z",
+      "indexed_at": "2026-08-13T08:19:48.319Z",
+      "ssot": [
+        "docs/products/collectibles/PRODUCT_HOME.md"
       ]
     },
     {
