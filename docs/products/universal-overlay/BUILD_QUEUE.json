@@ -6984,9 +6984,9 @@
       "shipped_via": "governed_ship_queue"
     },
     {
-      "status": "pending",
+      "status": "done",
       "founder_gated": false,
-      "attempts": 3,
+      "attempts": 0,
       "action_type": "write_file_exact",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
@@ -7010,17 +7010,17 @@
         "need-for"
       ],
       "blueprint_step_id": "COLLECTIBLES-V2-WANT-GRAPH-001",
-      "commit_sha": null,
+      "commit_sha": "9a7243dc868185f34e827bde7cccbeb3d7b894af",
       "built_sha": null,
       "proof": null,
       "last_attempt_at": "2026-08-13T23:27:09.052Z",
-      "last_error": "artifact_missing_after_ship: artifact_proof_failed: missing:need-for",
+      "last_error": null,
       "started_at": "2026-08-13T23:26:53.066Z",
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
       "park_until": null,
-      "heal_unblocked": true,
+      "heal_unblocked": false,
       "heal_reason": "collectibles_never_stop_heal",
       "skip_reason": null,
       "escalation_required": false,
@@ -7065,8 +7065,37 @@
         }
       },
       "tokens_used": 0,
-      "duration_ms": 1000,
-      "shipped_at": "2026-08-13T23:27:09.690Z"
+      "duration_ms": 23984,
+      "shipped_at": "2026-08-13T23:27:17.047Z",
+      "shipped_via": "governed_ship_queue"
+    },
+    {
+      "status": "pending",
+      "founder_gated": false,
+      "attempts": 0,
+      "action_type": "author_then_write",
+      "product_id": "collectibles",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "mission_id": "PRODUCT-universal-overlay",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
+      "depends_on": [
+        "COLLECTIBLES-V2-WANT-GRAPH-001"
+      ],
+      "id": "COLLECTIBLES-V2-INVISIBLE-LISTING-001",
+      "target_file": "services/collectibles/invisible-listing.js",
+      "sandbox_boundary": "services/collectibles/**",
+      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createInvisibleListingService({ pool }) — latent liquidity from liquidity_preferences; Quiet Mode; never auto-list without permission. ES module.",
+      "spec": "MASTER_BLUEPRINT V2 Invisible Listing.",
+      "expected_exports": [
+        "createInvisibleListingService"
+      ],
+      "file_contains": [
+        "createInvisibleListingService",
+        "invisible",
+        "liquidity",
+        "Quiet"
+      ],
+      "blueprint_step_id": "COLLECTIBLES-V2-INVISIBLE-LISTING-001"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
