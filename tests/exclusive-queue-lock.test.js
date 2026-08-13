@@ -114,7 +114,7 @@ test('one queue may carry Collectibles BP slices without a second queue file', (
   }
 });
 
-test('Collectibles wait while overlay print remains — overlay exclusive_until_complete', async () => {
+test('one queue multi-factory: selectNextStep prefers overlay; selectShippableSteps still exposes Collectibles', async () => {
   const { selectShippableSteps } = await import('../factory-staging/factory-core/bpb/build-queue-step-adapter.js');
   const queue = {
     product_id: 'universal-overlay',
@@ -139,7 +139,10 @@ test('Collectibles wait while overlay print remains — overlay exclusive_until_
   const { step } = selectNextStep(queue);
   assert.equal(step.id, 'TALOA-S64-ANDROID-BODY-001');
   const shippable = selectShippableSteps(queue);
-  assert.deepEqual(shippable.map((s) => s.id), ['TALOA-S64-ANDROID-BODY-001']);
+  assert.deepEqual(shippable.map((s) => s.id), [
+    'TALOA-S64-ANDROID-BODY-001',
+    'COLLECTIBLES-V1-TWIN-SERVICE-001',
+  ]);
 });
 
 test('invented register scripts are not print slices even with blueprint source', () => {

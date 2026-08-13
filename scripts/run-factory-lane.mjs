@@ -44,6 +44,38 @@ function tipCommandKey() {
   ).trim();
 }
 
+/** Probe tip from outside Railway — tip-hosted SENTRY cannot see tip death. */
+export async function probeTipHealth({
+  baseUrl = tipBaseUrl(),
+  commandKey = tipCommandKey(),
+  fetchFn = fetch,
+} = {}) {
+  const base = String(baseUrl || '').replace(/\/$/, '');
+  if (!base) return { ok: false, error: 'missing_base_url' };
+  try {
+    const healthRes = await fetchFn(`${base}/health`, { signal: AbortSignal.timeout(12_000) });
+    const healthBody = await healthRes.json().catch(() => ({}));
+    const db = healthBody?.health?.database?.status || healthBody?.database?.status || null;
+    const headers = commandKey ? { 'x-command-key': commandKey } : {};
+    const readyRes = await fetchFn(`${base}/api/v1/lifeos/builder/ready`, {
+      headers,
+      signal: AbortSignal.timeout(12_000),
+    });
+    const readyBody = await readyRes.json().catch(() => ({}));
+    const readyOk = readyRes.status === 200;
+    const healthOk = healthRes.status === 200 && db !== 'error';
+    return {
+      ok: Boolean(healthOk && readyOk),
+      status: healthRes.status,
+      db,
+      readyStatus: readyRes.status,
+      deploy_sha: readyBody?.codegen?.deploy_commit_sha || readyBody?.deploy_commit_sha || null,
+    };
+  } catch (err) {
+    return { ok: false, error: String(err.message || err).slice(0, 200) };
+  }
+}
+
 function ownsCollectiblesLane(factoryId) {
   return ownerFor('services/collectibles/category-adapter.js') === factoryId;
 }
@@ -219,10 +251,11 @@ export async function runFactoryLane({ factoryId = thisFactoryId(), productId = 
   const needsAuthor = checks.filter((c) => !c.ok);
   const claimable = checks.filter((c) => c.ok);
 
+  const tip = await probeTipHealth();
   let build = { skipped: true, reason: factoryId === 'factory-1' ? 'primary_lane_does_not_compile_native' : 'lane_does_not_own_native' };
   let ship = { skipped: true, reason: 'not_web_shell_lane' };
   let taloa = null;
-  let watchdog = null;
+  let watchdog = evaluateSystemWatchdog({ tip, overlayNativeBlocks: overlayNativeBlockedSteps(queue) });
   if (ownsNative(factoryId) && sync.ok !== false) {
     const head = nativeTreeSha(repoRoot);
     const prev = readLastTick(repoRoot, factoryId);
@@ -243,6 +276,7 @@ export async function runFactoryLane({ factoryId = thisFactoryId(), productId = 
     const taloaState = ensureTaloaRunning(repoRoot);
     taloa = taloaState;
     watchdog = evaluateSystemWatchdog({
+      tip,
       factory2: { tickAt: prev?.at, ok: true, taloaRunning: taloaState.running },
       overlayNativeBlocks: overlayNativeBlockedSteps(queue),
     });
@@ -252,6 +286,7 @@ export async function runFactoryLane({ factoryId = thisFactoryId(), productId = 
       native_tree_sha: head,
       build,
       taloa: taloaState,
+      tip,
       watchdog,
       pending_owned: checks,
     });
@@ -268,22 +303,28 @@ export async function runFactoryLane({ factoryId = thisFactoryId(), productId = 
       product_id: resolvedProduct,
       build,
       ship,
+      tip,
+      watchdog,
       pending_owned: checks,
     });
   } else if (factoryId !== 'factory-1') {
     writeTick(repoRoot, factoryId, {
       at: new Date().toISOString(),
       factory_id: factoryId,
+      tip,
+      watchdog,
       build,
       pending_owned: checks,
     });
   }
 
   let detail;
-  if (ownsCollectiblesLane(factoryId) && ship && !ship.skipped) {
+  if (watchdog && watchdog.ok === false) {
+    detail = `watchdog: ${(watchdog.findings || []).map((f) => f.id).join(', ')}`;
+  } else if (ownsCollectiblesLane(factoryId) && ship && !ship.skipped) {
     detail = ship.ok
-      ? `collectibles ship requested for ${factoryId}: shipped=${ship.shipped || 0}`
-      : `collectibles ship failed for ${factoryId}: ${ship.reason || ship.error || ship.detail || 'unknown'}`;
+      ? `lane ship requested for ${factoryId}: shipped=${ship.shipped || 0}`
+      : `lane ship failed for ${factoryId}: ${ship.reason || ship.error || ship.detail || 'unknown'}`;
   } else if (needsAuthor.length) {
     detail = `${needsAuthor.length} owned step(s) need authoring: ${needsAuthor.map((c) => c.id).join(', ')}`;
   } else if (claimable.length) {
@@ -297,7 +338,7 @@ export async function runFactoryLane({ factoryId = thisFactoryId(), productId = 
   }
 
   return {
-    ok: sync.ok !== false && build.ok !== false && (ship.skipped || ship.ok !== false),
+    ok: sync.ok !== false && build.ok !== false && (ship.skipped || ship.ok !== false) && (watchdog?.ok !== false),
     factory_id: factoryId,
     workspace: repoRoot,
     sync,
@@ -305,6 +346,7 @@ export async function runFactoryLane({ factoryId = thisFactoryId(), productId = 
     pending_owned: checks,
     build,
     ship,
+    tip,
     taloa,
     watchdog,
     detail,

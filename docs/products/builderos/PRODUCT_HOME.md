@@ -35,6 +35,10 @@
 ---
 
 ## Change Receipts
+| 2026-08-13 | **Collectibles parallel again + tip probe on factory lanes.** Observation: tip recovered; factory-3 no_shippable because selectShippableSteps held Collectibles behind overlay print. Removed hold (selectNextStep still prefers overlay). Tip probe on factory-2/3. | Founder observation order. | tests/exclusive-queue-lock + system-watchdog-tip |
+
+| 2026-08-13 | **Local factory watchdog now probes tip.** Tip-hosted SENTRY cannot see tip death (DB error → routes 404). factory-2/3 lanes probe `/health` + `/builder/ready` each tick and emit `tip_manufacturing_down` with a Railway DATABASE_URL/restart solution. | Founder: observe BuilderOS; find issues; fix them. | `tests/system-watchdog-tip.test.js` |
+
 | 2026-08-13 | **BP acceptance resolver accepts `node scripts/*.mjs`.** TALOA-OVERLAY-P1 used a direct node command; guardrails only resolved `npm run`. Fixed + wired finishBpAcceptance into verify-universaloverlay so commits are not blocked by a pre-existing queue row. | Tip outage + one-queue heal ship. | `services/bp-priority-sync.js` |
 
 | 2026-08-13 | **Hard gate: the factory cannot invent the next overlay slice, and cannot ship Collectibles while overlay print is open.** Root cause of "it stopped": `isBlueprintSlice` treated any `source` citing the Taloa print as on-print (invented `register-*.mjs` clones); persist did not skip/enroll; discover never enrolled the next sealed §64 item so `selectNextStep` returned null and the planner invented more scripts. Closed: sealed `OVERLAY_PRINT_SEQUENCE`; `PRINT_INVENTION_FORBIDDEN` on persist; planner never calls a model for overlay; discover enrolls then continues; Collectibles hold restored in `selectShippableSteps`. Slice `duration_ms`/`tokens_used` stamped; founder-runtime mounts `/api/v1/builderos/control-plane/spend-outcomes`. | Founder: it stopped; keep asking and it is not done; hard-gate so it is impossible not to do what I asked. | `node --test tests/exclusive-queue-lock.test.js` 19/19. Next shippable step `TALOA-S64-ANDROID-BODY-001`. |

@@ -17,15 +17,32 @@ export const FACTORY2_STALE_MS = 3 * 60 * 1000;
  * @param {number} [input.now]
  * @param {{ enabled?: boolean, lastTickAt?: string, hardHalt?: boolean }} [input.governed]
  * @param {{ tickAt?: string, ok?: boolean, taloaRunning?: boolean } | null} [input.factory2]
+ * @param {{ ok?: boolean, status?: number, db?: string, readyStatus?: number, error?: string } | null} [input.tip]
  * @param {Array<{ id?: string, last_error?: string, target_file?: string, status?: string }>} [input.overlayNativeBlocks]
  */
 export function evaluateSystemWatchdog({
   now = Date.now(),
   governed = null,
   factory2 = null,
+  tip = null,
   overlayNativeBlocks = [],
 } = {}) {
   const findings = [];
+
+  if (tip && tip.ok === false) {
+    const db = String(tip.db || '');
+    const ready = Number(tip.readyStatus || 0);
+    const health = Number(tip.status || 0);
+    findings.push({
+      id: 'tip_manufacturing_down',
+      proposed_solution:
+        db === 'error' || health === 503
+          ? 'Production tip is up but database probe failed (Neon itself may still be healthy). In Railway vault for lumin-web-production: verify DATABASE_URL / DATABASE_PUBLIC_URL, restart the founder_builder service, then confirm GET /api/v1/lifeos/builder/ready returns 200 with deploy_commit_sha. Factory lanes cannot ship while tip routes 404.'
+          : ready === 404 || health === 404
+            ? 'Production tip is not serving BuilderOS routes (ready/factory 404). Redeploy Railway from origin/main tip SHA and confirm /builder/ready. Local factory-2/3 keep watching; they cannot manufacture without tip.'
+            : `Production tip probe failed (${tip.error || `health=${health} ready=${ready}`}). Restore tip, then factory-3 Collectibles + factory-1 overlay ships resume.`,
+    });
+  }
 
   if (governed?.hardHalt) {
     findings.push({

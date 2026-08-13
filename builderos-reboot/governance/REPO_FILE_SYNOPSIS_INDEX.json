@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T06:54:12.400Z",
+  "generated_at": "2026-08-13T06:55:36.341Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13533,
+  "file_count": 13534,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -41266,9 +41266,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Documentation — CONTINUITY LOG.",
-      "bytes": 199357,
-      "mtime": "2026-08-13T06:42:56.794Z",
-      "indexed_at": "2026-08-13T06:48:47.620Z"
+      "bytes": 199837,
+      "mtime": "2026-08-13T06:55:36.341Z",
+      "indexed_at": "2026-08-13T06:55:36.341Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -44293,9 +44293,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 579492,
-      "mtime": "2026-08-13T06:43:57.389Z",
-      "indexed_at": "2026-08-13T06:43:58.741Z"
+      "bytes": 580212,
+      "mtime": "2026-08-13T06:55:36.341Z",
+      "indexed_at": "2026-08-13T06:55:36.341Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -44789,8 +44789,8 @@
       "path": "docs/products/collectibles/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Collectibles (LimitlessOS)",
       "bytes": 7780,
-      "mtime": "2026-08-13T06:41:53.652Z",
-      "indexed_at": "2026-08-13T06:43:58.741Z"
+      "mtime": "2026-08-13T06:55:36.341Z",
+      "indexed_at": "2026-08-13T06:55:36.341Z"
     },
     {
       "path": "docs/products/collectibles/SCHEMA_CONTRACTS.md",
@@ -66833,9 +66833,9 @@
     {
       "path": "factory-staging/factory-core/bpb/build-queue-step-adapter.js",
       "synopsis": "STEP 5e — adapt a per-product docs/products/<id>/BUILD_QUEUE.json step",
-      "bytes": 17286,
-      "mtime": "2026-08-13T06:29:41.042Z",
-      "indexed_at": "2026-08-13T06:48:47.620Z",
+      "bytes": 17331,
+      "mtime": "2026-08-13T06:55:36.341Z",
+      "indexed_at": "2026-08-13T06:55:36.341Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -78618,9 +78618,9 @@
     {
       "path": "scripts/lib/system-watchdog.mjs",
       "synopsis": "In-system watchdog decisions. The actor doing the work is not",
-      "bytes": 3419,
-      "mtime": "2026-08-12T22:30:50.776Z",
-      "indexed_at": "2026-08-12T22:30:50.776Z",
+      "bytes": 4637,
+      "mtime": "2026-08-13T06:55:36.341Z",
+      "indexed_at": "2026-08-13T06:55:36.341Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -80058,9 +80058,9 @@
     {
       "path": "scripts/run-factory-lane.mjs",
       "synopsis": "Dispatch one tick of work for a named factory lane. Production",
-      "bytes": 14609,
-      "mtime": "2026-08-13T06:24:07.119Z",
-      "indexed_at": "2026-08-13T06:24:07.119Z",
+      "bytes": 16269,
+      "mtime": "2026-08-13T06:55:36.341Z",
+      "indexed_at": "2026-08-13T06:55:36.341Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -105051,9 +105051,9 @@
     {
       "path": "tests/exclusive-queue-lock.test.js",
       "synopsis": "One overlay queue, blueprint slices only — the factory may not choose.",
-      "bytes": 12014,
-      "mtime": "2026-08-13T06:34:04.106Z",
-      "indexed_at": "2026-08-13T06:48:47.620Z",
+      "bytes": 12085,
+      "mtime": "2026-08-13T06:55:36.341Z",
+      "indexed_at": "2026-08-13T06:55:36.341Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -106290,6 +106290,16 @@
       "bytes": 2086,
       "mtime": "2026-07-28T17:54:14.947Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "tests/system-watchdog-tip.test.js",
+      "synopsis": "Tip-outage findings for local factory watchdog (outside Railway).",
+      "bytes": 960,
+      "mtime": "2026-08-13T06:55:36.341Z",
+      "indexed_at": "2026-08-13T06:55:36.341Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "tests/tc-mailbox-subject.test.js",

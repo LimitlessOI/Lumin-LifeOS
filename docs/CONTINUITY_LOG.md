@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Documentation — CONTINUITY LOG. -->
 
+## 2026-08-13 — BuilderOS observation: tip down, queue order OK
+
+Observed: tip health 503 database error (Neon still answers from local). Builder routes 404 — factory-1 never-stop dead. Queue order correct (next overlay print ANDROID-BODY; Collectibles twin/mtg pending; no inventions). SENTRY findings stale (July). Local factory watchdog extended to probe tip (`tip_manufacturing_down`). Blocker: Railway vault DATABASE_URL / service restart — no RAILWAY_TOKEN in shell.
+
 ## 2026-08-13 — Overlay stopped because the loop invented work; hard-gated
 
 Adam: building stopped; he keeps asking and it is not done; hard-gate so it is impossible not to do what he asked. Root cause: invented `register-*.mjs` counted as print slices via source-string hole; persist did not skip/enroll; discover never enrolled the next sealed §64 item so the planner invented more scripts; Collectibles were allowed to ship while overlay print was open. Closed: sealed `OVERLAY_PRINT_SEQUENCE`, `PRINT_INVENTION_FORBIDDEN`, planner cannot call a model for overlay, Collectibles wait, REGISTER claimed done (capreg already mounted), next step `TALOA-S64-ANDROID-BODY-001`. Spend-outcomes mounted on founder-runtime.
