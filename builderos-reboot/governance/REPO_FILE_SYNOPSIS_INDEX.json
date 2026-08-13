@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T08:06:27.180Z",
+  "generated_at": "2026-08-13T08:07:17.635Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13543,
+  "file_count": 13544,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -102283,6 +102283,16 @@
       "bytes": 2599,
       "mtime": "2026-08-12T19:59:24.155Z",
       "indexed_at": "2026-08-12T19:59:24.155Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/taloa/template-replay-service.js",
+      "synopsis": "Template Replay Service",
+      "bytes": 5303,
+      "mtime": "2026-08-13T08:07:17.635Z",
+      "indexed_at": "2026-08-13T08:07:17.635Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
