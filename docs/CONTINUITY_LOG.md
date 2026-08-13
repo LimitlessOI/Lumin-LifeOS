@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Documentation — CONTINUITY LOG. -->
 
+## 2026-08-13 — Critical tip auth/money/memory holes still open (11th rediscovery)
+
+Daily sweep: tip still accepts member JWT as operator key, public `set-password`, header-presence forgot-password token leak, unbound billing `/verify`, unauthenticated memory list GETs, and public student-interview analytics. Drafts #367–#377 never merged. Restored the proven 9fb2 gates on `cursor/critical-bug-investigation-15b9`. Remaining open (not in this PR): MarketingOS `owner_id`, voice-rail `body.user`, `x-forwarded-host` checkout URLs.
+
 ## 2026-08-13 — Mandatory factory-1+2 overlay + factory-3 Collectibles; SENTRY/fixer fixed
 
 Founder: 1 and 2 must finish overlay together (mandatory); 3 on Collectibles; keep working 7h; fix SENTRY fail and the fixer that missed it. Root: twin assertion `OWNED_` vs schema `owned_*`; SENTRY blamed wrong needle; FORBIDDEN thrash; factory-2 never tip-shipped native; enroll blocked factory-1 while native open; watchdog ignored lane SENTRY. Fixes shipped; AUTH-ENVELOPE+ enrolled for factory-1 parallel; loop armed for 7h.

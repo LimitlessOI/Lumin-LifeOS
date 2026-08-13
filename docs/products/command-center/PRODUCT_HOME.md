@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/command-center/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-08-12 — Self-repair executor learned `DR-BIND-MIGRATION`. Prior 2026-07-14: deprecated as a standalone product; admin controls are `lifeos-admin-*` steps in `docs/products/lifeos/BUILD_QUEUE.json`. |
+| **Last Updated** | 2026-08-13 — `requireKey` again role-gates account JWTs (member JWT ≠ operator). Prior 2026-08-12: Self-repair executor learned `DR-BIND-MIGRATION`. Prior 2026-07-14: deprecated as a standalone product; admin controls are `lifeos-admin-*` steps in `docs/products/lifeos/BUILD_QUEUE.json`. |
 
 ---
 > **PLATFORM SPEC:** `docs/products/PLATFORM.md §C2` — current state, files, endpoints, traps (built for AI readers).
@@ -28,7 +28,7 @@
 | **Lifecycle** | `experimental` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `needs-review` |
-| **Last Updated** | 2026-08-12 — Self-repair executor learned `DR-BIND-MIGRATION`. Prior 2026-07-14: deprecated as a standalone product; admin controls are `lifeos-admin-*` steps in `docs/products/lifeos/BUILD_QUEUE.json`. |
+| **Last Updated** | 2026-08-13 — `requireKey` again role-gates account JWTs (member JWT ≠ operator). Prior 2026-08-12: Self-repair executor learned `DR-BIND-MIGRATION`. Prior 2026-07-14: deprecated as a standalone product; admin controls are `lifeos-admin-*` steps in `docs/products/lifeos/BUILD_QUEUE.json`. |
 | **Verification Command** | `node scripts/verify-project.mjs --project command_center` |
 | **Manifest** | `docs/products/command-center/FILE_MANIFEST.json` |
 
@@ -309,6 +309,7 @@ node --check public/overlay/command-center.js
 
 ## Change Receipts
 
+| 2026-08-13 | **`src/server/auth/requireKey.js` role-gate restored (11th rediscovery).** Tip still accepted any valid LifeOS account JWT as operator after drafts #367–#377 never merged. Member JWT could hit operator routes including billing `operator-mark-paid`. Restore `founder_admin`/`operator`/`admin` allowlist; member JWT → 403. | Daily critical-bug sweep: concrete trigger is `Authorization: Bearer <member JWT>` on any `requireKey` route. | `node --test tests/require-key-operator-jwt.test.js` | merge required — drafts do not protect tip |
 | 2026-08-12 | **Self-repair executor learned `DR-BIND-MIGRATION`.** Watchdog was alerting on `migrations_failed` while the executor returned `repair_id_not_supported`. The bind-before-create class now applies `repairBindMigrationsInRepo` instead of the proof-refresh HTTP chain. | Last incident: caught, not repaired. | Next `migrations_failed` of this class must rewrite the SQL on the same tick as the SMS. |
 | 2026-08-02 | **Creative Director review** — generated CREATIVE_BRIEF.md using the Creative Director lens. | Command Center reviewed through the BuilderOS creative responsibility; brief written to product home for founder review. | ✅ generated |
 | 2026-07-14 | **Deprecated as a standalone product.** Adam: LifeOS is the command center. Admin controls (runtime mode, phase14 cert, pending Adam) are folded into `docs/products/lifeos/BUILD_QUEUE.json` as `lifeos-admin-*` steps. `docs/products/command-center/BUILD_QUEUE.json` is emptied and `status` set to `deprecated`; `docs/products/PRODUCT_BUILD_PRIORITY.json` no longer lists `command-center`. | Adam: Command Center is not a separate product; it is the LifeOS admin command surface. | `node --check` changed JS files, `npm run builder:preflight`, `npm run verify:ci`, `npm run lifeos:bp-priority:verify`, `npm run factory:ci`. | redeploy + force BuilderOS tick + verify `GET /api/v1/lifeos/never-stop/status` `governed_status` increments and `GET /api/v1/lifeos/command-center/mode` returns 200. |
