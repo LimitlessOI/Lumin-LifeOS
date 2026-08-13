@@ -1120,14 +1120,47 @@ export function mergeQueueRuntimeStatus(repoQueue, memQueue) {
     // when the repo step is itself blocked; a repo done or building step must not
     // be downgraded by a stale in-memory pending snapshot.
     const memRevived = (memStep.revive_count || 0) > (repoStep.revive_count || 0);
-    const healDowngrade = memStep.heal_unblocked === true && memStep.status === STEP_STATUS.PENDING;
+    const repoStatus = String(repoStep.status || '').toLowerCase();
+    const memStatus = String(memStep.status || '').toLowerCase();
+    const repoProvenDone = repoRank >= STATUS_RANK.done
+      && Boolean(repoStep.commit_sha || repoStep.built_sha || repoStep.shipped_at);
+    // heal_unblocked+pending on a STALE container snapshot must never wipe a
+    // repo done that already has ship proof (live 2026-08-13: AUTH done→pending
+    // via never-stop queue-status merge). Only allow heal-driven downgrade for
+    // blocked/skipped/unproven-done false terminals.
+    const healDowngrade = memStep.heal_unblocked === true
+      && memStatus === STEP_STATUS.PENDING
+      && !repoProvenDone
+      && (repoStatus === STEP_STATUS.BLOCKED
+        || repoStatus === STEP_STATUS.SKIPPED
+        || repoStatus === 'founder_gated'
+        || (repoRank >= STATUS_RANK.done && !repoProvenDone));
     // Founder/heal unskip on GitHub (repo pending + heal_unblocked) must beat a
     // stale container skipped/blocked/demoted copy — otherwise one-queue multi-
-    // project resets never take effect on Railway.
+    // project resets never take effect on Railway. But if mem already advanced
+    // (done/building with runtime), apply that runtime or ships never stick.
     const repoHealPending =
       repoStep.heal_unblocked === true
-      && String(repoStep.status || '').toLowerCase() === STEP_STATUS.PENDING;
+      && repoStatus === STEP_STATUS.PENDING;
     if (repoHealPending) {
+      // Only real forward progress — not skipped/blocked/demoted leftovers.
+      const memAdvanced = memStatus === STEP_STATUS.DONE
+        || memStatus === 'complete'
+        || memStatus === STEP_STATUS.BUILDING
+        || (memRank >= STATUS_RANK.done
+          && Boolean(memStep.commit_sha || memStep.built_sha || memStep.shipped_at));
+      if (memAdvanced) {
+        for (const f of QUEUE_RUNTIME_STEP_FIELDS) {
+          if (Object.prototype.hasOwnProperty.call(memStep, f)) out[f] = memStep[f];
+        }
+        if (statusRank(out.status) >= STATUS_RANK.done) {
+          out.heal_unblocked = false;
+          out.demoted = false;
+          out.demote_reason = null;
+          out.demoted_at = null;
+        }
+        return out;
+      }
       return {
         ...repoStep,
         heal_unblocked: true,
@@ -1147,6 +1180,9 @@ export function mergeQueueRuntimeStatus(repoQueue, memQueue) {
     }
     for (const f of QUEUE_RUNTIME_STEP_FIELDS) {
       if (Object.prototype.hasOwnProperty.call(memStep, f)) out[f] = memStep[f];
+    }
+    if (statusRank(out.status) >= STATUS_RANK.done) {
+      out.heal_unblocked = false;
     }
     return out;
   });

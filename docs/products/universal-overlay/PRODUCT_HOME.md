@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/universal-overlay/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-08-13 — SemanticPerception compile-clean on HEAD; MACOS-BODY enrolled; AUTH/TEMPLATE revived. |
+| **Last Updated** | 2026-08-13 — AUTH+BODY locked done; merge no longer wipes ship proof; twin pending for factory-3. |
 
 ---
 ---
@@ -346,6 +346,8 @@ User on insurance portal
 ---
 
 ## Change Receipts
+
+| 2026-08-13 | **AUTH+BODY locked done; merge thrash closed.** never-stop queue-status was wiping proven done via heal_unblocked. Twin stays pending with `identity_status` needle for factory-3. | Founder: f1+f2 overlay; f3 Collectibles; keep working. | next: twin ship + TEMPLATE/PROMPT/SENTRY-B |
 
 | 2026-08-13 | **SemanticPerception.swift compile-clean; MACOS-BODY enrolled.** | Tip ship left broken Swift + SLICE_COST block; closed. | factory-2 compile + factory-1 JS print |
 

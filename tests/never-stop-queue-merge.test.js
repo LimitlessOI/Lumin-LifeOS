@@ -116,3 +116,58 @@ test('repo heal_unblocked pending beats stale mem skipped/demoted', () => {
   assert.equal(step.revive_count, 0);
   assert.equal(step.last_error, null);
 });
+
+test('repo heal_unblocked pending yields to mem done ship (does not drop twin)', () => {
+  const repo = {
+    steps: [{
+      id: 'COLLECTIBLES-V1-TWIN-SERVICE-001',
+      status: 'pending',
+      heal_unblocked: true,
+      task: 'Author twin',
+    }],
+  };
+  const mem = {
+    steps: [{
+      id: 'COLLECTIBLES-V1-TWIN-SERVICE-001',
+      status: 'done',
+      heal_unblocked: true,
+      commit_sha: 'abc1234',
+      shipped_at: '2026-08-13T08:00:00Z',
+      tokens_used: 1200,
+      duration_ms: 8000,
+      task: 'Author twin',
+    }],
+  };
+  const merged = mergeQueueRuntimeStatus(repo, mem);
+  const step = merged.steps.find((s) => s.id === 'COLLECTIBLES-V1-TWIN-SERVICE-001');
+  assert.equal(step.status, 'done');
+  assert.equal(step.commit_sha, 'abc1234');
+  assert.equal(step.heal_unblocked, false);
+});
+
+test('stale mem heal_unblocked pending must not wipe repo proven done', () => {
+  const repo = {
+    steps: [{
+      id: 'TALOA-S64-AUTH-ENVELOPE-001',
+      status: 'done',
+      commit_sha: '23e69a186e',
+      shipped_at: '2026-08-13T08:00:20Z',
+      tokens_used: 0,
+      duration_ms: 12850,
+      heal_unblocked: true,
+    }],
+  };
+  const mem = {
+    steps: [{
+      id: 'TALOA-S64-AUTH-ENVELOPE-001',
+      status: 'pending',
+      heal_unblocked: true,
+      commit_sha: null,
+      last_attempt_at: '2026-08-13T07:45:23Z',
+    }],
+  };
+  const merged = mergeQueueRuntimeStatus(repo, mem);
+  const step = merged.steps.find((s) => s.id === 'TALOA-S64-AUTH-ENVELOPE-001');
+  assert.equal(step.status, 'done');
+  assert.equal(step.commit_sha, '23e69a186e');
+});

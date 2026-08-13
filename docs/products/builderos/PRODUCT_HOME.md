@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/builderos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-08-13 — perception compile-clean + SLICE_COST native 0-token; f1/f2/f3 manufacturing. |
+| **Last Updated** | 2026-08-13 — queue merge no longer wipes proven done; f1/f2/f3 manufacturing. |
 ### Related docs (this product)
 
 | Doc | Path |
@@ -35,6 +35,8 @@
 ---
 
 ## Change Receipts
+| 2026-08-13 | **Queue merge wiped proven DONE (AUTH/BODY thrash).** `repoHealPending` dropped mem done; `healDowngrade` let stale heal_unblocked pending overwrite repo done+sha. Fixed: heal pending yields to mem done; heal downgrade only for blocked/skipped/unproven-done; clear heal_unblocked on done. | Founder mandatory factories; ships must stick. | `tests/never-stop-queue-merge.test.js` 8/8 |
+
 | 2026-08-13 | **Perception closed: native tokens=0 + compile-clean SemanticPerception.** Tip authored broken Hashable/AX types; factory-2 build.sh was pulling webview-load-test.swift. Fixed Swift, exclude *test*.swift, claim DONE with tokens_used=0, enroll MACOS-BODY, revive AUTH/TEMPLATE with no-invention specs. | Founder mandatory overlay+Collectibles. | `bash native/macos-overlay/build.sh` |
 
 | 2026-08-13 | **Mandatory: factory-1+2 finish overlay together; factory-3 Collectibles; fix SENTRY+fixer.** Twin thrash: frozen `OWNED_` vs schema `owned_*` + SENTRY misreported needles[0]; FORBIDDEN overwrote SENTRY last_error; watchdog blind to lane SENTRY. Closed: assertion→`owned_`, real missing needle, retryable blocked shippable, no FORBIDDEN overwrite, watchdog `lane_sentry_failed`, factory-2 tip-ships native, open native no longer blocks enrolling factory-1 JS print, build.sh compiles all `*.swift`. | Founder: mandatory 1+2 overlay; 3 collectibles; fix SENTRY + fixer; keep working 7h. | exclusive-queue + sentry-file-contains + system-watchdog-tip |
