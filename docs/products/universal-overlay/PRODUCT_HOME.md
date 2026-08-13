@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/universal-overlay/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-08-12 — Founder correction: the uploaded Taloa print IS the complete overlay program. Factory now walks §64 of that print (Capability Registry on DeviceRegistry), not agent-invented WIRE-HOST. |
+| **Last Updated** | 2026-08-12 — SENTRY must_include fix + CAPREG-COL unblocked so the factory can keep walking the uploaded print. |
 
 ---
 ---
@@ -346,6 +346,8 @@ User on insurance portal
 ---
 
 ## Change Receipts
+
+| 2026-08-12 | **SENTRY false-failed CAPREG-COL (`must_include` ignored), blocked overlay, loop ran LifeOS.** Fixed in BuilderOS. This queue: CAPREG-COL pending again; WIRE-HOST stays off-print skipped and will not be revived. | Founder: fix the system, never stop, fix SENTRY. | Next overlay step `TALOA-S64-CAPREG-COL-001`. |
 
 | 2026-08-12 | **The uploaded print is the overlay program. Agents were wrong to talk as if it wasn't.** Founder worked the full Taloa Universal Overlay & Fluid UI blueprint through multiple models and uploaded it. Factory had only executed the 15-file Phase 1 foundation lap, then invented WIRE-HOST (explicitly out of scope while Gate 0 is open). Corrected: skipped WIRE-HOST; queued §15 Capability Registry onto existing DeviceRegistry `overlay_devices`; wired existing `secretScannerService.js` into `githooks/pre-commit` (Gate 0 item 7). | Founder: I worked through the entire print with multiple AI models and uploaded it; it has a complete overlay program; I want it done; I don't think [it isn't complete] is true. | Next never-stop overlay step must be `TALOA-S64-CAPREG-COL-001`. |
 

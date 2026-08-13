@@ -9,3 +9,5 @@ Founder, furious: the overlay is not to stop doing anything. Not other projects 
 **Follow-up same evening:** WIRE-HOST landed on the queue twin, then blocked `AIC_GATE_FAILURE`. Cause: ship-queue requested HTTP `skip_intake_gate` for product twins; execute-step denies that without `FACTORY_ALLOW_SKIP_INTAKE_GATE`. Loop went back to LifeOS. Fix: in-process `trustedIntakeSkip` after blueprint follow. WIRE-HOST pending again. Railway redeploy of `9bfdace7` did trigger; exit 1 was the never-stop parity race, not a missed build.
 
 **Founder correction, same evening:** the uploaded Taloa print is the complete overlay program. "Not done / not a complete program" was false. WIRE-HOST was agent invention off that print. Factory now queued on §15 Capability Registry (DeviceRegistry `overlay_devices`). Gate 0 item 7 (secret scanner live in pre-commit) shipped.
+
+**Fix the system / fix SENTRY (asked):** SENTRY `file_contains` ignored `must_include`, so CAPREG-COL false-failed and overlay sat BLOCKED while LifeOS shipped. SENTRY now honors `must_include`; SENTRY_FAILED revives immediately; `off_print` is not revived.

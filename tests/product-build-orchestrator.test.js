@@ -151,6 +151,39 @@ test('queueSummary counts by status including design_review_flagged and human_ho
   assert.equal(s.complete, false);
 });
 
+test('reviveStaleBlockedSteps does not revive off_print skipped steps even if re-blocked', () => {
+  const q = makeQueue([
+    {
+      id: 'TALOA-WIRE-HOST-001',
+      target_file: 'routes/taloa-overlay-host-routes.js',
+      task: 't',
+      status: STEP_STATUS.BLOCKED,
+      last_error: 'STEP_STATUS_FORBIDDEN',
+      skip_reason: 'off_print — not in the uploaded Taloa program',
+      last_attempt_at: new Date(Date.now() - 60 * 60 * 1000).toISOString(),
+    },
+  ]);
+  assert.deepEqual(reviveStaleBlockedSteps(q), []);
+  assert.equal(q.steps[0].status, STEP_STATUS.BLOCKED);
+});
+
+test('reviveStaleBlockedSteps revives SENTRY_FAILED immediately so overlay does not wait 15m', () => {
+  const q = makeQueue([
+    {
+      id: 'TALOA-S64-CAPREG-COL-001',
+      target_file: 'db/migrations/20260813_overlay_devices_capabilities.sql',
+      task: 't',
+      status: STEP_STATUS.BLOCKED,
+      last_error: 'SENTRY_FAILED: behavior_proof; behavior_assertion_failed; behavior_proof',
+      last_attempt_at: new Date().toISOString(),
+      attempts: 1,
+    },
+  ]);
+  const revived = reviveStaleBlockedSteps(q);
+  assert.deepEqual(revived, ['TALOA-S64-CAPREG-COL-001']);
+  assert.equal(q.steps[0].status, STEP_STATUS.PENDING);
+});
+
 test('reviveStaleBlockedSteps revives blocked steps past cooldown, bounded, never human_hold', () => {
   const old = new Date(Date.now() - 60 * 60 * 1000).toISOString();
   const fresh = new Date().toISOString();

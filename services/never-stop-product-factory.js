@@ -479,7 +479,11 @@ export async function discoverBuildQueueWorkFresh() {
     if (!fs.existsSync(queuePath)) continue;
     try {
       const queue = await loadBuildQueuePreferRemote(productId);
-      // Discover must not revive — see discoverBuildQueueWork.
+      // Top-priority product (overlay): revive SENTRY_FAILED immediately so
+      // discover still returns overlay work instead of falling through to LifeOS.
+      if (productId === priorityList[0]) {
+        reviveStaleBlockedSteps(queue);
+      }
       const { step } = selectNextStep(queueForThisFactory(queue));
       if (step) {
         found.push({

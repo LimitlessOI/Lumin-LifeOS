@@ -5,12 +5,23 @@
  * per-assertion results. Fail-closed: a step that requires proof but declares no
  * assertions, has no runner, or fails any assertion is a SENTRY FAIL. factory-core
  * stays pure — the runner (pg pool + fetch + fs) is injected at the route boundary.
- * @ssot docs/products/lifeos/PRODUCT_HOME.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
 // Server-code targets are executable modules whose "success" can lie about
 // runtime effect (e.g. a handler that returns ok without writing the DB).
 const SERVER_CODE_DIR_RE = /^(routes|services|middleware|startup)\/|^factory-staging\/factory-core\//;
+
+export function fileContainsNeedles(assertion) {
+  const needles = [];
+  if (typeof assertion?.substring === 'string' && assertion.substring.length) needles.push(assertion.substring);
+  if (Array.isArray(assertion?.must_include)) {
+    for (const s of assertion.must_include) {
+      if (typeof s === 'string' && s.length) needles.push(s);
+    }
+  }
+  return needles;
+}
 
 export function stepRequiresBehaviorProof(step) {
   if (!step) return false;
@@ -74,7 +85,17 @@ export async function runSingleAssertion(assertion, runner = {}) {
       case 'file_contains': {
         if (typeof runner.readFile !== 'function') return { ...base, ok: false, reason: 'no_file_runner' };
         const content = await runner.readFile(assertion.target || assertion.path);
-        return { ...base, ok: typeof content === 'string' && content.includes(assertion.substring), substring: assertion.substring };
+        if (typeof content !== 'string') return { ...base, ok: false, reason: 'file_unreadable' };
+        const needles = fileContainsNeedles(assertion);
+        if (!needles.length) return { ...base, ok: false, reason: 'file_contains_missing_substring' };
+        const missing = needles.filter((n) => !content.includes(n));
+        return {
+          ...base,
+          ok: missing.length === 0,
+          missing,
+          substrings: needles,
+          substring: needles[0],
+        };
       }
       case 'exports_smoke': {
         // Stronger than file_contains: prove the module imports and named exports exist.

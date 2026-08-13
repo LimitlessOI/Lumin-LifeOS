@@ -3379,7 +3379,7 @@
     },
     {
       "id": "TALOA-WIRE-HOST-001",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "routes/taloa-overlay-host-routes.js",
       "task": "The file MUST begin with a JSDoc block comment containing a line exactly \"@ssot docs/products/universal-overlay/PRODUCT_HOME.md\" (mandatory, enforced by a commit gate). Wire the already-built Phase 1 overlay host into a live HTTP surface so it has a real caller. Export exactly: export function registerTaloaOverlayHostRoutes(app, deps). Import createOverlayHostService from \"../services/taloa/overlay-host-service.js\" and CALL it (construction without a caller is false-done). Mount GET /api/v1/taloa/overlay-host/health behind deps.requireKey. The handler constructs the service with { pool: deps.pool, logger: deps.logger, preferenceStore: deps.preferenceStore || { get: async () => ({}), set: async () => ({}) } }, awaits displayOverlay(), and returns a plain serialisable JSON object that includes ok:true and the displayOverlay result. Do not invent a new table. Do not edit server.js. ES module syntax only. No top-level timers or model calls.",
       "spec": "The file MUST begin with a JSDoc block comment containing a line exactly \"@ssot docs/products/universal-overlay/PRODUCT_HOME.md\" (mandatory, enforced by a commit gate). Wire the already-built Phase 1 overlay host into a live HTTP surface so it has a real caller. Export exactly: export function registerTaloaOverlayHostRoutes(app, deps). Import createOverlayHostService from \"../services/taloa/overlay-host-service.js\" and CALL it (construction without a caller is false-done). Mount GET /api/v1/taloa/overlay-host/health behind deps.requireKey. The handler constructs the service with { pool: deps.pool, logger: deps.logger, preferenceStore: deps.preferenceStore || { get: async () => ({}), set: async () => ({}) } }, awaits displayOverlay(), and returns a plain serialisable JSON object that includes ok:true and the displayOverlay result. Do not invent a new table. Do not edit server.js. ES module syntax only. No top-level timers or model calls.",
@@ -3428,9 +3428,9 @@
       "built_sha": null,
       "proof": null,
       "last_attempt_at": "2026-08-13T01:59:15.997Z",
-      "last_error": "STEP_STATUS_FORBIDDEN",
-      "skip_reason": "off_print — founder uploaded the complete Taloa overlay program (TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md §64). Phase 1 packet forbids route mounting while Gate 0 is open. WIRE-HOST was agent invention, not a step in that print.",
-      "skipped_at": "2026-08-13T00:35:00.000Z",
+      "last_error": null,
+      "skip_reason": "off_print — not in the uploaded Taloa program; Gate 0 forbids route mounting.",
+      "skipped_at": "2026-08-13T02:05:00.000Z",
       "last_attempt": null,
       "revive_count": 6,
       "revived_at": "2026-08-13T01:59:15.800Z",
@@ -3447,7 +3447,7 @@
     },
     {
       "id": "TALOA-WIRE-HOST-REGISTER-001",
-      "status": "pending",
+      "status": "skipped",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "Add an enabled auto-register entry so TALOA-WIRE-HOST-001 actually mounts on the founder-builder lane. Append exactly one module object: {\"path\":\"routes/taloa-overlay-host-routes.js\",\"register\":\"registerTaloaOverlayHostRoutes\",\"mount_path\":\"/api/v1/taloa/overlay-host\",\"enabled\":true,\"note\":\"Overlay host health — Phase 1 createOverlayHostService live caller.\"}. Do not disable or rewrite unrelated entries. Do not edit server.js.",
       "spec": "Add an enabled auto-register entry so TALOA-WIRE-HOST-001 actually mounts on the founder-builder lane. Append exactly one module object: {\"path\":\"routes/taloa-overlay-host-routes.js\",\"register\":\"registerTaloaOverlayHostRoutes\",\"mount_path\":\"/api/v1/taloa/overlay-host\",\"enabled\":true,\"note\":\"Overlay host health — Phase 1 createOverlayHostService live caller.\"}. Do not disable or rewrite unrelated entries. Do not edit server.js.",
@@ -3476,8 +3476,9 @@
       "blueprint_step_id": "TALOA-WIRE-HOST-REGISTER-001",
       "mission_id": "PRODUCT-universal-overlay",
       "last_error": null,
-      "skip_reason": "off_print — depends on TALOA-WIRE-HOST-001, which is not in the uploaded overlay program.",
-      "skipped_at": "2026-08-13T00:35:00.000Z"
+      "skip_reason": "off_print — depends on TALOA-WIRE-HOST-001.",
+      "skipped_at": "2026-08-13T02:05:00.000Z",
+      "demoted": false
     },
     {
       "id": "TALOA-NATIVE-HOST-PING-001",
@@ -3521,7 +3522,7 @@
       "proof": "SO-001 allows scripts/CI. Layer B remains REGISTERED_NOT_IMPLEMENTED."
     },
     {
-      "status": "blocked",
+      "status": "pending",
       "founder_gated": false,
       "attempts": 1,
       "action_type": "author_then_write",
@@ -3530,7 +3531,7 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_error": "STEP_STATUS_FORBIDDEN",
+      "last_error": null,
       "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md §64 / §45a / §15 / §44a",
       "id": "TALOA-S64-CAPREG-COL-001",
       "target_file": "db/migrations/20260813_overlay_devices_capabilities.sql",

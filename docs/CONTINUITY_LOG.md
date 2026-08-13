@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Documentation — CONTINUITY LOG. -->
 
+## 2026-08-12 — Fix SENTRY + never-stop: must_include was a false fail
+
+Adam: fix the system, make sure it never stops, fix SENTRY. SENTRY `file_contains` ignored BUILD_QUEUE `must_include`, so CAPREG-COL failed `behavior_assertion_failed` with no file shipped. One BLOCKED + 15m cooldown and the loop built LifeOS. Fix: honor must_include; revive SENTRY_FAILED immediately; do not revive `off_print` steps.
+
 ## 2026-08-12 — The uploaded print is the overlay program
 
 Adam: he worked the entire overlay print with multiple models and uploaded it; it is a complete program; he wants it done; he does not believe the "it isn't complete / isn't done" story. He is right. The print is `docs/products/universal-overlay/TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md`. Agents had reduced it to a 15-file Phase 1 foundation lap and then invented WIRE-HOST, which that same print forbids until Gate 0 closes. Corrected: skipped WIRE-HOST; queued §15 Capability Registry on DeviceRegistry; wired existing secretScannerService into pre-commit (Gate 0.7).

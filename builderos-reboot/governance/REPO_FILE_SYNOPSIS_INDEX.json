@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T02:07:30.288Z",
+  "generated_at": "2026-08-13T02:09:34.096Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13441,
+  "file_count": 13442,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -41221,8 +41221,8 @@
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Documentation — CONTINUITY LOG.",
       "bytes": 0,
-      "mtime": "2026-08-13T00:36:28.790Z",
-      "indexed_at": "2026-08-13T00:36:28.790Z"
+      "mtime": "2026-08-13T02:09:34.096Z",
+      "indexed_at": "2026-08-13T02:09:34.096Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -41515,8 +41515,8 @@
       "path": "docs/conversation_dumps/2026-08-12-overlay-never-stop-factory-n-switch.md",
       "synopsis": "Documentation — 2026 08 12 Overlay Never Stop Factory N Switch.",
       "bytes": 0,
-      "mtime": "2026-08-13T00:36:28.790Z",
-      "indexed_at": "2026-08-13T00:36:28.790Z"
+      "mtime": "2026-08-13T02:09:34.096Z",
+      "indexed_at": "2026-08-13T02:09:34.096Z"
     },
     {
       "path": "docs/conversation_dumps/by-product/sessions/2a4739f2/BUILDEROS-AUTONOMOUS.md",
@@ -43799,8 +43799,8 @@
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Documentation — PRODUCT HOME.",
       "bytes": 0,
-      "mtime": "2026-08-13T00:15:37.774Z",
-      "indexed_at": "2026-08-13T00:15:37.774Z"
+      "mtime": "2026-08-13T02:09:34.096Z",
+      "indexed_at": "2026-08-13T02:09:34.096Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -45748,8 +45748,8 @@
       "path": "docs/products/universal-overlay/conversations/2026-08-12-overlay-never-stop-factory-n-switch.md",
       "synopsis": "Documentation — 2026 08 12 Overlay Never Stop Factory N Switch.",
       "bytes": 0,
-      "mtime": "2026-08-13T00:36:28.790Z",
-      "indexed_at": "2026-08-13T00:36:28.790Z"
+      "mtime": "2026-08-13T02:09:34.096Z",
+      "indexed_at": "2026-08-13T02:09:34.096Z"
     },
     {
       "path": "docs/products/universal-overlay/conversations/2026-08-12-overlay-progress-after-handoff.md",
@@ -45784,8 +45784,8 @@
       "path": "docs/products/universal-overlay/PRODUCT_HOME.md",
       "synopsis": "Documentation — PRODUCT HOME.",
       "bytes": 0,
-      "mtime": "2026-08-13T00:36:28.790Z",
-      "indexed_at": "2026-08-13T00:36:28.790Z"
+      "mtime": "2026-08-13T02:09:34.096Z",
+      "indexed_at": "2026-08-13T02:09:34.096Z"
     },
     {
       "path": "docs/products/universal-overlay/SEND_PACKET_FLUID_UI_AND_TWO_FACTORIES_2026-08-11.md",
@@ -66577,13 +66577,10 @@
     },
     {
       "path": "factory-staging/factory-core/sentry/behavior-assertions.js",
-      "synopsis": "SENTRY behavioral proof. Classifies which steps require runtime",
-      "bytes": 11662,
-      "mtime": "2026-08-08T09:24:16.551Z",
-      "indexed_at": "2026-08-08T09:26:28.090Z",
-      "ssot": [
-        "docs/products/lifeos/PRODUCT_HOME.md"
-      ]
+      "synopsis": "Factory staging — Behavior Assertions.",
+      "bytes": 0,
+      "mtime": "2026-08-13T02:09:34.096Z",
+      "indexed_at": "2026-08-13T02:09:34.096Z"
     },
     {
       "path": "factory-staging/factory-core/sentry/blueprint-freeze-check.js",
@@ -99238,8 +99235,8 @@
       "path": "services/never-stop-product-factory.js",
       "synopsis": "Service module — Never Stop Product Factory.",
       "bytes": 0,
-      "mtime": "2026-08-12T21:50:46.856Z",
-      "indexed_at": "2026-08-12T21:50:46.856Z"
+      "mtime": "2026-08-13T02:09:34.096Z",
+      "indexed_at": "2026-08-13T02:09:34.096Z"
     },
     {
       "path": "services/newWireframes.js",
@@ -99734,13 +99731,10 @@
     },
     {
       "path": "services/product-build-orchestrator.js",
-      "synopsis": "General product-build orchestrator — turns a product's structured",
-      "bytes": 28750,
-      "mtime": "2026-08-11T22:22:10.305Z",
-      "indexed_at": "2026-08-11T22:25:25.951Z",
-      "ssot": [
-        "docs/products/builderos/PRODUCT_HOME.md"
-      ]
+      "synopsis": "Service module — Product Build Orchestrator.",
+      "bytes": 0,
+      "mtime": "2026-08-13T02:09:34.096Z",
+      "indexed_at": "2026-08-13T02:09:34.096Z"
     },
     {
       "path": "services/product-readiness.js",
@@ -105133,12 +105127,9 @@
     {
       "path": "tests/product-build-orchestrator.test.js",
       "synopsis": "js — tests/product-build-orchestrator.test.js.",
-      "bytes": 14778,
-      "mtime": "2026-07-31T04:57:13.763Z",
-      "indexed_at": "2026-07-31T05:01:14.830Z",
-      "ssot": [
-        "docs/products/builderos/PRODUCT_HOME.md"
-      ]
+      "bytes": 0,
+      "mtime": "2026-08-13T02:09:34.096Z",
+      "indexed_at": "2026-08-13T02:09:34.096Z"
     },
     {
       "path": "tests/product-expansion-lanes.test.js",
@@ -105337,6 +105328,13 @@
       "bytes": 0,
       "mtime": "2026-08-12T23:04:01.649Z",
       "indexed_at": "2026-08-12T23:04:01.649Z"
+    },
+    {
+      "path": "tests/sentry-file-contains.test.js",
+      "synopsis": "js — tests/sentry-file-contains.test.js.",
+      "bytes": 0,
+      "mtime": "2026-08-13T02:09:34.096Z",
+      "indexed_at": "2026-08-13T02:09:34.096Z"
     },
     {
       "path": "tests/sentry-observation-cadence.test.js",

@@ -284,6 +284,7 @@ export function reviveStaleBlockedSteps(queue, {
     if (step.status !== STEP_STATUS.BLOCKED) continue;
     if (isHumanHold(step)) continue;
     if (step.demoted === true) continue;
+    if (String(step.skip_reason || '').startsWith('off_print')) continue;
     if (step.escalation_required === true) continue;
     if (typeof step.same_signature_count === 'number' && step.same_signature_count >= 3 && step.escalation_required !== true) {
       step.escalation_required = true;
@@ -302,9 +303,12 @@ export function reviveStaleBlockedSteps(queue, {
     const artifactToolingBlock = /artifact_proof_failed:\sassertion_threw|codegen_authoring_failed|codegen_empty|codegen_threw|no_codegen_runner|authoring_requires_blueprint_assertions/i.test(
       String(step.last_error || ''),
     );
+    const sentryBlock = /SENTRY_FAILED|behavior_assertion_failed|behavior_proof/i.test(
+      String(step.last_error || ''),
+    );
     const verifyThrash = /^verify_exit_/i.test(String(step.last_error || ''));
     // Cap thrash hard. Same error after budget → SKIPPED (terminal), stop burning tokens.
-    const effectiveMax = (autoRegBlock || artifactToolingBlock) ? maxRevives + 3 : maxRevives;
+    const effectiveMax = (autoRegBlock || artifactToolingBlock || sentryBlock) ? maxRevives + 3 : maxRevives;
     if (reviveCount >= effectiveMax || (verifyThrash && reviveCount >= 2)) {
       step.status = STEP_STATUS.SKIPPED;
       step.demoted = true;
@@ -323,7 +327,7 @@ export function reviveStaleBlockedSteps(queue, {
         return rDeps.includes(step.id);
       });
       if (!registerDone) continue;
-    } else if (waited < cooldownMs && !artifactToolingBlock) {
+    } else if (waited < cooldownMs && !artifactToolingBlock && !sentryBlock) {
       continue;
     }
     if (artifactToolingBlock && waited < Math.min(cooldownMs, 60_000)) continue;
