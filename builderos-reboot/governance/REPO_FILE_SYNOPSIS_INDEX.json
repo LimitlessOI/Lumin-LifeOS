@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T16:38:37.132Z",
+  "generated_at": "2026-08-13T16:41:06.826Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13566,
   "files": [
@@ -33101,9 +33101,9 @@
     {
       "path": "config/overlay-print-sequence.js",
       "synopsis": "Sealed manufacturing sequences for the ONE queue — factory may not",
-      "bytes": 42320,
-      "mtime": "2026-08-13T16:37:44.485Z",
-      "indexed_at": "2026-08-13T16:37:44.485Z",
+      "bytes": 42637,
+      "mtime": "2026-08-13T16:41:06.826Z",
+      "indexed_at": "2026-08-13T16:41:06.826Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md",
         "docs/products/universal-overlay/PRODUCT_HOME.md\". Overlay print §64 item 3: Android Universal Body adapter. Export exactly: export function createAndroidBodyAdapter(deps). Return { observe(scope), act(action), verify(goal, expected) }. observe MUST call deps.dumpVisibleText (injected) then CALL redactObservation from \"../drive-sensitive-content-filter.js\" on that text before returning. act MUST call deps.enqueueCommand. verify MUST use independent evidence from a fresh observe(). Do NOT rebuild runBrowserGoal. Do NOT invent a table. ES module. Do not edit server.js.',"
@@ -100645,8 +100645,8 @@
       "path": "services/product-build-orchestrator.js",
       "synopsis": "General product-build orchestrator — turns a product's structured",
       "bytes": 33974,
-      "mtime": "2026-08-13T16:37:44.485Z",
-      "indexed_at": "2026-08-13T16:37:44.485Z",
+      "mtime": "2026-08-13T16:41:06.826Z",
+      "indexed_at": "2026-08-13T16:41:06.826Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -105105,8 +105105,8 @@
       "path": "tests/collectibles-print-sequence.test.js",
       "synopsis": "Collectibles sealed print never idles — enrolls through V10 unless reassigned.",
       "bytes": 5055,
-      "mtime": "2026-08-13T16:37:44.485Z",
-      "indexed_at": "2026-08-13T16:37:44.485Z"
+      "mtime": "2026-08-13T16:41:06.826Z",
+      "indexed_at": "2026-08-13T16:41:06.826Z"
     },
     {
       "path": "tests/collectibles-v1-foundation.test.js",

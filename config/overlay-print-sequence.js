@@ -708,8 +708,8 @@ export function enrollNextCollectiblesPrintSlice(queue) {
 }
 
 /**
- * Heal Collectibles steps blocked on missing PRODUCT-COLLECTIBLES twin — cite
- * the one-queue overlay twin (same as foundation) and return to pending.
+ * Heal Collectibles steps blocked on missing PRODUCT-COLLECTIBLES twin or a
+ * sealed exact path that was claimed without the file on disk.
  */
 export function healCollectiblesBlueprintAuthority(queue) {
   const healed = [];
@@ -718,18 +718,24 @@ export function healCollectiblesBlueprintAuthority(queue) {
     const err = String(step.last_error || '');
     const badTwin = /PRODUCT-COLLECTIBLES/i.test(String(step.blueprint_id || ''))
       || /NOT_ON_BLUEPRINT|blueprint_id_not_found|blueprint_step_id_not_on_twin/i.test(err);
-    if (!badTwin && String(step.status || '').toLowerCase() !== 'blocked') continue;
-    if (!badTwin) continue;
+    const missingExact = /hidden_dependency|Missing source file/i.test(err);
+    if (!badTwin && !missingExact) continue;
     step.blueprint_id = 'PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1';
     step.mission_id = 'PRODUCT-universal-overlay';
     step.blueprint_step_id = step.id;
     step.product_id = step.product_id || 'collectibles';
     if (!step.source) step.source = COLLECTIBLES_SOURCE;
+    // Prefer sealed exact under twins/steps/<id>.exact when present.
+    const exactRel = `docs/products/universal-overlay/twins/steps/${step.id}.exact`;
+    step.action_type = 'write_file_exact';
+    step.exact_inputs = { content_source_path: exactRel };
     step.status = 'pending';
     step.last_error = null;
     step.demoted = false;
     step.heal_unblocked = true;
-    step.heal_reason = 'collectibles_cite_one_queue_twin';
+    step.heal_reason = missingExact
+      ? 'collectibles_restore_sealed_exact'
+      : 'collectibles_cite_one_queue_twin';
     healed.push(step.id);
   }
   return healed;
