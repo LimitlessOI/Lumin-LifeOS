@@ -13,13 +13,14 @@ rm -rf "$APP_BUNDLE"
 mkdir -p "$APP_BUNDLE/Contents/MacOS"
 mkdir -p "$APP_BUNDLE/Contents/Resources"
 
-# Include every Swift source so tip-shipped print slices (SemanticPerception,
-# MacOsBodyAdapter, …) compile without a second hand edit of this list.
+# Include tip-shipped print slices (SemanticPerception, MacOsBodyAdapter, …)
+# without a second hand edit. Exclude ad-hoc test harnesses (*test*.swift).
 SWIFT_SOURCES=()
 for f in *.swift; do
   [ -f "$f" ] || continue
   case "$f" in
     main.swift) continue ;;
+    *test*.swift|*Test*.swift) continue ;;
     *) SWIFT_SOURCES+=("$f") ;;
   esac
 done

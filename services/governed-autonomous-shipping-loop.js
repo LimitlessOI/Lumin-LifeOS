@@ -673,17 +673,22 @@ function markShippedStepsDone(queueOrProductId, shippedStepIds, commit_sha, usag
   for (const step of queue.steps) {
     if (!done.has(step.id)) continue;
     const usage = usageByStepId[step.id] || {};
-    const exactOrPreexisting = step.action_type === 'write_file_exact'
+    const target = String(step.target_file || step.file || '');
+    const nativeOrExact = step.action_type === 'write_file_exact'
       || usage.no_codegen === true
       || usage.exact === true
-      || step.pre_existing === true;
+      || step.pre_existing === true
+      || target.endsWith('.swift')
+      || target.endsWith('.m')
+      || target.endsWith('.mm');
     const cost = requireSliceCostTracked(step, {
       ...usage,
       action_type: step.action_type,
-      // Only exact/pre-existing may resolve to 0 tokens. Missing codegen usage
-      // on author_then_write must fail closed — never invent a silent 0.
-      no_codegen: exactOrPreexisting,
+      // Native / exact may resolve to 0 tokens. Missing codegen usage on JS
+      // author_then_write must fail closed — never invent a silent 0.
+      no_codegen: nativeOrExact,
       pre_existing: step.pre_existing === true,
+      tokens_used: usage.tokens_used ?? usage.total_tokens ?? (nativeOrExact ? 0 : undefined),
     });
     if (!cost.ok) {
       untracked.push({ id: step.id, reason: cost.reason || SLICE_COST_UNTRACKED });

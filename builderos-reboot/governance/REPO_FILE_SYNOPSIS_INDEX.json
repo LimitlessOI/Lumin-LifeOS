@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T07:43:24.720Z",
+  "generated_at": "2026-08-13T07:47:29.006Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13542,
   "files": [
@@ -44336,8 +44336,8 @@
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
       "bytes": 582005,
-      "mtime": "2026-08-13T07:43:24.720Z",
-      "indexed_at": "2026-08-13T07:43:24.720Z"
+      "mtime": "2026-08-13T07:47:29.006Z",
+      "indexed_at": "2026-08-13T07:47:29.006Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -46497,8 +46497,8 @@
       "path": "docs/products/universal-overlay/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Universal Overlay",
       "bytes": 121922,
-      "mtime": "2026-08-13T07:43:24.720Z",
-      "indexed_at": "2026-08-13T07:43:24.720Z"
+      "mtime": "2026-08-13T07:47:29.006Z",
+      "indexed_at": "2026-08-13T07:47:29.006Z"
     },
     {
       "path": "docs/products/universal-overlay/SEND_PACKET_FLUID_UI_AND_TWO_FACTORIES_2026-08-11.md",
@@ -69320,9 +69320,9 @@
     {
       "path": "native/macos-overlay/build.sh",
       "synopsis": "Shell script — Build.",
-      "bytes": 2094,
-      "mtime": "2026-08-13T07:43:24.720Z",
-      "indexed_at": "2026-08-13T07:43:24.720Z"
+      "bytes": 2140,
+      "mtime": "2026-08-13T07:47:29.006Z",
+      "indexed_at": "2026-08-13T07:47:29.006Z"
     },
     {
       "path": "native/macos-overlay/demos/capability-tour.json",
@@ -97096,9 +97096,9 @@
     {
       "path": "services/governed-autonomous-shipping-loop.js",
       "synopsis": "STEP 5g — the governed AUTONOMOUS shipping loop. When the STEP 5a",
-      "bytes": 68755,
-      "mtime": "2026-08-13T07:43:24.720Z",
-      "indexed_at": "2026-08-13T07:43:24.720Z",
+      "bytes": 68996,
+      "mtime": "2026-08-13T07:47:29.006Z",
+      "indexed_at": "2026-08-13T07:47:29.006Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
