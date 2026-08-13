@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T05:25:30.116Z",
+  "generated_at": "2026-08-13T05:55:59.531Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13474,
+  "file_count": 13476,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -41246,9 +41246,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Documentation — CONTINUITY LOG.",
-      "bytes": 197154,
-      "mtime": "2026-08-13T05:23:57.945Z",
-      "indexed_at": "2026-08-13T05:23:57.945Z"
+      "bytes": 198182,
+      "mtime": "2026-08-13T05:55:59.531Z",
+      "indexed_at": "2026-08-13T05:55:59.531Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -41515,6 +41515,13 @@
       "bytes": 0,
       "mtime": "2026-08-12T23:45:57.703Z",
       "indexed_at": "2026-08-12T23:45:57.703Z"
+    },
+    {
+      "path": "docs/conversation_dumps/2026-08-12-builderos-observation-report.md",
+      "synopsis": "Twin/archive capture of 2026-08-12 BuilderOS observation report",
+      "bytes": 1557,
+      "mtime": "2026-08-13T05:55:59.531Z",
+      "indexed_at": "2026-08-13T05:55:59.531Z"
     },
     {
       "path": "docs/conversation_dumps/2026-08-12-collectibles-master-blueprint.md",
@@ -45948,6 +45955,13 @@
       "indexed_at": "2026-08-12T22:30:50.776Z"
     },
     {
+      "path": "docs/products/universal-overlay/conversations/2026-08-12-builderos-observation-report.md",
+      "synopsis": "2026-08-12 — Founder asked for a BuilderOS observation report: what it is building, when done, slice duration, token spend",
+      "bytes": 6942,
+      "mtime": "2026-08-13T05:55:59.531Z",
+      "indexed_at": "2026-08-13T05:55:59.531Z"
+    },
+    {
       "path": "docs/products/universal-overlay/conversations/2026-08-12-one-queue-print-slices-only.md",
       "synopsis": "Documentation — 2026 08 12 One Queue Print Slices Only.",
       "bytes": 0,
@@ -45993,9 +46007,9 @@
     {
       "path": "docs/products/universal-overlay/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Universal Overlay",
-      "bytes": 120248,
-      "mtime": "2026-08-13T05:09:00.646Z",
-      "indexed_at": "2026-08-13T05:09:00.646Z"
+      "bytes": 120830,
+      "mtime": "2026-08-13T05:55:59.531Z",
+      "indexed_at": "2026-08-13T05:55:59.531Z"
     },
     {
       "path": "docs/products/universal-overlay/SEND_PACKET_FLUID_UI_AND_TWO_FACTORIES_2026-08-11.md",

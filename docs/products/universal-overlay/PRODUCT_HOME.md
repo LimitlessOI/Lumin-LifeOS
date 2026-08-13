@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/universal-overlay/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-08-12 — factory-3 enabled for overlay (`public/overlay/`). Prior: hard gate — no new BUILD_QUEUE may ever be created. |
+| **Last Updated** | 2026-08-12 — BuilderOS observation report: running, not on next print slice; slice-time and token-spend not live-queryable. |
 
 ---
 ---
@@ -338,14 +338,16 @@ User on insurance portal
 | Field | Value |
 |---|---|
 | **Lane log** | `docs/CONTINUITY_LOG.md` (cross-cutting) |
-| **Next build** | factory-1: next overlay print slice (services/routes/public/overlay). factory-2: native/macos-overlay. factory-3 is **Collectibles**, not overlay. No invented col001. |
-| **Known gaps** | Signed iOS `.ipa` blocked on Apple Developer cert + UDID (PWA works today). Gate 0 item 1 (rotate previously-exposed COMMAND_CENTER_KEY) is founder-at-source, not a missing program. Layer B still `REGISTERED_NOT_IMPLEMENTED`. |
-| **⚠️ IN PROGRESS** | Overlay on factory-1 (backend + `public/overlay/`) + factory-2 native. factory-3 is Collectibles. Do not ship native from factory-1. |
+| **Next build** | Next real print slice is §64 item 3 (Android Universal Body adapter), not invented `scripts/register*.mjs`. factory-2: native/macos-overlay only. factory-3 has no live queue (one-queue law). |
+| **Known gaps** | Slice duration and token spend required, not live on founder-runtime (`/api/v1/builderos/control-plane/spend-outcomes` 404). REGISTER queue row blocked `github_commit_failed` even though capreg is mounted. Layer B `REGISTERED_NOT_IMPLEMENTED`. Overlay SENTRY feed file missing on Railway. |
+| **⚠️ IN PROGRESS** | BuilderOS looping invented overlay register scripts + factory-2 leftover `step-5`. Not advancing the uploaded print. |
 | **How to load extension in Chrome** | Go to `chrome://extensions` → Enable Developer Mode → Load Unpacked → select the `extension/` folder in this repo |
 
 ---
 
 ## Change Receipts
+
+| 2026-08-12 | **BuilderOS observation report (not a new build).** Running; not manufacturing the next overlay-print slice. Capreg mounted live. Loop inventing register scripts. Slice duration + token spend required and not live-queryable (control-plane 404). No clock-time ETA. | Founder: observe BuilderOS; what is it building; when done; track slice time and token spend. | Capture `docs/products/universal-overlay/conversations/2026-08-12-builderos-observation-report.md`. Production SHA `8d038e2d5e6d`. |
 
 | 2026-08-12 | **factory-3 enabled for overlay.** factory-1 + factory-2 were already on overlay, so flipped the switch: provisioned `/Users/adamhopkins/Projects/Lumin-LifeOS-factory-3`, owns `public/overlay/`, LaunchAgent `com.lumin.factory-3-lane` loaded and ticking. Collectibles stays behind overlay exclusivity. | Founder: overlay first; if both factories used, make a 3rd. | `npm run builderos:factory:slots` shows factory-3 dispatching; log ticks `pending_owned: []` until a `public/overlay/` queue slice exists. |
 
