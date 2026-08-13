@@ -7717,19 +7717,24 @@
     },
     {
       "id": "fix-founder-intent-service-create",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/founder-chair-intent.js",
       "task": "Create service for founder build intent classification.",
       "spec": "Implement a service with `classifyFounderBuildIntent` function that uses `callCouncilMember('founder_intent_classifier', prompt)` to classify incoming founder prompts, specifically identifying 'drawer_direct_build' vs. 'counsel/essay text' intent. It should return a structured intent object.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "classifyFounderBuildIntent"
       ],
       "file_contains": [
         "callCouncilMember('founder_intent_classifier'"
-      ]
+      ],
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-08-13T01:51:31.662Z",
+      "last_error": "NOT_ON_BLUEPRINT"
     }
   ],
   "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
