@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T20:32:47.803Z",
+  "generated_at": "2026-08-13T20:43:01.829Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13579,
   "files": [
@@ -95174,10 +95174,10 @@
     },
     {
       "path": "services/collectibles/review-queue.js",
-      "synopsis": "Needs Review queue — list + resolve against collectible_twins.",
-      "bytes": 3073,
-      "mtime": "2026-08-13T20:32:30.627Z",
-      "indexed_at": "2026-08-13T20:32:30.627Z",
+      "synopsis": "Exports createReviewQueueService — services/collectibles/review-queue.js.",
+      "bytes": 3534,
+      "mtime": "2026-08-13T20:43:01.829Z",
+      "indexed_at": "2026-08-13T20:43:01.829Z",
       "ssot": [
         "docs/products/collectibles/PRODUCT_HOME.md"
       ]
