@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T08:12:31.959Z",
+  "generated_at": "2026-08-13T08:12:55.302Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13545,
   "files": [
@@ -44831,8 +44831,8 @@
       "path": "docs/products/collectibles/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Collectibles (LimitlessOS)",
       "bytes": 8030,
-      "mtime": "2026-08-13T08:11:12.649Z",
-      "indexed_at": "2026-08-13T08:11:12.649Z"
+      "mtime": "2026-08-13T08:12:55.302Z",
+      "indexed_at": "2026-08-13T08:12:55.302Z"
     },
     {
       "path": "docs/products/collectibles/SCHEMA_CONTRACTS.md",
@@ -94985,12 +94985,11 @@
     },
     {
       "path": "services/collectibles/twin-service.js",
-      "synopsis": "Creates a new Collectible Twin object.",
-      "bytes": 7697,
-      "mtime": "2026-08-13T08:11:47.886Z",
-      "indexed_at": "2026-08-13T08:11:47.886Z",
+      "synopsis": "CollectibleTwin create/update helpers.",
+      "bytes": 3737,
+      "mtime": "2026-08-13T08:12:55.302Z",
+      "indexed_at": "2026-08-13T08:12:55.302Z",
       "ssot": [
-        "docs/products/collectibles/PRODUCT_HOME.md",
         "docs/products/collectibles/PRODUCT_HOME.md"
       ]
     },
