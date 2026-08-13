@@ -7563,17 +7563,22 @@
     },
     {
       "id": "lifeos-direct-build-smoke-test-ssot-tag",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/lifeos-direct-build-smoke-test.mjs",
       "task": "Add @ssot JSDoc tag for compliance",
       "spec": "Ensure the `@ssot` JSDoc tag is present within the main JSDoc block of the file to resolve the `FILE_PLACEMENT_VIOLATION` for protected source files.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "@ssot"
       ],
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-08-13T01:05:28.668Z",
+      "last_error": "github_commit_failed_after_local_ship"
     }
   ],
   "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
