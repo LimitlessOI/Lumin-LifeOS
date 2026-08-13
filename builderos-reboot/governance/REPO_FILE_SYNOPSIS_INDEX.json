@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T23:54:30.818Z",
+  "generated_at": "2026-08-13T23:56:01.795Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13591,
+  "file_count": 13592,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -95278,6 +95278,17 @@
       "mtime": "2026-08-13T20:43:01.829Z",
       "indexed_at": "2026-08-13T20:43:01.829Z",
       "ssot": [
+        "docs/products/collectibles/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/collectibles/shipping-tracking.js",
+      "synopsis": "Exports createShippingTrackingService — services/collectibles/shipping-tracking.js.",
+      "bytes": 4050,
+      "mtime": "2026-08-13T23:56:01.795Z",
+      "indexed_at": "2026-08-13T23:56:01.795Z",
+      "ssot": [
+        "docs/products/collectibles/PRODUCT_HOME.md",
         "docs/products/collectibles/PRODUCT_HOME.md"
       ]
     },
