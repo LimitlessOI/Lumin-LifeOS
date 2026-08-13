@@ -226,7 +226,7 @@
       "expected_exports": [
         "routeUIContext"
       ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": null,
       "shipped_at": "2026-07-15T22:13:12.909Z",
       "commit_sha": null,
@@ -349,7 +349,7 @@
       "expected_exports": [
         "adaptLayoutPreferences"
       ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": null,
       "shipped_at": "2026-07-15T22:17:14.890Z",
       "commit_sha": "fa2519b6c14b3c4e89dfc5f4743263910d45f808",
@@ -466,7 +466,7 @@
         "method": "POST",
         "path": "/api/v1/lifeos/page-summarization"
       },
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
       "behavior_assertions": [
         {
           "type": "exports_smoke",
@@ -519,7 +519,7 @@
         "48px",
         "128px"
       ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": null,
       "shipped_at": "2026-07-15T22:23:49.799Z",
       "commit_sha": "4dec1b1e2b6d8e1fa45755527339dcb700ebd7c0",
@@ -542,7 +542,7 @@
       "depends_on": [],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:30:12.087Z",
       "commit_sha": "2250a6752e7c3c01d6cb88b96754223aaaf0425a",
@@ -1321,7 +1321,7 @@
       "mission_id": "PRODUCT-universal-overlay",
       "same_signature_count": 0,
       "demoted": false,
-      "last_error": "route module not auto-registered — add {\"path\":\"routes/firefoxExtension.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
+      "last_error": "route module not auto-registered \u2014 add {\"path\":\"routes/firefoxExtension.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
       "heal_unblocked": true,
       "last_attempt_at": "2026-08-01T14:26:54.455Z",
       "blocker_class": "BLOCKED_TOOLING",
@@ -3308,7 +3308,7 @@
     },
     {
       "id": "step-1",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "services/holdToTalkService.js",
       "task": "Create service to manage hold-to-talk audio streams and integrate with Taloa perception.",
       "spec": "Implement a service that buffers incoming audio from the client-side 'hold-to-talk' interaction, coordinates with Taloa's perception-fusion-service and task-orchestrator-service for processing upon release, and handles streaming state.",
@@ -3337,12 +3337,12 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "skip_reason": "native_badge_voice_supersedes_js_hold_to_talk — TALOA-BADGE-VOICE-001 records on the badge; JS holdToTalkBadge.js cannot start getUserMedia in a hidden WKWebView.",
+      "skip_reason": "native_badge_voice_supersedes_js_hold_to_talk \u2014 TALOA-BADGE-VOICE-001 records on the badge; JS holdToTalkBadge.js cannot start getUserMedia in a hidden WKWebView.",
       "skipped_at": "2026-08-12T23:55:00.000Z"
     },
     {
       "id": "step-2",
-      "status": "pending",
+      "status": "skipped",
       "target_file": "routes/holdToTalk.js",
       "task": "Create API route for hold-to-talk audio input from the overlay.",
       "spec": "Expose a POST endpoint for the overlay to stream audio chunks during a 'hold-to-talk' session, piping them to the `holdToTalkService`.",
@@ -3359,12 +3359,12 @@
         "path": "/api/v1/overlay/hold-to-talk"
       },
       "design_review_flagged": true,
-      "skip_reason": "native_badge_voice_supersedes_js_hold_to_talk — TALOA-BADGE-VOICE-001 records on the badge; JS holdToTalkBadge.js cannot start getUserMedia in a hidden WKWebView.",
+      "skip_reason": "native_badge_voice_supersedes_js_hold_to_talk \u2014 TALOA-BADGE-VOICE-001 records on the badge; JS holdToTalkBadge.js cannot start getUserMedia in a hidden WKWebView.",
       "skipped_at": "2026-08-12T23:55:00.000Z"
     },
     {
       "id": "step-4",
-      "status": "pending",
+      "status": "skipped",
       "target_file": "public/overlay/holdToTalkBadge.js",
       "task": "Implement client-side hold-to-talk interaction for the overlay badge.",
       "spec": "Develop a JavaScript module for the 'universal-overlay' to detect 'hold' and 'release' gestures on the visual badge (already existing), capture microphone input during 'hold', and stream the audio to the `/api/v1/overlay/hold-to-talk` endpoint. Manage microphone permissions and streaming state.",
@@ -3374,12 +3374,12 @@
       "founder_gated": false,
       "attempts": 0,
       "design_review_flagged": true,
-      "skip_reason": "native_badge_voice_supersedes_js_hold_to_talk — TALOA-BADGE-VOICE-001 records on the badge; JS holdToTalkBadge.js cannot start getUserMedia in a hidden WKWebView.",
+      "skip_reason": "native_badge_voice_supersedes_js_hold_to_talk \u2014 TALOA-BADGE-VOICE-001 records on the badge; JS holdToTalkBadge.js cannot start getUserMedia in a hidden WKWebView.",
       "skipped_at": "2026-08-12T23:55:00.000Z"
     },
     {
       "id": "TALOA-WIRE-HOST-001",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "routes/taloa-overlay-host-routes.js",
       "task": "The file MUST begin with a JSDoc block comment containing a line exactly \"@ssot docs/products/universal-overlay/PRODUCT_HOME.md\" (mandatory, enforced by a commit gate). Wire the already-built Phase 1 overlay host into a live HTTP surface so it has a real caller. Export exactly: export function registerTaloaOverlayHostRoutes(app, deps). Import createOverlayHostService from \"../services/taloa/overlay-host-service.js\" and CALL it (construction without a caller is false-done). Mount GET /api/v1/taloa/overlay-host/health behind deps.requireKey. The handler constructs the service with { pool: deps.pool, logger: deps.logger, preferenceStore: deps.preferenceStore || { get: async () => ({}), set: async () => ({}) } }, awaits displayOverlay(), and returns a plain serialisable JSON object that includes ok:true and the displayOverlay result. Do not invent a new table. Do not edit server.js. ES module syntax only. No top-level timers or model calls.",
       "spec": "The file MUST begin with a JSDoc block comment containing a line exactly \"@ssot docs/products/universal-overlay/PRODUCT_HOME.md\" (mandatory, enforced by a commit gate). Wire the already-built Phase 1 overlay host into a live HTTP surface so it has a real caller. Export exactly: export function registerTaloaOverlayHostRoutes(app, deps). Import createOverlayHostService from \"../services/taloa/overlay-host-service.js\" and CALL it (construction without a caller is false-done). Mount GET /api/v1/taloa/overlay-host/health behind deps.requireKey. The handler constructs the service with { pool: deps.pool, logger: deps.logger, preferenceStore: deps.preferenceStore || { get: async () => ({}), set: async () => ({}) } }, awaits displayOverlay(), and returns a plain serialisable JSON object that includes ok:true and the displayOverlay result. Do not invent a new table. Do not edit server.js. ES module syntax only. No top-level timers or model calls.",
@@ -3387,7 +3387,7 @@
         "TALOA-P1-008"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "registerTaloaOverlayHostRoutes"
       ],
@@ -3421,21 +3421,21 @@
         }
       ],
       "action_type": "author_then_write",
-      "blueprint_id": "TALOA-OVERLAY-P1-0001-BP1",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "TALOA-WIRE-HOST-001",
-      "mission_id": "TALOA-OVERLAY-P1-0001",
+      "mission_id": "PRODUCT-universal-overlay",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "last_attempt_at": "2026-08-13T00:04:28.739Z",
-      "last_error": "NOT_ON_BLUEPRINT"
+      "last_error": null
     },
     {
       "id": "TALOA-WIRE-HOST-REGISTER-001",
       "status": "pending",
       "target_file": "config/auto-registered-product-modules.json",
-      "task": "Add an enabled auto-register entry so TALOA-WIRE-HOST-001 actually mounts on the founder-builder lane. Append exactly one module object: {\"path\":\"routes/taloa-overlay-host-routes.js\",\"register\":\"registerTaloaOverlayHostRoutes\",\"mount_path\":\"/api/v1/taloa/overlay-host\",\"enabled\":true,\"note\":\"Overlay host health — Phase 1 createOverlayHostService live caller.\"}. Do not disable or rewrite unrelated entries. Do not edit server.js.",
-      "spec": "Add an enabled auto-register entry so TALOA-WIRE-HOST-001 actually mounts on the founder-builder lane. Append exactly one module object: {\"path\":\"routes/taloa-overlay-host-routes.js\",\"register\":\"registerTaloaOverlayHostRoutes\",\"mount_path\":\"/api/v1/taloa/overlay-host\",\"enabled\":true,\"note\":\"Overlay host health — Phase 1 createOverlayHostService live caller.\"}. Do not disable or rewrite unrelated entries. Do not edit server.js.",
+      "task": "Add an enabled auto-register entry so TALOA-WIRE-HOST-001 actually mounts on the founder-builder lane. Append exactly one module object: {\"path\":\"routes/taloa-overlay-host-routes.js\",\"register\":\"registerTaloaOverlayHostRoutes\",\"mount_path\":\"/api/v1/taloa/overlay-host\",\"enabled\":true,\"note\":\"Overlay host health \u2014 Phase 1 createOverlayHostService live caller.\"}. Do not disable or rewrite unrelated entries. Do not edit server.js.",
+      "spec": "Add an enabled auto-register entry so TALOA-WIRE-HOST-001 actually mounts on the founder-builder lane. Append exactly one module object: {\"path\":\"routes/taloa-overlay-host-routes.js\",\"register\":\"registerTaloaOverlayHostRoutes\",\"mount_path\":\"/api/v1/taloa/overlay-host\",\"enabled\":true,\"note\":\"Overlay host health \u2014 Phase 1 createOverlayHostService live caller.\"}. Do not disable or rewrite unrelated entries. Do not edit server.js.",
       "depends_on": [
         "TALOA-WIRE-HOST-001"
       ],
@@ -3457,9 +3457,10 @@
         }
       ],
       "action_type": "author_then_write",
-      "blueprint_id": "TALOA-OVERLAY-P1-0001-BP1",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "TALOA-WIRE-HOST-REGISTER-001",
-      "mission_id": "TALOA-OVERLAY-P1-0001"
+      "mission_id": "PRODUCT-universal-overlay",
+      "last_error": null
     },
     {
       "id": "TALOA-NATIVE-HOST-PING-001",
@@ -3506,5 +3507,5 @@
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
   "mission_id": "PRODUCT-universal-overlay",
   "twin_kind": "product_build_queue_registered",
-  "updated_at": "2026-08-12T21:52:21.000Z"
+  "updated_at": "2026-08-13T00:08:00.000Z"
 }
