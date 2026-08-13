@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/command-center/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-08-13 — Registered WRM_CONSULT_EMAIL so Sherry's inbox can be set on Railway. |
+| **Last Updated** | 2026-08-13 — WRM_CONSULT_EMAIL = Maternity@wellroundedmomma.com (founder correction). |
 
 ---
 > **PLATFORM SPEC:** `docs/products/PLATFORM.md §C2` — current state, files, endpoints, traps (built for AI readers).

@@ -2,7 +2,7 @@
 
 ## 2026-08-13 — WRM consults never reached Sherry
 
-Founder: wellroundedmomma consults not arriving; send to Maternity@wellroundedwoman.com; use overlay. Live: 10 real leads stored, all `emailed=false`, Postmark invalid token. Overlay Gmail login for lumea.lifeos@gmail.com is on Google account-recovery (confirm phone **07**, then SMS code). Server fallback (Postmark → Resend/SMTP) is the automatic path for new submits.
+Founder: wellroundedmomma consults not arriving. First inbox guess was wellroundedwoman.com; founder correction: **Maternity@wellroundedmomma.com**. Live: 9 real leads still `emailed=false`. Postmark invalid; Railway SMTP blocked. Overlay/Chrome Gmail blocked on 2FA. Env `WRM_CONSULT_EMAIL` set to momma.com. Catch-up not sent until Gmail 2FA or SMTP works.
 
 ## 2026-08-13 — Taloa badge: faint + free-move
 
