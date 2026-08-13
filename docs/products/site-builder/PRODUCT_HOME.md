@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/site-builder/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-08-13 — WRM consults go to Maternity@wellroundedwoman.com; Postmark invalid-token falls through to SMTP/Resend. |
+| **Last Updated** | 2026-08-13 — WRM consults go to Maternity@wellroundedmomma.com (founder correction). |
 
 ---
 
@@ -343,6 +343,8 @@ Founder directive: review every revenue blueprint for gaps against real competit
 **Chair status:** the deliverability gap is `approved` (infrastructure/config, no founder judgment needed) — Architect should queue it. The REFACTOR PLAN items and before/after idea are `escalate_to_founder` (product-direction calls, not purely technical).
 
 ## Change Receipts
+
+| 2026-08-13 | **Founder correction: consult inbox is `Maternity@wellroundedmomma.com`**, not wellroundedwoman.com. Catch-up send + default `CONSULT_TO` pointed at momma.com. | Founder: mailto:Maternity@wellroundedmomma.com — that's the right email, I messed up. | Live send receipt after SMTP/overlay. |
 
 | 2026-08-13 | **WRM consult email disaster: form saved leads, mail never left.** Live: 10 real consults `emailed=false` with `Request does not contain a valid Server token.` Postmark fallback only ran on "pending approval", so invalid token never tried SMTP. Default inbox was `maternity@wellroundedmomma.com`. Fix: default `Maternity@wellroundedwoman.com`; any Postmark failure → Resend → SendGrid → IPv4 SMTP; `POST /api/v1/wrm/consult/retry-unsent` resends the backlog. | Founder: wife's site not sending consults; go to Maternity@wellroundedwoman.com; use the overlay. | `node --test tests/notification-postmark-fallback.test.js`; live retry after deploy. |
 

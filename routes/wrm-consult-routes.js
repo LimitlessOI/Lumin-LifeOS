@@ -10,7 +10,7 @@ import express from "express";
 import { NotificationService } from "../core/notification-service.js";
 
 const CONSULT_TO = () =>
-  String(process.env.WRM_CONSULT_EMAIL || "Maternity@wellroundedwoman.com").trim();
+  String(process.env.WRM_CONSULT_EMAIL || "Maternity@wellroundedmomma.com").trim();
 // Fallback recipient on the same domain as the system From address. Used only if
 // the primary send fails (e.g. an email provider that is still pending approval
 // and can't reach cross-domain) — so a lead is never merely captured-but-unseen.

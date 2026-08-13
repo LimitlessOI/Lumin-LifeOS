@@ -206,7 +206,7 @@ export const ENV_REGISTRY = [
   { name: "WRM_WIX_EMAIL",            status: "OPTIONAL", category: "social",   purpose: "Well Rounded Momma Wix login (maternity@…) for domain cutover" },
   { name: "WRM_WIX_PASSWORD",         status: "OPTIONAL", category: "social",   purpose: "WRM Wix password — never log" },
   { name: "WRM_DOMAIN",               status: "OPTIONAL", category: "social",   purpose: "WRM public domain default wellroundedmomma.com" },
-  { name: "WRM_CONSULT_EMAIL",        status: "SET",      category: "email",    purpose: "Sherry consult inbox — Maternity@wellroundedwoman.com" },
+  { name: "WRM_CONSULT_EMAIL",        status: "SET",      category: "email",    purpose: "Sherry consult inbox — Maternity@wellroundedmomma.com" },
   { name: "WRM_CONSULT_FALLBACK_EMAIL", status: "OPTIONAL", category: "email",  purpose: "Fallback if primary WRM consult inbox cannot be reached" },
   { name: "WIX_EMAIL",                status: "OPTIONAL", category: "social",   purpose: "Generic Wix email alias" },
   { name: "WIX_PASSWORD",             status: "OPTIONAL", category: "social",   purpose: "Generic Wix password alias — never log" },

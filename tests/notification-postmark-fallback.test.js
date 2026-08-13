@@ -42,7 +42,7 @@ test('invalid Postmark server token falls back to Resend', async () => {
     }
     if (String(url).includes('api.resend.com')) {
       const body = JSON.parse(opts.body);
-      assert.equal(body.to[0], 'maternity@wellroundedwoman.com');
+      assert.equal(body.to[0], 'maternity@wellroundedmomma.com');
       return { ok: true, json: async () => ({ id: 're_test_msg' }) };
     }
     throw new Error(`unexpected fetch ${url}`);
@@ -51,7 +51,7 @@ test('invalid Postmark server token falls back to Resend', async () => {
   try {
     const svc = new NotificationService({ pool: { query: async () => { throw new Error('no db'); } } });
     const result = await svc.sendEmail({
-      to: 'Maternity@wellroundedwoman.com',
+      to: 'Maternity@wellroundedmomma.com',
       subject: 'New consult request — test',
       text: 'lead',
       html: '<p>lead</p>',

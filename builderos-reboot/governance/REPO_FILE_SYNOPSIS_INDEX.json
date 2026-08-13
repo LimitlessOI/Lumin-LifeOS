@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T15:35:25.395Z",
+  "generated_at": "2026-08-13T15:44:41.648Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13555,
   "files": [
@@ -44894,9 +44894,9 @@
     {
       "path": "docs/products/command-center/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Command Center",
-      "bytes": 110023,
-      "mtime": "2026-08-13T15:27:45.485Z",
-      "indexed_at": "2026-08-13T15:34:55.290Z"
+      "bytes": 110026,
+      "mtime": "2026-08-13T15:44:41.759Z",
+      "indexed_at": "2026-08-13T15:44:41.648Z"
     },
     {
       "path": "docs/products/COMMANDCENTER.md",
@@ -46288,9 +46288,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 223364,
-      "mtime": "2026-08-13T15:17:51.989Z",
-      "indexed_at": "2026-08-13T15:34:55.290Z"
+      "bytes": 223640,
+      "mtime": "2026-08-13T15:40:48.155Z",
+      "indexed_at": "2026-08-13T15:44:41.648Z"
     },
     {
       "path": "docs/products/site-builder/SITE_TEMPLATE_CATALOG.md",
