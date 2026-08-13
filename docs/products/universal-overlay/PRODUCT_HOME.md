@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/universal-overlay/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-08-13 — Hard gate: next sealed slice is Android Body; invented register scripts skipped; REGISTER claimed done (capreg already mounted). |
+| **Last Updated** | 2026-08-13 — ANDROID-BODY+WIRE done; next print macOS perception; Collectibles twin pending on factory-3. |
 
 ---
 ---
