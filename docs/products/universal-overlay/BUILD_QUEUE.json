@@ -5554,9 +5554,9 @@
       "shipped_via": "governed_ship_queue"
     },
     {
-      "status": "pending",
+      "status": "done",
       "founder_gated": false,
-      "attempts": 2,
+      "attempts": 0,
       "action_type": "write_file_exact",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
@@ -5579,15 +5579,15 @@
         "sha256"
       ],
       "blueprint_step_id": "COLLECTIBLES-V1-MEDIA-EVIDENCE-001",
-      "commit_sha": null,
+      "commit_sha": "94e591618835f11edff89a24d95862b7bcb66b15",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-13T17:45:15.556Z",
+      "last_attempt_at": "2026-08-13T18:21:15.155Z",
       "last_error": null,
-      "started_at": "2026-08-13T17:45:15.369Z",
+      "started_at": "2026-08-13T18:21:15.155Z",
       "demoted": false,
-      "heal_unblocked": true,
-      "heal_reason": "collectibles_clear_missing_exact_to_author",
+      "heal_unblocked": false,
+      "heal_reason": "collectibles_cite_one_queue_twin",
       "demote_reason": null,
       "demoted_at": null,
       "skip_reason": null,
@@ -5615,7 +5615,7 @@
           "content_sha256": "58a58c22b5f898a450be601f89f0868cd91f0307e6ddb93e8e0b59b087747ca7"
         }
       },
-      "shipped_at": "2026-08-13T18:21:21.121Z",
+      "shipped_at": "2026-08-13T18:21:34.462Z",
       "same_signature_count": 1,
       "behavior_assertions": [
         {
@@ -5631,7 +5631,40 @@
       "escalation_class": "same_signature_repeat",
       "exact_inputs": {
         "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V1-MEDIA-EVIDENCE-001.exact"
-      }
+      },
+      "duration_ms": 19308,
+      "tokens_used": 0,
+      "shipped_via": "governed_ship_queue"
+    },
+    {
+      "status": "pending",
+      "founder_gated": false,
+      "attempts": 0,
+      "action_type": "author_then_write",
+      "product_id": "collectibles",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "mission_id": "PRODUCT-universal-overlay",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
+      "depends_on": [
+        "COLLECTIBLES-V1-TWIN-STORE-001",
+        "COLLECTIBLES-V1-MEDIA-EVIDENCE-001",
+        "COLLECTIBLES-V1-MTG-ADAPTER-001"
+      ],
+      "id": "COLLECTIBLES-V1-CAPTURE-API-001",
+      "target_file": "routes/collectibles-routes.js",
+      "sandbox_boundary": "routes/**",
+      "task": "Keep @ssot. Wire real POST /api/v1/collectibles/twins/capture + GET /twins + GET /twins/:id per API_CONTRACTS: persist media, identify via MTG adapter, insert Twin via twin-store, set needs_review on low confidence. Import createCollectibleTwinStore + createMediaEvidenceStore + createMtgCategoryAdapter. Additive — do not delete registerCollectiblesRoutes.",
+      "spec": "API_CONTRACTS §1 Twin lifecycle. Default liquidity surprise_me. Never auto-list.",
+      "expected_exports": [
+        "registerCollectiblesRoutes"
+      ],
+      "file_contains": [
+        "twins/capture",
+        "createCollectibleTwinStore",
+        "createMediaEvidenceStore",
+        "needs_review"
+      ],
+      "blueprint_step_id": "COLLECTIBLES-V1-CAPTURE-API-001"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
