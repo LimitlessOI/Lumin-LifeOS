@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T23:27:12.222Z",
+  "generated_at": "2026-08-13T23:29:01.463Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13592,
+  "file_count": 13593,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -95246,6 +95246,16 @@
       "bytes": 1697,
       "mtime": "2026-08-13T21:30:04.295Z",
       "indexed_at": "2026-08-13T21:30:04.295Z",
+      "ssot": [
+        "docs/products/collectibles/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/collectibles/invisible-listing.js",
+      "synopsis": "Exports createInvisibleListingService — services/collectibles/invisible-listing.js.",
+      "bytes": 2984,
+      "mtime": "2026-08-13T23:29:01.463Z",
+      "indexed_at": "2026-08-13T23:29:01.463Z",
       "ssot": [
         "docs/products/collectibles/PRODUCT_HOME.md"
       ]

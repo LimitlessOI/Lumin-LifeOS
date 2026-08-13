@@ -7072,8 +7072,8 @@
     {
       "status": "pending",
       "founder_gated": false,
-      "attempts": 2,
-      "action_type": "author_then_write",
+      "attempts": 3,
+      "action_type": "write_file_exact",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
@@ -7099,18 +7099,56 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-13T23:28:07.333Z",
-      "last_error": "GROUNDING_FAIL: missing_sql_table: collectible_items",
-      "started_at": "2026-08-13T23:27:53.377Z",
+      "last_attempt_at": "2026-08-13T23:28:53.357Z",
+      "last_error": "AIC_GATE_FAILURE",
+      "started_at": "2026-08-13T23:28:53.288Z",
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
       "park_until": null,
       "heal_unblocked": true,
       "heal_reason": "collectibles_never_stop_heal",
-      "skip_reason": null,
+      "same_signature_count": 1,
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/collectibles/invisible-listing.js",
+          "exports": [
+            "createInvisibleListingService"
+          ],
+          "assertion_id": "expected_exports:services/collectibles/invisible-listing.js"
+        }
+      ],
+      "failure_signature": "AIC_GATE_FAILURE",
+      "escalation_class": "same_signature_repeat",
       "escalation_required": false,
-      "revive_count": 0
+      "escalation_note": null,
+      "exact_inputs": {
+        "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V2-INVISIBLE-LISTING-001.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-08-13T23:28:58.733Z",
+        "shipped_at": "2026-08-13T23:28:58.733Z",
+        "commit_sha": null,
+        "content_sha256": "6d78a3239d9a334691e950e3dd6a0c711a85c3634fba23aaa374fd6e45e47a7e",
+        "target_file": "services/collectibles/invisible-listing.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/collectibles/invisible-listing.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "PASS"
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V2-INVISIBLE-LISTING-001.exact",
+          "content_sha256": "6d78a3239d9a334691e950e3dd6a0c711a85c3634fba23aaa374fd6e45e47a7e"
+        }
+      },
+      "shipped_at": "2026-08-13T23:28:58.733Z"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
