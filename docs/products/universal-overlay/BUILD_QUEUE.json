@@ -5719,7 +5719,7 @@
       "heal_unblocked": false
     },
     {
-      "status": "pending",
+      "status": "done",
       "founder_gated": false,
       "attempts": 0,
       "action_type": "write_file_exact",
@@ -5769,7 +5769,47 @@
           "content_sha256": "c2ff6edc2b1607350435c9b76ca206d92aae0bbfd36e55b1ea5a07a9c930d6ab"
         }
       },
-      "shipped_at": "2026-08-13T20:42:58.650Z"
+      "shipped_at": "2026-08-13T20:43:07.217Z",
+      "commit_sha": "bf2bd06b90ab2b84cc1714b43a246c3c691482dc",
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-08-13T20:42:53.421Z",
+      "last_error": null,
+      "revive_count": 0,
+      "started_at": "2026-08-13T20:42:53.421Z",
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "heal_unblocked": false,
+      "heal_reason": "collectibles_never_stop_queue_heal",
+      "duration_ms": 13796,
+      "tokens_used": 0,
+      "shipped_via": "governed_ship_queue"
+    },
+    {
+      "status": "pending",
+      "founder_gated": false,
+      "attempts": 0,
+      "action_type": "author_then_write",
+      "product_id": "collectibles",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "mission_id": "PRODUCT-universal-overlay",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
+      "depends_on": [
+        "COLLECTIBLES-V1-CAPTURE-API-001"
+      ],
+      "id": "COLLECTIBLES-V1-VAULT-UI-001",
+      "target_file": "public/collectibles/vault.html",
+      "sandbox_boundary": "public/collectibles/**",
+      "task": "Brand-first Vault home: image-led browse, capture CTA, Needs Review entry, honest empty/error states. Call /api/v1/collectibles/twins. No card-grid dashboard aesthetic. No purple AI defaults.",
+      "spec": "MASTER_BLUEPRINT V1 ENJOY + UX product design law. Deterministic fallback UI.",
+      "file_contains": [
+        "collectibles",
+        "/api/v1/collectibles",
+        "Needs Review"
+      ],
+      "blueprint_step_id": "COLLECTIBLES-V1-VAULT-UI-001"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
