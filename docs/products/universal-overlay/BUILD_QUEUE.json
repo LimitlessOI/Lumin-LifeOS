@@ -5754,7 +5754,7 @@
       "demote_reason": null,
       "demoted_at": null,
       "park_until": null,
-      "heal_unblocked": true,
+      "heal_unblocked": false,
       "heal_reason": "collectibles_never_stop_queue_heal",
       "escalation_required": false,
       "exact_inputs": {
@@ -5786,9 +5786,9 @@
       "shipped_at": "2026-08-13T20:43:07.217Z"
     },
     {
-      "status": "pending",
+      "status": "blocked",
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "action_type": "write_file_exact",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
@@ -5833,7 +5833,14 @@
           "content_sha256": "8ea612022f0f6b9847c667ad8572068e0111792d24a52879d2c901fd17d13ddc"
         }
       },
-      "shipped_at": "2026-08-13T20:44:03.399Z"
+      "shipped_at": "2026-08-13T20:44:03.399Z",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-08-13T20:44:15.623Z",
+      "last_error": "SLICE_COST_UNTRACKED: tokens_used required on every built slice (0 allowed for exact/no-codegen)",
+      "started_at": "2026-08-13T20:43:53.172Z",
+      "duration_ms": 22450
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
