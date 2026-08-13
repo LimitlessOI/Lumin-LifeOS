@@ -7402,7 +7402,7 @@
       "shipped_via": "governed_ship_queue"
     },
     {
-      "status": "blocked",
+      "status": "pending",
       "founder_gated": false,
       "attempts": 1,
       "action_type": "author_then_write",
@@ -7432,7 +7432,13 @@
       "proof": null,
       "last_attempt_at": "2026-08-13T23:50:53.470Z",
       "last_error": "AIC_GATE_FAILURE",
-      "started_at": "2026-08-13T23:50:53.409Z"
+      "started_at": "2026-08-13T23:50:53.409Z",
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "heal_unblocked": true,
+      "heal_reason": "collectibles_never_stop_heal"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
