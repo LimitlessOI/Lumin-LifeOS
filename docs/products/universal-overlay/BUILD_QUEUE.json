@@ -4334,7 +4334,7 @@
     {
       "id": "COLLECTIBLES-V1-TWIN-SERVICE-001",
       "product_id": "collectibles",
-      "status": "pending",
+      "status": "done",
       "attempts": 0,
       "target_file": "services/collectibles/twin-service.js",
       "action_type": "write_file_exact",
@@ -4370,10 +4370,10 @@
         }
       ],
       "same_signature_count": 1,
-      "commit_sha": null,
+      "commit_sha": "2e693d71332d0fa191d82440cb229d5dac507c32",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-08-13T08:11:35.677Z",
       "last_error": null,
       "last_attempt": null,
       "revive_count": 0,
@@ -4392,9 +4392,9 @@
       "escalation_note": null,
       "skip_reason": null,
       "failure_signature": null,
-      "heal_unblocked": true,
+      "heal_unblocked": false,
       "heal_reason": "sealed_exact_identity_status_2026-08-13",
-      "started_at": "2026-08-13T07:51:44.070Z",
+      "started_at": "2026-08-13T08:11:35.677Z",
       "escalation_class": "same_signature_repeat",
       "exact_inputs": {
         "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V1-TWIN-SERVICE-001.exact"
@@ -4420,7 +4420,11 @@
           "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V1-TWIN-SERVICE-001.exact",
           "content_sha256": "0bb7f0ed7f1137db7e5175d9df448ac00f596ffd61a4cf18bfb62ae284a6470f"
         }
-      }
+      },
+      "duration_ms": 17020,
+      "tokens_used": 0,
+      "shipped_at": "2026-08-13T08:11:52.697Z",
+      "shipped_via": "governed_ship_queue"
     },
     {
       "id": "COLLECTIBLES-V1-MTG-ADAPTER-001",
