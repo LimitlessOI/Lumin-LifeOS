@@ -6797,7 +6797,7 @@
     },
     {
       "id": "s1-founder-chair-intent-service",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "services/founder-chair-intent.js",
       "task": "Create service to classify founder chat intent",
       "spec": "Implement core logic to classify founder chat prompts, distinguishing workflow directives (like \"drawer_direct_build\") from general inquiries or requests for counsel, ensuring correct lane assignment.",
@@ -6821,9 +6821,9 @@
       "revived_at": "2026-08-13T00:59:53.376Z",
       "no_op": null,
       "pre_existing": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:STEP_STATUS_FORBIDDEN",
+      "demoted_at": "2026-08-13T01:04:51.273Z",
       "park_until": null,
       "blocker_class": null,
       "claim_level": null,
@@ -6845,7 +6845,7 @@
     },
     {
       "id": "s2-founder-intent-clarify-service",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "services/founder-intent-clarify.js",
       "task": "Create service to clarify ambiguous founder intent",
       "spec": "Implement logic to process and clarify ambiguous founder chat prompts, potentially by asking follow-up questions or using contextual information to refine intent classification for build directives.",
@@ -6869,9 +6869,9 @@
       "revived_at": "2026-08-13T00:59:53.376Z",
       "no_op": null,
       "pre_existing": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:artifact_missing_after_ship: artifact_proof_failed: async function clarifyFounderIntent; callCouncilMember('clarifier'",
+      "demoted_at": "2026-08-13T01:04:51.273Z",
       "park_until": null,
       "blocker_class": null,
       "claim_level": null,
@@ -6999,7 +6999,7 @@
     },
     {
       "id": "s5-add-ssot-to-smoke-test",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "scripts/lifeos-direct-build-smoke-test.mjs",
       "task": "Add @ssot tag to smoke test script",
       "spec": "Insert the JSDoc tag `/** @ssot */` at the top of the file `scripts/lifeos-direct-build-smoke-test.mjs` to comply with file placement regulations and resolve the `FILE_PLACEMENT_VIOLATION`.",
@@ -7019,9 +7019,9 @@
       "revived_at": "2026-08-13T01:04:46.972Z",
       "no_op": null,
       "pre_existing": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:NOT_ON_BLUEPRINT",
+      "demoted_at": "2026-08-13T01:04:51.273Z",
       "park_until": null,
       "blocker_class": null,
       "claim_level": null,
@@ -7060,8 +7060,8 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "same_signature_count": 1,
-      "failure_signature": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:/** @ssot */; behavior_assertion_failed; behavior_proof",
-      "escalation_class": "evidence_gap"
+      "failure_signature": "STEP_STATUS_FORBIDDEN",
+      "escalation_class": "same_signature_repeat"
     },
     {
       "id": "104",
@@ -7437,7 +7437,8 @@
       "built_sha": null,
       "proof": null,
       "last_attempt_at": "2026-08-13T01:00:56.057Z",
-      "last_error": "NOT_ON_BLUEPRINT"
+      "last_error": "NOT_ON_BLUEPRINT",
+      "same_signature_count": 0
     },
     {
       "id": "lifeos-build-fix-2",
@@ -7484,7 +7485,18 @@
       "built_sha": null,
       "proof": null,
       "last_attempt_at": "2026-08-13T01:04:21.788Z",
-      "last_error": "artifact_missing_after_ship: artifact_proof_failed: missing_exports:classifyFounderIntent"
+      "last_error": "artifact_missing_after_ship: artifact_proof_failed: missing_exports:classifyFounderIntent",
+      "same_signature_count": 0,
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/founder-chair-intent.js",
+          "exports": [
+            "classifyFounderIntent"
+          ],
+          "assertion_id": "expected_exports:services/founder-chair-intent.js"
+        }
+      ]
     },
     {
       "id": "lifeos-founder-chair-intent-service-create",
@@ -7502,7 +7514,47 @@
         "workflow-conten",
         "drawer_direct_build",
         "callCouncilMember"
-      ]
+      ],
+      "same_signature_count": 0,
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/founder-chair-intent.js",
+          "exports": [
+            "classifyFounderIntent"
+          ],
+          "assertion_id": "expected_exports:services/founder-chair-intent.js"
+        }
+      ],
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/lifeos/twins/steps/lifeos-founder-chair-intent-service-create.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-08-13T01:05:09.672Z",
+        "shipped_at": "2026-08-13T01:05:09.672Z",
+        "commit_sha": null,
+        "content_sha256": "bcf91bfdc05a71375e5c88423f8880cf8075f47c0557011f6919fd3cf4d612c2",
+        "target_file": "services/founder-chair-intent.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/founder-chair-intent.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "PASS"
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/lifeos/twins/steps/lifeos-founder-chair-intent-service-create.exact",
+          "content_sha256": "bcf91bfdc05a71375e5c88423f8880cf8075f47c0557011f6919fd3cf4d612c2"
+        }
+      },
+      "shipped_at": "2026-08-13T01:05:09.672Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-founder-chair-intent-service-create"
     },
     {
       "id": "lifeos-direct-build-smoke-test-ssot-tag",
@@ -7515,7 +7567,8 @@
       "attempts": 0,
       "file_contains": [
         "@ssot"
-      ]
+      ],
+      "same_signature_count": 0
     }
   ],
   "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",

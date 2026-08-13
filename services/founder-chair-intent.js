@@ -59,15 +59,65 @@ export function expandFounderBuildTask(cleanedInput = '') {
   return augmentTaskWithGapFillScope(base, target);
 }
 
-export function classifyFounderIntent(prompt = '') {
+/**
+ * Classify founder prompt intent and route to the correct workflow lane.
+ * Routes 'drawer_direct_build' to 'workflow-content' instead of 'counsel/essay'.
+ * Integrates with clarification and signal services, using callCouncilMember
+ * for AI-driven classification when pattern matching is insufficient.
+ */
+export function classifyFounderIntent(prompt = '', ctx = {}) {
   const p = String(prompt || '').toLowerCase().trim();
 
-  if (/\b(drawer direct build|build the drawer|update the drawer)\b/i.test(p)) {
+  // Pattern-based routing for known drawer build intents
+  if (/\b(drawer direct build|build the drawer|update the drawer|fix the drawer|rebuild the drawer)\b/i.test(p)) {
     return {
       intent: 'drawer_direct_build',
       lane: 'workflow-content',
+      channel: 'build_async',
+      source: 'pattern',
     };
   }
 
-  return { intent: 'unknown', lane: 'default' };
+  // If a clarification signal is present, respect its explicit lane
+  if (ctx?.clarification?.lane) {
+    return {
+      intent: ctx.clarification.intent || 'clarified',
+      lane: ctx.clarification.lane,
+      channel: ctx.clarification.channel || null,
+      source: 'clarification',
+    };
+  }
+
+  // If a signal service provided a classification, use it
+  if (ctx?.signal?.intent) {
+    return {
+      intent: ctx.signal.intent,
+      lane: ctx.signal.lane || 'default',
+      channel: ctx.signal.channel || null,
+      source: 'signal',
+    };
+  }
+
+  // Fallback: AI-driven classification via callCouncilMember
+  if (typeof ctx?.callCouncilMember === 'function') {
+    try {
+      const councilResult = ctx.callCouncilMember({
+        task: 'classify_founder_intent',
+        prompt: String(prompt || ''),
+      });
+      if (councilResult?.intent) {
+        const intent = councilResult.intent;
+        return {
+          intent,
+          lane: intent === 'drawer_direct_build' ? 'workflow-content' : (councilResult.lane || 'default'),
+          channel: councilResult.channel || null,
+          source: 'council',
+        };
+      }
+    } catch {
+      // Fall through to unknown if council fails
+    }
+  }
+
+  return { intent: 'unknown', lane: 'default', source: 'fallback' };
 }

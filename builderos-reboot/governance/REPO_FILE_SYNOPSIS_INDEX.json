@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T01:04:17.731Z",
+  "generated_at": "2026-08-13T01:05:13.912Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13441,
   "files": [
@@ -95769,9 +95769,9 @@
     {
       "path": "services/founder-chair-intent.js",
       "synopsis": "Founder natural language → structured build task + explicit Chair channel map.",
-      "bytes": 2393,
-      "mtime": "2026-08-13T01:04:17.731Z",
-      "indexed_at": "2026-08-13T01:04:17.731Z",
+      "bytes": 4100,
+      "mtime": "2026-08-13T01:05:13.912Z",
+      "indexed_at": "2026-08-13T01:05:13.912Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
