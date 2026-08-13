@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T16:49:07.407Z",
+  "generated_at": "2026-08-13T16:50:22.365Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13566,
+  "file_count": 13567,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -95103,6 +95103,16 @@
       "bytes": 3737,
       "mtime": "2026-08-13T08:12:55.302Z",
       "indexed_at": "2026-08-13T08:12:55.302Z",
+      "ssot": [
+        "docs/products/collectibles/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/collectibles/twin-store.js",
+      "synopsis": "Exports createCollectibleTwinStore — services/collectibles/twin-store.js.",
+      "bytes": 10346,
+      "mtime": "2026-08-13T16:50:22.365Z",
+      "indexed_at": "2026-08-13T16:50:22.365Z",
       "ssot": [
         "docs/products/collectibles/PRODUCT_HOME.md"
       ]

@@ -5356,10 +5356,10 @@
       },
       "exactness": {
         "sealed": true,
-        "sealed_at": "2026-08-13T16:49:04.813Z",
-        "shipped_at": "2026-08-13T16:49:04.813Z",
+        "sealed_at": "2026-08-13T16:38:20.097Z",
+        "shipped_at": "2026-08-13T16:38:20.097Z",
         "commit_sha": null,
-        "content_sha256": "9b8de0d9197011bc5df753c3dee4b4eb850bc43b5d412cd7f46ef8783257781d",
+        "content_sha256": "343075788695df923b4b9f61291402c417d950fbd4b1384d30f94c759fa50437",
         "target_file": "db/migrations/20260813_collectible_twins_v1.sql",
         "reverse": {
           "mode": "delete_file",
@@ -5368,12 +5368,85 @@
           "prior_content_sha256": null
         },
         "grounding": {
-          "status": "PASS"
+          "status": "INDETERMINATE",
+          "reason": "indeterminate_sql: SQL string could not be parsed for table names",
+          "details": {
+            "filePath": "/usr/src/app/db/migrations/20260813_collectible_twins_v1.sql",
+            "hash": "343075788695df923b4b9f61291402c417d950fbd4b1384d30f94c759fa50437",
+            "importChecks": [],
+            "sqlChecks": [
+              {
+                "text": "USD",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "USD",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "USD",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "pending",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "accepted",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "rejected",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "collectible_twin",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "ownership_record",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "create",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "update",
+                "status": "INDETERMINATE",
+                "reason": "sql_keywords_present_but_no_table_extracted"
+              },
+              {
+                "text": "delete",
+                "status": "INDETERMINATE",
+                "reason": "sql_keywords_present_but_no_table_extracted"
+              },
+              {
+                "text": "transfer",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "uuid-ossp",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              }
+            ]
+          }
         },
         "rebuild": {
           "action_type": "write_file_exact",
           "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V1-SCHEMA-TWINS-001.exact",
-          "content_sha256": "9b8de0d9197011bc5df753c3dee4b4eb850bc43b5d412cd7f46ef8783257781d"
+          "content_sha256": "343075788695df923b4b9f61291402c417d950fbd4b1384d30f94c759fa50437"
         }
       },
       "shipped_at": "2026-08-13T16:49:11.661Z",
@@ -5387,7 +5460,7 @@
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
-      "heal_unblocked": false,
+      "heal_unblocked": true,
       "heal_reason": "collectibles_restore_sealed_exact",
       "duration_ms": 6932,
       "tokens_used": 0,
@@ -5400,7 +5473,7 @@
       "status": "pending",
       "founder_gated": false,
       "attempts": 0,
-      "action_type": "author_then_write",
+      "action_type": "write_file_exact",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
@@ -5422,7 +5495,33 @@
         "collectible_twins",
         "insertTwin"
       ],
-      "blueprint_step_id": "COLLECTIBLES-V1-TWIN-STORE-001"
+      "blueprint_step_id": "COLLECTIBLES-V1-TWIN-STORE-001",
+      "exact_inputs": {
+        "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V1-TWIN-STORE-001.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-08-13T16:50:19.186Z",
+        "shipped_at": "2026-08-13T16:50:19.186Z",
+        "commit_sha": null,
+        "content_sha256": "ce503da452e25d83ff555e9f5eb348e74d1b44fd5fc96e050427d7f86b37e7d9",
+        "target_file": "services/collectibles/twin-store.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/collectibles/twin-store.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "PASS"
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V1-TWIN-STORE-001.exact",
+          "content_sha256": "ce503da452e25d83ff555e9f5eb348e74d1b44fd5fc96e050427d7f86b37e7d9"
+        }
+      },
+      "shipped_at": "2026-08-13T16:50:19.186Z"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
