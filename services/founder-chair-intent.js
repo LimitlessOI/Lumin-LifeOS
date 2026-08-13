@@ -156,3 +156,15 @@ export async function classifyFounderBuildIntent(prompt = '', ctx = {}) {
     return { intent: 'unknown', lane: 'default', source: 'council_error', error: error.message };
   }
 }
+
+/**
+ * Classifies a founder prompt into the correct workflow lane,
+ * specifically identifying 'drawer_direct_build' prompts.
+ * This is an alias for classifyFounderIntent, ensuring consistent naming.
+ * @param {string} prompt The founder's natural language prompt.
+ * @param {object} ctx Context object, which may contain clarification, signal, or callCouncilMember.
+ * @returns {object} A structured object indicating the classified intent, lane, channel, and source.
+ */
+export function classifyFounderPrompt(prompt = '', ctx = {}) {
+  return classifyFounderIntent(prompt, ctx);
+}

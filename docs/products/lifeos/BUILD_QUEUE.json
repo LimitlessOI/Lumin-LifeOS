@@ -7377,7 +7377,7 @@
     },
     {
       "id": "s1-create-founder-chair-intent-service",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "services/founder-chair-intent.js",
       "task": "Create service for founder chat intent classification",
       "spec": "Implement `classifyFounderPrompt` function that takes a prompt and uses `callCouncilMember('founder')` to determine the correct intent, specifically identifying 'drawer_direct_build' prompts to route to a build workflow lane instead of general counsel/essay text.",
@@ -7412,9 +7412,9 @@
       "revived_at": "2026-08-13T02:22:24.570Z",
       "no_op": null,
       "pre_existing": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:STEP_STATUS_FORBIDDEN",
+      "demoted_at": "2026-08-13T02:42:46.882Z",
       "park_until": null,
       "blocker_class": null,
       "claim_level": null,
@@ -7574,7 +7574,7 @@
         "drawer_direct_build",
         "callCouncilMember"
       ],
-      "same_signature_count": 1,
+      "same_signature_count": 2,
       "behavior_assertions": [
         {
           "type": "exports_smoke",
@@ -7739,7 +7739,36 @@
           ],
           "assertion_id": "expected_exports:services/founder-chair-intent.js"
         }
-      ]
+      ],
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/lifeos/twins/steps/step2-create-founder-chair-intent-service.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-08-13T02:42:58.416Z",
+        "shipped_at": "2026-08-13T02:42:58.416Z",
+        "commit_sha": null,
+        "content_sha256": "7590ced42341af2b351617127c15c8b84bd3de43cbf00742221394ceec55e6e7",
+        "target_file": "services/founder-chair-intent.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/founder-chair-intent.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "PASS"
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/lifeos/twins/steps/step2-create-founder-chair-intent-service.exact",
+          "content_sha256": "7590ced42341af2b351617127c15c8b84bd3de43cbf00742221394ceec55e6e7"
+        }
+      },
+      "shipped_at": "2026-08-13T02:42:58.416Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step2-create-founder-chair-intent-service"
     },
     {
       "id": "fix-founder-intent-service-create",
