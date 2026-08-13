@@ -7054,19 +7054,24 @@
     },
     {
       "id": "chair-intent-signals-service",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/chair-intent-signals.js",
       "task": "Create service for generating intent classification signals",
       "spec": "This service should gather or provide signals that aid in the founder intent classification process. It will export a function 'getIntentSignals'.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "getIntentSignals"
       ],
       "file_contains": [
         "export function getIntentSignals("
-      ]
+      ],
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-08-13T00:06:02.808Z",
+      "last_error": "AIC_GATE_FAILURE"
     }
   ],
   "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
