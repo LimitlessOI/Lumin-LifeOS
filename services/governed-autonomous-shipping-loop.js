@@ -319,10 +319,10 @@ function deriveFailureReason(body) {
       for (const r of behaviorResults.slice(0, 5)) {
         if (r.ok) continue;
         const detail = r.reason || r.error
+          || (Array.isArray(r.missing) && r.missing.length ? `missing:${r.missing.join(',')}` : '')
           || (typeof r.substring === 'string' ? `missing_substring:${r.substring}` : '')
           || (typeof r.observed_status === 'number' ? `observed_status:${r.observed_status}, expected:[${(r.expected_status || []).join(',')}]` : '')
-          || (typeof r.observed_rows === 'number' ? `observed_rows:${r.observed_rows}, expected_min:${r.expected_min_rows}` : '')
-          || (Array.isArray(r.missing) ? `missing:${r.missing.join(',')}` : '');
+          || (typeof r.observed_rows === 'number' ? `observed_rows:${r.observed_rows}, expected_min:${r.expected_min_rows}` : '');
         const label = r.assertion_id || r.type || 'behavior_assertion';
         if (detail) reasons.push(`${label}: ${detail}`);
       }
@@ -528,9 +528,20 @@ export async function markFailedStep(queue, stepId, body, productId, logger) {
   const step = queue.steps.find((s) => s.id === stepId || s.step_id === stepId);
   if (!step) return;
   const previousError = step.last_error || null;
+  const derived = deriveFailureReason(body);
+  // Do not let STEP_STATUS_FORBIDDEN overwrite a real SENTRY/codegen failure —
+  // that thrash erased the actionable last_error and burned tokens (2026-08-13).
+  if (/STEP_STATUS_FORBIDDEN/i.test(derived) && previousError
+    && /SENTRY_FAILED|codegen_|behavior_assertion|missing:/i.test(previousError)) {
+    logger?.warn?.(
+      { product_id: productId, step_id: stepId, kept: previousError, dropped: derived },
+      '[GOVERNED-AUTONOMOUS-SHIP] ignoring STEP_STATUS_FORBIDDEN overwrite of actionable failure',
+    );
+    return;
+  }
   step.attempts = (typeof step.attempts === 'number' ? step.attempts : 0) + 1;
   step.last_attempt_at = new Date().toISOString();
-  step.last_error = deriveFailureReason(body);
+  step.last_error = derived;
   step.status = STEP_STATUS.BLOCKED;
   step.commit_sha = null;
   step.built_sha = null;

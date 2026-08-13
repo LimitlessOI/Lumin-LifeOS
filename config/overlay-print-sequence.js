@@ -135,17 +135,29 @@ export function overlayPrintStillOpen(queue) {
   return nextSealedOverlaySlice(queue) != null;
 }
 
+/**
+ * Next sealed slice that is not yet on the queue and whose depends_on are done.
+ * Open slices owned by another factory do NOT block enrollment — factory-1 and
+ * factory-2 must manufacture overlay in parallel (founder mandatory 2026-08-13).
+ */
 export function nextSealedOverlaySlice(queue) {
   const steps = Array.isArray(queue?.steps) ? queue.steps : [];
   const byId = new Map(steps.map((s) => [s.id, s]));
+  const doneIds = new Set(
+    steps
+      .filter((s) => String(s.status || '').toLowerCase() === 'done')
+      .map((s) => s.id),
+  );
   for (const slice of OVERLAY_PRINT_SEQUENCE) {
-    const existing = byId.get(slice.id);
-    if (!existing) return slice;
-    if (isOpen(existing)) return null;
+    if (byId.has(slice.id)) continue;
+    const deps = Array.isArray(slice.depends_on) ? slice.depends_on : [];
+    if (!deps.every((d) => doneIds.has(d))) continue;
+    return slice;
   }
   return null;
 }
 
+/** Enroll the next ready sealed slice (one per call; open peers do not block). */
 export function enrollNextOverlayPrintSlice(queue) {
   if (!queue || !Array.isArray(queue.steps)) return null;
   const next = nextSealedOverlaySlice(queue);

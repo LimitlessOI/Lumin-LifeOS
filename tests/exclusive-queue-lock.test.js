@@ -177,6 +177,32 @@ test('enrollNextOverlayPrintSlice adds the sealed Android Body adapter', () => {
   assert.equal(queue.steps[0].target_file, 'services/taloa/android-body-adapter.js');
 });
 
+test('open native print slice does not block enrolling factory-1 JS print', () => {
+  const queue = {
+    product_id: 'universal-overlay',
+    steps: [
+      {
+        id: 'TALOA-S64-ANDROID-BODY-001',
+        status: STEP_STATUS.DONE,
+        target_file: 'services/taloa/android-body-adapter.js',
+      },
+      {
+        id: 'TALOA-S64-ANDROID-BODY-WIRE-001',
+        status: STEP_STATUS.DONE,
+        target_file: 'services/general-browser-agent-runtime.js',
+      },
+      {
+        id: 'TALOA-S64-MACOS-PERCEPTION-001',
+        status: STEP_STATUS.PENDING,
+        target_file: 'native/macos-overlay/SemanticPerception.swift',
+      },
+    ],
+  };
+  const id = enrollNextOverlayPrintSlice(queue);
+  assert.equal(id, 'TALOA-S64-AUTH-ENVELOPE-001');
+  assert.ok(queue.steps.some((s) => s.id === 'TALOA-S64-AUTH-ENVELOPE-001'));
+});
+
 test('prepareOverlayManufacturingQueue skips invented register scripts and enrolls the next print slice', () => {
   const queue = {
     product_id: 'universal-overlay',

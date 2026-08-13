@@ -19,6 +19,9 @@ export const FACTORY2_STALE_MS = 3 * 60 * 1000;
  * @param {{ tickAt?: string, ok?: boolean, taloaRunning?: boolean } | null} [input.factory2]
  * @param {{ ok?: boolean, status?: number, db?: string, readyStatus?: number, error?: string } | null} [input.tip]
  * @param {Array<{ id?: string, last_error?: string, target_file?: string, status?: string }>} [input.overlayNativeBlocks]
+ * @param {{ ok?: boolean, shipped?: number, products?: Array, reason?: string, error?: string } | null} [input.laneShip]
+ * @param {{ steps?: Array } | null} [input.queue]
+ * @param {string | null} [input.factoryId]
  */
 export function evaluateSystemWatchdog({
   now = Date.now(),
@@ -26,6 +29,9 @@ export function evaluateSystemWatchdog({
   factory2 = null,
   tip = null,
   overlayNativeBlocks = [],
+  laneShip = null,
+  queue = null,
+  factoryId = null,
 } = {}) {
   const findings = [];
 
@@ -85,6 +91,38 @@ export function evaluateSystemWatchdog({
     findings.push({
       id: `false_block:${step.id || file}`,
       proposed_solution: 'factory-1 shipped a factory-2 native file. Do not retry via ship-queue. Claim done if file_contains holds on HEAD.',
+    });
+  }
+
+  // Lane ship / queue SENTRY thrash — fixer must see this (proven blind 2026-08-13).
+  const shipErrors = [];
+  for (const p of laneShip?.products || []) {
+    if (p && p.ok === false && p.error) shipErrors.push(String(p.error));
+  }
+  if (laneShip?.error) shipErrors.push(String(laneShip.error));
+  if (laneShip?.reason && /SENTRY|FORBIDDEN|codegen/i.test(String(laneShip.reason))) {
+    shipErrors.push(String(laneShip.reason));
+  }
+  const sentryShip = shipErrors.find((e) => /SENTRY_FAILED|behavior_assertion|missing:/i.test(e));
+  if (sentryShip) {
+    findings.push({
+      id: 'lane_sentry_failed',
+      factory_id: factoryId || null,
+      proposed_solution:
+        `Tip ship for ${factoryId || 'lane'} failed SENTRY: ${sentryShip.slice(0, 240)}. Align behavior_assertions with SCHEMA (no false OWNED_ needles), fix must_include reporting, revive the step, and re-run POST /factory/ship-queue-and-commit with factory_id=${factoryId || 'factory-3'}.`,
+    });
+  }
+
+  for (const step of queue?.steps || []) {
+    const st = String(step.status || '').toLowerCase();
+    const err = String(step.last_error || '');
+    if (st !== 'blocked' && st !== 'pending') continue;
+    if (!/SENTRY_FAILED|STEP_STATUS_FORBIDDEN/i.test(err)) continue;
+    if (Number(step.attempts || 0) < 1 && !/SENTRY_FAILED/i.test(err)) continue;
+    findings.push({
+      id: `queue_ship_thrash:${step.id || 'unknown'}`,
+      proposed_solution:
+        `Step ${step.id} is thrashing (${err.slice(0, 160)}). Clear false assertion needles, treat retryable SENTRY blocks as shippable in truth-ladder, do not overwrite last_error with STEP_STATUS_FORBIDDEN, then re-ship.`,
     });
   }
 

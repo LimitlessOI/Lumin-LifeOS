@@ -503,8 +503,13 @@ export function exactChangeClaim({
   // actionable so construction can proceed (one-queue multi-factory path).
   const selfReferentialStatusForbidden =
     stepStatus === 'blocked' && /STEP_STATUS_FORBIDDEN/i.test(lastErr);
+  // Retryable SENTRY/codegen blocks must stay shippable — otherwise factory
+  // lanes thrash FORBIDDEN↔SENTRY forever and never rewrite the artifact.
+  const retryableBlocked =
+    stepStatus === 'blocked'
+    && /SENTRY_FAILED|codegen_|behavior_assertion|missing:|artifact_missing/i.test(lastErr);
   const nonActionable = new Set(['blocked', 'skipped', 'cancelled']);
-  if (nonActionable.has(stepStatus) && !selfReferentialStatusForbidden) {
+  if (nonActionable.has(stepStatus) && !selfReferentialStatusForbidden && !retryableBlocked) {
     return {
       ok: false,
       status: 'STEP_STATUS_FORBIDDEN',

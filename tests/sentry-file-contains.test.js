@@ -40,3 +40,18 @@ test('file_contains fails closed when substring is missing (old false-fail shape
   assert.equal(r.ok, false);
   assert.deepEqual(r.missing, ['overlay_devices']);
 });
+
+test('file_contains reports the actual missing needle, not needles[0]', async () => {
+  const r = await runSingleAssertion(
+    {
+      type: 'file_contains',
+      path: 'services/collectibles/twin-service.js',
+      must_include: ['createCollectibleTwin', 'needs_review', 'OWNED_'],
+    },
+    { readFile: async () => 'export function createCollectibleTwin(){ return { needs_review: true, identity_status: "owned_unverified" }; }' },
+  );
+  assert.equal(r.ok, false);
+  assert.deepEqual(r.missing, ['OWNED_']);
+  assert.equal(r.substring, 'OWNED_');
+  assert.match(r.reason, /OWNED_/);
+});

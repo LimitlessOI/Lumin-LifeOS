@@ -259,6 +259,13 @@ export async function runFactoryLane({ factoryId = thisFactoryId(), productId = 
   if (ownsNative(factoryId) && sync.ok !== false) {
     const head = nativeTreeSha(repoRoot);
     const prev = readLastTick(repoRoot, factoryId);
+    // Author native slices via tip (same pattern as factory-3). Compile alone
+    // never creates SemanticPerception.swift — founder mandatory 2026-08-13.
+    if (needsAuthor.length || claimable.length) {
+      ship = await requestLaneShip(factoryId);
+    } else {
+      ship = { skipped: true, reason: 'no_pending_owned_steps' };
+    }
     if (!prev || prev.native_tree_sha !== head) {
       try {
         const log = buildTaloa(repoRoot);
@@ -279,12 +286,16 @@ export async function runFactoryLane({ factoryId = thisFactoryId(), productId = 
       tip,
       factory2: { tickAt: prev?.at, ok: true, taloaRunning: taloaState.running },
       overlayNativeBlocks: overlayNativeBlockedSteps(queue),
+      laneShip: ship,
+      queue,
+      factoryId,
     });
     writeTick(repoRoot, factoryId, {
       at: new Date().toISOString(),
       factory_id: factoryId,
       native_tree_sha: head,
       build,
+      ship,
       taloa: taloaState,
       tip,
       watchdog,
@@ -297,6 +308,13 @@ export async function runFactoryLane({ factoryId = thisFactoryId(), productId = 
     } else {
       ship = { skipped: true, reason: 'no_pending_owned_steps' };
     }
+    watchdog = evaluateSystemWatchdog({
+      tip,
+      laneShip: ship,
+      queue,
+      factoryId,
+      overlayNativeBlocks: overlayNativeBlockedSteps(queue),
+    });
     writeTick(repoRoot, factoryId, {
       at: new Date().toISOString(),
       factory_id: factoryId,
@@ -321,7 +339,7 @@ export async function runFactoryLane({ factoryId = thisFactoryId(), productId = 
   let detail;
   if (watchdog && watchdog.ok === false) {
     detail = `watchdog: ${(watchdog.findings || []).map((f) => f.id).join(', ')}`;
-  } else if (ownsCollectiblesLane(factoryId) && ship && !ship.skipped) {
+  } else if (ship && !ship.skipped) {
     detail = ship.ok
       ? `lane ship requested for ${factoryId}: shipped=${ship.shipped || 0}`
       : `lane ship failed for ${factoryId}: ${ship.reason || ship.error || ship.detail || 'unknown'}`;

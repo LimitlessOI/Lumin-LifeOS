@@ -23,3 +23,22 @@ test('healthy tip + healthy factory2 → ok', () => {
   assert.equal(wd.ok, true);
   assert.equal(wd.findings.length, 0);
 });
+
+test('lane SENTRY_FAILED is a finding with proposed_solution', () => {
+  const wd = evaluateSystemWatchdog({
+    tip: { ok: true, status: 200, db: 'ok', readyStatus: 200 },
+    factoryId: 'factory-3',
+    laneShip: {
+      ok: true,
+      shipped: 0,
+      products: [{
+        product_id: 'universal-overlay',
+        ok: false,
+        error: 'SENTRY_FAILED: behavior_assertion: missing:owned_',
+      }],
+    },
+  });
+  assert.equal(wd.ok, false);
+  assert.equal(wd.findings.some((f) => f.id === 'lane_sentry_failed'), true);
+  assert.match(wd.findings.find((f) => f.id === 'lane_sentry_failed').proposed_solution, /ship-queue-and-commit/);
+});

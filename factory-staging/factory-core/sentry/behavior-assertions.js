@@ -94,7 +94,10 @@ export async function runSingleAssertion(assertion, runner = {}) {
           ok: missing.length === 0,
           missing,
           substrings: needles,
-          substring: needles[0],
+          // Report the first ACTUAL miss — needles[0] lied when a later needle failed
+          // (proven 2026-08-13: OWNED_ miss reported as createCollectibleTwin).
+          substring: missing[0] || needles[0],
+          reason: missing.length ? `missing:${missing.join(',')}` : undefined,
         };
       }
       case 'exports_smoke': {

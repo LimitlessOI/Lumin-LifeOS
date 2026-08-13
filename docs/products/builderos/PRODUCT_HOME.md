@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/builderos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-08-13 — SLICE_COST_UNTRACKED hard gate: every DONE slice must stamp duration_ms + tokens_used. |
+| **Last Updated** | 2026-08-13 — factory-1+2 parallel overlay mandatory; factory-3 Collectibles; SENTRY/fixer thrash closed. |
 ### Related docs (this product)
 
 | Doc | Path |
@@ -35,6 +35,8 @@
 ---
 
 ## Change Receipts
+| 2026-08-13 | **Mandatory: factory-1+2 finish overlay together; factory-3 Collectibles; fix SENTRY+fixer.** Twin thrash: frozen `OWNED_` vs schema `owned_*` + SENTRY misreported needles[0]; FORBIDDEN overwrote SENTRY last_error; watchdog blind to lane SENTRY. Closed: assertion→`owned_`, real missing needle, retryable blocked shippable, no FORBIDDEN overwrite, watchdog `lane_sentry_failed`, factory-2 tip-ships native, open native no longer blocks enrolling factory-1 JS print, build.sh compiles all `*.swift`. | Founder: mandatory 1+2 overlay; 3 collectibles; fix SENTRY + fixer; keep working 7h. | exclusive-queue + sentry-file-contains + system-watchdog-tip |
+
 | 2026-08-13 | **Hard gate: every built slice must track duration_ms + tokens_used.** Founder: cannot score the system without tracking. Proven gap: 0/112 BUILD_QUEUE steps had cost fields; spend-outcomes only saw 3 unrelated missions. Closed: `services/slice-cost-tracking.js` + refuse DONE without stamps on runNextStep / governed markDone / pre_existing claim; scoreboard `GET /api/v1/builderos/control-plane/slice-costs`. author_then_write missing usage fails closed (no silent 0). | Founder: hard gate slice time + tokens on every build. | `tests/slice-cost-tracking.test.js` 6/6 |
 
 | 2026-08-13 | **Tip Docker omitted LANE_ASSIGNMENT → factory-3 owned nothing.** Live: Collectibles pending, local plan runnable, tip `factory_id=factory-3` → `no_shippable_steps`. Root: `.dockerignore` excluded `products/` and never allowlisted the receipt; tip used FALLBACK without factory-3. Fix: ship `LANE_ASSIGNMENT.json` + `FACTORY_SLOT_STATE.json` in the image; FALLBACK now includes Collectibles owns for factory-3. Claimed false-blocked ANDROID-BODY-WIRE (`makeAndroidBody` already on HEAD). | Founder: observe BuilderOS; right work/order; find+fix. | `tests/lane-assignment.test.js` Collectibles FALLBACK |

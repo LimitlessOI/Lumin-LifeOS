@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Documentation — CONTINUITY LOG. -->
 
+## 2026-08-13 — Mandatory factory-1+2 overlay + factory-3 Collectibles; SENTRY/fixer fixed
+
+Founder: 1 and 2 must finish overlay together (mandatory); 3 on Collectibles; keep working 7h; fix SENTRY fail and the fixer that missed it. Root: twin assertion `OWNED_` vs schema `owned_*`; SENTRY blamed wrong needle; FORBIDDEN thrash; factory-2 never tip-shipped native; enroll blocked factory-1 while native open; watchdog ignored lane SENTRY. Fixes shipped; AUTH-ENVELOPE+ enrolled for factory-1 parallel; loop armed for 7h.
+
 ## 2026-08-13 — Hard gate: track slice duration + tokens on every build
 
 Founder: report how it is building; hard-gate duration + tokens on every slice so the system can be scored. Proven: tip shipping overlay/Collectibles but 0/112 queue steps had cost fields; spend-outcomes blind to print slices. Shipped `SLICE_COST_UNTRACKED` gate + `/slice-costs` scoreboard. Live build: factory-3 twin SENTRY-failing; factory-2 next native perception; factory-1 no tip-shippable overlay JS.
