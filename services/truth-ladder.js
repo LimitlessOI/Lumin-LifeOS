@@ -363,6 +363,32 @@ export function blueprintFollowClaim({
     };
   }
   if (!resolved.step_ids.has(bsid)) {
+    // Point B (founder 2026-08-13): Architect-sealed Collectibles print is
+    // manufacturing authority even before the one-queue twin lists the id.
+    // Without this, enroll→ship races tip image lag as NOT_ON_BLUEPRINT idle.
+    if (/^COLLECTIBLES-V\d+-/i.test(bsid)) {
+      try {
+        const printPath = path.join(repoRoot, 'docs', 'products', 'collectibles', 'PRINT_SEQUENCE.json');
+        if (fs.existsSync(printPath)) {
+          const print = JSON.parse(fs.readFileSync(printPath, 'utf8'));
+          const printIds = new Set(
+            (Array.isArray(print.steps) ? print.steps : []).map((s) => s.id).filter(Boolean),
+          );
+          if (printIds.has(bsid)) {
+            return {
+              ok: true,
+              status: 'ON_BLUEPRINT',
+              blueprint_id: resolved.blueprint_id,
+              blueprint_step_id: bsid,
+              mission_id: resolved.mission_id,
+              twin_source: 'architect_collectibles_print_sequence',
+              twin_path: printPath,
+              trust_earned: null,
+            };
+          }
+        }
+      } catch { /* fall through to NOT_ON_BLUEPRINT */ }
+    }
     return {
       ok: false,
       status: 'NOT_ON_BLUEPRINT',
@@ -430,7 +456,24 @@ export function getTwinStep(blueprint_id, blueprint_step_id, { repoRoot = _REPO_
     return { ok: false, status: 'NOT_ON_BLUEPRINT', error: resolved.reason };
   }
   const steps = Array.isArray(resolved.blueprint?.steps) ? resolved.blueprint.steps : [];
-  const step = steps.find((s) => stepIdentity(s) === String(blueprint_step_id || '').trim());
+  let step = steps.find((s) => stepIdentity(s) === String(blueprint_step_id || '').trim());
+  let twin_source = resolved.source;
+  let twin_path = resolved.path;
+  if (!step && /^COLLECTIBLES-V\d+-/i.test(String(blueprint_step_id || ''))) {
+    try {
+      const printPath = path.join(repoRoot, 'docs', 'products', 'collectibles', 'PRINT_SEQUENCE.json');
+      if (fs.existsSync(printPath)) {
+        const print = JSON.parse(fs.readFileSync(printPath, 'utf8'));
+        step = (Array.isArray(print.steps) ? print.steps : []).find(
+          (s) => stepIdentity(s) === String(blueprint_step_id || '').trim(),
+        );
+        if (step) {
+          twin_source = 'architect_collectibles_print_sequence';
+          twin_path = printPath;
+        }
+      }
+    } catch { /* fall through */ }
+  }
   if (!step) {
     return {
       ok: false,
@@ -443,8 +486,8 @@ export function getTwinStep(blueprint_id, blueprint_step_id, { repoRoot = _REPO_
     status: 'ON_BLUEPRINT',
     step,
     twin: follow,
-    twin_source: resolved.source,
-    twin_path: resolved.path,
+    twin_source,
+    twin_path,
     blueprint: resolved.blueprint,
   };
 }

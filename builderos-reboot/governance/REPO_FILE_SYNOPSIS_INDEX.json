@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T20:51:32.995Z",
+  "generated_at": "2026-08-13T20:58:40.486Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13589,
   "files": [
@@ -44419,9 +44419,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 585270,
-      "mtime": "2026-08-13T20:32:47.803Z",
-      "indexed_at": "2026-08-13T20:32:47.803Z"
+      "bytes": 585290,
+      "mtime": "2026-08-13T20:58:40.486Z",
+      "indexed_at": "2026-08-13T20:58:40.486Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -103372,9 +103372,9 @@
     {
       "path": "services/truth-ladder.js",
       "synopsis": "Truth-ladder enforcement — grades load-bearing CLAIMS (not code",
-      "bytes": 31047,
-      "mtime": "2026-08-13T07:43:24.720Z",
-      "indexed_at": "2026-08-13T07:43:24.720Z",
+      "bytes": 32861,
+      "mtime": "2026-08-13T20:58:40.486Z",
+      "indexed_at": "2026-08-13T20:58:40.486Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
