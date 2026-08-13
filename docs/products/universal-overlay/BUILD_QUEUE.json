@@ -4009,6 +4009,22 @@
       "proof": null,
       "last_attempt_at": "2026-08-13T04:18:39.815Z",
       "last_error": "NOT_ON_BLUEPRINT"
+    },
+    {
+      "id": "register-taloa-s64-capability",
+      "status": "pending",
+      "target_file": "scripts/registerTaloaS64Capability.mjs",
+      "task": "Create a script to register the TALOA-S64 capability",
+      "spec": "Create a Node.js script named `registerTaloaS64Capability.mjs`. This script will programmatically call the `taloa/capability-registry-service.js` to register a new capability with the `capabilityId` of 'TALOA-S64'. The script should provide necessary placeholder details for the capability registration (e.g., name, description, version, status) as required by the existing service's `registerCapability` function, ensuring that the 'TALOA-S64' capability is successfully added to the system.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "import { capabilityRegistryService } from '../services/taloa/capability-registry-service.js';",
+        "async function registerTaloaS64Capability() {",
+        "await capabilityRegistryService.registerCapability({",
+        "capabilityId: 'TALOA-S64'"
+      ]
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
