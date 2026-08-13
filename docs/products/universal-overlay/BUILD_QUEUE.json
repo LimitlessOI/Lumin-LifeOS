@@ -7402,9 +7402,9 @@
       "shipped_via": "governed_ship_queue"
     },
     {
-      "status": "pending",
+      "status": "done",
       "founder_gated": false,
-      "attempts": 2,
+      "attempts": 0,
       "action_type": "write_file_exact",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
@@ -7427,17 +7427,17 @@
         "fail-closed"
       ],
       "blueprint_step_id": "COLLECTIBLES-V3-PAYMENT-ADAPTER-001",
-      "commit_sha": null,
+      "commit_sha": "447e3a9e3d66a13b305d55bcdd3d5759d334bdbe",
       "built_sha": null,
       "proof": null,
       "last_attempt_at": "2026-08-13T23:51:53.356Z",
-      "last_error": "AIC_GATE_FAILURE",
+      "last_error": null,
       "started_at": "2026-08-13T23:51:53.288Z",
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
       "park_until": null,
-      "heal_unblocked": true,
+      "heal_unblocked": false,
       "heal_reason": "collectibles_never_stop_heal",
       "same_signature_count": 1,
       "behavior_assertions": [
@@ -7479,7 +7479,37 @@
           "content_sha256": "2080c6fdc90c861c4387ed505e3e192226f12f5224eadf2389a1229dc55db309"
         }
       },
-      "shipped_at": "2026-08-13T23:51:56.264Z"
+      "shipped_at": "2026-08-13T23:52:03.848Z",
+      "duration_ms": 10562,
+      "tokens_used": 0,
+      "shipped_via": "governed_ship_queue"
+    },
+    {
+      "status": "pending",
+      "founder_gated": false,
+      "attempts": 0,
+      "action_type": "author_then_write",
+      "product_id": "collectibles",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "mission_id": "PRODUCT-universal-overlay",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
+      "depends_on": [
+        "COLLECTIBLES-V3-TRANSACTION-001"
+      ],
+      "id": "COLLECTIBLES-V3-SHIPPING-001",
+      "target_file": "services/collectibles/shipping-tracking.js",
+      "sandbox_boundary": "services/collectibles/**",
+      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createShippingTrackingService({ pool }) — tracking + inspection window stubs behind carrier adapters. ES module.",
+      "spec": "MASTER_BLUEPRINT V3 shipping/tracking.",
+      "expected_exports": [
+        "createShippingTrackingService"
+      ],
+      "file_contains": [
+        "createShippingTrackingService",
+        "tracking",
+        "inspection"
+      ],
+      "blueprint_step_id": "COLLECTIBLES-V3-SHIPPING-001"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
