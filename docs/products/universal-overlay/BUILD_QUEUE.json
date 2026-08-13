@@ -4581,7 +4581,7 @@
       "status": "pending",
       "founder_gated": false,
       "attempts": 0,
-      "action_type": "author_then_write",
+      "action_type": "write_file_exact",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
       "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md §64",
@@ -4596,7 +4596,33 @@
         "AXUIElement"
       ],
       "blueprint_step_id": "TALOA-S64-MACOS-PERCEPTION-001",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "exact_inputs": {
+        "content_source_path": "docs/products/universal-overlay/twins/steps/TALOA-S64-MACOS-PERCEPTION-001.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-08-13T07:44:49.071Z",
+        "shipped_at": "2026-08-13T07:44:49.071Z",
+        "commit_sha": null,
+        "content_sha256": "27aaa0ed1519adae39ac5d5120e579ff76d4136aa9ed81b7aabd1a26f69dee56",
+        "target_file": "native/macos-overlay/SemanticPerception.swift",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "native/macos-overlay/SemanticPerception.swift",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "PASS"
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/universal-overlay/twins/steps/TALOA-S64-MACOS-PERCEPTION-001.exact",
+          "content_sha256": "27aaa0ed1519adae39ac5d5120e579ff76d4136aa9ed81b7aabd1a26f69dee56"
+        }
+      },
+      "shipped_at": "2026-08-13T07:44:49.071Z"
     },
     {
       "status": "pending",
