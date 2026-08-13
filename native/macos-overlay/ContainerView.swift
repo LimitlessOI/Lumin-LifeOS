@@ -60,6 +60,10 @@ final class ContainerView: NSView, WKNavigationDelegate, WKUIDelegate {
     static let resizeMargin: CGFloat = 10
     static let dragStripHeight: CGFloat = 22
     static let minSize: CGFloat = 56
+    /// Resting badge: ~80% transparent (founder 2026-08-13: current full-opacity circle is annoying).
+    static let restAlpha: CGFloat = 0.20
+    static let hoverAlpha: CGFloat = 0.70
+    static let activeAlpha: CGFloat = 1.0
 
     // Production LifeOS host -- same canonical /lifeos shell the Capacitor
     // Android app and PWA already load (public/shared/lifeos-native-shell.js
@@ -74,6 +78,7 @@ final class ContainerView: NSView, WKNavigationDelegate, WKUIDelegate {
     /// True while the user is actively dragging/resizing this window --
     /// autonomous wandering (main.swift) must not fight a real drag.
     var isUserInteracting: Bool { dragMode != .none }
+    private var hovering = false
 
     private enum DragMode { case none, move, resizeL, resizeR, resizeT, resizeB, resizeTL, resizeTR, resizeBL, resizeBR }
     private var dragMode: DragMode = .none
@@ -175,6 +180,54 @@ final class ContainerView: NSView, WKNavigationDelegate, WKUIDelegate {
             )
         }
         window?.invalidateCursorRects(for: self)
+        refreshBadgeAlpha()
+    }
+
+    override func viewDidMoveToWindow() {
+        super.viewDidMoveToWindow()
+        refreshBadgeAlpha()
+    }
+
+    override func updateTrackingAreas() {
+        super.updateTrackingAreas()
+        trackingAreas.forEach { removeTrackingArea($0) }
+        addTrackingArea(NSTrackingArea(
+            rect: bounds,
+            options: [.mouseEnteredAndExited, .activeAlways, .inVisibleRect],
+            owner: self,
+            userInfo: nil
+        ))
+    }
+
+    override func mouseEntered(with event: NSEvent) {
+        hovering = true
+        refreshBadgeAlpha()
+    }
+
+    override func mouseExited(with event: NSEvent) {
+        hovering = false
+        refreshBadgeAlpha()
+    }
+
+    func refreshBadgeAlpha() {
+        guard let w = window else { return }
+        if isExpanded {
+            w.alphaValue = Self.activeAlpha
+            w.hasShadow = true
+            return
+        }
+        if isUserInteracting {
+            w.alphaValue = Self.activeAlpha
+            w.hasShadow = false
+            return
+        }
+        if hovering {
+            w.alphaValue = Self.hoverAlpha
+            w.hasShadow = false
+            return
+        }
+        w.alphaValue = Self.restAlpha
+        w.hasShadow = false
     }
 
     private func installWebViewIfNeeded() {
@@ -381,6 +434,7 @@ final class ContainerView: NSView, WKNavigationDelegate, WKUIDelegate {
         }
         dragStartMouseScreen = NSEvent.mouseLocation
         dragStartFrame = window?.frame ?? .zero
+        refreshBadgeAlpha()
         if !isExpanded, dragMode == .move {
             voiceHoldTimer?.invalidate()
             voiceHoldTimer = Timer.scheduledTimer(withTimeInterval: Self.voiceHoldDelay, repeats: false) { [weak self] _ in
@@ -438,13 +492,11 @@ final class ContainerView: NSView, WKNavigationDelegate, WKUIDelegate {
         if voiceHoldActive {
             endBadgeVoice()
             dragMode = .none
+            refreshBadgeAlpha()
             return
         }
         // A "move" that barely moved is a click, not a drag -- click-to-chat.
-        // A real move (not a click), on the un-expanded badge, is corner-
-        // snap territory instead -- founder, direct: "you can move it
-        // around any way you want to. It can stay in some standard
-        // places... one of the four corners."
+        // A real move (not a click) parks her where she was dropped.
         if dragMode == .move, !isExpanded {
             let cur = NSEvent.mouseLocation
             let moved = hypot(cur.x - dragStartMouseScreen.x, cur.y - dragStartMouseScreen.y)
@@ -476,6 +528,7 @@ final class ContainerView: NSView, WKNavigationDelegate, WKUIDelegate {
             }
         }
         dragMode = .none
+        refreshBadgeAlpha()
     }
 
     /// Native hold-to-talk. Injecting a JS click into WKWebView is not a
@@ -598,6 +651,7 @@ final class ContainerView: NSView, WKNavigationDelegate, WKUIDelegate {
         f.origin.y += f.size.height - newSize
         f.size = NSSize(width: newSize, height: newSize)
         window.setFrame(f, display: true, animate: true)
+        NotificationCenter.default.post(name: .taloaDidFinishDrag, object: window)
     }
 
     override func resetCursorRects() {

@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/universal-overlay/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-08-13 — Body compile-clean; twin sealed exact for factory-3; AUTH/BODY done sticky. |
+| **Last Updated** | 2026-08-13 — Resting Taloa badge ~80% transparent; drag parks in place (no corner snap). |
 
 ---
 ---
@@ -340,12 +340,14 @@ User on insurance portal
 | **Lane log** | `docs/CONTINUITY_LOG.md` (cross-cutting) |
 | **Next build** | `TALOA-S64-ANDROID-BODY-001` (`services/taloa/android-body-adapter.js`) — sealed §64 item 3. factory-2: native/macos-overlay only. Collectibles wait while overlay print is open. |
 | **Known gaps** | Layer B `REGISTERED_NOT_IMPLEMENTED`. Overlay SENTRY feed file missing on Railway. Spend-outcomes mounts on this deploy — not live until SHA matches. |
-| **⚠️ IN PROGRESS** | Overlay manufacturing resumes at Android Universal Body adapter after this ship. |
+| **⚠️ IN PROGRESS** | Resting badge faded; drag parks in place. Next print still macOS perception / factory-2 compile. |
 | **How to load extension in Chrome** | Go to `chrome://extensions` → Enable Developer Mode → Load Unpacked → select the `extension/` folder in this repo |
 
 ---
 
 ## Change Receipts
+
+| 2026-08-13 | **Resting Taloa badge is ~80% transparent and stays where you drag her.** Rest `alphaValue=0.20`, no shadow. Hover 70%, drag/chat 100%. Drop parks the exact origin per screen (UserDefaults) — no corner snap, 10Hz settle timer skips parked screens. | Founder: make it so I can move the Taloa icon; only 15% visible / ~80% transparent; current condition is annoying. | Rebuild Taloa.app; drag her; she stays; resting she is faint. |
 
 | 2026-08-13 | **Body compile-clean + twin sealed exact.** MacOsBodyAdapter used invented BodyAdapter types; rewritten against ScreenControl+SemanticPerception. Twin step → write_file_exact with identity_status needle so factory-3 stops thrashing author_then_write SENTRY. | Founder: f1+f2 overlay; f3 Collectibles. | factory-3 tip-ship twin; f1 TEMPLATE |
 

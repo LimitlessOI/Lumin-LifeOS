@@ -107,23 +107,47 @@ func homeRect(for screen: NSScreen) -> NSRect {
     return NSRect(origin: origin, size: NSSize(width: homeNookSize, height: homeNookSize))
 }
 
-/// Real drag-to-snap: called when the founder finishes dragging her (not a
-/// click) -- picks whichever of the four corners she's now closest to as
-/// the new, persisted home, and animates a real snap there rather than
-/// waiting for the slow wander drift to catch up.
-func snapToNearestCorner(window: OverlayWindow) {
+/// Exact parked origin per screen. Founder 2026-08-13: drag her and leave
+/// her there — do not snap to a corner, do not ease her back home.
+enum BadgePark {
+    private static func key(_ screen: NSScreen, _ axis: String) -> String {
+        "taloa_park_origin_\(screen.localizedName.replacingOccurrences(of: " ", with: "_"))_\(axis)"
+    }
+
+    static func origin(for screen: NSScreen) -> NSPoint? {
+        let d = UserDefaults.standard
+        guard d.object(forKey: key(screen, "x")) != nil else { return nil }
+        return NSPoint(x: d.double(forKey: key(screen, "x")), y: d.double(forKey: key(screen, "y")))
+    }
+
+    static func setOrigin(_ origin: NSPoint, for screen: NSScreen) {
+        UserDefaults.standard.set(origin.x, forKey: key(screen, "x"))
+        UserDefaults.standard.set(origin.y, forKey: key(screen, "y"))
+    }
+}
+
+func clampOrigin(_ origin: NSPoint, size: NSSize, on screen: NSScreen) -> NSPoint {
+    let sf = screen.visibleFrame
+    let x = min(max(origin.x, sf.minX), max(sf.minX, sf.maxX - size.width))
+    let y = min(max(origin.y, sf.minY), max(sf.minY, sf.maxY - size.height))
+    return NSPoint(x: x, y: y)
+}
+
+/// Leave her where the founder dropped her. Persist that origin so relaunch
+/// and the 10Hz settle timer do not pull her back to a corner.
+func parkInPlace(window: OverlayWindow) {
     guard let screen = window.screen ?? NSScreen.screens.first else { return }
     let frame = window.frame
-    let center = NSPoint(x: frame.midX, y: frame.midY)
-    let corner = HomeCorner.nearest(to: center, on: screen)
-    HomeCorner.setCurrent(corner, for: screen)
-    let target = corner.origin(in: screen, size: frame.width, margin: 20)
-    window.setFrame(NSRect(origin: target, size: frame.size), display: true, animate: true)
-    if let idx = overlayWindows.firstIndex(where: { $0 === window }) {
-        wanderTargets[idx] = pickWanderTarget(in: homeRect(for: screen), windowSize: frame.size)
-        wanderNextChangeAt[idx] = ProcessInfo.processInfo.systemUptime + Double.random(in: 4...9)
+    let origin = clampOrigin(frame.origin, size: frame.size, on: screen)
+    if origin != frame.origin {
+        window.setFrameOrigin(origin)
     }
-    FileHandle.standardError.write("Taloa: snapped home to \(corner)\n".data(using: .utf8)!)
+    BadgePark.setOrigin(origin, for: screen)
+    if let idx = overlayWindows.firstIndex(where: { $0 === window }) {
+        wanderTargets[idx] = NSPoint(x: origin.x + frame.width / 2, y: origin.y + frame.height / 2)
+        wanderNextChangeAt[idx] = ProcessInfo.processInfo.systemUptime + 86_400
+    }
+    FileHandle.standardError.write("Taloa: parked at (\(Int(origin.x)), \(Int(origin.y)))\n".data(using: .utf8)!)
 }
 
 /// Real simplification, founder direct (2026-08-10): "have her in a set
@@ -138,13 +162,14 @@ func pickWanderTarget(in home: NSRect, windowSize: NSSize) -> NSPoint {
 }
 
 func makeOverlayWindow(for screen: NSScreen) -> OverlayWindow {
-    let screenFrame = screen.frame
-    let windowRect = NSRect(
-        x: screenFrame.minX + 40, // bottom-left, matches homeRect -- avoids the notification-stack corner
-        y: screenFrame.minY + 100,
-        width: initialSize,
-        height: initialSize
-    )
+    let size = NSSize(width: initialSize, height: initialSize)
+    let origin: NSPoint
+    if let parked = BadgePark.origin(for: screen) {
+        origin = clampOrigin(parked, size: size, on: screen)
+    } else {
+        origin = HomeCorner.current(for: screen).origin(in: screen, size: initialSize, margin: 20)
+    }
+    let windowRect = NSRect(origin: origin, size: size)
 
     let window = OverlayWindow(
         contentRect: windowRect,
@@ -165,7 +190,8 @@ func makeOverlayWindow(for screen: NSScreen) -> OverlayWindow {
     // partially cover her), but with no observed side effects.
     window.level = .screenSaver
     window.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary, .stationary]
-    window.hasShadow = true
+    window.hasShadow = false
+    window.alphaValue = ContainerView.restAlpha
     window.isMovableByWindowBackground = false // ContainerView handles drag/resize itself
     window.minSize = NSSize(width: ContainerView.minSize, height: ContainerView.minSize)
 
@@ -204,6 +230,9 @@ let wanderTimer = Timer(timeInterval: 1.0 / 10.0, repeats: true) { _ in
         let window = overlayWindows[i]
         guard let container = window.contentView as? ContainerView else { continue }
         if container.isUserInteracting || container.isExpanded { continue }
+        if let screen = window.screen ?? NSScreen.screens.first, BadgePark.origin(for: screen) != nil {
+            continue
+        }
 
         if now >= wanderNextChangeAt[i], let screen = window.screen ?? NSScreen.screens.first {
             wanderTargets[i] = pickWanderTarget(in: homeRect(for: screen), windowSize: window.frame.size)
@@ -235,14 +264,14 @@ NotificationCenter.default.addObserver(
     rebuildOverlaysForAllScreens()
 }
 
-// Corner-snap on real drag-end -- see snapToNearestCorner above.
+// Park in place on real drag-end — founder 2026-08-13: move her, leave her.
 NotificationCenter.default.addObserver(
     forName: .taloaDidFinishDrag,
     object: nil,
     queue: .main
 ) { note in
     guard let window = note.object as? OverlayWindow else { return }
-    snapToNearestCorner(window: window)
+    parkInPlace(window: window)
 }
 
 // Phase 5: click-through toggle (Cmd+Shift+T) so the overlay can be made

@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Documentation — CONTINUITY LOG. -->
 
+## 2026-08-13 — Taloa badge: faint + free-move
+
+Founder: move the Taloa icon; make it ~15% visible / ~80% transparent; current full-opacity circle is annoying. Resting badge is now `alphaValue=0.20`, no shadow; hover 70%; drag/chat 100%. Drag parks the exact origin per screen — no corner snap, settle timer skips parked screens.
+
 ## 2026-08-13 — Mandatory factory-1+2 overlay + factory-3 Collectibles; SENTRY/fixer fixed
 
 Founder: 1 and 2 must finish overlay together (mandatory); 3 on Collectibles; keep working 7h; fix SENTRY fail and the fixer that missed it. Root: twin assertion `OWNED_` vs schema `owned_*`; SENTRY blamed wrong needle; FORBIDDEN thrash; factory-2 never tip-shipped native; enroll blocked factory-1 while native open; watchdog ignored lane SENTRY. Fixes shipped; AUTH-ENVELOPE+ enrolled for factory-1 parallel; loop armed for 7h.

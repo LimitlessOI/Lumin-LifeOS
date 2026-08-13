@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T08:38:29.732Z",
+  "generated_at": "2026-08-13T14:20:17.585Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13550,
+  "file_count": 13552,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -41266,9 +41266,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Documentation — CONTINUITY LOG.",
-      "bytes": 201420,
-      "mtime": "2026-08-13T07:43:24.720Z",
-      "indexed_at": "2026-08-13T07:43:24.720Z"
+      "bytes": 201755,
+      "mtime": "2026-08-13T14:19:34.972Z",
+      "indexed_at": "2026-08-13T14:20:17.585Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -41640,6 +41640,13 @@
       "bytes": 503,
       "mtime": "2026-08-13T07:30:50.044Z",
       "indexed_at": "2026-08-13T07:30:50.044Z"
+    },
+    {
+      "path": "docs/conversation_dumps/2026-08-13-taloa-badge-faint-free-move.md",
+      "synopsis": "Twin intake dump — Taloa badge faint + free-move.",
+      "bytes": 402,
+      "mtime": "2026-08-13T14:19:34.973Z",
+      "indexed_at": "2026-08-13T14:20:17.585Z"
     },
     {
       "path": "docs/conversation_dumps/by-product/sessions/2a4739f2/BUILDEROS-AUTONOMOUS.md",
@@ -46472,6 +46479,13 @@
       "indexed_at": "2026-08-13T06:48:47.620Z"
     },
     {
+      "path": "docs/products/universal-overlay/conversations/2026-08-13-taloa-badge-faint-free-move.md",
+      "synopsis": "Founder conversation capture — Taloa badge too loud; make it movable and faint.",
+      "bytes": 780,
+      "mtime": "2026-08-13T14:19:34.974Z",
+      "indexed_at": "2026-08-13T14:20:17.585Z"
+    },
+    {
       "path": "docs/products/universal-overlay/CREATIVE_BRIEF.md",
       "synopsis": "Creative Brief — Universal Overlay (universal-overlay)",
       "bytes": 3769,
@@ -46496,9 +46510,9 @@
     {
       "path": "docs/products/universal-overlay/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Universal Overlay",
-      "bytes": 122729,
-      "mtime": "2026-08-13T08:37:03.253Z",
-      "indexed_at": "2026-08-13T08:37:03.253Z"
+      "bytes": 123194,
+      "mtime": "2026-08-13T14:20:08.849Z",
+      "indexed_at": "2026-08-13T14:20:17.585Z"
     },
     {
       "path": "docs/products/universal-overlay/SEND_PACKET_FLUID_UI_AND_TWO_FACTORIES_2026-08-11.md",
