@@ -309,6 +309,48 @@ export function registerWrmConsultRoutes(app, deps = {}) {
 
   const guard = typeof requireKey === "function" ? requireKey : (_req, _res, next) => next();
 
+  // Railway blocks outbound SMTP (465/587 timeout). Postmark is canceled.
+  // Operator catch-up: this machine sends via the system mailbox, then marks sent.
+  router.post("/consult/operator-smtp-bundle", guard, (req, res) => {
+    res.setHeader("Cache-Control", "no-store");
+    res.setHeader("Pragma", "no-cache");
+    const user = String(
+      process.env.SMTP_USER || process.env.WORK_EMAIL || process.env.GMAIL_SIGNUP_EMAIL || ""
+    ).trim();
+    const pass = String(
+      process.env.SMTP_PASS || process.env.WORK_EMAIL_APP_PASSWORD || process.env.GMAIL_SIGNUP_APP_PASSWORD || ""
+    ).trim();
+    const from = String(process.env.WORK_EMAIL || process.env.GMAIL_SIGNUP_EMAIL || user).trim();
+    if (!user || !pass) {
+      return res.status(503).json({
+        ok: false,
+        error: "smtp_credentials_missing",
+        has_user: Boolean(user),
+        has_pass: Boolean(pass),
+      });
+    }
+    return res.json({ ok: true, user, pass, from });
+  });
+
+  router.post("/consult/mark-sent", guard, async (req, res) => {
+    try {
+      await ensureSchema();
+      if (!pool) return res.status(503).json({ ok: false, error: "no_pool" });
+      const ids = Array.isArray(req.body?.ids)
+        ? req.body.ids.map((n) => Number(n)).filter((n) => Number.isFinite(n) && n > 0)
+        : [];
+      const note = String(req.body?.note || `sent to ${CONSULT_TO()}`).slice(0, 300);
+      if (!ids.length) return res.status(400).json({ ok: false, error: "ids required" });
+      await pool.query(
+        `UPDATE wrm_consult_leads SET emailed=true, email_error=$1 WHERE id = ANY($2::bigint[])`,
+        [note, ids]
+      );
+      return res.json({ ok: true, marked: ids.length, to: CONSULT_TO() });
+    } catch (err) {
+      return res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
   router.post("/consult/retry-unsent", guard, async (req, res) => {
     try {
       await ensureSchema();

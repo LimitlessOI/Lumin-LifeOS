@@ -6,7 +6,7 @@ Founder: fix all observed issues — overnight closed slices via conductor but d
 
 ## 2026-08-13 — WRM consults never reached Sherry
 
-Founder: wellroundedmomma consults not arriving. First inbox guess was wellroundedwoman.com; founder correction: **Maternity@wellroundedmomma.com**. Live: 9 real leads still `emailed=false`. Postmark invalid; Railway SMTP blocked. Overlay/Chrome Gmail blocked on 2FA. Env `WRM_CONSULT_EMAIL` set to momma.com. Catch-up not sent until Gmail 2FA or SMTP works.
+Founder: wellroundedmomma consults not arriving; send them through the system (not Google login). Inbox: **Maternity@wellroundedmomma.com**. Railway cannot SMTP; Postmark is dead. Catch-up sends from this machine via the system mailbox after `operator-smtp-bundle` is live. Do not claim Sherry received mail until those sends return message ids.
 
 ## 2026-08-13 — Taloa badge: faint + free-move
 

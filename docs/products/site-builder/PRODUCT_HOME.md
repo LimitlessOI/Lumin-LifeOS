@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/site-builder/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-08-13 — WRM consults go to Maternity@wellroundedmomma.com (founder correction). |
+| **Last Updated** | 2026-08-13 — WRM consult catch-up: operator SMTP bundle + mark-sent (Railway cannot SMTP). |
 
 ---
 
@@ -343,6 +343,8 @@ Founder directive: review every revenue blueprint for gaps against real competit
 **Chair status:** the deliverability gap is `approved` (infrastructure/config, no founder judgment needed) — Architect should queue it. The REFACTOR PLAN items and before/after idea are `escalate_to_founder` (product-direction calls, not purely technical).
 
 ## Change Receipts
+
+| 2026-08-13 | **Operator catch-up for WRM consults: Railway cannot send mail.** Postmark token invalid; outbound SMTP 465/587 times out on Railway. Added command-key `POST /api/v1/wrm/consult/operator-smtp-bundle` + `POST /api/v1/wrm/consult/mark-sent` so the system mailbox can send from a host that can actually reach Gmail SMTP, then mark the stored leads sent. Inbox: `Maternity@wellroundedmomma.com`. | Founder: send the consults through the system; stop Google-login theater. | Live send receipts to Maternity@ after deploy. |
 
 | 2026-08-13 | **Founder correction: consult inbox is `Maternity@wellroundedmomma.com`**, not wellroundedwoman.com. Catch-up send + default `CONSULT_TO` pointed at momma.com. | Founder: mailto:Maternity@wellroundedmomma.com — that's the right email, I messed up. | Live send receipt after SMTP/overlay. |
 
