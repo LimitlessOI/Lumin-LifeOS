@@ -16,7 +16,7 @@
 | **Blueprint status** | `BLUEPRINT_READY_FOR_CONSENSUS` |
 | **Factory lane** | `factory-3` (`com.lumin.factory-3-lane`) |
 | **Build queue** | One manufacturing queue: `docs/products/universal-overlay/BUILD_QUEUE.json` (Collectibles steps carry `product_id: collectibles`) |
-| **Last Updated** | 2026-08-13 — Point B: never stop; sealed remaining V1 exacts + tip retry on ship=0. |
+| **Last Updated** | 2026-08-13 — Fixed Layer-B SENTRY gate case-mismatch deadlock (`scripts/sentry-collectibles-layer-b.mjs`). |
 
 ---
 

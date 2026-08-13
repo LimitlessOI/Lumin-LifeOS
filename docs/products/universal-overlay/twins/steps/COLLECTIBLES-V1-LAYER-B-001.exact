@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * SYNOPSIS: Collectibles V1 Layer-B SENTRY walker placeholder — registers product walk.
+ * SYNOPSIS: Collectibles V1 Layer-B (layer-b) SENTRY walker placeholder — registers product walk.
  * @ssot docs/products/collectibles/PRODUCT_HOME.md
  */
 import fs from 'node:fs';

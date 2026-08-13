@@ -280,7 +280,11 @@ export async function runFactoryLane({ factoryId = thisFactoryId(), productId = 
   let ship = { skipped: true, reason: 'not_web_shell_lane' };
   let taloa = null;
   let selfRepair = null;
-  let watchdog = evaluateSystemWatchdog({ tip, overlayNativeBlocks: overlayNativeBlockedSteps(queue) });
+  let watchdog = evaluateSystemWatchdog({
+    tip,
+    overlayNativeBlocks: overlayNativeBlockedSteps(queue),
+    diskChecks: checks,
+  });
 
   // Tip persists promote/stamp; lane mutates in-memory so findings + reship see it.
   prepareQueueSelfRepair(queue);
@@ -293,6 +297,7 @@ export async function runFactoryLane({ factoryId = thisFactoryId(), productId = 
       laneShip: ship,
       queue,
       factoryId,
+      diskChecks: checks,
     });
     selfRepair = executeManufacturingWatchdogPlaybooks(watchdog, queue);
     const shouldReship = (selfRepair.tip_actions || []).some((a) =>
@@ -312,6 +317,7 @@ export async function runFactoryLane({ factoryId = thisFactoryId(), productId = 
         laneShip: ship,
         queue,
         factoryId,
+        diskChecks: checks,
       });
     }
   }

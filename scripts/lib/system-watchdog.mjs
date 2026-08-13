@@ -25,6 +25,10 @@ export const FACTORY2_STALE_MS = 3 * 60 * 1000;
  * @param {{ ok?: boolean, shipped?: number, products?: Array, reason?: string, error?: string } | null} [input.laneShip]
  * @param {{ steps?: Array } | null} [input.queue]
  * @param {string | null} [input.factoryId]
+ * @param {Array<{ id?: string, target_file?: string, reason?: string, missing?: string[] }>} [input.diskChecks]
+ *   Local on-disk file_contains checks (stepSatisfiedOnDisk), already computed
+ *   this tick — used to turn a generic queue_ship_thrash finding into the exact
+ *   needle + file that's missing, instead of advisory text nobody can act on.
  */
 export function evaluateSystemWatchdog({
   now = Date.now(),
@@ -35,6 +39,7 @@ export function evaluateSystemWatchdog({
   laneShip = null,
   queue = null,
   factoryId = null,
+  diskChecks = [],
 } = {}) {
   const findings = [];
 
@@ -132,11 +137,58 @@ export function evaluateSystemWatchdog({
     if (st !== 'blocked' && st !== 'pending') continue;
     if (!/SENTRY_FAILED|STEP_STATUS_FORBIDDEN/i.test(err)) continue;
     if (Number(step.attempts || 0) < 1 && !/SENTRY_FAILED/i.test(err)) continue;
+
+    // If this is a static missing-literal-substring failure, the exact needle
+    // and file were already computed locally this tick (stepSatisfiedOnDisk).
+    // Re-shipping identical bytes can never pass that check — surface the
+    // concrete needle + both candidate source files so the fix is one edit,
+    // not a forensic search. Proven live 2026-08-13: a generic "align
+    // behavior_assertions with SCHEMA" solution left this thrashing 40+ min.
+    const diskCheck = diskChecks.find((c) => c && c.id === step.id && c.reason === 'missing_strings');
+    let proposed_solution =
+      `Step ${step.id} is thrashing (${err.slice(0, 160)}). applyManufacturingSelfRepair + revive, then re-ship. Do not Cursor GAP-FILL sealed twins.`;
+    if (diskCheck && Array.isArray(diskCheck.missing) && diskCheck.missing.length) {
+      const needles = diskCheck.missing.join(', ');
+      const scriptPath = diskCheck.target_file || step.target_file || 'unknown target_file';
+      const twinPath = `docs/products/universal-overlay/twins/steps/${step.id}.exact`;
+      proposed_solution =
+        `Step ${step.id} is missing literal SENTRY needle(s) [${needles}] from ${scriptPath}. `
+        + `write_file_exact re-materializes from the sealed twin, so fix BOTH ${scriptPath} `
+        + `AND ${twinPath} (if it exists) — re-shipping unchanged bytes will fail identically forever.`;
+    }
     findings.push({
       id: `queue_ship_thrash:${step.id || 'unknown'}`,
       action: 'promote_sealed_exact_and_reship',
+      proposed_solution,
+    });
+  }
+
+  if (!hasSealedPrintSequence('collectibles')) {
+    findings.push({
+      id: 'architect_print_seal_missing_collectibles',
+      action: 'architect_seal_print',
       proposed_solution:
-        `Step ${step.id} is thrashing (${err.slice(0, 160)}). applyManufacturingSelfRepair + revive, then re-ship. Do not Cursor GAP-FILL sealed twins.`,
+        'Architect must seal Collectibles print: npm run builderos:architect:seal-print -- --product collectibles --from-amended-blueprint (reads docs/products/collectibles/AMENDED_BLUEPRINT.json → PRINT_SEQUENCE.json). Cursor must not hand-edit print slices in config — that SO-001 drift made manufacturing Cursor-dependent.',
+    });
+  }
+
+  if (
+    factoryId === 'factory-3'
+    && laneShip
+    && (
+      /collectibles_print_still_open_idle_forbidden/i.test(String(laneShip.reason || ''))
+      || (
+        /no_shippable_steps/i.test(String(laneShip.reason || ''))
+        && collectiblesPrintStillOpen(queue)
+      )
+    )
+  ) {
+    findings.push({
+      id: 'factory3_idle_with_collectibles_work',
+      factory_id: 'factory-3',
+      action: 'enroll_collectibles_print_and_reship',
+      proposed_solution:
+        'factory-3 idle while Collectibles print still open. Load Architect-sealed docs/products/collectibles/PRINT_SEQUENCE.json via enrollNextCollectiblesPrintSlice; never treat foundation DONE as product complete; continue through V10 unless FACTORY_3_REASSIGNED=1. Re-ship factory_id=factory-3.',
     });
   }
 

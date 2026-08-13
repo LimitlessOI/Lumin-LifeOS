@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T21:32:57.174Z",
+  "generated_at": "2026-08-13T22:20:23.901Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13589,
   "files": [
@@ -44419,9 +44419,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 585290,
-      "mtime": "2026-08-13T20:58:40.486Z",
-      "indexed_at": "2026-08-13T20:58:40.486Z"
+      "bytes": 588547,
+      "mtime": "2026-08-13T22:19:30.936Z",
+      "indexed_at": "2026-08-13T22:20:23.901Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -44951,9 +44951,9 @@
     {
       "path": "docs/products/collectibles/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Collectibles (LimitlessOS)",
-      "bytes": 10271,
-      "mtime": "2026-08-13T21:06:42.091Z",
-      "indexed_at": "2026-08-13T21:06:42.091Z"
+      "bytes": 10294,
+      "mtime": "2026-08-13T22:18:57.384Z",
+      "indexed_at": "2026-08-13T22:20:23.901Z"
     },
     {
       "path": "docs/products/collectibles/SCHEMA_CONTRACTS.md",
@@ -78843,9 +78843,9 @@
     {
       "path": "scripts/lib/system-watchdog.mjs",
       "synopsis": "In-system watchdog decisions. The actor doing the work is not",
-      "bytes": 8547,
-      "mtime": "2026-08-13T16:54:50.206Z",
-      "indexed_at": "2026-08-13T16:54:50.206Z",
+      "bytes": 11478,
+      "mtime": "2026-08-13T22:18:14.110Z",
+      "indexed_at": "2026-08-13T22:20:23.901Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -80283,9 +80283,9 @@
     {
       "path": "scripts/run-factory-lane.mjs",
       "synopsis": "Dispatch one tick of work for a named factory lane. Production",
-      "bytes": 19286,
-      "mtime": "2026-08-13T20:50:44.207Z",
-      "indexed_at": "2026-08-13T20:50:44.207Z",
+      "bytes": 19375,
+      "mtime": "2026-08-13T22:18:14.110Z",
+      "indexed_at": "2026-08-13T22:20:23.901Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -81033,10 +81033,10 @@
     },
     {
       "path": "scripts/sentry-collectibles-layer-b.mjs",
-      "synopsis": "Collectibles V1 Layer-B SENTRY walker placeholder — registers product walk.",
-      "bytes": 1082,
-      "mtime": "2026-08-13T20:50:44.207Z",
-      "indexed_at": "2026-08-13T20:50:44.207Z",
+      "synopsis": "Collectibles V1 Layer-B (layer-b) SENTRY walker placeholder — registers product walk.",
+      "bytes": 1092,
+      "mtime": "2026-08-13T22:18:39.342Z",
+      "indexed_at": "2026-08-13T22:20:23.901Z",
       "ssot": [
         "docs/products/collectibles/PRODUCT_HOME.md"
       ]
