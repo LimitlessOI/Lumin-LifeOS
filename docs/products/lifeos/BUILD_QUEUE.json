@@ -6999,7 +6999,7 @@
     },
     {
       "id": "s5-add-ssot-to-smoke-test",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "scripts/lifeos-direct-build-smoke-test.mjs",
       "task": "Add @ssot tag to smoke test script",
       "spec": "Insert the JSDoc tag `/** @ssot */` at the top of the file `scripts/lifeos-direct-build-smoke-test.mjs` to comply with file placement regulations and resolve the `FILE_PLACEMENT_VIOLATION`.",
@@ -7019,9 +7019,9 @@
       "revived_at": "2026-08-13T01:06:19.781Z",
       "no_op": null,
       "pre_existing": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:STEP_STATUS_FORBIDDEN",
+      "demoted_at": "2026-08-13T01:21:43.085Z",
       "park_until": null,
       "blocker_class": null,
       "claim_level": null,
@@ -7541,7 +7541,7 @@
         "drawer_direct_build",
         "callCouncilMember"
       ],
-      "same_signature_count": 0,
+      "same_signature_count": 1,
       "behavior_assertions": [
         {
           "type": "exports_smoke",
@@ -7586,19 +7586,21 @@
       "proof": null,
       "last_attempt_at": "2026-08-13T01:21:43.384Z",
       "last_error": "STEP_STATUS_FORBIDDEN",
-      "last_attempt": null,
       "revive_count": 1,
       "revived_at": "2026-08-13T01:21:43.085Z",
-      "no_op": null,
-      "pre_existing": null,
+      "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
       "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "failure_signature": "STEP_STATUS_FORBIDDEN",
+      "escalation_class": "same_signature_repeat"
     },
     {
       "id": "lifeos-direct-build-smoke-test-ssot-tag",
@@ -7618,19 +7620,48 @@
       "proof": null,
       "last_attempt_at": null,
       "last_error": "github_commit_failed_after_local_ship",
-      "last_attempt": null,
       "revive_count": 1,
       "revived_at": "2026-08-13T01:21:43.085Z",
-      "no_op": null,
-      "pre_existing": null,
+      "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
       "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/lifeos/twins/steps/lifeos-direct-build-smoke-test-ssot-tag.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-08-13T01:21:52.579Z",
+        "shipped_at": "2026-08-13T01:21:52.579Z",
+        "commit_sha": null,
+        "content_sha256": "ab2276f3f4c531c48fa8e1a2e81be85fa3490619e3d514392751e7a90e5a6f4d",
+        "target_file": "scripts/lifeos-direct-build-smoke-test.mjs",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "scripts/lifeos-direct-build-smoke-test.mjs",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "PASS"
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/lifeos/twins/steps/lifeos-direct-build-smoke-test-ssot-tag.exact",
+          "content_sha256": "ab2276f3f4c531c48fa8e1a2e81be85fa3490619e3d514392751e7a90e5a6f4d"
+        }
+      },
+      "shipped_at": "2026-08-13T01:21:52.579Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-direct-build-smoke-test-ssot-tag"
     }
   ],
   "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
