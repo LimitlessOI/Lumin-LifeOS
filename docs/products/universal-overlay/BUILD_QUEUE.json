@@ -4575,6 +4575,26 @@
       "last_error": null,
       "heal_unblocked": true,
       "heal_reason": "observation_claim_wire_export_present_2026-08-13"
+    },
+    {
+      "status": "pending",
+      "founder_gated": false,
+      "attempts": 0,
+      "action_type": "author_then_write",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "mission_id": "PRODUCT-universal-overlay",
+      "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md §64",
+      "depends_on": [],
+      "id": "TALOA-S64-MACOS-PERCEPTION-001",
+      "target_file": "native/macos-overlay/SemanticPerception.swift",
+      "sandbox_boundary": "native/macos-overlay/**",
+      "task": "Overlay print §64 item 4: macOS semantic perception. Native Swift AXUIElement tree-walk plus vision-model fallback. factory-2 compiles. Do not edit services/ or routes/.",
+      "spec": "AX tree as primary observe(); vision fallback when AX is empty. No independent reasoning loop.",
+      "file_contains": [
+        "SemanticPerception",
+        "AXUIElement"
+      ],
+      "blueprint_step_id": "TALOA-S64-MACOS-PERCEPTION-001"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
