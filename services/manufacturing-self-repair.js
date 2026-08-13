@@ -157,6 +157,10 @@ export function forceCollectiblesNeverStopHeal(queue) {
       step.last_error = 'codegen_authoring_failed:collectibles_never_stop_heal';
     }
     attachConventionSealedExact(step);
+    if (sealedExactSourcePath(step)) {
+      step.tokens_used = step.tokens_used == null ? 0 : step.tokens_used;
+      step.duration_ms = Number(step.duration_ms) > 0 ? step.duration_ms : 1000;
+    }
     if (wasTerminal || sealedExactSourcePath(step)) {
       step.heal_reason = 'collectibles_never_stop_heal';
       healed.push(step.id);

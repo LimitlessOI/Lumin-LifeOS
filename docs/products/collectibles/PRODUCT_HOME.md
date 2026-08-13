@@ -16,7 +16,7 @@
 | **Blueprint status** | `BLUEPRINT_READY_FOR_CONSENSUS` |
 | **Factory lane** | `factory-3` (`com.lumin.factory-3-lane`) |
 | **Build queue** | One manufacturing queue: `docs/products/universal-overlay/BUILD_QUEUE.json` (Collectibles steps carry `product_id: collectibles`) |
-| **Last Updated** | 2026-08-13 — Collectibles never-stop: no demote/idle without FACTORY_3_REASSIGNED. |
+| **Last Updated** | 2026-08-13 — Point B: never stop; sealed remaining V1 exacts + tip retry on ship=0. |
 
 ---
 
@@ -110,6 +110,7 @@ Every version must be independently valuable. Manufacture version N only after p
 
 | Date | What | Why | Evidence | Next |
 |---|---|---|---|---|
+| 2026-08-13 | **Point B — never stop.** Tip must not return success with shipped=0 while Collectibles print open; retry+heal in-tick; F3 always tip-ships while print open; sealed DOSSIER+LOCATION+HOUSEHOLD+GUEST+EXPORT+LAYER-B exacts ahead of thrash. | Founder: Point A not working → Point B never stops; do not sell partial. | sealed twins/steps + tip retry | Keep shipping through V10 |
 | 2026-08-13 | **Never-stop hard gate.** Collectibles print cannot demote/skip/escalate-idle; tip heals + attaches convention sealed exact; CAPTURE-API + REVIEW-QUEUE sealed `write_file_exact` on real schema. | Founder: fix so it never stops again unless I say it to. | `tests/manufacturing-self-repair.test.js` never-stop | Tip F3 continues print |
 | 2026-08-13 | **Architect print custody (honesty).** Cursor hand-sealing Collectibles print in config was SO-001 drift — made manufacturing Cursor-dependent. Closed: `AMENDED_BLUEPRINT.json` + Architect-sealed `PRINT_SEQUENCE.json`; config is loader only; `builderos:architect:seal-print`. | Founder: if sealed print is required, Architect was supposed to do it — not Cursor. | `tests/architect-print-seal.test.js` | Tip loads seal; F3 continues |
 | 2026-08-13 | **Never-idle Collectibles print V1→V10.** Sealed print continues past foundation; prepare enrolls next slice; tip forbids factory-3 idle while print open unless `FACTORY_3_REASSIGNED=1`. | Founder: cannot idle if even one thing needed — through V10 if not reassigned. | `tests/collectibles-print-sequence.test.js` | Tip ship SCHEMA-TWINS |

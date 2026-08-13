@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T20:46:56.794Z",
+  "generated_at": "2026-08-13T20:50:44.207Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13581,
+  "file_count": 13587,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -41273,9 +41273,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Documentation — CONTINUITY LOG.",
-      "bytes": 203895,
-      "mtime": "2026-08-13T20:09:15.162Z",
-      "indexed_at": "2026-08-13T20:09:15.162Z"
+      "bytes": 204337,
+      "mtime": "2026-08-13T20:50:44.207Z",
+      "indexed_at": "2026-08-13T20:50:44.207Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -44937,9 +44937,9 @@
     {
       "path": "docs/products/collectibles/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Collectibles (LimitlessOS)",
-      "bytes": 9876,
-      "mtime": "2026-08-13T20:32:47.803Z",
-      "indexed_at": "2026-08-13T20:32:47.803Z"
+      "bytes": 10271,
+      "mtime": "2026-08-13T20:50:44.207Z",
+      "indexed_at": "2026-08-13T20:50:44.207Z"
     },
     {
       "path": "docs/products/collectibles/SCHEMA_CONTRACTS.md",
@@ -71537,6 +71537,13 @@
       "indexed_at": "2026-08-13T20:46:56.794Z"
     },
     {
+      "path": "public/collectibles/twin-dossier.html",
+      "synopsis": "Collectibles Twin Dossier — owner projection",
+      "bytes": 7002,
+      "mtime": "2026-08-13T20:50:44.207Z",
+      "indexed_at": "2026-08-13T20:50:44.207Z"
+    },
+    {
       "path": "public/collectibles/vault.html",
       "synopsis": "HTML page: Your Collectibles Vault",
       "bytes": 9026,
@@ -80262,9 +80269,9 @@
     {
       "path": "scripts/run-factory-lane.mjs",
       "synopsis": "Dispatch one tick of work for a named factory lane. Production",
-      "bytes": 18778,
-      "mtime": "2026-08-13T20:09:15.162Z",
-      "indexed_at": "2026-08-13T20:09:15.162Z",
+      "bytes": 19286,
+      "mtime": "2026-08-13T20:50:44.207Z",
+      "indexed_at": "2026-08-13T20:50:44.207Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -81008,6 +81015,16 @@
       "indexed_at": "2026-08-13T06:44:07.157Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/sentry-collectibles-layer-b.mjs",
+      "synopsis": "Collectibles V1 Layer-B SENTRY walker placeholder — registers product walk.",
+      "bytes": 1082,
+      "mtime": "2026-08-13T20:50:44.207Z",
+      "indexed_at": "2026-08-13T20:50:44.207Z",
+      "ssot": [
+        "docs/products/collectibles/PRODUCT_HOME.md"
       ]
     },
     {
@@ -95176,6 +95193,46 @@
       ]
     },
     {
+      "path": "services/collectibles/export-privacy.js",
+      "synopsis": "Owner export + privacy redaction for Collectible projections.",
+      "bytes": 1108,
+      "mtime": "2026-08-13T20:50:44.207Z",
+      "indexed_at": "2026-08-13T20:50:44.207Z",
+      "ssot": [
+        "docs/products/collectibles/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/collectibles/guest-claim-service.js",
+      "synopsis": "Guest capture session → claim into authenticated Vault.",
+      "bytes": 2432,
+      "mtime": "2026-08-13T20:50:44.207Z",
+      "indexed_at": "2026-08-13T20:50:44.207Z",
+      "ssot": [
+        "docs/products/collectibles/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/collectibles/household-service.js",
+      "synopsis": "Household membership for shared Collectibles Vault access.",
+      "bytes": 1697,
+      "mtime": "2026-08-13T20:50:44.207Z",
+      "indexed_at": "2026-08-13T20:50:44.207Z",
+      "ssot": [
+        "docs/products/collectibles/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/collectibles/location-service.js",
+      "synopsis": "Binder GPS / location records for CollectibleTwins.",
+      "bytes": 2502,
+      "mtime": "2026-08-13T20:50:44.207Z",
+      "indexed_at": "2026-08-13T20:50:44.207Z",
+      "ssot": [
+        "docs/products/collectibles/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "services/collectibles/media-evidence.js",
       "synopsis": "Exports createMediaEvidenceStore — services/collectibles/media-evidence.js.",
       "bytes": 4763,
@@ -97329,9 +97386,9 @@
     {
       "path": "services/governed-autonomous-shipping-loop.js",
       "synopsis": "STEP 5g — the governed AUTONOMOUS shipping loop. When the STEP 5a",
-      "bytes": 72813,
-      "mtime": "2026-08-13T20:09:15.162Z",
-      "indexed_at": "2026-08-13T20:09:15.162Z",
+      "bytes": 77468,
+      "mtime": "2026-08-13T20:50:44.207Z",
+      "indexed_at": "2026-08-13T20:50:44.207Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -99450,9 +99507,9 @@
     {
       "path": "services/manufacturing-self-repair.js",
       "synopsis": "Deterministic manufacturing self-repair playbooks — no Cursor required.",
-      "bytes": 9972,
-      "mtime": "2026-08-13T20:32:30.627Z",
-      "indexed_at": "2026-08-13T20:32:30.627Z",
+      "bytes": 10172,
+      "mtime": "2026-08-13T20:50:44.207Z",
+      "indexed_at": "2026-08-13T20:50:44.207Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

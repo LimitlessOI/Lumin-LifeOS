@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Documentation — CONTINUITY LOG. -->
 
+## 2026-08-13 — Point B: never stops (founder)
+
+Founder: Point A is not working; Point B is it never stops — if not at Point B it is a failure; do not sell otherwise. Closed stop classes: tip returns `ok:false` + in-tick heal/retry when Collectibles print open and shipped=0; F3 always tip-ships while print open; sealed remaining V1 exacts (DOSSIER/LOCATION/HOUSEHOLD/GUEST/EXPORT/LAYER-B) so SENTRY/author thrash cannot idle the lane.
+
 ## 2026-08-13 — Collectibles never-stop (founder)
 
 Founder: F3 stopping without his word is the failure — family pays, system must not quit. Closed: Collectibles print cannot demote/skip/escalate-idle unless `FACTORY_3_REASSIGNED=1`; tip `forceCollectiblesNeverStopHeal` attaches convention sealed exact + re-plans before idle_forbidden; CAPTURE-API sealed exact so stub thrash ships bytes.

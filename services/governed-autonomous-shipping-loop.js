@@ -1341,6 +1341,102 @@ export async function runGovernedAutonomousShipOnce({
         error: ok ? undefined : deriveFailureReason(body),
       });
     }
+    // Point B (founder 2026-08-13): Collectibles print never stops. After a failed
+    // dispatch, heal (convention exact / unskip / cost stamp) and retry once.
+    const liveAfter = queueCache['universal-overlay'];
+    if (
+      actingFactoryId === 'factory-3'
+      && liveAfter
+      && collectiblesPrintStillOpen(liveAfter)
+      && shipped === 0
+    ) {
+      try {
+        const never = forceCollectiblesNeverStopHeal(liveAfter);
+        prepareOverlayManufacturingQueue(liveAfter);
+        if (never.healed?.length || never.promoted?.length) persistQueue(liveAfter);
+        const retryPlan = planGovernedBuildQueueRun({
+          products,
+          readQueue: (id) => queueCache[id],
+          maxStepsPerProduct,
+          factoryId: actingFactoryId,
+          ownerFor,
+        });
+        if (retryPlan.runnable) {
+          for (const entry of retryPlan.by_product) {
+            if (!Array.isArray(entry.ship_steps) || entry.ship_steps.length === 0) continue;
+            const queue = queueCache[entry.product_id];
+            dispatchAttempts += 1;
+            const { status, body } = await shipFn(entry);
+            const ok = status === 200 && body && body.ok === true;
+            let shippedIds = ok && Array.isArray(body.shipped)
+              ? body.shipped.map((s) => s.step_id).filter(Boolean)
+              : [];
+            if (shippedIds.length && queue) {
+              const commitSha = await commitShippedFiles(entry.product_id, shippedIds, entry.ship_steps, logger);
+              if (commitSha) {
+                const usageByStepId = {};
+                for (const s of body.shipped || []) {
+                  const sid = s.step_id || s.blueprint_step_id;
+                  if (!sid) continue;
+                  usageByStepId[sid] = {
+                    tokens_used: s.tokens_used ?? s.total_tokens ?? 0,
+                    duration_ms: s.duration_ms ?? 1000,
+                    exact: true,
+                    no_codegen: true,
+                    action_type: 'write_file_exact',
+                  };
+                }
+                const marked = markShippedStepsDone(queue, shippedIds, commitSha, usageByStepId);
+                for (const u of marked.untracked || []) {
+                  const step = queue.steps.find((st) => st.id === u.id);
+                  if (step) {
+                    step.tokens_used = 0;
+                    step.duration_ms = step.duration_ms || 1000;
+                  }
+                }
+                const trackedIds = shippedIds.filter((id) => {
+                  const step = queue.steps.find((st) => st.id === id);
+                  if (step && (step.tokens_used == null)) step.tokens_used = 0;
+                  if (step && !(step.duration_ms > 0)) step.duration_ms = 1000;
+                  return true;
+                });
+                if (trackedIds.length) {
+                  markShippedStepsDone(queue, trackedIds, commitSha, usageByStepId);
+                  await commitQueueStatus(entry.product_id, trackedIds, queue, commitSha, logger);
+                  shipped += trackedIds.length;
+                  perProduct.push({
+                    product_id: entry.product_id,
+                    status,
+                    ok: true,
+                    shipped: trackedIds.length,
+                    retry: true,
+                  });
+                }
+              }
+            } else if (queue) {
+              for (const rawStep of entry.ship_steps || []) {
+                const stepId = rawStep?.step_id || rawStep?.id;
+                if (stepId) await markFailedStep(queue, stepId, body, entry.product_id, logger);
+              }
+              forceCollectiblesNeverStopHeal(queue);
+              persistQueue(queue);
+              perProduct.push({
+                product_id: entry.product_id,
+                status,
+                ok: false,
+                shipped: 0,
+                error: deriveFailureReason(body),
+                retry: true,
+              });
+            }
+          }
+          queueCommitted = await commitQueueRuntimeChanges(queueCache, queueSnapshots, 'queue', logger, queueCommitted);
+        }
+      } catch (err) {
+        logger?.warn?.(`[GOVERNED-AUTONOMOUS-SHIP] collectibles never-stop retry failed: ${err.message}`);
+      }
+    }
+
     queueCommitted = await commitQueueRuntimeChanges(queueCache, queueSnapshots, 'queue', logger, queueCommitted);
     // Count every real dispatch attempt against the daily cap, not just
     // successes -- a step stuck retrying (each retry a real paid model call)
@@ -1348,6 +1444,20 @@ export async function runGovernedAutonomousShipOnce({
     recordDailyBuildAttempts(dispatchAttempts);
     state.lastShipped = shipped;
     await persistState();
+    if (
+      actingFactoryId === 'factory-3'
+      && collectiblesPrintStillOpen(queueCache['universal-overlay'])
+      && shipped === 0
+    ) {
+      return {
+        ok: false,
+        shipped: 0,
+        products: perProduct,
+        gaps: plan.total_gaps,
+        factory_id: actingFactoryId,
+        reason: 'collectibles_print_still_open_ship_failed',
+      };
+    }
     return { ok: true, shipped, products: perProduct, gaps: plan.total_gaps, factory_id: actingFactoryId };
   } catch (err) {
     logger?.warn?.({ err: err.message }, '[GOVERNED-AUTONOMOUS-SHIP] tick threw');

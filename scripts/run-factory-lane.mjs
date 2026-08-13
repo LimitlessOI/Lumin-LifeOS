@@ -26,6 +26,7 @@ import {
   applyManufacturingSelfRepair,
   executeManufacturingWatchdogPlaybooks,
 } from '../services/manufacturing-self-repair.js';
+import { collectiblesPrintStillOpen } from '../config/overlay-print-sequence.js';
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -358,8 +359,16 @@ export async function runFactoryLane({ factoryId = thisFactoryId(), productId = 
     });
   } else if (ownsCollectiblesLane(factoryId) && factoryId !== 'factory-1') {
     build = { skipped: true, reason: 'collectibles_lane_ships_via_tip' };
-    if (needsAuthor.length || claimable.length) {
+    // Point B: while Collectibles print is open, always tip-ship (enroll/heal
+    // happens on tip). Local empty pending must not idle the lane.
+    const printOpen = collectiblesPrintStillOpen(queue);
+    if (needsAuthor.length || claimable.length || printOpen) {
       ship = await requestLaneShip(factoryId);
+      if (printOpen && (ship.skipped || ship.shipped === 0)) {
+        await sleep(2_000);
+        const again = await requestLaneShip(factoryId);
+        ship = { ...again, never_stop_reship: true };
+      }
     } else {
       ship = { skipped: true, reason: 'no_pending_owned_steps' };
     }

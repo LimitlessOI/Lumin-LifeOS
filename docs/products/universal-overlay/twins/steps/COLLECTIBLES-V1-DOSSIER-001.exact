@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: Collectibles Twin Dossier — owner projection -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Twin Dossier</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #1c1915;
+      --paper: #f7f1e6;
+      --panel: #efe6d6;
+      --accent: #0f5c4c;
+      --warn: #8a4b12;
+      --line: rgba(28, 25, 21, 0.14);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Source Sans 3", Georgia, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(1200px 600px at 10% -10%, #fff8ea 0%, transparent 55%),
+        linear-gradient(180deg, #f3ebe0, var(--paper));
+    }
+    header {
+      padding: 2.5rem 1.25rem 1rem;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+    h1 {
+      font-family: Fraunces, Georgia, serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      margin: 0 0 0.35rem;
+      letter-spacing: -0.02em;
+    }
+    .sub { opacity: 0.72; margin: 0; }
+    main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 1.25rem 3rem;
+      display: grid;
+      gap: 1rem;
+    }
+    .hero {
+      min-height: 280px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+    }
+    .hero img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .meta {
+      display: grid;
+      gap: 0.75rem;
+      border-top: 1px solid var(--line);
+      padding-top: 1rem;
+    }
+    .row { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+    .label { opacity: 0.65; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.06em; }
+    .value { font-weight: 600; }
+    .badge {
+      display: inline-block;
+      padding: 0.2rem 0.55rem;
+      border: 1px solid var(--line);
+      background: #fffaf0;
+      font-size: 0.85rem;
+    }
+    .badge.warn { color: var(--warn); border-color: rgba(138, 75, 18, 0.35); }
+    .actions { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 0.5rem; }
+    a.btn, button.btn {
+      appearance: none;
+      border: 1px solid var(--accent);
+      background: var(--accent);
+      color: #f7fffb;
+      padding: 0.7rem 1rem;
+      font: inherit;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    a.btn.secondary, button.btn.secondary {
+      background: transparent;
+      color: var(--accent);
+    }
+    .empty, .error {
+      border: 1px dashed var(--line);
+      padding: 2rem 1rem;
+      text-align: center;
+      background: rgba(255,255,255,0.45);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Twin Dossier</h1>
+    <p class="sub">Owner view — identity, media, condition, price range, liquidity. Never a fake point price.</p>
+  </header>
+  <main>
+    <section class="hero" id="hero">
+      <p class="sub">Loading dossier…</p>
+    </section>
+    <section class="meta" id="meta" hidden></section>
+    <section class="empty" id="empty" hidden>
+      <p>No twin selected. Open one from the Vault.</p>
+      <div class="actions"><a class="btn" href="/collectibles/vault.html">Back to Vault</a></div>
+    </section>
+    <section class="error" id="error" hidden>
+      <p id="error-msg">Could not load dossier.</p>
+      <div class="actions"><button class="btn secondary" type="button" id="retry">Retry</button></div>
+    </section>
+  </main>
+  <script>
+    const params = new URLSearchParams(location.search);
+    const twinId = params.get("id");
+    const hero = document.getElementById("hero");
+    const meta = document.getElementById("meta");
+    const empty = document.getElementById("empty");
+    const error = document.getElementById("error");
+    const errorMsg = document.getElementById("error-msg");
+
+    function moneyRange(twin) {
+      const min = twin?.price_range?.min ?? twin?.market_min_cents;
+      const max = twin?.price_range?.max ?? twin?.market_max_cents;
+      if (min == null && max == null) return "Price range unknown";
+      const fmt = (c) => (Number(c) / 100).toLocaleString(undefined, { style: "currency", currency: "USD" });
+      if (min != null && max != null) return `${fmt(min)} – ${fmt(max)}`;
+      if (min != null) return `From ${fmt(min)}`;
+      return `Up to ${fmt(max)}`;
+    }
+
+    function render(twin) {
+      empty.hidden = true;
+      error.hidden = true;
+      meta.hidden = false;
+      const needs = Boolean(twin.needs_review);
+      const liquidity = twin.liquidity_posture || twin.liquidity || "surprise_me";
+      hero.innerHTML = twin.hero_media_url
+        ? `<img alt="" src="${twin.hero_media_url}" />`
+        : `<p class="sub">No hero photo yet</p>`;
+      meta.innerHTML = `
+        <div class="row"><div><div class="label">Name</div><div class="value">${twin.display_name || "Unnamed twin"}</div></div>
+          ${needs ? `<span class="badge warn">needs_review</span>` : `<span class="badge">reviewed</span>`}</div>
+        <div class="row"><div><div class="label">Identity</div><div class="value">${twin.identity_status || "owned_unverified"}</div></div>
+          <div><div class="label">Condition</div><div class="value">${twin.condition_estimate || "not set"}</div></div></div>
+        <div class="row"><div><div class="label">Price range</div><div class="value">${moneyRange(twin)}</div></div>
+          <div><div class="label">liquidity</div><div class="value">${liquidity}</div></div></div>
+        <div class="row"><div><div class="label">Location (owner)</div><div class="value">${twin.location_label || twin.location || "private / unset"}</div></div></div>
+        <div class="actions">
+          <a class="btn" href="/collectibles/vault.html">Vault</a>
+          <a class="btn secondary" href="/api/v1/collectibles/twins/${encodeURIComponent(twin.id || twinId || "")}">Raw JSON</a>
+        </div>`;
+    }
+
+    async function load() {
+      if (!twinId) {
+        hero.hidden = true;
+        meta.hidden = true;
+        empty.hidden = false;
+        return;
+      }
+      try {
+        const res = await fetch(`/api/v1/collectibles/twins/${encodeURIComponent(twinId)}`, {
+          credentials: "include",
+          headers: { Accept: "application/json" },
+        });
+        const body = await res.json().catch(() => ({}));
+        if (!res.ok || body.ok === false) throw new Error(body.message || body.error || `HTTP ${res.status}`);
+        render(body.twin || body);
+      } catch (err) {
+        meta.hidden = true;
+        error.hidden = false;
+        errorMsg.textContent = err.message || "Could not load dossier.";
+      }
+    }
+
+    document.getElementById("retry").addEventListener("click", load);
+    load();
+  </script>
+</body>
+</html>
