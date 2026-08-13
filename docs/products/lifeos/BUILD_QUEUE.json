@@ -6779,13 +6779,13 @@
     },
     {
       "id": "s1-founder-chair-intent-service",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/founder-chair-intent.js",
       "task": "Create service to classify founder chat intent",
       "spec": "Implement core logic to classify founder chat prompts, distinguishing workflow directives (like \"drawer_direct_build\") from general inquiries or requests for counsel, ensuring correct lane assignment.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "classifyFounderIntent"
       ],
@@ -6796,8 +6796,8 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
-      "last_error": "STEP_STATUS_FORBIDDEN",
+      "last_attempt_at": "2026-08-13T00:11:24.202Z",
+      "last_error": "AIC_GATE_FAILURE",
       "last_attempt": null,
       "revive_count": 3,
       "revived_at": "2026-08-13T00:11:17.751Z",
