@@ -5556,7 +5556,7 @@
     {
       "status": "pending",
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "action_type": "write_file_exact",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
@@ -5582,26 +5582,23 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-13T17:04:00.997Z",
+      "last_attempt_at": "2026-08-13T17:45:15.556Z",
       "last_error": null,
-      "started_at": "2026-08-13T17:04:00.983Z",
+      "started_at": "2026-08-13T17:45:15.369Z",
       "demoted": false,
       "heal_unblocked": true,
-      "heal_reason": "collectibles_cite_one_queue_twin",
+      "heal_reason": "collectibles_clear_missing_exact_to_author",
       "demote_reason": null,
       "demoted_at": null,
       "skip_reason": null,
       "escalation_required": false,
       "revive_count": 0,
-      "exact_inputs": {
-        "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V1-MEDIA-EVIDENCE-001.exact"
-      },
       "exactness": {
         "sealed": true,
-        "sealed_at": "2026-08-13T17:11:15.923Z",
-        "shipped_at": "2026-08-13T17:11:15.923Z",
+        "sealed_at": "2026-08-13T18:21:21.121Z",
+        "shipped_at": "2026-08-13T18:21:21.121Z",
         "commit_sha": null,
-        "content_sha256": "36d2ecc195bb817cfbc207953193263cc7217bb494ea080136bc32703742ac40",
+        "content_sha256": "58a58c22b5f898a450be601f89f0868cd91f0307e6ddb93e8e0b59b087747ca7",
         "target_file": "services/collectibles/media-evidence.js",
         "reverse": {
           "mode": "delete_file",
@@ -5615,10 +5612,26 @@
         "rebuild": {
           "action_type": "write_file_exact",
           "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V1-MEDIA-EVIDENCE-001.exact",
-          "content_sha256": "36d2ecc195bb817cfbc207953193263cc7217bb494ea080136bc32703742ac40"
+          "content_sha256": "58a58c22b5f898a450be601f89f0868cd91f0307e6ddb93e8e0b59b087747ca7"
         }
       },
-      "shipped_at": "2026-08-13T17:11:15.923Z"
+      "shipped_at": "2026-08-13T18:21:21.121Z",
+      "same_signature_count": 1,
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/collectibles/media-evidence.js",
+          "exports": [
+            "createMediaEvidenceStore"
+          ],
+          "assertion_id": "expected_exports:services/collectibles/media-evidence.js"
+        }
+      ],
+      "failure_signature": "hidden_dependency",
+      "escalation_class": "same_signature_repeat",
+      "exact_inputs": {
+        "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V1-MEDIA-EVIDENCE-001.exact"
+      }
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",

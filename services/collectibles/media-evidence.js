@@ -21,6 +21,8 @@
  * @param {function(string, ...any): void} params.logger.error - Error logger.
  * @returns {MediaEvidenceStore} An object containing functions to interact with the media evidence store.
  * @ssot docs/products/collectibles/PRODUCT_HOME.md
+ * @ssot SCHEMA_CONTRACTS media_evidence
+ * @ssot API_CONTRACTS media
  */
 export function createMediaEvidenceStore({ pool, logger }) {
   /**

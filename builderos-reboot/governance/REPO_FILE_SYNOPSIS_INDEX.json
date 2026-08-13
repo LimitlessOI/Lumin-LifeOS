@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T17:11:19.688Z",
+  "generated_at": "2026-08-13T18:21:24.963Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13576,
   "files": [
@@ -95150,11 +95150,12 @@
     {
       "path": "services/collectibles/media-evidence.js",
       "synopsis": "Exports createMediaEvidenceStore — services/collectibles/media-evidence.js.",
-      "bytes": 4693,
-      "mtime": "2026-08-13T17:11:19.688Z",
-      "indexed_at": "2026-08-13T17:11:19.688Z",
+      "bytes": 4763,
+      "mtime": "2026-08-13T18:21:24.963Z",
+      "indexed_at": "2026-08-13T18:21:24.963Z",
       "ssot": [
-        "docs/products/collectibles/PRODUCT_HOME.md"
+        "docs/products/collectibles/PRODUCT_HOME.md",
+        "SCHEMA_CONTRACTS media_evidence"
       ]
     },
     {
