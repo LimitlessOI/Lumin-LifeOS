@@ -7070,7 +7070,7 @@
       "shipped_via": "governed_ship_queue"
     },
     {
-      "status": "blocked",
+      "status": "pending",
       "founder_gated": false,
       "attempts": 2,
       "action_type": "author_then_write",
