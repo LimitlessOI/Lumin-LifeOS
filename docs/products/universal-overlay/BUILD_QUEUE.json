@@ -7070,9 +7070,9 @@
       "shipped_via": "governed_ship_queue"
     },
     {
-      "status": "pending",
+      "status": "done",
       "founder_gated": false,
-      "attempts": 3,
+      "attempts": 0,
       "action_type": "write_file_exact",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
@@ -7096,17 +7096,17 @@
         "Quiet"
       ],
       "blueprint_step_id": "COLLECTIBLES-V2-INVISIBLE-LISTING-001",
-      "commit_sha": null,
+      "commit_sha": "93aab206a660ccd7b2bf0707a2565fcbbc67b929",
       "built_sha": null,
       "proof": null,
       "last_attempt_at": "2026-08-13T23:28:53.357Z",
-      "last_error": "AIC_GATE_FAILURE",
+      "last_error": null,
       "started_at": "2026-08-13T23:28:53.288Z",
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
       "park_until": null,
-      "heal_unblocked": true,
+      "heal_unblocked": false,
       "heal_reason": "collectibles_never_stop_heal",
       "same_signature_count": 1,
       "behavior_assertions": [
@@ -7148,7 +7148,37 @@
           "content_sha256": "6d78a3239d9a334691e950e3dd6a0c711a85c3634fba23aaa374fd6e45e47a7e"
         }
       },
-      "shipped_at": "2026-08-13T23:28:58.733Z"
+      "shipped_at": "2026-08-13T23:29:05.718Z",
+      "duration_ms": 12433,
+      "tokens_used": 0,
+      "shipped_via": "governed_ship_queue"
+    },
+    {
+      "status": "pending",
+      "founder_gated": false,
+      "attempts": 0,
+      "action_type": "author_then_write",
+      "product_id": "collectibles",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "mission_id": "PRODUCT-universal-overlay",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
+      "depends_on": [
+        "COLLECTIBLES-V2-INVISIBLE-LISTING-001"
+      ],
+      "id": "COLLECTIBLES-V2-OFFER-INBOX-001",
+      "target_file": "services/collectibles/offer-inbox.js",
+      "sandbox_boundary": "services/collectibles/**",
+      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createOfferInboxService({ pool }) — standing offers, quality score, spam controls. Matching engine may be minimal; no payments. ES module.",
+      "spec": "MASTER_BLUEPRINT V2 offer inbox + trust foundation.",
+      "expected_exports": [
+        "createOfferInboxService"
+      ],
+      "file_contains": [
+        "createOfferInboxService",
+        "offer",
+        "quality"
+      ],
+      "blueprint_step_id": "COLLECTIBLES-V2-OFFER-INBOX-001"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
