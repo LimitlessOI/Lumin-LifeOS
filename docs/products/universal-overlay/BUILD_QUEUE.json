@@ -5854,9 +5854,9 @@
       "shipped_via": "governed_ship_queue"
     },
     {
-      "status": "pending",
+      "status": "done",
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "action_type": "write_file_exact",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
@@ -5876,14 +5876,14 @@
         "/api/v1/collectibles"
       ],
       "blueprint_step_id": "COLLECTIBLES-V1-ERA-WALL-001",
-      "commit_sha": null,
+      "commit_sha": "086e1857a08f58dab412115bf03ef99a354265e1",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-13T20:46:17.266Z",
-      "last_error": "SLICE_COST_UNTRACKED: tokens_used required on every built slice (0 allowed for exact/no-codegen)",
-      "started_at": "2026-08-13T20:45:53.450Z",
+      "last_attempt_at": "2026-08-13T20:46:53.061Z",
+      "last_error": null,
+      "started_at": "2026-08-13T20:46:53.061Z",
       "same_signature_count": 0,
-      "revive_count": 1,
+      "revive_count": 0,
       "revived_at": "2026-08-13T20:45:53.421Z",
       "last_attempt": null,
       "demoted": false,
@@ -6545,12 +6545,38 @@
           "content_sha256": "19fb7255d0965b1d7a62f8748aeff11393818462a466ccd5defc9cb61d25bde7"
         }
       },
-      "shipped_at": "2026-08-13T20:46:53.226Z",
-      "duration_ms": 23815,
+      "shipped_at": "2026-08-13T20:47:02.596Z",
+      "duration_ms": 9536,
       "tokens_used": 0,
       "heal_reason": "collectibles_never_stop_heal",
       "escalation_note": null,
-      "heal_unblocked": true
+      "heal_unblocked": false,
+      "shipped_via": "governed_ship_queue"
+    },
+    {
+      "status": "pending",
+      "founder_gated": false,
+      "attempts": 0,
+      "action_type": "author_then_write",
+      "product_id": "collectibles",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "mission_id": "PRODUCT-universal-overlay",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
+      "depends_on": [
+        "COLLECTIBLES-V1-VAULT-UI-001"
+      ],
+      "id": "COLLECTIBLES-V1-DOSSIER-001",
+      "target_file": "public/collectibles/twin-dossier.html",
+      "sandbox_boundary": "public/collectibles/**",
+      "task": "Twin Dossier: photos, identity, condition, price range, location abstract (owner), liquidity. Corrections path. Never show fake point price.",
+      "spec": "MASTER_BLUEPRINT Twin Dossier + price range law.",
+      "file_contains": [
+        "Dossier",
+        "liquidity",
+        "needs_review",
+        "/api/v1/collectibles"
+      ],
+      "blueprint_step_id": "COLLECTIBLES-V1-DOSSIER-001"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
