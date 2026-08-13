@@ -7528,7 +7528,7 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-13T01:51:05.308Z",
+      "last_attempt_at": "2026-08-13T02:07:15.888Z",
       "last_error": "STEP_STATUS_FORBIDDEN",
       "same_signature_count": 0,
       "behavior_assertions": [
@@ -7542,8 +7542,8 @@
         }
       ],
       "last_attempt": null,
-      "revive_count": 3,
-      "revived_at": "2026-08-13T01:51:05.004Z",
+      "revive_count": 4,
+      "revived_at": "2026-08-13T02:07:15.719Z",
       "no_op": null,
       "pre_existing": null,
       "demoted": false,
@@ -7730,13 +7730,13 @@
     },
     {
       "id": "fix-founder-intent-service-create",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/founder-chair-intent.js",
       "task": "Create service for founder build intent classification.",
       "spec": "Implement a service with `classifyFounderBuildIntent` function that uses `callCouncilMember('founder_intent_classifier', prompt)` to classify incoming founder prompts, specifically identifying 'drawer_direct_build' vs. 'counsel/essay text' intent. It should return a structured intent object.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "classifyFounderBuildIntent"
       ],
@@ -7746,8 +7746,21 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-13T01:51:31.662Z",
-      "last_error": "NOT_ON_BLUEPRINT"
+      "last_attempt_at": null,
+      "last_error": "NOT_ON_BLUEPRINT",
+      "last_attempt": null,
+      "revive_count": 1,
+      "revived_at": "2026-08-13T02:07:15.719Z",
+      "no_op": null,
+      "pre_existing": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     }
   ],
   "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
