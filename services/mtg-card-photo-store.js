@@ -156,9 +156,13 @@ export async function saveCroppedListingPhoto({
   }
   if (width < 20 || height < 20) throw new Error('crop_box_too_small');
 
-  // Slight pad so edges aren't clipped, then clamp.
-  const padX = Math.floor(width * 0.02);
-  const padY = Math.floor(height * 0.02);
+  // Founder correction 2026-08-13: leave real background margin, not a tight
+  // crop -- a listing photo that shows surrounding background reads as an
+  // actual photo of the physical card (not a stock scan), and the card's
+  // full border must stay uncut since border color (black vs white) is
+  // itself identifying information buyers check.
+  const padX = Math.floor(width * 0.18);
+  const padY = Math.floor(height * 0.18);
   left = Math.max(0, left - padX);
   top = Math.max(0, top - padY);
   width = Math.min(imgW - left, width + padX * 2);

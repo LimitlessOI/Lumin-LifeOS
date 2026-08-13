@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T23:53:01.849Z",
+  "generated_at": "2026-08-13T23:54:30.818Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13595,
+  "file_count": 13591,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -45796,9 +45796,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 871848,
-      "mtime": "2026-08-13T23:35:07.435Z",
-      "indexed_at": "2026-08-13T23:35:19.655Z"
+      "bytes": 872733,
+      "mtime": "2026-08-13T23:53:57.162Z",
+      "indexed_at": "2026-08-13T23:54:30.818Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -95211,16 +95211,6 @@
       ]
     },
     {
-      "path": "services/collectibles/adapters/payment-adapter.js",
-      "synopsis": "Exports createPaymentAdapterRegistry — services/collectibles/adapters/payment-adapter.js.",
-      "bytes": 2109,
-      "mtime": "2026-08-13T23:51:59.097Z",
-      "indexed_at": "2026-08-13T23:51:59.097Z",
-      "ssot": [
-        "docs/products/collectibles/PRODUCT_HOME.md"
-      ]
-    },
-    {
       "path": "services/collectibles/category-adapter.js",
       "synopsis": "Exports createCategoryAdapterRegistry — services/collectibles/category-adapter.js.",
       "bytes": 3063,
@@ -95287,26 +95277,6 @@
       "bytes": 3534,
       "mtime": "2026-08-13T20:43:01.829Z",
       "indexed_at": "2026-08-13T20:43:01.829Z",
-      "ssot": [
-        "docs/products/collectibles/PRODUCT_HOME.md"
-      ]
-    },
-    {
-      "path": "services/collectibles/shipping-tracking.js",
-      "synopsis": "Exports createShippingTrackingService — services/collectibles/shipping-tracking.js.",
-      "bytes": 2623,
-      "mtime": "2026-08-13T23:53:01.849Z",
-      "indexed_at": "2026-08-13T23:53:01.849Z",
-      "ssot": [
-        "docs/products/collectibles/PRODUCT_HOME.md"
-      ]
-    },
-    {
-      "path": "services/collectibles/transaction-service.js",
-      "synopsis": "Exports createTransactionService — services/collectibles/transaction-service.js.",
-      "bytes": 15059,
-      "mtime": "2026-08-13T23:50:14.361Z",
-      "indexed_at": "2026-08-13T23:50:14.361Z",
       "ssot": [
         "docs/products/collectibles/PRODUCT_HOME.md"
       ]
@@ -100256,9 +100226,9 @@
     {
       "path": "services/mtg-card-photo-store.js",
       "synopsis": "Durable MTG photo storage. Founder correction 2026-08-12: the",
-      "bytes": 7484,
-      "mtime": "2026-08-12T19:52:26.515Z",
-      "indexed_at": "2026-08-12T19:52:26.515Z",
+      "bytes": 7780,
+      "mtime": "2026-08-13T23:53:23.131Z",
+      "indexed_at": "2026-08-13T23:54:30.818Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -105348,13 +105318,6 @@
       "ssot": [
         "docs/products/collectibles/PRODUCT_HOME.md"
       ]
-    },
-    {
-      "path": "tests/collectibles-v2-acceptance.test.js",
-      "synopsis": "In a real scenario, these would be proper imports from your application's modules.",
-      "bytes": 8691,
-      "mtime": "2026-08-13T23:45:47.096Z",
-      "indexed_at": "2026-08-13T23:45:47.096Z"
     },
     {
       "path": "tests/completion-overclaim-guard.test.js",
