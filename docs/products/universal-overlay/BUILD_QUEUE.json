@@ -5314,9 +5314,9 @@
       "failure_signature": null
     },
     {
-      "status": "pending",
+      "status": "done",
       "founder_gated": false,
-      "attempts": 3,
+      "attempts": 0,
       "action_type": "write_file_exact",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
@@ -5376,24 +5376,53 @@
           "content_sha256": "9b8de0d9197011bc5df753c3dee4b4eb850bc43b5d412cd7f46ef8783257781d"
         }
       },
-      "shipped_at": "2026-08-13T16:49:04.813Z",
-      "commit_sha": null,
+      "shipped_at": "2026-08-13T16:49:11.661Z",
+      "commit_sha": "1453403c7e40661f59e285c61dd32e36ff62a1f4",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-13T16:40:14.034Z",
+      "last_attempt_at": "2026-08-13T16:49:04.729Z",
       "last_error": null,
       "revive_count": 0,
-      "started_at": "2026-08-13T16:40:13.987Z",
+      "started_at": "2026-08-13T16:49:04.729Z",
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
-      "heal_unblocked": true,
+      "heal_unblocked": false,
       "heal_reason": "collectibles_restore_sealed_exact",
-      "duration_ms": 1000,
+      "duration_ms": 6932,
       "tokens_used": 0,
       "skip_reason": null,
       "escalation_required": false,
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "shipped_via": "governed_ship_queue"
+    },
+    {
+      "status": "pending",
+      "founder_gated": false,
+      "attempts": 0,
+      "action_type": "author_then_write",
+      "product_id": "collectibles",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "mission_id": "PRODUCT-universal-overlay",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — V1 Trusted Personal Vault",
+      "depends_on": [
+        "COLLECTIBLES-V1-SCHEMA-TWINS-001",
+        "COLLECTIBLES-V1-TWIN-SERVICE-001"
+      ],
+      "id": "COLLECTIBLES-V1-TWIN-STORE-001",
+      "target_file": "services/collectibles/twin-store.js",
+      "sandbox_boundary": "services/collectibles/**",
+      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createCollectibleTwinStore({ pool, logger }) with insertTwin/getTwin/listTwins/softDeleteTwin against collectible_twins. Keep ownership/possession/custody/location as separate writes. ES module. Do not invent tables.",
+      "spec": "Persistence over SCHEMA_CONTRACTS collectible_twins + ownership_records.",
+      "expected_exports": [
+        "createCollectibleTwinStore"
+      ],
+      "file_contains": [
+        "createCollectibleTwinStore",
+        "collectible_twins",
+        "insertTwin"
+      ],
+      "blueprint_step_id": "COLLECTIBLES-V1-TWIN-STORE-001"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
