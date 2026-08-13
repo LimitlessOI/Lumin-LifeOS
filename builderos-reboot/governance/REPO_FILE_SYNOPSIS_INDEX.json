@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T20:58:40.486Z",
+  "generated_at": "2026-08-13T21:06:42.091Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13589,
   "files": [
@@ -44952,8 +44952,8 @@
       "path": "docs/products/collectibles/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Collectibles (LimitlessOS)",
       "bytes": 10271,
-      "mtime": "2026-08-13T20:50:44.207Z",
-      "indexed_at": "2026-08-13T20:50:44.207Z"
+      "mtime": "2026-08-13T21:06:42.091Z",
+      "indexed_at": "2026-08-13T21:06:42.091Z"
     },
     {
       "path": "docs/products/collectibles/SCHEMA_CONTRACTS.md",
@@ -97400,9 +97400,9 @@
     {
       "path": "services/governed-autonomous-shipping-loop.js",
       "synopsis": "STEP 5g — the governed AUTONOMOUS shipping loop. When the STEP 5a",
-      "bytes": 77468,
-      "mtime": "2026-08-13T20:50:44.207Z",
-      "indexed_at": "2026-08-13T20:50:44.207Z",
+      "bytes": 77640,
+      "mtime": "2026-08-13T21:06:42.091Z",
+      "indexed_at": "2026-08-13T21:06:42.091Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

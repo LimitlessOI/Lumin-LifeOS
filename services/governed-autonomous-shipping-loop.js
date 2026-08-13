@@ -651,7 +651,11 @@ export async function markFailedStep(queue, stepId, body, productId, logger) {
   // Avoid pushing a GitHub commit + deploy for every identical repeat failure.
   // Only commit when the error changes, on the first failure, or at exponential
   // backoff intervals so the loop stays loud without drowning the deploy queue.
-  const shouldCommit = step.last_error !== previousError || step.attempts <= 2 || isPowerOfTwo(step.attempts);
+  // Point B: failed-status commits were flooding Railway so tip never served
+  // never-stop code (founder 2026-08-13). Commit failures rarely.
+  const shouldCommit = step.last_error !== previousError
+    || step.attempts <= 1
+    || (step.attempts > 0 && step.attempts % 8 === 0);
   if (!shouldCommit) {
     logger?.info?.({ product_id: productId, step_id: stepId, attempts: step.attempts, last_error: step.last_error }, '[GOVERNED-AUTONOMOUS-SHIP] repeated failure; skipping queue status commit');
     return;
