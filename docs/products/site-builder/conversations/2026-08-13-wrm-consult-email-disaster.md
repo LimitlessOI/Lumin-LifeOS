@@ -8,17 +8,28 @@
 
 ## Founder
 
-> my wifes wellroundedmomma site is not sending the consolts results to her she tested it and it never came and now we are in a disaster that keeps getting worse. i need this fixed use the new overlay and make it so it goes to my wifes emali wich is Maternity@wellroundedwoman.com.
+> my wifes wellroundedmomma site is not sending the consolts results to her she tested it and it never came and now we are in a disaster that keeps getting worse.
 
-Later: login info is in Railway; he will provide the one-time code when overlay Gmail first-login asks.
+Correction:
+
+> mailto:Maternity@wellroundedmomma.com. thats the right email address i messed up send it to that and let me know when it was all sent
+
+On overlay/Google login theater:
+
+> what the fuck are you doing i asked you to please email the consults i did not know when i first talked to you that it was on our system
+
+Prior: "Send it through the system."
 
 ## KNOW (live)
 
-- Form posts to `/api/v1/wrm/consult` and stores leads. Email does not send.
-- 10 real unsent consults (`emailed=false`), including Blaine Reyes (2026-08-12, likely Sherry's test).
-- Error: `Request does not contain a valid Server token.` Postmark canceled; fallback only ran on "pending approval".
-- Default inbox was `maternity@wellroundedmomma.com`. Required inbox: `Maternity@wellroundedwoman.com`.
+- Site is Railway-hosted, not Wix. Form stores leads; production mail does not send (Postmark token invalid; Railway blocks outbound SMTP 465/587).
+- Inbox is **Maternity@wellroundedmomma.com** (not woman.com).
+- 2026-08-13 16:33 UTC: 11 stored consults accepted by Gmail SMTP to that inbox, then marked `emailed=true` on production.
+
+Sent: Isha Rios, Tynija, Ashley Brown, Sarah willman, Meredith White, Ириза, Илья, katey cloud, Arden Monroe, Blaine Reyes, Miranda Smith.
+
+Skipped probes / funnel audits / system tests.
 
 ## Decision
 
-Send consults to `Maternity@wellroundedwoman.com`. Use overlay Gmail for catch-up. Server path must fall through Postmark → Resend/SMTP so new form submits do not wait on an agent.
+Catch-up went through the system mailbox, not overlay Google login. New public form submits still need an HTTP mail provider on Railway (Postmark is dead; SMTP from the container times out).

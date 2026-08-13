@@ -10,7 +10,7 @@ Founder: fix all observed issues — overnight closed slices via conductor but d
 
 ## 2026-08-13 — WRM consults never reached Sherry
 
-Founder: wellroundedmomma consults not arriving; send them through the system (not Google login). Inbox: **Maternity@wellroundedmomma.com**. Railway cannot SMTP; Postmark is dead. Catch-up sends from this machine via the system mailbox after `operator-smtp-bundle` is live. Do not claim Sherry received mail until those sends return message ids.
+Founder: send the stored consults through the system, not Google login. Inbox: **Maternity@wellroundedmomma.com**. KNOW: 11 consults accepted by Gmail SMTP at 2026-08-13 16:33 UTC and marked emailed on production (Isha Rios through Miranda Smith). Railway still cannot send new form mail (Postmark dead; container SMTP blocked).
 
 ## 2026-08-13 — Taloa badge: faint + free-move
 

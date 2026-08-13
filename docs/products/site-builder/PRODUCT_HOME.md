@@ -344,7 +344,7 @@ Founder directive: review every revenue blueprint for gaps against real competit
 
 ## Change Receipts
 
-| 2026-08-13 | **Operator catch-up for WRM consults: Railway cannot send mail.** Postmark token invalid; outbound SMTP 465/587 times out on Railway. Added command-key `POST /api/v1/wrm/consult/operator-smtp-bundle` + `POST /api/v1/wrm/consult/mark-sent` so the system mailbox can send from a host that can actually reach Gmail SMTP, then mark the stored leads sent. Inbox: `Maternity@wellroundedmomma.com`. | Founder: send the consults through the system; stop Google-login theater. | Live send receipts to Maternity@ after deploy. |
+| 2026-08-13 | **11 stored WRM consults sent to `Maternity@wellroundedmomma.com`.** Gmail SMTP accepted them at 16:33 UTC; production rows marked `emailed=true`. Skipped probes/funnel audits/system tests. Railway still cannot send new form mail (Postmark dead; container SMTP blocked). | Founder: email the consults through the system; stop Google-login theater. | Live leads list: ids 5–14 and 17 emailed=true with catch-up note. |
 
 | 2026-08-13 | **Founder correction: consult inbox is `Maternity@wellroundedmomma.com`**, not wellroundedwoman.com. Catch-up send + default `CONSULT_TO` pointed at momma.com. | Founder: mailto:Maternity@wellroundedmomma.com — that's the right email, I messed up. | Live send receipt after SMTP/overlay. |
 

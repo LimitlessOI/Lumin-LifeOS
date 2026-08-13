@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T16:33:17.381Z",
+  "generated_at": "2026-08-13T16:34:44.012Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13562,
+  "file_count": 13563,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -41266,9 +41266,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Documentation — CONTINUITY LOG.",
-      "bytes": 202977,
-      "mtime": "2026-08-13T16:33:17.381Z",
-      "indexed_at": "2026-08-13T16:33:17.381Z"
+      "bytes": 202960,
+      "mtime": "2026-08-13T16:34:44.012Z",
+      "indexed_at": "2026-08-13T16:34:44.012Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -41668,6 +41668,13 @@
       "bytes": 634,
       "mtime": "2026-08-13T15:32:06.635Z",
       "indexed_at": "2026-08-13T15:34:55.290Z"
+    },
+    {
+      "path": "docs/conversation_dumps/2026-08-13-wrm-consults-sent.md",
+      "synopsis": "Twin-archive dump — WRM consults catch-up to Maternity@wellroundedmomma.com.",
+      "bytes": 711,
+      "mtime": "2026-08-13T16:34:44.012Z",
+      "indexed_at": "2026-08-13T16:34:44.012Z"
     },
     {
       "path": "docs/conversation_dumps/by-product/sessions/2a4739f2/BUILDEROS-AUTONOMOUS.md",
@@ -46280,9 +46287,9 @@
     {
       "path": "docs/products/site-builder/conversations/2026-08-13-wrm-consult-email-disaster.md",
       "synopsis": "Founder session — WRM consults never emailed Sherry.",
-      "bytes": 1238,
-      "mtime": "2026-08-13T15:32:06.636Z",
-      "indexed_at": "2026-08-13T15:34:55.290Z"
+      "bytes": 1512,
+      "mtime": "2026-08-13T16:34:44.012Z",
+      "indexed_at": "2026-08-13T16:34:44.012Z"
     },
     {
       "path": "docs/products/site-builder/CREATIVE_BRIEF.md",
@@ -46316,9 +46323,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 224201,
-      "mtime": "2026-08-13T16:30:23.738Z",
-      "indexed_at": "2026-08-13T16:30:23.738Z"
+      "bytes": 224102,
+      "mtime": "2026-08-13T16:34:44.012Z",
+      "indexed_at": "2026-08-13T16:34:44.012Z"
     },
     {
       "path": "docs/products/site-builder/SITE_TEMPLATE_CATALOG.md",
