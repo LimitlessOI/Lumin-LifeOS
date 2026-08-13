@@ -3525,7 +3525,7 @@
       "status": "pending",
       "founder_gated": false,
       "attempts": 1,
-      "action_type": "author_then_write",
+      "action_type": "write_file_exact",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
       "commit_sha": null,
@@ -3572,7 +3572,33 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "exact_inputs": {
+        "content_source_path": "docs/products/universal-overlay/twins/steps/TALOA-S64-CAPREG-COL-001.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-08-13T02:12:02.178Z",
+        "shipped_at": "2026-08-13T02:12:02.178Z",
+        "commit_sha": null,
+        "content_sha256": "b08237853e210c6617b8881932af31c3dc2518840295c7998e60cc8395796d85",
+        "target_file": "db/migrations/20260813_overlay_devices_capabilities.sql",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "db/migrations/20260813_overlay_devices_capabilities.sql",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "PASS"
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/universal-overlay/twins/steps/TALOA-S64-CAPREG-COL-001.exact",
+          "content_sha256": "b08237853e210c6617b8881932af31c3dc2518840295c7998e60cc8395796d85"
+        }
+      },
+      "shipped_at": "2026-08-13T02:12:02.178Z"
     },
     {
       "status": "pending",

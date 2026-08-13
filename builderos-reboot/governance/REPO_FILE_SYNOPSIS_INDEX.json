@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T02:09:34.096Z",
+  "generated_at": "2026-08-13T02:12:05.049Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13442,
+  "file_count": 13443,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -39427,6 +39427,13 @@
       "bytes": 1907,
       "mtime": "2026-08-12T19:52:26.515Z",
       "indexed_at": "2026-08-12T19:52:26.515Z"
+    },
+    {
+      "path": "db/migrations/20260813_overlay_devices_capabilities.sql",
+      "synopsis": "Database migration — 20260813_overlay_devices_capabilities.sql.",
+      "bytes": 237,
+      "mtime": "2026-08-13T02:12:05.049Z",
+      "indexed_at": "2026-08-13T02:12:05.049Z"
     },
     {
       "path": "db/migrations/20261101_habit_tables.sql",
