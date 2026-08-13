@@ -4246,8 +4246,8 @@
     {
       "id": "COLLECTIBLES-V1-TWIN-SERVICE-001",
       "product_id": "collectibles",
-      "status": "pending",
-      "attempts": 0,
+      "status": "blocked",
+      "attempts": 1,
       "target_file": "services/collectibles/twin-service.js",
       "action_type": "author_then_write",
       "depends_on": [
@@ -4281,7 +4281,12 @@
           ]
         }
       ],
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-08-13T06:05:08.954Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:createCollectibleTwin; behavior_assertion_failed; behavior_proof"
     },
     {
       "id": "COLLECTIBLES-V1-MTG-ADAPTER-001",
