@@ -6735,16 +6735,16 @@
       "escalation_required": false,
       "escalation_note": null,
       "park_until": null,
-      "heal_unblocked": true,
+      "heal_unblocked": false,
       "failure_signature": "artifact_missing_after_ship: artifact_proof_failed: missing:role",
       "escalation_class": "fake_green_attempt",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-08-13T21:30:08.722Z"
     },
     {
-      "status": "pending",
+      "status": "blocked",
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "action_type": "write_file_exact",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
@@ -6792,7 +6792,13 @@
           "content_sha256": "92ff0944baa1ecd6ae05fe20d5e35626fd6f3b04551c8edbe6e37204546f7506"
         }
       },
-      "shipped_at": "2026-08-13T21:30:56.648Z"
+      "shipped_at": "2026-08-13T21:30:56.648Z",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-08-13T21:31:53.091Z",
+      "last_error": "AIC_GATE_FAILURE",
+      "started_at": "2026-08-13T21:31:53.027Z"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
