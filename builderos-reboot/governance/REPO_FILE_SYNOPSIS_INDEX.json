@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T06:24:07.119Z",
+  "generated_at": "2026-08-13T06:26:42.588Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13477,
   "files": [
@@ -43875,8 +43875,8 @@
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
       "bytes": 577250,
-      "mtime": "2026-08-13T06:24:07.119Z",
-      "indexed_at": "2026-08-13T06:24:07.119Z"
+      "mtime": "2026-08-13T06:26:42.588Z",
+      "indexed_at": "2026-08-13T06:26:42.588Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -44370,8 +44370,8 @@
       "path": "docs/products/collectibles/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Collectibles (LimitlessOS)",
       "bytes": 7637,
-      "mtime": "2026-08-13T06:24:07.119Z",
-      "indexed_at": "2026-08-13T06:24:07.119Z"
+      "mtime": "2026-08-13T06:26:42.588Z",
+      "indexed_at": "2026-08-13T06:26:42.588Z"
     },
     {
       "path": "docs/products/collectibles/SCHEMA_CONTRACTS.md",
