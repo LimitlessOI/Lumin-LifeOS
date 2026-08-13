@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T18:21:24.963Z",
+  "generated_at": "2026-08-13T20:09:15.162Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13576,
+  "file_count": 13578,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -41273,9 +41273,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Documentation — CONTINUITY LOG.",
-      "bytes": 203499,
-      "mtime": "2026-08-13T16:57:18.107Z",
-      "indexed_at": "2026-08-13T16:57:18.107Z"
+      "bytes": 203895,
+      "mtime": "2026-08-13T20:09:15.162Z",
+      "indexed_at": "2026-08-13T20:09:15.162Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -41661,6 +41661,13 @@
       "bytes": 1015,
       "mtime": "2026-08-13T15:47:57.060Z",
       "indexed_at": "2026-08-13T15:47:57.060Z"
+    },
+    {
+      "path": "docs/conversation_dumps/2026-08-13-never-stop-unless-i-say.md",
+      "synopsis": "Twin dump — founder: never stop Collectibles unless I reassign.",
+      "bytes": 490,
+      "mtime": "2026-08-13T20:09:15.162Z",
+      "indexed_at": "2026-08-13T20:09:15.162Z"
     },
     {
       "path": "docs/conversation_dumps/2026-08-13-one-queue-multi-factory-multi-project.md",
@@ -44405,9 +44412,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 584842,
-      "mtime": "2026-08-13T16:58:49.703Z",
-      "indexed_at": "2026-08-13T16:58:49.703Z"
+      "bytes": 585252,
+      "mtime": "2026-08-13T20:09:15.162Z",
+      "indexed_at": "2026-08-13T20:09:15.162Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -44835,6 +44842,13 @@
       "indexed_at": "2026-08-13T16:33:17.381Z"
     },
     {
+      "path": "docs/products/collectibles/conversations/2026-08-13-never-stop-unless-i-say.md",
+      "synopsis": "Founder capture — F3 must never stop Collectibles unless he reassigns.",
+      "bytes": 936,
+      "mtime": "2026-08-13T20:09:15.162Z",
+      "indexed_at": "2026-08-13T20:09:15.162Z"
+    },
+    {
       "path": "docs/products/collectibles/conversations/2026-08-13-one-queue-multi-factory-multi-project.md",
       "synopsis": "Collectibles manufacturing: one queue, not a second queue",
       "bytes": 982,
@@ -44923,9 +44937,9 @@
     {
       "path": "docs/products/collectibles/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Collectibles (LimitlessOS)",
-      "bytes": 9446,
-      "mtime": "2026-08-13T16:54:50.206Z",
-      "indexed_at": "2026-08-13T16:54:50.206Z"
+      "bytes": 9844,
+      "mtime": "2026-08-13T20:09:15.162Z",
+      "indexed_at": "2026-08-13T20:09:15.162Z"
     },
     {
       "path": "docs/products/collectibles/SCHEMA_CONTRACTS.md",
@@ -73926,10 +73940,10 @@
     },
     {
       "path": "routes/collectibles-routes.js",
-      "synopsis": "Collectibles capture/list route scaffold.",
-      "bytes": 1463,
-      "mtime": "2026-08-13T08:37:03.253Z",
-      "indexed_at": "2026-08-13T08:37:03.253Z",
+      "synopsis": "Collectibles capture + Vault list/dossier routes.",
+      "bytes": 8044,
+      "mtime": "2026-08-13T20:09:15.162Z",
+      "indexed_at": "2026-08-13T20:09:15.162Z",
       "ssot": [
         "docs/products/collectibles/PRODUCT_HOME.md"
       ]
@@ -80234,9 +80248,9 @@
     {
       "path": "scripts/run-factory-lane.mjs",
       "synopsis": "Dispatch one tick of work for a named factory lane. Production",
-      "bytes": 18828,
-      "mtime": "2026-08-13T15:47:57.060Z",
-      "indexed_at": "2026-08-13T15:47:57.060Z",
+      "bytes": 18778,
+      "mtime": "2026-08-13T20:09:15.162Z",
+      "indexed_at": "2026-08-13T20:09:15.162Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -97291,9 +97305,9 @@
     {
       "path": "services/governed-autonomous-shipping-loop.js",
       "synopsis": "STEP 5g — the governed AUTONOMOUS shipping loop. When the STEP 5a",
-      "bytes": 72614,
-      "mtime": "2026-08-13T16:33:17.381Z",
-      "indexed_at": "2026-08-13T16:33:17.381Z",
+      "bytes": 72813,
+      "mtime": "2026-08-13T20:09:15.162Z",
+      "indexed_at": "2026-08-13T20:09:15.162Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -99412,9 +99426,9 @@
     {
       "path": "services/manufacturing-self-repair.js",
       "synopsis": "Deterministic manufacturing self-repair playbooks — no Cursor required.",
-      "bytes": 6172,
-      "mtime": "2026-08-13T16:58:49.703Z",
-      "indexed_at": "2026-08-13T16:58:49.703Z",
+      "bytes": 9939,
+      "mtime": "2026-08-13T20:09:15.162Z",
+      "indexed_at": "2026-08-13T20:09:15.162Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -100715,9 +100729,9 @@
     {
       "path": "services/product-build-orchestrator.js",
       "synopsis": "General product-build orchestrator — turns a product's structured",
-      "bytes": 33974,
-      "mtime": "2026-08-13T16:41:06.826Z",
-      "indexed_at": "2026-08-13T16:41:06.826Z",
+      "bytes": 35033,
+      "mtime": "2026-08-13T20:09:15.162Z",
+      "indexed_at": "2026-08-13T20:09:15.162Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -105904,9 +105918,9 @@
     {
       "path": "tests/manufacturing-self-repair.test.js",
       "synopsis": "Deterministic manufacturing self-repair — sealed exact promote,",
-      "bytes": 5071,
-      "mtime": "2026-08-13T16:59:34.118Z",
-      "indexed_at": "2026-08-13T16:59:34.118Z"
+      "bytes": 7854,
+      "mtime": "2026-08-13T20:09:15.162Z",
+      "indexed_at": "2026-08-13T20:09:15.162Z"
     },
     {
       "path": "tests/marketing-social-publish.test.js",

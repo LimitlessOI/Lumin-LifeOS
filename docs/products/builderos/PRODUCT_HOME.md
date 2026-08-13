@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/builderos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-08-13 — Architect print seal custody; Cursor hand-seal named SO-001 drift. |
+| **Last Updated** | 2026-08-13 — Collectibles never-stop heal; CAPTURE sealed exact. |
 ### Related docs (this product)
 
 | Doc | Path |
@@ -35,6 +35,8 @@
 ---
 
 ## Change Receipts
+| 2026-08-13 | **Collectibles never-stop (founder).** F3 stalled on CAPTURE codegen stub → idle_forbidden. Closed: never demote/skip Collectibles print without `FACTORY_3_REASSIGNED=1`; `forceCollectiblesNeverStopHeal` + convention exact promote; sealed `COLLECTIBLES-V1-CAPTURE-API-001.exact`; tip re-plans before idle_forbidden. | Founder: never stop again unless I say it. | `tests/manufacturing-self-repair.test.js` |
+
 | 2026-08-13 | **SO-001 honesty: Architect owns print seals.** Cursor conductor hand-sealed Collectibles print in `config/overlay-print-sequence.js` — that is Architect-role bypass and made tip depend on Cursor. Closed: `services/architect-print-seal.js` + `scripts/architect-seal-print-sequence.mjs` write `docs/products/<id>/PRINT_SEQUENCE.json`; config loads only; watchdog `architect_print_seal_missing_*`. | Founder: if sealed print is required to build, Architect was supposed to do it. | `tests/architect-print-seal.test.js` |
 
 | 2026-08-13 | **factory-3 never-idle through Collectibles V10.** Root: only 5 foundation slices were hand-enrolled; no sealed enroll → `no_shippable_steps`. Closed: Architect-sealed print + `ensureCollectiblesPrintEnrolled`; tip returns `collectibles_print_still_open_idle_forbidden` instead of silent idle; reassignment only via `FACTORY_3_REASSIGNED=1`. | Founder: cannot idle if anything needed — follow through V10 if not reassigned. | `tests/collectibles-print-sequence.test.js` |

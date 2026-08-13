@@ -9,7 +9,9 @@ import {
   applyManufacturingSelfRepair,
   executeManufacturingWatchdogPlaybooks,
   sealedExactSourcePath,
+  forceCollectiblesNeverStopHeal,
 } from '../services/manufacturing-self-repair.js';
+import { reviveStaleBlockedSteps } from '../services/product-build-orchestrator.js';
 import { toGovernedShipStep } from '../factory-staging/factory-core/bpb/build-queue-step-adapter.js';
 import { evaluateSystemWatchdog } from '../scripts/lib/system-watchdog.mjs';
 
@@ -137,4 +139,72 @@ test('executeManufacturingWatchdogPlaybooks promotes on lane_sentry_failed', () 
   assert.ok(out.applied.includes('manufacturing_self_repair'));
   assert.ok(out.tip_actions.includes('re_ship_after_promote'));
   assert.equal(queue.steps[0].action_type, 'write_file_exact');
+});
+
+test('forceCollectiblesNeverStopHeal unskips + promotes CAPTURE convention exact', () => {
+  const queue = {
+    steps: [{
+      id: 'COLLECTIBLES-V1-CAPTURE-API-001',
+      product_id: 'collectibles',
+      source: 'docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print',
+      status: 'skipped',
+      demoted: true,
+      demote_reason: 'revive_exhausted:codegen_stub',
+      action_type: 'author_then_write',
+      last_error: 'codegen_authoring_failed: codegen_stub_detected',
+      revive_count: 9,
+      escalation_required: true,
+    }],
+  };
+  const out = forceCollectiblesNeverStopHeal(queue);
+  assert.ok(out.healed.includes('COLLECTIBLES-V1-CAPTURE-API-001'));
+  assert.equal(queue.steps[0].status, 'pending');
+  assert.equal(queue.steps[0].demoted, false);
+  assert.equal(queue.steps[0].escalation_required, false);
+  assert.equal(queue.steps[0].action_type, 'write_file_exact');
+  assert.match(
+    queue.steps[0].exact_inputs.content_source_path,
+    /COLLECTIBLES-V1-CAPTURE-API-001\.exact$/,
+  );
+  assert.ok(out.promoted.includes('COLLECTIBLES-V1-CAPTURE-API-001'));
+});
+
+test('factory3_idle playbook heals and requests reship', () => {
+  const queue = {
+    steps: [{
+      id: 'COLLECTIBLES-V1-CAPTURE-API-001',
+      product_id: 'collectibles',
+      source: 'docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print',
+      status: 'blocked',
+      action_type: 'author_then_write',
+      last_error: 'codegen_authoring_failed: codegen_stub_detected',
+      attempts: 1,
+    }],
+  };
+  const out = executeManufacturingWatchdogPlaybooks(
+    { findings: [{ id: 'factory3_idle_with_collectibles_work' }] },
+    queue,
+  );
+  assert.ok(out.applied.includes('collectibles_never_stop_heal'));
+  assert.ok(out.tip_actions.includes('re_ship_after_promote'));
+  assert.equal(queue.steps[0].action_type, 'write_file_exact');
+});
+
+test('reviveStaleBlockedSteps never demotes Collectibles print on revive budget', () => {
+  const step = {
+    id: 'COLLECTIBLES-V1-CAPTURE-API-001',
+    product_id: 'collectibles',
+    source: 'docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print',
+    status: 'blocked',
+    last_error: 'codegen_authoring_failed:import_resolution_failed',
+    last_attempt_at: new Date(Date.now() - 120_000).toISOString(),
+    revive_count: 99,
+    attempts: 3,
+  };
+  const queue = { steps: [step] };
+  const revived = reviveStaleBlockedSteps(queue, { cooldownMs: 0, maxRevives: 6 });
+  assert.deepEqual(revived, ['COLLECTIBLES-V1-CAPTURE-API-001']);
+  assert.equal(step.status, 'pending');
+  assert.equal(step.demoted, false);
+  assert.notEqual(step.status, 'skipped');
 });

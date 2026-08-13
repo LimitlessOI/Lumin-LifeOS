@@ -16,7 +16,7 @@
 | **Blueprint status** | `BLUEPRINT_READY_FOR_CONSENSUS` |
 | **Factory lane** | `factory-3` (`com.lumin.factory-3-lane`) |
 | **Build queue** | One manufacturing queue: `docs/products/universal-overlay/BUILD_QUEUE.json` (Collectibles steps carry `product_id: collectibles`) |
-| **Last Updated** | 2026-08-13 — Architect owns PRINT_SEQUENCE.json; Cursor hand-seal acknowledged as SO-001 drift. |
+| **Last Updated** | 2026-08-13 — Collectibles never-stop: no demote/idle without FACTORY_3_REASSIGNED. |
 
 ---
 
@@ -102,14 +102,15 @@ Every version must be independently valuable. Manufacture version N only after p
 
 ## Agent handoff
 
-**Next:** factory-3 ships `COLLECTIBLES-V1-SCHEMA-TWINS-001` then continues the sealed print through V10. Do not mint `docs/products/collectibles/BUILD_QUEUE.json`.
+**Next:** factory-3 ships sealed Collectibles print through V10 (`CAPTURE-API` → …). Never stop unless `FACTORY_3_REASSIGNED=1`. Do not mint `docs/products/collectibles/BUILD_QUEUE.json`.
 
-**Do not:** Invent product architecture during manufacturing; invent MarketplaceCard / ArenaCard identities; treat play entitlement as IP permission; auto-list without permission; optimize Vault for engagement spam; declare Collectibles “done” at foundation acceptance.
+**Do not:** Invent product architecture during manufacturing; invent MarketplaceCard / ArenaCard identities; treat play entitlement as IP permission; auto-list without permission; optimize Vault for engagement spam; declare Collectibles “done” at foundation acceptance; demote/skip Collectibles print slices while the lane is assigned.
 
 ## Change Receipts
 
 | Date | What | Why | Evidence | Next |
 |---|---|---|---|---|
+| 2026-08-13 | **Never-stop hard gate.** Collectibles print cannot demote/skip/escalate-idle; tip heals + attaches convention sealed exact; CAPTURE-API sealed `write_file_exact`. | Founder: fix so it never stops again unless I say it to. | `tests/manufacturing-self-repair.test.js` never-stop | Tip F3 ships CAPTURE |
 | 2026-08-13 | **Architect print custody (honesty).** Cursor hand-sealing Collectibles print in config was SO-001 drift — made manufacturing Cursor-dependent. Closed: `AMENDED_BLUEPRINT.json` + Architect-sealed `PRINT_SEQUENCE.json`; config is loader only; `builderos:architect:seal-print`. | Founder: if sealed print is required, Architect was supposed to do it — not Cursor. | `tests/architect-print-seal.test.js` | Tip loads seal; F3 continues |
 | 2026-08-13 | **Never-idle Collectibles print V1→V10.** Sealed print continues past foundation; prepare enrolls next slice; tip forbids factory-3 idle while print open unless `FACTORY_3_REASSIGNED=1`. | Founder: cannot idle if even one thing needed — through V10 if not reassigned. | `tests/collectibles-print-sequence.test.js` | Tip ship SCHEMA-TWINS |
 | 2026-08-13 | **Twin sealed write_file_exact** (`COLLECTIBLES-V1-TWIN-SERVICE-001.exact`) with `identity_status` SENTRY needle. | author_then_write thrash + tip already_running; deterministic print. | twins/steps exact + queue seal | factory-3 tip-ship → MTG adapter |

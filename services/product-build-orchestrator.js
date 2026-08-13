@@ -380,12 +380,23 @@ export function reviveStaleBlockedSteps(queue, {
 } = {}) {
   const revived = [];
   for (const step of queue.steps) {
-    if (step.status !== STEP_STATUS.BLOCKED) continue;
+    const collectiblesNeverStop = isCollectiblesPrintSlice(step) && !collectiblesLaneReassigned();
+    const status = String(step.status || '');
+    const eligible =
+      status === STEP_STATUS.BLOCKED
+      || (collectiblesNeverStop && (step.demoted === true || status === STEP_STATUS.SKIPPED));
+    if (!eligible) continue;
     if (isHumanHold(step)) continue;
-    if (step.demoted === true) continue;
+    if (step.demoted === true && !collectiblesNeverStop) continue;
     if (String(step.skip_reason || '').startsWith('off_print')) continue;
-    if (step.escalation_required === true) continue;
-    if (typeof step.same_signature_count === 'number' && step.same_signature_count >= 3 && step.escalation_required !== true) {
+    if (step.escalation_required === true && !collectiblesNeverStop) continue;
+    // Founder 2026-08-13: Collectibles print never stops unless FACTORY_3_REASSIGNED=1.
+    if (
+      !collectiblesNeverStop
+      && typeof step.same_signature_count === 'number'
+      && step.same_signature_count >= 3
+      && step.escalation_required !== true
+    ) {
       step.escalation_required = true;
       step.status = STEP_STATUS.BLOCKED;
       step.escalation_note = `HARD GATE: 3+ identical failures (${step.failure_signature}). Automatic revival is disabled for this step until escalation_required is explicitly cleared by a real escalation action (external research + a second model, per founder directive 2026-07-26) -- this step will NOT auto-revive on its own again.`;
@@ -408,13 +419,23 @@ export function reviveStaleBlockedSteps(queue, {
     const statusForbiddenBlock = /STEP_STATUS_FORBIDDEN/i.test(String(step.last_error || ''));
     const verifyThrash = /^verify_exit_/i.test(String(step.last_error || ''));
     // Cap thrash hard. Same error after budget → SKIPPED (terminal), stop burning tokens.
+    // Exception: Collectibles print never demotes while lane is assigned (founder 2026-08-13).
     const effectiveMax = (autoRegBlock || artifactToolingBlock || sentryBlock) ? maxRevives + 3 : maxRevives;
-    if (reviveCount >= effectiveMax || (verifyThrash && reviveCount >= 2)) {
+    if (
+      !collectiblesNeverStop
+      && (reviveCount >= effectiveMax || (verifyThrash && reviveCount >= 2))
+    ) {
       step.status = STEP_STATUS.SKIPPED;
       step.demoted = true;
       step.demoted_at = new Date(now).toISOString();
       step.demote_reason = `revive_exhausted:${String(step.last_error || 'unknown').slice(0, 160)}`;
       continue;
+    }
+    if (collectiblesNeverStop && reviveCount >= effectiveMax) {
+      // Reset revive budget and keep shipping — never terminal-skip Collectibles print.
+      step.revive_count = 0;
+      step.heal_unblocked = true;
+      step.heal_reason = 'collectibles_never_stop_revive_budget_reset';
     }
     const lastAt = Date.parse(step.last_attempt_at || step.completed_at || '');
     const waited = Number.isFinite(lastAt) ? now - lastAt : Infinity;
@@ -433,7 +454,8 @@ export function reviveStaleBlockedSteps(queue, {
     if (artifactToolingBlock && waited < Math.min(cooldownMs, 60_000)) continue;
     step.status = STEP_STATUS.PENDING;
     step.attempts = 0;
-    step.revive_count = reviveCount + 1;
+    const nextRevive = (typeof step.revive_count === 'number' ? step.revive_count : 0) + 1;
+    step.revive_count = nextRevive;
     step.revived_at = new Date(now).toISOString();
     // Strip stale runtime evidence (commit/proof timestamps) but preserve the
     // previous failure message so the codegen retry prompt can see exactly what
@@ -448,6 +470,7 @@ export function reviveStaleBlockedSteps(queue, {
     step.demoted = false;
     step.demote_reason = null;
     step.demoted_at = null;
+    if (collectiblesNeverStop) step.escalation_required = false;
     step.park_until = null;
     step.no_op = null;
     step.pre_existing = null;

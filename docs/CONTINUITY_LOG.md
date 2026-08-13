@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Documentation — CONTINUITY LOG. -->
 
+## 2026-08-13 — Collectibles never-stop (founder)
+
+Founder: F3 stopping without his word is the failure — family pays, system must not quit. Closed: Collectibles print cannot demote/skip/escalate-idle unless `FACTORY_3_REASSIGNED=1`; tip `forceCollectiblesNeverStopHeal` attaches convention sealed exact + re-plans before idle_forbidden; CAPTURE-API sealed exact so stub thrash ships bytes.
+
 ## 2026-08-13 — Architect owns print seal (SO-001 honesty)
 
 Founder: if sealed Collectibles print is required to build, Architect must own it — Cursor hand-seal made the system depend on chat and is the failure. Closed: `docs/products/collectibles/{AMENDED_BLUEPRINT,PRINT_SEQUENCE}.json` + `builderos:architect:seal-print`; config loads only; watchdog on missing seal. Prior Cursor V1→V10 hand-seal named as drift.

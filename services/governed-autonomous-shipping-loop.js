@@ -46,7 +46,7 @@ import {
 import { createDeploymentService } from './deployment-service.js';
 import { recordModelOutcome } from './model-capability-ledger.js';
 import { requireSliceCostTracked, SLICE_COST_UNTRACKED } from './slice-cost-tracking.js';
-import { applyManufacturingSelfRepair } from './manufacturing-self-repair.js';
+import { applyManufacturingSelfRepair, forceCollectiblesNeverStopHeal } from './manufacturing-self-repair.js';
 import { evaluateInvariants, formatFindings } from '../scripts/lib/security-invariants.mjs';
 import { evaluateFilePlacement, formatFilePlacementFindings } from '../scripts/lib/file-placement-gate.mjs';
 import { evaluateDocHygiene, formatDocHygieneFindings } from '../scripts/lib/doc-hygiene-gate.mjs';
@@ -1147,8 +1147,13 @@ export async function runGovernedAutonomousShipOnce({
       const liveQ = queueCache['universal-overlay'];
       if (liveQ && actingFactoryId === 'factory-3') {
         try {
+          const never = forceCollectiblesNeverStopHeal(liveQ);
           const enrolled = prepareOverlayManufacturingQueue(liveQ);
-          if (enrolled.enrolled_collectibles) {
+          if (
+            never.healed?.length
+            || never.promoted?.length
+            || enrolled.enrolled_collectibles
+          ) {
             persistQueue(liveQ);
             plan = planGovernedBuildQueueRun({
               products,
@@ -1159,7 +1164,7 @@ export async function runGovernedAutonomousShipOnce({
             });
           }
         } catch (err) {
-          logger?.warn?.(`[GOVERNED-AUTONOMOUS-SHIP] collectibles re-enroll failed: ${err.message}`);
+          logger?.warn?.(`[GOVERNED-AUTONOMOUS-SHIP] collectibles never-stop heal failed: ${err.message}`);
         }
       }
     }

@@ -300,7 +300,6 @@ export async function runFactoryLane({ factoryId = thisFactoryId(), productId = 
     if (
       shouldReship
       && (selfRepair.tip_actions || []).includes('re_ship_after_promote')
-      && (needsAuthor.length || claimable.length)
     ) {
       await sleep(2_000);
       ship = await requestLaneShip(factoryId);
