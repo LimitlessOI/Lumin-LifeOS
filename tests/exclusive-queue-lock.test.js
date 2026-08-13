@@ -32,6 +32,15 @@ test('isBlueprintSlice accepts print ids and refuses invented col001', () => {
   }, 'universal-overlay'), true);
   assert.equal(isBlueprintSlice({ id: 'col001-reg-service' }, 'universal-overlay'), false);
   assert.equal(isBlueprintSlice({ id: 'lifeos-s1' }, 'lifeos'), true);
+  assert.equal(isBlueprintSlice({
+    id: 'COLLECTIBLES-V1-ADAPTER-INTERFACE-001',
+    product_id: 'collectibles',
+    source: 'docs/products/collectibles/MASTER_BLUEPRINT.md — V1',
+  }, 'universal-overlay'), true);
+  assert.equal(isBlueprintSlice({
+    id: 'COLLECTIBLES-V1-ADAPTER-INTERFACE-001',
+    product_id: 'collectibles',
+  }, 'universal-overlay'), false);
 });
 
 test('skipNonBlueprintSlices marks invented overlay steps off_print', () => {
@@ -85,6 +94,17 @@ test('the only live product queue on disk is overlay', () => {
   assert.doesNotThrow(() => assertNoSecondLiveQueueOnDisk());
   const overlay = loadBuildQueue('universal-overlay');
   assert.equal(overlay.product_id, 'universal-overlay');
+  assert.equal(fs.existsSync(path.join(ROOT, 'docs/products/collectibles/BUILD_QUEUE.json')), false);
+  assert.throws(() => loadBuildQueue('collectibles'), /SECOND_QUEUE_FORBIDDEN/);
+});
+
+test('one queue may carry Collectibles BP slices without a second queue file', () => {
+  const overlay = loadBuildQueue('universal-overlay');
+  const collectibles = (overlay.steps || []).filter((s) => s.product_id === 'collectibles');
+  assert.ok(collectibles.length >= 1, 'Collectibles slices enrolled in the one queue');
+  for (const s of collectibles) {
+    assert.equal(isBlueprintSlice(s, 'universal-overlay'), true, s.id);
+  }
 });
 
 test('planBuildQueue refuses every product except overlay', async () => {

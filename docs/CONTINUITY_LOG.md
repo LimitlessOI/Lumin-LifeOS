@@ -1,12 +1,12 @@
 <!-- SYNOPSIS: Documentation — CONTINUITY LOG. -->
 
-## 2026-08-13 — Collectibles queue twin fixed (factory-3 can load)
+## 2026-08-13 — One queue, multi-factory, multi-project from BPs
 
-Factory-3 was seeing pending Collectibles steps then returning `no_shippable_steps` because tip could not parse the queue: wrong schema (`build_queue_v1` vs required `product_build_queue_v1`) and missing `task` / registered twin ids. Repaired `docs/products/collectibles/BUILD_QUEUE.json` as `PRODUCT-COLLECTIBLES-BUILD-QUEUE-TWIN-V1`. Overlay stays factory-1/2; Collectibles stays factory-3.
+Adam correction: we do **not** start a new queue. One manufacturing queue manages multiple factories and more than one project; it pulls from the BPs. Reverted Collectibles second-queue carve-out; archived mistaken Collectibles BUILD_QUEUE; enrolled Collectibles V1 slices into `docs/products/universal-overlay/BUILD_QUEUE.json` (`product_id: collectibles`, source → MASTER_BLUEPRINT). factory-3 owns Collectibles paths and ships from that one queue.
 
 ## 2026-08-12 — factory-3 is Collectibles (not overlay)
 
-Adam correction: the third factory is for Collectibles, not overlay. Reassigned factory-3 owns to `services/collectibles/` + mtg bootstrap + collectibles routes/public/docs. Opened `docs/products/collectibles/BUILD_QUEUE.json` (V1 foundation steps). Live-queue lock now allows overlay + collectibles only. factory-1/2 stay overlay. LaunchAgent `com.lumin.factory-3-lane` ships via tip `factory_id=factory-3`.
+Adam: the third factory is for Collectibles, not overlay. Reassigned factory-3 owns to `services/collectibles/` + mtg bootstrap + collectibles routes/public/docs. (A temporary second-queue attempt was opened then reversed 2026-08-13 — work lives in the one queue.)
 
 ## 2026-08-12 — Overlay first; factory-3 enabled
 

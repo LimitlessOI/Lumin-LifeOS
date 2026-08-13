@@ -11,7 +11,6 @@ import { execSync } from 'node:child_process';
 import { extractSsotTag } from './product-home-enforce.mjs';
 import {
   LIVE_BUILD_QUEUE_REL,
-  COLLECTIBLES_BUILD_QUEUE_REL,
   NEW_QUEUE_FORBIDDEN,
   isCanonicalLiveQueuePath,
   isLiveQueueLocation,
@@ -203,14 +202,13 @@ export function evaluateFilePlacement(fileEntries, repoRoot = ROOT, { trackedSet
     if (entry?.delete === true || entry?.op === 'delete' || entry?.sha === null) continue;
     if (!isLiveQueueLocation(rel)) continue;
     const isNew = !tracked.has(rel);
-    const collectiblesMint = isNew && (rel === COLLECTIBLES_BUILD_QUEUE_REL || rel.endsWith(`/${COLLECTIBLES_BUILD_QUEUE_REL}`));
-    if (!isCanonicalLiveQueuePath(rel) || (isNew && !collectiblesMint)) {
+    if (!isCanonicalLiveQueuePath(rel) || isNew) {
       findings.push({
         path: rel,
         severity: 'error',
         kind: NEW_QUEUE_FORBIDDEN,
-        reason: `Unauthorized BUILD_QUEUE.json. Legal live queues: ${LIVE_BUILD_QUEUE_REL} + ${COLLECTIBLES_BUILD_QUEUE_REL}. Refused '${rel}'. This is supposed to break.`,
-        proposed_solution: `Only overlay updates or first mint of collectibles (factory-3) are legal. Archived queues stay in docs/history/product-build-queues/.`,
+        reason: `Unauthorized BUILD_QUEUE.json. Only updates to the one manufacturing queue (${LIVE_BUILD_QUEUE_REL}) are legal. Refused '${rel}'. This is supposed to break.`,
+        proposed_solution: `Enroll other projects as steps in ${LIVE_BUILD_QUEUE_REL} pulled from their blueprints. Do not mint a second BUILD_QUEUE.json. Archived queues stay in docs/history/product-build-queues/.`,
       });
     }
   }

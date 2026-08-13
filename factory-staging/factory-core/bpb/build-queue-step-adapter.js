@@ -21,7 +21,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { authorAssertionsFromSpec, normalizeCommonJsToEsm } from './author-assertions.js';
-import { depSatisfiedForSelect, STEP_STATUS } from '../../../services/product-build-orchestrator.js';
+import { depSatisfiedForSelect, isBlueprintSlice, STEP_STATUS } from '../../../services/product-build-orchestrator.js';
 import { authoringTiersForRetry } from '../../../services/builderos-model-escalation-gate.js';
 import { REPO_ROOT } from '../repo-paths.js';
 import { stepDependencies } from '../../../config/step-dependencies.js';
@@ -358,6 +358,7 @@ export function selectShippableSteps(queue) {
     if (s.demoted === true) return false;
     if (s.status === STEP_STATUS.DONE || s.status === STEP_STATUS.BLOCKED || s.status === STEP_STATUS.SKIPPED || s.status === STEP_STATUS.FAILED) return false;
     if (isHumanHold(s)) return false;
+    if (queue?.product_id === 'universal-overlay' && !isBlueprintSlice(s, queue.product_id)) return false;
     const deps = Array.isArray(s.depends_on) ? s.depends_on : [];
     return deps.every((d) => depSatisfiedForSelect(d, doneIds, queue, s));
   });

@@ -146,13 +146,29 @@ export function depSatisfiedForSelect(depId, doneIds, queue, consumingStep) {
  */
 export const OVERLAY_PRINT_SLICE_ID = /^(TALOA-S64-|TALOA-P1-|TALOA-G0-|TALOA-BADGE-|TALOA-NATIVE-|TALOA-SENTRY-)/;
 export const OVERLAY_PRINT_SOURCE = /TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT/i;
+/** Collectibles V-slices enrolled into the one manufacturing queue from MASTER_BLUEPRINT. */
+export const COLLECTIBLES_PRINT_SLICE_ID = /^COLLECTIBLES-V\d+-/;
+export const COLLECTIBLES_PRINT_SOURCE = /docs\/products\/collectibles\/MASTER_BLUEPRINT/i;
 
-/** Queue may only hand the factory a slice of the uploaded overlay print. Anything else is invention. */
+/**
+ * One queue may carry slices from multiple authorized product blueprints.
+ * Overlay print ids / sources, or Collectibles V-slices with MASTER_BLUEPRINT source.
+ * Anything else in the manufacturing queue is invention.
+ */
 export function isBlueprintSlice(step, productId) {
-  if (productId && productId !== 'universal-overlay') return true;
   const id = String(step?.id || '');
+  const source = String(step?.source || '');
+  const stepProduct = String(step?.product_id || '').trim();
+
+  if (stepProduct === 'collectibles' || COLLECTIBLES_PRINT_SLICE_ID.test(id)) {
+    return COLLECTIBLES_PRINT_SLICE_ID.test(id) && COLLECTIBLES_PRINT_SOURCE.test(source);
+  }
+
   if (OVERLAY_PRINT_SLICE_ID.test(id)) return true;
-  if (OVERLAY_PRINT_SOURCE.test(String(step?.source || ''))) return true;
+  if (OVERLAY_PRINT_SOURCE.test(source)) return true;
+
+  // Legacy non-live product queues (should not exist on disk).
+  if (productId && productId !== 'universal-overlay') return true;
   return false;
 }
 
@@ -163,7 +179,7 @@ export function skipNonBlueprintSlices(queue) {
     if (step.status === STEP_STATUS.DONE || step.status === STEP_STATUS.SKIPPED) continue;
     if (isBlueprintSlice(step, queue.product_id)) continue;
     step.status = STEP_STATUS.SKIPPED;
-    step.skip_reason = 'off_print — queue may only carry slices of the uploaded overlay blueprint';
+    step.skip_reason = 'off_print — one queue may only carry slices pulled from authorized product blueprints';
     skipped.push(step.id);
   }
   return skipped;

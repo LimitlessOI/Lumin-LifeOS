@@ -1,18 +1,18 @@
 /**
- * SYNOPSIS: Live product build queues. Overlay remains the primary money
- * queue. Collectibles is the only additional live queue — owned by factory-3
- * so overlay factories are not stolen. Every other product queue stays forbidden.
+ * SYNOPSIS: There is ONE live manufacturing queue. Multiple factories and
+ * multiple product blueprints feed that queue — they do not mint second
+ * BUILD_QUEUE.json files. Steps carry product_id + source citing the BP;
+ * factories pick by lane ownership of target_file.
  * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
-/** @deprecated use LIVE_BUILD_QUEUE_PRODUCTS[0] — kept for callers that expect a string */
+/** Canonical host id for the one queue file (path under docs/products/). */
 export const LIVE_BUILD_QUEUE_PRODUCT = 'universal-overlay';
 
-/** Founder-authorized live queues (2026-08-12): overlay + Collectibles factory-3 lane. */
-export const LIVE_BUILD_QUEUE_PRODUCTS = Object.freeze(['universal-overlay', 'collectibles']);
+/** @deprecated kept for callers that still expect an array — always one entry. */
+export const LIVE_BUILD_QUEUE_PRODUCTS = Object.freeze([LIVE_BUILD_QUEUE_PRODUCT]);
 
 export const LIVE_BUILD_QUEUE_REL = 'docs/products/universal-overlay/BUILD_QUEUE.json';
-export const COLLECTIBLES_BUILD_QUEUE_REL = 'docs/products/collectibles/BUILD_QUEUE.json';
 
 export const SECOND_QUEUE_FORBIDDEN = 'SECOND_QUEUE_FORBIDDEN';
 export const NEW_QUEUE_FORBIDDEN = 'NEW_QUEUE_FORBIDDEN';
@@ -22,14 +22,12 @@ export function normalizeQueueRel(filePath) {
 }
 
 export function isLiveQueueProduct(productId) {
-  return LIVE_BUILD_QUEUE_PRODUCTS.includes(String(productId || '').trim());
+  return String(productId || '').trim() === LIVE_BUILD_QUEUE_PRODUCT;
 }
 
 export function isCanonicalLiveQueuePath(filePath) {
   const rel = normalizeQueueRel(filePath);
-  if (rel === LIVE_BUILD_QUEUE_REL || rel.endsWith(`/${LIVE_BUILD_QUEUE_REL}`)) return true;
-  if (rel === COLLECTIBLES_BUILD_QUEUE_REL || rel.endsWith(`/${COLLECTIBLES_BUILD_QUEUE_REL}`)) return true;
-  return false;
+  return rel === LIVE_BUILD_QUEUE_REL || rel.endsWith(`/${LIVE_BUILD_QUEUE_REL}`);
 }
 
 export function isLiveQueueLocation(filePath) {

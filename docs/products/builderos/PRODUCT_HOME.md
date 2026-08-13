@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/builderos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-08-12 — Hard gate: no new BUILD_QUEUE.json may ever be created (`NEW_QUEUE_FORBIDDEN`). Overlay may be updated only. |
+| **Last Updated** | 2026-08-13 — One queue manages multiple factories + projects (BP slices); no second Collectibles queue. Prior: NEW_QUEUE_FORBIDDEN hard gate. |
 ### Related docs (this product)
 
 | Doc | Path |
@@ -35,7 +35,9 @@
 ---
 
 ## Change Receipts
-| 2026-08-13 | **Collectibles BUILD_QUEUE twin repaired so factory-3 can load.** Tip returned `no_shippable_steps` because the Collectibles queue used `schema: build_queue_v1` (loader requires `product_build_queue_v1`) and lacked `task` + registered `blueprint_id`. Twin is now `PRODUCT-COLLECTIBLES-BUILD-QUEUE-TWIN-V1`. Live queues remain overlay + collectibles only; factory-3 owns Collectibles paths. | Founder: 3rd factory is Collectibles and must work. | Local `loadBuildQueue('collectibles')` + factory-3 plan runnable; tip redeploy then factory-3 ship |
+| 2026-08-13 | **One queue manages multiple factories + projects — pulled from BPs.** Founder correction: do not mint a Collectibles queue. Reverted the second-queue carve-out. Collectibles V1 slices enrolled into the one manufacturing queue with `product_id` + MASTER_BLUEPRINT `source`. Factories filter by owns. Mistaken `docs/products/collectibles/BUILD_QUEUE.json` archived. | Founder: we do not start a new queue; one queue manages multiple factories and more than one project; it pulls from the BPs. | `config/live-build-queue.js` + overlay BUILD_QUEUE enroll + exclusive-queue tests |
+
+| 2026-08-13 | **(superseded)** Collectibles BUILD_QUEUE twin repaired — wrong direction; archived same day per founder one-queue law. | Mistaken second queue. | `docs/history/product-build-queues/collectibles/` |
 
 | 2026-08-12 | **Hard gate: no new BUILD_QUEUE.json may ever be created.** Founder: there can only be one, and nothing may mint another. `NEW_QUEUE_FORBIDDEN` on persist/plan/generate/commit/pre-commit. Discover will not enroll a missing queue. Overlay file may be updated; minting even overlay from nothing is refused. | Founder: hard gate; no new queues can be created ever. | `node --test tests/exclusive-queue-lock.test.js tests/generate-build-queue-from-home.test.js` |
 

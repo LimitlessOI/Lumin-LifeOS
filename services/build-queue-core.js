@@ -1,14 +1,11 @@
 /**
  * SYNOPSIS: Shared BUILD_QUEUE.json primitives plus the one-queue lock:
- * only universal-overlay may live under docs/products/<id>/BUILD_QUEUE.json.
- * Other paths throw SECOND_QUEUE_FORBIDDEN. Extracted out of
- * product-build-orchestrator.js so it and scripts/build-queue-drift-repair.mjs
- * can both depend on this instead of on each other. Pure extraction, no
- * behavior change -- fixes a real `madge --circular` failure (2026-08-10):
- * orchestrator imported repairStep from drift-repair, which imported these
- * three symbols back from orchestrator. product-build-orchestrator.js still
- * re-exports all of these under its own name, so every existing caller keeps
- * working unchanged.
+ * only the canonical manufacturing queue may live under
+ * docs/products/<id>/BUILD_QUEUE.json. Other paths throw SECOND_QUEUE_FORBIDDEN.
+ * Multiple factories + multiple product BPs share that one file (steps carry
+ * product_id / source). Extracted out of product-build-orchestrator.js so it
+ * and scripts/build-queue-drift-repair.mjs can both depend on this instead of
+ * on each other.
  * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 import fs from 'node:fs';
@@ -21,7 +18,6 @@ import {
   LIVE_BUILD_QUEUE_PRODUCT,
   LIVE_BUILD_QUEUE_PRODUCTS,
   LIVE_BUILD_QUEUE_REL,
-  COLLECTIBLES_BUILD_QUEUE_REL,
   SECOND_QUEUE_FORBIDDEN,
   NEW_QUEUE_FORBIDDEN,
   isCanonicalLiveQueuePath,
@@ -34,7 +30,6 @@ export {
   LIVE_BUILD_QUEUE_PRODUCT,
   LIVE_BUILD_QUEUE_PRODUCTS,
   LIVE_BUILD_QUEUE_REL,
-  COLLECTIBLES_BUILD_QUEUE_REL,
   SECOND_QUEUE_FORBIDDEN,
   NEW_QUEUE_FORBIDDEN,
   isCanonicalLiveQueuePath,
@@ -108,12 +103,8 @@ export function assertBuildQueueMayBeWritten(filePath, { creating = false } = {}
   assertLiveBuildQueuePath(filePath);
   if (!creating) return;
   const rel = normalizeQueueRel(filePath);
-  // Collectibles may be minted once (factory-3 lane). Overlay already exists — never re-mint.
-  if (rel === COLLECTIBLES_BUILD_QUEUE_REL || rel.endsWith(`/${COLLECTIBLES_BUILD_QUEUE_REL}`)) {
-    if (!fs.existsSync(path.isAbsolute(filePath) ? filePath : path.join(ROOT, rel))) return;
-  }
   throw new Error(
-    `${NEW_QUEUE_FORBIDDEN}: refused to mint '${rel}'. New BUILD_QUEUE.json only allowed for authorized live products that do not yet exist (${LIVE_BUILD_QUEUE_PRODUCTS.join(', ')}). Overlay already exists at ${LIVE_BUILD_QUEUE_REL}. This is supposed to break.`,
+    `${NEW_QUEUE_FORBIDDEN}: refused to mint '${rel}'. There is one manufacturing queue at ${LIVE_BUILD_QUEUE_REL} — enroll BP slices into it; do not create another BUILD_QUEUE.json. This is supposed to break.`,
   );
 }
 
@@ -127,18 +118,13 @@ export function assertNoNewBuildQueueInCommit(fileEntries, { trackedSet = new Se
     if (!isLiveQueueLocation(rel) && !rel.endsWith('/BUILD_QUEUE.json')) continue;
     if (!isLiveQueueLocation(rel)) continue;
     const isNew = !trackedSet.has(rel);
-    if (!isCanonicalLiveQueuePath(rel)) {
-      blocked.push(rel);
-      continue;
-    }
-    // Allow first mint of collectibles queue; overlay updates OK; other new queues blocked.
-    if (isNew && !(rel === COLLECTIBLES_BUILD_QUEUE_REL || rel.endsWith(`/${COLLECTIBLES_BUILD_QUEUE_REL}`))) {
+    if (!isCanonicalLiveQueuePath(rel) || isNew) {
       blocked.push(rel);
     }
   }
   if (!blocked.length) return;
   throw new Error(
-    `${NEW_QUEUE_FORBIDDEN}: commit refused — unauthorized BUILD_QUEUE.json. Refused:\n${blocked.join('\n')}\nLegal live queues: ${LIVE_BUILD_QUEUE_REL} + ${COLLECTIBLES_BUILD_QUEUE_REL}. This is supposed to break.`,
+    `${NEW_QUEUE_FORBIDDEN}: commit refused — unauthorized BUILD_QUEUE.json. Refused:\n${blocked.join('\n')}\nOnly updates to ${LIVE_BUILD_QUEUE_REL} are legal. Enroll other projects as steps in that one queue (from their BPs). This is supposed to break.`,
   );
 }
 

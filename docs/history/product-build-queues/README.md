@@ -2,14 +2,16 @@
 
 # THESE ARE NOT LIVE QUEUES
 
-**Moved here on 2026-08-12 by founder order: there can only be one queue.**
+**Founder law (2026-08-12 → 2026-08-13):** there is **one** manufacturing queue. It manages **multiple factories** and **more than one project** by enrolling slices pulled from product blueprints. It does **not** mint a second `BUILD_QUEUE.json` per product.
 
 The only live `BUILD_QUEUE.json` is:
 
 `docs/products/universal-overlay/BUILD_QUEUE.json`
 
-Every other product and project queue that used to live under `docs/products/<id>/BUILD_QUEUE.json` or `docs/projects/**/BUILD_QUEUE.json` was **moved** here. Not copied. Not stubbed. Not re-exported. The old path is gone.
+Steps in that file may carry `product_id` (e.g. `collectibles`) and `source` citing the product BP. Factories claim work by lane ownership of `target_file`.
 
-If something still calls `loadBuildQueue('lifeos')` or writes a second queue, it is supposed to throw `SECOND_QUEUE_FORBIDDEN`. That is the point.
+Every other product/project queue that used to live under `docs/products/<id>/BUILD_QUEUE.json` or `docs/projects/**/BUILD_QUEUE.json` was **moved** here — including a mistaken Collectibles second-queue attempt (`collectibles/`).
 
-Do not put these files back. Do not plan a new queue for a non-overlay product. Salvage ideas from these files the way this archive already works — as a parts car — then put real work on the overlay print.
+If something still calls `loadBuildQueue('lifeos')` or writes a second queue, it is supposed to throw `SECOND_QUEUE_FORBIDDEN` / `NEW_QUEUE_FORBIDDEN`. That is the point.
+
+Do not put these files back. Do not plan a new queue for a non-overlay product. Enroll BP slices into the one queue.

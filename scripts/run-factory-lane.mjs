@@ -3,8 +3,8 @@
  * SYNOPSIS: Dispatch one tick of work for a named factory lane. Production
  * Railway is factory-1 (GOVERNED_AUTONOMOUS_SHIP). factory-2 is a local
  * worktree — sync + compile Taloa when native/macos-overlay changes.
- * factory-3 owns public/overlay/ — sync + request production
- * ship-queue-and-commit with factory_id so Railway authors that lane.
+ * factory-3 owns Collectibles path prefixes — sync + request production
+ * ship-queue-and-commit with factory_id against the ONE manufacturing queue.
  * `--loop` keeps ticking. `--install-agent` installs a LaunchAgent.
  *
  * Usage: FACTORY_ID=factory-3 node scripts/run-factory-lane.mjs [--loop|--install-agent|--unload-agent]
@@ -48,8 +48,8 @@ function ownsCollectiblesLane(factoryId) {
   return ownerFor('services/collectibles/category-adapter.js') === factoryId;
 }
 
-function productIdForFactory(factoryId) {
-  if (ownsCollectiblesLane(factoryId)) return 'collectibles';
+/** One queue hosts every project; factories filter by owns, not by product queue file. */
+function productIdForFactory(_factoryId) {
   return 'universal-overlay';
 }
 
