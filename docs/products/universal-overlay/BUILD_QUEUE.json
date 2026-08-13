@@ -6950,7 +6950,10 @@
       "park_until": null,
       "heal_unblocked": true,
       "duration_ms": 1000,
-      "tokens_used": 0
+      "tokens_used": 0,
+      "skip_reason": null,
+      "escalation_required": false,
+      "revive_count": 0
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
