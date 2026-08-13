@@ -6912,7 +6912,7 @@
       "status": "pending",
       "founder_gated": false,
       "attempts": 2,
-      "action_type": "author_then_write",
+      "action_type": "write_file_exact",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
@@ -6953,7 +6953,34 @@
       "tokens_used": 0,
       "skip_reason": null,
       "escalation_required": false,
-      "revive_count": 0
+      "revive_count": 0,
+      "same_signature_count": 0,
+      "exact_inputs": {
+        "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V1-LAYER-B-001.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-08-13T22:22:53.722Z",
+        "shipped_at": "2026-08-13T22:22:53.722Z",
+        "commit_sha": null,
+        "content_sha256": "ca755edd66c2f82264d635a61989111cc3af14845e1af24b7b7103851c29634a",
+        "target_file": "scripts/sentry-collectibles-layer-b.mjs",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "scripts/sentry-collectibles-layer-b.mjs",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "PASS"
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V1-LAYER-B-001.exact",
+          "content_sha256": "ca755edd66c2f82264d635a61989111cc3af14845e1af24b7b7103851c29634a"
+        }
+      },
+      "shipped_at": "2026-08-13T22:22:53.722Z"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",

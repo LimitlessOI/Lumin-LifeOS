@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T22:20:23.901Z",
+  "generated_at": "2026-08-13T22:22:57.085Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13589,
   "files": [
@@ -81035,8 +81035,8 @@
       "path": "scripts/sentry-collectibles-layer-b.mjs",
       "synopsis": "Collectibles V1 Layer-B (layer-b) SENTRY walker placeholder — registers product walk.",
       "bytes": 1092,
-      "mtime": "2026-08-13T22:18:39.342Z",
-      "indexed_at": "2026-08-13T22:20:23.901Z",
+      "mtime": "2026-08-13T22:22:57.085Z",
+      "indexed_at": "2026-08-13T22:22:57.085Z",
       "ssot": [
         "docs/products/collectibles/PRODUCT_HOME.md"
       ]
