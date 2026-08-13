@@ -4966,7 +4966,7 @@
       "last_attempt_at": "2026-08-13T08:06:34.464Z",
       "last_error": null,
       "started_at": "2026-08-13T08:06:34.464Z",
-      "heal_unblocked": true,
+      "heal_unblocked": false,
       "heal_reason": "clear_false_NOT_ON_BLUEPRINT_2026-08-13",
       "blocker_class": null,
       "park_until": null,
