@@ -7343,6 +7343,23 @@
       "shipped_at": "2026-08-13T00:41:17.574Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "chair-intent-signals-service"
+    },
+    {
+      "id": "s1-create-founder-chair-intent-service",
+      "status": "pending",
+      "target_file": "services/founder-chair-intent.js",
+      "task": "Create service for founder chat intent classification",
+      "spec": "Implement `classifyFounderPrompt` function that takes a prompt and uses `callCouncilMember('founder')` to determine the correct intent, specifically identifying 'drawer_direct_build' prompts to route to a build workflow lane instead of general counsel/essay text.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "classifyFounderPrompt"
+      ],
+      "file_contains": [
+        "callCouncilMember('founder')",
+        "drawer_direct_build"
+      ]
     }
   ],
   "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
