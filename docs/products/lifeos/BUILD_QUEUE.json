@@ -7441,13 +7441,13 @@
     },
     {
       "id": "lifeos-build-fix-2",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/founder-chair-intent.js",
       "task": "Implement founder chat intent classification service",
       "spec": "Create a new service exporting 'classifyFounderIntent' that, when given a founder chat prompt, correctly identifies 'drawer_direct_build' and classifies it into the 'workflow-content' lane.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "classifyFounderIntent"
       ],
@@ -7479,7 +7479,12 @@
       },
       "shipped_at": "2026-08-13T01:04:14.446Z",
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
-      "blueprint_step_id": "lifeos-build-fix-2"
+      "blueprint_step_id": "lifeos-build-fix-2",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-08-13T01:04:21.788Z",
+      "last_error": "artifact_missing_after_ship: artifact_proof_failed: missing_exports:classifyFounderIntent"
     }
   ],
   "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
