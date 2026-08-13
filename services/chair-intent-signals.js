@@ -10,6 +10,28 @@ import {
 
 const CHAIR_DO_PREFIX = /^\s*(do|execute|run)\s*:\s*/i;
 
+// Centralized event emitter for intent signals
+const intentEventEmitter = new EventTarget();
+
+/**
+ * Emits a custom intent signal event.
+ * @param {string} signalType The type of intent signal (e.g., 'founder_intent_classified', 'founder_intent_clarification_required').
+ * @param {object} detail Custom data associated with the signal.
+ */
+export function emitIntentSignal(signalType, detail) {
+  const event = new CustomEvent(signalType, { detail });
+  intentEventEmitter.dispatchEvent(event);
+}
+
+/**
+ * Registers a listener for a specific intent signal.
+ * @param {string} signalType The type of intent signal to listen for.
+ * @param {function} handler The callback function to execute when the signal is received.
+ */
+export function onIntentSignal(signalType, handler) {
+  intentEventEmitter.addEventListener(signalType, handler);
+}
+
 /** Strip a leading "do:/execute:/run:" prefix and flag it as a forced-execute order. */
 export function stripChairDoPrefix(text = '') {
   const raw = String(text || '').trim();

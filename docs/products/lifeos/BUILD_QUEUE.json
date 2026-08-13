@@ -6829,7 +6829,7 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "same_signature_count": 1,
+      "same_signature_count": 0,
       "behavior_assertions": [
         {
           "type": "exports_smoke",
@@ -6839,9 +6839,7 @@
           ],
           "assertion_id": "expected_exports:services/founder-chair-intent.js"
         }
-      ],
-      "failure_signature": "STEP_STATUS_FORBIDDEN",
-      "escalation_class": "same_signature_repeat"
+      ]
     },
     {
       "id": "s2-founder-intent-clarify-service",
@@ -6877,7 +6875,7 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "same_signature_count": 0,
+      "same_signature_count": 1,
       "behavior_assertions": [
         {
           "type": "exports_smoke",
@@ -6888,35 +6886,8 @@
           "assertion_id": "expected_exports:services/founder-intent-clarify.js"
         }
       ],
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/lifeos/twins/steps/s2-founder-intent-clarify-service.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-08-13T00:27:50.123Z",
-        "shipped_at": "2026-08-13T00:27:50.123Z",
-        "commit_sha": null,
-        "content_sha256": "ba5e1ede043a1a24f0535579754babf92260f15cd37c3869c4e13a43df4f5989",
-        "target_file": "services/founder-intent-clarify.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "services/founder-intent-clarify.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "grounding": {
-          "status": "PASS"
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/lifeos/twins/steps/s2-founder-intent-clarify-service.exact",
-          "content_sha256": "ba5e1ede043a1a24f0535579754babf92260f15cd37c3869c4e13a43df4f5989"
-        }
-      },
-      "shipped_at": "2026-08-13T00:27:50.123Z",
-      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
-      "blueprint_step_id": "s2-founder-intent-clarify-service"
+      "failure_signature": "artifact_missing_after_ship: artifact_proof_failed: missing_exports:clarifyFounderIntent; async function clarifyFounderIntent; callCouncilMember('clarifier'",
+      "escalation_class": "fake_green_attempt"
     },
     {
       "id": "s3-chair-intent-signals-service",
@@ -6964,7 +6935,36 @@
           ],
           "assertion_id": "expected_exports:services/chair-intent-signals.js"
         }
-      ]
+      ],
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/lifeos/twins/steps/s3-chair-intent-signals-service.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-08-13T00:28:15.779Z",
+        "shipped_at": "2026-08-13T00:28:15.779Z",
+        "commit_sha": null,
+        "content_sha256": "643dd9d80fd050aaf7a11c8e8905c5756645d1727c952d9f36ddc1379e4b2da8",
+        "target_file": "services/chair-intent-signals.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/chair-intent-signals.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "PASS"
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/lifeos/twins/steps/s3-chair-intent-signals-service.exact",
+          "content_sha256": "643dd9d80fd050aaf7a11c8e8905c5756645d1727c952d9f36ddc1379e4b2da8"
+        }
+      },
+      "shipped_at": "2026-08-13T00:28:15.779Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s3-chair-intent-signals-service"
     },
     {
       "id": "s5-add-ssot-to-smoke-test",
