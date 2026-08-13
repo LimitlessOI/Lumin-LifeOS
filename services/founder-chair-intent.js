@@ -58,3 +58,16 @@ export function expandFounderBuildTask(cleanedInput = '') {
 
   return augmentTaskWithGapFillScope(base, target);
 }
+
+export function classifyFounderIntent(prompt = '') {
+  const p = String(prompt || '').toLowerCase().trim();
+
+  if (/\b(drawer direct build|build the drawer|update the drawer)\b/i.test(p)) {
+    return {
+      intent: 'drawer_direct_build',
+      lane: 'workflow-content',
+    };
+  }
+
+  return { intent: 'unknown', lane: 'default' };
+}
