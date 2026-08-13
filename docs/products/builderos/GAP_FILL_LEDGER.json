@@ -831,6 +831,22 @@
       "added_real_lines": 42,
       "justification": "orchestration/glue only — skip invented steps, enroll the next sealed §64 slice, throw PRINT_INVENTION_FORBIDDEN. No new service module. The factory was the bug (it invented register scripts instead of taking the print).\nCo-authored-by: Cursor <cursoragent@cursor.com>",
       "commit_message_excerpt": "GAP-FILL: hard-gate overlay print so the factory cannot invent slices. Tip execute-batch and /ready are 404 because founder routes never mounted (DB degraded); no factory path can land this gate until"
+    },
+    {
+      "at": "2026-08-13T15:34:45.413Z",
+      "file": "routes/system-notify-routes.js",
+      "is_new_file": false,
+      "added_real_lines": 37,
+      "justification": "existing files only. Sherry's Railway-hosted form stored 10 real leads and never emailed because Postmark's token is invalid. Default inbox is Maternity@wellroundedwoman.com; retry-unsent catches the backlog after deploy. execute-batch blocked core/ as builder-safe-scope — operator GAP-FILL.\nCo-authored-by: Cursor <cursoragent@cursor.com>",
+      "commit_message_excerpt": "GAP-FILL: WRM consults go to Maternity@wellroundedwoman.com; Postmark invalid-token falls through to Resend/SMTP."
+    },
+    {
+      "at": "2026-08-13T15:34:45.413Z",
+      "file": "routes/wrm-consult-routes.js",
+      "is_new_file": false,
+      "added_real_lines": 41,
+      "justification": "existing files only. Sherry's Railway-hosted form stored 10 real leads and never emailed because Postmark's token is invalid. Default inbox is Maternity@wellroundedwoman.com; retry-unsent catches the backlog after deploy. execute-batch blocked core/ as builder-safe-scope — operator GAP-FILL.\nCo-authored-by: Cursor <cursoragent@cursor.com>",
+      "commit_message_excerpt": "GAP-FILL: WRM consults go to Maternity@wellroundedwoman.com; Postmark invalid-token falls through to Resend/SMTP."
     }
   ]
 }

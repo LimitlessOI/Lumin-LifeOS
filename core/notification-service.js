@@ -588,10 +588,13 @@ export class NotificationService {
     }
 
     const postmarkError = lastError?.message || "Email send failed";
-    const pendingApproval = /pending approval|same domain as the 'From' address/i.test(postmarkError);
+    // ANY Postmark failure falls through — invalid token, pending-approval,
+    // and cross-domain blocks all drop consults if we only match one phrase.
+    // Proven live 2026-08-13: WRM consults stored emailed=false with
+    // "Request does not contain a valid Server token."
 
-    if (pendingApproval && String(process.env.RESEND_API_KEY || '').trim()) {
-      console.warn(`[EMAIL] Postmark blocked — falling back to Resend HTTP`);
+    if (String(process.env.RESEND_API_KEY || '').trim()) {
+      console.warn(`[EMAIL] Postmark failed (${postmarkError.slice(0, 120)}) — falling back to Resend HTTP`);
       const resendResult = await this._sendViaResend({
         to: recipient,
         subject,
@@ -602,12 +605,12 @@ export class NotificationService {
         bodyText,
       });
       if (resendResult.success) {
-        return { ...resendResult, fallback_from: "postmark_pending_approval" };
+        return { ...resendResult, fallback_from: "postmark_failed" };
       }
     }
 
-    if (pendingApproval && String(process.env.SENDGRID_API_KEY || '').trim()) {
-      console.warn(`[EMAIL] Postmark blocked — falling back to SendGrid HTTP`);
+    if (String(process.env.SENDGRID_API_KEY || '').trim()) {
+      console.warn(`[EMAIL] Postmark failed — falling back to SendGrid HTTP`);
       const sg = await this._sendViaSendgrid({
         to: recipient,
         subject,
@@ -618,12 +621,12 @@ export class NotificationService {
         bodyText,
       });
       if (sg.success) {
-        return { ...sg, fallback_from: "postmark_pending_approval" };
+        return { ...sg, fallback_from: "postmark_failed" };
       }
     }
 
-    if (pendingApproval && this._getSmtpAuth().ok) {
-      console.warn(`[EMAIL] Postmark blocked (${postmarkError.slice(0, 120)}) — falling back to SMTP/Workspace`);
+    if (this._getSmtpAuth().ok) {
+      console.warn(`[EMAIL] Postmark failed (${postmarkError.slice(0, 120)}) — falling back to SMTP/Workspace IPv4`);
       const smtpFrom = String(process.env.WORK_EMAIL || fromAddr).trim() || fromAddr;
       const smtpResult = await this._sendViaSmtp({
         to: recipient,
@@ -635,11 +638,11 @@ export class NotificationService {
         bodyText,
       });
       if (smtpResult.success) {
-        return { ...smtpResult, fallback_from: "postmark_pending_approval" };
+        return { ...smtpResult, fallback_from: "postmark_failed" };
       }
       return {
         success: false,
-        error: `Postmark pending approval; SMTP fallback also failed: ${smtpResult.error}`,
+        error: `primary+fallback failed: ${postmarkError} | ${smtpResult.error}`,
         postmark_error: postmarkError,
       };
     }

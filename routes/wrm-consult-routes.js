@@ -10,7 +10,7 @@ import express from "express";
 import { NotificationService } from "../core/notification-service.js";
 
 const CONSULT_TO = () =>
-  String(process.env.WRM_CONSULT_EMAIL || "maternity@wellroundedmomma.com").trim();
+  String(process.env.WRM_CONSULT_EMAIL || "Maternity@wellroundedwoman.com").trim();
 // Fallback recipient on the same domain as the system From address. Used only if
 // the primary send fails (e.g. an email provider that is still pending approval
 // and can't reach cross-domain) — so a lead is never merely captured-but-unseen.
@@ -308,6 +308,47 @@ export function registerWrmConsultRoutes(app, deps = {}) {
   });
 
   const guard = typeof requireKey === "function" ? requireKey : (_req, _res, next) => next();
+
+  router.post("/consult/retry-unsent", guard, async (req, res) => {
+    try {
+      await ensureSchema();
+      if (!pool) return res.status(503).json({ ok: false, error: "no_pool" });
+      const r = await pool.query(
+        `SELECT id, name, phone, email, preferred_time, message, source
+         FROM wrm_consult_leads
+         WHERE emailed IS NOT TRUE
+           AND name NOT ILIKE 'PROBE-%'
+         ORDER BY id ASC
+         LIMIT 50`
+      );
+      const results = [];
+      for (const row of r.rows) {
+        const emailResult = await sendConsultEmail(notifier, {
+          name: row.name,
+          phone: row.phone,
+          email: row.email,
+          preferredTime: row.preferred_time,
+          message: row.message,
+          leadId: row.id,
+        });
+        const note = emailResult.sent
+          ? emailResult.forwarded
+            ? `forwarded to ${emailResult.to} (primary ${CONSULT_TO()} unreachable: ${emailResult.primary_error})`
+            : `resent to ${emailResult.to}`
+          : String(emailResult.error || "").slice(0, 300);
+        await pool.query(`UPDATE wrm_consult_leads SET emailed=$1, email_error=$2 WHERE id=$3`, [
+          emailResult.sent,
+          note,
+          row.id,
+        ]);
+        results.push({ id: row.id, sent: emailResult.sent, to: emailResult.to || null, error: emailResult.sent ? null : note });
+      }
+      return res.json({ ok: true, attempted: results.length, to: CONSULT_TO(), results });
+    } catch (err) {
+      logger.error?.("[WRM] retry-unsent failed", { error: err.message });
+      return res.status(500).json({ ok: false, error: err.message });
+    }
+  });
 
   // Funnel stats — clicks, form starts/submits, per event + per label, last N days.
   router.get("/stats", guard, async (req, res) => {

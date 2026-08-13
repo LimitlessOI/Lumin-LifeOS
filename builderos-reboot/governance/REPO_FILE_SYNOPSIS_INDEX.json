@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T14:20:17.585Z",
+  "generated_at": "2026-08-13T15:34:55.290Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13552,
+  "file_count": 13555,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21678,9 +21678,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 4111556,
-      "mtime": "2026-08-13T06:48:47.713Z",
-      "indexed_at": "2026-08-13T06:49:34.249Z"
+      "bytes": 4118149,
+      "mtime": "2026-08-13T14:20:17.839Z",
+      "indexed_at": "2026-08-13T15:34:55.290Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -33850,9 +33850,9 @@
     {
       "path": "core/notification-service.js",
       "synopsis": "NotificationService",
-      "bytes": 21471,
-      "mtime": "2026-07-11T16:06:46.319Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 21589,
+      "mtime": "2026-08-13T15:17:52.213Z",
+      "indexed_at": "2026-08-13T15:34:55.290Z",
       "ssot": [
         "docs/products/tc-service/PRODUCT_HOME.md"
       ]
@@ -41266,9 +41266,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Documentation — CONTINUITY LOG.",
-      "bytes": 201755,
-      "mtime": "2026-08-13T14:19:34.972Z",
-      "indexed_at": "2026-08-13T14:20:17.585Z"
+      "bytes": 202182,
+      "mtime": "2026-08-13T15:32:07.672Z",
+      "indexed_at": "2026-08-13T15:34:55.290Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -41647,6 +41647,13 @@
       "bytes": 402,
       "mtime": "2026-08-13T14:19:34.973Z",
       "indexed_at": "2026-08-13T14:20:17.585Z"
+    },
+    {
+      "path": "docs/conversation_dumps/2026-08-13-wrm-consult-email-disaster.md",
+      "synopsis": "Twin intake dump — WRM consults never reached Sherry.",
+      "bytes": 634,
+      "mtime": "2026-08-13T15:32:06.635Z",
+      "indexed_at": "2026-08-13T15:34:55.290Z"
     },
     {
       "path": "docs/conversation_dumps/by-product/sessions/2a4739f2/BUILDEROS-AUTONOMOUS.md",
@@ -44327,9 +44334,9 @@
     {
       "path": "docs/products/builderos/GAP_FILL_LEDGER.json",
       "synopsis": "Documentation — GAP FILL LEDGER.",
-      "bytes": 114526,
-      "mtime": "2026-08-13T06:49:34.796Z",
-      "indexed_at": "2026-08-13T06:50:45.475Z",
+      "bytes": 115878,
+      "mtime": "2026-08-13T15:34:45.417Z",
+      "indexed_at": "2026-08-13T15:34:55.290Z",
       "synopsis_index_only": true
     },
     {
@@ -44342,9 +44349,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 583129,
-      "mtime": "2026-08-13T08:11:12.649Z",
-      "indexed_at": "2026-08-13T08:11:12.649Z"
+      "bytes": 583363,
+      "mtime": "2026-08-13T15:26:45.454Z",
+      "indexed_at": "2026-08-13T15:34:55.290Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -44887,9 +44894,9 @@
     {
       "path": "docs/products/command-center/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Command Center",
-      "bytes": 109897,
-      "mtime": "2026-08-12T21:12:45.323Z",
-      "indexed_at": "2026-08-12T21:12:45.323Z"
+      "bytes": 110023,
+      "mtime": "2026-08-13T15:27:45.485Z",
+      "indexed_at": "2026-08-13T15:34:55.290Z"
     },
     {
       "path": "docs/products/COMMANDCENTER.md",
@@ -46243,6 +46250,13 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "docs/products/site-builder/conversations/2026-08-13-wrm-consult-email-disaster.md",
+      "synopsis": "Founder session — WRM consults never emailed Sherry.",
+      "bytes": 1238,
+      "mtime": "2026-08-13T15:32:06.636Z",
+      "indexed_at": "2026-08-13T15:34:55.290Z"
+    },
+    {
       "path": "docs/products/site-builder/CREATIVE_BRIEF.md",
       "synopsis": "Creative Brief — Site Builder (site-builder)",
       "bytes": 4464,
@@ -46259,9 +46273,9 @@
     {
       "path": "docs/products/site-builder/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
-      "bytes": 6753,
-      "mtime": "2026-07-24T18:36:41.702Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 6752,
+      "mtime": "2026-08-13T15:17:51.940Z",
+      "indexed_at": "2026-08-13T15:34:55.290Z",
       "synopsis_index_only": true
     },
     {
@@ -46274,9 +46288,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 222909,
-      "mtime": "2026-08-02T15:54:21.622Z",
-      "indexed_at": "2026-08-02T15:54:33.322Z"
+      "bytes": 223364,
+      "mtime": "2026-08-13T15:17:51.989Z",
+      "indexed_at": "2026-08-13T15:34:55.290Z"
     },
     {
       "path": "docs/products/site-builder/SITE_TEMPLATE_CATALOG.md",
@@ -46360,9 +46374,9 @@
     {
       "path": "docs/products/tc-service/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — TC Service",
-      "bytes": 137287,
-      "mtime": "2026-08-10T14:09:46.054Z",
-      "indexed_at": "2026-08-10T14:09:59.095Z"
+      "bytes": 137342,
+      "mtime": "2026-08-13T15:17:52.063Z",
+      "indexed_at": "2026-08-13T15:34:55.290Z"
     },
     {
       "path": "docs/products/TCSERVICE.md",
@@ -46510,9 +46524,9 @@
     {
       "path": "docs/products/universal-overlay/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Universal Overlay",
-      "bytes": 123194,
-      "mtime": "2026-08-13T14:20:08.849Z",
-      "indexed_at": "2026-08-13T14:20:17.585Z"
+      "bytes": 123490,
+      "mtime": "2026-08-13T15:17:51.923Z",
+      "indexed_at": "2026-08-13T15:34:55.290Z"
     },
     {
       "path": "docs/products/universal-overlay/SEND_PACKET_FLUID_UI_AND_TWO_FACTORIES_2026-08-11.md",
@@ -76219,9 +76233,9 @@
     {
       "path": "routes/system-notify-routes.js",
       "synopsis": "Exports createSystemNotifyRoutes — routes/system-notify-routes.js.",
-      "bytes": 3953,
-      "mtime": "2026-08-10T08:22:21.989Z",
-      "indexed_at": "2026-08-10T08:22:55.920Z",
+      "bytes": 4386,
+      "mtime": "2026-08-13T15:17:52.195Z",
+      "indexed_at": "2026-08-13T15:34:55.290Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
@@ -76592,9 +76606,9 @@
     {
       "path": "routes/wrm-consult-routes.js",
       "synopsis": "Well Rounded Momma consult lead capture.",
-      "bytes": 13361,
-      "mtime": "2026-07-28T17:50:09.132Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 15000,
+      "mtime": "2026-08-13T15:17:52.168Z",
+      "indexed_at": "2026-08-13T15:34:55.290Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -96295,9 +96309,9 @@
     {
       "path": "services/env-registry-map.js",
       "synopsis": "env-registry-map.js",
-      "bytes": 29372,
-      "mtime": "2026-07-30T02:15:14.034Z",
-      "indexed_at": "2026-07-30T22:32:11.913Z",
+      "bytes": 29672,
+      "mtime": "2026-08-13T15:17:51.908Z",
+      "indexed_at": "2026-08-13T15:34:55.290Z",
       "ssot": [
         "docs/products/command-center/PRODUCT_HOME.md"
       ]
@@ -100698,9 +100712,9 @@
     {
       "path": "services/railway-managed-env-service.js",
       "synopsis": "Exports createRailwayManagedEnvService — services/railway-managed-env-service.js.",
-      "bytes": 24548,
-      "mtime": "2026-07-30T17:58:19.132Z",
-      "indexed_at": "2026-07-30T22:32:11.913Z",
+      "bytes": 24603,
+      "mtime": "2026-08-13T15:17:51.933Z",
+      "indexed_at": "2026-08-13T15:34:55.290Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -105902,6 +105916,16 @@
       "bytes": 347,
       "mtime": "2026-06-21T21:39:28.490Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "tests/notification-postmark-fallback.test.js",
+      "synopsis": "Invalid Postmark token must fall through to Resend, not swallow WRM consults.",
+      "bytes": 2750,
+      "mtime": "2026-08-13T15:17:52.014Z",
+      "indexed_at": "2026-08-13T15:34:55.290Z",
+      "ssot": [
+        "docs/products/site-builder/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "tests/nutrition-service.test.js",

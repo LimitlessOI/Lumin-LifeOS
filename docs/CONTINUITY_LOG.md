@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Documentation — CONTINUITY LOG. -->
 
+## 2026-08-13 — WRM consults never reached Sherry
+
+Founder: wellroundedmomma consults not arriving; send to Maternity@wellroundedwoman.com; use overlay. Live: 10 real leads stored, all `emailed=false`, Postmark invalid token. Overlay Gmail login for lumea.lifeos@gmail.com is on Google account-recovery (confirm phone **07**, then SMS code). Server fallback (Postmark → Resend/SMTP) is the automatic path for new submits.
+
 ## 2026-08-13 — Taloa badge: faint + free-move
 
 Founder: move the Taloa icon; make it ~15% visible / ~80% transparent; current full-opacity circle is annoying. Resting badge is now `alphaValue=0.20`, no shadow; hover 70%; drag/chat 100%. Drag parks the exact origin per screen — no corner snap, settle timer skips parked screens.

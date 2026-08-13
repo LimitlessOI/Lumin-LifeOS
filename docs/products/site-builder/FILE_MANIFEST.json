@@ -5,7 +5,7 @@
   "name": "Site Builder & Prospect Pipeline",
   "canonical_home": "docs/products/site-builder/PRODUCT_HOME.md",
   "amendment_path": "docs/products/site-builder/PRODUCT_HOME.md",
-  "updated_at": "2026-07-16",
+  "updated_at": "2026-08-13",
   "ownership_policy": "pointer_not_duplication",
   "owned_files": [
     "docs/products/site-builder/PRODUCT_HOME.md",
@@ -19,7 +19,7 @@
     "routes/site-builder-discovery-routes.js",
     "routes/site-builder-launch-readiness-routes.js",
     "routes/site-builder-pipeline-report-routes.js",
-    "routes/site-builder-routes.js",
+    "routes/wrm-consult-routes.js",
     "services/prospect-pipeline.js",
     "services/site-builder-email-templates.js",
     "services/site-builder-opportunity-scorer.js",

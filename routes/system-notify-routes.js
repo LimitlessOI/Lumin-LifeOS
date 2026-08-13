@@ -38,22 +38,44 @@ async function smtpSend({ to, subject, text, from }) {
   if (!smtpUser || !smtpPass) {
     return { sent: false, error: 'smtp_credentials_not_configured' };
   }
+  const dns = await import('node:dns');
+  dns.setDefaultResultOrder('ipv4first');
+  const hostname = process.env.SMTP_HOST || 'smtp.gmail.com';
+  let ipv4 = hostname;
+  try {
+    const addresses = dns.resolve4Sync(hostname);
+    if (addresses?.length) ipv4 = addresses[0];
+  } catch {
+    try {
+      ipv4 = dns.lookupSync(hostname, { family: 4 }).address;
+    } catch {
+      if (hostname.includes('gmail.com')) ipv4 = '142.250.80.109';
+    }
+  }
   const nodemailer = await import('nodemailer');
-  const transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST || 'smtp.gmail.com',
-    port: Number(process.env.SMTP_PORT || 465),
-    secure: Number(process.env.SMTP_PORT || 465) === 465,
-    auth: { user: smtpUser, pass: smtpPass },
-    // Many PaaS hosts block outbound SMTP ports at the network level (spam-relay
-    // abuse prevention) -- without these, a blocked port hangs the whole request
-    // instead of failing fast. Found live 2026-08-10: a real request hung past a
-    // 15s hard curl timeout with zero response.
-    connectionTimeout: 8000,
-    greetingTimeout: 8000,
-    socketTimeout: 8000,
-  });
-  const info = await transporter.sendMail({ from: from || smtpUser, to, subject, text });
-  return { sent: true, message_id: info.messageId || null };
+  const ports = [465, 587];
+  let lastError = 'smtp_failed';
+  for (const port of ports) {
+    try {
+      const transporter = nodemailer.createTransport({
+        host: ipv4,
+        port,
+        secure: port === 465,
+        family: 4,
+        auth: { user: smtpUser, pass: smtpPass },
+        tls: { servername: hostname, minVersion: 'TLSv1.2' },
+        requireTLS: port === 587,
+        connectionTimeout: 8000,
+        greetingTimeout: 8000,
+        socketTimeout: 8000,
+      });
+      const info = await transporter.sendMail({ from: from || smtpUser, to, subject, text });
+      return { sent: true, message_id: info.messageId || null, port };
+    } catch (err) {
+      lastError = err?.message || String(err);
+    }
+  }
+  return { sent: false, error: lastError };
 }
 
 export function createSystemNotifyRoutes({ requireKey, logger }) {

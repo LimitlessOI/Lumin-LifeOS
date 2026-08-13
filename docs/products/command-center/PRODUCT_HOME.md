@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/command-center/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-08-12 — Self-repair executor learned `DR-BIND-MIGRATION`. Prior 2026-07-14: deprecated as a standalone product; admin controls are `lifeos-admin-*` steps in `docs/products/lifeos/BUILD_QUEUE.json`. |
+| **Last Updated** | 2026-08-13 — Registered WRM_CONSULT_EMAIL so Sherry's inbox can be set on Railway. |
 
 ---
 > **PLATFORM SPEC:** `docs/products/PLATFORM.md §C2` — current state, files, endpoints, traps (built for AI readers).
@@ -308,6 +308,8 @@ node --check public/overlay/command-center.js
 ---
 
 ## Change Receipts
+
+| 2026-08-13 | **`env-registry-map` lists `WRM_CONSULT_EMAIL` (SET) and `WRM_CONSULT_FALLBACK_EMAIL` (OPTIONAL).** Default inbox is Maternity@wellroundedwoman.com. | Founder: WRM consults must reach Sherry. | Registry + managed-env allowlist. |
 
 | 2026-08-12 | **Self-repair executor learned `DR-BIND-MIGRATION`.** Watchdog was alerting on `migrations_failed` while the executor returned `repair_id_not_supported`. The bind-before-create class now applies `repairBindMigrationsInRepo` instead of the proof-refresh HTTP chain. | Last incident: caught, not repaired. | Next `migrations_failed` of this class must rewrite the SQL on the same tick as the SMS. |
 | 2026-08-02 | **Creative Director review** — generated CREATIVE_BRIEF.md using the Creative Director lens. | Command Center reviewed through the BuilderOS creative responsibility; brief written to product home for founder review. | ✅ generated |

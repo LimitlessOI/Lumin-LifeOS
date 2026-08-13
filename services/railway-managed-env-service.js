@@ -86,6 +86,8 @@ const DEFAULT_ALLOWED_KEYS = new Set([
   "WRM_WIX_EMAIL",
   "WRM_WIX_PASSWORD",
   "WRM_DOMAIN",
+  "WRM_CONSULT_EMAIL",
+  "WRM_CONSULT_FALLBACK_EMAIL",
   "WIX_EMAIL",
   "WIX_PASSWORD",
   /** Facebook — personal / admin login for Go Vegas ops (human paste only; never log values) */
