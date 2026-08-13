@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T23:29:01.463Z",
+  "generated_at": "2026-08-13T23:30:05.046Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13593,
+  "file_count": 13594,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -95279,6 +95279,16 @@
       "ssot": [
         "docs/products/collectibles/PRODUCT_HOME.md",
         "SCHEMA_CONTRACTS media_evidence"
+      ]
+    },
+    {
+      "path": "services/collectibles/offer-inbox.js",
+      "synopsis": "Exports createOfferInboxService — services/collectibles/offer-inbox.js.",
+      "bytes": 5161,
+      "mtime": "2026-08-13T23:30:05.046Z",
+      "indexed_at": "2026-08-13T23:30:05.046Z",
+      "ssot": [
+        "docs/products/collectibles/PRODUCT_HOME.md"
       ]
     },
     {

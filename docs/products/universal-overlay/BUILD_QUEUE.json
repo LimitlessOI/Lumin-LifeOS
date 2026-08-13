@@ -7154,10 +7154,10 @@
       "shipped_via": "governed_ship_queue"
     },
     {
-      "status": "blocked",
+      "status": "pending",
       "founder_gated": false,
       "attempts": 1,
-      "action_type": "author_then_write",
+      "action_type": "write_file_exact",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
@@ -7179,12 +7179,59 @@
         "quality"
       ],
       "blueprint_step_id": "COLLECTIBLES-V2-OFFER-INBOX-001",
+      "same_signature_count": 1,
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/collectibles/offer-inbox.js",
+          "exports": [
+            "createOfferInboxService"
+          ],
+          "assertion_id": "expected_exports:services/collectibles/offer-inbox.js"
+        }
+      ],
+      "started_at": "2026-08-13T23:29:53.142Z",
+      "last_attempt_at": "2026-08-13T23:29:53.208Z",
+      "last_error": "AIC_GATE_FAILURE",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-13T23:29:53.208Z",
-      "last_error": "AIC_GATE_FAILURE",
-      "started_at": "2026-08-13T23:29:53.142Z"
+      "failure_signature": "AIC_GATE_FAILURE",
+      "escalation_class": "same_signature_repeat",
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "escalation_required": false,
+      "escalation_note": null,
+      "park_until": null,
+      "heal_unblocked": true,
+      "heal_reason": "collectibles_never_stop_heal",
+      "exact_inputs": {
+        "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V2-OFFER-INBOX-001.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-08-13T23:30:02.053Z",
+        "shipped_at": "2026-08-13T23:30:02.053Z",
+        "commit_sha": null,
+        "content_sha256": "5fc096b2565f58bb149ec2b4815bc50cc45e86f587b913b00c16deb757b2fc85",
+        "target_file": "services/collectibles/offer-inbox.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/collectibles/offer-inbox.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "PASS"
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V2-OFFER-INBOX-001.exact",
+          "content_sha256": "5fc096b2565f58bb149ec2b4815bc50cc45e86f587b913b00c16deb757b2fc85"
+        }
+      },
+      "shipped_at": "2026-08-13T23:30:02.053Z"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
