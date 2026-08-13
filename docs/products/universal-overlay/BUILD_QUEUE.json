@@ -3743,16 +3743,16 @@
       "shipped_at": "2026-08-13T02:12:39.360Z"
     },
     {
-      "status": "pending",
+      "status": "blocked",
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "action_type": "author_then_write",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_error": null,
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:routes/taloa-capability-registry-routes.js; behavior_assertion_failed; behavior_proof",
       "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md §64 / §45a / §15 / §44a",
       "id": "TALOA-S64-CAPREG-REGISTER-001",
       "target_file": "config/auto-registered-product-modules.json",
@@ -3778,7 +3778,8 @@
         }
       ],
       "blueprint_step_id": "TALOA-S64-CAPREG-REGISTER-001",
-      "same_signature_count": 0
+      "same_signature_count": 0,
+      "last_attempt_at": "2026-08-13T02:17:25.441Z"
     },
     {
       "id": "TALOA-G0-SCANNERS-001",
