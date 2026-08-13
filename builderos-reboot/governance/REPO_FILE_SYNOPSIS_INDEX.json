@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T20:50:44.207Z",
+  "generated_at": "2026-08-13T20:51:32.995Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13587,
+  "file_count": 13589,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -41677,6 +41677,13 @@
       "indexed_at": "2026-08-13T05:23:57.945Z"
     },
     {
+      "path": "docs/conversation_dumps/2026-08-13-point-b-never-stops.md",
+      "synopsis": "Founder capture — Point B is never stops; do not sell Point A.",
+      "bytes": 503,
+      "mtime": "2026-08-13T20:51:32.995Z",
+      "indexed_at": "2026-08-13T20:51:32.995Z"
+    },
+    {
       "path": "docs/conversation_dumps/2026-08-13-slice-cost-hard-gate.md",
       "synopsis": "Twin intake — slice duration + token hard gate (2026-08-13)",
       "bytes": 503,
@@ -44861,6 +44868,13 @@
       "bytes": 434,
       "mtime": "2026-08-13T05:23:57.945Z",
       "indexed_at": "2026-08-13T05:23:57.945Z"
+    },
+    {
+      "path": "docs/products/collectibles/conversations/2026-08-13-point-b-never-stops.md",
+      "synopsis": "Founder capture — Point B is never stops; do not sell Point A.",
+      "bytes": 503,
+      "mtime": "2026-08-13T20:51:32.995Z",
+      "indexed_at": "2026-08-13T20:51:32.995Z"
     },
     {
       "path": "docs/products/collectibles/DEPENDENCY_GRAPH.md",
