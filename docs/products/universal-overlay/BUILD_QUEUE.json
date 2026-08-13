@@ -4641,7 +4641,7 @@
       "heal_reason": "native_swift_tokens_0_claim_2026-08-13"
     },
     {
-      "status": "pending",
+      "status": "done",
       "founder_gated": false,
       "attempts": 0,
       "action_type": "write_file_exact",
@@ -4663,12 +4663,12 @@
         "@ssot docs/products/universal-overlay/PRODUCT_HOME.md"
       ],
       "blueprint_step_id": "TALOA-S64-AUTH-ENVELOPE-001",
-      "commit_sha": null,
+      "commit_sha": "23e69a186e80b37c78f3a9ed630db96f68a5e390",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-13T07:45:23.034Z",
+      "last_attempt_at": "2026-08-13T08:00:07.599Z",
       "last_error": null,
-      "started_at": "2026-08-13T07:45:18.369Z",
+      "started_at": "2026-08-13T08:00:07.599Z",
       "blocker_class": null,
       "park_until": null,
       "heal_unblocked": true,
@@ -4690,17 +4690,17 @@
           "assertion_id": "expected_exports:services/taloa/task-authorization-envelope.js"
         }
       ],
-      "failure_signature": "github_commit_failed_after_local_ship",
+      "failure_signature": "STEP_STATUS_FORBIDDEN",
       "escalation_class": "same_signature_repeat",
       "exact_inputs": {
         "content_source_path": "docs/products/universal-overlay/twins/steps/TALOA-S64-AUTH-ENVELOPE-001.exact"
       },
       "exactness": {
         "sealed": true,
-        "sealed_at": "2026-08-13T08:00:11.637Z",
-        "shipped_at": "2026-08-13T08:00:11.637Z",
+        "sealed_at": "2026-08-13T07:58:27.271Z",
+        "shipped_at": "2026-08-13T07:58:27.271Z",
         "commit_sha": null,
-        "content_sha256": "39d843ccdbcc0ca4dd495e881aec90b4b4f8b2c9bd7e8c6b30b733095ede83b0",
+        "content_sha256": "bd6180161725c1b91d301152fa1f29d73b260af9abe78d95505316725a7d2b44",
         "target_file": "services/taloa/task-authorization-envelope.js",
         "reverse": {
           "mode": "delete_file",
@@ -4714,10 +4714,13 @@
         "rebuild": {
           "action_type": "write_file_exact",
           "content_source_path": "docs/products/universal-overlay/twins/steps/TALOA-S64-AUTH-ENVELOPE-001.exact",
-          "content_sha256": "39d843ccdbcc0ca4dd495e881aec90b4b4f8b2c9bd7e8c6b30b733095ede83b0"
+          "content_sha256": "bd6180161725c1b91d301152fa1f29d73b260af9abe78d95505316725a7d2b44"
         }
       },
-      "shipped_at": "2026-08-13T08:00:11.637Z"
+      "shipped_at": "2026-08-13T08:00:20.447Z",
+      "duration_ms": 12850,
+      "tokens_used": 0,
+      "shipped_via": "governed_ship_queue"
     },
     {
       "status": "pending",
@@ -4869,8 +4872,8 @@
       },
       "exactness": {
         "sealed": true,
-        "sealed_at": "2026-08-13T07:56:30.243Z",
-        "shipped_at": "2026-08-13T07:56:30.243Z",
+        "sealed_at": "2026-08-13T08:00:28.382Z",
+        "shipped_at": "2026-08-13T08:00:28.382Z",
         "commit_sha": null,
         "content_sha256": "4d34e1d2088564f729449f9b6b721c4a8d8c39af99ea08473b423725ace1947e",
         "target_file": "native/macos-overlay/MacOsBodyAdapter.swift",
@@ -4967,7 +4970,7 @@
           "content_sha256": "4d34e1d2088564f729449f9b6b721c4a8d8c39af99ea08473b423725ace1947e"
         }
       },
-      "shipped_at": "2026-08-13T07:55:30.545Z",
+      "shipped_at": "2026-08-13T08:00:28.382Z",
       "tokens_used": 0,
       "duration_ms": 15000,
       "shipped_via": "governed_ship_queue"
