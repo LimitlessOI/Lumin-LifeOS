@@ -15,7 +15,7 @@ import {
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 export const AUTHOR_THRASH_RE =
-  /codegen_authoring_failed|import_resolution_failed|codegen_empty|codegen_threw|SENTRY_FAILED|behavior_assertion_failed|behavior_proof|github_commit_failed|SLICE_COST_UNTRACKED|hidden_dependency|codegen_stub/i;
+  /codegen_authoring_failed|import_resolution_failed|codegen_empty|codegen_threw|SENTRY_FAILED|behavior_assertion_failed|behavior_proof|github_commit_failed|SLICE_COST_UNTRACKED|hidden_dependency|codegen_stub|GROUNDING_FAIL|missing_sql_table/i;
 
 export function conventionSealedExactPath(stepId) {
   const id = String(stepId || '').trim();

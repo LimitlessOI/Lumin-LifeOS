@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T20:22:56.381Z",
+  "generated_at": "2026-08-13T20:32:30.627Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13578,
+  "file_count": 13579,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -39471,8 +39471,8 @@
       "path": "db/migrations/20260813_collectible_twins_v1.sql",
       "synopsis": "Collectibles V1 Vault schema — collectible_twins + evidence + stubs",
       "bytes": 6873,
-      "mtime": "2026-08-13T16:49:07.407Z",
-      "indexed_at": "2026-08-13T16:49:07.407Z"
+      "mtime": "2026-08-13T20:32:30.627Z",
+      "indexed_at": "2026-08-13T20:32:30.627Z"
     },
     {
       "path": "db/migrations/20260813_overlay_devices_capabilities.sql",
@@ -44413,8 +44413,8 @@
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
       "bytes": 585252,
-      "mtime": "2026-08-13T20:09:15.162Z",
-      "indexed_at": "2026-08-13T20:09:15.162Z"
+      "mtime": "2026-08-13T20:32:30.627Z",
+      "indexed_at": "2026-08-13T20:32:30.627Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -44938,8 +44938,8 @@
       "path": "docs/products/collectibles/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Collectibles (LimitlessOS)",
       "bytes": 9844,
-      "mtime": "2026-08-13T20:09:15.162Z",
-      "indexed_at": "2026-08-13T20:09:15.162Z"
+      "mtime": "2026-08-13T20:32:30.627Z",
+      "indexed_at": "2026-08-13T20:32:30.627Z"
     },
     {
       "path": "docs/products/collectibles/SCHEMA_CONTRACTS.md",
@@ -95173,6 +95173,16 @@
       ]
     },
     {
+      "path": "services/collectibles/review-queue.js",
+      "synopsis": "Needs Review queue — list + resolve against collectible_twins.",
+      "bytes": 3073,
+      "mtime": "2026-08-13T20:32:30.627Z",
+      "indexed_at": "2026-08-13T20:32:30.627Z",
+      "ssot": [
+        "docs/products/collectibles/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "services/collectibles/twin-service.js",
       "synopsis": "CollectibleTwin create/update helpers.",
       "bytes": 3737,
@@ -99426,9 +99436,9 @@
     {
       "path": "services/manufacturing-self-repair.js",
       "synopsis": "Deterministic manufacturing self-repair playbooks — no Cursor required.",
-      "bytes": 9939,
-      "mtime": "2026-08-13T20:09:15.162Z",
-      "indexed_at": "2026-08-13T20:09:15.162Z",
+      "bytes": 9972,
+      "mtime": "2026-08-13T20:32:30.627Z",
+      "indexed_at": "2026-08-13T20:32:30.627Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
