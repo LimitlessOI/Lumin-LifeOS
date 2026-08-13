@@ -7009,6 +7009,54 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null
+    },
+    {
+      "id": "founder-chair-intent-service",
+      "status": "pending",
+      "target_file": "services/founder-chair-intent.js",
+      "task": "Create service for founder chat intent handling",
+      "spec": "This service should contain the core logic for identifying the founder's intent from a message, specifically handling the 'drawer_direct_build' workflow. It will export a function 'classifyFounderIntent'.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "classifyFounderIntent"
+      ],
+      "file_contains": [
+        "export function classifyFounderIntent("
+      ]
+    },
+    {
+      "id": "founder-intent-clarify-service",
+      "status": "pending",
+      "target_file": "services/founder-intent-clarify.js",
+      "task": "Create service for clarifying founder chat intents",
+      "spec": "This service should provide logic to refine or clarify identified founder intents when ambiguity exists. It will export a function 'clarifyIntent'.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "clarifyIntent"
+      ],
+      "file_contains": [
+        "export function clarifyIntent("
+      ]
+    },
+    {
+      "id": "chair-intent-signals-service",
+      "status": "pending",
+      "target_file": "services/chair-intent-signals.js",
+      "task": "Create service for generating intent classification signals",
+      "spec": "This service should gather or provide signals that aid in the founder intent classification process. It will export a function 'getIntentSignals'.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getIntentSignals"
+      ],
+      "file_contains": [
+        "export function getIntentSignals("
+      ]
     }
   ],
   "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
