@@ -5530,7 +5530,12 @@
       "started_at": "2026-08-13T16:51:00.952Z",
       "demoted": false,
       "heal_unblocked": true,
-      "heal_reason": "collectibles_cite_one_queue_twin"
+      "heal_reason": "collectibles_cite_one_queue_twin",
+      "demote_reason": null,
+      "demoted_at": null,
+      "skip_reason": null,
+      "escalation_required": false,
+      "revive_count": 0
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
