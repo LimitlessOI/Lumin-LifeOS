@@ -807,6 +807,14 @@
       "added_real_lines": 36,
       "justification": "orchestration glue in never-stop mergeQueueRuntimeStatus only — prefers GitHub heal_unblocked pending over stale Railway skipped/demoted so founder one-queue unskips take effect; not a new product module codegen should invent.\nCo-authored-by: Cursor <cursoragent@cursor.com>",
       "commit_message_excerpt": "GAP-FILL: one-queue heal_unblocked — Collectibles unskip sticks past Railway mem"
+    },
+    {
+      "at": "2026-08-13T06:43:59.263Z",
+      "file": "services/never-stop-product-factory.js",
+      "is_new_file": false,
+      "added_real_lines": 36,
+      "justification": "orchestration glue only — mergeQueueRuntimeStatus prefers GitHub heal_unblocked pending over stale Railway skipped/demoted; bp-priority resolveAcceptanceScriptRel accepts direct node *.mjs commands; verify-universaloverlay wires finishBpAcceptance. Not new product modules for codegen.\nCo-authored-by: Cursor <cursoragent@cursor.com>",
+      "commit_message_excerpt": "GAP-FILL: one-queue heal_unblocked — tip execute-batch 404/503; Collectibles unskip must stick"
     }
   ]
 }

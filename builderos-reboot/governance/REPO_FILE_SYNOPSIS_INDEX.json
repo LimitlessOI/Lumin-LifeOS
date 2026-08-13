@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T06:43:58.741Z",
+  "generated_at": "2026-08-13T06:44:10.376Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13477,
+  "file_count": 13529,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21678,9 +21678,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 4019680,
-      "mtime": "2026-08-11T22:15:50.859Z",
-      "indexed_at": "2026-08-11T22:16:03.727Z"
+      "bytes": 4109963,
+      "mtime": "2026-08-13T06:44:09.217Z",
+      "indexed_at": "2026-08-13T06:44:10.376Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -21757,9 +21757,9 @@
     {
       "path": "builderos-reboot/governance/SENTRY_PRODUCT_REGISTRY.json",
       "synopsis": "BuilderOS artifact — SENTRY PRODUCT REGISTRY.",
-      "bytes": 0,
-      "mtime": "2026-08-13T00:02:11.564Z",
-      "indexed_at": "2026-08-13T00:02:11.564Z",
+      "bytes": 6284,
+      "mtime": "2026-08-13T05:59:55.558Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
       "synopsis_index_only": true
     },
     {
@@ -32579,9 +32579,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 0,
-      "mtime": "2026-08-13T04:02:02.038Z",
-      "indexed_at": "2026-08-13T04:02:02.038Z",
+      "bytes": 46163,
+      "mtime": "2026-08-13T06:11:04.923Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
       "synopsis_index_only": true
     },
     {
@@ -33090,10 +33090,13 @@
     },
     {
       "path": "config/officer-staff.js",
-      "synopsis": "Configuration — Officer Staff.",
-      "bytes": 0,
-      "mtime": "2026-08-12T23:04:01.649Z",
-      "indexed_at": "2026-08-12T23:04:01.649Z"
+      "synopsis": "Officer staffing — every office gets cheap assistants, and the",
+      "bytes": 9419,
+      "mtime": "2026-08-13T05:59:55.566Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "config/printerCapabilities.json",
@@ -33154,17 +33157,23 @@
     },
     {
       "path": "config/sentry-observation-cadence.js",
-      "synopsis": "Configuration — Sentry Observation Cadence.",
-      "bytes": 0,
-      "mtime": "2026-08-12T23:04:01.649Z",
-      "indexed_at": "2026-08-12T23:04:01.649Z"
+      "synopsis": "SENTRY observation cadence — cheap constant watch, strong only",
+      "bytes": 2555,
+      "mtime": "2026-08-13T05:59:55.566Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "config/sentry-repair-handoff.js",
-      "synopsis": "Configuration — Sentry Repair Handoff.",
-      "bytes": 0,
-      "mtime": "2026-08-12T23:45:57.703Z",
-      "indexed_at": "2026-08-12T23:45:57.703Z"
+      "synopsis": "SENTRY → Conductor repair handoff. SENTRY must solve what it",
+      "bytes": 10712,
+      "mtime": "2026-08-13T05:59:55.567Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "config/site-builder-industry-sales.js",
@@ -41475,6 +41484,20 @@
       "indexed_at": "2026-08-12T04:41:47.841Z"
     },
     {
+      "path": "docs/conversation_dumps/2026-08-11-governance-repair-blueprint-mandate.md",
+      "synopsis": "Founder capture — stop analyzing Overlay intake failure; blueprint BuilderOS governance repair; keep broken intake as regression fixture, 2026-08-11.",
+      "bytes": 6718,
+      "mtime": "2026-08-11T22:02:13.678Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z"
+    },
+    {
+      "path": "docs/conversation_dumps/2026-08-11-manufacturing-lifecycle-and-factory-competition.md",
+      "synopsis": "Founder capture — manufacturing-plan stage, three-party Factory Ready consensus, peer factories, and reality-scored trust leaderboard; plus the repository truth audit it triggered. 2026-08-11.",
+      "bytes": 13523,
+      "mtime": "2026-08-11T22:02:13.678Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z"
+    },
+    {
       "path": "docs/conversation_dumps/2026-08-11-mtg-cataloger-mispricing-root-cause.md",
       "synopsis": "Founder capture -- picking the MTG cataloger back up cold, finding that the catalogue was mispriced rather than merely incomplete, 2026-08-11.",
       "bytes": 4279,
@@ -41511,10 +41534,10 @@
     },
     {
       "path": "docs/conversation_dumps/2026-08-12-both-factories-and-fix-the-fixer.md",
-      "synopsis": "Documentation — 2026 08 12 Both Factories And Fix The Fixer.",
-      "bytes": 0,
-      "mtime": "2026-08-12T23:45:57.703Z",
-      "indexed_at": "2026-08-12T23:45:57.703Z"
+      "synopsis": "2026-08-12 — Both factories, and fix the fixer (continued)",
+      "bytes": 1534,
+      "mtime": "2026-08-13T05:59:55.587Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z"
     },
     {
       "path": "docs/conversation_dumps/2026-08-12-builderos-observation-report.md",
@@ -41552,18 +41575,25 @@
       "indexed_at": "2026-08-12T19:52:26.515Z"
     },
     {
+      "path": "docs/conversation_dumps/2026-08-12-one-queue-archive-the-rest.md",
+      "synopsis": "Twin archive — one live BUILD_QUEUE; others moved so relying code breaks",
+      "bytes": 574,
+      "mtime": "2026-08-13T05:59:55.589Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z"
+    },
+    {
       "path": "docs/conversation_dumps/2026-08-12-one-queue-print-slices-only.md",
-      "synopsis": "Documentation — 2026 08 12 One Queue Print Slices Only.",
-      "bytes": 0,
-      "mtime": "2026-08-13T04:02:02.038Z",
-      "indexed_at": "2026-08-13T04:02:02.038Z"
+      "synopsis": "Twin/archive — 2026-08-12 one queue print slices only",
+      "bytes": 572,
+      "mtime": "2026-08-13T05:59:55.589Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z"
     },
     {
       "path": "docs/conversation_dumps/2026-08-12-overlay-never-stop-factory-n-switch.md",
-      "synopsis": "Documentation — 2026 08 12 Overlay Never Stop Factory N Switch.",
-      "bytes": 0,
-      "mtime": "2026-08-13T02:09:34.096Z",
-      "indexed_at": "2026-08-13T02:09:34.096Z"
+      "synopsis": "2026-08-12 — Overlay never stops; factory-3 is a switch",
+      "bytes": 1122,
+      "mtime": "2026-08-13T05:59:55.590Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z"
     },
     {
       "path": "docs/conversation_dumps/2026-08-13-one-queue-multi-factory-multi-project.md",
@@ -43219,6 +43249,54 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "docs/history/product-build-queues/ai-council/BUILD_QUEUE.json",
+      "synopsis": "Documentation — BUILD QUEUE.",
+      "bytes": 35298,
+      "mtime": "2026-08-09T17:51:34.667Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "docs/history/product-build-queues/ai-receptionist/BUILD_QUEUE.json",
+      "synopsis": "Documentation — BUILD QUEUE.",
+      "bytes": 25441,
+      "mtime": "2026-08-09T17:51:34.670Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "docs/history/product-build-queues/boldtrail/BUILD_QUEUE.json",
+      "synopsis": "Documentation — BUILD QUEUE.",
+      "bytes": 9601,
+      "mtime": "2026-08-09T17:51:34.674Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "docs/history/product-build-queues/builderos/BUILD_QUEUE.json",
+      "synopsis": "Documentation — BUILD QUEUE.",
+      "bytes": 226993,
+      "mtime": "2026-08-13T02:03:01.466Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "docs/history/product-build-queues/business-tools/BUILD_QUEUE.json",
+      "synopsis": "Documentation — BUILD QUEUE.",
+      "bytes": 36612,
+      "mtime": "2026-08-09T17:51:34.680Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "docs/history/product-build-queues/clientcare-billing-recovery/BUILD_QUEUE.json",
+      "synopsis": "Documentation — BUILD QUEUE.",
+      "bytes": 11381,
+      "mtime": "2026-08-09T17:51:34.683Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "docs/history/product-build-queues/collectibles/BUILD_QUEUE.json",
       "synopsis": "Documentation — BUILD QUEUE.",
       "bytes": 6833,
@@ -43227,11 +43305,283 @@
       "synopsis_index_only": true
     },
     {
+      "path": "docs/history/product-build-queues/command-center/BUILD_QUEUE.json",
+      "synopsis": "Documentation — BUILD QUEUE.",
+      "bytes": 643,
+      "mtime": "2026-08-09T17:51:34.685Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "docs/history/product-build-queues/creative-engine/BUILD_QUEUE.json",
+      "synopsis": "Documentation — BUILD QUEUE.",
+      "bytes": 4042,
+      "mtime": "2026-08-09T17:51:34.686Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "docs/history/product-build-queues/creator-media-os/BUILD_QUEUE.json",
+      "synopsis": "Documentation — BUILD QUEUE.",
+      "bytes": 47562,
+      "mtime": "2026-08-09T17:51:34.687Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "docs/history/product-build-queues/faith-studio/BUILD_QUEUE.json",
+      "synopsis": "Documentation — BUILD QUEUE.",
+      "bytes": 66941,
+      "mtime": "2026-08-09T17:51:34.688Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "docs/history/product-build-queues/financial-revenue/BUILD_QUEUE.json",
+      "synopsis": "Documentation — BUILD QUEUE.",
+      "bytes": 5532,
+      "mtime": "2026-08-09T17:51:34.690Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "docs/history/product-build-queues/ideavault/BUILD_QUEUE.json",
+      "synopsis": "Documentation — BUILD QUEUE.",
+      "bytes": 20748,
+      "mtime": "2026-08-09T17:51:34.690Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "docs/history/product-build-queues/kids-os/BUILD_QUEUE.json",
+      "synopsis": "Documentation — BUILD QUEUE.",
+      "bytes": 30182,
+      "mtime": "2026-08-09T17:51:34.697Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "docs/history/product-build-queues/knowledge-base/BUILD_QUEUE.json",
+      "synopsis": "Documentation — BUILD QUEUE.",
+      "bytes": 33910,
+      "mtime": "2026-08-09T17:51:34.699Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "docs/history/product-build-queues/lifeos/BUILD_QUEUE.json",
+      "synopsis": "Documentation — BUILD QUEUE.",
+      "bytes": 274801,
+      "mtime": "2026-08-09T17:51:34.701Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "docs/history/product-build-queues/lifere/BUILD_QUEUE.json",
+      "synopsis": "Documentation — BUILD QUEUE.",
+      "bytes": 25974,
+      "mtime": "2026-08-09T17:51:34.707Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "docs/history/product-build-queues/limitlessos/BUILD_QUEUE.json",
+      "synopsis": "Documentation — BUILD QUEUE.",
+      "bytes": 66457,
+      "mtime": "2026-08-09T17:51:34.709Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "docs/history/product-build-queues/lumin-university/BUILD_QUEUE.json",
+      "synopsis": "Documentation — BUILD QUEUE.",
+      "bytes": 66088,
+      "mtime": "2026-08-09T17:51:34.710Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "docs/history/product-build-queues/marketingos/BUILD_QUEUE.json",
+      "synopsis": "` + `@ssot docs/products/marketingos/PRODUCT_HOME.md` header.\",\"depends_on\":[\"mos-phase1-schema\"],\"founder_gated\":false,\"attempts\":1,\"max_output_tokens\":14000,\"revive_count\":2,\"last_attempt_at\":\"2026-07-07T10:49:33.021Z\",\"last_error\":\"no_co",
+      "bytes": 98295,
+      "mtime": "2026-08-09T17:51:34.712Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "docs/history/product-build-queues/memory-intelligence/BUILD_QUEUE.json",
+      "synopsis": "Documentation — BUILD QUEUE.",
+      "bytes": 37394,
+      "mtime": "2026-08-09T17:51:34.715Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "docs/history/product-build-queues/memory-system/BUILD_QUEUE.json",
+      "synopsis": "Documentation — BUILD QUEUE.",
+      "bytes": 34557,
+      "mtime": "2026-08-09T17:51:34.718Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "docs/history/product-build-queues/music-talent-studio/BUILD_QUEUE.json",
+      "synopsis": "Documentation — BUILD QUEUE.",
+      "bytes": 60427,
+      "mtime": "2026-08-09T17:51:34.719Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "docs/history/product-build-queues/oil-security-divisions/BUILD_QUEUE.json",
+      "synopsis": "Documentation — BUILD QUEUE.",
+      "bytes": 55141,
+      "mtime": "2026-08-09T17:51:34.722Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "docs/history/product-build-queues/outreach-crm/BUILD_QUEUE.json",
+      "synopsis": "Documentation — BUILD QUEUE.",
+      "bytes": 5109,
+      "mtime": "2026-08-09T17:51:34.723Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "docs/history/product-build-queues/personal-finance-os/BUILD_QUEUE.json",
+      "synopsis": "Documentation — BUILD QUEUE.",
+      "bytes": 40247,
+      "mtime": "2026-08-09T17:51:34.724Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "docs/history/product-build-queues/productized-sprint/BUILD_QUEUE.json",
+      "synopsis": "Documentation — BUILD QUEUE.",
+      "bytes": 58043,
+      "mtime": "2026-08-09T17:51:34.725Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "docs/history/product-build-queues/project-governance/BUILD_QUEUE.json",
+      "synopsis": "Exports getDecisionDebt — docs/history/product-build-queues/project-governance/BUILD_QUEUE.json.",
+      "bytes": 12956,
+      "mtime": "2026-08-09T17:51:34.726Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "docs/history/product-build-queues/projects-builderos-remediation/BUILD_QUEUE.json",
+      "synopsis": "Documentation — BUILD QUEUE.",
+      "bytes": 11638,
+      "mtime": "2026-06-29T17:44:55.052Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "docs/history/product-build-queues/projects-oil-security/BUILD_QUEUE.json",
+      "synopsis": "Documentation — BUILD QUEUE.",
+      "bytes": 782,
+      "mtime": "2026-08-13T02:03:01.201Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "docs/history/product-build-queues/README.md",
       "synopsis": "Archived product BUILD_QUEUE files — dead, not live, not SSOT",
       "bytes": 1145,
       "mtime": "2026-08-13T05:23:57.945Z",
       "indexed_at": "2026-08-13T05:23:57.945Z"
+    },
+    {
+      "path": "docs/history/product-build-queues/salesos/BUILD_QUEUE.json",
+      "synopsis": "Documentation — BUILD QUEUE.",
+      "bytes": 10075,
+      "mtime": "2026-08-13T05:59:55.594Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "docs/history/product-build-queues/site-builder/BUILD_QUEUE.json",
+      "synopsis": "Exports checkDomainDeliverabilityDNS — docs/history/product-build-queues/site-builder/BUILD_QUEUE.json.",
+      "bytes": 195830,
+      "mtime": "2026-08-09T17:51:34.727Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "docs/history/product-build-queues/story-studio/BUILD_QUEUE.json",
+      "synopsis": "Documentation — BUILD QUEUE.",
+      "bytes": 21519,
+      "mtime": "2026-08-09T17:51:34.729Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "docs/history/product-build-queues/tc-service/BUILD_QUEUE.json",
+      "synopsis": "Documentation — BUILD QUEUE.",
+      "bytes": 29578,
+      "mtime": "2026-08-09T17:51:34.730Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "docs/history/product-build-queues/teacher-os/BUILD_QUEUE.json",
+      "synopsis": "Documentation — BUILD QUEUE.",
+      "bytes": 28927,
+      "mtime": "2026-08-09T17:51:34.731Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "docs/history/product-build-queues/token-accounting-os/BUILD_QUEUE.json",
+      "synopsis": "Documentation — BUILD QUEUE.",
+      "bytes": 17177,
+      "mtime": "2026-08-09T17:51:34.732Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "docs/history/product-build-queues/video-pipeline/BUILD_QUEUE.json",
+      "synopsis": "Documentation — BUILD QUEUE.",
+      "bytes": 9259,
+      "mtime": "2026-08-09T17:51:34.734Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "docs/history/product-build-queues/wellness-studio/BUILD_QUEUE.json",
+      "synopsis": "Documentation — BUILD QUEUE.",
+      "bytes": 64394,
+      "mtime": "2026-08-09T17:51:34.735Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "docs/history/product-build-queues/white-label/BUILD_QUEUE.json",
+      "synopsis": "Documentation — BUILD QUEUE.",
+      "bytes": 36795,
+      "mtime": "2026-08-09T17:51:34.738Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "docs/history/product-build-queues/word-keeper/BUILD_QUEUE.json",
+      "synopsis": "Documentation — BUILD QUEUE.",
+      "bytes": 25678,
+      "mtime": "2026-08-09T17:51:34.739Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "docs/history/product-build-queues/zero-drift-handoff-protocol/BUILD_QUEUE.json",
+      "synopsis": "Documentation — BUILD QUEUE.",
+      "bytes": 1743,
+      "mtime": "2026-08-09T17:51:34.741Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "synopsis_index_only": true
     },
     {
       "path": "docs/history/products/BUILD_PLAN.md",
@@ -43257,9 +43607,9 @@
     {
       "path": "docs/history/README.md",
       "synopsis": "History archive — parts car for wisdom and salvage",
-      "bytes": 1703,
-      "mtime": "2026-06-30T00:08:38.323Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 2058,
+      "mtime": "2026-08-13T05:59:55.592Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z"
     },
     {
       "path": "docs/history/REPO_CLEANUP_INVENTORY_2026-07-02.md",
@@ -43785,6 +44135,20 @@
       "indexed_at": "2026-08-12T04:41:47.841Z"
     },
     {
+      "path": "docs/products/builderos/conversations/2026-08-11-governance-repair-blueprint-mandate.md",
+      "synopsis": "Founder capture — stop analyzing Overlay intake failure; blueprint BuilderOS governance repair; keep broken intake as regression fixture, 2026-08-11.",
+      "bytes": 6718,
+      "mtime": "2026-08-11T22:02:13.681Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z"
+    },
+    {
+      "path": "docs/products/builderos/conversations/2026-08-11-manufacturing-lifecycle-and-factory-competition.md",
+      "synopsis": "Founder capture — manufacturing-plan stage, three-party Factory Ready consensus, peer factories, and reality-scored trust leaderboard; plus the repository truth audit it triggered. 2026-08-11.",
+      "bytes": 13523,
+      "mtime": "2026-08-11T22:02:13.681Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z"
+    },
+    {
       "path": "docs/products/builderos/conversations/2026-08-11-two-factory-findings-and-chair-research-packet.md",
       "synopsis": "Conversation capture — Chair research packet + two-factory run findings, 2026-08-11.",
       "bytes": 5824,
@@ -43793,10 +44157,17 @@
     },
     {
       "path": "docs/products/builderos/conversations/2026-08-12-both-factories-and-fix-the-fixer.md",
-      "synopsis": "Documentation — 2026 08 12 Both Factories And Fix The Fixer.",
-      "bytes": 0,
-      "mtime": "2026-08-12T23:45:57.703Z",
-      "indexed_at": "2026-08-12T23:45:57.703Z"
+      "synopsis": "2026-08-12 — Both factories, and fix the fixer (continued)",
+      "bytes": 4588,
+      "mtime": "2026-08-13T05:59:55.601Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z"
+    },
+    {
+      "path": "docs/products/builderos/conversations/2026-08-12-one-queue-archive-the-rest.md",
+      "synopsis": "Founder conversation — one live BUILD_QUEUE; others archived so relying code breaks",
+      "bytes": 1279,
+      "mtime": "2026-08-13T05:59:55.603Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z"
     },
     {
       "path": "docs/products/builderos/conversations/2026-08-13-one-queue-multi-factory-multi-project.md",
@@ -43827,6 +44198,13 @@
       "indexed_at": "2026-08-03T09:41:38.588Z"
     },
     {
+      "path": "docs/products/builderos/FACTORY_LIFECYCLE_TRUTH_AUDIT_2026-08-11.md",
+      "synopsis": "Truth audit — does BuilderOS actually enforce the constitutional manufacturing lifecycle end-to-end? Repository evidence per stage.",
+      "bytes": 28922,
+      "mtime": "2026-08-11T22:02:13.678Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z"
+    },
+    {
       "path": "docs/products/builderos/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
       "bytes": 3119,
@@ -43835,11 +44213,34 @@
       "synopsis_index_only": true
     },
     {
+      "path": "docs/products/builderos/fixtures/intake-regression-2026-08-11/EXPECTED_DEFECTS.json",
+      "synopsis": "Documentation — EXPECTED DEFECTS.",
+      "bytes": 1868,
+      "mtime": "2026-08-11T22:02:13.681Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "docs/products/builderos/fixtures/intake-regression-2026-08-11/GOVERNANCE_SNAPSHOT_AT_CAPTURE.json",
       "synopsis": "Documentation — GOVERNANCE SNAPSHOT AT CAPTURE.",
       "bytes": 719,
       "mtime": "2026-08-12T04:41:47.841Z",
       "indexed_at": "2026-08-12T04:41:47.841Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "docs/products/builderos/fixtures/intake-regression-2026-08-11/README.md",
+      "synopsis": "Regression fixture for BuilderOS governance repair — frozen Overlay intake that invented architecture.",
+      "bytes": 1963,
+      "mtime": "2026-08-11T22:02:13.681Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z"
+    },
+    {
+      "path": "docs/products/builderos/fixtures/intake-regression-2026-08-11/SESSION_000146ae_ready_invented_architecture.json",
+      "synopsis": "Exports createVideoRoutes — docs/products/builderos/fixtures/intake-regression-2026-08-11/SESSION_000146ae_ready_invented_architecture.json.",
+      "bytes": 69669,
+      "mtime": "2026-08-11T22:02:13.681Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
       "synopsis_index_only": true
     },
     {
@@ -43859,9 +44260,9 @@
     {
       "path": "docs/products/builderos/GAP_FILL_LEDGER.json",
       "synopsis": "Documentation — GAP FILL LEDGER.",
-      "bytes": 112470,
-      "mtime": "2026-08-13T06:40:40.212Z",
-      "indexed_at": "2026-08-13T06:43:58.741Z",
+      "bytes": 113131,
+      "mtime": "2026-08-13T06:43:59.265Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
       "synopsis_index_only": true
     },
     {
@@ -45162,6 +45563,13 @@
       "indexed_at": "2026-08-12T19:52:26.515Z"
     },
     {
+      "path": "docs/products/lifeos/conversations/2026-08-12-one-queue-archive-the-rest.md",
+      "synopsis": "LifeOS conversation — BUILD_QUEUE moved to archive; overlay is the only live queue",
+      "bytes": 409,
+      "mtime": "2026-08-13T05:59:55.627Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z"
+    },
+    {
       "path": "docs/products/lifeos/CREATIVE_BRIEF.md",
       "synopsis": "Creative Brief — LifeOS (lifeos)",
       "bytes": 4211,
@@ -45192,10 +45600,10 @@
     },
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
-      "synopsis": "Canonical product home — LifeOS",
-      "bytes": 868326,
-      "mtime": "2026-08-12T22:46:29.979Z",
-      "indexed_at": "2026-08-12T22:46:29.979Z"
+      "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
+      "bytes": 869484,
+      "mtime": "2026-08-13T06:42:54.185Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -45969,25 +46377,32 @@
       "indexed_at": "2026-08-13T05:55:59.531Z"
     },
     {
+      "path": "docs/products/universal-overlay/conversations/2026-08-12-one-queue-archive-the-rest.md",
+      "synopsis": "Overlay conversation — other product queues archived; this is the only live BUILD_QUEUE",
+      "bytes": 373,
+      "mtime": "2026-08-13T05:59:55.637Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z"
+    },
+    {
       "path": "docs/products/universal-overlay/conversations/2026-08-12-one-queue-print-slices-only.md",
-      "synopsis": "Documentation — 2026 08 12 One Queue Print Slices Only.",
-      "bytes": 0,
-      "mtime": "2026-08-13T04:02:02.038Z",
-      "indexed_at": "2026-08-13T04:02:02.038Z"
+      "synopsis": "2026-08-12 — Founder: one queue, blueprint slices only, no choices",
+      "bytes": 1175,
+      "mtime": "2026-08-13T05:59:55.637Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z"
     },
     {
       "path": "docs/products/universal-overlay/conversations/2026-08-12-overlay-never-stop-factory-n-switch.md",
-      "synopsis": "Documentation — 2026 08 12 Overlay Never Stop Factory N Switch.",
-      "bytes": 0,
-      "mtime": "2026-08-13T02:09:34.096Z",
-      "indexed_at": "2026-08-13T02:09:34.096Z"
+      "synopsis": "2026-08-12 — Overlay never stops; factory-3 is a switch",
+      "bytes": 2219,
+      "mtime": "2026-08-13T05:59:55.638Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z"
     },
     {
       "path": "docs/products/universal-overlay/conversations/2026-08-12-overlay-progress-after-handoff.md",
-      "synopsis": "Documentation — 2026 08 12 Overlay Progress After Handoff.",
-      "bytes": 0,
-      "mtime": "2026-08-12T23:45:57.703Z",
-      "indexed_at": "2026-08-12T23:45:57.703Z"
+      "synopsis": "2026-08-12 — Overlay progress after SENTRY handoff ship",
+      "bytes": 1426,
+      "mtime": "2026-08-13T05:59:55.638Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z"
     },
     {
       "path": "docs/products/universal-overlay/CREATIVE_BRIEF.md",
@@ -66517,10 +66932,13 @@
     },
     {
       "path": "factory-staging/factory-core/builder/run-step.js",
-      "synopsis": "Factory staging — Run Step.",
-      "bytes": 0,
-      "mtime": "2026-08-13T00:15:37.774Z",
-      "indexed_at": "2026-08-13T00:15:37.774Z"
+      "synopsis": "Exports resolveRepoPath — factory-staging/factory-core/builder/run-step.js.",
+      "bytes": 13529,
+      "mtime": "2026-08-13T05:59:55.641Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "factory-staging/factory-core/builder/sandbox.js",
@@ -66808,10 +67226,13 @@
     },
     {
       "path": "factory-staging/factory-core/sentry/behavior-assertions.js",
-      "synopsis": "Factory staging — Behavior Assertions.",
-      "bytes": 0,
-      "mtime": "2026-08-13T02:09:34.096Z",
-      "indexed_at": "2026-08-13T02:09:34.096Z"
+      "synopsis": "SENTRY behavioral proof. Classifies which steps require runtime",
+      "bytes": 12395,
+      "mtime": "2026-08-13T05:59:55.642Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "factory-staging/factory-core/sentry/blueprint-freeze-check.js",
@@ -68832,9 +69253,9 @@
     {
       "path": "native/macos-overlay/build.sh",
       "synopsis": "Shell script — Build.",
-      "bytes": 0,
-      "mtime": "2026-08-13T00:02:11.564Z",
-      "indexed_at": "2026-08-13T00:02:11.564Z"
+      "bytes": 1943,
+      "mtime": "2026-08-13T05:59:55.645Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z"
     },
     {
       "path": "native/macos-overlay/demos/capability-tour.json",
@@ -68917,10 +69338,10 @@
     },
     {
       "path": "package.json",
-      "synopsis": "JSON data/config — package.json.",
-      "bytes": 0,
-      "mtime": "2026-08-13T00:02:11.564Z",
-      "indexed_at": "2026-08-13T00:02:11.564Z",
+      "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
+      "bytes": 42215,
+      "mtime": "2026-08-13T06:11:04.923Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
       "synopsis_index_only": true
     },
     {
@@ -70172,9 +70593,9 @@
     {
       "path": "products/receipts/OFFICER_STAFFING_RECEIPT.json",
       "synopsis": "Product receipt — OFFICER STAFFING RECEIPT.",
-      "bytes": 0,
-      "mtime": "2026-08-12T23:04:01.649Z",
-      "indexed_at": "2026-08-12T23:04:01.649Z",
+      "bytes": 751,
+      "mtime": "2026-08-13T05:59:55.651Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
       "synopsis_index_only": true
     },
     {
@@ -76587,9 +77008,9 @@
     {
       "path": "scripts/build-queue-drift-repair.mjs",
       "synopsis": "Deterministic BUILD_QUEUE drift repair executor. Scans product queues,",
-      "bytes": 25502,
-      "mtime": "2026-08-11T22:22:10.306Z",
-      "indexed_at": "2026-08-11T22:25:25.951Z",
+      "bytes": 25631,
+      "mtime": "2026-08-13T05:59:55.680Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md",
         "${productHomePath(product)}\\n`;"
@@ -77275,10 +77696,13 @@
     },
     {
       "path": "scripts/deliberation-governance-behavior.mjs",
-      "synopsis": "Script — Deliberation Governance Behavior.",
-      "bytes": 0,
-      "mtime": "2026-08-13T00:15:37.774Z",
-      "indexed_at": "2026-08-13T00:15:37.774Z"
+      "synopsis": "Behavioral fail-closed tests for deliberation governance v2.7 (mock pool — no DATABASE_URL).",
+      "bytes": 16605,
+      "mtime": "2026-08-13T05:59:55.680Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "scripts/deliberation-regression-mock-pool.mjs",
@@ -77512,10 +77936,13 @@
     },
     {
       "path": "scripts/factory-allocation.mjs",
-      "synopsis": "Script — Factory Allocation.",
-      "bytes": 0,
-      "mtime": "2026-08-13T00:02:11.564Z",
-      "indexed_at": "2026-08-13T00:02:11.564Z"
+      "synopsis": "Deterministic slice→factory allocation over an authorized manufacturing",
+      "bytes": 15228,
+      "mtime": "2026-08-13T05:59:55.681Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "scripts/factory-ci.mjs",
@@ -77539,10 +77966,13 @@
     },
     {
       "path": "scripts/factory-slot.mjs",
-      "synopsis": "Script — Factory Slot.",
-      "bytes": 0,
-      "mtime": "2026-08-13T00:02:11.564Z",
-      "indexed_at": "2026-08-13T00:02:11.564Z"
+      "synopsis": "Flip a factory slot on or idle without recoding the registry.",
+      "bytes": 5167,
+      "mtime": "2026-08-13T05:59:55.681Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "scripts/fcla-arc-pack.mjs",
@@ -77617,9 +78047,9 @@
     {
       "path": "scripts/generate-build-queue-from-home.mjs",
       "synopsis": "Spec/intention → queue generator — PRODUCT_HOME backlog → validated",
-      "bytes": 13083,
-      "mtime": "2026-07-24T18:36:41.703Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 13247,
+      "mtime": "2026-08-13T06:11:04.922Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -79138,10 +79568,13 @@
     },
     {
       "path": "scripts/plan-two-factory-build.mjs",
-      "synopsis": "Script — Plan Two Factory Build.",
-      "bytes": 0,
-      "mtime": "2026-08-13T00:02:11.564Z",
-      "indexed_at": "2026-08-13T00:02:11.564Z"
+      "synopsis": "Produces the two-factory manufacturing plan — how the project is",
+      "bytes": 16556,
+      "mtime": "2026-08-13T06:11:04.923Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "scripts/pm2-setup.sh",
@@ -79196,10 +79629,13 @@
     },
     {
       "path": "scripts/prod-health-watchdog.mjs",
-      "synopsis": "Script — Prod Health Watchdog.",
-      "bytes": 0,
-      "mtime": "2026-08-12T22:21:35.412Z",
-      "indexed_at": "2026-08-12T22:21:35.412Z"
+      "synopsis": "Production runtime-health watchdog — polls this server's own",
+      "bytes": 9572,
+      "mtime": "2026-08-13T05:59:55.684Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "scripts/programming-artifacts-preflight.js",
@@ -79297,10 +79733,13 @@
     },
     {
       "path": "scripts/provision-factory.mjs",
-      "synopsis": "Script — Provision Factory.",
-      "bytes": 0,
-      "mtime": "2026-08-13T00:02:11.564Z",
-      "indexed_at": "2026-08-13T00:02:11.564Z"
+      "synopsis": "Provisions a factory as a REAL execution lane by creating its own",
+      "bytes": 5166,
+      "mtime": "2026-08-13T05:59:55.684Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "scripts/railway_verification.mjs",
@@ -80046,10 +80485,13 @@
     },
     {
       "path": "scripts/run-overlay-lifecycle-exam.mjs",
-      "synopsis": "Script — Run Overlay Lifecycle Exam.",
-      "bytes": 0,
-      "mtime": "2026-08-13T00:02:11.564Z",
-      "indexed_at": "2026-08-13T00:02:11.564Z"
+      "synopsis": "Drives the frozen Overlay fixture through the whole governed loop —",
+      "bytes": 31049,
+      "mtime": "2026-08-13T05:59:55.695Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "scripts/run-overlay-regression-exam.mjs",
@@ -80103,10 +80545,13 @@
     },
     {
       "path": "scripts/run-secret-scan-staged.mjs",
-      "synopsis": "Script — Run Secret Scan Staged.",
-      "bytes": 0,
-      "mtime": "2026-08-13T00:36:28.790Z",
-      "indexed_at": "2026-08-13T00:36:28.790Z"
+      "synopsis": "Gate 0.7 — run the existing secretScannerService on staged source files.",
+      "bytes": 1410,
+      "mtime": "2026-08-13T05:59:55.700Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "scripts/run-site-builder-prealpha.mjs",
@@ -80319,26 +80764,32 @@
     {
       "path": "scripts/self-heal-build-queue.mjs",
       "synopsis": "Deterministic BUILD_QUEUE self-healer. Re-evaluates every step with",
-      "bytes": 3404,
-      "mtime": "2026-08-01T06:21:27.515Z",
-      "indexed_at": "2026-08-01T06:36:53.017Z",
+      "bytes": 3518,
+      "mtime": "2026-08-13T05:59:55.702Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
     },
     {
       "path": "scripts/sentry-chair-governance-audit.mjs",
-      "synopsis": "Script — Sentry Chair Governance Audit.",
-      "bytes": 0,
-      "mtime": "2026-08-12T23:45:57.703Z",
-      "indexed_at": "2026-08-12T23:45:57.703Z"
+      "synopsis": "Orchestrates SENTRY (finds + proposes) -> Chair (reviews, real AI",
+      "bytes": 19496,
+      "mtime": "2026-08-13T05:59:55.710Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "scripts/sentry-overlay-layer-a.mjs",
-      "synopsis": "Script — Sentry Overlay Layer A.",
-      "bytes": 0,
-      "mtime": "2026-08-13T00:02:11.564Z",
-      "indexed_at": "2026-08-13T00:02:11.564Z"
+      "synopsis": "Universal Overlay SENTRY Layer A — structural HTTP probes, no browser.",
+      "bytes": 4297,
+      "mtime": "2026-08-13T05:59:55.710Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "scripts/sentry-prealpha-gate.mjs",
@@ -95318,9 +95769,9 @@
     {
       "path": "services/deployment-service.js",
       "synopsis": "deployment-service.js",
-      "bytes": 51114,
-      "mtime": "2026-08-01T00:16:25.638Z",
-      "indexed_at": "2026-08-01T02:50:40.598Z",
+      "bytes": 51844,
+      "mtime": "2026-08-13T05:59:55.726Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -103736,9 +104187,9 @@
     {
       "path": "tests/architect-blueprint-writer.test.js",
       "synopsis": "js — tests/architect-blueprint-writer.test.js.",
-      "bytes": 6534,
-      "mtime": "2026-07-28T17:44:19.845Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 5830,
+      "mtime": "2026-08-13T05:59:55.751Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z"
     },
     {
       "path": "tests/architect-resolution.test.js",
@@ -104581,10 +105032,10 @@
     },
     {
       "path": "tests/factory-allocation.test.js",
-      "synopsis": "js — tests/factory-allocation.test.js.",
-      "bytes": 0,
-      "mtime": "2026-08-13T00:02:11.564Z",
-      "indexed_at": "2026-08-13T00:02:11.564Z"
+      "synopsis": "Proves two-factory operation in both modes the founder asked for —",
+      "bytes": 16446,
+      "mtime": "2026-08-13T05:59:55.754Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z"
     },
     {
       "path": "tests/factory-authoring-model-rotation.test.js",
@@ -104830,9 +105281,9 @@
     {
       "path": "tests/generate-build-queue-from-home.test.js",
       "synopsis": "Fixture tests for Spec/intention → queue generator (Wave 0 item 15).",
-      "bytes": 8807,
-      "mtime": "2026-07-24T18:36:41.597Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 7450,
+      "mtime": "2026-08-13T05:59:55.755Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -104927,10 +105378,10 @@
     },
     {
       "path": "tests/lane-assignment.test.js",
-      "synopsis": "js — tests/lane-assignment.test.js.",
-      "bytes": 0,
-      "mtime": "2026-08-12T21:50:46.856Z",
-      "indexed_at": "2026-08-12T21:50:46.856Z"
+      "synopsis": "Lane ownership is the dispatch rule, not a receipt on disk.",
+      "bytes": 4911,
+      "mtime": "2026-08-13T05:59:55.756Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z"
     },
     {
       "path": "tests/learningStyleDetector.test.js",
@@ -105256,9 +105707,12 @@
     {
       "path": "tests/never-stop-sentry-fix.test.js",
       "synopsis": "js — tests/never-stop-sentry-fix.test.js.",
-      "bytes": 2116,
-      "mtime": "2026-07-10T03:15:55.851Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 1237,
+      "mtime": "2026-08-13T05:59:55.757Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "tests/nlpProcessor.test.js",
@@ -105403,23 +105857,29 @@
     {
       "path": "tests/prod-health-watchdog.test.js",
       "synopsis": "js — tests/prod-health-watchdog.test.js.",
-      "bytes": 0,
-      "mtime": "2026-08-12T22:21:35.412Z",
-      "indexed_at": "2026-08-12T22:21:35.412Z"
+      "bytes": 5210,
+      "mtime": "2026-08-13T05:59:55.757Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z"
     },
     {
       "path": "tests/product-build-orchestrator.test.js",
       "synopsis": "js — tests/product-build-orchestrator.test.js.",
-      "bytes": 0,
-      "mtime": "2026-08-13T04:02:02.038Z",
-      "indexed_at": "2026-08-13T04:02:02.038Z"
+      "bytes": 16604,
+      "mtime": "2026-08-13T05:59:55.758Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "tests/product-expansion-lanes.test.js",
-      "synopsis": "js — tests/product-expansion-lanes.test.js.",
-      "bytes": 0,
-      "mtime": "2026-08-13T04:02:02.038Z",
-      "indexed_at": "2026-08-13T04:02:02.038Z"
+      "synopsis": "Multiple-lane concurrency — the factory builds several products'",
+      "bytes": 5866,
+      "mtime": "2026-08-13T05:59:55.758Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "tests/product-home-enforce.test.js",
@@ -105605,23 +106065,26 @@
     {
       "path": "tests/sentry-chair-governance-audit.test.js",
       "synopsis": "js — tests/sentry-chair-governance-audit.test.js.",
-      "bytes": 0,
-      "mtime": "2026-08-12T23:04:01.649Z",
-      "indexed_at": "2026-08-12T23:04:01.649Z"
+      "bytes": 18125,
+      "mtime": "2026-08-13T05:59:55.759Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z"
     },
     {
       "path": "tests/sentry-file-contains.test.js",
-      "synopsis": "js — tests/sentry-file-contains.test.js.",
-      "bytes": 0,
-      "mtime": "2026-08-13T02:09:34.096Z",
-      "indexed_at": "2026-08-13T02:09:34.096Z"
+      "synopsis": "SENTRY file_contains must honor BUILD_QUEUE must_include arrays.",
+      "bytes": 1647,
+      "mtime": "2026-08-13T05:59:55.760Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "tests/sentry-observation-cadence.test.js",
       "synopsis": "js — tests/sentry-observation-cadence.test.js.",
-      "bytes": 0,
-      "mtime": "2026-08-12T23:04:01.649Z",
-      "indexed_at": "2026-08-12T23:04:01.649Z"
+      "bytes": 2163,
+      "mtime": "2026-08-13T05:59:55.760Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z"
     },
     {
       "path": "tests/sentry-reality-station.test.js",
@@ -105636,9 +106099,9 @@
     {
       "path": "tests/sentry-repair-handoff.test.js",
       "synopsis": "js — tests/sentry-repair-handoff.test.js.",
-      "bytes": 0,
-      "mtime": "2026-08-12T23:45:57.703Z",
-      "indexed_at": "2026-08-12T23:45:57.703Z"
+      "bytes": 6090,
+      "mtime": "2026-08-13T05:59:55.760Z",
+      "indexed_at": "2026-08-13T06:44:07.157Z"
     },
     {
       "path": "tests/sentry-system-audit.test.js",
