@@ -162,3 +162,28 @@ export function isBuildRequest(text) {
     || isFounderShipOrUsabilityIntent(t)
     || /\b(drawer_direct_build|smos_question)\b/i.test(t);
 }
+
+/**
+ * Gathers and provides signals that aid in the founder intent classification process.
+ * @param {string} text The input text from the founder.
+ * @returns {object} An object containing various intent classification signals.
+ */
+export function getIntentSignals(text = '') {
+  const stripped = stripChairDoPrefix(text);
+  const cleanedText = stripped.text;
+
+  return {
+    forcedExecute: stripped.forcedExecute,
+    isExplicitExecuteCommand: isExplicitExecuteCommand(cleanedText),
+    isBlueprintExecuteIntent: isBlueprintExecuteIntent(cleanedText),
+    isPureCounselQuestion: isPureCounselQuestion(cleanedText),
+    isFounderRepairOrderIntent: isFounderRepairOrderIntent(cleanedText),
+    isFounderUiBehaviorChangeRequest: isFounderUiBehaviorChangeRequest(cleanedText),
+    isCounselOnlyBypass: isCounselOnlyBypass(cleanedText),
+    isBuildStatusQuestion: isBuildStatusQuestion(cleanedText),
+    isCounselPresenceIntent: isCounselPresenceIntent(cleanedText),
+    isBuildRequest: isBuildRequest(cleanedText),
+    isFounderPersonalLifeIntent: isFounderPersonalLifeIntent(cleanedText),
+    isFounderShipOrUsabilityIntent: isFounderShipOrUsabilityIntent(cleanedText),
+  };
+}
