@@ -12,6 +12,7 @@ import {
   collectiblesLaneReassigned,
   collectiblesPrintTerminalId,
   prepareOverlayManufacturingQueue,
+  healCollectiblesBlueprintAuthority,
 } from '../services/product-build-orchestrator.js';
 import { ownerFor } from '../config/lane-assignment.js';
 
@@ -86,6 +87,26 @@ test('V2 does not enroll until V1 Layer B is DONE', () => {
   assert.ok(next);
   assert.match(next.id, /^COLLECTIBLES-V1-/);
   assert.notEqual(next.id, 'COLLECTIBLES-V2-WANT-GRAPH-001');
+});
+
+test('healCollectiblesBlueprintAuthority unblocks NOT_ON_BLUEPRINT Collectibles twin miss', () => {
+  const queue = {
+    product_id: 'universal-overlay',
+    steps: [{
+      id: 'COLLECTIBLES-V1-SCHEMA-TWINS-001',
+      status: 'blocked',
+      last_error: 'NOT_ON_BLUEPRINT',
+      blueprint_id: 'PRODUCT-COLLECTIBLES-BUILD-QUEUE-TWIN-V1',
+      mission_id: 'PRODUCT-collectibles',
+      product_id: 'collectibles',
+      source: 'docs/products/collectibles/MASTER_BLUEPRINT.md — V1 Trusted Personal Vault',
+      target_file: 'db/migrations/20260813_collectible_twins_v1.sql',
+    }],
+  };
+  assert.deepEqual(healCollectiblesBlueprintAuthority(queue), ['COLLECTIBLES-V1-SCHEMA-TWINS-001']);
+  assert.equal(queue.steps[0].status, 'pending');
+  assert.equal(queue.steps[0].blueprint_id, 'PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1');
+  assert.equal(queue.steps[0].last_error, null);
 });
 
 test('collectiblesLaneReassigned allows honest idle', () => {

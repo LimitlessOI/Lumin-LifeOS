@@ -35,8 +35,11 @@ function collectiblesPrintStep(partial) {
     attempts: 0,
     action_type: 'author_then_write',
     product_id: 'collectibles',
-    blueprint_id: 'PRODUCT-COLLECTIBLES-BUILD-QUEUE-TWIN-V1',
-    mission_id: 'PRODUCT-collectibles',
+    // One-queue twin: Collectibles steps must cite the live BUILD_QUEUE twin
+    // (same as foundation that shipped). PRODUCT-COLLECTIBLES-* has no twin file
+    // → tip NOT_ON_BLUEPRINT idle (live 2026-08-13 SCHEMA).
+    blueprint_id: 'PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1',
+    mission_id: 'PRODUCT-universal-overlay',
     source: COLLECTIBLES_SOURCE,
     depends_on: [],
     ...partial,
@@ -705,12 +708,41 @@ export function enrollNextCollectiblesPrintSlice(queue) {
 }
 
 /**
+ * Heal Collectibles steps blocked on missing PRODUCT-COLLECTIBLES twin — cite
+ * the one-queue overlay twin (same as foundation) and return to pending.
+ */
+export function healCollectiblesBlueprintAuthority(queue) {
+  const healed = [];
+  for (const step of queue?.steps || []) {
+    if (!COLLECTIBLES_PRINT_SLICE_ID.test(String(step?.id || ''))) continue;
+    const err = String(step.last_error || '');
+    const badTwin = /PRODUCT-COLLECTIBLES/i.test(String(step.blueprint_id || ''))
+      || /NOT_ON_BLUEPRINT|blueprint_id_not_found|blueprint_step_id_not_on_twin/i.test(err);
+    if (!badTwin && String(step.status || '').toLowerCase() !== 'blocked') continue;
+    if (!badTwin) continue;
+    step.blueprint_id = 'PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1';
+    step.mission_id = 'PRODUCT-universal-overlay';
+    step.blueprint_step_id = step.id;
+    step.product_id = step.product_id || 'collectibles';
+    if (!step.source) step.source = COLLECTIBLES_SOURCE;
+    step.status = 'pending';
+    step.last_error = null;
+    step.demoted = false;
+    step.heal_unblocked = true;
+    step.heal_reason = 'collectibles_cite_one_queue_twin';
+    healed.push(step.id);
+  }
+  return healed;
+}
+
+/**
  * Ensure at least one Collectibles print slice is open while V1–V10 remains.
  * Founder: never idle if anything is needed — through V10 unless reassigned.
  */
 export function ensureCollectiblesPrintEnrolled(queue) {
   if (!queue || !Array.isArray(queue.steps)) return null;
   if (collectiblesLaneReassigned()) return null;
+  healCollectiblesBlueprintAuthority(queue);
   const open = queue.steps.some((s) => isCollectiblesPrintSlice(s) && isOpen(s));
   if (open) return null;
   return enrollNextCollectiblesPrintSlice(queue);
