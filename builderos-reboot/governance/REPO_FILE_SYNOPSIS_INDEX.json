@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T06:01:06.579Z",
+  "generated_at": "2026-08-13T06:02:00.751Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13477,
   "files": [
@@ -94458,9 +94458,9 @@
     {
       "path": "services/collectibles/category-adapter.js",
       "synopsis": "Exports createCategoryAdapterRegistry — services/collectibles/category-adapter.js.",
-      "bytes": 2928,
-      "mtime": "2026-08-13T05:21:04.532Z",
-      "indexed_at": "2026-08-13T05:21:04.532Z",
+      "bytes": 3063,
+      "mtime": "2026-08-13T06:02:00.751Z",
+      "indexed_at": "2026-08-13T06:02:00.751Z",
       "ssot": [
         "docs/products/collectibles/PRODUCT_HOME.md"
       ]

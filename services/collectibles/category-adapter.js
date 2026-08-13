@@ -29,9 +29,11 @@ export function createCategoryAdapterRegistry() {
       if (!adapter || typeof adapter.identify !== 'function' || typeof adapter.resolveIdentity !== 'function' || typeof adapter.price !== 'function' || typeof adapter.conditionSchema !== 'function') {
         throw new Error('Invalid CategoryAdapter: missing required methods (identify, resolveIdentity, price, conditionSchema).');
       }
-      const categoryId = adapter.identify('__CATEGORY_ID_TEST__'); // Use a special input to get the category ID
+      // The identify method is expected to return the category ID when given a specific test input.
+      // This allows the adapter to self-declare its category ID.
+      const categoryId = adapter.identify('__CATEGORY_ID_TEST_STRING__');
       if (!categoryId || typeof categoryId !== 'string') {
-        throw new Error('CategoryAdapter must return a non-null string for identify("__CATEGORY_ID_TEST__") to serve as its ID.');
+        throw new Error('CategoryAdapter must return a non-null string for identify("__CATEGORY_ID_TEST_STRING__") to serve as its ID.');
       }
       if (adapters.has(categoryId)) {
         console.warn(`Category adapter for ID "${categoryId}" already registered. Overwriting.`);
