@@ -6751,7 +6751,9 @@
       "escalation_note": null,
       "park_until": null,
       "heal_unblocked": true,
-      "shipped_at": "2026-08-13T21:29:53.323Z"
+      "shipped_at": "2026-08-13T21:29:53.323Z",
+      "skip_reason": null,
+      "revive_count": 0
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
