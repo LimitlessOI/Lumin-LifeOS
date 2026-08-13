@@ -52,13 +52,14 @@ test('promoteSealedExactOnThrash forces write_file_exact on author thrash', () =
 });
 
 test('applyManufacturingSelfRepair stamps SLICE_COST_UNTRACKED on sealed exact', () => {
+  const exact = 'docs/products/universal-overlay/twins/steps/COLLECTIBLES-V1-TWIN-SERVICE-001.exact';
   const queue = {
     steps: [{
       id: 'S1',
       status: 'pending',
       action_type: 'write_file_exact',
       last_error: 'SLICE_COST_UNTRACKED',
-      exact_inputs: { content_source_path: 'twins/s1.exact' },
+      exact_inputs: { content_source_path: exact },
     }],
   };
   const out = applyManufacturingSelfRepair(queue);
@@ -119,13 +120,14 @@ test('watchdog flags lane_ship_already_running with retry action', () => {
 });
 
 test('executeManufacturingWatchdogPlaybooks promotes on lane_sentry_failed', () => {
+  const exact = 'docs/products/universal-overlay/twins/steps/COLLECTIBLES-V1-TWIN-SERVICE-001.exact';
   const queue = {
     steps: [{
       id: 'SENTRY-1',
       status: 'blocked',
       action_type: 'author_then_write',
       last_error: 'SENTRY_FAILED:missing:identity_status',
-      exact_inputs: { content_source_path: 'twins/x.exact' },
+      exact_inputs: { content_source_path: exact },
     }],
   };
   const out = executeManufacturingWatchdogPlaybooks(
