@@ -338,9 +338,9 @@ User on insurance portal
 | Field | Value |
 |---|---|
 | **Lane log** | `docs/CONTINUITY_LOG.md` (cross-cutting) |
-| **Next build** | factory-1: next overlay print slice (services/routes). factory-2: native/macos-overlay. factory-3: **enabled** — owns `public/overlay/` (`com.lumin.factory-3-lane` ticking). No LifeOS queue. No invented col001. Other product queues stay in `docs/history/product-build-queues/`. |
+| **Next build** | factory-1: next overlay print slice (services/routes/public/overlay). factory-2: native/macos-overlay. factory-3 is **Collectibles**, not overlay. No invented col001. |
 | **Known gaps** | Signed iOS `.ipa` blocked on Apple Developer cert + UDID (PWA works today). Gate 0 item 1 (rotate previously-exposed COMMAND_CENTER_KEY) is founder-at-source, not a missing program. Layer B still `REGISTERED_NOT_IMPLEMENTED`. |
-| **⚠️ IN PROGRESS** | Overlay never-stop on **three** factories: factory-1 backend, factory-2 native (`com.lumin.factory-2-lane`), factory-3 web shell (`com.lumin.factory-3-lane` → `public/overlay/`). Do not ship native or public/overlay from factory-1. |
+| **⚠️ IN PROGRESS** | Overlay on factory-1 (backend + `public/overlay/`) + factory-2 native. factory-3 is Collectibles. Do not ship native from factory-1. |
 | **How to load extension in Chrome** | Go to `chrome://extensions` → Enable Developer Mode → Load Unpacked → select the `extension/` folder in this repo |
 
 ---

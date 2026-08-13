@@ -6,13 +6,13 @@
 **Parent platform:** Lumin / LifeOS ecosystem  
 **Constitutional law:** `docs/constitution/NORTH_STAR_SSOT.md`  
 **Machine manifest:** `docs/products/limitlessos/FILE_MANIFEST.json`  
-|| **Last Updated** | 2026-08-09 — Taloa Onboarding, Authority Map & Education Model captured (see Change Receipts). Prior: 2026-07-23 SalesOS added as child product. |
+|| **Last Updated** | 2026-08-12 — Collectibles child product master blueprint ready for consensus. Prior: 2026-08-09 Taloa Onboarding/Authority Map. Prior: 2026-07-23 SalesOS. |
 
 | Field | Value |
 |-------|-------|
 | **Lifecycle** | `founder-vision` — not a separate runtime repo slice yet |
 | **Status** | Business operating product (umbrella for business-facing modules) |
-| **First modules** | MarketingOS, Business Tools, Site Builder, AI Receptionist, Outreach CRM, SalesOS, … |
+| **First modules** | MarketingOS, Business Tools, Site Builder, AI Receptionist, Outreach CRM, SalesOS, Collectibles, … |
 | **Human layer** | LifeOS (employees + owners) |
 | **Improvement engine** | BuilderOS |
 
@@ -169,6 +169,7 @@ Together: AI handles repetitive, disconnected, administrative work — humans fo
 | Site Builder | `docs/products/site-builder/PRODUCT_HOME.md` |
 | AI Receptionist | `docs/products/ai-receptionist/PRODUCT_HOME.md` |
 | SalesOS | `docs/products/salesos/PRODUCT_HOME.md` |
+| Collectibles | `docs/products/collectibles/PRODUCT_HOME.md` |
 | LifeOS (human) | `docs/products/lifeos/PRODUCT_HOME.md` |
 | BuilderOS | `docs/products/builderos/PRODUCT_HOME.md` |
 
@@ -197,6 +198,7 @@ Together: AI handles repetitive, disconnected, administrative work — humans fo
 
 ## Change Receipts
 
+| 2026-08-12 | **Collectibles child product — master blueprint ready for consensus.** Registered `docs/products/collectibles/` with full V1–V10 blueprint set (schema, API, state machines, trust/privacy, partners, adapters, 30 adversarial sims, acceptance gates, audits). Status `BLUEPRINT_READY_FOR_CONSENSUS`. Docs only; no product manufacturing. Bootstraps from LifeOS MTG cataloger via Category Adapter. | Founder mandate: convert completed brainstorm into implementation-ready blueprint for two-builder behavioral equivalence. | Document tree + `AUDIT_RECEIPT.md` | Consensus → V1 mission pack |
 || 2026-08-09 | **Taloa Onboarding, Authority Map & Education Model captured.** New satellite doc [`TALOA_ONBOARDING_AUTHORITY_AND_EDUCATION_MODEL.md`](TALOA_ONBOARDING_AUTHORITY_AND_EDUCATION_MODEL.md) — the founder's live strategy session reframing the sale from "buy Taloa AI" to "let us run part of your business for 30 days, you decide after you've watched it work." Six-phase onboarding (Discover/Demonstrate/Delegate/Operate/Measure/Expand), per-department Authority Map (explicit ✅/❌ permission tables, not blanket access), and an Education Layer ("Taloa Academy") that turns a company's onboarding into a persistent, interactive organizational teacher — with struggle-detection surfacing real training gaps. Explicitly connected to code already shipped tonight: the Authority Map is a generalization of the live browser-agent risk gate (`services/general-browser-agent.js`'s `RISKY_ACTION_LABEL_PATTERNS`/`allowRiskyActions`, shipped as `OVERLAY-ENGINE-RISK-GATE-0001`), and the Education Layer's struggle-detection reuses the Universal Overlay's existing `STRUGGLE_SIGNAL` mechanism. | Founder: "you're seeing the commercial wedge here... the pitch becomes: let us run part of your business for you for 30 days." A materially stronger GTM motion than selling a platform decision on faith — captured in full so it survives past this session. | Doc-only change; `npm run builder:preflight` expected PASS. | Explicitly not yet scoped: no Authority Map data model/schema, no Education Layer content pipeline, no AR/camera integration plan — named as real open work, not silently implied to exist. |
 || 2026-07-23 | **SalesOS child product added.** Created `docs/products/salesos/PRODUCT_HOME.md`, `FILE_MANIFEST.json`, and mission pack `PRODUCT-SALESOS-THERAPIST-MEETING-KIT-V1-0001` from founder's therapist-meeting-kit vision. SalesOS is scoped to founder-led outbound meeting prep; recording/tonality are Phase 2+ and gated by explicit jurisdiction-aware consent. | Capture the vision in canonical product form and surface open decisions before execution. | `npm run builder:preflight` PASS after doc-only changes. | — |
 || 2026-08-02 | **GAP-FILL: `services/price-book-vendor-comparison.js` + `routes/price-book-vendor-comparison-routes.js` for `limitlessos` step4/step5.** Added `// ... expensive ...` comment to satisfy `file_contains`; changed route path to `/api/v1/price-book/vendor-comparison` and added `// Vendor Comparison:` comment; updated `config/auto-registered-product-modules.json` mount_path to match. | The never-stop factory selected these steps but artifact proof failed on missing substrings/path; existing implementation was correct, only proof markers and mount path drifted. | `node --input-type=module` artifact-proof for step4 and step5 PASS; `npm run builder:preflight` PASS. | — |

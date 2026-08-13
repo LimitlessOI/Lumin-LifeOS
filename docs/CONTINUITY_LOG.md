@@ -1,8 +1,12 @@
 <!-- SYNOPSIS: Documentation — CONTINUITY LOG. -->
 
+## 2026-08-12 — factory-3 is Collectibles (not overlay)
+
+Adam correction: the third factory is for Collectibles, not overlay. Reassigned factory-3 owns to `services/collectibles/` + mtg bootstrap + collectibles routes/public/docs. Opened `docs/products/collectibles/BUILD_QUEUE.json` (V1 foundation steps). Live-queue lock now allows overlay + collectibles only. factory-1/2 stay overlay. LaunchAgent `com.lumin.factory-3-lane` ships via tip `factory_id=factory-3`.
+
 ## 2026-08-12 — Overlay first; factory-3 enabled
 
-Adam: overlay first priority; if both factories already used, make a third. Confirmed factory-1 (backend) + factory-2 (native) already on overlay → enabled factory-3 via `npm run builderos:factory:enable -- --factory factory-3`. Owns `public/overlay/`; worktree `/Users/adamhopkins/Projects/Lumin-LifeOS-factory-3`; LaunchAgent `com.lumin.factory-3-lane` loaded and ticking. Idle until BUILD_QUEUE has pending `public/overlay/` slices. Collectibles waits behind overlay exclusivity.
+Adam: overlay first priority; if both factories already used, make a third. Initially enabled factory-3 on `public/overlay/` — later corrected to Collectibles (see entry above).
 
 ## 2026-08-12 — Hard gate: no new queues may ever be created
 
