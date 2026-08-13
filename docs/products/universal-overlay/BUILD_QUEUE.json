@@ -3387,7 +3387,7 @@
         "TALOA-P1-008"
       ],
       "founder_gated": false,
-      "attempts": 2,
+      "attempts": 1,
       "expected_exports": [
         "registerTaloaOverlayHostRoutes"
       ],
@@ -3427,8 +3427,21 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-13T00:19:11.982Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion_failed; behavior_proof"
+      "last_attempt_at": "2026-08-13T00:34:55.993Z",
+      "last_error": "STEP_STATUS_FORBIDDEN",
+      "last_attempt": null,
+      "revive_count": 1,
+      "revived_at": "2026-08-13T00:34:55.669Z",
+      "no_op": null,
+      "pre_existing": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "TALOA-WIRE-HOST-REGISTER-001",
