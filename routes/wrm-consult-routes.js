@@ -314,13 +314,13 @@ export function registerWrmConsultRoutes(app, deps = {}) {
   router.post("/consult/operator-smtp-bundle", guard, (req, res) => {
     res.setHeader("Cache-Control", "no-store");
     res.setHeader("Pragma", "no-cache");
-    const user = String(
-      process.env.SMTP_USER || process.env.WORK_EMAIL || process.env.GMAIL_SIGNUP_EMAIL || ""
-    ).trim();
-    const pass = String(
-      process.env.SMTP_PASS || process.env.WORK_EMAIL_APP_PASSWORD || process.env.GMAIL_SIGNUP_APP_PASSWORD || ""
-    ).trim();
-    const from = String(process.env.WORK_EMAIL || process.env.GMAIL_SIGNUP_EMAIL || user).trim();
+    const signupUser = String(process.env.GMAIL_SIGNUP_EMAIL || "").trim();
+    const signupPass = String(process.env.GMAIL_SIGNUP_APP_PASSWORD || "").trim();
+    const workUser = String(process.env.SMTP_USER || process.env.WORK_EMAIL || "").trim();
+    const workPass = String(process.env.SMTP_PASS || process.env.WORK_EMAIL_APP_PASSWORD || "").trim();
+    const user = signupUser && signupPass ? signupUser : workUser;
+    const pass = signupUser && signupPass ? signupPass : workPass;
+    const from = user;
     if (!user || !pass) {
       return res.status(503).json({
         ok: false,

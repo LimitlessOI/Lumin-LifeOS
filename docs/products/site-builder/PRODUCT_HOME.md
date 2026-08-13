@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/site-builder/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-08-13 — WRM consult catch-up: operator SMTP bundle + mark-sent (Railway cannot SMTP). |
+| **Last Updated** | 2026-08-13 — WRM operator SMTP catch-up prefers GMAIL_SIGNUP app password (WORK_EMAIL is not an app password). |
 
 ---
 
