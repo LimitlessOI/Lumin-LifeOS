@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T16:50:22.365Z",
+  "generated_at": "2026-08-13T16:54:50.206Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13567,
+  "file_count": 13574,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -33101,9 +33101,9 @@
     {
       "path": "config/overlay-print-sequence.js",
       "synopsis": "Sealed manufacturing sequences for the ONE queue — factory may not",
-      "bytes": 42637,
-      "mtime": "2026-08-13T16:41:06.826Z",
-      "indexed_at": "2026-08-13T16:41:06.826Z",
+      "bytes": 13875,
+      "mtime": "2026-08-13T16:54:50.206Z",
+      "indexed_at": "2026-08-13T16:54:50.206Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md",
         "docs/products/universal-overlay/PRODUCT_HOME.md\". Overlay print §64 item 3: Android Universal Body adapter. Export exactly: export function createAndroidBodyAdapter(deps). Return { observe(scope), act(action), verify(goal, expected) }. observe MUST call deps.dumpVisibleText (injected) then CALL redactObservation from \"../drive-sensitive-content-filter.js\" on that text before returning. act MUST call deps.enqueueCommand. verify MUST use independent evidence from a fresh observe(). Do NOT rebuild runBrowserGoal. Do NOT invent a table. ES module. Do not edit server.js.',"
@@ -41273,9 +41273,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Documentation — CONTINUITY LOG.",
-      "bytes": 203080,
-      "mtime": "2026-08-13T16:38:37.132Z",
-      "indexed_at": "2026-08-13T16:38:37.132Z"
+      "bytes": 203503,
+      "mtime": "2026-08-13T16:54:50.206Z",
+      "indexed_at": "2026-08-13T16:54:50.206Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -41612,6 +41612,13 @@
       "bytes": 1122,
       "mtime": "2026-08-13T05:59:55.590Z",
       "indexed_at": "2026-08-13T06:44:07.157Z"
+    },
+    {
+      "path": "docs/conversation_dumps/2026-08-13-architect-owns-print-seal.md",
+      "synopsis": "Twin dump — founder: Architect must seal print; Cursor hand-seal is the failure.",
+      "bytes": 940,
+      "mtime": "2026-08-13T16:54:50.206Z",
+      "indexed_at": "2026-08-13T16:54:50.206Z"
     },
     {
       "path": "docs/conversation_dumps/2026-08-13-builderos-observation-order-selfheal.md",
@@ -44258,6 +44265,13 @@
       "indexed_at": "2026-08-13T06:44:07.157Z"
     },
     {
+      "path": "docs/products/builderos/conversations/2026-08-13-architect-owns-print-seal.md",
+      "synopsis": "Twin dump — founder: Architect must seal print; Cursor hand-seal is the failure.",
+      "bytes": 940,
+      "mtime": "2026-08-13T16:54:50.206Z",
+      "indexed_at": "2026-08-13T16:54:50.206Z"
+    },
+    {
       "path": "docs/products/builderos/conversations/2026-08-13-builderos-observation-order-selfheal.md",
       "synopsis": "BuilderOS observation — right work, right order, self-heal",
       "bytes": 2348,
@@ -44391,9 +44405,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 584341,
-      "mtime": "2026-08-13T16:37:44.485Z",
-      "indexed_at": "2026-08-13T16:37:44.485Z"
+      "bytes": 584842,
+      "mtime": "2026-08-13T16:54:50.206Z",
+      "indexed_at": "2026-08-13T16:54:50.206Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -44785,6 +44799,14 @@
       "indexed_at": "2026-08-13T05:09:00.646Z"
     },
     {
+      "path": "docs/products/collectibles/AMENDED_BLUEPRINT.json",
+      "synopsis": "Documentation — AMENDED BLUEPRINT.",
+      "bytes": 41935,
+      "mtime": "2026-08-13T16:54:50.206Z",
+      "indexed_at": "2026-08-13T16:54:50.206Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "docs/products/collectibles/API_CONTRACTS.md",
       "synopsis": "Collectibles domain API contracts",
       "bytes": 7763,
@@ -44891,11 +44913,19 @@
       "indexed_at": "2026-08-13T05:09:00.646Z"
     },
     {
+      "path": "docs/products/collectibles/PRINT_SEQUENCE.json",
+      "synopsis": "Documentation — PRINT SEQUENCE.",
+      "bytes": 42301,
+      "mtime": "2026-08-13T16:54:50.206Z",
+      "indexed_at": "2026-08-13T16:54:50.206Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "docs/products/collectibles/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Collectibles (LimitlessOS)",
-      "bytes": 8811,
-      "mtime": "2026-08-13T16:37:44.485Z",
-      "indexed_at": "2026-08-13T16:37:44.485Z"
+      "bytes": 9446,
+      "mtime": "2026-08-13T16:54:50.206Z",
+      "indexed_at": "2026-08-13T16:54:50.206Z"
     },
     {
       "path": "docs/products/collectibles/SCHEMA_CONTRACTS.md",
@@ -69489,10 +69519,10 @@
     },
     {
       "path": "package.json",
-      "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 42215,
-      "mtime": "2026-08-13T06:11:04.923Z",
-      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "synopsis": "enforce\":\"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",\"lifeos:file-synopsis:backfill\":\"node scripts/file-synopsis-enforce.mjs --all --auto-fix && node scripts/generate-file-synopsis-index.mjs\",\"lifeos:file-synopsis:index\":\"n",
+      "bytes": 39562,
+      "mtime": "2026-08-13T16:54:50.206Z",
+      "indexed_at": "2026-08-13T16:54:50.206Z",
       "synopsis_index_only": true
     },
     {
@@ -76872,6 +76902,16 @@
       ]
     },
     {
+      "path": "scripts/architect-seal-print-sequence.mjs",
+      "synopsis": "Architect seal for product print sequences on the ONE manufacturing queue.",
+      "bytes": 6645,
+      "mtime": "2026-08-13T16:54:50.206Z",
+      "indexed_at": "2026-08-13T16:54:50.206Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "scripts/archive-all-cursor-transcripts.mjs",
       "synopsis": "Archive all parent Cursor agent transcripts for this workspace.",
       "bytes": 3946,
@@ -78754,9 +78794,9 @@
     {
       "path": "scripts/lib/system-watchdog.mjs",
       "synopsis": "In-system watchdog decisions. The actor doing the work is not",
-      "bytes": 7903,
-      "mtime": "2026-08-13T16:33:17.381Z",
-      "indexed_at": "2026-08-13T16:33:17.381Z",
+      "bytes": 8547,
+      "mtime": "2026-08-13T16:54:50.206Z",
+      "indexed_at": "2026-08-13T16:54:50.206Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -93520,6 +93560,16 @@
       ]
     },
     {
+      "path": "services/architect-print-seal.js",
+      "synopsis": "Architect custody of sealed manufacturing print sequences.",
+      "bytes": 4177,
+      "mtime": "2026-08-13T16:54:50.206Z",
+      "indexed_at": "2026-08-13T16:54:50.206Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "services/asip/db/migrations/20231026_add_asip_tables.sql",
       "synopsis": "Service module — 20231026 Add Asip Tables.",
       "bytes": 592,
@@ -104454,6 +104504,13 @@
       "indexed_at": "2026-08-13T06:44:07.157Z"
     },
     {
+      "path": "tests/architect-print-seal.test.js",
+      "synopsis": "Architect owns print sequence custody — Cursor must not author slices.",
+      "bytes": 2687,
+      "mtime": "2026-08-13T16:54:50.206Z",
+      "indexed_at": "2026-08-13T16:54:50.206Z"
+    },
+    {
       "path": "tests/architect-resolution.test.js",
       "synopsis": "Proves the Architect can actually ANSWER routed requests — the",
       "bytes": 14619,
@@ -105115,8 +105172,8 @@
       "path": "tests/collectibles-print-sequence.test.js",
       "synopsis": "Collectibles sealed print never idles — enrolls through V10 unless reassigned.",
       "bytes": 5055,
-      "mtime": "2026-08-13T16:41:06.826Z",
-      "indexed_at": "2026-08-13T16:41:06.826Z"
+      "mtime": "2026-08-13T16:54:50.206Z",
+      "indexed_at": "2026-08-13T16:54:50.206Z"
     },
     {
       "path": "tests/collectibles-v1-foundation.test.js",

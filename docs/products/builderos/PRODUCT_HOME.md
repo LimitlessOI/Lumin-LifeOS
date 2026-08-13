@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/builderos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-08-13 — Collectibles sealed print V1→V10; factory-3 never-idle unless reassigned. |
+| **Last Updated** | 2026-08-13 — Architect print seal custody; Cursor hand-seal named SO-001 drift. |
 ### Related docs (this product)
 
 | Doc | Path |
@@ -35,7 +35,9 @@
 ---
 
 ## Change Receipts
-| 2026-08-13 | **factory-3 never-idle through Collectibles V10.** Root: only 5 foundation slices were hand-enrolled; no sealed enroll → `no_shippable_steps`. Closed: `COLLECTIBLES_PRINT_SEQUENCE` V1→V10 + `ensureCollectiblesPrintEnrolled` in prepare; tip returns `collectibles_print_still_open_idle_forbidden` instead of silent idle; reassignment only via `FACTORY_3_REASSIGNED=1`. | Founder: cannot idle if anything needed — follow through V10 if not reassigned. | `tests/collectibles-print-sequence.test.js` |
+| 2026-08-13 | **SO-001 honesty: Architect owns print seals.** Cursor conductor hand-sealed Collectibles print in `config/overlay-print-sequence.js` — that is Architect-role bypass and made tip depend on Cursor. Closed: `services/architect-print-seal.js` + `scripts/architect-seal-print-sequence.mjs` write `docs/products/<id>/PRINT_SEQUENCE.json`; config loads only; watchdog `architect_print_seal_missing_*`. | Founder: if sealed print is required to build, Architect was supposed to do it. | `tests/architect-print-seal.test.js` |
+
+| 2026-08-13 | **factory-3 never-idle through Collectibles V10.** Root: only 5 foundation slices were hand-enrolled; no sealed enroll → `no_shippable_steps`. Closed: Architect-sealed print + `ensureCollectiblesPrintEnrolled`; tip returns `collectibles_print_still_open_idle_forbidden` instead of silent idle; reassignment only via `FACTORY_3_REASSIGNED=1`. | Founder: cannot idle if anything needed — follow through V10 if not reassigned. | `tests/collectibles-print-sequence.test.js` |
 
 | 2026-08-13 | **Manufacturing self-repair closed overnight thrash classes.** Tip reclaim stale `already_running` (90s); import-check mkdir+ENOENT retry; sealed `content_source_path` stays `write_file_exact`; revive+ship apply `promoteSealedExactOnThrash` / cost stamp; lane retries already_running + watchdog playbooks execute (not advisory-only). | Founder: fix all observed issues — system must self-repair without Cursor. | `tests/manufacturing-self-repair.test.js` 7/7 |
 

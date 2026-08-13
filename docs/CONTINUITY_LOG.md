@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Documentation — CONTINUITY LOG. -->
 
+## 2026-08-13 — Architect owns print seal (SO-001 honesty)
+
+Founder: if sealed Collectibles print is required to build, Architect must own it — Cursor hand-seal made the system depend on chat and is the failure. Closed: `docs/products/collectibles/{AMENDED_BLUEPRINT,PRINT_SEQUENCE}.json` + `builderos:architect:seal-print`; config loads only; watchdog on missing seal. Prior Cursor V1→V10 hand-seal named as drift.
+
 ## 2026-08-13 — factory-3 never idle through Collectibles V10
 
 Founder: cannot idle if even one thing is needed — follow through to V10 if not reassigned. Root: foundation five DONE with no sealed Collectibles enroll sequence. Shipped `COLLECTIBLES_PRINT_SEQUENCE` V1→V10 + prepare enroll + idle-forbidden tip reason; only `FACTORY_3_REASSIGNED=1` allows honest idle.

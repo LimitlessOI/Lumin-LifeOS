@@ -10,6 +10,7 @@
  */
 
 import { collectiblesPrintStillOpen } from '../../config/overlay-print-sequence.js';
+import { hasSealedPrintSequence } from '../../services/architect-print-seal.js';
 
 export const GOVERNED_STALE_MS = 10 * 60 * 1000;
 export const FACTORY2_STALE_MS = 3 * 60 * 1000;
@@ -139,6 +140,15 @@ export function evaluateSystemWatchdog({
     });
   }
 
+  if (!hasSealedPrintSequence('collectibles')) {
+    findings.push({
+      id: 'architect_print_seal_missing_collectibles',
+      action: 'architect_seal_print',
+      proposed_solution:
+        'Architect must seal Collectibles print: npm run builderos:architect:seal-print -- --product collectibles --from-amended-blueprint (reads docs/products/collectibles/AMENDED_BLUEPRINT.json → PRINT_SEQUENCE.json). Cursor must not hand-edit print slices in config — that SO-001 drift made manufacturing Cursor-dependent.',
+    });
+  }
+
   if (
     factoryId === 'factory-3'
     && laneShip
@@ -155,7 +165,7 @@ export function evaluateSystemWatchdog({
       factory_id: 'factory-3',
       action: 'enroll_collectibles_print_and_reship',
       proposed_solution:
-        'factory-3 idle while Collectibles V1→V10 print still open. enrollNextCollectiblesPrintSlice from COLLECTIBLES_PRINT_SEQUENCE; never treat foundation DONE as product complete; continue through V10 unless FACTORY_3_REASSIGNED=1. Re-ship factory_id=factory-3.',
+        'factory-3 idle while Collectibles print still open. Load Architect-sealed docs/products/collectibles/PRINT_SEQUENCE.json via enrollNextCollectiblesPrintSlice; never treat foundation DONE as product complete; continue through V10 unless FACTORY_3_REASSIGNED=1. Re-ship factory_id=factory-3.',
     });
   }
 
