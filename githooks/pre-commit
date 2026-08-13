@@ -20,6 +20,15 @@ else
   exit 1
 fi
 
+# ── 0b. Overlay Gate 0.7 — existing secretScannerService, actually called ─────
+# Blueprint §45a item 7: scanners were dead code. This is the live caller.
+if node "$ROOT/scripts/run-secret-scan-staged.mjs" 2>&1; then
+  :
+else
+  echo "❌ Secret scan failed — overlay Gate 0.7 (blueprint §45a item 7)."
+  exit 1
+fi
+
 # ── 1. JS syntax check (production spine only — skip orphaned services/* subdirs) ─
 STAGED_JS=$(git diff --cached --name-only --diff-filter=ACM | grep '\.js$' \
   | grep -E '^(routes/|core/|startup/|middleware/|config/|scripts/|builderos-reboot/|factory-staging/|public/)' || true)

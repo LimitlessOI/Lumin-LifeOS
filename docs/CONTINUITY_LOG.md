@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Documentation — CONTINUITY LOG. -->
 
+## 2026-08-12 — The uploaded print is the overlay program
+
+Adam: he worked the entire overlay print with multiple models and uploaded it; it is a complete program; he wants it done; he does not believe the "it isn't complete / isn't done" story. He is right. The print is `docs/products/universal-overlay/TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md`. Agents had reduced it to a 15-file Phase 1 foundation lap and then invented WIRE-HOST, which that same print forbids until Gate 0 closes. Corrected: skipped WIRE-HOST; queued §15 Capability Registry on DeviceRegistry; wired existing secretScannerService into pre-commit (Gate 0.7).
+
 ## 2026-08-12 — WIRE-HOST AIC_GATE was the skip-gate eating product-queue twins
 
 Railway did trigger `9bfdace7`; exit 1 was the known never-stop parity race. Overlay then blocked: `/factory/ship-queue` requested `skip_intake_gate` for the queue twin, execute-step denied it, `TALOA-WIRE-HOST-001` → `AIC_GATE_FAILURE`, loop went back to LifeOS. Fix: in-process `trustedIntakeSkip` after blueprint follow; HTTP skip still env-gated. WIRE-HOST pending again.

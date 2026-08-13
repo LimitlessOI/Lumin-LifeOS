@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/universal-overlay/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-08-12 — WIRE-HOST unblocked: product-queue twin skip is in-process (`trustedIntakeSkip`), not HTTP `skip_intake_gate`. |
+| **Last Updated** | 2026-08-12 — Founder correction: the uploaded Taloa print IS the complete overlay program. Factory now walks §64 of that print (Capability Registry on DeviceRegistry), not agent-invented WIRE-HOST. |
 
 ---
 ---
@@ -338,14 +338,16 @@ User on insurance portal
 | Field | Value |
 |---|---|
 | **Lane log** | `docs/CONTINUITY_LOG.md` (cross-cutting) |
-| **Next build** | factory-1: TALOA-WIRE-HOST-001 then REGISTER (live caller for createOverlayHostService). factory-2: LaunchAgent compiles OverlayHostPing. factory-3 stays idle until `npm run builderos:factory:enable -- --factory factory-3`. Layer B still unimplemented. |
-| **Known gaps** | Signed iOS `.ipa` blocked on Apple Developer cert + UDID (PWA works today). Phase 1 host is not founder-usable until WIRE-HOST ships. Layer B still `REGISTERED_NOT_IMPLEMENTED`. |
+| **Next build** | factory-1: TALOA-S64-CAPREG-COL-001 → service → route → register — Capability Registry from the uploaded print §15, stored on DeviceRegistry `overlay_devices`. factory-2: LaunchAgent stays loaded. factory-3 stays idle. |
+| **Known gaps** | Signed iOS `.ipa` blocked on Apple Developer cert + UDID (PWA works today). Gate 0 item 1 (rotate previously-exposed COMMAND_CENTER_KEY) is founder-at-source, not a missing program. Layer B still `REGISTERED_NOT_IMPLEMENTED`. |
 | **⚠️ IN PROGRESS** | Overlay never-stop: both factories on overlay. factory-2 LaunchAgent `com.lumin.factory-2-lane` must stay loaded. Do not ship `native/macos-overlay/` from factory-1. |
 | **How to load extension in Chrome** | Go to `chrome://extensions` → Enable Developer Mode → Load Unpacked → select the `extension/` folder in this repo |
 
 ---
 
 ## Change Receipts
+
+| 2026-08-12 | **The uploaded print is the overlay program. Agents were wrong to talk as if it wasn't.** Founder worked the full Taloa Universal Overlay & Fluid UI blueprint through multiple models and uploaded it. Factory had only executed the 15-file Phase 1 foundation lap, then invented WIRE-HOST (explicitly out of scope while Gate 0 is open). Corrected: skipped WIRE-HOST; queued §15 Capability Registry onto existing DeviceRegistry `overlay_devices`; wired existing `secretScannerService.js` into `githooks/pre-commit` (Gate 0 item 7). | Founder: I worked through the entire print with multiple AI models and uploaded it; it has a complete overlay program; I want it done; I don't think [it isn't complete] is true. | Next never-stop overlay step must be `TALOA-S64-CAPREG-COL-001`. |
 
 | 2026-08-12 | **WIRE-HOST blocked `AIC_GATE_FAILURE` after the queue-twin retarget.** `/factory/ship-queue` set `skip_intake_gate: true` for product twins; execute-step denies that unless an env flag is on. Overlay fell back to LifeOS. Fix is in BuilderOS (`trustedIntakeSkip`); this queue row is pending again. | Founder: overlay never stops. | After this ship, never-stop next overlay step must be `TALOA-WIRE-HOST-001`, not a LifeOS queue-status commit. |
 
