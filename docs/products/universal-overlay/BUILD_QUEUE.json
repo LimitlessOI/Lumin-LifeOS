@@ -3883,6 +3883,21 @@
       ],
       "skip_reason": "off_print — queue may only carry slices of the uploaded overlay blueprint",
       "last_error": null
+    },
+    {
+      "id": "taloa-s64-capreg-001-registration-script",
+      "status": "pending",
+      "target_file": "scripts/taloa/register-taloa-s64-capreg-001.mjs",
+      "task": "Create script for initial TALOA-S64-CAPREG-REGISTER-001 capability registration",
+      "spec": "Create an executable script at 'scripts/taloa/register-taloa-s64-capreg-001.mjs' that imports the existing 'services/taloa/capability-registry-service.js' and invokes its 'registerCapability' method. The script must explicitly register a capability using the identifier 'TALOA-S64-CAPREG-REGISTER-001'. The script should include basic error handling and log the outcome of the registration.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "import { capabilityRegistryService } from '../../services/taloa/capability-registry-service.js';",
+        "const CAPABILITY_ID = 'TALOA-S64-CAPREG-REGISTER-001';",
+        "await capabilityRegistryService.registerCapability({ id: CAPABILITY_ID"
+      ]
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
