@@ -16,7 +16,7 @@
 | **Blueprint status** | `BLUEPRINT_READY_FOR_CONSENSUS` |
 | **Factory lane** | `factory-3` (`com.lumin.factory-3-lane`) |
 | **Build queue** | One manufacturing queue: `docs/products/universal-overlay/BUILD_QUEUE.json` (Collectibles steps carry `product_id: collectibles`) |
-| **Last Updated** | 2026-08-13 — Fixed Layer-B SENTRY gate case-mismatch deadlock (`scripts/sentry-collectibles-layer-b.mjs`). |
+| **Last Updated** | 2026-08-13 — Added `wants` table (SCHEMA_CONTRACTS.md §11) + `user_collectible_wants` compat view; unblocked V2 Want Graph GROUNDING_FAIL. |
 
 ---
 

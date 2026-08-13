@@ -135,7 +135,13 @@ export function evaluateSystemWatchdog({
     const st = String(step.status || '').toLowerCase();
     const err = String(step.last_error || '');
     if (st !== 'blocked' && st !== 'pending') continue;
-    if (!/SENTRY_FAILED|STEP_STATUS_FORBIDDEN/i.test(err)) continue;
+    // GROUNDING_FAIL joined 2026-08-13: a missing_sql_table thrash was invisible
+    // to this detector (only SENTRY_FAILED/STEP_STATUS_FORBIDDEN matched), so it
+    // could spin unnoticed the same way a needle mismatch did — no finding at
+    // all, not even an unhelpful one. AUTHOR_THRASH_RE in manufacturing-self-repair.js
+    // already treats GROUNDING_FAIL as a recognized thrash class; this detector
+    // was narrower than that and needed to match it.
+    if (!/SENTRY_FAILED|STEP_STATUS_FORBIDDEN|GROUNDING_FAIL/i.test(err)) continue;
     if (Number(step.attempts || 0) < 1 && !/SENTRY_FAILED/i.test(err)) continue;
 
     // If this is a static missing-literal-substring failure, the exact needle
@@ -145,6 +151,7 @@ export function evaluateSystemWatchdog({
     // not a forensic search. Proven live 2026-08-13: a generic "align
     // behavior_assertions with SCHEMA" solution left this thrashing 40+ min.
     const diskCheck = diskChecks.find((c) => c && c.id === step.id && c.reason === 'missing_strings');
+    const missingTable = err.match(/missing_sql_table:\s*([a-zA-Z0-9_]+)/i)?.[1];
     let proposed_solution =
       `Step ${step.id} is thrashing (${err.slice(0, 160)}). applyManufacturingSelfRepair + revive, then re-ship. Do not Cursor GAP-FILL sealed twins.`;
     if (diskCheck && Array.isArray(diskCheck.missing) && diskCheck.missing.length) {
@@ -155,6 +162,13 @@ export function evaluateSystemWatchdog({
         `Step ${step.id} is missing literal SENTRY needle(s) [${needles}] from ${scriptPath}. `
         + `write_file_exact re-materializes from the sealed twin, so fix BOTH ${scriptPath} `
         + `AND ${twinPath} (if it exists) — re-shipping unchanged bytes will fail identically forever.`;
+    } else if (missingTable) {
+      proposed_solution =
+        `Step ${step.id} (${step.target_file || 'unknown target_file'}) generated code against SQL table `
+        + `"${missingTable}", which does not exist. Check docs/products/collectibles/SCHEMA_CONTRACTS.md for the `
+        + `canonical table name/columns first — do not invent one — then add db/migrations/<date>_<name>.sql `
+        + `creating it (or a compatibility view, if the canonical name differs from what was generated). `
+        + `Re-shipping without the table existing will fail identically forever.`;
     }
     findings.push({
       id: `queue_ship_thrash:${step.id || 'unknown'}`,

@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T22:22:57.085Z",
+  "generated_at": "2026-08-13T23:18:25.428Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13589,
+  "file_count": 13590,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -39475,6 +39475,13 @@
       "indexed_at": "2026-08-13T20:32:30.627Z"
     },
     {
+      "path": "db/migrations/20260813_collectibles_wants_v2.sql",
+      "synopsis": "Collectibles V2 Want Graph — canonical `wants` table (SCHEMA_CONTRACTS.md §11)",
+      "bytes": 1027,
+      "mtime": "2026-08-13T23:18:17.534Z",
+      "indexed_at": "2026-08-13T23:18:25.428Z"
+    },
+    {
       "path": "db/migrations/20260813_overlay_devices_capabilities.sql",
       "synopsis": "Database migration — 20260813_overlay_devices_capabilities.sql.",
       "bytes": 237,
@@ -44419,9 +44426,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 588547,
-      "mtime": "2026-08-13T22:19:30.936Z",
-      "indexed_at": "2026-08-13T22:20:23.901Z"
+      "bytes": 589996,
+      "mtime": "2026-08-13T23:18:17.536Z",
+      "indexed_at": "2026-08-13T23:18:25.428Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -44951,9 +44958,9 @@
     {
       "path": "docs/products/collectibles/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Collectibles (LimitlessOS)",
-      "bytes": 10294,
-      "mtime": "2026-08-13T22:18:57.384Z",
-      "indexed_at": "2026-08-13T22:20:23.901Z"
+      "bytes": 10327,
+      "mtime": "2026-08-13T23:18:17.536Z",
+      "indexed_at": "2026-08-13T23:18:25.428Z"
     },
     {
       "path": "docs/products/collectibles/SCHEMA_CONTRACTS.md",
@@ -78843,9 +78850,9 @@
     {
       "path": "scripts/lib/system-watchdog.mjs",
       "synopsis": "In-system watchdog decisions. The actor doing the work is not",
-      "bytes": 11478,
-      "mtime": "2026-08-13T22:18:14.110Z",
-      "indexed_at": "2026-08-13T22:20:23.901Z",
+      "bytes": 12627,
+      "mtime": "2026-08-13T23:18:17.536Z",
+      "indexed_at": "2026-08-13T23:18:25.428Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
