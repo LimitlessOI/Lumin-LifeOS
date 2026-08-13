@@ -7209,13 +7209,13 @@
     },
     {
       "id": "chair-intent-signals-service",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/chair-intent-signals.js",
       "task": "Create service for generating intent classification signals",
       "spec": "This service should gather or provide signals that aid in the founder intent classification process. It will export a function 'getIntentSignals'.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "getIntentSignals"
       ],
@@ -7225,8 +7225,8 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
-      "last_error": "AIC_GATE_FAILURE",
+      "last_attempt_at": "2026-08-13T00:25:11.188Z",
+      "last_error": "artifact_missing_after_ship: artifact_proof_failed: missing_exports:getIntentSignals",
       "last_attempt": null,
       "revive_count": 2,
       "revived_at": "2026-08-13T00:21:50.584Z",
