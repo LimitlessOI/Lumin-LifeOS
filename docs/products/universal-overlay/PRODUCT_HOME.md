@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/universal-overlay/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-08-13 — factory-1+2 parallel print (AUTH/TEMPLATE/PROMPT/SENTRY-B + native perception); Collectibles twin unblocked. |
+| **Last Updated** | 2026-08-13 — SemanticPerception compile-clean on HEAD; MACOS-BODY enrolled; AUTH/TEMPLATE revived. |
 
 ---
 ---
@@ -346,6 +346,8 @@ User on insurance portal
 ---
 
 ## Change Receipts
+
+| 2026-08-13 | **SemanticPerception.swift compile-clean; MACOS-BODY enrolled.** | Tip ship left broken Swift + SLICE_COST block; closed. | factory-2 compile + factory-1 JS print |
 
 | 2026-08-13 | **ANDROID-BODY + WIRE claimed done; next print is macOS perception.** Body adapter + `makeAndroidBody` on HEAD (`0db441c` / `cf51b3bcd2`). Wire had false `artifact_missing_after_ship` after ship. Collectibles V1 still pending on this queue for factory-3. | Observation heal + print advance. | Next enroll `TALOA-S64-MACOS-PERCEPTION-001`. |
 

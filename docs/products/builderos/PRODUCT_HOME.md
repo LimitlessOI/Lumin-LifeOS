@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/builderos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-08-13 — factory-1+2 parallel overlay mandatory; factory-3 Collectibles; SENTRY/fixer thrash closed. |
+| **Last Updated** | 2026-08-13 — perception compile-clean + SLICE_COST native 0-token; f1/f2/f3 manufacturing. |
 ### Related docs (this product)
 
 | Doc | Path |
@@ -35,6 +35,8 @@
 ---
 
 ## Change Receipts
+| 2026-08-13 | **Perception closed: native tokens=0 + compile-clean SemanticPerception.** Tip authored broken Hashable/AX types; factory-2 build.sh was pulling webview-load-test.swift. Fixed Swift, exclude *test*.swift, claim DONE with tokens_used=0, enroll MACOS-BODY, revive AUTH/TEMPLATE with no-invention specs. | Founder mandatory overlay+Collectibles. | `bash native/macos-overlay/build.sh` |
+
 | 2026-08-13 | **Mandatory: factory-1+2 finish overlay together; factory-3 Collectibles; fix SENTRY+fixer.** Twin thrash: frozen `OWNED_` vs schema `owned_*` + SENTRY misreported needles[0]; FORBIDDEN overwrote SENTRY last_error; watchdog blind to lane SENTRY. Closed: assertion→`owned_`, real missing needle, retryable blocked shippable, no FORBIDDEN overwrite, watchdog `lane_sentry_failed`, factory-2 tip-ships native, open native no longer blocks enrolling factory-1 JS print, build.sh compiles all `*.swift`. | Founder: mandatory 1+2 overlay; 3 collectibles; fix SENTRY + fixer; keep working 7h. | exclusive-queue + sentry-file-contains + system-watchdog-tip |
 
 | 2026-08-13 | **Hard gate: every built slice must track duration_ms + tokens_used.** Founder: cannot score the system without tracking. Proven gap: 0/112 BUILD_QUEUE steps had cost fields; spend-outcomes only saw 3 unrelated missions. Closed: `services/slice-cost-tracking.js` + refuse DONE without stamps on runNextStep / governed markDone / pre_existing claim; scoreboard `GET /api/v1/builderos/control-plane/slice-costs`. author_then_write missing usage fails closed (no silent 0). | Founder: hard gate slice time + tokens on every build. | `tests/slice-cost-tracking.test.js` 6/6 |
