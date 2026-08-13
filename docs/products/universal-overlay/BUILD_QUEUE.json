@@ -3304,7 +3304,8 @@
       "proof": "file_contains beginBadgeVoiceIfStillHolding/endBadgeVoice/voiceHoldDelay/lumin-ptt-btn on origin/main (d55dfc166e). factory-2 compiled Taloa.app. NOT_ON_BLUEPRINT was factory-1 (old deploy) shipping a factory-2 local_lane file.",
       "last_attempt_at": "2026-08-12T21:51:22.919Z",
       "last_error": null,
-      "unblock_evidence": "Same false NOT_ON_BLUEPRINT class as TALOA-BADGE-CHAIR-001. Code is on main; factory-2 binary built 2026-08-12T21:51:36Z."
+      "unblock_evidence": "Same false NOT_ON_BLUEPRINT class as TALOA-BADGE-CHAIR-001. Code is on main; factory-2 binary built 2026-08-12T21:51:36Z.",
+      "same_signature_count": 0
     },
     {
       "id": "step-1",
@@ -3338,7 +3339,8 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "skip_reason": "native_badge_voice_supersedes_js_hold_to_talk — TALOA-BADGE-VOICE-001 records on the badge; JS holdToTalkBadge.js cannot start getUserMedia in a hidden WKWebView.",
-      "skipped_at": "2026-08-12T23:55:00.000Z"
+      "skipped_at": "2026-08-12T23:55:00.000Z",
+      "same_signature_count": 0
     },
     {
       "id": "step-2",
@@ -3360,7 +3362,8 @@
       },
       "design_review_flagged": true,
       "skip_reason": "native_badge_voice_supersedes_js_hold_to_talk — TALOA-BADGE-VOICE-001 records on the badge; JS holdToTalkBadge.js cannot start getUserMedia in a hidden WKWebView.",
-      "skipped_at": "2026-08-12T23:55:00.000Z"
+      "skipped_at": "2026-08-12T23:55:00.000Z",
+      "same_signature_count": 0
     },
     {
       "id": "step-4",
@@ -3375,7 +3378,8 @@
       "attempts": 0,
       "design_review_flagged": true,
       "skip_reason": "native_badge_voice_supersedes_js_hold_to_talk — TALOA-BADGE-VOICE-001 records on the badge; JS holdToTalkBadge.js cannot start getUserMedia in a hidden WKWebView.",
-      "skipped_at": "2026-08-12T23:55:00.000Z"
+      "skipped_at": "2026-08-12T23:55:00.000Z",
+      "same_signature_count": 0
     },
     {
       "id": "TALOA-WIRE-HOST-001",
@@ -3443,7 +3447,8 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "same_signature_count": 0
     },
     {
       "id": "TALOA-WIRE-HOST-REGISTER-001",
@@ -3478,7 +3483,8 @@
       "last_error": null,
       "skip_reason": "off_print — depends on TALOA-WIRE-HOST-001.",
       "skipped_at": "2026-08-13T02:05:00.000Z",
-      "demoted": false
+      "demoted": false,
+      "same_signature_count": 0
     },
     {
       "id": "TALOA-NATIVE-HOST-PING-001",
@@ -3499,7 +3505,8 @@
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "shipped_via": "conductor_native_glue",
       "shipped_at": "2026-08-12T23:55:00.000Z",
-      "proof": "Conductor authored native keep-alive (SO-001 allows native/). factory-2 LaunchAgent compiles on next native tree change."
+      "proof": "Conductor authored native keep-alive (SO-001 allows native/). factory-2 LaunchAgent compiles on next native tree change.",
+      "same_signature_count": 0
     },
     {
       "id": "TALOA-SENTRY-LAYER-A-001",
@@ -3519,13 +3526,14 @@
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "shipped_via": "conductor_script",
       "shipped_at": "2026-08-12T23:55:00.000Z",
-      "proof": "SO-001 allows scripts/CI. Layer B remains REGISTERED_NOT_IMPLEMENTED."
+      "proof": "SO-001 allows scripts/CI. Layer B remains REGISTERED_NOT_IMPLEMENTED.",
+      "same_signature_count": 0
     },
     {
       "status": "done",
       "founder_gated": false,
       "attempts": 0,
-      "action_type": "write_file_exact",
+      "action_type": "author_then_write",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
       "commit_sha": "b5229280a0c8a1285c6f17988c160c0a95c32a00",
@@ -3573,38 +3581,15 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "exact_inputs": {
-        "content_source_path": "docs/products/universal-overlay/twins/steps/TALOA-S64-CAPREG-COL-001.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-08-13T02:12:02.178Z",
-        "shipped_at": "2026-08-13T02:12:02.178Z",
-        "commit_sha": null,
-        "content_sha256": "b08237853e210c6617b8881932af31c3dc2518840295c7998e60cc8395796d85",
-        "target_file": "db/migrations/20260813_overlay_devices_capabilities.sql",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "db/migrations/20260813_overlay_devices_capabilities.sql",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "grounding": {
-          "status": "PASS"
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/universal-overlay/twins/steps/TALOA-S64-CAPREG-COL-001.exact",
-          "content_sha256": "b08237853e210c6617b8881932af31c3dc2518840295c7998e60cc8395796d85"
-        }
-      },
-      "shipped_at": "2026-08-13T02:12:02.178Z"
+      "same_signature_count": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-08-13T02:12:13.125Z"
     },
     {
       "status": "pending",
       "founder_gated": false,
       "attempts": 0,
-      "action_type": "author_then_write",
+      "action_type": "write_file_exact",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
       "commit_sha": null,
@@ -3648,7 +3633,34 @@
           "assertion_id": "reachability:reportCapabilities"
         }
       ],
-      "blueprint_step_id": "TALOA-S64-CAPREG-001"
+      "blueprint_step_id": "TALOA-S64-CAPREG-001",
+      "same_signature_count": 0,
+      "exact_inputs": {
+        "content_source_path": "docs/products/universal-overlay/twins/steps/TALOA-S64-CAPREG-001.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-08-13T02:12:22.504Z",
+        "shipped_at": "2026-08-13T02:12:22.504Z",
+        "commit_sha": null,
+        "content_sha256": "22d60764a7e4318e6279fd06cce1ed2833b74962720fa265b917a344eefbfda8",
+        "target_file": "services/taloa/capability-registry-service.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/taloa/capability-registry-service.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "PASS"
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/universal-overlay/twins/steps/TALOA-S64-CAPREG-001.exact",
+          "content_sha256": "22d60764a7e4318e6279fd06cce1ed2833b74962720fa265b917a344eefbfda8"
+        }
+      },
+      "shipped_at": "2026-08-13T02:12:22.504Z"
     },
     {
       "status": "pending",
@@ -3701,7 +3713,8 @@
           "assertion_id": "reachability:capability-registry-route"
         }
       ],
-      "blueprint_step_id": "TALOA-S64-CAPREG-ROUTE-001"
+      "blueprint_step_id": "TALOA-S64-CAPREG-ROUTE-001",
+      "same_signature_count": 0
     },
     {
       "status": "pending",
@@ -3738,7 +3751,8 @@
           "assertion_id": "auto_register:taloa-capability-registry"
         }
       ],
-      "blueprint_step_id": "TALOA-S64-CAPREG-REGISTER-001"
+      "blueprint_step_id": "TALOA-S64-CAPREG-REGISTER-001",
+      "same_signature_count": 0
     },
     {
       "id": "TALOA-G0-SCANNERS-001",
@@ -3760,7 +3774,8 @@
       "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md §45a item 7",
       "shipped_via": "conductor_script",
       "shipped_at": "2026-08-13T00:35:00.000Z",
-      "proof": "SO-001 allows scripts/CI. Live caller is githooks/pre-commit section 0b."
+      "proof": "SO-001 allows scripts/CI. Live caller is githooks/pre-commit section 0b.",
+      "same_signature_count": 0
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",

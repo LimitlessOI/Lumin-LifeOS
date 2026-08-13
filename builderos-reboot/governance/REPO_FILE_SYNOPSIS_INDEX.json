@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T02:12:05.049Z",
+  "generated_at": "2026-08-13T02:12:25.892Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13443,
+  "file_count": 13444,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -101408,6 +101408,16 @@
       "bytes": 2572,
       "mtime": "2026-08-12T19:57:56.004Z",
       "indexed_at": "2026-08-12T19:57:56.004Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/taloa/capability-registry-service.js",
+      "synopsis": "Exports createCapabilityRegistryService — services/taloa/capability-registry-service.js.",
+      "bytes": 1656,
+      "mtime": "2026-08-13T02:12:25.892Z",
+      "indexed_at": "2026-08-13T02:12:25.892Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
