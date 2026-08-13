@@ -6676,7 +6676,7 @@
     {
       "status": "pending",
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "action_type": "write_file_exact",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
@@ -6702,18 +6702,18 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-13T21:28:58.637Z",
-      "last_error": "GROUNDING_FAIL: missing_sql_table: household_memberships",
-      "started_at": "2026-08-13T21:28:52.990Z",
+      "last_attempt_at": "2026-08-13T21:30:00.092Z",
+      "last_error": "artifact_missing_after_ship: artifact_proof_failed: missing:role",
+      "started_at": "2026-08-13T21:29:53.216Z",
       "heal_reason": "collectibles_never_stop_heal",
-      "same_signature_count": 0,
+      "same_signature_count": 1,
       "exact_inputs": {
         "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V1-HOUSEHOLD-001.exact"
       },
       "exactness": {
         "sealed": true,
-        "sealed_at": "2026-08-13T21:29:53.323Z",
-        "shipped_at": "2026-08-13T21:29:53.323Z",
+        "sealed_at": "2026-08-13T21:30:01.836Z",
+        "shipped_at": "2026-08-13T21:30:01.836Z",
         "commit_sha": null,
         "content_sha256": "f9628fe42a87383d4c77b3e9d975e60298cb4d5a2c851f020f139420d59ecae3",
         "target_file": "services/collectibles/household-service.js",
@@ -6751,9 +6751,9 @@
       "escalation_note": null,
       "park_until": null,
       "heal_unblocked": true,
-      "shipped_at": "2026-08-13T21:29:53.323Z",
-      "skip_reason": null,
-      "revive_count": 0
+      "failure_signature": "artifact_missing_after_ship: artifact_proof_failed: missing:role",
+      "escalation_class": "fake_green_attempt",
+      "shipped_at": "2026-08-13T21:30:01.836Z"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
