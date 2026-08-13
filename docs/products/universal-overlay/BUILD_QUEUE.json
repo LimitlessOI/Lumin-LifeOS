@@ -7072,7 +7072,7 @@
     {
       "status": "blocked",
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "action_type": "author_then_write",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
@@ -7099,9 +7099,15 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-13T23:28:00.352Z",
-      "last_error": "GROUNDING_FAIL: missing_sql_table: collectibles",
-      "started_at": "2026-08-13T23:27:53.377Z"
+      "last_attempt_at": "2026-08-13T23:28:07.333Z",
+      "last_error": "GROUNDING_FAIL: missing_sql_table: collectible_items",
+      "started_at": "2026-08-13T23:27:53.377Z",
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "heal_unblocked": true,
+      "heal_reason": "collectibles_never_stop_heal"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
