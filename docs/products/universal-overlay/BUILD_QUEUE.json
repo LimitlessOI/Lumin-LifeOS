@@ -3663,13 +3663,13 @@
       "shipped_at": "2026-08-13T02:12:29.737Z"
     },
     {
-      "status": "pending",
+      "status": "done",
       "founder_gated": false,
       "attempts": 0,
       "action_type": "write_file_exact",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
-      "commit_sha": null,
+      "commit_sha": "fa4f5953732d6d8d501f03d10661da1475e67ed5",
       "built_sha": null,
       "proof": null,
       "last_error": null,
