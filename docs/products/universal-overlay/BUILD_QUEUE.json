@@ -6674,9 +6674,9 @@
       "shipped_via": "governed_ship_queue"
     },
     {
-      "status": "pending",
+      "status": "done",
       "founder_gated": false,
-      "attempts": 2,
+      "attempts": 0,
       "action_type": "write_file_exact",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
@@ -6699,11 +6699,11 @@
         "role"
       ],
       "blueprint_step_id": "COLLECTIBLES-V1-HOUSEHOLD-001",
-      "commit_sha": null,
+      "commit_sha": "0d85ec9d8efd73c9daa59ffb24e14d64e9f11ec4",
       "built_sha": null,
       "proof": null,
       "last_attempt_at": "2026-08-13T21:30:00.092Z",
-      "last_error": "artifact_missing_after_ship: artifact_proof_failed: missing:role",
+      "last_error": null,
       "started_at": "2026-08-13T21:29:53.216Z",
       "heal_reason": "collectibles_never_stop_heal",
       "same_signature_count": 1,
@@ -6733,7 +6733,7 @@
         }
       },
       "tokens_used": 0,
-      "duration_ms": 1000,
+      "duration_ms": 15511,
       "behavior_assertions": [
         {
           "type": "exports_smoke",
@@ -6750,10 +6750,38 @@
       "escalation_required": false,
       "escalation_note": null,
       "park_until": null,
-      "heal_unblocked": true,
+      "heal_unblocked": false,
       "failure_signature": "artifact_missing_after_ship: artifact_proof_failed: missing:role",
       "escalation_class": "fake_green_attempt",
-      "shipped_at": "2026-08-13T21:30:01.836Z"
+      "shipped_at": "2026-08-13T21:30:08.722Z",
+      "shipped_via": "governed_ship_queue"
+    },
+    {
+      "status": "pending",
+      "founder_gated": false,
+      "attempts": 0,
+      "action_type": "author_then_write",
+      "product_id": "collectibles",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "mission_id": "PRODUCT-universal-overlay",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
+      "depends_on": [
+        "COLLECTIBLES-V1-CAPTURE-API-001"
+      ],
+      "id": "COLLECTIBLES-V1-GUEST-CLAIM-001",
+      "target_file": "services/collectibles/guest-claim-service.js",
+      "sandbox_boundary": "services/collectibles/**",
+      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createGuestClaimService({ pool }) — guest capture session → claim into authenticated Vault via guest_claim_token_hash. ES module.",
+      "spec": "MASTER_BLUEPRINT Guest scan → claim.",
+      "expected_exports": [
+        "createGuestClaimService"
+      ],
+      "file_contains": [
+        "createGuestClaimService",
+        "guest_claim",
+        "claim"
+      ],
+      "blueprint_step_id": "COLLECTIBLES-V1-GUEST-CLAIM-001"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
