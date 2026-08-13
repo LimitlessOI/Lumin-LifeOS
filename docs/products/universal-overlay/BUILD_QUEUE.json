@@ -7237,9 +7237,9 @@
       "shipped_via": "governed_ship_queue"
     },
     {
-      "status": "pending",
+      "status": "done",
       "founder_gated": false,
-      "attempts": 3,
+      "attempts": 0,
       "action_type": "write_file_exact",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
@@ -7259,20 +7259,20 @@
         "createOfferInboxService"
       ],
       "blueprint_step_id": "COLLECTIBLES-V2-ACCEPTANCE-001",
-      "commit_sha": null,
+      "commit_sha": "e240929f90a49dfe830950c5df81b2171cd7475b",
       "built_sha": null,
       "proof": null,
       "last_attempt_at": "2026-08-13T23:45:25.549Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing:createWantGraphService; behavior_assertion: missing:createInvisibleListingService; behavior_assertion: missing:createOfferInboxService; behavior_assertion_failed; behavior_proof",
+      "last_error": null,
       "started_at": "2026-08-13T23:44:52.639Z",
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
       "park_until": null,
-      "heal_unblocked": true,
+      "heal_unblocked": false,
       "heal_reason": "collectibles_never_stop_heal",
       "last_attempt": null,
-      "revive_count": 1,
+      "revive_count": 0,
       "revived_at": "2026-08-13T23:35:53.136Z",
       "no_op": null,
       "pre_existing": null,
@@ -7311,7 +7311,37 @@
           "content_sha256": "b6b4bfbb002d32f41bd629d01817b821e08570f19373fae81e88f231814a5593"
         }
       },
-      "shipped_at": "2026-08-13T23:45:44.282Z"
+      "shipped_at": "2026-08-13T23:45:51.175Z",
+      "duration_ms": 58538,
+      "tokens_used": 0,
+      "shipped_via": "governed_ship_queue"
+    },
+    {
+      "status": "pending",
+      "founder_gated": false,
+      "attempts": 0,
+      "action_type": "author_then_write",
+      "product_id": "collectibles",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "mission_id": "PRODUCT-universal-overlay",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
+      "depends_on": [
+        "COLLECTIBLES-V2-ACCEPTANCE-001"
+      ],
+      "id": "COLLECTIBLES-V3-TRANSACTION-001",
+      "target_file": "services/collectibles/transaction-service.js",
+      "sandbox_boundary": "services/collectibles/**",
+      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createTransactionService({ pool }) — buy/sell/trade state machine; object+cash balancing stubs. Transaction state SEPARATE from payment provider. Do NOT hold customer funds. ES module.",
+      "spec": "MASTER_BLUEPRINT V3 Protected Exchange hard law.",
+      "expected_exports": [
+        "createTransactionService"
+      ],
+      "file_contains": [
+        "createTransactionService",
+        "payment_provider",
+        "do not hold"
+      ],
+      "blueprint_step_id": "COLLECTIBLES-V3-TRANSACTION-001"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
