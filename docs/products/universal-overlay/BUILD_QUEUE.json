@@ -5637,10 +5637,10 @@
       "shipped_via": "governed_ship_queue"
     },
     {
-      "status": "blocked",
+      "status": "pending",
       "founder_gated": false,
-      "attempts": 1,
-      "action_type": "author_then_write",
+      "attempts": 0,
+      "action_type": "write_file_exact",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
@@ -5668,12 +5668,12 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-13T20:22:19.898Z",
+      "last_attempt_at": null,
       "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 0b is < 30% of existing 1463b. underlying: import_resolution_failed:openai_builder_mini: Command failed: /usr/local/bin/node --input-type=module -e import \"file:///usr",
-      "started_at": "2026-08-13T20:21:52.774Z",
+      "started_at": "2026-08-13T20:08:53.027Z",
       "last_attempt": null,
-      "revive_count": 9,
-      "revived_at": "2026-08-13T20:21:52.768Z",
+      "revive_count": 8,
+      "revived_at": "2026-08-13T20:22:53.342Z",
       "no_op": null,
       "pre_existing": null,
       "demoted": false,
@@ -5683,7 +5683,38 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "same_signature_count": 0,
+      "escalation_required": false,
+      "exact_inputs": {
+        "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V1-CAPTURE-API-001.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-08-13T20:22:53.440Z",
+        "shipped_at": "2026-08-13T20:22:53.440Z",
+        "commit_sha": null,
+        "content_sha256": "5db5ad2a88f236e3f4d6a4432d37a27626313f3f063b56433ca38dfe8dc6a1b7",
+        "target_file": "routes/collectibles-routes.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "routes/collectibles-routes.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "PASS"
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V1-CAPTURE-API-001.exact",
+          "content_sha256": "5db5ad2a88f236e3f4d6a4432d37a27626313f3f063b56433ca38dfe8dc6a1b7"
+        }
+      },
+      "heal_reason": "attach_convention_sealed_exact",
+      "tokens_used": 0,
+      "duration_ms": 1000,
+      "shipped_at": "2026-08-13T20:22:53.440Z"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",

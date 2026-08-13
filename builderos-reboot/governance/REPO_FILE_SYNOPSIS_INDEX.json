@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T20:09:15.162Z",
+  "generated_at": "2026-08-13T20:22:56.381Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13578,
   "files": [
@@ -73942,8 +73942,8 @@
       "path": "routes/collectibles-routes.js",
       "synopsis": "Collectibles capture + Vault list/dossier routes.",
       "bytes": 8044,
-      "mtime": "2026-08-13T20:09:15.162Z",
-      "indexed_at": "2026-08-13T20:09:15.162Z",
+      "mtime": "2026-08-13T20:22:56.381Z",
+      "indexed_at": "2026-08-13T20:22:56.381Z",
       "ssot": [
         "docs/products/collectibles/PRODUCT_HOME.md"
       ]
