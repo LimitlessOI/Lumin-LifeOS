@@ -7394,8 +7394,8 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-13T00:46:21.451Z",
-      "last_error": "NOT_ON_BLUEPRINT",
+      "last_attempt_at": "2026-08-13T01:01:39.584Z",
+      "last_error": "STEP_STATUS_FORBIDDEN",
       "same_signature_count": 0,
       "behavior_assertions": [
         {
@@ -7406,7 +7406,20 @@
           ],
           "assertion_id": "expected_exports:services/founder-chair-intent.js"
         }
-      ]
+      ],
+      "last_attempt": null,
+      "revive_count": 1,
+      "revived_at": "2026-08-13T01:01:39.426Z",
+      "no_op": null,
+      "pre_existing": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "lifeos-build-fix-1",
