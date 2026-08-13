@@ -10,6 +10,8 @@ import {
   buildRuntimeFingerprintReport,
   parseRuntimeFingerprintPaths,
 } from '../scripts/lib/runtime-fingerprint.mjs';
+import { loadBuildQueue } from '../services/product-build-orchestrator.js';
+import { summarizeQueueSliceCosts } from '../services/slice-cost-tracking.js';
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -94,6 +96,23 @@ export function createBuilderOSControlPlaneRoutes({ pool, requireKey, controlPla
       });
       const status = report.blind && (process.env.SPEND_OUTCOME_STRICT === '1') ? 409 : 200;
       res.status(status).json(report);
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  /**
+   * Founder hard-gate surface: every BUILD_QUEUE slice must carry duration_ms +
+   * tokens_used. Defaults to the one live manufacturing queue (universal-overlay).
+   * GET /slice-costs?product_id=universal-overlay
+   */
+  router.get('/slice-costs', (req, res) => {
+    try {
+      const productId = String(req.query.product_id || 'universal-overlay').trim();
+      const queue = loadBuildQueue(productId);
+      const report = summarizeQueueSliceCosts(queue);
+      const status = report.untracked_done > 0 && process.env.SLICE_COST_STRICT === '1' ? 409 : 200;
+      res.status(status).json({ ok: true, ...report });
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
     }

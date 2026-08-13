@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T07:06:08.091Z",
+  "generated_at": "2026-08-13T07:30:50.044Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13536,
+  "file_count": 13540,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -41266,9 +41266,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Documentation — CONTINUITY LOG.",
-      "bytes": 200411,
-      "mtime": "2026-08-13T07:03:21.230Z",
-      "indexed_at": "2026-08-13T07:03:21.230Z"
+      "bytes": 200895,
+      "mtime": "2026-08-13T07:30:50.044Z",
+      "indexed_at": "2026-08-13T07:30:50.044Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -41626,6 +41626,13 @@
       "bytes": 582,
       "mtime": "2026-08-13T05:23:57.945Z",
       "indexed_at": "2026-08-13T05:23:57.945Z"
+    },
+    {
+      "path": "docs/conversation_dumps/2026-08-13-slice-cost-hard-gate.md",
+      "synopsis": "Twin intake — slice duration + token hard gate (2026-08-13)",
+      "bytes": 503,
+      "mtime": "2026-08-13T07:30:50.044Z",
+      "indexed_at": "2026-08-13T07:30:50.044Z"
     },
     {
       "path": "docs/conversation_dumps/by-product/sessions/2a4739f2/BUILDEROS-AUTONOMOUS.md",
@@ -44209,6 +44216,13 @@
       "indexed_at": "2026-08-13T05:23:57.945Z"
     },
     {
+      "path": "docs/products/builderos/conversations/2026-08-13-slice-cost-hard-gate.md",
+      "synopsis": "Slice cost hard gate — track every build",
+      "bytes": 1585,
+      "mtime": "2026-08-13T07:30:50.044Z",
+      "indexed_at": "2026-08-13T07:30:50.044Z"
+    },
+    {
       "path": "docs/products/builderos/CREATIVE_BRIEF.md",
       "synopsis": "Creative Brief — Builderos (builderos)",
       "bytes": 2491,
@@ -44307,9 +44321,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 580781,
-      "mtime": "2026-08-13T07:03:21.230Z",
-      "indexed_at": "2026-08-13T07:03:21.230Z"
+      "bytes": 581331,
+      "mtime": "2026-08-13T07:30:50.044Z",
+      "indexed_at": "2026-08-13T07:30:50.044Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -73585,9 +73599,9 @@
     {
       "path": "routes/builderos-control-plane-routes.js",
       "synopsis": "BuilderOS Control Plane API — measurement health + build ledger.",
-      "bytes": 5256,
-      "mtime": "2026-07-30T03:57:08.487Z",
-      "indexed_at": "2026-07-30T22:32:11.913Z",
+      "bytes": 6132,
+      "mtime": "2026-08-13T07:30:50.044Z",
+      "indexed_at": "2026-08-13T07:30:50.044Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -97068,9 +97082,9 @@
     {
       "path": "services/governed-autonomous-shipping-loop.js",
       "synopsis": "STEP 5g — the governed AUTONOMOUS shipping loop. When the STEP 5a",
-      "bytes": 65280,
-      "mtime": "2026-08-13T05:03:17.278Z",
-      "indexed_at": "2026-08-13T05:03:17.278Z",
+      "bytes": 68167,
+      "mtime": "2026-08-13T07:30:50.044Z",
+      "indexed_at": "2026-08-13T07:30:50.044Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -99981,9 +99995,9 @@
     {
       "path": "services/never-stop-product-factory.js",
       "synopsis": "Permanent product expansion lane — work exists even when BP_PRIORITY queue reads complete.",
-      "bytes": 93365,
-      "mtime": "2026-08-13T06:41:53.653Z",
-      "indexed_at": "2026-08-13T06:43:58.741Z",
+      "bytes": 93536,
+      "mtime": "2026-08-13T07:30:50.044Z",
+      "indexed_at": "2026-08-13T07:30:50.044Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -100482,9 +100496,9 @@
     {
       "path": "services/product-build-orchestrator.js",
       "synopsis": "General product-build orchestrator — turns a product's structured",
-      "bytes": 32495,
-      "mtime": "2026-08-13T06:29:02.487Z",
-      "indexed_at": "2026-08-13T06:48:47.620Z",
+      "bytes": 32698,
+      "mtime": "2026-08-13T07:30:50.044Z",
+      "indexed_at": "2026-08-13T07:30:50.044Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -101759,6 +101773,16 @@
       "bytes": 690,
       "mtime": "2026-06-21T21:39:17.877Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "services/slice-cost-tracking.js",
+      "synopsis": "Hard-gate slice duration_ms + tokens_used on every BUILD_QUEUE done.",
+      "bytes": 5081,
+      "mtime": "2026-08-13T07:30:50.044Z",
+      "indexed_at": "2026-08-13T07:30:50.044Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/smos-pack-checkout.js",
@@ -106256,6 +106280,13 @@
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "tests/slice-cost-tracking.test.js",
+      "synopsis": "Hard-gate — every built slice must stamp duration_ms + tokens_used.",
+      "bytes": 2752,
+      "mtime": "2026-08-13T07:30:50.044Z",
+      "indexed_at": "2026-08-13T07:30:50.044Z"
     },
     {
       "path": "tests/smoke.test.js",

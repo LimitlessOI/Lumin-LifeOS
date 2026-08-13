@@ -1068,10 +1068,12 @@ async function postBuilderBuild(baseUrl, commandKey, body) {
 const QUEUE_RUNTIME_STEP_FIELDS = [
   'status', 'attempts', 'commit_sha', 'built_sha', 'proof',
   'last_attempt_at', 'last_attempt', 'last_error', 'revive_count', 'revived_at',
-  'completed_at', 'no_op', 'pre_existing',
+  'completed_at', 'started_at', 'no_op', 'pre_existing',
   'demoted', 'demote_reason', 'demoted_at', 'park_until',
   'blocker_class', 'claim_level', 'blocker_type', 'blocker_resolution',
   'heal_unblocked', 'heal_claimed', 'heal_reason', 'un_demoted',
+  // Founder hard-gate: every slice must keep duration + tokens across merges.
+  'duration_ms', 'tokens_used', 'estimated_usd', 'shipped_at', 'shipped_via',
 ];
 
 const STATUS_RANK = Object.freeze({

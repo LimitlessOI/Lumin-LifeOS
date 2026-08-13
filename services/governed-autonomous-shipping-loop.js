@@ -43,6 +43,7 @@ import {
 } from './product-build-orchestrator.js';
 import { createDeploymentService } from './deployment-service.js';
 import { recordModelOutcome } from './model-capability-ledger.js';
+import { requireSliceCostTracked, SLICE_COST_UNTRACKED } from './slice-cost-tracking.js';
 import { evaluateInvariants, formatFindings } from '../scripts/lib/security-invariants.mjs';
 import { evaluateFilePlacement, formatFilePlacementFindings } from '../scripts/lib/file-placement-gate.mjs';
 import { evaluateDocHygiene, formatDocHygieneFindings } from '../scripts/lib/doc-hygiene-gate.mjs';
@@ -648,58 +649,72 @@ export async function markFailedStep(queue, stepId, body, productId, logger) {
   }
 }
 
-function markShippedStepsDone(queueOrProductId, shippedStepIds, commit_sha) {
-  if (!shippedStepIds.length) return;
+function markShippedStepsDone(queueOrProductId, shippedStepIds, commit_sha, usageByStepId = {}) {
+  if (!shippedStepIds.length) return { untracked: [] };
   const queue = typeof queueOrProductId === 'string'
     ? loadBuildQueue(queueOrProductId)
     : queueOrProductId;
-  if (!queue || !Array.isArray(queue.steps)) return;
+  if (!queue || !Array.isArray(queue.steps)) return { untracked: [] };
   const done = new Set(shippedStepIds);
+  const untracked = [];
   let changed = false;
   const now = new Date().toISOString();
   for (const step of queue.steps) {
-    if (done.has(step.id)) {
-      if (step.status !== STEP_STATUS.DONE) {
-        step.status = STEP_STATUS.DONE;
-        step.shipped_via = 'governed_ship_queue';
-        step.shipped_at = now;
-        changed = true;
-      }
-      if (step.last_error != null) {
-        step.last_error = null;
-        changed = true;
-      }
-      if (step.last_attempt_at != null) {
-        step.last_attempt_at = null;
-        changed = true;
-      }
-      if (step.attempts !== 0) {
-        step.attempts = 0;
-        changed = true;
-      }
-      if (step.blocker_class != null) {
-        step.blocker_class = null;
-        changed = true;
-      }
-      if (step.claim_level != null) {
-        step.claim_level = null;
-        changed = true;
-      }
-      if (step.park_until != null) {
-        step.park_until = null;
-        changed = true;
-      }
-      if (step.revive_count != null && step.revive_count !== 0) {
-        step.revive_count = 0;
-        changed = true;
-      }
-      if (commit_sha && step.commit_sha !== commit_sha) {
-        step.commit_sha = commit_sha;
-        changed = true;
-      }
+    if (!done.has(step.id)) continue;
+    const usage = usageByStepId[step.id] || {};
+    const exactOrPreexisting = step.action_type === 'write_file_exact'
+      || usage.no_codegen === true
+      || usage.exact === true
+      || step.pre_existing === true;
+    const cost = requireSliceCostTracked(step, {
+      ...usage,
+      action_type: step.action_type,
+      // Only exact/pre-existing may resolve to 0 tokens. Missing codegen usage
+      // on author_then_write must fail closed — never invent a silent 0.
+      no_codegen: exactOrPreexisting,
+      pre_existing: step.pre_existing === true,
+    });
+    if (!cost.ok) {
+      untracked.push({ id: step.id, reason: cost.reason || SLICE_COST_UNTRACKED });
+      continue;
+    }
+    if (step.status !== STEP_STATUS.DONE) {
+      step.status = STEP_STATUS.DONE;
+      step.shipped_via = 'governed_ship_queue';
+      step.shipped_at = now;
+      changed = true;
+    }
+    if (step.last_error != null) {
+      step.last_error = null;
+      changed = true;
+    }
+    if (step.attempts !== 0) {
+      step.attempts = 0;
+      changed = true;
+    }
+    if (step.blocker_class != null) {
+      step.blocker_class = null;
+      changed = true;
+    }
+    if (step.claim_level != null) {
+      step.claim_level = null;
+      changed = true;
+    }
+    if (step.park_until != null) {
+      step.park_until = null;
+      changed = true;
+    }
+    if (step.revive_count != null && step.revive_count !== 0) {
+      step.revive_count = 0;
+      changed = true;
+    }
+    if (commit_sha && step.commit_sha !== commit_sha) {
+      step.commit_sha = commit_sha;
+      changed = true;
     }
   }
   if (changed) persistQueue(queue);
+  return { untracked };
 }
 
 /**
@@ -1070,11 +1085,41 @@ export async function runGovernedAutonomousShipOnce({
       if (!Array.isArray(entry.ship_steps) || entry.ship_steps.length === 0) continue;
       const queue = queueCache[entry.product_id];
       dispatchAttempts += 1;
+      const shipStartedAt = new Date().toISOString();
+      if (queue && Array.isArray(queue.steps)) {
+        for (const raw of entry.ship_steps) {
+          const sid = raw?.step_id || raw?.id;
+          const step = queue.steps.find((s) => s.id === sid || s.step_id === sid);
+          if (!step) continue;
+          step.started_at = shipStartedAt;
+          step.last_attempt_at = shipStartedAt;
+        }
+      }
       const { status, body } = await shipFn(entry);
       const ok = status === 200 && body && body.ok === true;
       let shippedIds = ok && Array.isArray(body.shipped)
         ? body.shipped.map((s) => s.step_id).filter(Boolean)
         : [];
+      const usageByStepId = {};
+      if (Array.isArray(body?.shipped)) {
+        for (const s of body.shipped) {
+          const sid = s.step_id || s.blueprint_step_id;
+          if (!sid) continue;
+          usageByStepId[sid] = {
+            usage: s.usage || s.codegen?.usage || null,
+            tokens_used: s.tokens_used ?? s.total_tokens ?? s.codegen?.total_tokens ?? s.codegen?.usage?.total_tokens,
+            total_tokens: s.total_tokens ?? s.codegen?.total_tokens ?? s.codegen?.usage?.total_tokens,
+            prompt_tokens: s.prompt_tokens ?? s.codegen?.prompt_tokens ?? s.codegen?.usage?.prompt_tokens,
+            completion_tokens: s.completion_tokens ?? s.codegen?.completion_tokens ?? s.codegen?.usage?.completion_tokens,
+            estimated_usd: s.estimated_usd ?? s.codegen?.estimated_usd ?? s.codegen?.usage?.estimated_usd,
+            duration_ms: s.duration_ms,
+            codegen: s.codegen || null,
+            exact: s.exact === true,
+            no_codegen: s.action_type === 'write_file_exact' || s.exact === true,
+            action_type: s.action_type,
+          };
+        }
+      }
       // Real per-model outcome ledger. Founder, direct: "every model that
       // sits in here needs to be rated... Have we ranked any of them?" --
       // hooked here because this is the one place every governed-factory
@@ -1146,9 +1191,20 @@ export async function runGovernedAutonomousShipOnce({
               }
               shippedIds = [];
             } else {
-              markShippedStepsDone(queue, shippedIds, commitSha);
-              await commitQueueStatus(entry.product_id, shippedIds, queue, commitSha, logger);
-              queueCommitted.add(entry.product_id);
+              const marked = markShippedStepsDone(queue, shippedIds, commitSha, usageByStepId);
+              for (const u of marked.untracked || []) {
+                logger?.warn?.(
+                  { product_id: entry.product_id, step_id: u.id, reason: u.reason },
+                  '[GOVERNED-AUTONOMOUS-SHIP] refusing DONE — slice cost untracked',
+                );
+                await markFailedStep(queue, u.id, { error: u.reason }, entry.product_id, logger);
+              }
+              const trackedIds = shippedIds.filter((id) => !(marked.untracked || []).some((u) => u.id === id));
+              shippedIds = trackedIds;
+              if (trackedIds.length) {
+                await commitQueueStatus(entry.product_id, trackedIds, queue, commitSha, logger);
+                queueCommitted.add(entry.product_id);
+              }
             }
           }
         } else {

@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Documentation — CONTINUITY LOG. -->
 
+## 2026-08-13 — Hard gate: track slice duration + tokens on every build
+
+Founder: report how it is building; hard-gate duration + tokens on every slice so the system can be scored. Proven: tip shipping overlay/Collectibles but 0/112 queue steps had cost fields; spend-outcomes blind to print slices. Shipped `SLICE_COST_UNTRACKED` gate + `/slice-costs` scoreboard. Live build: factory-3 twin SENTRY-failing; factory-2 next native perception; factory-1 no tip-shippable overlay JS.
+
 ## 2026-08-13 — BuilderOS observation: factory-3 empty because tip lacked lane receipt
 
 Founder: observe BuilderOS — right work, right order, quality, self-heal. Tip healthy on `5e4969` but `factory_id=factory-3` → `no_shippable_steps` while Collectibles twin/mtg pending. Root: `.dockerignore` excluded `products/receipts/LANE_ASSIGNMENT.json`, tip FALLBACK had no factory-3 owns. Fix: allowlist receipt + FALLBACK Collectibles owns. ANDROID-BODY/WIRE done (wire false-blocked). Next overlay: macOS perception (factory-2). factory-3 should ship twin after redeploy.

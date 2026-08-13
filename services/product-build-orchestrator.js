@@ -46,6 +46,7 @@ import {
   enrollNextOverlayPrintSlice,
   assertOverlayQueuePrintLaw,
 } from '../config/overlay-print-sequence.js';
+import { requireSliceCostTracked, stampSliceCost, SLICE_COST_UNTRACKED } from './slice-cost-tracking.js';
 
 export {
   isOverlayPrintSliceId,
@@ -312,8 +313,15 @@ export async function claimPreExistingSatisfiedSteps(queue, {
     step.grounding_status = grounding.status;
     if (grounding.status === 'INDETERMINATE') step.grounding_details = grounding.details;
 
-    step.status = STEP_STATUS.DONE;
     step.pre_existing = true;
+    step.started_at = step.started_at || (typeof now === 'function' ? now() : now);
+    const cost = requireSliceCostTracked(step, { pre_existing: true, no_codegen: true, tokens_used: 0 });
+    if (!cost.ok) {
+      step.status = STEP_STATUS.BLOCKED;
+      step.last_error = cost.reason;
+      continue;
+    }
+    step.status = STEP_STATUS.DONE;
     step.shipped_via = 'pre_existing_artifact_proof';
     step.shipped_at = typeof now === 'function' ? now() : now;
     step.last_error = null;
@@ -637,15 +645,39 @@ export async function runNextStep(queue, { buildFn, verifyFn, deployProofFn, mod
     }
   }
 
+  const cost = requireSliceCostTracked(step, build);
+  if (!cost.ok) {
+    return failStep(step, queue, maxAttempts, {
+      stage: 'slice_cost',
+      reason: cost.reason || SLICE_COST_UNTRACKED,
+      commit_sha: sha,
+    }, logger);
+  }
   step.status = STEP_STATUS.DONE;
   step.completed_at = new Date().toISOString();
-  stampSliceTiming(step, build);
   step.deploy_proven = true;
   step.failure_signature = null;
   step.same_signature_count = 0;
   if (functionalProven !== null) step.functional_proven = functionalProven;
-  logger?.info?.({ step: step.id, commit_sha: sha, deploy_proven: true, functional_proven: functionalProven }, '[PRODUCT-BUILD] step done');
-  return { ok: true, step_id: step.id, commit_sha: sha, verified: true, deploy_proven: true, functional_proven: functionalProven, summary: queueSummary(queue) };
+  logger?.info?.({
+    step: step.id,
+    commit_sha: sha,
+    deploy_proven: true,
+    functional_proven: functionalProven,
+    duration_ms: step.duration_ms,
+    tokens_used: step.tokens_used,
+  }, '[PRODUCT-BUILD] step done');
+  return {
+    ok: true,
+    step_id: step.id,
+    commit_sha: sha,
+    verified: true,
+    deploy_proven: true,
+    functional_proven: functionalProven,
+    duration_ms: step.duration_ms,
+    tokens_used: step.tokens_used,
+    summary: queueSummary(queue),
+  };
 }
 
 /**
@@ -703,20 +735,8 @@ function normalizeFailureSignature(reason, stage, blockerClass) {
   return `${stage || 'unknown'}|${blockerClass || 'unknown'}|${stripped}`;
 }
 
-function stampSliceTiming(step, extra = {}) {
-  const started = Date.parse(step.started_at || step.last_attempt_at || '');
-  if (Number.isFinite(started)) step.duration_ms = Math.max(0, Date.now() - started);
-  const usage = extra.usage || extra;
-  const tokens = Number(usage.tokens_used ?? usage.total_tokens ?? (
-    (Number(usage.prompt_tokens) || 0) + (Number(usage.completion_tokens) || 0)
-  ));
-  if (Number.isFinite(tokens) && tokens > 0) step.tokens_used = tokens;
-  const usd = Number(usage.estimated_usd ?? extra.estimated_usd);
-  if (Number.isFinite(usd) && usd > 0) step.estimated_usd = usd;
-}
-
 function failStep(step, queue, maxAttempts, info, logger) {
-  stampSliceTiming(step, info);
+  stampSliceCost(step, info);
   step.last_error = info.reason;
   const blockerClass = resolveTypedBlockerClass({ stage: info.stage, reason: info.reason });
   step.blocker_class = blockerClass;
