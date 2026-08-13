@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T23:27:04.702Z",
+  "generated_at": "2026-08-13T23:27:12.222Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13592,
   "files": [
@@ -95305,8 +95305,8 @@
       "path": "services/collectibles/want-graph.js",
       "synopsis": "Exports createWantGraphService — services/collectibles/want-graph.js.",
       "bytes": 7356,
-      "mtime": "2026-08-13T23:27:04.702Z",
-      "indexed_at": "2026-08-13T23:27:04.702Z",
+      "mtime": "2026-08-13T23:27:12.222Z",
+      "indexed_at": "2026-08-13T23:27:12.222Z",
       "ssot": [
         "docs/products/collectibles/PRODUCT_HOME.md"
       ]
