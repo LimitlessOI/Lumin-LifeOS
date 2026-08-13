@@ -3952,18 +3952,23 @@
     },
     {
       "id": "taloa-s64-capreg-register-001-script",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/taloa/registerS64Capreg001.mjs",
       "task": "Create script to register TALOA-S64-CAPREG-REGISTER-001 capability",
       "spec": "Develop an idempotent ESM script that uses the existing `capability-registry-service` to programmatically register the specific capability identified as `TALOA-S64-CAPREG-REGISTER-001`. The script should define the capability's ID, description, and any essential metadata required by the registry. It must log successful registration or any errors encountered.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "import { registerCapability } from '../../services/taloa/capability-registry-service.js';",
         "id: 'TALOA-S64-CAPREG-REGISTER-001'",
         "console.log('Capability TALOA-S64-CAPREG-REGISTER-001 registration attempt completed.')"
-      ]
+      ],
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-08-13T04:15:33.779Z",
+      "last_error": "NOT_ON_BLUEPRINT"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
