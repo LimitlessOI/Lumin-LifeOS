@@ -7028,7 +7028,9 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "same_signature_count": 0
+      "same_signature_count": 1,
+      "failure_signature": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:/** @ssot */; behavior_assertion_failed; behavior_proof",
+      "escalation_class": "evidence_gap"
     },
     {
       "id": "104",
@@ -7073,7 +7075,36 @@
           ],
           "assertion_id": "expected_exports:services/chair-intent-signals.js"
         }
-      ]
+      ],
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/lifeos/twins/steps/104.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-08-13T00:32:01.482Z",
+        "shipped_at": "2026-08-13T00:32:01.482Z",
+        "commit_sha": null,
+        "content_sha256": "a969c5a10b4e10cf6f6e9f548f0e9b0e20ebd7df7712aee9a5c1412ee13da3a2",
+        "target_file": "services/chair-intent-signals.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/chair-intent-signals.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "PASS"
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/lifeos/twins/steps/104.exact",
+          "content_sha256": "a969c5a10b4e10cf6f6e9f548f0e9b0e20ebd7df7712aee9a5c1412ee13da3a2"
+        }
+      },
+      "shipped_at": "2026-08-13T00:32:01.482Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "104"
     },
     {
       "id": "2-create-founder-chair-intent-service",

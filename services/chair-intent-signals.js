@@ -155,6 +155,39 @@ export function isCounselPresenceIntent(text = '') {
   return false;
 }
 
+/**
+ * Determines if the given text likely indicates a 'workflow-conten' lane intent.
+ * This intent focuses on content-related tasks or workflows, often involving creation,
+ * modification, or management of text, data, or media within a structured process.
+ * It's distinct from direct UI/product changes or personal life admin.
+ * @param {string} text The input text from the founder.
+ * @returns {boolean} True if the text suggests a workflow-content intent, false otherwise.
+ */
+export function isWorkflowContentIntent(text = '') {
+  const t = String(text || '').trim();
+  if (!t) return false;
+
+  // Keywords for content creation/management
+  if (/\b(write|draft|compose|generate|create|edit|revise|proofread|publish)\b.*\b(post|article|report|summary|email|doc|document|content|message|blog|script)\b/i.test(t)) return true;
+  // Keywords for data/information handling within a workflow
+  if (/\b(extract|analyze|summarize|categorize|organize|process|manage|update)\b.*\b(data|information|records|files|tasks|workflow|list)\b/i.test(t)) return true;
+  // Mentions of specific content types or platforms in a workflow context
+  if (/\b(social media|newsletter|marketing campaign|jira ticket|confluence page|github issue)\b/i.test(t) && /\b(prepare|update|review|track|assign)\b/i.test(t)) return true;
+  // General workflow-related verbs
+  if (/\b(prepare|schedule|coordinate|automate|streamline|optimize|document)\b.*\b(workflow|process|task)\b/i.test(t)) return true;
+
+  // Exclude common build/repair/counsel terms if they appear without a strong content context
+  if (isBuildRequest(t) && !/\b(write|draft|compose|generate|content)\b/i.test(t)) return false;
+  if (isFounderRepairOrderIntent(t)) return false;
+  if (isCounselOnlyBypass(t)) return false;
+  if (isBuildStatusQuestion(t)) return false;
+  if (isCounselPresenceIntent(t)) return false;
+  if (isFounderPersonalLifeIntent(t)) return false;
+  if (isFounderShipOrUsabilityIntent(t) && !/\b(content|message|post)\b/i.test(t)) return false;
+
+  return false;
+}
+
 export function isBuildRequest(text) {
   const stripped = stripChairDoPrefix(text);
   const t = String(stripped.text || '');
@@ -163,6 +196,7 @@ export function isBuildRequest(text) {
   if (isCounselPresenceIntent(t)) return false;
   if (isBlueprintExecuteIntent(t)) return false;
   if (isCounselOnlyBypass(t)) return false;
+  if (isWorkflowContentIntent(t)) return false; // Exclude if it's primarily a workflow-content request
   // Cognitive Core: "Should I X or Y / make … first?" is judgment, not a build order.
   if (/\b(should i|should we)\b/i.test(t) && /\bor\b/i.test(t)) return false;
   if (/\b(decide|decision|choose between|trade ?off)\b/i.test(t) && /\?/i.test(t)) return false;
@@ -207,5 +241,6 @@ export function getIntentSignals(text = '') {
     isBuildRequest: isBuildRequest(cleanedText),
     isFounderPersonalLifeIntent: isFounderPersonalLifeIntent(cleanedText),
     isFounderShipOrUsabilityIntent: isFounderShipOrUsabilityIntent(cleanedText),
+    isWorkflowContentIntent: isWorkflowContentIntent(cleanedText), // New signal for workflow-content
   };
 }
