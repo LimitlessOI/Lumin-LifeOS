@@ -7407,6 +7407,32 @@
           "assertion_id": "expected_exports:services/founder-chair-intent.js"
         }
       ]
+    },
+    {
+      "id": "lifeos-build-fix-1",
+      "status": "pending",
+      "target_file": "scripts/lifeos-direct-build-smoke-test.mjs",
+      "task": "Add @ssot JSDoc tag for governance compliance",
+      "spec": "Ensure the top-level JSDoc for scripts/lifeos-direct-build-smoke-test.mjs includes the @ssot tag to resolve FILE_PLACEMENT_VIOLATION, ensuring the script is marked as a Single Source Of Truth.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "@ssot"
+      ]
+    },
+    {
+      "id": "lifeos-build-fix-2",
+      "status": "pending",
+      "target_file": "services/founder-chair-intent.js",
+      "task": "Implement founder chat intent classification service",
+      "spec": "Create a new service exporting 'classifyFounderIntent' that, when given a founder chat prompt, correctly identifies 'drawer_direct_build' and classifies it into the 'workflow-content' lane.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "classifyFounderIntent"
+      ]
     }
   ],
   "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
