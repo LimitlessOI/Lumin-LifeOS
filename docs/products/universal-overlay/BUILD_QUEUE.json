@@ -4451,7 +4451,7 @@
       "same_signature_count": 0
     },
     {
-      "status": "pending",
+      "status": "done",
       "founder_gated": false,
       "attempts": 0,
       "action_type": "write_file_exact",
@@ -4522,7 +4522,45 @@
           "content_sha256": "e2416387a1c3a7d6298dd5ef4d59d30fd434b7c01a87ca8e002238732472f18a"
         }
       },
-      "shipped_at": "2026-08-13T06:53:50.247Z"
+      "shipped_at": "2026-08-13T06:53:50.247Z",
+      "commit_sha": "0db441c4acd473be015881a9e2a584aec310fc28"
+    },
+    {
+      "status": "pending",
+      "founder_gated": false,
+      "attempts": 0,
+      "action_type": "author_then_write",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "mission_id": "PRODUCT-universal-overlay",
+      "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md §64",
+      "depends_on": [
+        "TALOA-S64-ANDROID-BODY-001"
+      ],
+      "id": "TALOA-S64-ANDROID-BODY-WIRE-001",
+      "target_file": "services/general-browser-agent-runtime.js",
+      "sandbox_boundary": "services/**",
+      "task": "Keep existing @ssot. Import createAndroidBodyAdapter from \"./taloa/android-body-adapter.js\" and CALL it. Export makeAndroidBody(deps). Do NOT rewrite runBrowserGoal. Additive only.",
+      "spec": "Add makeAndroidBody so a caller can pass the Android Body without forking the Mind.",
+      "expected_exports": [
+        "observePage",
+        "makeAndroidBody"
+      ],
+      "file_contains": [
+        "createAndroidBodyAdapter",
+        "makeAndroidBody"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "file_contains",
+          "path": "services/general-browser-agent-runtime.js",
+          "must_include": [
+            "createAndroidBodyAdapter",
+            "makeAndroidBody"
+          ],
+          "assertion_id": "reachability:android-body-wired"
+        }
+      ],
+      "blueprint_step_id": "TALOA-S64-ANDROID-BODY-WIRE-001"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
