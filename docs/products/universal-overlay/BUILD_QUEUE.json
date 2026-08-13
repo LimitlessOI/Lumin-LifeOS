@@ -4429,8 +4429,8 @@
     {
       "id": "COLLECTIBLES-V1-MTG-ADAPTER-001",
       "product_id": "collectibles",
-      "status": "blocked",
-      "attempts": 1,
+      "status": "pending",
+      "attempts": 0,
       "target_file": "services/collectibles/adapters/mtg-adapter.js",
       "action_type": "write_file_exact",
       "depends_on": [
@@ -4466,8 +4466,8 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-13T08:19:26.116Z",
-      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/local/bin/node --input-type=module -e import \"file:///usr/src/app/services/collectibles/adapters/.factory-import-check",
+      "last_attempt_at": null,
+      "last_error": null,
       "last_attempt": null,
       "revive_count": 0,
       "revived_at": "2026-08-13T06:28:36.702Z",
@@ -4942,9 +4942,9 @@
       "shipped_via": "governed_ship_queue"
     },
     {
-      "status": "pending",
+      "status": "blocked",
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "action_type": "write_file_exact",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
@@ -4998,7 +4998,14 @@
           "content_sha256": "079795bb3edac7b164f0401cea9846fbdf070a1127f5e0b203837da2b5932589"
         }
       },
-      "shipped_at": "2026-08-13T08:19:33.589Z"
+      "shipped_at": "2026-08-13T08:19:33.589Z",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-08-13T08:19:41.017Z",
+      "last_error": "SLICE_COST_UNTRACKED: tokens_used required on every built slice (0 allowed for exact/no-codegen)",
+      "started_at": "2026-08-13T08:19:31.213Z",
+      "duration_ms": 9804
     },
     {
       "status": "pending",
