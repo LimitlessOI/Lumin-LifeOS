@@ -4641,7 +4641,7 @@
       "heal_reason": "native_swift_tokens_0_claim_2026-08-13"
     },
     {
-      "status": "done",
+      "status": "pending",
       "founder_gated": false,
       "attempts": 0,
       "action_type": "write_file_exact",
@@ -4663,12 +4663,12 @@
         "@ssot docs/products/universal-overlay/PRODUCT_HOME.md"
       ],
       "blueprint_step_id": "TALOA-S64-AUTH-ENVELOPE-001",
-      "commit_sha": "23e69a186e80b37c78f3a9ed630db96f68a5e390",
+      "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-13T08:00:07.599Z",
+      "last_attempt_at": "2026-08-13T07:45:23.034Z",
       "last_error": null,
-      "started_at": "2026-08-13T08:00:07.599Z",
+      "started_at": "2026-08-13T07:45:18.369Z",
       "blocker_class": null,
       "park_until": null,
       "heal_unblocked": true,
@@ -4717,7 +4717,7 @@
           "content_sha256": "bd6180161725c1b91d301152fa1f29d73b260af9abe78d95505316725a7d2b44"
         }
       },
-      "shipped_at": "2026-08-13T08:00:20.447Z",
+      "shipped_at": "2026-08-13T08:00:11.637Z",
       "duration_ms": 12850,
       "tokens_used": 0,
       "shipped_via": "governed_ship_queue"
