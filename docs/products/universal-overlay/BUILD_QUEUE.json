@@ -5854,10 +5854,10 @@
       "shipped_via": "governed_ship_queue"
     },
     {
-      "status": "blocked",
+      "status": "pending",
       "founder_gated": false,
-      "attempts": 1,
-      "action_type": "author_then_write",
+      "attempts": 0,
+      "action_type": "write_file_exact",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
@@ -5879,9 +5879,673 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-13T20:44:58.630Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing:/api/v1/collectibles; behavior_assertion_failed; behavior_proof",
-      "started_at": "2026-08-13T20:44:52.290Z"
+      "started_at": "2026-08-13T20:44:52.290Z",
+      "same_signature_count": 0,
+      "revive_count": 1,
+      "revived_at": "2026-08-13T20:45:53.421Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "escalation_required": false,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "exact_inputs": {
+        "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V1-ERA-WALL-001.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-08-13T20:46:09.413Z",
+        "shipped_at": "2026-08-13T20:46:09.413Z",
+        "commit_sha": null,
+        "content_sha256": "19fb7255d0965b1d7a62f8748aeff11393818462a466ccd5defc9cb61d25bde7",
+        "target_file": "public/collectibles/era-wall.html",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "public/collectibles/era-wall.html",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "INDETERMINATE",
+          "reason": "indeterminate_sql: SQL string could not be parsed for table names",
+          "details": {
+            "filePath": "/usr/src/app/public/collectibles/era-wall.html",
+            "hash": "19fb7255d0965b1d7a62f8748aeff11393818462a466ccd5defc9cb61d25bde7",
+            "importChecks": [],
+            "sqlChecks": [
+              {
+                "text": "\n                            <img src=\"${era.image}\" alt=\"${era.name}\">\n        ",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "\n                    <div class=\"empty-state\">\n                        <p>It loo",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "fetch('/api/v1/collectibles')",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "DOMContentLoaded",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "era-content",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "/api/v1/collectibles",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "ll proceed to the mock data if the fetch doesn",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "API call to /api/v1/collectibles failed or returned non-200. Using mock data.",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "API call failed",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Error fetching era data:",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "s Block\", image: \"https://gatherer.wizards.com/Handlers/Image.ashx?type=card&mul",
+                "status": "INDETERMINATE",
+                "reason": "sql_keywords_present_but_no_table_extracted"
+              },
+              {
+                "text": ");\n                    eraGrid.className = ",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": ";\n\n                    eras.forEach(era => {\n                        const eraCa",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": ");\n                        eraCard.href = era.dossierLink;\n                     ",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": ";\n                        eraCard.innerHTML = `\n                            <img",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "; // Clear any previous content\n                    eraContentDiv.appendChild(er",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "/api/v1/collectibles",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "t fail\n        // the SENTRY check by providing a plausible (though client-side ",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": ") { // Basic check if fetch is not globally available (e.g., in some test enviro",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": ") {\n                        setTimeout(() => {\n                            resol",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "en",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "UTF-8",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "viewport",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "width=device-width, initial-scale=1.0",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "container",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "era-content",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Alpha/Beta/Unlimited",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "https://gatherer.wizards.com/Handlers/Image.ashx?type=card&multiverseid=3&size=s",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "/twin-dossier?era=abu",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Ice Age Block",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "https://gatherer.wizards.com/Handlers/Image.ashx?type=card&multiverseid=2474&siz",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "/twin-dossier?era=iceage",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Mirage Block",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "https://gatherer.wizards.com/Handlers/Image.ashx?type=card&multiverseid=3770&siz",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "/twin-dossier?era=mirage",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Urza's Block",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "https://gatherer.wizards.com/Handlers/Image.ashx?type=card&multiverseid=9712&siz",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "/twin-dossier?era=urza",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Invasion Block",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "https://gatherer.wizards.com/Handlers/Image.ashx?type=card&multiverseid=22730&si",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "/twin-dossier?era=invasion",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Odyssey Block",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "https://gatherer.wizards.com/Handlers/Image.ashx?type=card&multiverseid=29749&si",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "/twin-dossier?era=odyssey",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Onslaught Block",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "https://gatherer.wizards.com/Handlers/Image.ashx?type=card&multiverseid=39180&si",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "/twin-dossier?era=onslaught",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Mirrodin Block",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "https://gatherer.wizards.com/Handlers/Image.ashx?type=card&multiverseid=45974&si",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "/twin-dossier?era=mirrodin",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Kamigawa Block",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "https://gatherer.wizards.com/Handlers/Image.ashx?type=card&multiverseid=78918&si",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "/twin-dossier?era=kamigawa",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Ravnica Block",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "https://gatherer.wizards.com/Handlers/Image.ashx?type=card&multiverseid=89091&si",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "/twin-dossier?era=ravnica",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Time Spiral Block",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "https://gatherer.wizards.com/Handlers/Image.ashx?type=card&multiverseid=121175&s",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "/twin-dossier?era=timespiral",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Lorwyn-Shadowmoor Block",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "https://gatherer.wizards.com/Handlers/Image.ashx?type=card&multiverseid=139265&s",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "/twin-dossier?era=lorwyn",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Alara Block",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "https://gatherer.wizards.com/Handlers/Image.ashx?type=card&multiverseid=174917&s",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "/twin-dossier?era=alara",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Zendikar Block",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "https://gatherer.wizards.com/Handlers/Image.ashx?type=card&multiverseid=185800&s",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "/twin-dossier?era=zendikar",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Scars of Mirrodin Block",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "https://gatherer.wizards.com/Handlers/Image.ashx?type=card&multiverseid=207869&s",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "/twin-dossier?era=scars",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Innistrad Block",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "https://gatherer.wizards.com/Handlers/Image.ashx?type=card&multiverseid=227072&s",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "/twin-dossier?era=innistrad",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Return to Ravnica Block",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "https://gatherer.wizards.com/Handlers/Image.ashx?type=card&multiverseid=253571&s",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "/twin-dossier?era=rtr",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Theros Block",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "https://gatherer.wizards.com/Handlers/Image.ashx?type=card&multiverseid=373539&s",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "/twin-dossier?era=theros",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Khans of Tarkir Block",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "https://gatherer.wizards.com/Handlers/Image.ashx?type=card&multiverseid=386540&s",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "/twin-dossier?era=khans",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Battle for Zendikar Block",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "https://gatherer.wizards.com/Handlers/Image.ashx?type=card&multiverseid=402061&s",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "/twin-dossier?era=bfz",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Kaladesh Block",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "https://gatherer.wizards.com/Handlers/Image.ashx?type=card&multiverseid=417637&s",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "/twin-dossier?era=kaladesh",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Amonkhet Block",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "https://gatherer.wizards.com/Handlers/Image.ashx?type=card&multiverseid=426743&s",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "/twin-dossier?era=amonkhet",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Ixalan Block",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "https://gatherer.wizards.com/Handlers/Image.ashx?type=card&multiverseid=435154&s",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "/twin-dossier?era=ixalan",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Dominaria",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "https://gatherer.wizards.com/Handlers/Image.ashx?type=card&multiverseid=442999&s",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "/twin-dossier?era=dominaria",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Guilds of Ravnica Block",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "https://gatherer.wizards.com/Handlers/Image.ashx?type=card&multiverseid=452835&s",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "/twin-dossier?era=guildsofravnica",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "War of the Spark",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "https://gatherer.wizards.com/Handlers/Image.ashx?type=card&multiverseid=461011&s",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "/twin-dossier?era=warofthespark",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Eldraine/Theros Beyond Death",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "https://gatherer.wizards.com/Handlers/Image.ashx?type=card&multiverseid=473132&s",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "/twin-dossier?era=eldraine",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Ikoria/Zendikar Rising",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "https://gatherer.wizards.com/Handlers/Image.ashx?type=card&multiverseid=482613&s",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "/twin-dossier?era=ikoria",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "${era.image}",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "${era.name}",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "empty-state",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "/",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Alpha/Beta/Unlimited",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "https://gatherer.wizards.com/Handlers/Image.ashx?type=card&multiverseid=3&size=s",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "/twin-dossier?era=abu",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Ice Age Block",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "https://gatherer.wizards.com/Handlers/Image.ashx?type=card&multiverseid=2474&siz",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "/twin-dossier?era=iceage",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "Mirage Block",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "https://gatherer.wizards.com/Handlers/Image.ashx?type=card&multiverseid=3770&siz",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              },
+              {
+                "text": "/twin-dossier?era=mirage",
+                "status": "PASS",
+                "reason": "not_a_sql_string"
+              }
+            ]
+          }
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V1-ERA-WALL-001.exact",
+          "content_sha256": "19fb7255d0965b1d7a62f8748aeff11393818462a466ccd5defc9cb61d25bde7"
+        }
+      },
+      "shipped_at": "2026-08-13T20:46:09.413Z"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
