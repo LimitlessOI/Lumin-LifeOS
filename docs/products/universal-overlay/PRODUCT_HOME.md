@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/universal-overlay/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-08-12 — Overlay re-queued: TALOA-WIRE-HOST-001/REGISTER pending so factory-1 cannot skip to LifeOS. factory-2 compiles OverlayHostPing. factory-3 registered idle (enable switch). Layer A script exists; host 404 is a SENTRY finding until the route ships. |
+| **Last Updated** | 2026-08-12 — WIRE-HOST unblocked: product-queue twin skip is in-process (`trustedIntakeSkip`), not HTTP `skip_intake_gate`. |
 
 ---
 ---
@@ -346,6 +346,8 @@ User on insurance portal
 ---
 
 ## Change Receipts
+
+| 2026-08-12 | **WIRE-HOST blocked `AIC_GATE_FAILURE` after the queue-twin retarget.** `/factory/ship-queue` set `skip_intake_gate: true` for product twins; execute-step denies that unless an env flag is on. Overlay fell back to LifeOS. Fix is in BuilderOS (`trustedIntakeSkip`); this queue row is pending again. | Founder: overlay never stops. | After this ship, never-stop next overlay step must be `TALOA-WIRE-HOST-001`, not a LifeOS queue-status commit. |
 
 | 2026-08-12 | **Overlay stopped because the queue had no buildable overlay step, so the loop moved to LifeOS.** Pending JS hold-to-talk (`step-2`/`step-4`) depended on blocked `step-1`; `selectNextStep` returned null; `discoverBuildQueueWork` skipped overlay. Skipped the dead JS PTT path (native badge voice already replaced it). Queued `TALOA-WIRE-HOST-001` + `REGISTER` so factory-1 has a real caller for `createOverlayHostService`. factory-2 compiles `OverlayHostPing.swift` (pings `/lifeos` + overlay-host health into taloa.log). SENTRY Layer A script now exists — host 404 is a finding with that proposed_solution, not a pass. factory-3 is registered idle: `npm run builderos:factory:enable -- --factory factory-3` is the switch (provision + `public/overlay/` owns + LaunchAgent); `--idle` unloads the agent and keeps the worktree. | Founder: overlay is not to stop; both factories; keep an eye on SENTRY; make sure two is working; three should be a switch we can flip instantly and leave idle. | After deploy, never-stop next overlay step must be `TALOA-WIRE-HOST-001`, not a LifeOS queue-status commit. `launchctl list com.lumin.factory-2-lane` must be running. Layer A: `npm run sentry:overlay:layer-a`. |
 

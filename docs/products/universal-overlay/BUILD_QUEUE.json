@@ -3379,7 +3379,7 @@
     },
     {
       "id": "TALOA-WIRE-HOST-001",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "routes/taloa-overlay-host-routes.js",
       "task": "The file MUST begin with a JSDoc block comment containing a line exactly \"@ssot docs/products/universal-overlay/PRODUCT_HOME.md\" (mandatory, enforced by a commit gate). Wire the already-built Phase 1 overlay host into a live HTTP surface so it has a real caller. Export exactly: export function registerTaloaOverlayHostRoutes(app, deps). Import createOverlayHostService from \"../services/taloa/overlay-host-service.js\" and CALL it (construction without a caller is false-done). Mount GET /api/v1/taloa/overlay-host/health behind deps.requireKey. The handler constructs the service with { pool: deps.pool, logger: deps.logger, preferenceStore: deps.preferenceStore || { get: async () => ({}), set: async () => ({}) } }, awaits displayOverlay(), and returns a plain serialisable JSON object that includes ok:true and the displayOverlay result. Do not invent a new table. Do not edit server.js. ES module syntax only. No top-level timers or model calls.",
       "spec": "The file MUST begin with a JSDoc block comment containing a line exactly \"@ssot docs/products/universal-overlay/PRODUCT_HOME.md\" (mandatory, enforced by a commit gate). Wire the already-built Phase 1 overlay host into a live HTTP surface so it has a real caller. Export exactly: export function registerTaloaOverlayHostRoutes(app, deps). Import createOverlayHostService from \"../services/taloa/overlay-host-service.js\" and CALL it (construction without a caller is false-done). Mount GET /api/v1/taloa/overlay-host/health behind deps.requireKey. The handler constructs the service with { pool: deps.pool, logger: deps.logger, preferenceStore: deps.preferenceStore || { get: async () => ({}), set: async () => ({}) } }, awaits displayOverlay(), and returns a plain serialisable JSON object that includes ok:true and the displayOverlay result. Do not invent a new table. Do not edit server.js. ES module syntax only. No top-level timers or model calls.",
@@ -3428,7 +3428,7 @@
       "built_sha": null,
       "proof": null,
       "last_attempt_at": "2026-08-13T00:11:17.987Z",
-      "last_error": "AIC_GATE_FAILURE"
+      "last_error": null
     },
     {
       "id": "TALOA-WIRE-HOST-REGISTER-001",

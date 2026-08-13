@@ -715,10 +715,10 @@ ${text.slice(0, 24000)}`;
           mission_id: m,
           blueprint_id: b,
           step,
-          skip_intake_gate: allowSkip,
+          skip_intake_gate: false,
           auto_generate_reasoning_plan: auto_generate_reasoning_plan === true,
         },
-        dispatchOptions,
+        { ...dispatchOptions, trustedIntakeSkip: allowSkip },
       );
       const signal = async (sig) => {
         appendHistorianRecord({

@@ -372,6 +372,17 @@ assert('unknown REP rejected', !unknownRep.ok);
     'skip_intake_gate denial cites the bypass reason (not a coincidental failure)',
     blocked.body?.reason === 'skip_intake_gate_not_permitted' && blocked.body?.attempted_bypass === true
   );
+  const trusted = await dispatchExecuteStep(
+    {
+      mission_id: 'M1',
+      step: { step_id: 'S1', sandbox_boundary: 'test' },
+    },
+    { trustedIntakeSkip: true },
+  );
+  assert(
+    'in-process trustedIntakeSkip is not the caller-controlled skip denial',
+    trusted.body?.reason !== 'skip_intake_gate_not_permitted',
+  );
   if (prev === undefined) delete process.env.FACTORY_ALLOW_SKIP_INTAKE_GATE;
   else process.env.FACTORY_ALLOW_SKIP_INTAKE_GATE = prev;
 }

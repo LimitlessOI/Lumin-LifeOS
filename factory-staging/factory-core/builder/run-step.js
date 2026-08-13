@@ -1,5 +1,6 @@
 /**
  * SYNOPSIS: Exports resolveRepoPath — factory-staging/factory-core/builder/run-step.js.
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -134,15 +135,16 @@ export async function dispatchExecuteStep(body, options = {}) {
   const mission_id = body?.mission_id || 'unknown';
   const blueprint_id = body?.blueprint_id || 'unknown';
   let step = body?.step;
-  // `skip_intake_gate` was env-gated by an adversarial-probe fix (AMENDMENT_48,
-  // 2026-06-10) and that protection later regressed away — a §2.13 no-regression
-  // violation that `deliberation-governance-behavior.mjs` only appeared to catch
-  // because its fixture step also fails BPB for missing content. Restored here:
-  // the caller may request the skip, but only the environment may grant it.
+  // HTTP callers may request `skip_intake_gate`; only FACTORY_ALLOW_SKIP_INTAKE_GATE
+  // grants that request (AMENDMENT_48). Product-queue twins have no mission pack —
+  // `/factory/ship-queue` already proved them via blueprintFollowClaim and passes
+  // `trustedIntakeSkip` in-process. That is not a caller-controlled body field;
+  // POST /factory/execute-step cannot set it.
   const skipRequested = body?.skip_intake_gate === true;
-  const skipAllowed = String(process.env.FACTORY_ALLOW_SKIP_INTAKE_GATE || '').trim().toLowerCase() === 'true';
-  const skipIntake = skipRequested && skipAllowed;
-  const skipDenied = skipRequested && !skipAllowed;
+  const envSkip = String(process.env.FACTORY_ALLOW_SKIP_INTAKE_GATE || '').trim().toLowerCase() === 'true';
+  const trustedSkip = options?.trustedIntakeSkip === true;
+  const skipIntake = (skipRequested && envSkip) || trustedSkip;
+  const skipDenied = skipRequested && !envSkip && !trustedSkip;
   const assertionRunner = options?.assertionRunner || null;
   const codegenRunner = options?.codegenRunner || null;
 

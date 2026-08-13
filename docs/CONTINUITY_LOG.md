@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Documentation — CONTINUITY LOG. -->
 
+## 2026-08-12 — WIRE-HOST AIC_GATE was the skip-gate eating product-queue twins
+
+Railway did trigger `9bfdace7`; exit 1 was the known never-stop parity race. Overlay then blocked: `/factory/ship-queue` requested `skip_intake_gate` for the queue twin, execute-step denied it, `TALOA-WIRE-HOST-001` → `AIC_GATE_FAILURE`, loop went back to LifeOS. Fix: in-process `trustedIntakeSkip` after blueprint follow; HTTP skip still env-gated. WIRE-HOST pending again.
+
 ## 2026-08-12 — Overlay stopped because the queue was empty of buildable overlay work
 
 Adam: the overlay is not to stop; both factories; Cursor watches SENTRY; factory-2 must be working; factory-3 should be a switch we can flip on instantly and leave idle.

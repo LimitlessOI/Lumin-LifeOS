@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T00:02:11.564Z",
+  "generated_at": "2026-08-13T00:15:37.774Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13440,
   "files": [
@@ -41221,8 +41221,8 @@
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Documentation — CONTINUITY LOG.",
       "bytes": 0,
-      "mtime": "2026-08-13T00:02:11.564Z",
-      "indexed_at": "2026-08-13T00:02:11.564Z"
+      "mtime": "2026-08-13T00:15:37.774Z",
+      "indexed_at": "2026-08-13T00:15:37.774Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -41515,8 +41515,8 @@
       "path": "docs/conversation_dumps/2026-08-12-overlay-never-stop-factory-n-switch.md",
       "synopsis": "Documentation — 2026 08 12 Overlay Never Stop Factory N Switch.",
       "bytes": 0,
-      "mtime": "2026-08-13T00:02:11.564Z",
-      "indexed_at": "2026-08-13T00:02:11.564Z"
+      "mtime": "2026-08-13T00:15:37.774Z",
+      "indexed_at": "2026-08-13T00:15:37.774Z"
     },
     {
       "path": "docs/conversation_dumps/by-product/sessions/2a4739f2/BUILDEROS-AUTONOMOUS.md",
@@ -43799,8 +43799,8 @@
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Documentation — PRODUCT HOME.",
       "bytes": 0,
-      "mtime": "2026-08-13T00:02:11.564Z",
-      "indexed_at": "2026-08-13T00:02:11.564Z"
+      "mtime": "2026-08-13T00:15:37.774Z",
+      "indexed_at": "2026-08-13T00:15:37.774Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -45748,8 +45748,8 @@
       "path": "docs/products/universal-overlay/conversations/2026-08-12-overlay-never-stop-factory-n-switch.md",
       "synopsis": "Documentation — 2026 08 12 Overlay Never Stop Factory N Switch.",
       "bytes": 0,
-      "mtime": "2026-08-13T00:02:11.564Z",
-      "indexed_at": "2026-08-13T00:02:11.564Z"
+      "mtime": "2026-08-13T00:15:37.774Z",
+      "indexed_at": "2026-08-13T00:15:37.774Z"
     },
     {
       "path": "docs/products/universal-overlay/conversations/2026-08-12-overlay-progress-after-handoff.md",
@@ -45784,8 +45784,8 @@
       "path": "docs/products/universal-overlay/PRODUCT_HOME.md",
       "synopsis": "Documentation — PRODUCT HOME.",
       "bytes": 0,
-      "mtime": "2026-08-13T00:02:11.564Z",
-      "indexed_at": "2026-08-13T00:02:11.564Z"
+      "mtime": "2026-08-13T00:15:37.774Z",
+      "indexed_at": "2026-08-13T00:15:37.774Z"
     },
     {
       "path": "docs/products/universal-overlay/SEND_PACKET_FLUID_UI_AND_TWO_FACTORIES_2026-08-11.md",
@@ -66286,10 +66286,10 @@
     },
     {
       "path": "factory-staging/factory-core/builder/run-step.js",
-      "synopsis": "Exports resolveRepoPath — factory-staging/factory-core/builder/run-step.js.",
-      "bytes": 13423,
-      "mtime": "2026-08-11T21:54:41.477Z",
-      "indexed_at": "2026-08-11T22:01:29.323Z"
+      "synopsis": "Factory staging — Run Step.",
+      "bytes": 0,
+      "mtime": "2026-08-13T00:15:37.774Z",
+      "indexed_at": "2026-08-13T00:15:37.774Z"
     },
     {
       "path": "factory-staging/factory-core/builder/sandbox.js",
@@ -73394,13 +73394,10 @@
     },
     {
       "path": "routes/factory-mount-routes.js",
-      "synopsis": "Pure: should the codegen prompt inline this file's existing content?",
-      "bytes": 44855,
-      "mtime": "2026-08-12T19:44:16.410Z",
-      "indexed_at": "2026-08-12T19:44:16.410Z",
-      "ssot": [
-        "docs/products/builderos/PRODUCT_HOME.md"
-      ]
+      "synopsis": "HTTP route module — Factory Mount Routes.",
+      "bytes": 0,
+      "mtime": "2026-08-13T00:15:37.774Z",
+      "indexed_at": "2026-08-13T00:15:37.774Z"
     },
     {
       "path": "routes/faith-studio-routes.js",
@@ -77037,13 +77034,10 @@
     },
     {
       "path": "scripts/deliberation-governance-behavior.mjs",
-      "synopsis": "Behavioral fail-closed tests for deliberation governance v2.7 (mock pool — no DATABASE_URL).",
-      "bytes": 16273,
-      "mtime": "2026-08-11T22:23:19.089Z",
-      "indexed_at": "2026-08-11T22:25:25.951Z",
-      "ssot": [
-        "docs/products/builderos/PRODUCT_HOME.md"
-      ]
+      "synopsis": "Script — Deliberation Governance Behavior.",
+      "bytes": 0,
+      "mtime": "2026-08-13T00:15:37.774Z",
+      "indexed_at": "2026-08-13T00:15:37.774Z"
     },
     {
       "path": "scripts/deliberation-regression-mock-pool.mjs",
