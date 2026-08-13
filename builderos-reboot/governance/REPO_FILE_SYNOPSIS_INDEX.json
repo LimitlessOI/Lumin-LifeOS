@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T08:07:17.635Z",
+  "generated_at": "2026-08-13T08:11:12.649Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13544,
   "files": [
@@ -44335,9 +44335,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 582779,
-      "mtime": "2026-08-13T08:03:13.668Z",
-      "indexed_at": "2026-08-13T08:03:13.668Z"
+      "bytes": 583129,
+      "mtime": "2026-08-13T08:11:12.649Z",
+      "indexed_at": "2026-08-13T08:11:12.649Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -44830,9 +44830,9 @@
     {
       "path": "docs/products/collectibles/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Collectibles (LimitlessOS)",
-      "bytes": 7780,
-      "mtime": "2026-08-13T06:55:36.341Z",
-      "indexed_at": "2026-08-13T06:55:36.341Z"
+      "bytes": 8030,
+      "mtime": "2026-08-13T08:11:12.649Z",
+      "indexed_at": "2026-08-13T08:11:12.649Z"
     },
     {
       "path": "docs/products/collectibles/SCHEMA_CONTRACTS.md",
@@ -46496,9 +46496,9 @@
     {
       "path": "docs/products/universal-overlay/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Universal Overlay",
-      "bytes": 122378,
-      "mtime": "2026-08-13T08:03:13.668Z",
-      "indexed_at": "2026-08-13T08:03:13.668Z"
+      "bytes": 122729,
+      "mtime": "2026-08-13T08:11:12.649Z",
+      "indexed_at": "2026-08-13T08:11:12.649Z"
     },
     {
       "path": "docs/products/universal-overlay/SEND_PACKET_FLUID_UI_AND_TWO_FACTORIES_2026-08-11.md",

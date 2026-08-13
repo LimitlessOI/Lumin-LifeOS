@@ -16,7 +16,7 @@
 | **Blueprint status** | `BLUEPRINT_READY_FOR_CONSENSUS` |
 | **Factory lane** | `factory-3` (`com.lumin.factory-3-lane`) |
 | **Build queue** | One manufacturing queue: `docs/products/universal-overlay/BUILD_QUEUE.json` (Collectibles steps carry `product_id: collectibles`) |
-| **Last Updated** | 2026-08-13 — One-queue law locked. Twin/mtg re-healed with `heal_unblocked` so Railway cannot re-skip from stale mem. |
+| **Last Updated** | 2026-08-13 — Twin sealed as write_file_exact (`identity_status` needle) for factory-3 tip ship. |
 
 ---
 
@@ -109,6 +109,7 @@ Every version must be independently valuable. Do not manufacture later versions 
 
 | Date | What | Why | Evidence | Next |
 |---|---|---|---|---|
+| 2026-08-13 | **Twin sealed write_file_exact** (`COLLECTIBLES-V1-TWIN-SERVICE-001.exact`) with `identity_status` SENTRY needle. | author_then_write thrash + tip already_running; deterministic print. | twins/steps exact + queue seal | factory-3 tip-ship → MTG adapter |
 | 2026-08-13 | **heal_unblocked on twin/mtg so one-queue unskips stick.** Tip mem was re-skipping Collectibles after GitHub reset. | Founder one-queue law. | Queue steps + merge fix | Factory-3 ships twin |
 | 2026-08-13 | **Founder reaffirmed one-queue law; factory-3 re-pointed at the manufacturing queue.** No Collectibles BUILD_QUEUE. Stale lane process still asked for `collectibles` queue → missing. Reloaded; twin/mtg unblocked after self-referential STEP_STATUS_FORBIDDEN thrash. | Founder: we do not start a new queue; one queue manages multiple factories and more than one project; it pulls from the BPs. | factory-3 tick `product_id:universal-overlay` | Ship twin-service + mtg-adapter from the one queue |
 | 2026-08-13 | **Founder correction: one queue, multi-factory, multi-project from BPs.** Mistaken Collectibles second queue archived. V1 foundation slices enrolled into `docs/products/universal-overlay/BUILD_QUEUE.json` with `product_id: collectibles` + `source` → MASTER_BLUEPRINT. factory-3 still owns Collectibles paths. | Founder: we do not start a new queue; one queue manages multiple factories and more than one project; it pulls from the BPs. | One queue + archived `docs/history/product-build-queues/collectibles/` | Factory-3 ship of `COLLECTIBLES-V1-ADAPTER-INTERFACE-001` |

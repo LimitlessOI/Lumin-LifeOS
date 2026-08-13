@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/universal-overlay/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-08-13 — AUTH+BODY locked done; merge no longer wipes ship proof; twin pending for factory-3. |
+| **Last Updated** | 2026-08-13 — Body compile-clean; twin sealed exact for factory-3; AUTH/BODY done sticky. |
 
 ---
 ---
@@ -346,6 +346,8 @@ User on insurance portal
 ---
 
 ## Change Receipts
+
+| 2026-08-13 | **Body compile-clean + twin sealed exact.** MacOsBodyAdapter used invented BodyAdapter types; rewritten against ScreenControl+SemanticPerception. Twin step → write_file_exact with identity_status needle so factory-3 stops thrashing author_then_write SENTRY. | Founder: f1+f2 overlay; f3 Collectibles. | factory-3 tip-ship twin; f1 TEMPLATE |
 
 | 2026-08-13 | **AUTH+BODY locked done; merge thrash closed.** never-stop queue-status was wiping proven done via heal_unblocked. Twin stays pending with `identity_status` needle for factory-3. | Founder: f1+f2 overlay; f3 Collectibles; keep working. | next: twin ship + TEMPLATE/PROMPT/SENTRY-B |
 
