@@ -4285,8 +4285,21 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-13T06:05:08.954Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:createCollectibleTwin; behavior_assertion_failed; behavior_proof"
+      "last_attempt_at": "2026-08-13T06:05:13.280Z",
+      "last_error": "STEP_STATUS_FORBIDDEN",
+      "last_attempt": null,
+      "revive_count": 1,
+      "revived_at": "2026-08-13T06:05:13.137Z",
+      "no_op": null,
+      "pre_existing": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "COLLECTIBLES-V1-MTG-ADAPTER-001",
