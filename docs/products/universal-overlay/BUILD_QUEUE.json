@@ -4024,13 +4024,13 @@
     },
     {
       "id": "taloa-s64-capreg-register-001-migration",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/20260814_add_taloa_s64_capreg_001.sql",
       "task": "Register TALOA-S64-CAPREG-REGISTER-001 capability data",
       "spec": "Insert a new row into the 'overlay_devices_capabilities' table for 'TALOA-S64-CAPREG-REGISTER-001', ensuring id, created_at, and updated_at are database-defaulted. The capability will have a placeholder schema definition.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "INSERT INTO overlay_devices_capabilities (name, description, schema_definition)",
         "VALUES ('TALOA-S64-CAPREG-REGISTER-001', 'Taloa S64 Core Capability 001', jsonb_build_object());"
@@ -4038,8 +4038,8 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
-      "last_error": "NOT_ON_BLUEPRINT",
+      "last_attempt_at": "2026-08-13T04:48:42.470Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:INSERT INTO overlay_devices_capabilities (name, description, schema_definition); behavior_assertion: missing_substring:VALUES ('TALOA-S64-CAPREG-REGISTER-001', 'Taloa S64 Core Capability 001', jsonb_build_object());; behavior_assertion_failed; behavior_proof",
       "last_attempt": null,
       "revive_count": 1,
       "revived_at": "2026-08-13T04:35:33.576Z",
