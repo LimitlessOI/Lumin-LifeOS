@@ -6735,16 +6735,16 @@
       "escalation_required": false,
       "escalation_note": null,
       "park_until": null,
-      "heal_unblocked": true,
+      "heal_unblocked": false,
       "failure_signature": "artifact_missing_after_ship: artifact_proof_failed: missing:role",
       "escalation_class": "fake_green_attempt",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-08-13T21:30:08.722Z"
     },
     {
-      "status": "pending",
+      "status": "done",
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "action_type": "write_file_exact",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
@@ -6792,7 +6792,7 @@
           "content_sha256": "63933ed8fedefb7641df233ecfa7df66499defd9910d2bbd6e63d26f4bca5aab"
         }
       },
-      "shipped_at": "2026-08-13T21:31:54.851Z",
+      "shipped_at": "2026-08-13T21:32:00.929Z",
       "same_signature_count": 1,
       "behavior_assertions": [
         {
@@ -6806,8 +6806,8 @@
       ],
       "started_at": "2026-08-13T21:31:53.027Z",
       "last_attempt_at": "2026-08-13T21:31:53.091Z",
-      "last_error": "AIC_GATE_FAILURE",
-      "commit_sha": null,
+      "last_error": null,
+      "commit_sha": "db683023e832c50fc2a59dbb593be52bfe3b1e4a",
       "built_sha": null,
       "proof": null,
       "failure_signature": "AIC_GATE_FAILURE",
@@ -6818,10 +6818,39 @@
       "escalation_required": false,
       "escalation_note": null,
       "park_until": null,
-      "heal_unblocked": true,
+      "heal_unblocked": false,
       "tokens_used": 0,
-      "duration_ms": 1000,
-      "heal_reason": "collectibles_never_stop_heal"
+      "duration_ms": 7906,
+      "heal_reason": "collectibles_never_stop_heal",
+      "shipped_via": "governed_ship_queue"
+    },
+    {
+      "status": "pending",
+      "founder_gated": false,
+      "attempts": 0,
+      "action_type": "author_then_write",
+      "product_id": "collectibles",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "mission_id": "PRODUCT-universal-overlay",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
+      "depends_on": [
+        "COLLECTIBLES-V1-TWIN-STORE-001",
+        "COLLECTIBLES-V1-MEDIA-EVIDENCE-001"
+      ],
+      "id": "COLLECTIBLES-V1-EXPORT-PRIVACY-001",
+      "target_file": "services/collectibles/export-privacy.js",
+      "sandbox_boundary": "services/collectibles/**",
+      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createExportPrivacyService({ pool }) — full owner export + soft-delete with audit. ES module.",
+      "spec": "MASTER_BLUEPRINT Export/delete/privacy.",
+      "expected_exports": [
+        "createExportPrivacyService"
+      ],
+      "file_contains": [
+        "createExportPrivacyService",
+        "export",
+        "soft-delete"
+      ],
+      "blueprint_step_id": "COLLECTIBLES-V1-EXPORT-PRIVACY-001"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
