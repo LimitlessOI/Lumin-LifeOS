@@ -6849,13 +6849,13 @@
     },
     {
       "id": "s3-chair-intent-signals-service",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/chair-intent-signals.js",
       "task": "Create service for intent signaling and event handling",
       "spec": "Implement functions to emit signals when founder intent is classified or requires clarification, and to listen for and react to these signals to ensure correct workflow routing for build directives.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "emitIntentSignal",
         "onIntentSignal"
@@ -6867,7 +6867,7 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-08-13T00:12:17.390Z",
       "last_error": "AIC_GATE_FAILURE",
       "last_attempt": null,
       "revive_count": 3,
