@@ -4661,9 +4661,9 @@
       "started_at": "2026-08-13T07:45:18.369Z"
     },
     {
-      "status": "pending",
+      "status": "blocked",
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "action_type": "author_then_write",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
@@ -4681,7 +4681,13 @@
         "createTemplateReplayService",
         "environment_signature"
       ],
-      "blueprint_step_id": "TALOA-S64-TEMPLATE-REPLAY-001"
+      "blueprint_step_id": "TALOA-S64-TEMPLATE-REPLAY-001",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-08-13T07:45:30.792Z",
+      "last_error": "GROUNDING_FAIL: missing_sql_table: capsule_store",
+      "started_at": "2026-08-13T07:45:26.804Z"
     },
     {
       "status": "pending",
