@@ -3521,9 +3521,9 @@
       "proof": "SO-001 allows scripts/CI. Layer B remains REGISTERED_NOT_IMPLEMENTED."
     },
     {
-      "status": "pending",
+      "status": "blocked",
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "action_type": "author_then_write",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
@@ -3558,7 +3558,7 @@
         }
       ],
       "blueprint_step_id": "TALOA-S64-CAPREG-COL-001",
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-08-13T01:25:20.167Z",
       "last_attempt": null,
       "revive_count": 3,
       "revived_at": "2026-08-13T01:25:12.653Z",
