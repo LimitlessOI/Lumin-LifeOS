@@ -16,7 +16,7 @@
 | **Blueprint status** | `BLUEPRINT_READY_FOR_CONSENSUS` |
 | **Factory lane** | `factory-3` (`com.lumin.factory-3-lane`) |
 | **Build queue** | One manufacturing queue: `docs/products/universal-overlay/BUILD_QUEUE.json` (Collectibles steps carry `product_id: collectibles`) |
-| **Last Updated** | 2026-08-13 — Founder correction: no second Collectibles queue; V1 slices enrolled into the one queue from MASTER_BLUEPRINT; factory-3 owns Collectibles paths. |
+| **Last Updated** | 2026-08-13 — Founder reaffirmed: one queue, multi-factory, multi-project from BPs. factory-3 reads the overlay-hosted queue; twin/mtg steps reset after STEP_STATUS_FORBIDDEN thrash. |
 
 ---
 
@@ -109,6 +109,7 @@ Every version must be independently valuable. Do not manufacture later versions 
 
 | Date | What | Why | Evidence | Next |
 |---|---|---|---|---|
+| 2026-08-13 | **Founder reaffirmed one-queue law; factory-3 re-pointed at the manufacturing queue.** No Collectibles BUILD_QUEUE. Stale lane process still asked for `collectibles` queue → missing. Reloaded; twin/mtg unblocked after self-referential STEP_STATUS_FORBIDDEN thrash. | Founder: we do not start a new queue; one queue manages multiple factories and more than one project; it pulls from the BPs. | factory-3 tick `product_id:universal-overlay` | Ship twin-service + mtg-adapter from the one queue |
 | 2026-08-13 | **Founder correction: one queue, multi-factory, multi-project from BPs.** Mistaken Collectibles second queue archived. V1 foundation slices enrolled into `docs/products/universal-overlay/BUILD_QUEUE.json` with `product_id: collectibles` + `source` → MASTER_BLUEPRINT. factory-3 still owns Collectibles paths. | Founder: we do not start a new queue; one queue manages multiple factories and more than one project; it pulls from the BPs. | One queue + archived `docs/history/product-build-queues/collectibles/` | Factory-3 ship of `COLLECTIBLES-V1-ADAPTER-INTERFACE-001` |
 | 2026-08-12 | **factory-3 = Collectibles manufacturing lane.** Owns `services/collectibles/`, mtg-card bootstrap, collectibles routes/public/docs. Overlay stays factory-1/2. | Founder: 3rd will not be for overlay but Collectibles; want it working. | `LANE_ASSIGNMENT.json` + LaunchAgent | Enroll work into the one queue (corrected 2026-08-13) |
 | 2026-08-12 | **Monetization section resolved** after founder merge: constitutional fee-display law; V1 range vs V3+ expected net; no secret listing; hard non-monetization list; V2 Quiet Matching not locked as paid premium — basic matching must not be degraded for subscription pressure; recommendation-integrity rule. | Founder: ~90–95% consensus with Cursor draft; adopt sharper prohibitions; unlock V2 premium-matching assumption. | `MONETIZATION.md` + MASTER §13 + FD-R9/R10/FD-M2 | Consensus → V1 mission pack |

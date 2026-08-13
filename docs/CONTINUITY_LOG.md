@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Documentation — CONTINUITY LOG. -->
 
+## 2026-08-13 — One-queue law reaffirmed; factory-3 healed
+
+Adam restated: we do not start a new queue; one queue manages multiple factories and more than one project; it pulls from the BPs. factory-3 LaunchAgent was still resolving deleted `collectibles/BUILD_QUEUE.json` (`queue_missing`) — reloaded to `product_id:universal-overlay`. Twin/mtg reset after self-referential `STEP_STATUS_FORBIDDEN` thrash; truth-ladder no longer treats that meta-block as terminal.
+
 ## 2026-08-13 — One queue multi-project: Collectibles parallel with overlay
 
 Adam: do not start a new queue; one queue manages multiple factories and more than one project; it pulls from the BPs. Enrolled `COLLECTIBLES-V1-*` on the one manufacturing queue. Adapter shipped (`f80a2bb`). Governed path was still holding Collectibles behind `overlayPrintStillOpen` — removed so factory-3 can ship twin/MTG/routes while factory-1 continues overlay. No second Collectibles queue.

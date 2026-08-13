@@ -35,6 +35,8 @@
 ---
 
 ## Change Receipts
+| 2026-08-13 | **One-queue law reaffirmed + Collectibles thrash fixed.** Founder: do not start a new queue; one queue manages multiple factories and more than one project; pulls from BPs. factory-3 LaunchAgent was still resolving `product_id=collectibles` (stale process) → `queue_missing`. Reloaded to `universal-overlay`. Twin step was near revive_exhausted on self-referential `STEP_STATUS_FORBIDDEN`; truth-ladder now treats that meta-block as actionable; twin+mtg reset to pending. | Founder: one queue / multi-factory / multi-project from BPs. | `truth-ladder.js` + factory-3 tick `product_id:universal-overlay` |
+
 | 2026-08-13 | **Collectibles may ship while overlay print is open.** `selectShippableSteps` was holding all Collectibles slices behind `overlayPrintStillOpen`, so factory-3 returned `no_shippable_steps` after adapter. Removed that hold on the governed path; factory-1 never-stop still prefers overlay via `selectNextStep`. | Founder: one queue manages multiple factories + projects from BPs (parallel). | `build-queue-step-adapter.js` + exclusive-queue test |
 
 | 2026-08-13 | **Collectibles V1 slices now actually on the one queue.** Law was already tip-correct; enrollment was a docs claim without steps. Enrolled `COLLECTIBLES-V1-*` into overlay BUILD_QUEUE; factory-3 plan picks adapter interface. | Founder: one queue; multi-factory; multi-project from BPs. | factory-3 `COLLECTIBLES-V1-ADAPTER-INTERFACE-001` |

@@ -496,8 +496,15 @@ export function exactChangeClaim({
   // paths (allow_terminal_steps=true) because shipping into a DONE step would
   // overwrite completed work without a new blueprint amendment.
   const stepStatus = String(step.status || '').toLowerCase();
+  const lastErr = String(step.last_error || '');
+  // Self-referential thrash: a step blocked ONLY because this gate previously
+  // said STEP_STATUS_FORBIDDEN can never heal — revive→ship re-reads blocked→
+  // FORBIDDEN→reblock until revive_exhausted. Treat that meta-error as
+  // actionable so construction can proceed (one-queue multi-factory path).
+  const selfReferentialStatusForbidden =
+    stepStatus === 'blocked' && /STEP_STATUS_FORBIDDEN/i.test(lastErr);
   const nonActionable = new Set(['blocked', 'skipped', 'cancelled']);
-  if (nonActionable.has(stepStatus)) {
+  if (nonActionable.has(stepStatus) && !selfReferentialStatusForbidden) {
     return {
       ok: false,
       status: 'STEP_STATUS_FORBIDDEN',
@@ -509,6 +516,7 @@ export function exactChangeClaim({
       // fs.readFileSync, so the two should agree; twin_source/twin_path/mtime
       // are appended here so the next occurrence's last_error pins whether this
       // read hit a stale/duplicate twin source or a genuine still-blocked step.
+      // 2026-08-13: self-referential STEP_STATUS_FORBIDDEN blocks are exempt above.
       error: `Step ${blueprint_step_id} status is "${stepStatus}" — cannot construct from a terminal/blocked step without a blueprint amendment [diag twin_source=${loaded.twin_source || 'unknown'} twin_path=${loaded.twin_path || 'unknown'} twin_mtime=${safeMtimeIso(loaded.twin_path)}]`,
       trust_earned: false,
       twin: follow,

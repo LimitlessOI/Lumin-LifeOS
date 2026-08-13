@@ -209,6 +209,38 @@ test('exactChangeClaim: lifeos twin step with task+spec is authorable', () => {
   assert.ok(ok.target_file);
 });
 
+test('exactChangeClaim: blocked only by STEP_STATUS_FORBIDDEN is still actionable', () => {
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'exact-status-'));
+  const prod = path.join(tmp, 'docs', 'products', 'statusheal');
+  fs.mkdirSync(prod, { recursive: true });
+  const queue = {
+    schema: 'product_build_queue_v1',
+    blueprint_id: 'PRODUCT-STATUSHEAL-BUILD-QUEUE-TWIN-V1',
+    mission_id: 'PRODUCT-statusheal',
+    steps: [{
+      id: 'heal-1',
+      blueprint_step_id: 'heal-1',
+      blueprint_id: 'PRODUCT-STATUSHEAL-BUILD-QUEUE-TWIN-V1',
+      status: 'blocked',
+      last_error: 'STEP_STATUS_FORBIDDEN',
+      target_file: 'services/statusheal/heal.js',
+      task: 'Author heal helper',
+      spec: 'Export function healStatus().',
+      expected_exports: ['healStatus'],
+    }],
+  };
+  fs.writeFileSync(path.join(prod, 'BUILD_QUEUE.json'), `${JSON.stringify(queue, null, 2)}\n`);
+  const ok = exactChangeClaim({
+    blueprint_id: 'PRODUCT-STATUSHEAL-BUILD-QUEUE-TWIN-V1',
+    blueprint_step_id: 'heal-1',
+    claim_following_blueprint: true,
+    allow_terminal_steps: false,
+    repoRoot: tmp,
+  });
+  assert.equal(ok.ok, true, ok.error);
+  assert.notEqual(ok.status, 'STEP_STATUS_FORBIDDEN');
+});
+
 test('exactChangeClaim: vague twin step without rebuild contract → NOT_EXACT', () => {
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'exact-law-'));
   const prod = path.join(tmp, 'docs', 'products', 'exactlaw');

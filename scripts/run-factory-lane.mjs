@@ -91,7 +91,9 @@ function loadQueue(productId, repoRoot) {
 export function pendingOwnedSteps(queue, factoryId) {
   return (queue.steps || []).filter((s) => {
     const status = String(s.status || '').toLowerCase();
-    if (status !== 'pending' && status !== 'building') return false;
+    // Include blocked so factory-3 keeps requesting tip ship/revive for owned
+    // Collectibles (and future BP) slices on the one manufacturing queue.
+    if (status !== 'pending' && status !== 'building' && status !== 'blocked') return false;
     return ownerFor(s.target_file || s.file) === factoryId;
   });
 }

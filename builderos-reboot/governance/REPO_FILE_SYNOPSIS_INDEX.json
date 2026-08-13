@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T06:08:06.203Z",
+  "generated_at": "2026-08-13T06:24:07.119Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13477,
   "files": [
@@ -41246,9 +41246,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Documentation — CONTINUITY LOG.",
-      "bytes": 198164,
-      "mtime": "2026-08-13T06:08:06.203Z",
-      "indexed_at": "2026-08-13T06:08:06.203Z"
+      "bytes": 198635,
+      "mtime": "2026-08-13T06:24:07.119Z",
+      "indexed_at": "2026-08-13T06:24:07.119Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -43874,9 +43874,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 576627,
-      "mtime": "2026-08-13T06:08:06.203Z",
-      "indexed_at": "2026-08-13T06:08:06.203Z"
+      "bytes": 577250,
+      "mtime": "2026-08-13T06:24:07.119Z",
+      "indexed_at": "2026-08-13T06:24:07.119Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -44291,9 +44291,9 @@
     {
       "path": "docs/products/collectibles/conversations/2026-08-13-one-queue-multi-factory-multi-project.md",
       "synopsis": "Collectibles manufacturing: one queue, not a second queue",
-      "bytes": 618,
-      "mtime": "2026-08-13T06:01:06.579Z",
-      "indexed_at": "2026-08-13T06:01:06.579Z"
+      "bytes": 982,
+      "mtime": "2026-08-13T06:24:07.119Z",
+      "indexed_at": "2026-08-13T06:24:07.119Z"
     },
     {
       "path": "docs/products/collectibles/conversations/2026-08-13-one-queue-not-second-queue.md",
@@ -44369,9 +44369,9 @@
     {
       "path": "docs/products/collectibles/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Collectibles (LimitlessOS)",
-      "bytes": 7102,
-      "mtime": "2026-08-13T05:23:57.945Z",
-      "indexed_at": "2026-08-13T05:23:57.945Z"
+      "bytes": 7637,
+      "mtime": "2026-08-13T06:24:07.119Z",
+      "indexed_at": "2026-08-13T06:24:07.119Z"
     },
     {
       "path": "docs/products/collectibles/SCHEMA_CONTRACTS.md",
@@ -79594,9 +79594,9 @@
     {
       "path": "scripts/run-factory-lane.mjs",
       "synopsis": "Dispatch one tick of work for a named factory lane. Production",
-      "bytes": 14431,
-      "mtime": "2026-08-13T05:23:57.945Z",
-      "indexed_at": "2026-08-13T05:23:57.945Z",
+      "bytes": 14609,
+      "mtime": "2026-08-13T06:24:07.119Z",
+      "indexed_at": "2026-08-13T06:24:07.119Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -102486,9 +102486,9 @@
     {
       "path": "services/truth-ladder.js",
       "synopsis": "Truth-ladder enforcement — grades load-bearing CLAIMS (not code",
-      "bytes": 30125,
-      "mtime": "2026-07-31T10:16:29.761Z",
-      "indexed_at": "2026-07-31T10:17:06.560Z",
+      "bytes": 30721,
+      "mtime": "2026-08-13T06:24:07.119Z",
+      "indexed_at": "2026-08-13T06:24:07.119Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -105841,9 +105841,9 @@
     {
       "path": "tests/truth-ladder.test.js",
       "synopsis": "js — tests/truth-ladder.test.js.",
-      "bytes": 14722,
-      "mtime": "2026-07-31T04:56:23.107Z",
-      "indexed_at": "2026-07-31T05:01:14.830Z",
+      "bytes": 15943,
+      "mtime": "2026-08-13T06:24:07.119Z",
+      "indexed_at": "2026-08-13T06:24:07.119Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
