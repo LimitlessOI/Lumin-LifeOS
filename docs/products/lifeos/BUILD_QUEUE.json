@@ -6829,7 +6829,7 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "same_signature_count": 0,
+      "same_signature_count": 1,
       "behavior_assertions": [
         {
           "type": "exports_smoke",
@@ -6839,7 +6839,9 @@
           ],
           "assertion_id": "expected_exports:services/founder-chair-intent.js"
         }
-      ]
+      ],
+      "failure_signature": "STEP_STATUS_FORBIDDEN",
+      "escalation_class": "same_signature_repeat"
     },
     {
       "id": "s2-founder-intent-clarify-service",
@@ -6885,7 +6887,36 @@
           ],
           "assertion_id": "expected_exports:services/founder-intent-clarify.js"
         }
-      ]
+      ],
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/lifeos/twins/steps/s2-founder-intent-clarify-service.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-08-13T00:27:50.123Z",
+        "shipped_at": "2026-08-13T00:27:50.123Z",
+        "commit_sha": null,
+        "content_sha256": "ba5e1ede043a1a24f0535579754babf92260f15cd37c3869c4e13a43df4f5989",
+        "target_file": "services/founder-intent-clarify.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/founder-intent-clarify.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "PASS"
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/lifeos/twins/steps/s2-founder-intent-clarify-service.exact",
+          "content_sha256": "ba5e1ede043a1a24f0535579754babf92260f15cd37c3869c4e13a43df4f5989"
+        }
+      },
+      "shipped_at": "2026-08-13T00:27:50.123Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s2-founder-intent-clarify-service"
     },
     {
       "id": "s3-chair-intent-signals-service",

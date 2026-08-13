@@ -207,3 +207,14 @@ export function clarifyIntent(founderChatInput, expandedTask = '') {
     options: clarityAssessment.options,
   };
 }
+
+/**
+ * Service to clarify ambiguous founder chat prompts.
+ * This function is an alias for `clarifyIntent` to satisfy the `clarifyFounderIntent` export requirement.
+ * @param {string} founderChatInput The raw input from the founder.
+ * @param {string} [expandedTask=''] An optional pre-expanded task string if available.
+ * @returns {{ needs_clarify: boolean, summary: string, inferred_target: string|null, options: object[] }}
+ */
+export function clarifyFounderIntent(founderChatInput, expandedTask = '') {
+  return clarifyIntent(founderChatInput, expandedTask);
+}
