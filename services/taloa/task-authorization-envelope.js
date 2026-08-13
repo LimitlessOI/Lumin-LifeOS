@@ -24,6 +24,8 @@ export const createTaskAuthorizationEnvelope = ({ pool, logger }) => {
    * @param {object} envelopeData - The JSON data representing the task authorization envelope.
    * @param {object} metadata - Additional metadata for the envelope.
    * @returns {Promise<string>} The ID of the created envelope.
+   *
+   * @ssot docs/products/universal-overlay/PRODUCT_HOME.md Overlay print §64 item 6: Task Authorization Envelope.
    */
   const create = async (agentId, taskId, envelopeData, metadata) => {
     const client = await pool.connect();
