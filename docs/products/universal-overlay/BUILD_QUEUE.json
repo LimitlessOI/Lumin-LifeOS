@@ -4124,13 +4124,13 @@
     },
     {
       "id": "taloa-capreg-001",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/register-taloa-s64-capreg.mjs",
       "task": "Register specific TALOA capability TALOA-S64-CAPREG-REGISTER-001",
       "spec": "Create a Node.js script to programmatically register the TALOA capability 'TALOA-S64-CAPREG-REGISTER-001' by importing and calling the 'registerCapability' function from the existing 'services/taloa/capability-registry-service.js'. The script should execute and ensure the capability is persisted in the database via the service.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "import { registerCapability } from '../services/taloa/capability-registry-service.js';",
         "TALOA-S64-CAPREG-REGISTER-001"
@@ -4138,8 +4138,8 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
-      "last_error": "NOT_ON_BLUEPRINT",
+      "last_attempt_at": "2026-08-13T05:01:29.084Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/local/bin/node --input-type=module -e import \"file:///usr/src/app/scripts/.factory-import-check-1786597288990-1.mjs\";\n",
       "last_attempt": null,
       "revive_count": 1,
       "revived_at": "2026-08-13T04:41:02.642Z",
