@@ -35,7 +35,9 @@
 ---
 
 ## Change Receipts
-| 2026-08-13 | **One queue manages multiple factories + projects — pulled from BPs.** Founder correction: do not mint a Collectibles queue. Reverted the second-queue carve-out. Collectibles V1 slices enrolled into the one manufacturing queue with `product_id` + MASTER_BLUEPRINT `source`. Factories filter by owns. Mistaken `docs/products/collectibles/BUILD_QUEUE.json` archived. | Founder: we do not start a new queue; one queue manages multiple factories and more than one project; it pulls from the BPs. | `config/live-build-queue.js` + overlay BUILD_QUEUE enroll + exclusive-queue tests |
+| 2026-08-13 | **Collectibles V1 slices now actually on the one queue.** Law was already tip-correct; enrollment was a docs claim without steps. Enrolled `COLLECTIBLES-V1-*` into overlay BUILD_QUEUE; factory-3 plan picks adapter interface. | Founder: one queue; multi-factory; multi-project from BPs. | factory-3 `COLLECTIBLES-V1-ADAPTER-INTERFACE-001` |
+
+| 2026-08-13 | **One queue manages multiple factories + projects — pulled from BPs.** Founder correction: do not mint a Collectibles queue. Reverted the second-queue carve-out. Factories filter by owns. Mistaken `docs/products/collectibles/BUILD_QUEUE.json` archived. | Founder: we do not start a new queue; one queue manages multiple factories and more than one project; it pulls from the BPs. | `config/live-build-queue.js` + exclusive-queue tests |
 
 | 2026-08-13 | **(superseded)** Collectibles BUILD_QUEUE twin repaired — wrong direction; archived same day per founder one-queue law. | Mistaken second queue. | `docs/history/product-build-queues/collectibles/` |
 

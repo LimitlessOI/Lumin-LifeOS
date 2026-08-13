@@ -347,6 +347,8 @@ User on insurance portal
 
 ## Change Receipts
 
+| 2026-08-13 | **Collectibles V1 BP slices enrolled on this queue (honest).** Docs claimed enrollment earlier; steps were missing on tip. Added `COLLECTIBLES-V1-*` with `product_id: collectibles` + MASTER_BLUEPRINT `source`. `multi_project: true`. factory-3 owns those targets. | Founder: one queue; multi-factory; multi-project from BPs. | factory-3 plan → `COLLECTIBLES-V1-ADAPTER-INTERFACE-001` |
+
 | 2026-08-12 | **BuilderOS observation report (not a new build).** Running; not manufacturing the next overlay-print slice. Capreg mounted live. Loop inventing register scripts. Slice duration + token spend required and not live-queryable (control-plane 404). No clock-time ETA. | Founder: observe BuilderOS; what is it building; when done; track slice time and token spend. | Capture `docs/products/universal-overlay/conversations/2026-08-12-builderos-observation-report.md`. Production SHA `8d038e2d5e6d`. |
 
 | 2026-08-12 | **factory-3 enabled for overlay.** factory-1 + factory-2 were already on overlay, so flipped the switch: provisioned `/Users/adamhopkins/Projects/Lumin-LifeOS-factory-3`, owns `public/overlay/`, LaunchAgent `com.lumin.factory-3-lane` loaded and ticking. Collectibles stays behind overlay exclusivity. | Founder: overlay first; if both factories used, make a 3rd. | `npm run builderos:factory:slots` shows factory-3 dispatching; log ticks `pending_owned: []` until a `public/overlay/` queue slice exists. |

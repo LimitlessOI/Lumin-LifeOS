@@ -1,16 +1,16 @@
 <!-- SYNOPSIS: Documentation — CONTINUITY LOG. -->
 
+## 2026-08-13 — One queue multi-project: Collectibles V1 slices actually enrolled
+
+Adam: do not start a new queue; one queue manages multiple factories and more than one project; it pulls from the BPs. Law was already on tip; missing piece was enrolling `COLLECTIBLES-V1-*` onto `docs/products/universal-overlay/BUILD_QUEUE.json`. factory-3 plans `COLLECTIBLES-V1-ADAPTER-INTERFACE-001` from that file. No second Collectibles queue.
+
 ## 2026-08-12 — BuilderOS observation report (founder asked: what is it building, when done, slice time, token spend)
 
 BuilderOS is running. It is not manufacturing the next overlay-print slice. Origin/production `8d038e2d5e6d`. Capability Registry is mounted live (`/api/v1/capabilities/report` 400 needs `body_id`). The loop is inventing register scripts (`STEP_STATUS_FORBIDDEN`) and factory-2 is staring at leftover `step-5` ApplicationContextMonitor.swift without authoring. Tonight's only governed ship in the last 100 commits was collectibles, then that second queue was deleted. Slice duration and token spend are required and are **not** live-queryable on founder-runtime (control-plane `/spend-outcomes` 404; never-stop `daily_budget.used=0` unlimited). No honest clock-time ETA: remaining print is §64 items 3–10, not queued. Capture: `docs/products/universal-overlay/conversations/2026-08-12-builderos-observation-report.md`.
 
-## 2026-08-13 — Collectibles queue twin fixed (factory-3 can load)
-
-Factory-3 was seeing pending Collectibles steps then returning `no_shippable_steps` because tip could not parse the queue: wrong schema (`build_queue_v1` vs required `product_build_queue_v1`) and missing `task` / registered twin ids. Repaired `docs/products/collectibles/BUILD_QUEUE.json` as `PRODUCT-COLLECTIBLES-BUILD-QUEUE-TWIN-V1`. Overlay stays factory-1/2; Collectibles stays factory-3.
-
 ## 2026-08-12 — factory-3 is Collectibles (not overlay)
 
-Adam correction: the third factory is for Collectibles, not overlay. Reassigned factory-3 owns to `services/collectibles/` + mtg bootstrap + collectibles routes/public/docs. Opened `docs/products/collectibles/BUILD_QUEUE.json` (V1 foundation steps). Live-queue lock now allows overlay + collectibles only. factory-1/2 stay overlay. LaunchAgent `com.lumin.factory-3-lane` ships via tip `factory_id=factory-3`.
+Adam correction: the third factory is for Collectibles, not overlay. Reassigned factory-3 owns to `services/collectibles/` + mtg bootstrap + collectibles routes/public/docs. Collectibles work enrolls as BP slices on the one manufacturing queue (not a second BUILD_QUEUE). factory-1/2 stay overlay. LaunchAgent `com.lumin.factory-3-lane` ships via tip `factory_id=factory-3`.
 
 ## 2026-08-12 — Overlay first; factory-3 enabled
 
