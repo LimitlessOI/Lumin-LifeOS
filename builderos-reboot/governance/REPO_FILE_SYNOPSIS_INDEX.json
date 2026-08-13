@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T20:44:06.674Z",
+  "generated_at": "2026-08-13T20:44:25.370Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13580,
   "files": [
@@ -71533,8 +71533,8 @@
       "path": "public/collectibles/vault.html",
       "synopsis": "HTML page: Your Collectibles Vault",
       "bytes": 9026,
-      "mtime": "2026-08-13T20:44:06.674Z",
-      "indexed_at": "2026-08-13T20:44:06.674Z"
+      "mtime": "2026-08-13T20:44:25.370Z",
+      "indexed_at": "2026-08-13T20:44:25.370Z"
     },
     {
       "path": "public/commitments/dashboard.html",
