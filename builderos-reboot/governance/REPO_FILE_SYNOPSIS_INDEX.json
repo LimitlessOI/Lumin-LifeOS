@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T00:15:37.774Z",
+  "generated_at": "2026-08-13T00:22:08.509Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13440,
   "files": [
@@ -95863,9 +95863,9 @@
     {
       "path": "services/founder-intent-clarify.js",
       "synopsis": "Detect ambiguous founder build asks — paraphrase, assumptions, confirm before execute.",
-      "bytes": 6989,
-      "mtime": "2026-06-29T17:21:08.878Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 7783,
+      "mtime": "2026-08-13T00:22:08.509Z",
+      "indexed_at": "2026-08-13T00:22:08.509Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

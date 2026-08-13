@@ -189,3 +189,21 @@ export function formatClarifySummary(clarity = {}) {
   lines.push('', 'Nothing runs until you confirm. Reply **confirm** + your choice, or set `confirm_intent: true` with a clearer ask.');
   return lines.filter(Boolean).join('\n');
 }
+
+/**
+ * Provides logic to refine or clarify identified founder intents when ambiguity exists.
+ * @param {string} founderChatInput The raw input from the founder.
+ * @param {string} [expandedTask=''] An optional pre-expanded task string if available.
+ * @returns {{ needs_clarify: boolean, summary: string, inferred_target: string|null, options: object[] }}
+ */
+export function clarifyIntent(founderChatInput, expandedTask = '') {
+  const clarityAssessment = assessFounderBuildClarity(founderChatInput, expandedTask);
+  const summary = clarityAssessment.needs_clarify ? formatClarifySummary(clarityAssessment) : '';
+
+  return {
+    needs_clarify: clarityAssessment.needs_clarify,
+    summary,
+    inferred_target: clarityAssessment.inferred_target,
+    options: clarityAssessment.options,
+  };
+}
