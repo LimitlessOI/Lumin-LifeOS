@@ -3926,13 +3926,13 @@
     },
     {
       "id": "register-taloa-s64-cap-001",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/registerTaloaS64Capability.mjs",
       "task": "Register TALOA-S64 capability for factory-1",
       "spec": "Create a new standalone script to programmatically register the 'TALOA-S64' capability for 'factory-1' in the capability registry. The script will utilize the existing capability-registry-service and pass '001' as a registration instance identifier within the metadata.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "import { registerCapability } from '../services/taloa/capability-registry-service.js';",
         "const TALOA_S64_CAPABILITY_ID = 'TALOA-S64';",
@@ -3943,7 +3943,12 @@
         "capabilityName,",
         "{ registration_instance: registrationIdentifier }",
         "catch (error)"
-      ]
+      ],
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-08-13T04:11:35.976Z",
+      "last_error": "NOT_ON_BLUEPRINT"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
