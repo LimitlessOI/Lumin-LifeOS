@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T23:25:08.819Z",
+  "generated_at": "2026-08-13T23:27:04.702Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13591,
+  "file_count": 13592,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -95297,6 +95297,16 @@
       "bytes": 10346,
       "mtime": "2026-08-13T17:03:12.832Z",
       "indexed_at": "2026-08-13T17:03:12.832Z",
+      "ssot": [
+        "docs/products/collectibles/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/collectibles/want-graph.js",
+      "synopsis": "Exports createWantGraphService — services/collectibles/want-graph.js.",
+      "bytes": 7356,
+      "mtime": "2026-08-13T23:27:04.702Z",
+      "indexed_at": "2026-08-13T23:27:04.702Z",
       "ssot": [
         "docs/products/collectibles/PRODUCT_HOME.md"
       ]
