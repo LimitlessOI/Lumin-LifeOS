@@ -4697,10 +4697,10 @@
       },
       "exactness": {
         "sealed": true,
-        "sealed_at": "2026-08-13T07:58:27.271Z",
-        "shipped_at": "2026-08-13T07:58:27.271Z",
+        "sealed_at": "2026-08-13T08:06:22.617Z",
+        "shipped_at": "2026-08-13T08:06:22.617Z",
         "commit_sha": null,
-        "content_sha256": "bd6180161725c1b91d301152fa1f29d73b260af9abe78d95505316725a7d2b44",
+        "content_sha256": "39d843ccdbcc0ca4dd495e881aec90b4b4f8b2c9bd7e8c6b30b733095ede83b0",
         "target_file": "services/taloa/task-authorization-envelope.js",
         "reverse": {
           "mode": "delete_file",
@@ -4714,10 +4714,10 @@
         "rebuild": {
           "action_type": "write_file_exact",
           "content_source_path": "docs/products/universal-overlay/twins/steps/TALOA-S64-AUTH-ENVELOPE-001.exact",
-          "content_sha256": "bd6180161725c1b91d301152fa1f29d73b260af9abe78d95505316725a7d2b44"
+          "content_sha256": "39d843ccdbcc0ca4dd495e881aec90b4b4f8b2c9bd7e8c6b30b733095ede83b0"
         }
       },
-      "shipped_at": "2026-08-13T08:00:11.637Z",
+      "shipped_at": "2026-08-13T08:06:22.617Z",
       "duration_ms": 12850,
       "tokens_used": 0,
       "shipped_via": "governed_ship_queue"
