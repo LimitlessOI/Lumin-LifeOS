@@ -40,6 +40,8 @@ import {
   claimPreExistingSatisfiedSteps,
   evaluateStepExpectations,
   reviveStaleBlockedSteps,
+  collectiblesPrintStillOpen,
+  prepareOverlayManufacturingQueue,
 } from './product-build-orchestrator.js';
 import { createDeploymentService } from './deployment-service.js';
 import { recordModelOutcome } from './model-capability-ledger.js';
@@ -1140,7 +1142,47 @@ export async function runGovernedAutonomousShipOnce({
       }
     }
     if (!plan.runnable) {
+      // Last-chance Collectibles enroll before declaring idle (foundation DONE
+      // used to return no_shippable_steps while V1 Vault BP remained).
+      const liveQ = queueCache['universal-overlay'];
+      if (liveQ && actingFactoryId === 'factory-3') {
+        try {
+          const enrolled = prepareOverlayManufacturingQueue(liveQ);
+          if (enrolled.enrolled_collectibles) {
+            persistQueue(liveQ);
+            plan = planGovernedBuildQueueRun({
+              products,
+              readQueue: (id) => queueCache[id],
+              maxStepsPerProduct,
+              factoryId: actingFactoryId,
+              ownerFor,
+            });
+          }
+        } catch (err) {
+          logger?.warn?.(`[GOVERNED-AUTONOMOUS-SHIP] collectibles re-enroll failed: ${err.message}`);
+        }
+      }
+    }
+    if (!plan.runnable) {
       queueCommitted = await commitQueueRuntimeChanges(queueCache, queueSnapshots, 'queue', logger, queueCommitted);
+      const liveQ = queueCache['universal-overlay'];
+      if (
+        actingFactoryId === 'factory-3'
+        && liveQ
+        && collectiblesPrintStillOpen(liveQ)
+      ) {
+        logger?.error?.(
+          { factory_id: actingFactoryId, gaps: plan.total_gaps },
+          '[GOVERNED-AUTONOMOUS-SHIP] IDLE FORBIDDEN — Collectibles print still open but no shippable step',
+        );
+        return {
+          ok: false,
+          shipped: 0,
+          reason: 'collectibles_print_still_open_idle_forbidden',
+          gaps: plan.total_gaps,
+          factory_id: actingFactoryId,
+        };
+      }
       return { ok: true, shipped: 0, reason: 'no_shippable_steps', gaps: plan.total_gaps, factory_id: actingFactoryId };
     }
     let shipped = 0;

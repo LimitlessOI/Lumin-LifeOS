@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/builderos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-08-13 — Manufacturing self-repair: sealed-exact promote, stale ship-lock reclaim, import mkdir retry (no Cursor GAP-FILL). |
+| **Last Updated** | 2026-08-13 — Collectibles sealed print V1→V10; factory-3 never-idle unless reassigned. |
 ### Related docs (this product)
 
 | Doc | Path |
@@ -35,6 +35,8 @@
 ---
 
 ## Change Receipts
+| 2026-08-13 | **factory-3 never-idle through Collectibles V10.** Root: only 5 foundation slices were hand-enrolled; no sealed enroll → `no_shippable_steps`. Closed: `COLLECTIBLES_PRINT_SEQUENCE` V1→V10 + `ensureCollectiblesPrintEnrolled` in prepare; tip returns `collectibles_print_still_open_idle_forbidden` instead of silent idle; reassignment only via `FACTORY_3_REASSIGNED=1`. | Founder: cannot idle if anything needed — follow through V10 if not reassigned. | `tests/collectibles-print-sequence.test.js` |
+
 | 2026-08-13 | **Manufacturing self-repair closed overnight thrash classes.** Tip reclaim stale `already_running` (90s); import-check mkdir+ENOENT retry; sealed `content_source_path` stays `write_file_exact`; revive+ship apply `promoteSealedExactOnThrash` / cost stamp; lane retries already_running + watchdog playbooks execute (not advisory-only). | Founder: fix all observed issues — system must self-repair without Cursor. | `tests/manufacturing-self-repair.test.js` 7/7 |
 
 | 2026-08-13 | **Allowlisted `WRM_CONSULT_EMAIL` + `WRM_CONSULT_FALLBACK_EMAIL` on managed-env.** Consults go to Maternity@wellroundedwoman.com. | Founder: wife's WRM site not sending consults. | bulk-set after ship. |

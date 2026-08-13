@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Documentation — CONTINUITY LOG. -->
 
+## 2026-08-13 — factory-3 never idle through Collectibles V10
+
+Founder: cannot idle if even one thing is needed — follow through to V10 if not reassigned. Root: foundation five DONE with no sealed Collectibles enroll sequence. Shipped `COLLECTIBLES_PRINT_SEQUENCE` V1→V10 + prepare enroll + idle-forbidden tip reason; only `FACTORY_3_REASSIGNED=1` allows honest idle.
+
 ## 2026-08-13 — Manufacturing self-repair (no Cursor GAP-FILL)
 
 Founder: fix all observed issues — overnight closed slices via conductor but did not self-repair. Shipped: stale ship-lock reclaim (90s), import mkdir/ENOENT retry, sealed exact promote on thrash, revive for import/github/SLICE_COST, lane already_running retry + watchdog playbooks that mutate/reship. Next: tip redeploy + verify factories do not need Cursor for those classes.

@@ -32,6 +32,10 @@ export const COLLECTIBLES_FALLBACK_OWNS = Object.freeze([
   'builderos-reboot/MISSIONS/PRODUCT-COLLECTIBLES-',
   'tests/collectibles-',
   'tests/mtg-card-',
+  'scripts/sentry-collectibles-',
+  // Basename must include "collectible" — ownerFor special-cases these under
+  // factory-1's broad db/migrations/ prefix (V1 schema stays on factory-3).
+  'db/migrations/20260813_collectible_',
 ]);
 
 export const FALLBACK_LANES = Object.freeze([
@@ -66,6 +70,8 @@ function matchPrefix(rel, prefix) {
  */
 export function ownerFor(targetFile, assignment = loadLaneAssignment()) {
   const rel = normalizeRel(targetFile);
+  // Collectibles schema migrations must not fall to factory-1's db/migrations/.
+  if (/^db\/migrations\/[^/]*collectible/i.test(rel)) return 'factory-3';
   const lanes = (assignment.lanes && assignment.lanes.length) ? assignment.lanes : FALLBACK_LANES;
   let best = { factory_id: PRIMARY, len: -1 };
   for (const lane of lanes) {

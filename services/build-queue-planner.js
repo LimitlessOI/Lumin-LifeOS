@@ -9,7 +9,7 @@ import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { STEP_STATUS, skipNonBlueprintSlices, enrollNextOverlayPrintSlice, loadBuildQueue } from './product-build-orchestrator.js';
+import { STEP_STATUS, skipNonBlueprintSlices, prepareOverlayManufacturingQueue, loadBuildQueue } from './product-build-orchestrator.js';
 import {
   LIVE_BUILD_QUEUE_PRODUCT,
   LIVE_BUILD_QUEUE_PRODUCTS,
@@ -508,10 +508,16 @@ export async function planBuildQueue({
         return null;
       }
     }
-    skipNonBlueprintSlices(queue);
-    const enrolled = enrollNextOverlayPrintSlice(queue);
-    logger?.info?.({ productId, enrolled }, '[BUILD-QUEUE-PLANNER] overlay print is sealed — model planning forbidden');
-    return { queue, added: enrolled ? [enrolled] : [], source: 'sealed_overlay_print' };
+    const { enrolled, enrolled_overlay, enrolled_collectibles } = prepareOverlayManufacturingQueue(queue);
+    logger?.info?.(
+      { productId, enrolled, enrolled_overlay, enrolled_collectibles },
+      '[BUILD-QUEUE-PLANNER] sealed print only — model planning forbidden (overlay + collectibles)',
+    );
+    return {
+      queue,
+      added: [enrolled_overlay, enrolled_collectibles].filter(Boolean),
+      source: 'sealed_overlay_print',
+    };
   }
   // extraBacklog carries non-doc-sourced work (e.g. SENTRY self-fix findings)
   // that must also be planned into concrete target_file steps. It is merged with

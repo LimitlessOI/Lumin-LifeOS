@@ -16,7 +16,7 @@
 | **Blueprint status** | `BLUEPRINT_READY_FOR_CONSENSUS` |
 | **Factory lane** | `factory-3` (`com.lumin.factory-3-lane`) |
 | **Build queue** | One manufacturing queue: `docs/products/universal-overlay/BUILD_QUEUE.json` (Collectibles steps carry `product_id: collectibles`) |
-| **Last Updated** | 2026-08-13 — Twin sealed as write_file_exact (`identity_status` needle) for factory-3 tip ship. |
+| **Last Updated** | 2026-08-13 — Sealed Collectibles print V1→V10; factory-3 never idles unless reassigned. |
 
 ---
 
@@ -47,9 +47,9 @@ Marketplace, Arena, insurance, and partner custody consume authorized projection
 | Layer | State |
 |---|---|
 | Master blueprint | Authored 2026-08-12 — ready for consensus |
-| Runtime product code | Not started under `collectibles` ownership |
+| Runtime product code | V1 foundation shipped (adapter/twin/mtg/routes/acceptance); Vault schema+UI+V2–V10 sealed print continues |
 | Bootstrap source | LifeOS MTG cataloger (adapter seed) |
-| Manufacturing | factory-3 pulls Collectibles V1 slices from the one manufacturing queue |
+| Manufacturing | factory-3 pulls sealed `COLLECTIBLES-V*` from the one queue through V10 unless `FACTORY_3_REASSIGNED=1` |
 
 ### Bootstrap assets (LifeOS-owned until migration)
 
@@ -84,7 +84,7 @@ V1 manufacturing must generalize MTG into a Category Adapter; core must not hard
 
 ## Release sequence (law)
 
-Every version must be independently valuable. Do not manufacture later versions while building V1.
+Every version must be independently valuable. Manufacture version N only after prior version’s sealed acceptance/Layer-B dep is DONE (encoded in `COLLECTIBLES_PRINT_SEQUENCE` depends_on). **factory-3 does not idle** while any sealed Collectibles slice remains through **V10**, unless the founder explicitly reassigns the lane (`FACTORY_3_REASSIGNED=1` or factory-3 `owns:[]`).
 
 | Ver | Name |
 |-----|------|
@@ -101,14 +101,15 @@ Every version must be independently valuable. Do not manufacture later versions 
 
 ## Agent handoff
 
-**Next:** Factory-3 ships `COLLECTIBLES-V1-ADAPTER-INTERFACE-001` from the one queue → twin → MTG adapter → routes → acceptance. Do not mint `docs/products/collectibles/BUILD_QUEUE.json`.
+**Next:** factory-3 ships `COLLECTIBLES-V1-SCHEMA-TWINS-001` then continues the sealed print through V10. Do not mint `docs/products/collectibles/BUILD_QUEUE.json`.
 
-**Do not:** Invent product architecture during manufacturing; invent MarketplaceCard / ArenaCard identities; treat play entitlement as IP permission; auto-list without permission; optimize Vault for engagement spam.
+**Do not:** Invent product architecture during manufacturing; invent MarketplaceCard / ArenaCard identities; treat play entitlement as IP permission; auto-list without permission; optimize Vault for engagement spam; declare Collectibles “done” at foundation acceptance.
 
 ## Change Receipts
 
 | Date | What | Why | Evidence | Next |
 |---|---|---|---|---|
+| 2026-08-13 | **Never-idle Collectibles print V1→V10.** Sealed `COLLECTIBLES_PRINT_SEQUENCE` continues past foundation; prepare enrolls next slice; tip forbids factory-3 idle while print open unless `FACTORY_3_REASSIGNED=1`. | Founder: cannot idle if even one thing needed — through V10 if not reassigned. | `tests/collectibles-print-sequence.test.js` | Tip ship SCHEMA-TWINS |
 | 2026-08-13 | **Twin sealed write_file_exact** (`COLLECTIBLES-V1-TWIN-SERVICE-001.exact`) with `identity_status` SENTRY needle. | author_then_write thrash + tip already_running; deterministic print. | twins/steps exact + queue seal | factory-3 tip-ship → MTG adapter |
 | 2026-08-13 | **heal_unblocked on twin/mtg so one-queue unskips stick.** Tip mem was re-skipping Collectibles after GitHub reset. | Founder one-queue law. | Queue steps + merge fix | Factory-3 ships twin |
 | 2026-08-13 | **Founder reaffirmed one-queue law; factory-3 re-pointed at the manufacturing queue.** No Collectibles BUILD_QUEUE. Stale lane process still asked for `collectibles` queue → missing. Reloaded; twin/mtg unblocked after self-referential STEP_STATUS_FORBIDDEN thrash. | Founder: we do not start a new queue; one queue manages multiple factories and more than one project; it pulls from the BPs. | factory-3 tick `product_id:universal-overlay` | Ship twin-service + mtg-adapter from the one queue |

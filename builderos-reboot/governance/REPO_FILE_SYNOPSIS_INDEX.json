@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T16:30:23.738Z",
+  "generated_at": "2026-08-13T16:33:17.381Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13559,
+  "file_count": 13562,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -32963,9 +32963,9 @@
     {
       "path": "config/lane-assignment.js",
       "synopsis": "Who writes which files. Conductor + Architect freeze this so two",
-      "bytes": 4200,
-      "mtime": "2026-08-13T07:03:21.230Z",
-      "indexed_at": "2026-08-13T07:03:21.230Z",
+      "bytes": 4587,
+      "mtime": "2026-08-13T16:33:17.381Z",
+      "indexed_at": "2026-08-13T16:33:17.381Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -33100,10 +33100,10 @@
     },
     {
       "path": "config/overlay-print-sequence.js",
-      "synopsis": "Sealed overlay manufacturing sequence — the factory may not invent",
-      "bytes": 9417,
-      "mtime": "2026-08-13T07:51:00.361Z",
-      "indexed_at": "2026-08-13T07:51:00.361Z",
+      "synopsis": "Sealed manufacturing sequences for the ONE queue — factory may not",
+      "bytes": 40843,
+      "mtime": "2026-08-13T16:33:17.381Z",
+      "indexed_at": "2026-08-13T16:33:17.381Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md",
         "docs/products/universal-overlay/PRODUCT_HOME.md\". Overlay print §64 item 3: Android Universal Body adapter. Export exactly: export function createAndroidBodyAdapter(deps). Return { observe(scope), act(action), verify(goal, expected) }. observe MUST call deps.dumpVisibleText (injected) then CALL redactObservation from \"../drive-sensitive-content-filter.js\" on that text before returning. act MUST call deps.enqueueCommand. verify MUST use independent evidence from a fresh observe(). Do NOT rebuild runBrowserGoal. Do NOT invent a table. ES module. Do not edit server.js.',"
@@ -41266,9 +41266,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Documentation — CONTINUITY LOG.",
-      "bytes": 202602,
-      "mtime": "2026-08-13T16:22:41.325Z",
-      "indexed_at": "2026-08-13T16:22:41.325Z"
+      "bytes": 202977,
+      "mtime": "2026-08-13T16:33:17.381Z",
+      "indexed_at": "2026-08-13T16:33:17.381Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -41612,6 +41612,13 @@
       "bytes": 775,
       "mtime": "2026-08-13T07:03:21.230Z",
       "indexed_at": "2026-08-13T07:03:21.230Z"
+    },
+    {
+      "path": "docs/conversation_dumps/2026-08-13-collectibles-never-idle-v10.md",
+      "synopsis": "Twin dump — founder: factory-3 never idles; follow Collectibles through V10 unless reassigned.",
+      "bytes": 540,
+      "mtime": "2026-08-13T16:33:17.381Z",
+      "indexed_at": "2026-08-13T16:33:17.381Z"
     },
     {
       "path": "docs/conversation_dumps/2026-08-13-hard-gate-print-invention.md",
@@ -44363,9 +44370,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 583861,
-      "mtime": "2026-08-13T15:47:57.060Z",
-      "indexed_at": "2026-08-13T15:47:57.060Z"
+      "bytes": 584341,
+      "mtime": "2026-08-13T16:33:17.381Z",
+      "indexed_at": "2026-08-13T16:33:17.381Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -44778,6 +44785,13 @@
       "indexed_at": "2026-08-13T05:09:00.646Z"
     },
     {
+      "path": "docs/products/collectibles/conversations/2026-08-13-never-idle-through-v10.md",
+      "synopsis": "Product capture — Collectibles manufacturing never idles through V10.",
+      "bytes": 479,
+      "mtime": "2026-08-13T16:33:17.381Z",
+      "indexed_at": "2026-08-13T16:33:17.381Z"
+    },
+    {
       "path": "docs/products/collectibles/conversations/2026-08-13-one-queue-multi-factory-multi-project.md",
       "synopsis": "Collectibles manufacturing: one queue, not a second queue",
       "bytes": 982,
@@ -44858,9 +44872,9 @@
     {
       "path": "docs/products/collectibles/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Collectibles (LimitlessOS)",
-      "bytes": 8030,
-      "mtime": "2026-08-13T08:37:03.253Z",
-      "indexed_at": "2026-08-13T08:37:03.253Z"
+      "bytes": 8811,
+      "mtime": "2026-08-13T16:33:17.381Z",
+      "indexed_at": "2026-08-13T16:33:17.381Z"
     },
     {
       "path": "docs/products/collectibles/SCHEMA_CONTRACTS.md",
@@ -70190,9 +70204,9 @@
     {
       "path": "products/receipts/LANE_ASSIGNMENT.json",
       "synopsis": "Product receipt — LANE ASSIGNMENT.",
-      "bytes": 2494,
-      "mtime": "2026-08-13T05:03:17.278Z",
-      "indexed_at": "2026-08-13T05:03:17.278Z",
+      "bytes": 2595,
+      "mtime": "2026-08-13T16:33:17.381Z",
+      "indexed_at": "2026-08-13T16:33:17.381Z",
       "synopsis_index_only": true
     },
     {
@@ -78712,9 +78726,9 @@
     {
       "path": "scripts/lib/system-watchdog.mjs",
       "synopsis": "In-system watchdog decisions. The actor doing the work is not",
-      "bytes": 7060,
-      "mtime": "2026-08-13T15:47:57.060Z",
-      "indexed_at": "2026-08-13T15:47:57.060Z",
+      "bytes": 7903,
+      "mtime": "2026-08-13T16:33:17.381Z",
+      "indexed_at": "2026-08-13T16:33:17.381Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -93827,9 +93841,9 @@
     {
       "path": "services/build-queue-planner.js",
       "synopsis": "Build-queue planner — turns a product's PRODUCT_HOME backlog into a",
-      "bytes": 28424,
-      "mtime": "2026-08-13T06:32:32.679Z",
-      "indexed_at": "2026-08-13T06:48:47.620Z",
+      "bytes": 28577,
+      "mtime": "2026-08-13T16:33:17.381Z",
+      "indexed_at": "2026-08-13T16:33:17.381Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -97178,9 +97192,9 @@
     {
       "path": "services/governed-autonomous-shipping-loop.js",
       "synopsis": "STEP 5g — the governed AUTONOMOUS shipping loop. When the STEP 5a",
-      "bytes": 71096,
-      "mtime": "2026-08-13T15:47:57.060Z",
-      "indexed_at": "2026-08-13T15:47:57.060Z",
+      "bytes": 72614,
+      "mtime": "2026-08-13T16:33:17.381Z",
+      "indexed_at": "2026-08-13T16:33:17.381Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -100602,9 +100616,9 @@
     {
       "path": "services/product-build-orchestrator.js",
       "synopsis": "General product-build orchestrator — turns a product's structured",
-      "bytes": 32974,
-      "mtime": "2026-08-13T15:47:57.060Z",
-      "indexed_at": "2026-08-13T15:47:57.060Z",
+      "bytes": 33898,
+      "mtime": "2026-08-13T16:33:17.381Z",
+      "indexed_at": "2026-08-13T16:33:17.381Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -105058,6 +105072,13 @@
       "bytes": 4912,
       "mtime": "2026-07-28T17:47:22.581Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "tests/collectibles-print-sequence.test.js",
+      "synopsis": "Collectibles sealed print never idles — enrolls through V10 unless reassigned.",
+      "bytes": 4123,
+      "mtime": "2026-08-13T16:33:17.381Z",
+      "indexed_at": "2026-08-13T16:33:17.381Z"
     },
     {
       "path": "tests/collectibles-v1-foundation.test.js",

@@ -43,7 +43,14 @@ import {
   isCollectiblesPrintSlice,
   isAuthorizedQueueSlice,
   overlayPrintStillOpen,
+  collectiblesPrintStillOpen,
+  collectiblesLaneReassigned,
   enrollNextOverlayPrintSlice,
+  enrollNextCollectiblesPrintSlice,
+  ensureCollectiblesPrintEnrolled,
+  nextSealedCollectiblesSlice,
+  collectiblesPrintTerminalId,
+  COLLECTIBLES_PRINT_SEQUENCE,
   assertOverlayQueuePrintLaw,
 } from '../config/overlay-print-sequence.js';
 import { requireSliceCostTracked, stampSliceCost, SLICE_COST_UNTRACKED } from './slice-cost-tracking.js';
@@ -53,7 +60,14 @@ export {
   isOverlayPrintSliceId,
   isCollectiblesPrintSlice,
   overlayPrintStillOpen,
+  collectiblesPrintStillOpen,
+  collectiblesLaneReassigned,
   enrollNextOverlayPrintSlice,
+  enrollNextCollectiblesPrintSlice,
+  ensureCollectiblesPrintEnrolled,
+  nextSealedCollectiblesSlice,
+  collectiblesPrintTerminalId,
+  COLLECTIBLES_PRINT_SEQUENCE,
   assertOverlayQueuePrintLaw,
 };
 
@@ -180,9 +194,18 @@ export function isBlueprintSlice(step, _productId) {
 
 export function prepareOverlayManufacturingQueue(queue) {
   const skipped = skipNonBlueprintSlices(queue);
-  const enrolled = enrollNextOverlayPrintSlice(queue);
+  const enrolled_overlay = enrollNextOverlayPrintSlice(queue);
+  // Collectibles sealed print V1→V10 on the SAME queue. If nothing Collectibles
+  // is open, enroll the next BP slice — factory-3 never idles until V10 done
+  // or the lane is explicitly reassigned (founder 2026-08-13).
+  const enrolled_collectibles = ensureCollectiblesPrintEnrolled(queue);
   assertOverlayQueuePrintLaw(queue);
-  return { skipped, enrolled };
+  return {
+    skipped,
+    enrolled: enrolled_overlay || enrolled_collectibles,
+    enrolled_overlay,
+    enrolled_collectibles,
+  };
 }
 
 export function skipNonBlueprintSlices(queue) {
@@ -209,9 +232,9 @@ export function selectNextStep(queue) {
     if (TERMINAL.has(step.status)) return null;
     if (step.demoted === true || step.status === STEP_STATUS.SKIPPED) return null;
     if (queue.product_id === 'universal-overlay' && !isBlueprintSlice(step, queue.product_id)) return null;
-    if (queue.product_id === 'universal-overlay' && isCollectiblesPrintSlice(step) && overlayPrintStillOpen(queue)) {
-      return null;
-    }
+    // Collectibles ships in parallel with overlay (selectShippableSteps already
+    // does). Holding Collectibles behind overlayPrintStillOpen made F3 idle
+    // while V1 Vault work remained — forbidden.
     if (isHumanHold(step)) return null;
     if (step.status === STEP_STATUS.FOUNDER_GATED && !isHumanHold(step)) {
       step.status = STEP_STATUS.PENDING;

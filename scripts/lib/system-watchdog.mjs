@@ -9,6 +9,8 @@
  * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
+import { collectiblesPrintStillOpen } from '../../config/overlay-print-sequence.js';
+
 export const GOVERNED_STALE_MS = 10 * 60 * 1000;
 export const FACTORY2_STALE_MS = 3 * 60 * 1000;
 
@@ -134,6 +136,26 @@ export function evaluateSystemWatchdog({
       action: 'promote_sealed_exact_and_reship',
       proposed_solution:
         `Step ${step.id} is thrashing (${err.slice(0, 160)}). applyManufacturingSelfRepair + revive, then re-ship. Do not Cursor GAP-FILL sealed twins.`,
+    });
+  }
+
+  if (
+    factoryId === 'factory-3'
+    && laneShip
+    && (
+      /collectibles_print_still_open_idle_forbidden/i.test(String(laneShip.reason || ''))
+      || (
+        /no_shippable_steps/i.test(String(laneShip.reason || ''))
+        && collectiblesPrintStillOpen(queue)
+      )
+    )
+  ) {
+    findings.push({
+      id: 'factory3_idle_with_collectibles_work',
+      factory_id: 'factory-3',
+      action: 'enroll_collectibles_print_and_reship',
+      proposed_solution:
+        'factory-3 idle while Collectibles V1→V10 print still open. enrollNextCollectiblesPrintSlice from COLLECTIBLES_PRINT_SEQUENCE; never treat foundation DONE as product complete; continue through V10 unless FACTORY_3_REASSIGNED=1. Re-ship factory_id=factory-3.',
     });
   }
 
