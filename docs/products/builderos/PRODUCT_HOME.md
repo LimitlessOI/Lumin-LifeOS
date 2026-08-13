@@ -35,7 +35,7 @@
 ---
 
 ## Change Receipts
-| 2026-08-13 | **Collectibles never-stop (founder).** F3 stalled on CAPTURE codegen stub → idle_forbidden. Closed: never demote/skip Collectibles print without `FACTORY_3_REASSIGNED=1`; `forceCollectiblesNeverStopHeal` + convention exact promote; sealed `COLLECTIBLES-V1-CAPTURE-API-001.exact`; tip re-plans before idle_forbidden. | Founder: never stop again unless I say it. | `tests/manufacturing-self-repair.test.js` |
+| 2026-08-13 | **Collectibles never-stop (founder).** F3 stalled on CAPTURE codegen stub → idle_forbidden. Closed: never demote/skip Collectibles print without `FACTORY_3_REASSIGNED=1`; `forceCollectiblesNeverStopHeal` + convention exact promote; sealed CAPTURE + REVIEW exacts; tip re-plans before idle_forbidden; GROUNDING_FAIL is thrash→exact. | Founder: never stop again unless I say it. | `tests/manufacturing-self-repair.test.js` |
 
 | 2026-08-13 | **SO-001 honesty: Architect owns print seals.** Cursor conductor hand-sealed Collectibles print in `config/overlay-print-sequence.js` — that is Architect-role bypass and made tip depend on Cursor. Closed: `services/architect-print-seal.js` + `scripts/architect-seal-print-sequence.mjs` write `docs/products/<id>/PRINT_SEQUENCE.json`; config loads only; watchdog `architect_print_seal_missing_*`. | Founder: if sealed print is required to build, Architect was supposed to do it. | `tests/architect-print-seal.test.js` |
 
