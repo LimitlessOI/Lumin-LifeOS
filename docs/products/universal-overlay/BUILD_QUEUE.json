@@ -5472,7 +5472,7 @@
     {
       "status": "pending",
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "action_type": "write_file_exact",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
@@ -5496,15 +5496,12 @@
         "insertTwin"
       ],
       "blueprint_step_id": "COLLECTIBLES-V1-TWIN-STORE-001",
-      "exact_inputs": {
-        "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V1-TWIN-STORE-001.exact"
-      },
       "exactness": {
         "sealed": true,
-        "sealed_at": "2026-08-13T16:50:19.186Z",
-        "shipped_at": "2026-08-13T16:50:19.186Z",
+        "sealed_at": "2026-08-13T17:03:09.756Z",
+        "shipped_at": "2026-08-13T17:03:09.756Z",
         "commit_sha": null,
-        "content_sha256": "ce503da452e25d83ff555e9f5eb348e74d1b44fd5fc96e050427d7f86b37e7d9",
+        "content_sha256": "d212e3d1cffc9f33adb9101ed2187e768ffd329faa76038624fcf46dfc06fc97",
         "target_file": "services/collectibles/twin-store.js",
         "reverse": {
           "mode": "delete_file",
@@ -5518,24 +5515,40 @@
         "rebuild": {
           "action_type": "write_file_exact",
           "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V1-TWIN-STORE-001.exact",
-          "content_sha256": "ce503da452e25d83ff555e9f5eb348e74d1b44fd5fc96e050427d7f86b37e7d9"
+          "content_sha256": "d212e3d1cffc9f33adb9101ed2187e768ffd329faa76038624fcf46dfc06fc97"
         }
       },
-      "shipped_at": "2026-08-13T16:50:19.186Z",
+      "shipped_at": "2026-08-13T17:03:09.756Z",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-13T16:51:00.989Z",
+      "last_attempt_at": "2026-08-13T17:02:00.148Z",
       "last_error": null,
-      "started_at": "2026-08-13T16:51:00.952Z",
+      "started_at": "2026-08-13T17:02:00.051Z",
       "demoted": false,
       "heal_unblocked": true,
-      "heal_reason": "collectibles_cite_one_queue_twin",
+      "heal_reason": "collectibles_clear_missing_exact_to_author",
       "demote_reason": null,
       "demoted_at": null,
       "skip_reason": null,
       "escalation_required": false,
-      "revive_count": 0
+      "revive_count": 0,
+      "same_signature_count": 1,
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/collectibles/twin-store.js",
+          "exports": [
+            "createCollectibleTwinStore"
+          ],
+          "assertion_id": "expected_exports:services/collectibles/twin-store.js"
+        }
+      ],
+      "failure_signature": "hidden_dependency",
+      "escalation_class": "same_signature_repeat",
+      "exact_inputs": {
+        "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V1-TWIN-STORE-001.exact"
+      }
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",

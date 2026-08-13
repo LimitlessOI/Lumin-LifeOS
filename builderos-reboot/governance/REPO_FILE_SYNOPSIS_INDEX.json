@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T16:59:34.118Z",
+  "generated_at": "2026-08-13T17:03:12.832Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13575,
   "files": [
@@ -95161,8 +95161,8 @@
       "path": "services/collectibles/twin-store.js",
       "synopsis": "Exports createCollectibleTwinStore — services/collectibles/twin-store.js.",
       "bytes": 10346,
-      "mtime": "2026-08-13T16:50:22.365Z",
-      "indexed_at": "2026-08-13T16:50:22.365Z",
+      "mtime": "2026-08-13T17:03:12.832Z",
+      "indexed_at": "2026-08-13T17:03:12.832Z",
       "ssot": [
         "docs/products/collectibles/PRODUCT_HOME.md"
       ]
