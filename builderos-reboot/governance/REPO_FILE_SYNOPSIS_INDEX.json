@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T16:41:06.826Z",
+  "generated_at": "2026-08-13T16:49:07.407Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13566,
   "files": [
@@ -39469,10 +39469,10 @@
     },
     {
       "path": "db/migrations/20260813_collectible_twins_v1.sql",
-      "synopsis": "Database migration — 20260813_collectible_twins_v1.sql.",
-      "bytes": 7696,
-      "mtime": "2026-08-13T16:38:23.311Z",
-      "indexed_at": "2026-08-13T16:38:23.311Z"
+      "synopsis": "Collectibles V1 Vault schema — collectible_twins + evidence + stubs",
+      "bytes": 6873,
+      "mtime": "2026-08-13T16:49:07.407Z",
+      "indexed_at": "2026-08-13T16:49:07.407Z"
     },
     {
       "path": "db/migrations/20260813_overlay_devices_capabilities.sql",
