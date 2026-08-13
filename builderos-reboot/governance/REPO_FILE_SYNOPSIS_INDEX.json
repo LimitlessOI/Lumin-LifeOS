@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T21:31:57.356Z",
+  "generated_at": "2026-08-13T21:32:57.174Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13589,
   "files": [
@@ -95210,8 +95210,8 @@
       "path": "services/collectibles/export-privacy.js",
       "synopsis": "Owner export + privacy redaction for Collectible projections.",
       "bytes": 1108,
-      "mtime": "2026-08-13T20:50:44.207Z",
-      "indexed_at": "2026-08-13T20:50:44.207Z",
+      "mtime": "2026-08-13T21:32:57.174Z",
+      "indexed_at": "2026-08-13T21:32:57.174Z",
       "ssot": [
         "docs/products/collectibles/PRODUCT_HOME.md"
       ]

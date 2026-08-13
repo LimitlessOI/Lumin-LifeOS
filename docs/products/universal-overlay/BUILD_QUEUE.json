@@ -6825,10 +6825,10 @@
       "shipped_via": "governed_ship_queue"
     },
     {
-      "status": "blocked",
+      "status": "pending",
       "founder_gated": false,
       "attempts": 1,
-      "action_type": "author_then_write",
+      "action_type": "write_file_exact",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
@@ -6851,13 +6851,61 @@
         "soft-delete"
       ],
       "blueprint_step_id": "COLLECTIBLES-V1-EXPORT-PRIVACY-001",
+      "same_signature_count": 1,
+      "exact_inputs": {
+        "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V1-EXPORT-PRIVACY-001.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-08-13T21:32:54.493Z",
+        "shipped_at": "2026-08-13T21:32:54.493Z",
+        "commit_sha": null,
+        "content_sha256": "787d8ef66002dbd0bd54c4668ded846539fda0b905bd57eba42c3e2214e1582e",
+        "target_file": "services/collectibles/export-privacy.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/collectibles/export-privacy.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "PASS"
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V1-EXPORT-PRIVACY-001.exact",
+          "content_sha256": "787d8ef66002dbd0bd54c4668ded846539fda0b905bd57eba42c3e2214e1582e"
+        }
+      },
+      "heal_reason": "collectibles_never_stop_heal",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/collectibles/export-privacy.js",
+          "exports": [
+            "createExportPrivacyService"
+          ],
+          "assertion_id": "expected_exports:services/collectibles/export-privacy.js"
+        }
+      ],
+      "started_at": "2026-08-13T21:32:52.574Z",
+      "last_attempt_at": "2026-08-13T21:32:52.648Z",
+      "last_error": "AIC_GATE_FAILURE",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-13T21:32:52.648Z",
-      "last_error": "AIC_GATE_FAILURE",
-      "started_at": "2026-08-13T21:32:52.574Z",
-      "heal_reason": "attach_convention_sealed_exact"
+      "failure_signature": "AIC_GATE_FAILURE",
+      "escalation_class": "same_signature_repeat",
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "escalation_required": false,
+      "escalation_note": null,
+      "park_until": null,
+      "heal_unblocked": true,
+      "tokens_used": 0,
+      "duration_ms": 1000,
+      "shipped_at": "2026-08-13T21:32:54.493Z"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
