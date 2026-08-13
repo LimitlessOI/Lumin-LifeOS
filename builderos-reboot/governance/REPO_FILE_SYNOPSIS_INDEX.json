@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T20:46:13.209Z",
+  "generated_at": "2026-08-13T20:46:56.794Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13581,
   "files": [
@@ -71533,8 +71533,8 @@
       "path": "public/collectibles/era-wall.html",
       "synopsis": "HTML page: Era Wall",
       "bytes": 12671,
-      "mtime": "2026-08-13T20:46:13.209Z",
-      "indexed_at": "2026-08-13T20:46:13.209Z"
+      "mtime": "2026-08-13T20:46:56.794Z",
+      "indexed_at": "2026-08-13T20:46:56.794Z"
     },
     {
       "path": "public/collectibles/vault.html",
