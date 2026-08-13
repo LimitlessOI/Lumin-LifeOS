@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T08:11:12.649Z",
+  "generated_at": "2026-08-13T08:11:47.886Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13544,
+  "file_count": 13545,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -94980,6 +94980,17 @@
       "mtime": "2026-08-13T06:02:00.751Z",
       "indexed_at": "2026-08-13T06:02:00.751Z",
       "ssot": [
+        "docs/products/collectibles/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/collectibles/twin-service.js",
+      "synopsis": "Creates a new Collectible Twin object.",
+      "bytes": 7697,
+      "mtime": "2026-08-13T08:11:47.886Z",
+      "indexed_at": "2026-08-13T08:11:47.886Z",
+      "ssot": [
+        "docs/products/collectibles/PRODUCT_HOME.md",
         "docs/products/collectibles/PRODUCT_HOME.md"
       ]
     },

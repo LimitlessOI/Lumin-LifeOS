@@ -4334,8 +4334,8 @@
     {
       "id": "COLLECTIBLES-V1-TWIN-SERVICE-001",
       "product_id": "collectibles",
-      "status": "pending",
-      "attempts": 0,
+      "status": "blocked",
+      "attempts": 1,
       "target_file": "services/collectibles/twin-service.js",
       "action_type": "write_file_exact",
       "depends_on": [
@@ -4373,8 +4373,8 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
-      "last_error": null,
+      "last_attempt_at": "2026-08-13T08:11:26.106Z",
+      "last_error": "STEP_STATUS_FORBIDDEN",
       "last_attempt": null,
       "revive_count": 0,
       "revived_at": "2026-08-13T06:17:39.524Z",
@@ -4391,20 +4391,20 @@
       "escalation_required": false,
       "escalation_note": null,
       "skip_reason": null,
-      "failure_signature": null,
+      "failure_signature": "STEP_STATUS_FORBIDDEN",
       "heal_unblocked": true,
       "heal_reason": "sealed_exact_identity_status_2026-08-13",
-      "started_at": "2026-08-13T07:51:44.070Z",
+      "started_at": "2026-08-13T08:11:26.083Z",
       "escalation_class": "same_signature_repeat",
       "exact_inputs": {
         "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V1-TWIN-SERVICE-001.exact"
       },
       "exactness": {
         "sealed": true,
-        "sealed_at": "2026-08-13T08:10:49.215Z",
-        "shipped_at": null,
+        "sealed_at": "2026-08-13T08:11:44.443Z",
+        "shipped_at": "2026-08-13T08:11:44.443Z",
         "commit_sha": null,
-        "content_sha256": "0bb7f0ed7f1137db7e5175d9df448ac00f596ffd61a4cf18bfb62ae284a6470f",
+        "content_sha256": "ca58970497dbb429b3ca30fd877e93239068e612df47cba12f43e738f2857918",
         "target_file": "services/collectibles/twin-service.js",
         "reverse": {
           "mode": "delete_file",
@@ -4418,9 +4418,10 @@
         "rebuild": {
           "action_type": "write_file_exact",
           "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V1-TWIN-SERVICE-001.exact",
-          "content_sha256": "0bb7f0ed7f1137db7e5175d9df448ac00f596ffd61a4cf18bfb62ae284a6470f"
+          "content_sha256": "ca58970497dbb429b3ca30fd877e93239068e612df47cba12f43e738f2857918"
         }
-      }
+      },
+      "shipped_at": "2026-08-13T08:11:44.443Z"
     },
     {
       "id": "COLLECTIBLES-V1-MTG-ADAPTER-001",
