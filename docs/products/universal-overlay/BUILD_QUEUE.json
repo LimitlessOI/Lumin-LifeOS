@@ -4841,8 +4841,8 @@
       },
       "exactness": {
         "sealed": true,
-        "sealed_at": "2026-08-13T07:54:10.978Z",
-        "shipped_at": "2026-08-13T07:54:10.978Z",
+        "sealed_at": "2026-08-13T07:55:30.545Z",
+        "shipped_at": "2026-08-13T07:55:30.545Z",
         "commit_sha": null,
         "content_sha256": "4d34e1d2088564f729449f9b6b721c4a8d8c39af99ea08473b423725ace1947e",
         "target_file": "native/macos-overlay/MacOsBodyAdapter.swift",
@@ -4939,7 +4939,7 @@
           "content_sha256": "4d34e1d2088564f729449f9b6b721c4a8d8c39af99ea08473b423725ace1947e"
         }
       },
-      "shipped_at": "2026-08-13T07:54:10.978Z"
+      "shipped_at": "2026-08-13T07:55:30.545Z"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
