@@ -2,14 +2,17 @@
 /**
  * SYNOPSIS: Dispatch one tick of work for a named factory lane. Production
  * Railway is factory-1 (GOVERNED_AUTONOMOUS_SHIP). factory-2 is a local
- * worktree — this runner syncs it, verifies owned native steps, and compiles
- * Taloa.app when native/macos-overlay changes. `--loop` keeps ticking.
- * `--install-agent` installs a LaunchAgent so the loop survives this chat.
+ * worktree — sync + compile Taloa when native/macos-overlay changes.
+ * factory-3 owns public/overlay/ — sync + request production
+ * ship-queue-and-commit with factory_id so Railway authors that lane.
+ * `--loop` keeps ticking. `--install-agent` installs a LaunchAgent.
  *
- * Usage: FACTORY_ID=factory-2 node scripts/run-factory-lane.mjs [--loop|--install-agent|--unload-agent]
+ * Usage: FACTORY_ID=factory-3 node scripts/run-factory-lane.mjs [--loop|--install-agent|--unload-agent]
  *
  * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
+import * as dotenv from 'dotenv';
+dotenv.config({ override: true });
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -21,6 +24,64 @@ import { syncFactoryWorktree } from './sync-factory-worktree.mjs';
 import { evaluateSystemWatchdog, overlayNativeBlockedSteps } from './lib/system-watchdog.mjs';
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+
+function tipBaseUrl() {
+  return (
+    process.env.BUILDER_BASE_URL ||
+    process.env.PUBLIC_BASE_URL ||
+    process.env.LUMIN_SMOKE_BASE_URL ||
+    'https://lumin-web-production-e3a9.up.railway.app'
+  ).trim().replace(/\/$/, '');
+}
+
+function tipCommandKey() {
+  return (
+    process.env.COMMAND_CENTER_KEY ||
+    process.env.COMMAND_KEY ||
+    process.env.LIFEOS_KEY ||
+    process.env.API_KEY ||
+    ''
+  ).trim();
+}
+
+function ownsCollectiblesLane(factoryId) {
+  return ownerFor('services/collectibles/category-adapter.js') === factoryId;
+}
+
+function productIdForFactory(factoryId) {
+  if (ownsCollectiblesLane(factoryId)) return 'collectibles';
+  return 'universal-overlay';
+}
+
+async function requestLaneShip(factoryId) {
+  const key = tipCommandKey();
+  if (!key) {
+    return { ok: false, skipped: true, reason: 'missing_command_key' };
+  }
+  const url = `${tipBaseUrl()}/factory/ship-queue-and-commit`;
+  try {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        'x-command-key': key,
+      },
+      body: JSON.stringify({ factory_id: factoryId, maxStepsPerProduct: 1 }),
+    });
+    const body = await res.json().catch(() => ({}));
+    return {
+      ok: res.ok && body?.ok !== false,
+      status: res.status,
+      shipped: body?.shipped ?? 0,
+      reason: body?.reason,
+      factory_id: body?.factory_id || factoryId,
+      products: body?.products,
+      detail: body?.error || body?.detail,
+    };
+  } catch (err) {
+    return { ok: false, error: String(err.message || err).slice(0, 300) };
+  }
+}
 
 function loadQueue(productId, repoRoot) {
   const p = path.join(repoRoot, 'docs/products', productId, 'BUILD_QUEUE.json');
@@ -126,10 +187,26 @@ function buildTaloa(repoRoot) {
   });
 }
 
-export function runFactoryLane({ factoryId = thisFactoryId(), productId = 'universal-overlay' } = {}) {
+export async function runFactoryLane({ factoryId = thisFactoryId(), productId = null } = {}) {
+  const resolvedProduct = productId || productIdForFactory(factoryId);
   const sync = factoryId === 'factory-1' ? { ok: true, skipped: true } : syncFactoryWorktree(factoryId);
   const repoRoot = workspaceRootFor(factoryId);
-  const queue = loadQueue(productId, repoRoot);
+  let queue;
+  try {
+    queue = loadQueue(resolvedProduct, repoRoot);
+  } catch (err) {
+    return {
+      ok: false,
+      factory_id: factoryId,
+      workspace: repoRoot,
+      sync,
+      product_id: resolvedProduct,
+      pending_owned: [],
+      build: { skipped: true, reason: 'queue_missing' },
+      ship: { skipped: true, reason: 'queue_missing' },
+      detail: `BUILD_QUEUE missing for ${resolvedProduct}: ${String(err.message || err).slice(0, 200)}`,
+    };
+  }
   const owned = pendingOwnedSteps(queue, factoryId);
   const checks = owned.map((s) => ({
     id: s.id,
@@ -141,6 +218,7 @@ export function runFactoryLane({ factoryId = thisFactoryId(), productId = 'unive
   const claimable = checks.filter((c) => c.ok);
 
   let build = { skipped: true, reason: factoryId === 'factory-1' ? 'primary_lane_does_not_compile_native' : 'lane_does_not_own_native' };
+  let ship = { skipped: true, reason: 'not_web_shell_lane' };
   let taloa = null;
   let watchdog = null;
   if (ownsNative(factoryId) && sync.ok !== false) {
@@ -175,6 +253,21 @@ export function runFactoryLane({ factoryId = thisFactoryId(), productId = 'unive
       watchdog,
       pending_owned: checks,
     });
+  } else if (ownsCollectiblesLane(factoryId) && factoryId !== 'factory-1') {
+    build = { skipped: true, reason: 'collectibles_lane_ships_via_tip' };
+    if (needsAuthor.length || claimable.length) {
+      ship = await requestLaneShip(factoryId);
+    } else {
+      ship = { skipped: true, reason: 'no_pending_owned_steps' };
+    }
+    writeTick(repoRoot, factoryId, {
+      at: new Date().toISOString(),
+      factory_id: factoryId,
+      product_id: resolvedProduct,
+      build,
+      ship,
+      pending_owned: checks,
+    });
   } else if (factoryId !== 'factory-1') {
     writeTick(repoRoot, factoryId, {
       at: new Date().toISOString(),
@@ -185,26 +278,31 @@ export function runFactoryLane({ factoryId = thisFactoryId(), productId = 'unive
   }
 
   let detail;
-  if (needsAuthor.length) {
+  if (ownsCollectiblesLane(factoryId) && ship && !ship.skipped) {
+    detail = ship.ok
+      ? `collectibles ship requested for ${factoryId}: shipped=${ship.shipped || 0}`
+      : `collectibles ship failed for ${factoryId}: ${ship.reason || ship.error || ship.detail || 'unknown'}`;
+  } else if (needsAuthor.length) {
     detail = `${needsAuthor.length} owned step(s) need authoring: ${needsAuthor.map((c) => c.id).join(', ')}`;
   } else if (claimable.length) {
     detail = `${claimable.length} owned step(s) satisfied on disk (queue claim is factory-1): ${claimable.map((c) => c.id).join(', ')}`;
   } else if (build.ok) {
     detail = `compiled Taloa.app at native ${build.native_tree_sha}`;
   } else if (build.skipped) {
-    detail = `no pending ${productId} steps owned by ${factoryId}; ${build.reason}`;
+    detail = `no pending ${resolvedProduct} steps owned by ${factoryId}; ${build.reason}`;
   } else {
     detail = `native compile failed`;
   }
 
   return {
-    ok: sync.ok !== false && build.ok !== false,
+    ok: sync.ok !== false && build.ok !== false && (ship.skipped || ship.ok !== false),
     factory_id: factoryId,
     workspace: repoRoot,
     sync,
-    product_id: productId,
+    product_id: resolvedProduct,
     pending_owned: checks,
     build,
+    ship,
     taloa,
     watchdog,
     detail,
@@ -245,7 +343,9 @@ export function installLaunchAgent(factoryId = thisFactoryId()) {
   <dict>
     <key>FACTORY_ID</key><string>${factoryId}</string>
     <key>FACTORY_LANE_INTERVAL_MS</key><string>60000</string>
-    <key>PATH</key><string>/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin</string>
+    <key>PATH</key><string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+    <key>PUBLIC_BASE_URL</key><string>${tipBaseUrl()}</string>
+    ${tipCommandKey() ? `<key>COMMAND_CENTER_KEY</key><string>${tipCommandKey().replace(/&/g, '&amp;').replace(/</g, '&lt;')}</string>` : ''}
   </dict>
   <key>RunAtLoad</key><true/>
   <key>KeepAlive</key><true/>
@@ -295,8 +395,8 @@ function main() {
     return;
   }
   const loop = process.argv.includes('--loop');
-  const tick = () => {
-    const result = runFactoryLane({ factoryId: thisFactoryId() });
+  const tick = async () => {
+    const result = await runFactoryLane({ factoryId: thisFactoryId() });
     console.log(JSON.stringify({ at: new Date().toISOString(), ...result }));
     if (!result.ok && !loop) process.exit(1);
   };
@@ -304,7 +404,7 @@ function main() {
   if (loop) {
     const ms = Number(process.env.FACTORY_LANE_INTERVAL_MS || 60_000);
     console.error(`[factory-lane] looping every ${ms}ms as ${thisFactoryId()}`);
-    setInterval(tick, ms);
+    setInterval(() => { tick().catch((err) => console.error(String(err))); }, ms);
   }
 }
 

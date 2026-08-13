@@ -54,17 +54,30 @@ export function nextFactoryId(filePath = SLOT_RECEIPT) {
   return factoryIdAt(registeredCount(filePath) + 1);
 }
 
+/** Collectibles lane — longest-prefix wins over factory-1's broad services/routes. */
+export const COLLECTIBLES_LANE_OWNS = Object.freeze([
+  'services/collectibles/',
+  'services/mtg-card-',
+  'routes/collectibles-',
+  'routes/mtg-cards-',
+  'public/collectibles/',
+  'public/mtg-cards-',
+  'docs/products/collectibles/',
+  'builderos-reboot/MISSIONS/PRODUCT-COLLECTIBLES-',
+  'tests/collectibles-',
+  'tests/mtg-card-',
+]);
+
 /**
- * Who writes which prefix when a slot is flipped on. factory-1/2 stay the
- * existing split. factory-3 takes the web overlay shell so it does not collide
- * with backend or native. factory-4+ gets an empty owns list until Conductor
- * assigns one — enabling still provisions the lane.
+ * Who writes which prefix when a slot is flipped on. factory-1/2 stay overlay
+ * (backend + native). factory-3 is Collectibles. factory-4+ gets empty owns
+ * until Conductor assigns one — enabling still provisions the lane.
  */
 export function laneTemplateFor(factoryId) {
   const id = String(factoryId || '').trim();
   if (id === 'factory-1') return [...(FALLBACK_LANES[0]?.owns || [])];
   if (id === 'factory-2') return [...(FALLBACK_LANES[1]?.owns || [])];
-  if (id === 'factory-3') return ['public/overlay/'];
+  if (id === 'factory-3') return [...COLLECTIBLES_LANE_OWNS];
   return [];
 }
 

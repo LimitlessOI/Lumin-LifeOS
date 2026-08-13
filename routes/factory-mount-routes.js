@@ -796,8 +796,14 @@ ${text.slice(0, 24000)}`;
 
   router.post('/factory/ship-queue-and-commit', guard, async (req, res) => {
     try {
-      const result = await runGovernedAutonomousShipOnce({ logger, maxStepsPerProduct: req.body?.maxStepsPerProduct || 1 });
-      res.json(result);
+      const factoryIdRaw = req.body?.factory_id || req.body?.factoryId || null;
+      const factoryId = factoryIdRaw ? String(factoryIdRaw).trim() : null;
+      const result = await runGovernedAutonomousShipOnce({
+        logger,
+        maxStepsPerProduct: req.body?.maxStepsPerProduct || 1,
+        factoryId,
+      });
+      res.json({ ...result, factory_id: factoryId || result.factory_id || 'factory-1' });
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
     }

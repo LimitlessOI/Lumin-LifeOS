@@ -23,7 +23,10 @@ function noteFor(factoryId) {
     return 'The existing governed factory, and the repository working tree itself. Historical ledger rows belong to it.';
   }
   if (factoryId === 'factory-2') {
-    return 'Second lane. Provisioned as its own git worktree so it has an independent index — two factories sharing one index is the git-lock and staging-contamination failure this repo has already hit.';
+    return 'Second lane. Provisioned as its own git worktree so it has an independent index — two factories sharing one index is the git-lock and staging-contamination failure this repo has already hit. Owns native/macos-overlay/.';
+  }
+  if (factoryId === 'factory-3') {
+    return 'Third lane — Collectibles. Owns services/collectibles/, mtg-card bootstrap, collectibles routes/public/docs. LaunchAgent ships via production ship-queue-and-commit with factory_id=factory-3. Overlay stays on factory-1/2.';
   }
   return `Registered slot. Idle until enabled. Flip on with npm run builderos:factory:enable -- --factory ${factoryId}; idle with --idle (worktree stays).`;
 }

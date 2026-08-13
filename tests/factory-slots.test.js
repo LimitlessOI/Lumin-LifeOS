@@ -35,7 +35,7 @@ test('three slots are registered without recoding FACTORIES', () => {
 test('idle factory-3 does not steal native or backend files', () => {
   const assignment = {
     lanes: [
-      { factory_id: 'factory-1', owns: ['services/', 'routes/'] },
+      { factory_id: 'factory-1', owns: ['services/', 'routes/', 'public/overlay/'] },
       { factory_id: 'factory-2', owns: ['native/macos-overlay/'] },
       { factory_id: 'factory-3', owns: [] },
     ],
@@ -43,25 +43,28 @@ test('idle factory-3 does not steal native or backend files', () => {
   assert.equal(ownerFor('services/taloa/overlay-host-service.js', assignment), 'factory-1');
   assert.equal(ownerFor('native/macos-overlay/ContainerView.swift', assignment), 'factory-2');
   assert.equal(ownerFor('public/overlay/lifeos-app.html', assignment), 'factory-1');
+  assert.equal(ownerFor('services/collectibles/category-adapter.js', assignment), 'factory-1');
   assert.deepEqual(dispatchingFactoryIds(assignment), ['factory-1', 'factory-2']);
 });
 
-test('enabling factory-3 is a lane-assignment switch onto public/overlay', () => {
+test('enabling factory-3 is a lane-assignment switch onto Collectibles', () => {
   const before = {
     lanes: [
-      { factory_id: 'factory-1', owns: ['services/', 'routes/'] },
+      { factory_id: 'factory-1', owns: ['services/', 'routes/', 'public/overlay/'] },
       { factory_id: 'factory-2', owns: ['native/macos-overlay/'] },
     ],
   };
   const enabled = applyEnableLane(before, 'factory-3');
-  assert.deepEqual(laneTemplateFor('factory-3'), ['public/overlay/']);
-  assert.equal(ownerFor('public/overlay/lifeos-app.html', enabled), 'factory-3');
+  assert.ok(laneTemplateFor('factory-3').includes('services/collectibles/'));
+  assert.equal(ownerFor('services/collectibles/category-adapter.js', enabled), 'factory-3');
+  assert.equal(ownerFor('services/mtg-card-vision.js', enabled), 'factory-3');
+  assert.equal(ownerFor('public/overlay/lifeos-app.html', enabled), 'factory-1');
   assert.equal(ownerFor('native/macos-overlay/ContainerView.swift', enabled), 'factory-2');
   assert.equal(ownerFor('routes/taloa-overlay-host-routes.js', enabled), 'factory-1');
   assert.ok(dispatchingFactoryIds(enabled).includes('factory-3'));
 
   const idled = applyIdleLane(enabled, 'factory-3');
-  assert.equal(ownerFor('public/overlay/lifeos-app.html', idled), 'factory-1');
+  assert.equal(ownerFor('services/collectibles/category-adapter.js', idled), 'factory-1');
   assert.equal(dispatchingFactoryIds(idled).includes('factory-3'), false);
 });
 
@@ -85,17 +88,19 @@ test('LaunchAgent label is parameterized so factory-3 does not recode the plist'
   assert.equal(launchAgentLabel('factory-3'), 'com.lumin.factory-3-lane');
 });
 
-test('allocate default does not hand slices to an idle factory-3', () => {
-  const dispatching = dispatchingFactories().map((f) => f.factory_id);
-  assert.ok(dispatching.includes('factory-1'));
-  assert.equal(dispatching.includes('factory-3'), false);
-
+test('allocate does not hand slices to factory-3 when it is not in the factory list', () => {
+  // Live LANE_ASSIGNMENT may have factory-3 enabled — this test freezes an
+  // idle assignment and only offers factory-1/2 to allocate().
   const assignment = {
     lanes: [
       { factory_id: 'factory-1', owns: ['services/', 'routes/'] },
       { factory_id: 'factory-2', owns: ['native/macos-overlay/'] },
+      { factory_id: 'factory-3', owns: [] },
     ],
   };
+  assert.equal(dispatchingFactoryIds(assignment).includes('factory-3'), false);
+  assert.ok(dispatchingFactoryIds(assignment).includes('factory-1'));
+
   const blueprint = {
     blueprint_id: 'BP-SLOT',
     _meta: { product: 'p' },
@@ -115,6 +120,14 @@ test('allocate default does not hand slices to an idle factory-3', () => {
   });
   assert.equal(result.ok, true);
   assert.equal(result.assignments.some((a) => (a.factory_ids || []).includes('factory-3')), false);
+});
+
+test('enabled factory-3 owns Collectibles paths in the live assignment', () => {
+  const live = dispatchingFactories().map((f) => f.factory_id);
+  assert.ok(live.includes('factory-1'));
+  assert.ok(live.includes('factory-3'), `expected factory-3 dispatching, got ${live.join(',')}`);
+  assert.equal(ownerFor('services/collectibles/category-adapter.js'), 'factory-3');
+  assert.equal(ownerFor('public/overlay/lifeos-app.html'), 'factory-1');
 });
 
 test('factoryIdAt is the only identity constructor', () => {

@@ -19,21 +19,27 @@ import { authorAssertionsFromSpec } from '../factory-staging/factory-core/bpb/au
 import { runBehaviorAssertions } from '../factory-staging/factory-core/sentry/behavior-assertions.js';
 import {
   LIVE_BUILD_QUEUE_PRODUCT,
+  LIVE_BUILD_QUEUE_PRODUCTS,
   LIVE_BUILD_QUEUE_REL,
+  COLLECTIBLES_BUILD_QUEUE_REL,
   SECOND_QUEUE_FORBIDDEN,
   NEW_QUEUE_FORBIDDEN,
   isCanonicalLiveQueuePath,
   isLiveQueueLocation,
+  isLiveQueueProduct,
   normalizeQueueRel,
 } from '../config/live-build-queue.js';
 
 export {
   LIVE_BUILD_QUEUE_PRODUCT,
+  LIVE_BUILD_QUEUE_PRODUCTS,
   LIVE_BUILD_QUEUE_REL,
+  COLLECTIBLES_BUILD_QUEUE_REL,
   SECOND_QUEUE_FORBIDDEN,
   NEW_QUEUE_FORBIDDEN,
   isCanonicalLiveQueuePath,
   isLiveQueueLocation,
+  isLiveQueueProduct,
 };
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -50,7 +56,7 @@ export const STEP_STATUS = Object.freeze({
 export function liveQueuePathForbidden(filePath) {
   const rel = String(filePath || '').replace(/\\/g, '/');
   const product = rel.match(/docs\/products\/([^/]+)\/BUILD_QUEUE\.json$/);
-  if (product && product[1] !== LIVE_BUILD_QUEUE_PRODUCT) return product[1];
+  if (product && !isLiveQueueProduct(product[1])) return product[1];
   const project = rel.match(/docs\/projects\/([^/]+(?:\/[^/]+)?)\/BUILD_QUEUE\.json$/);
   if (project) return project[1];
   const archived = rel.match(/docs\/history\/product-build-queues\/([^/]+)\/BUILD_QUEUE\.json$/);
@@ -62,7 +68,7 @@ export function assertLiveBuildQueuePath(filePath) {
   const other = liveQueuePathForbidden(filePath);
   if (!other) return;
   throw new Error(
-    `${SECOND_QUEUE_FORBIDDEN}: the only live BUILD_QUEUE is docs/products/${LIVE_BUILD_QUEUE_PRODUCT}/BUILD_QUEUE.json. Refused '${other}'. Archived at docs/history/product-build-queues/. This is supposed to break.`,
+    `${SECOND_QUEUE_FORBIDDEN}: live BUILD_QUEUEs are only ${LIVE_BUILD_QUEUE_PRODUCTS.map((id) => `docs/products/${id}/BUILD_QUEUE.json`).join(' + ')}. Refused '${other}'. Archived at docs/history/product-build-queues/. This is supposed to break.`,
   );
 }
 
@@ -73,7 +79,7 @@ export function listForbiddenLiveQueueFiles(root = ROOT) {
     for (const name of fs.readdirSync(productsDir, { withFileTypes: true })) {
       if (!name.isDirectory()) continue;
       const p = path.join(productsDir, name.name, 'BUILD_QUEUE.json');
-      if (name.name !== LIVE_BUILD_QUEUE_PRODUCT && fs.existsSync(p)) found.push(path.relative(root, p));
+      if (!isLiveQueueProduct(name.name) && fs.existsSync(p)) found.push(path.relative(root, p));
     }
   } catch { /* missing products dir */ }
   const projectsDir = path.join(root, 'docs/projects');
@@ -94,15 +100,20 @@ export function assertNoSecondLiveQueueOnDisk(root = ROOT) {
   const extra = listForbiddenLiveQueueFiles(root);
   if (!extra.length) return;
   throw new Error(
-    `${SECOND_QUEUE_FORBIDDEN}: extra live queues on disk:\n${extra.join('\n')}\nOnly docs/products/${LIVE_BUILD_QUEUE_PRODUCT}/BUILD_QUEUE.json may exist. Move the rest to docs/history/product-build-queues/.`,
+    `${SECOND_QUEUE_FORBIDDEN}: extra live queues on disk:\n${extra.join('\n')}\nOnly ${LIVE_BUILD_QUEUE_PRODUCTS.map((id) => `docs/products/${id}/BUILD_QUEUE.json`).join(' + ')} may exist. Move the rest to docs/history/product-build-queues/.`,
   );
 }
 
 export function assertBuildQueueMayBeWritten(filePath, { creating = false } = {}) {
   assertLiveBuildQueuePath(filePath);
   if (!creating) return;
+  const rel = normalizeQueueRel(filePath);
+  // Collectibles may be minted once (factory-3 lane). Overlay already exists — never re-mint.
+  if (rel === COLLECTIBLES_BUILD_QUEUE_REL || rel.endsWith(`/${COLLECTIBLES_BUILD_QUEUE_REL}`)) {
+    if (!fs.existsSync(path.isAbsolute(filePath) ? filePath : path.join(ROOT, rel))) return;
+  }
   throw new Error(
-    `${NEW_QUEUE_FORBIDDEN}: refused to mint '${normalizeQueueRel(filePath)}'. No new BUILD_QUEUE.json may ever be created. The only live queue already exists at ${LIVE_BUILD_QUEUE_REL}. This is supposed to break.`,
+    `${NEW_QUEUE_FORBIDDEN}: refused to mint '${rel}'. New BUILD_QUEUE.json only allowed for authorized live products that do not yet exist (${LIVE_BUILD_QUEUE_PRODUCTS.join(', ')}). Overlay already exists at ${LIVE_BUILD_QUEUE_REL}. This is supposed to break.`,
   );
 }
 
@@ -116,13 +127,18 @@ export function assertNoNewBuildQueueInCommit(fileEntries, { trackedSet = new Se
     if (!isLiveQueueLocation(rel) && !rel.endsWith('/BUILD_QUEUE.json')) continue;
     if (!isLiveQueueLocation(rel)) continue;
     const isNew = !trackedSet.has(rel);
-    if (!isCanonicalLiveQueuePath(rel) || isNew) {
+    if (!isCanonicalLiveQueuePath(rel)) {
+      blocked.push(rel);
+      continue;
+    }
+    // Allow first mint of collectibles queue; overlay updates OK; other new queues blocked.
+    if (isNew && !(rel === COLLECTIBLES_BUILD_QUEUE_REL || rel.endsWith(`/${COLLECTIBLES_BUILD_QUEUE_REL}`))) {
       blocked.push(rel);
     }
   }
   if (!blocked.length) return;
   throw new Error(
-    `${NEW_QUEUE_FORBIDDEN}: commit refused — no new BUILD_QUEUE.json may ever be created. Refused:\n${blocked.join('\n')}\nOnly updates to ${LIVE_BUILD_QUEUE_REL} are legal. This is supposed to break.`,
+    `${NEW_QUEUE_FORBIDDEN}: commit refused — unauthorized BUILD_QUEUE.json. Refused:\n${blocked.join('\n')}\nLegal live queues: ${LIVE_BUILD_QUEUE_REL} + ${COLLECTIBLES_BUILD_QUEUE_REL}. This is supposed to break.`,
   );
 }
 

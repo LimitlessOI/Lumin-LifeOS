@@ -11,6 +11,7 @@ import { execSync } from 'node:child_process';
 import { extractSsotTag } from './product-home-enforce.mjs';
 import {
   LIVE_BUILD_QUEUE_REL,
+  COLLECTIBLES_BUILD_QUEUE_REL,
   NEW_QUEUE_FORBIDDEN,
   isCanonicalLiveQueuePath,
   isLiveQueueLocation,
@@ -202,13 +203,14 @@ export function evaluateFilePlacement(fileEntries, repoRoot = ROOT, { trackedSet
     if (entry?.delete === true || entry?.op === 'delete' || entry?.sha === null) continue;
     if (!isLiveQueueLocation(rel)) continue;
     const isNew = !tracked.has(rel);
-    if (!isCanonicalLiveQueuePath(rel) || isNew) {
+    const collectiblesMint = isNew && (rel === COLLECTIBLES_BUILD_QUEUE_REL || rel.endsWith(`/${COLLECTIBLES_BUILD_QUEUE_REL}`));
+    if (!isCanonicalLiveQueuePath(rel) || (isNew && !collectiblesMint)) {
       findings.push({
         path: rel,
         severity: 'error',
         kind: NEW_QUEUE_FORBIDDEN,
-        reason: `No new BUILD_QUEUE.json may ever be created. Only updates to ${LIVE_BUILD_QUEUE_REL} are legal. Refused '${rel}'. This is supposed to break.`,
-        proposed_solution: `Do not mint a queue. Put work on ${LIVE_BUILD_QUEUE_REL}. Archived queues stay in docs/history/product-build-queues/.`,
+        reason: `Unauthorized BUILD_QUEUE.json. Legal live queues: ${LIVE_BUILD_QUEUE_REL} + ${COLLECTIBLES_BUILD_QUEUE_REL}. Refused '${rel}'. This is supposed to break.`,
+        proposed_solution: `Only overlay updates or first mint of collectibles (factory-3) are legal. Archived queues stay in docs/history/product-build-queues/.`,
       });
     }
   }

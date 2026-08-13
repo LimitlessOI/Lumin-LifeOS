@@ -1,7 +1,1 @@
-{
-  "schema": "factory_slot_state_v1",
-  "generated_at": "2026-08-12T23:55:00.000Z",
-  "registered_count": 3,
-  "last_registered": "factory-3",
-  "note": "factory-1 and factory-2 dispatch. factory-3 is registered idle. Enable with npm run builderos:factory:enable -- --factory factory-3. Idle unloads the agent and keeps the worktree. factory-4+ is --register-next then --enable."
-}
+{"schema":"factory_slot_state_v1","generated_at":"2026-08-13T05:00:00.000Z","registered_count":3,"last_registered":"factory-3","note":"factory-1=overlay backend+public/overlay; factory-2=native overlay; factory-3=Collectibles (services/collectibles + mtg bootstrap). Founder 2026-08-12: third factory is Collectibles, not overlay."}

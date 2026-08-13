@@ -961,9 +961,16 @@ async function planQueueIfNeeded({ products, queueCache, logger, maxPlanAttempts
   return planned;
 }
 
-export async function runGovernedAutonomousShipOnce({ logger, maxStepsPerProduct = 1, shipFn = shipViaGovernedQueue, queueCache: inputQueueCache } = {}) {
+export async function runGovernedAutonomousShipOnce({
+  logger,
+  maxStepsPerProduct = 1,
+  shipFn = shipViaGovernedQueue,
+  queueCache: inputQueueCache,
+  factoryId: factoryIdOverride = null,
+} = {}) {
   if (state.running) return { ok: false, skipped: true, reason: 'already_running' };
   if (!governedFactoryOnly()) return { ok: false, skipped: true, reason: 'fence_off' };
+  const actingFactoryId = String(factoryIdOverride || thisFactoryId() || 'factory-1').trim() || 'factory-1';
 
   const token = hasTokenCapacity();
   if (!token.ok) {
@@ -1037,7 +1044,7 @@ export async function runGovernedAutonomousShipOnce({ logger, maxStepsPerProduct
       products,
       readQueue: (id) => queueCache[id],
       maxStepsPerProduct,
-      factoryId: thisFactoryId(),
+      factoryId: actingFactoryId,
       ownerFor,
     });
     if (!plan.runnable) {
@@ -1047,14 +1054,14 @@ export async function runGovernedAutonomousShipOnce({ logger, maxStepsPerProduct
           products,
           readQueue: (id) => queueCache[id],
           maxStepsPerProduct,
-          factoryId: thisFactoryId(),
+          factoryId: actingFactoryId,
           ownerFor,
         });
       }
     }
     if (!plan.runnable) {
       queueCommitted = await commitQueueRuntimeChanges(queueCache, queueSnapshots, 'queue', logger, queueCommitted);
-      return { ok: true, shipped: 0, reason: 'no_shippable_steps', gaps: plan.total_gaps };
+      return { ok: true, shipped: 0, reason: 'no_shippable_steps', gaps: plan.total_gaps, factory_id: actingFactoryId };
     }
     let shipped = 0;
     let dispatchAttempts = 0;
@@ -1173,7 +1180,7 @@ export async function runGovernedAutonomousShipOnce({ logger, maxStepsPerProduct
     recordDailyBuildAttempts(dispatchAttempts);
     state.lastShipped = shipped;
     await persistState();
-    return { ok: true, shipped, products: perProduct, gaps: plan.total_gaps };
+    return { ok: true, shipped, products: perProduct, gaps: plan.total_gaps, factory_id: actingFactoryId };
   } catch (err) {
     logger?.warn?.({ err: err.message }, '[GOVERNED-AUTONOMOUS-SHIP] tick threw');
     return { ok: false, error: err.message };

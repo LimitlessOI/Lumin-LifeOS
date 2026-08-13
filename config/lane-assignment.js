@@ -13,7 +13,12 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ASSIGNMENT_PATH = path.join(ROOT, 'products/receipts/LANE_ASSIGNMENT.json');
 const PRIMARY = 'factory-1';
 
-/** Hard floor so a missing receipt cannot assign native overlay to factory-1. */
+/**
+ * Hard floor when LANE_ASSIGNMENT.json is missing.
+ * factory-3 (public/overlay/) is NOT in the fallback — enabling it writes the
+ * receipt. If factory-3 is idled (owns:[]), unmatched public/overlay paths
+ * default to factory-1 so manufacturing does not stall on a parked lane.
+ */
 export const FALLBACK_LANES = Object.freeze([
   Object.freeze({ factory_id: 'factory-1', owns: Object.freeze(['services/', 'routes/', 'db/migrations/', 'builderos-reboot/MISSIONS/']) }),
   Object.freeze({ factory_id: 'factory-2', owns: Object.freeze(['native/macos-overlay/']) }),

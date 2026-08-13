@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T04:02:02.038Z",
+  "generated_at": "2026-08-13T05:03:17.278Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13448,
+  "file_count": 13449,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -32801,17 +32801,23 @@
     },
     {
       "path": "config/factory-registry.js",
-      "synopsis": "Configuration — Factory Registry.",
-      "bytes": 0,
-      "mtime": "2026-08-13T00:02:11.564Z",
-      "indexed_at": "2026-08-13T00:02:11.564Z"
+      "synopsis": "Factory identity and allocation policy. Factories are PEERS: neither",
+      "bytes": 5554,
+      "mtime": "2026-08-13T05:03:17.278Z",
+      "indexed_at": "2026-08-13T05:03:17.278Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "config/factory-slots.js",
-      "synopsis": "Configuration — Factory Slots.",
-      "bytes": 0,
-      "mtime": "2026-08-13T00:02:11.564Z",
-      "indexed_at": "2026-08-13T00:02:11.564Z"
+      "synopsis": "Factory-N is a switch, not a rewrite. Identities factory-1..N are",
+      "bytes": 5997,
+      "mtime": "2026-08-13T05:03:17.278Z",
+      "indexed_at": "2026-08-13T05:03:17.278Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "config/factory-workspace.js",
@@ -32956,10 +32962,13 @@
     },
     {
       "path": "config/lane-assignment.js",
-      "synopsis": "Configuration — Lane Assignment.",
-      "bytes": 0,
-      "mtime": "2026-08-12T21:50:46.856Z",
-      "indexed_at": "2026-08-12T21:50:46.856Z"
+      "synopsis": "Who writes which files. Conductor + Architect freeze this so two",
+      "bytes": 3614,
+      "mtime": "2026-08-13T05:03:17.278Z",
+      "indexed_at": "2026-08-13T05:03:17.278Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "config/lifeos-personal-twin-schema.json",
@@ -33032,6 +33041,16 @@
       "mtime": "2026-06-23T06:07:27.646Z",
       "indexed_at": "2026-07-28T22:54:46.666Z",
       "synopsis_index_only": true
+    },
+    {
+      "path": "config/live-build-queue.js",
+      "synopsis": "Live product build queues. Overlay remains the primary money",
+      "bytes": 1763,
+      "mtime": "2026-08-13T05:03:17.278Z",
+      "indexed_at": "2026-08-13T05:03:17.278Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "config/manufacturing-plan-schema.js",
@@ -45373,9 +45392,9 @@
     {
       "path": "docs/products/PRODUCT_BUILD_PRIORITY.json",
       "synopsis": "Documentation — PRODUCT BUILD PRIORITY.",
-      "bytes": 0,
-      "mtime": "2026-08-13T04:02:02.038Z",
-      "indexed_at": "2026-08-13T04:02:02.038Z",
+      "bytes": 4388,
+      "mtime": "2026-08-13T05:03:17.278Z",
+      "indexed_at": "2026-08-13T05:03:17.278Z",
       "synopsis_index_only": true
     },
     {
@@ -69338,9 +69357,9 @@
     {
       "path": "products/receipts/FACTORY_SLOT_STATE.json",
       "synopsis": "Product receipt — FACTORY SLOT STATE.",
-      "bytes": 0,
-      "mtime": "2026-08-13T00:02:11.564Z",
-      "indexed_at": "2026-08-13T00:02:11.564Z",
+      "bytes": 332,
+      "mtime": "2026-08-13T05:03:17.278Z",
+      "indexed_at": "2026-08-13T05:03:17.278Z",
       "synopsis_index_only": true
     },
     {
@@ -69450,9 +69469,9 @@
     {
       "path": "products/receipts/LANE_ASSIGNMENT.json",
       "synopsis": "Product receipt — LANE ASSIGNMENT.",
-      "bytes": 0,
-      "mtime": "2026-08-12T21:50:46.856Z",
-      "indexed_at": "2026-08-12T21:50:46.856Z",
+      "bytes": 2494,
+      "mtime": "2026-08-13T05:03:17.278Z",
+      "indexed_at": "2026-08-13T05:03:17.278Z",
       "synopsis_index_only": true
     },
     {
@@ -73412,10 +73431,13 @@
     },
     {
       "path": "routes/factory-mount-routes.js",
-      "synopsis": "HTTP route module — Factory Mount Routes.",
-      "bytes": 0,
-      "mtime": "2026-08-13T00:15:37.774Z",
-      "indexed_at": "2026-08-13T00:15:37.774Z"
+      "synopsis": "Pure: should the codegen prompt inline this file's existing content?",
+      "bytes": 45151,
+      "mtime": "2026-08-13T05:03:17.278Z",
+      "indexed_at": "2026-08-13T05:03:17.278Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/faith-studio-routes.js",
@@ -77808,9 +77830,9 @@
     {
       "path": "scripts/lib/file-placement-gate.mjs",
       "synopsis": "File-placement authority gate — blocks new protected source files",
-      "bytes": 8169,
-      "mtime": "2026-07-31T08:29:51.991Z",
-      "indexed_at": "2026-07-31T08:33:28.712Z",
+      "bytes": 9343,
+      "mtime": "2026-08-13T05:03:17.278Z",
+      "indexed_at": "2026-08-13T05:03:17.278Z",
       "ssot": [
         "tag pointing to a registered product home or approved",
         "docs/products/builderos/PRODUCT_HOME.md"
@@ -79380,10 +79402,13 @@
     },
     {
       "path": "scripts/run-factory-lane.mjs",
-      "synopsis": "Script — Run Factory Lane.",
-      "bytes": 0,
-      "mtime": "2026-08-13T00:02:11.564Z",
-      "indexed_at": "2026-08-13T00:02:11.564Z"
+      "synopsis": "Dispatch one tick of work for a named factory lane. Production",
+      "bytes": 14383,
+      "mtime": "2026-08-13T05:03:17.278Z",
+      "indexed_at": "2026-08-13T05:03:17.278Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "scripts/run-foundation-pipeline.mjs",
@@ -93020,10 +93045,10 @@
     },
     {
       "path": "services/build-queue-core.js",
-      "synopsis": "Shared BUILD_QUEUE.json primitives (STEP_STATUS, loadBuildQueue,",
-      "bytes": 10367,
-      "mtime": "2026-08-10T22:32:52.738Z",
-      "indexed_at": "2026-08-10T22:40:09.823Z",
+      "synopsis": "Shared BUILD_QUEUE.json primitives plus the one-queue lock:",
+      "bytes": 15306,
+      "mtime": "2026-08-13T05:03:17.278Z",
+      "indexed_at": "2026-08-13T05:03:17.278Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -93031,9 +93056,9 @@
     {
       "path": "services/build-queue-planner.js",
       "synopsis": "Build-queue planner — turns a product's PRODUCT_HOME backlog into a",
-      "bytes": 26827,
-      "mtime": "2026-08-11T22:22:10.303Z",
-      "indexed_at": "2026-08-11T22:25:25.951Z",
+      "bytes": 27689,
+      "mtime": "2026-08-13T05:03:17.278Z",
+      "indexed_at": "2026-08-13T05:03:17.278Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -96352,9 +96377,9 @@
     {
       "path": "services/governed-autonomous-shipping-loop.js",
       "synopsis": "STEP 5g — the governed AUTONOMOUS shipping loop. When the STEP 5a",
-      "bytes": 65065,
-      "mtime": "2026-08-12T21:12:45.323Z",
-      "indexed_at": "2026-08-12T21:12:45.323Z",
+      "bytes": 65280,
+      "mtime": "2026-08-13T05:03:17.278Z",
+      "indexed_at": "2026-08-13T05:03:17.278Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -104367,10 +104392,10 @@
     },
     {
       "path": "tests/factory-slots.test.js",
-      "synopsis": "js — tests/factory-slots.test.js.",
-      "bytes": 0,
-      "mtime": "2026-08-13T00:02:11.564Z",
-      "indexed_at": "2026-08-13T00:02:11.564Z"
+      "synopsis": "Factory-N is a switch — register, enable, idle — without recoding identity.",
+      "bytes": 6235,
+      "mtime": "2026-08-13T05:03:17.278Z",
+      "indexed_at": "2026-08-13T05:03:17.278Z"
     },
     {
       "path": "tests/fcla-engines-smoke.test.mjs",
