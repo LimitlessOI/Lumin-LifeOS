@@ -1,67 +1,67 @@
+/**
+ * Overlay print §64 — macOS Universal Body adapter (observe/act/verify).
+ * Uses SemanticPerception for observe; ScreenControl for act.
+ * @ssot docs/products/universal-overlay/PRODUCT_HOME.md
+ */
 import Foundation
-import os.log
-import Combine
+import AppKit
+import ApplicationServices
 
-class MacOsBodyAdapter: BodyAdapter {
-    private let screenControl: MacOsScreenControl
-    private let semanticPerception: MacOsSemanticPerception
-    private var cancellables = Set<AnyCancellable>()
+enum MacOsBodyAction {
+    case click(CGPoint)
+    case typeText(String)
+    case key(String)
+}
 
-    init(screenControl: MacOsScreenControl, semanticPerception: MacOsSemanticPerception) {
-        self.screenControl = screenControl
-        self.semanticPerception = semanticPerception
-        os_log("MacOsBodyAdapter initialized.", log: OSLog.default, type: .info)
-        observeScreenControl()
-        observeSemanticPerception()
+final class MacOsBodyAdapter {
+    private let perception: SemanticPerception
+
+    init(perception: SemanticPerception = SemanticPerception()) {
+        self.perception = perception
     }
 
-    func act(action: BodyAction) {
-        os_log("MacOsBodyAdapter received action: %@", log: OSLog.default, type: .info, String(describing: action))
+    func observe(completion: @escaping (SemanticData) -> Void) {
+        perception.observe(completion: completion)
+    }
+
+    func act(_ action: MacOsBodyAction) {
         switch action {
-        case .tap(let x, let y):
-            screenControl.tap(atX: x, y: y)
-        case .scroll(let dx, let dy):
-            screenControl.scroll(byDx: dx, dy: dy)
-        case .sendKeys(let keys):
-            screenControl.sendKeys(keys)
-        case .focusElement(let elementId):
-            screenControl.focusElement(id: elementId)
-        case .requestScreenshot:
-            // The screenshot is provided via observation, not direct action response
-            break
-        case .requestSemanticTree:
-            // The semantic tree is provided via observation, not direct action response
-            break
+        case .click(let point):
+            click(at: point)
+        case .typeText(let text):
+            typeText(text)
+        case .key(let key):
+            typeText(key)
         }
     }
 
-    func observeScreenControl() {
-        screenControl.screenshotPublisher
-            .sink { [weak self] imageData in
-                // This is the 'observe' part for screenshots
-                // The 'verify' part would involve an independent mechanism checking if the screenshot
-                // accurately reflects the current screen state, which is outside this adapter's scope.
-                os_log("MacOsBodyAdapter observed new screenshot data.", log: OSLog.default, type: .debug)
-                self?.notifyObservation(observation: .screenshot(imageData))
+    func verify(expectedLabel: String, completion: @escaping (Bool) -> Void) {
+        observe { data in
+            let ok = data.elements.contains { element in
+                element.label.localizedCaseInsensitiveContains(expectedLabel)
             }
-            .store(in: &cancellables)
+            completion(ok)
+        }
     }
 
-    func observeSemanticPerception() {
-        semanticPerception.semanticTreePublisher
-            .sink { [weak self] semanticTreeData in
-                // This is the 'observe' part for the semantic tree
-                // The 'verify' part would involve an independent mechanism checking if the semantic tree
-                // accurately represents the UI elements, which is outside this adapter's scope.
-                os_log("MacOsBodyAdapter observed new semantic tree data.", log: OSLog.default, type: .debug)
-                self?.notifyObservation(observation: .semanticTree(semanticTreeData))
-            }
-            .store(in: &cancellables)
+    private func click(at point: CGPoint) {
+        let source = CGEventSource(stateID: .hidSystemState)
+        let down = CGEvent(mouseEventSource: source, mouseType: .leftMouseDown, mouseCursorPosition: point, mouseButton: .left)
+        let up = CGEvent(mouseEventSource: source, mouseType: .leftMouseUp, mouseCursorPosition: point, mouseButton: .left)
+        down?.post(tap: .cghidEventTap)
+        up?.post(tap: .cghidEventTap)
     }
 
-    private func notifyObservation(observation: BodyObservation) {
-        // In a real system, this would publish to a central observation stream or a delegate.
-        // For this factory-2 compilation, we'll just log it.
-        os_log("MacOsBodyAdapter produced observation: %@", log: OSLog.default, type: .info, String(describing: observation))
+    private func typeText(_ text: String) {
+        let source = CGEventSource(stateID: .hidSystemState)
+        for ch in text.utf16 {
+            var chars = [UniChar(ch)]
+            let down = CGEvent(keyboardEventSource: source, virtualKey: 0, keyDown: true)
+            let up = CGEvent(keyboardEventSource: source, virtualKey: 0, keyDown: false)
+            down?.keyboardSetUnicodeString(stringLength: 1, unicodeString: &chars)
+            up?.keyboardSetUnicodeString(stringLength: 1, unicodeString: &chars)
+            down?.post(tap: .cghidEventTap)
+            up?.post(tap: .cghidEventTap)
+        }
     }
 }
