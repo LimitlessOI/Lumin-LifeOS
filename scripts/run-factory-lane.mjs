@@ -22,6 +22,10 @@ import { ownerFor, thisFactoryId } from '../config/lane-assignment.js';
 import { workspaceRootFor } from '../config/factory-workspace.js';
 import { syncFactoryWorktree } from './sync-factory-worktree.mjs';
 import { evaluateSystemWatchdog, overlayNativeBlockedSteps } from './lib/system-watchdog.mjs';
+import {
+  applyManufacturingSelfRepair,
+  executeManufacturingWatchdogPlaybooks,
+} from '../services/manufacturing-self-repair.js';
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -85,7 +89,11 @@ function productIdForFactory(_factoryId) {
   return 'universal-overlay';
 }
 
-async function requestLaneShip(factoryId) {
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function requestLaneShipOnce(factoryId) {
   const key = tipCommandKey();
   if (!key) {
     return { ok: false, skipped: true, reason: 'missing_command_key' };
@@ -113,6 +121,21 @@ async function requestLaneShip(factoryId) {
   } catch (err) {
     return { ok: false, error: String(err.message || err).slice(0, 300) };
   }
+}
+
+/** Tip reclaimStaleShipLock is 90s; one short retry closes overnight already_running starvation. */
+async function requestLaneShip(factoryId) {
+  let ship = await requestLaneShipOnce(factoryId);
+  if (ship.ok !== false || !/already_running/i.test(String(ship.reason || ''))) return ship;
+  await sleep(8_000);
+  ship = await requestLaneShipOnce(factoryId);
+  ship.retried_after_already_running = true;
+  return ship;
+}
+
+/** In-memory only — tip's governed ship loop persists promote/stamp on revive. */
+function prepareQueueSelfRepair(queue) {
+  return applyManufacturingSelfRepair(queue);
 }
 
 function loadQueue(productId, repoRoot) {
@@ -255,7 +278,44 @@ export async function runFactoryLane({ factoryId = thisFactoryId(), productId = 
   let build = { skipped: true, reason: factoryId === 'factory-1' ? 'primary_lane_does_not_compile_native' : 'lane_does_not_own_native' };
   let ship = { skipped: true, reason: 'not_web_shell_lane' };
   let taloa = null;
+  let selfRepair = null;
   let watchdog = evaluateSystemWatchdog({ tip, overlayNativeBlocks: overlayNativeBlockedSteps(queue) });
+
+  // Tip persists promote/stamp; lane mutates in-memory so findings + reship see it.
+  prepareQueueSelfRepair(queue);
+
+  async function applyWatchdogAndMaybeReship({ factory2 = null } = {}) {
+    watchdog = evaluateSystemWatchdog({
+      tip,
+      factory2,
+      overlayNativeBlocks: overlayNativeBlockedSteps(queue),
+      laneShip: ship,
+      queue,
+      factoryId,
+    });
+    selfRepair = executeManufacturingWatchdogPlaybooks(watchdog, queue);
+    const shouldReship = (selfRepair.tip_actions || []).some((a) =>
+      a === 're_ship_after_promote' || a === 'retry_ship_after_reclaim');
+    // already_running already retried inside requestLaneShip; only reship for promote.
+    if (
+      shouldReship
+      && (selfRepair.tip_actions || []).includes('re_ship_after_promote')
+      && (needsAuthor.length || claimable.length)
+    ) {
+      await sleep(2_000);
+      ship = await requestLaneShip(factoryId);
+      ship.self_repair_reship = true;
+      watchdog = evaluateSystemWatchdog({
+        tip,
+        factory2,
+        overlayNativeBlocks: overlayNativeBlockedSteps(queue),
+        laneShip: ship,
+        queue,
+        factoryId,
+      });
+    }
+  }
+
   if (ownsNative(factoryId) && sync.ok !== false) {
     const head = nativeTreeSha(repoRoot);
     const prev = readLastTick(repoRoot, factoryId);
@@ -282,13 +342,8 @@ export async function runFactoryLane({ factoryId = thisFactoryId(), productId = 
     }
     const taloaState = ensureTaloaRunning(repoRoot);
     taloa = taloaState;
-    watchdog = evaluateSystemWatchdog({
-      tip,
+    await applyWatchdogAndMaybeReship({
       factory2: { tickAt: prev?.at, ok: true, taloaRunning: taloaState.running },
-      overlayNativeBlocks: overlayNativeBlockedSteps(queue),
-      laneShip: ship,
-      queue,
-      factoryId,
     });
     writeTick(repoRoot, factoryId, {
       at: new Date().toISOString(),
@@ -299,6 +354,7 @@ export async function runFactoryLane({ factoryId = thisFactoryId(), productId = 
       taloa: taloaState,
       tip,
       watchdog,
+      self_repair: selfRepair,
       pending_owned: checks,
     });
   } else if (ownsCollectiblesLane(factoryId) && factoryId !== 'factory-1') {
@@ -308,13 +364,7 @@ export async function runFactoryLane({ factoryId = thisFactoryId(), productId = 
     } else {
       ship = { skipped: true, reason: 'no_pending_owned_steps' };
     }
-    watchdog = evaluateSystemWatchdog({
-      tip,
-      laneShip: ship,
-      queue,
-      factoryId,
-      overlayNativeBlocks: overlayNativeBlockedSteps(queue),
-    });
+    await applyWatchdogAndMaybeReship();
     writeTick(repoRoot, factoryId, {
       at: new Date().toISOString(),
       factory_id: factoryId,
@@ -323,6 +373,7 @@ export async function runFactoryLane({ factoryId = thisFactoryId(), productId = 
       ship,
       tip,
       watchdog,
+      self_repair: selfRepair,
       pending_owned: checks,
     });
   } else if (factoryId !== 'factory-1') {
@@ -337,7 +388,9 @@ export async function runFactoryLane({ factoryId = thisFactoryId(), productId = 
   }
 
   let detail;
-  if (watchdog && watchdog.ok === false) {
+  if (selfRepair?.applied?.length) {
+    detail = `self-repair: ${selfRepair.applied.join(', ')}; ship=${ship.ok ? 'ok' : (ship.reason || ship.error || 'n/a')}`;
+  } else if (watchdog && watchdog.ok === false) {
     detail = `watchdog: ${(watchdog.findings || []).map((f) => f.id).join(', ')}`;
   } else if (ship && !ship.skipped) {
     detail = ship.ok
@@ -367,6 +420,7 @@ export async function runFactoryLane({ factoryId = thisFactoryId(), productId = 
     tip,
     taloa,
     watchdog,
+    self_repair: selfRepair,
     detail,
   };
 }

@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/builderos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-08-13 — Allowlisted WRM_CONSULT_EMAIL so Sherry's inbox can be set on Railway without a dashboard trip. |
+| **Last Updated** | 2026-08-13 — Manufacturing self-repair: sealed-exact promote, stale ship-lock reclaim, import mkdir retry (no Cursor GAP-FILL). |
 ### Related docs (this product)
 
 | Doc | Path |
@@ -35,6 +35,8 @@
 ---
 
 ## Change Receipts
+| 2026-08-13 | **Manufacturing self-repair closed overnight thrash classes.** Tip reclaim stale `already_running` (90s); import-check mkdir+ENOENT retry; sealed `content_source_path` stays `write_file_exact`; revive+ship apply `promoteSealedExactOnThrash` / cost stamp; lane retries already_running + watchdog playbooks execute (not advisory-only). | Founder: fix all observed issues — system must self-repair without Cursor. | `tests/manufacturing-self-repair.test.js` 7/7 |
+
 | 2026-08-13 | **Allowlisted `WRM_CONSULT_EMAIL` + `WRM_CONSULT_FALLBACK_EMAIL` on managed-env.** Consults go to Maternity@wellroundedwoman.com. | Founder: wife's WRM site not sending consults. | bulk-set after ship. |
 
 | 2026-08-13 | **Twin sealed exact + MacOsBody compile-clean.** Factory-3 was starving on tip `already_running` while author_then_write thrash; sealed twin write_file_exact. Body false-done with invented types → rewrite against real ScreenControl/SemanticPerception. | Founder mandatory f1+f2+f3. | native build.sh + twin exact |

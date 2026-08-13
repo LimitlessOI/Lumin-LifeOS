@@ -53,7 +53,7 @@ test('selectNextStep skips human_hold only; ships design_review_flagged and lega
 test('runNextStep marks done only when build has SHA AND verify passes AND deploy-truth passes', async () => {
   const q = makeQueue([{ id: 'a', target_file: 'f', task: 't' }]);
   const r = await runNextStep(q, {
-    buildFn: async () => ({ ok: true, commit_sha: 'abc123' }),
+    buildFn: async () => ({ ok: true, commit_sha: 'abc123', tokens_used: 12, duration_ms: 40 }),
     verifyFn: async () => ({ ok: true }),
     deployProofFn: async () => ({ ok: true }),
   });
@@ -91,7 +91,7 @@ test('build that claims ok but returns no SHA is treated as failure (no false gr
 test('deployProofFn gates "live": step stays retryable until the deploy serves the built SHA (no false live)', async () => {
   const q = makeQueue([{ id: 'a', target_file: 'f', task: 't' }]);
   const base = {
-    buildFn: async () => ({ ok: true, commit_sha: 'abc123' }),
+    buildFn: async () => ({ ok: true, commit_sha: 'abc123', tokens_used: 8, duration_ms: 25 }),
     verifyFn: async () => ({ ok: true }),
     maxAttempts: 3,
   };

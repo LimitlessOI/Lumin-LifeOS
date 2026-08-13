@@ -100,16 +100,26 @@ export function evaluateSystemWatchdog({
     if (p && p.ok === false && p.error) shipErrors.push(String(p.error));
   }
   if (laneShip?.error) shipErrors.push(String(laneShip.error));
-  if (laneShip?.reason && /SENTRY|FORBIDDEN|codegen/i.test(String(laneShip.reason))) {
+  if (laneShip?.reason && /SENTRY|FORBIDDEN|codegen|already_running/i.test(String(laneShip.reason))) {
     shipErrors.push(String(laneShip.reason));
+  }
+  if (laneShip && laneShip.ok === false && /already_running/i.test(String(laneShip.reason || ''))) {
+    findings.push({
+      id: 'lane_ship_already_running',
+      factory_id: factoryId || null,
+      action: 'retry_ship_after_reclaim',
+      proposed_solution:
+        `Tip returned already_running for ${factoryId || 'lane'}. Tip reclaimStaleShipLock (default 90s) clears hung locks; lane retries once after short wait. Do not redeploy for a fresh lock.`,
+    });
   }
   const sentryShip = shipErrors.find((e) => /SENTRY_FAILED|behavior_assertion|missing:/i.test(e));
   if (sentryShip) {
     findings.push({
       id: 'lane_sentry_failed',
       factory_id: factoryId || null,
+      action: 'promote_sealed_exact_and_reship',
       proposed_solution:
-        `Tip ship for ${factoryId || 'lane'} failed SENTRY: ${sentryShip.slice(0, 240)}. Align behavior_assertions with SCHEMA (no false OWNED_ needles), fix must_include reporting, revive the step, and re-run POST /factory/ship-queue-and-commit with factory_id=${factoryId || 'factory-3'}.`,
+        `Tip ship for ${factoryId || 'lane'} failed SENTRY: ${sentryShip.slice(0, 240)}. applyManufacturingSelfRepair promotes sealed exact twins to write_file_exact, then re-run POST /factory/ship-queue-and-commit with factory_id=${factoryId || 'factory-3'}.`,
     });
   }
 
@@ -121,8 +131,9 @@ export function evaluateSystemWatchdog({
     if (Number(step.attempts || 0) < 1 && !/SENTRY_FAILED/i.test(err)) continue;
     findings.push({
       id: `queue_ship_thrash:${step.id || 'unknown'}`,
+      action: 'promote_sealed_exact_and_reship',
       proposed_solution:
-        `Step ${step.id} is thrashing (${err.slice(0, 160)}). Clear false assertion needles, treat retryable SENTRY blocks as shippable in truth-ladder, do not overwrite last_error with STEP_STATUS_FORBIDDEN, then re-ship.`,
+        `Step ${step.id} is thrashing (${err.slice(0, 160)}). applyManufacturingSelfRepair + revive, then re-ship. Do not Cursor GAP-FILL sealed twins.`,
     });
   }
 

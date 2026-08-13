@@ -25,6 +25,7 @@ import { depSatisfiedForSelect, isBlueprintSlice, STEP_STATUS } from '../../../s
 import { authoringTiersForRetry } from '../../../services/builderos-model-escalation-gate.js';
 import { REPO_ROOT } from '../repo-paths.js';
 import { stepDependencies } from '../../../config/step-dependencies.js';
+import { promoteSealedExactOnThrash } from '../../../services/manufacturing-self-repair.js';
 
 const AUTO_REGISTER_TARGET = 'config/auto-registered-product-modules.json';
 
@@ -223,7 +224,10 @@ function deriveAutoRegisterEntry(depStep) {
 function buildAutoRegisterMerge(step, queue) {
   const target = String(step?.target_file || '');
   if (target !== AUTO_REGISTER_TARGET) return null;
-  if (step?.action_type === 'write_file_exact' && step?.exact_inputs?.exact_content != null) {
+  if (step?.action_type === 'write_file_exact'
+    && (step?.exact_inputs?.exact_content != null
+      || (typeof step?.exact_inputs?.content_source_path === 'string'
+        && step.exact_inputs.content_source_path.trim()))) {
     return null;
   }
 
@@ -283,7 +287,9 @@ export function toGovernedShipStep(step, { product_id, queue } = {}) {
   // Auto-register config steps are merged deterministically so they never
   // overwrite each other's entries. The merge supplies exact_content + assertion_spec.
   let workingStep = step;
-  const autoMerge = buildAutoRegisterMerge(step, queue);
+  // Promote sealed exact before classifying — otherwise thrash steps stay author_then_write.
+  promoteSealedExactOnThrash(workingStep);
+  const autoMerge = buildAutoRegisterMerge(workingStep, queue);
   if (autoMerge) {
     workingStep = {
       ...step,
@@ -324,11 +330,19 @@ export function toGovernedShipStep(step, { product_id, queue } = {}) {
     ...(workingStep?.last_error ? { last_error: workingStep.last_error } : {}),
   };
 
-  if (workingStep?.action_type === 'write_file_exact' && workingStep?.exact_inputs?.exact_content != null) {
+  // Sealed exact must stay deterministic. content_source_path alone is valid
+  // (live 2026-08-13: seals with only content_source_path were silently
+  // downgraded to author_then_write → codegen import thrash + Cursor GAP-FILL).
+  const exactInputs = workingStep?.exact_inputs || {};
+  const hasExactBytes = exactInputs.exact_content != null;
+  const hasExactSource = typeof exactInputs.content_source_path === 'string'
+    && exactInputs.content_source_path.trim().length > 0;
+  if (workingStep?.action_type === 'write_file_exact' && (hasExactBytes || hasExactSource)) {
     governedStep.action_type = 'write_file_exact';
     governedStep.exact_inputs = {
-      exact_content: workingStep.exact_inputs.exact_content,
-      ...(workingStep.exact_inputs.merge === true ? { merge: true } : {}),
+      ...(hasExactBytes ? { exact_content: exactInputs.exact_content } : {}),
+      ...(hasExactSource ? { content_source_path: String(exactInputs.content_source_path).trim() } : {}),
+      ...(exactInputs.merge === true ? { merge: true } : {}),
     };
   } else {
     governedStep.action_type = 'author_then_write';

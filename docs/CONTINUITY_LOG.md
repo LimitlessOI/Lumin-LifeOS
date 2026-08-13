@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Documentation — CONTINUITY LOG. -->
 
+## 2026-08-13 — Manufacturing self-repair (no Cursor GAP-FILL)
+
+Founder: fix all observed issues — overnight closed slices via conductor but did not self-repair. Shipped: stale ship-lock reclaim (90s), import mkdir/ENOENT retry, sealed exact promote on thrash, revive for import/github/SLICE_COST, lane already_running retry + watchdog playbooks that mutate/reship. Next: tip redeploy + verify factories do not need Cursor for those classes.
+
 ## 2026-08-13 — WRM consults never reached Sherry
 
 Founder: wellroundedmomma consults not arriving. First inbox guess was wellroundedwoman.com; founder correction: **Maternity@wellroundedmomma.com**. Live: 9 real leads still `emailed=false`. Postmark invalid; Railway SMTP blocked. Overlay/Chrome Gmail blocked on 2FA. Env `WRM_CONSULT_EMAIL` set to momma.com. Catch-up not sent until Gmail 2FA or SMTP works.

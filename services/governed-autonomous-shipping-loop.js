@@ -44,6 +44,7 @@ import {
 import { createDeploymentService } from './deployment-service.js';
 import { recordModelOutcome } from './model-capability-ledger.js';
 import { requireSliceCostTracked, SLICE_COST_UNTRACKED } from './slice-cost-tracking.js';
+import { applyManufacturingSelfRepair } from './manufacturing-self-repair.js';
 import { evaluateInvariants, formatFindings } from '../scripts/lib/security-invariants.mjs';
 import { evaluateFilePlacement, formatFilePlacementFindings } from '../scripts/lib/file-placement-gate.mjs';
 import { evaluateDocHygiene, formatDocHygieneFindings } from '../scripts/lib/doc-hygiene-gate.mjs';
@@ -992,6 +993,33 @@ async function planQueueIfNeeded({ products, queueCache, logger, maxPlanAttempts
   return planned;
 }
 
+/** How long a ship tick may hold `running` before the next call reclaims the lock. */
+export const SHIP_RUNNING_STALE_MS = Number(
+  process.env.GOVERNED_SHIP_RUNNING_STALE_MS || 90 * 1000,
+);
+
+/**
+ * If a prior tick left `running:true` (hung await / killed mid-finally), reclaim
+ * after SHIP_RUNNING_STALE_MS so tip is not stuck on already_running forever
+ * (live 2026-08-13: factories starved ~6+ minutes until manual redeploy).
+ */
+export function reclaimStaleShipLock(nowMs = Date.now()) {
+  if (!state.running) return { reclaimed: false, reason: 'not_running' };
+  const started = state.lastRunAt ? Date.parse(state.lastRunAt) : NaN;
+  if (!Number.isFinite(started)) {
+    state.running = false;
+    state.shipLockReclaims = (state.shipLockReclaims || 0) + 1;
+    return { reclaimed: true, reason: 'missing_lastRunAt' };
+  }
+  const ageMs = nowMs - started;
+  if (ageMs < SHIP_RUNNING_STALE_MS) {
+    return { reclaimed: false, reason: 'still_fresh', ageMs, staleMs: SHIP_RUNNING_STALE_MS };
+  }
+  state.running = false;
+  state.shipLockReclaims = (state.shipLockReclaims || 0) + 1;
+  return { reclaimed: true, reason: 'stale_running', ageMs, staleMs: SHIP_RUNNING_STALE_MS };
+}
+
 export async function runGovernedAutonomousShipOnce({
   logger,
   maxStepsPerProduct = 1,
@@ -999,6 +1027,14 @@ export async function runGovernedAutonomousShipOnce({
   queueCache: inputQueueCache,
   factoryId: factoryIdOverride = null,
 } = {}) {
+  const reclaim = reclaimStaleShipLock();
+  if (reclaim.reclaimed) {
+    logger?.warn?.(
+      { reclaim },
+      '[GOVERNED-AUTONOMOUS-SHIP] reclaimed stale running lock — tip was blocking all factory_id ships',
+    );
+    await persistState().catch(() => {});
+  }
   if (state.running) return { ok: false, skipped: true, reason: 'already_running' };
   if (!governedFactoryOnly()) return { ok: false, skipped: true, reason: 'fence_off' };
   const actingFactoryId = String(factoryIdOverride || thisFactoryId() || 'factory-1').trim() || 'factory-1';
@@ -1059,9 +1095,22 @@ export async function runGovernedAutonomousShipOnce({
       if (!queue || !Array.isArray(queue.steps)) continue;
       try {
         const revived = reviveStaleBlockedSteps(queue);
-        if (revived.length) {
+        const repair = applyManufacturingSelfRepair(queue);
+        if (revived.length || repair.promoted.length || repair.stamped_cost.length) {
           persistQueue(queue);
-          logger?.info?.(`[GOVERNED-AUTONOMOUS-SHIP] revived blocked ${pid}: ${revived.join(', ')}`);
+          if (revived.length) {
+            logger?.info?.(`[GOVERNED-AUTONOMOUS-SHIP] revived blocked ${pid}: ${revived.join(', ')}`);
+          }
+          if (repair.promoted.length) {
+            logger?.info?.(
+              `[GOVERNED-AUTONOMOUS-SHIP] promoted sealed exact ${pid}: ${repair.promoted.join(', ')}`,
+            );
+          }
+          if (repair.stamped_cost.length) {
+            logger?.info?.(
+              `[GOVERNED-AUTONOMOUS-SHIP] stamped exact cost ${pid}: ${repair.stamped_cost.join(', ')}`,
+            );
+          }
         }
       } catch (err) {
         logger?.warn?.(`[GOVERNED-AUTONOMOUS-SHIP] revive ${pid} failed: ${err.message}`);

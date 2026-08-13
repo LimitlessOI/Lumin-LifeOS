@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-13T15:45:13.313Z",
+  "generated_at": "2026-08-13T15:47:57.060Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13555,
+  "file_count": 13559,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -41266,9 +41266,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Documentation — CONTINUITY LOG.",
-      "bytes": 202168,
-      "mtime": "2026-08-13T15:44:41.519Z",
-      "indexed_at": "2026-08-13T15:45:13.313Z"
+      "bytes": 202615,
+      "mtime": "2026-08-13T15:47:57.060Z",
+      "indexed_at": "2026-08-13T15:47:57.060Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -41626,6 +41626,13 @@
       "bytes": 458,
       "mtime": "2026-08-13T07:43:24.720Z",
       "indexed_at": "2026-08-13T07:43:24.720Z"
+    },
+    {
+      "path": "docs/conversation_dumps/2026-08-13-manufacturing-self-repair.md",
+      "synopsis": "Twin-archive dump — founder asked to fix all observed manufacturing thrash classes.",
+      "bytes": 1015,
+      "mtime": "2026-08-13T15:47:57.060Z",
+      "indexed_at": "2026-08-13T15:47:57.060Z"
     },
     {
       "path": "docs/conversation_dumps/2026-08-13-one-queue-multi-factory-multi-project.md",
@@ -44237,6 +44244,13 @@
       "indexed_at": "2026-08-13T07:43:24.720Z"
     },
     {
+      "path": "docs/products/builderos/conversations/2026-08-13-manufacturing-self-repair.md",
+      "synopsis": "Product capture — BuilderOS manufacturing self-repair after overnight thrash.",
+      "bytes": 927,
+      "mtime": "2026-08-13T15:47:57.060Z",
+      "indexed_at": "2026-08-13T15:47:57.060Z"
+    },
+    {
       "path": "docs/products/builderos/conversations/2026-08-13-one-queue-multi-factory-multi-project.md",
       "synopsis": "2026-08-13 — Founder: one queue, multi-factory, multi-project from BPs",
       "bytes": 1019,
@@ -44349,9 +44363,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 583363,
-      "mtime": "2026-08-13T15:26:45.454Z",
-      "indexed_at": "2026-08-13T15:34:55.290Z"
+      "bytes": 583861,
+      "mtime": "2026-08-13T15:47:57.060Z",
+      "indexed_at": "2026-08-13T15:47:57.060Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -66903,9 +66917,9 @@
     {
       "path": "factory-staging/factory-core/bpb/build-queue-step-adapter.js",
       "synopsis": "STEP 5e — adapt a per-product docs/products/<id>/BUILD_QUEUE.json step",
-      "bytes": 17331,
-      "mtime": "2026-08-13T06:55:36.341Z",
-      "indexed_at": "2026-08-13T06:55:36.341Z",
+      "bytes": 18281,
+      "mtime": "2026-08-13T15:47:57.060Z",
+      "indexed_at": "2026-08-13T15:47:57.060Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -74149,9 +74163,9 @@
     {
       "path": "routes/factory-mount-routes.js",
       "synopsis": "Pure: should the codegen prompt inline this file's existing content?",
-      "bytes": 45151,
-      "mtime": "2026-08-13T05:03:17.278Z",
-      "indexed_at": "2026-08-13T05:03:17.278Z",
+      "bytes": 46186,
+      "mtime": "2026-08-13T15:47:57.060Z",
+      "indexed_at": "2026-08-13T15:47:57.060Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -78698,9 +78712,9 @@
     {
       "path": "scripts/lib/system-watchdog.mjs",
       "synopsis": "In-system watchdog decisions. The actor doing the work is not",
-      "bytes": 6576,
-      "mtime": "2026-08-13T07:43:24.720Z",
-      "indexed_at": "2026-08-13T07:43:24.720Z",
+      "bytes": 7060,
+      "mtime": "2026-08-13T15:47:57.060Z",
+      "indexed_at": "2026-08-13T15:47:57.060Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -80138,9 +80152,9 @@
     {
       "path": "scripts/run-factory-lane.mjs",
       "synopsis": "Dispatch one tick of work for a named factory lane. Production",
-      "bytes": 16811,
-      "mtime": "2026-08-13T07:43:24.720Z",
-      "indexed_at": "2026-08-13T07:43:24.720Z",
+      "bytes": 18828,
+      "mtime": "2026-08-13T15:47:57.060Z",
+      "indexed_at": "2026-08-13T15:47:57.060Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -97164,9 +97178,9 @@
     {
       "path": "services/governed-autonomous-shipping-loop.js",
       "synopsis": "STEP 5g — the governed AUTONOMOUS shipping loop. When the STEP 5a",
-      "bytes": 68996,
-      "mtime": "2026-08-13T07:47:29.006Z",
-      "indexed_at": "2026-08-13T07:47:29.006Z",
+      "bytes": 71096,
+      "mtime": "2026-08-13T15:47:57.060Z",
+      "indexed_at": "2026-08-13T15:47:57.060Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -99283,6 +99297,16 @@
       ]
     },
     {
+      "path": "services/manufacturing-self-repair.js",
+      "synopsis": "Deterministic manufacturing self-repair playbooks — no Cursor required.",
+      "bytes": 5358,
+      "mtime": "2026-08-13T15:47:57.060Z",
+      "indexed_at": "2026-08-13T15:47:57.060Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "services/market-analysis/db/schema.sql",
       "synopsis": "Service module — Schema.",
       "bytes": 901,
@@ -100578,9 +100602,9 @@
     {
       "path": "services/product-build-orchestrator.js",
       "synopsis": "General product-build orchestrator — turns a product's structured",
-      "bytes": 32698,
-      "mtime": "2026-08-13T07:30:50.044Z",
-      "indexed_at": "2026-08-13T07:30:50.044Z",
+      "bytes": 32974,
+      "mtime": "2026-08-13T15:47:57.060Z",
+      "indexed_at": "2026-08-13T15:47:57.060Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -105751,6 +105775,13 @@
       "indexed_at": "2026-08-11T22:37:29.742Z"
     },
     {
+      "path": "tests/manufacturing-self-repair.test.js",
+      "synopsis": "Deterministic manufacturing self-repair — sealed exact promote,",
+      "bytes": 4888,
+      "mtime": "2026-08-13T15:47:57.060Z",
+      "indexed_at": "2026-08-13T15:47:57.060Z"
+    },
+    {
       "path": "tests/marketing-social-publish.test.js",
       "synopsis": "js — tests/marketing-social-publish.test.js.",
       "bytes": 4333,
@@ -106070,9 +106101,9 @@
     {
       "path": "tests/product-build-orchestrator.test.js",
       "synopsis": "js — tests/product-build-orchestrator.test.js.",
-      "bytes": 16604,
-      "mtime": "2026-08-13T05:59:55.758Z",
-      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "bytes": 16671,
+      "mtime": "2026-08-13T15:47:57.060Z",
+      "indexed_at": "2026-08-13T15:47:57.060Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

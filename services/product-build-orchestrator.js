@@ -47,6 +47,7 @@ import {
   assertOverlayQueuePrintLaw,
 } from '../config/overlay-print-sequence.js';
 import { requireSliceCostTracked, stampSliceCost, SLICE_COST_UNTRACKED } from './slice-cost-tracking.js';
+import { promoteSealedExactOnThrash } from './manufacturing-self-repair.js';
 
 export {
   isOverlayPrintSliceId,
@@ -373,7 +374,7 @@ export function reviveStaleBlockedSteps(queue, {
     const autoRegBlock = /auto-registered|not auto-registered|module-health|module_not_mounted/i.test(
       String(step.last_error || ''),
     );
-    const artifactToolingBlock = /artifact_proof_failed:\sassertion_threw|codegen_authoring_failed|codegen_empty|codegen_threw|no_codegen_runner|authoring_requires_blueprint_assertions/i.test(
+    const artifactToolingBlock = /artifact_proof_failed:\sassertion_threw|codegen_authoring_failed|import_resolution_failed|codegen_empty|codegen_threw|no_codegen_runner|authoring_requires_blueprint_assertions|github_commit_failed|SLICE_COST_UNTRACKED/i.test(
       String(step.last_error || ''),
     );
     const sentryBlock = /SENTRY_FAILED|behavior_assertion_failed|behavior_proof/i.test(
@@ -429,6 +430,8 @@ export function reviveStaleBlockedSteps(queue, {
     step.claim_level = null;
     step.blocker_type = null;
     step.blocker_resolution = null;
+    // Sealed twin exact → write_file_exact (stop author_then_write thrash without Cursor).
+    promoteSealedExactOnThrash(step);
     revived.push(step.id);
   }
   return revived;

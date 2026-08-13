@@ -276,8 +276,23 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
                       // step reported codegen_empty as if no model had answered
                       // (confirmed live 2026-08-12 on services/taloa/).
                       fs.mkdirSync(path.dirname(importCheckFile), { recursive: true });
+                      // Also ensure the eventual target path's parents exist so a
+                      // later write_file_exact cannot fail after a passing probe.
+                      if (absTarget) fs.mkdirSync(path.dirname(absTarget), { recursive: true });
                       fs.writeFileSync(importCheckFile, content);
-                      execFileSync(process.execPath, ['--input-type=module', '-e', `import ${JSON.stringify(pathToFileURL(importCheckFile).href)};`]);
+                      try {
+                        execFileSync(process.execPath, ['--input-type=module', '-e', `import ${JSON.stringify(pathToFileURL(importCheckFile).href)};`]);
+                      } catch (err) {
+                        const msg = String(err?.message || err);
+                        // One retry after mkdir — tip races / first create of nested dirs.
+                        if (/ENOENT|no such file or directory/i.test(msg)) {
+                          fs.mkdirSync(path.dirname(importCheckFile), { recursive: true });
+                          if (absTarget) fs.mkdirSync(path.dirname(absTarget), { recursive: true });
+                          execFileSync(process.execPath, ['--input-type=module', '-e', `import ${JSON.stringify(pathToFileURL(importCheckFile).href)};`]);
+                        } else {
+                          throw err;
+                        }
+                      }
                     } catch (err) {
                       lastError = `import_resolution_failed:${member}: ${String(err?.message || err)}`;
                       tierErrors.push({ tier: member, reason: lastError });
