@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-14T00:18:30.813Z",
+  "generated_at": "2026-08-14T00:19:12.645Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13596,
+  "file_count": 13597,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -95277,6 +95277,16 @@
       "bytes": 3057,
       "mtime": "2026-08-14T00:05:02.076Z",
       "indexed_at": "2026-08-14T00:05:02.076Z",
+      "ssot": [
+        "docs/products/collectibles/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/collectibles/partner-capability-registry.js",
+      "synopsis": "Exports createPartnerCapabilityRegistry — services/collectibles/partner-capability-registry.js.",
+      "bytes": 2039,
+      "mtime": "2026-08-14T00:19:12.645Z",
+      "indexed_at": "2026-08-14T00:19:12.645Z",
       "ssot": [
         "docs/products/collectibles/PRODUCT_HOME.md"
       ]

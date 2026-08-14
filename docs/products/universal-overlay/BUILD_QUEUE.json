@@ -7895,10 +7895,10 @@
       "shipped_via": "governed_ship_queue"
     },
     {
-      "status": "blocked",
+      "status": "pending",
       "founder_gated": false,
       "attempts": 3,
-      "action_type": "author_then_write",
+      "action_type": "write_file_exact",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
@@ -7933,7 +7933,46 @@
       "heal_unblocked": true,
       "heal_reason": "collectibles_never_stop_heal",
       "duration_ms": 1000,
-      "tokens_used": 0
+      "tokens_used": 0,
+      "same_signature_count": 0,
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/collectibles/partner-capability-registry.js",
+          "exports": [
+            "createPartnerCapabilityRegistry"
+          ],
+          "assertion_id": "expected_exports:services/collectibles/partner-capability-registry.js"
+        }
+      ],
+      "escalation_required": false,
+      "escalation_note": null,
+      "exact_inputs": {
+        "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V5-PARTNER-REGISTRY-001.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-08-14T00:19:09.550Z",
+        "shipped_at": "2026-08-14T00:19:09.550Z",
+        "commit_sha": null,
+        "content_sha256": "16048ab85bd8f9fd03249634929730e2851b8fcdb0003096b073eca67ea646fc",
+        "target_file": "services/collectibles/partner-capability-registry.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/collectibles/partner-capability-registry.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "PASS"
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V5-PARTNER-REGISTRY-001.exact",
+          "content_sha256": "16048ab85bd8f9fd03249634929730e2851b8fcdb0003096b073eca67ea646fc"
+        }
+      },
+      "shipped_at": "2026-08-14T00:19:09.550Z"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
