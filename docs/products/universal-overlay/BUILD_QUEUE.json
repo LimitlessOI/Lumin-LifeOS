@@ -3632,8 +3632,20 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-14T19:35:26.074Z",
-      "started_at": "2026-08-14T19:34:57.084Z"
+      "last_attempt_at": "2026-08-14T19:36:00.262Z",
+      "started_at": "2026-08-14T19:35:30.793Z",
+      "last_attempt": null,
+      "revive_count": 1,
+      "revived_at": "2026-08-14T19:35:30.706Z",
+      "no_op": null,
+      "pre_existing": null,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "TALOA-NATIVE-HOST-PING-001",
