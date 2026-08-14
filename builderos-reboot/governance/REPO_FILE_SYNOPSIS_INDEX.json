@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-14T02:33:21.490Z",
+  "generated_at": "2026-08-14T02:37:49.262Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13604,
+  "file_count": 13605,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -95307,6 +95307,16 @@
       "bytes": 2039,
       "mtime": "2026-08-14T00:19:12.645Z",
       "indexed_at": "2026-08-14T00:19:12.645Z",
+      "ssot": [
+        "docs/products/collectibles/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/collectibles/provenance-graph.js",
+      "synopsis": "Exports createProvenanceGraph — services/collectibles/provenance-graph.js.",
+      "bytes": 3941,
+      "mtime": "2026-08-14T02:37:49.262Z",
+      "indexed_at": "2026-08-14T02:37:49.262Z",
       "ssot": [
         "docs/products/collectibles/PRODUCT_HOME.md"
       ]
