@@ -8719,7 +8719,7 @@
       "escalation_required": false,
       "revive_count": 0,
       "same_signature_count": 1,
-      "duration_ms": 24452,
+      "duration_ms": 24448,
       "failure_signature": "SLICE_COST_UNTRACKED: tokens_used required on every built slice (N allowed for exact/no-codegen)",
       "escalation_class": "same_signature_repeat",
       "escalation_note": null,
