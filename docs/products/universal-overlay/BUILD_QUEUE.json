@@ -8273,9 +8273,9 @@
       "shipped_via": "governed_ship_queue"
     },
     {
-      "status": "pending",
+      "status": "done",
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "action_type": "write_file_exact",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
@@ -8294,21 +8294,21 @@
         "createRevealStudio"
       ],
       "blueprint_step_id": "COLLECTIBLES-V6-ACCEPTANCE-001",
-      "commit_sha": null,
+      "commit_sha": "08125815b6294a052d6c1eca7deefbe6078b6a14",
       "built_sha": null,
       "proof": null,
       "last_attempt_at": "2026-08-14T00:29:23.034Z",
-      "last_error": "SLICE_COST_UNTRACKED: tokens_used required on every built slice (0 allowed for exact/no-codegen)",
+      "last_error": null,
       "started_at": "2026-08-14T00:29:01.997Z",
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
       "park_until": null,
-      "heal_unblocked": true,
+      "heal_unblocked": false,
       "heal_reason": "collectibles_never_stop_heal",
       "same_signature_count": 1,
       "last_attempt": null,
-      "revive_count": 1,
+      "revive_count": 0,
       "revived_at": "2026-08-14T00:28:58.377Z",
       "no_op": null,
       "pre_existing": null,
@@ -8316,7 +8316,7 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "duration_ms": 21036,
+      "duration_ms": 31152,
       "failure_signature": "SLICE_COST_UNTRACKED: tokens_used required on every built slice (N allowed for exact/no-codegen)",
       "escalation_class": "same_signature_repeat",
       "escalation_required": false,
@@ -8347,7 +8347,36 @@
         }
       },
       "tokens_used": 0,
-      "shipped_at": "2026-08-14T00:29:24.817Z"
+      "shipped_at": "2026-08-14T00:29:33.147Z",
+      "shipped_via": "governed_ship_queue"
+    },
+    {
+      "status": "pending",
+      "founder_gated": false,
+      "attempts": 0,
+      "action_type": "author_then_write",
+      "product_id": "collectibles",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "mission_id": "PRODUCT-universal-overlay",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
+      "depends_on": [
+        "COLLECTIBLES-V6-ACCEPTANCE-001"
+      ],
+      "id": "COLLECTIBLES-V7-TABLETOP-RUNTIME-001",
+      "target_file": "services/collectibles/tabletop-runtime.js",
+      "sandbox_boundary": "services/collectibles/**",
+      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createTabletopRuntime({ pool }) — publisher-independent primitives + rules-adapter INTERFACE only. Do NOT ship third-party game adapters. IP gate fail-closed. play_entitlement separate from IP permission. ES module.",
+      "spec": "MASTER_BLUEPRINT V7 + LEGAL_IP gates.",
+      "expected_exports": [
+        "createTabletopRuntime"
+      ],
+      "file_contains": [
+        "createTabletopRuntime",
+        "IP",
+        "fail-closed",
+        "play_entitlement"
+      ],
+      "blueprint_step_id": "COLLECTIBLES-V7-TABLETOP-RUNTIME-001"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
