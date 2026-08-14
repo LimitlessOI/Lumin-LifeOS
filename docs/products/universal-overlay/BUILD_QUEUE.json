@@ -222,8 +222,8 @@
       "id": "5",
       "status": "pending",
       "target_file": "public/overlay/routeRegistry.js",
-      "task": "build fluid UI context router \u2014 Part 1: route registry mapping table",
-      "spec": "Small, standalone mapping table only: exports ROUTE_CONTEXT_MAP, an object/array mapping URL-pattern strings (e.g. insurance portal, banking site, generic form) to a context-type label. No dispatch logic, no rendering \u2014 pure data + one lookup helper. This is Part 1 of 3 (routeRegistry.js data table -> thin moduleRouter.js dispatcher -> per-context view modules), re-scoped 2026-08-14 after 5 failed revives on a single monolithic moduleRouter.js exceeded the governed factory Zone-3 additive-patch working size (documented 150-line failure mode). Keep this file well under that limit.",
+      "task": "build fluid UI context router — Part 1: route registry mapping table",
+      "spec": "Small, standalone mapping table only: exports ROUTE_CONTEXT_MAP, an object/array mapping URL-pattern strings (e.g. insurance portal, banking site, generic form) to a context-type label. No dispatch logic, no rendering — pure data + one lookup helper. This is Part 1 of 3 (routeRegistry.js data table -> thin moduleRouter.js dispatcher -> per-context view modules), re-scoped 2026-08-14 after 5 failed revives on a single monolithic moduleRouter.js exceeded the governed factory Zone-3 additive-patch working size (documented 150-line failure mode). Keep this file well under that limit.",
       "depends_on": [],
       "founder_gated": false,
       "attempts": 1,
@@ -231,9 +231,9 @@
         "ROUTE_CONTEXT_MAP",
         "lookupRouteContext"
       ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": null,
-      "shipped_at": "2026-07-15T22:13:12.909Z",
+      "shipped_at": "2026-08-14T17:27:29.980Z",
       "commit_sha": null,
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "5",
@@ -266,7 +266,33 @@
       "skip_reason": null,
       "reclassified_at": "2026-08-14T17:23:22.770Z",
       "reclassify_note": "isOriginalOverlayBlueprintStep fix 2026-08-14: was wrongly off_print due to old numeric id predating the TALOA-* convention; blueprint_id confirms real original-blueprint authorization.",
-      "retarget_note": "Re-scoped 2026-08-14 per already-documented recommendation in TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md (currently-blocked build-queue step section) -- split into 3 smaller files instead of a 6th identical retry on the oversized original target."
+      "retarget_note": "Re-scoped 2026-08-14 per already-documented recommendation in TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md (currently-blocked build-queue step section) -- split into 3 smaller files instead of a 6th identical retry on the oversized original target.",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/universal-overlay/twins/steps/5.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-08-14T17:27:29.980Z",
+        "shipped_at": "2026-08-14T17:27:29.980Z",
+        "commit_sha": null,
+        "content_sha256": "54ee6d3ac2ccdfca99ea7794347b9a7a33172eca83814789aa20fc38feb35dd1",
+        "target_file": "public/overlay/routeRegistry.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "public/overlay/routeRegistry.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "PASS"
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/universal-overlay/twins/steps/5.exact",
+          "content_sha256": "54ee6d3ac2ccdfca99ea7794347b9a7a33172eca83814789aa20fc38feb35dd1"
+        }
+      }
     },
     {
       "id": "6",
@@ -359,7 +385,7 @@
       "expected_exports": [
         "adaptLayoutPreferences"
       ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": null,
       "shipped_at": "2026-07-15T22:17:14.890Z",
       "commit_sha": "fa2519b6c14b3c4e89dfc5f4743263910d45f808",
@@ -479,7 +505,7 @@
         "method": "POST",
         "path": "/api/v1/lifeos/page-summarization"
       },
-      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "behavior_assertions": [
         {
           "type": "exports_smoke",
@@ -533,7 +559,7 @@
         "48px",
         "128px"
       ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": null,
       "shipped_at": "2026-07-15T22:23:49.799Z",
       "commit_sha": "4dec1b1e2b6d8e1fa45755527339dcb700ebd7c0",
@@ -557,7 +583,7 @@
       "depends_on": [],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:30:12.087Z",
       "commit_sha": "2250a6752e7c3c01d6cb88b96754223aaaf0425a",
@@ -1354,7 +1380,7 @@
       "mission_id": "PRODUCT-universal-overlay",
       "same_signature_count": 0,
       "demoted": false,
-      "last_error": "route module not auto-registered \u2014 add {\"path\":\"routes/firefoxExtension.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
+      "last_error": "route module not auto-registered — add {\"path\":\"routes/firefoxExtension.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
       "heal_unblocked": false,
       "last_attempt_at": "2026-08-01T14:26:54.455Z",
       "blocker_class": "BLOCKED_TOOLING",
@@ -3418,7 +3444,7 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "skip_reason": "native_badge_voice_supersedes_js_hold_to_talk \u2014 TALOA-BADGE-VOICE-001 records on the badge; JS holdToTalkBadge.js cannot start getUserMedia in a hidden WKWebView.",
+      "skip_reason": "native_badge_voice_supersedes_js_hold_to_talk — TALOA-BADGE-VOICE-001 records on the badge; JS holdToTalkBadge.js cannot start getUserMedia in a hidden WKWebView.",
       "skipped_at": "2026-08-12T23:55:00.000Z",
       "same_signature_count": 0
     },
@@ -3441,7 +3467,7 @@
         "path": "/api/v1/overlay/hold-to-talk"
       },
       "design_review_flagged": true,
-      "skip_reason": "native_badge_voice_supersedes_js_hold_to_talk \u2014 TALOA-BADGE-VOICE-001 records on the badge; JS holdToTalkBadge.js cannot start getUserMedia in a hidden WKWebView.",
+      "skip_reason": "native_badge_voice_supersedes_js_hold_to_talk — TALOA-BADGE-VOICE-001 records on the badge; JS holdToTalkBadge.js cannot start getUserMedia in a hidden WKWebView.",
       "skipped_at": "2026-08-12T23:55:00.000Z",
       "same_signature_count": 0
     },
@@ -3457,7 +3483,7 @@
       "founder_gated": false,
       "attempts": 0,
       "design_review_flagged": true,
-      "skip_reason": "native_badge_voice_supersedes_js_hold_to_talk \u2014 TALOA-BADGE-VOICE-001 records on the badge; JS holdToTalkBadge.js cannot start getUserMedia in a hidden WKWebView.",
+      "skip_reason": "native_badge_voice_supersedes_js_hold_to_talk — TALOA-BADGE-VOICE-001 records on the badge; JS holdToTalkBadge.js cannot start getUserMedia in a hidden WKWebView.",
       "skipped_at": "2026-08-12T23:55:00.000Z",
       "same_signature_count": 0
     },
@@ -3536,8 +3562,8 @@
       "id": "TALOA-WIRE-HOST-REGISTER-001",
       "status": "pending",
       "target_file": "config/auto-registered-product-modules.json",
-      "task": "Add an enabled auto-register entry so TALOA-WIRE-HOST-001 actually mounts on the founder-builder lane. Append exactly one module object: {\"path\":\"routes/taloa-overlay-host-routes.js\",\"register\":\"registerTaloaOverlayHostRoutes\",\"mount_path\":\"/api/v1/taloa/overlay-host\",\"enabled\":true,\"note\":\"Overlay host health \u2014 Phase 1 createOverlayHostService live caller.\"}. Do not disable or rewrite unrelated entries. Do not edit server.js.",
-      "spec": "Add an enabled auto-register entry so TALOA-WIRE-HOST-001 actually mounts on the founder-builder lane. Append exactly one module object: {\"path\":\"routes/taloa-overlay-host-routes.js\",\"register\":\"registerTaloaOverlayHostRoutes\",\"mount_path\":\"/api/v1/taloa/overlay-host\",\"enabled\":true,\"note\":\"Overlay host health \u2014 Phase 1 createOverlayHostService live caller.\"}. Do not disable or rewrite unrelated entries. Do not edit server.js.",
+      "task": "Add an enabled auto-register entry so TALOA-WIRE-HOST-001 actually mounts on the founder-builder lane. Append exactly one module object: {\"path\":\"routes/taloa-overlay-host-routes.js\",\"register\":\"registerTaloaOverlayHostRoutes\",\"mount_path\":\"/api/v1/taloa/overlay-host\",\"enabled\":true,\"note\":\"Overlay host health — Phase 1 createOverlayHostService live caller.\"}. Do not disable or rewrite unrelated entries. Do not edit server.js.",
+      "spec": "Add an enabled auto-register entry so TALOA-WIRE-HOST-001 actually mounts on the founder-builder lane. Append exactly one module object: {\"path\":\"routes/taloa-overlay-host-routes.js\",\"register\":\"registerTaloaOverlayHostRoutes\",\"mount_path\":\"/api/v1/taloa/overlay-host\",\"enabled\":true,\"note\":\"Overlay host health — Phase 1 createOverlayHostService live caller.\"}. Do not disable or rewrite unrelated entries. Do not edit server.js.",
       "depends_on": [
         "TALOA-WIRE-HOST-001"
       ],
@@ -3626,11 +3652,11 @@
       "built_sha": null,
       "proof": null,
       "last_error": null,
-      "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md \u00a764 / \u00a745a / \u00a715 / \u00a744a",
+      "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md §64 / §45a / §15 / §44a",
       "id": "TALOA-S64-CAPREG-COL-001",
       "target_file": "db/migrations/20260813_overlay_devices_capabilities.sql",
-      "task": "The file MUST begin with a SQL comment line exactly \"-- @ssot docs/products/universal-overlay/PRODUCT_HOME.md\". This migration creates NO new table. DeviceRegistry is overlay_devices (TALOA-P1-006, blueprint \u00a744a). Add the capabilities column the Capability Registry (\u00a715) stores on that canonical store: ALTER TABLE overlay_devices ADD COLUMN IF NOT EXISTS capabilities JSONB NOT NULL DEFAULT '{}'::jsonb; Do NOT CREATE TABLE. Do NOT DROP. Do NOT invent a second devices/capabilities table.",
-      "spec": "The file MUST begin with a SQL comment line exactly \"-- @ssot docs/products/universal-overlay/PRODUCT_HOME.md\". This migration creates NO new table. DeviceRegistry is overlay_devices (TALOA-P1-006, blueprint \u00a744a). Add the capabilities column the Capability Registry (\u00a715) stores on that canonical store: ALTER TABLE overlay_devices ADD COLUMN IF NOT EXISTS capabilities JSONB NOT NULL DEFAULT '{}'::jsonb; Do NOT CREATE TABLE. Do NOT DROP. Do NOT invent a second devices/capabilities table.",
+      "task": "The file MUST begin with a SQL comment line exactly \"-- @ssot docs/products/universal-overlay/PRODUCT_HOME.md\". This migration creates NO new table. DeviceRegistry is overlay_devices (TALOA-P1-006, blueprint §44a). Add the capabilities column the Capability Registry (§15) stores on that canonical store: ALTER TABLE overlay_devices ADD COLUMN IF NOT EXISTS capabilities JSONB NOT NULL DEFAULT '{}'::jsonb; Do NOT CREATE TABLE. Do NOT DROP. Do NOT invent a second devices/capabilities table.",
+      "spec": "The file MUST begin with a SQL comment line exactly \"-- @ssot docs/products/universal-overlay/PRODUCT_HOME.md\". This migration creates NO new table. DeviceRegistry is overlay_devices (TALOA-P1-006, blueprint §44a). Add the capabilities column the Capability Registry (§15) stores on that canonical store: ALTER TABLE overlay_devices ADD COLUMN IF NOT EXISTS capabilities JSONB NOT NULL DEFAULT '{}'::jsonb; Do NOT CREATE TABLE. Do NOT DROP. Do NOT invent a second devices/capabilities table.",
       "depends_on": [
         "TALOA-P1-006"
       ],
@@ -3707,11 +3733,11 @@
       "built_sha": null,
       "proof": null,
       "last_error": null,
-      "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md \u00a764 / \u00a745a / \u00a715 / \u00a744a",
+      "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md §64 / §45a / §15 / §44a",
       "id": "TALOA-S64-CAPREG-001",
       "target_file": "services/taloa/capability-registry-service.js",
-      "task": "The file MUST begin with a JSDoc block comment containing a line exactly \"@ssot docs/products/universal-overlay/PRODUCT_HOME.md\". Capability Registry from the uploaded overlay print \u00a715, persisted on DeviceRegistry (overlay_devices), not a new table. Export exactly: export function createCapabilityRegistryService({ pool, logger }). The service MUST expose reportCapabilities({ body_id, capabilities, reported_at }) which UPSERTs overlay_devices on device_key = body_id, writing platform from capabilities if present, last_seen_at = now(), capabilities = the JSON object. It MUST expose getCapabilities(body_id) which SELECTs that row and returns it or null. CALL pool.query. Do not invent a new table. ES module. No top-level timers or model calls. Do not edit server.js.",
-      "spec": "The file MUST begin with a JSDoc block comment containing a line exactly \"@ssot docs/products/universal-overlay/PRODUCT_HOME.md\". Capability Registry from the uploaded overlay print \u00a715, persisted on DeviceRegistry (overlay_devices), not a new table. Export exactly: export function createCapabilityRegistryService({ pool, logger }). The service MUST expose reportCapabilities({ body_id, capabilities, reported_at }) which UPSERTs overlay_devices on device_key = body_id, writing platform from capabilities if present, last_seen_at = now(), capabilities = the JSON object. It MUST expose getCapabilities(body_id) which SELECTs that row and returns it or null. CALL pool.query. Do not invent a new table. ES module. No top-level timers or model calls. Do not edit server.js.",
+      "task": "The file MUST begin with a JSDoc block comment containing a line exactly \"@ssot docs/products/universal-overlay/PRODUCT_HOME.md\". Capability Registry from the uploaded overlay print §15, persisted on DeviceRegistry (overlay_devices), not a new table. Export exactly: export function createCapabilityRegistryService({ pool, logger }). The service MUST expose reportCapabilities({ body_id, capabilities, reported_at }) which UPSERTs overlay_devices on device_key = body_id, writing platform from capabilities if present, last_seen_at = now(), capabilities = the JSON object. It MUST expose getCapabilities(body_id) which SELECTs that row and returns it or null. CALL pool.query. Do not invent a new table. ES module. No top-level timers or model calls. Do not edit server.js.",
+      "spec": "The file MUST begin with a JSDoc block comment containing a line exactly \"@ssot docs/products/universal-overlay/PRODUCT_HOME.md\". Capability Registry from the uploaded overlay print §15, persisted on DeviceRegistry (overlay_devices), not a new table. Export exactly: export function createCapabilityRegistryService({ pool, logger }). The service MUST expose reportCapabilities({ body_id, capabilities, reported_at }) which UPSERTs overlay_devices on device_key = body_id, writing platform from capabilities if present, last_seen_at = now(), capabilities = the JSON object. It MUST expose getCapabilities(body_id) which SELECTs that row and returns it or null. CALL pool.query. Do not invent a new table. ES module. No top-level timers or model calls. Do not edit server.js.",
       "depends_on": [
         "TALOA-S64-CAPREG-COL-001"
       ],
@@ -3761,11 +3787,11 @@
       "built_sha": null,
       "proof": null,
       "last_error": null,
-      "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md \u00a764 / \u00a745a / \u00a715 / \u00a744a",
+      "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md §64 / §45a / §15 / §44a",
       "id": "TALOA-S64-CAPREG-ROUTE-001",
       "target_file": "routes/taloa-capability-registry-routes.js",
-      "task": "The file MUST begin with a JSDoc block comment containing a line exactly \"@ssot docs/products/universal-overlay/PRODUCT_HOME.md\". Live HTTP surface for the Capability Registry (\u00a715). Export exactly: export function registerTaloaCapabilityRegistryRoutes(app, deps). Import createCapabilityRegistryService from \"../services/taloa/capability-registry-service.js\" and CALL it. Mount POST /api/v1/capabilities/report and GET /api/v1/capabilities/report behind deps.requireKey. POST body is { body_id, capabilities, reported_at } matching the \u00a715 JSON shape (body_id, reported_at, capabilities object). GET returns the stored DeviceRegistry row for query body_id. Do not invent a new table. Do not edit server.js. ES module. No top-level timers or model calls.",
-      "spec": "The file MUST begin with a JSDoc block comment containing a line exactly \"@ssot docs/products/universal-overlay/PRODUCT_HOME.md\". Live HTTP surface for the Capability Registry (\u00a715). Export exactly: export function registerTaloaCapabilityRegistryRoutes(app, deps). Import createCapabilityRegistryService from \"../services/taloa/capability-registry-service.js\" and CALL it. Mount POST /api/v1/capabilities/report and GET /api/v1/capabilities/report behind deps.requireKey. POST body is { body_id, capabilities, reported_at } matching the \u00a715 JSON shape (body_id, reported_at, capabilities object). GET returns the stored DeviceRegistry row for query body_id. Do not invent a new table. Do not edit server.js. ES module. No top-level timers or model calls.",
+      "task": "The file MUST begin with a JSDoc block comment containing a line exactly \"@ssot docs/products/universal-overlay/PRODUCT_HOME.md\". Live HTTP surface for the Capability Registry (§15). Export exactly: export function registerTaloaCapabilityRegistryRoutes(app, deps). Import createCapabilityRegistryService from \"../services/taloa/capability-registry-service.js\" and CALL it. Mount POST /api/v1/capabilities/report and GET /api/v1/capabilities/report behind deps.requireKey. POST body is { body_id, capabilities, reported_at } matching the §15 JSON shape (body_id, reported_at, capabilities object). GET returns the stored DeviceRegistry row for query body_id. Do not invent a new table. Do not edit server.js. ES module. No top-level timers or model calls.",
+      "spec": "The file MUST begin with a JSDoc block comment containing a line exactly \"@ssot docs/products/universal-overlay/PRODUCT_HOME.md\". Live HTTP surface for the Capability Registry (§15). Export exactly: export function registerTaloaCapabilityRegistryRoutes(app, deps). Import createCapabilityRegistryService from \"../services/taloa/capability-registry-service.js\" and CALL it. Mount POST /api/v1/capabilities/report and GET /api/v1/capabilities/report behind deps.requireKey. POST body is { body_id, capabilities, reported_at } matching the §15 JSON shape (body_id, reported_at, capabilities object). GET returns the stored DeviceRegistry row for query body_id. Do not invent a new table. Do not edit server.js. ES module. No top-level timers or model calls.",
       "depends_on": [
         "TALOA-S64-CAPREG-001"
       ],
@@ -3842,11 +3868,11 @@
       "built_sha": null,
       "proof": null,
       "last_error": "github_commit_failed_after_local_ship",
-      "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md \u00a764 / \u00a745a / \u00a715 / \u00a744a",
+      "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md §64 / §45a / §15 / §44a",
       "id": "TALOA-S64-CAPREG-REGISTER-001",
       "target_file": "config/auto-registered-product-modules.json",
-      "task": "Add an enabled auto-register entry so TALOA-S64-CAPREG-ROUTE-001 mounts. Append exactly one module object: {\"path\":\"routes/taloa-capability-registry-routes.js\",\"register\":\"registerTaloaCapabilityRegistryRoutes\",\"mount_path\":\"/api/v1/capabilities\",\"enabled\":true,\"note\":\"Overlay Capability Registry \u00a715 on DeviceRegistry overlay_devices.\"}. Do not disable or rewrite unrelated entries. Do not edit server.js.",
-      "spec": "Add an enabled auto-register entry so TALOA-S64-CAPREG-ROUTE-001 mounts. Append exactly one module object: {\"path\":\"routes/taloa-capability-registry-routes.js\",\"register\":\"registerTaloaCapabilityRegistryRoutes\",\"mount_path\":\"/api/v1/capabilities\",\"enabled\":true,\"note\":\"Overlay Capability Registry \u00a715 on DeviceRegistry overlay_devices.\"}. Do not disable or rewrite unrelated entries. Do not edit server.js.",
+      "task": "Add an enabled auto-register entry so TALOA-S64-CAPREG-ROUTE-001 mounts. Append exactly one module object: {\"path\":\"routes/taloa-capability-registry-routes.js\",\"register\":\"registerTaloaCapabilityRegistryRoutes\",\"mount_path\":\"/api/v1/capabilities\",\"enabled\":true,\"note\":\"Overlay Capability Registry §15 on DeviceRegistry overlay_devices.\"}. Do not disable or rewrite unrelated entries. Do not edit server.js.",
+      "spec": "Add an enabled auto-register entry so TALOA-S64-CAPREG-ROUTE-001 mounts. Append exactly one module object: {\"path\":\"routes/taloa-capability-registry-routes.js\",\"register\":\"registerTaloaCapabilityRegistryRoutes\",\"mount_path\":\"/api/v1/capabilities\",\"enabled\":true,\"note\":\"Overlay Capability Registry §15 on DeviceRegistry overlay_devices.\"}. Do not disable or rewrite unrelated entries. Do not edit server.js.",
       "depends_on": [
         "TALOA-S64-CAPREG-ROUTE-001"
       ],
@@ -3892,7 +3918,7 @@
       "id": "TALOA-G0-SCANNERS-001",
       "status": "done",
       "target_file": "scripts/run-secret-scan-staged.mjs",
-      "task": "Wire existing secretScannerService.js into the real pre-commit hook (blueprint \u00a745a Gate 0 item 7). Do not invent a second scanner.",
+      "task": "Wire existing secretScannerService.js into the real pre-commit hook (blueprint §45a Gate 0 item 7). Do not invent a second scanner.",
       "spec": "githooks/pre-commit calls scripts/run-secret-scan-staged.mjs which imports scanSecrets from services/secretScannerService.js.",
       "depends_on": [],
       "founder_gated": false,
@@ -3905,7 +3931,7 @@
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "TALOA-G0-SCANNERS-001",
       "mission_id": "PRODUCT-universal-overlay",
-      "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md \u00a745a item 7",
+      "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md §45a item 7",
       "shipped_via": "conductor_script",
       "shipped_at": "2026-08-13T00:35:00.000Z",
       "proof": "SO-001 allows scripts/CI. Live caller is githooks/pre-commit section 0b.",
@@ -3917,7 +3943,7 @@
       "status": "skipped",
       "target_file": "services/taloa/capability-collection-001-registration-service.js",
       "task": "Implement capability collection registration for TALOA-S64-CAPREG-COL-001",
-      "spec": "This service will expose a function `registerCollection001(print15Data)` that processes the input `print15Data` (representing 'print \u00a715' as structured data) and calls functions from the existing `services/taloa/capability-registry-service.js` to store the derived capabilities, ultimately impacting `overlay_devices`. It should contain basic validation for the `print15Data` structure relevant to 'TALOA-S64-CAPREG-COL-001'.",
+      "spec": "This service will expose a function `registerCollection001(print15Data)` that processes the input `print15Data` (representing 'print §15' as structured data) and calls functions from the existing `services/taloa/capability-registry-service.js` to store the derived capabilities, ultimately impacting `overlay_devices`. It should contain basic validation for the `print15Data` structure relevant to 'TALOA-S64-CAPREG-COL-001'.",
       "depends_on": [],
       "founder_gated": false,
       "attempts": 1,
@@ -3947,7 +3973,7 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "skip_reason": "off_print \u2014 queue may only carry slices of the uploaded overlay blueprint",
+      "skip_reason": "off_print — queue may only carry slices of the uploaded overlay blueprint",
       "same_signature_count": 0
     },
     {
@@ -3955,7 +3981,7 @@
       "status": "skipped",
       "target_file": "routes/taloa-capability-collection-001-routes.js",
       "task": "Expose API endpoint for TALOA-S64-CAPREG-COL-001 capability collection registration",
-      "spec": "Create a POST endpoint `/taloa/capabilities/collections/S64-CAPREG-COL-001` that accepts `print \u00a715` data in the request body. This endpoint will validate the incoming data and call the `registerCollection001` function from `services/taloa/capability-collection-001-registration-service.js`. The module must export a `registerRoutes` function that takes an `app` (express instance) and `deps` object.",
+      "spec": "Create a POST endpoint `/taloa/capabilities/collections/S64-CAPREG-COL-001` that accepts `print §15` data in the request body. This endpoint will validate the incoming data and call the `registerCollection001` function from `services/taloa/capability-collection-001-registration-service.js`. The module must export a `registerRoutes` function that takes an `app` (express instance) and `deps` object.",
       "depends_on": [
         "col001-reg-service"
       ],
@@ -3975,7 +4001,7 @@
         "req.body",
         "res.status"
       ],
-      "skip_reason": "off_print \u2014 queue may only carry slices of the uploaded overlay blueprint",
+      "skip_reason": "off_print — queue may only carry slices of the uploaded overlay blueprint",
       "last_error": null,
       "same_signature_count": 0
     },
@@ -4256,7 +4282,7 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "same_signature_count": 0,
-      "skip_reason": "off_print \u2014 one queue may only carry slices pulled from authorized product blueprints"
+      "skip_reason": "off_print — one queue may only carry slices pulled from authorized product blueprints"
     },
     {
       "id": "step-5",
@@ -4272,7 +4298,7 @@
       ],
       "design_review_flagged": true,
       "same_signature_count": 0,
-      "skip_reason": "off_print \u2014 one queue may only carry slices pulled from authorized product blueprints"
+      "skip_reason": "off_print — one queue may only carry slices pulled from authorized product blueprints"
     },
     {
       "id": "COLLECTIBLES-V1-ADAPTER-INTERFACE-001",
@@ -4285,7 +4311,7 @@
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "COLLECTIBLES-V1-ADAPTER-INTERFACE-001",
       "mission_id": "PRODUCT-universal-overlay",
-      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md \u2014 V1 Trusted Personal Vault foundation",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — V1 Trusted Personal Vault foundation",
       "task": "Author CategoryAdapter registry + contract for Collectibles",
       "spec": "Create ESM module services/collectibles/category-adapter.js. Export createCategoryAdapterRegistry() that returns { register(adapter), get(categoryId), list() }. Document CategoryAdapter shape in JSDoc: identify(input), resolveIdentity(candidate), price(identity, opts), conditionSchema(). Do NOT hard-code Magic/MTG in this file. Include @ssot docs/products/collectibles/PRODUCT_HOME.md. Use export function (not CommonJS).",
       "expected_exports": [
@@ -4352,7 +4378,7 @@
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "COLLECTIBLES-V1-TWIN-SERVICE-001",
       "mission_id": "PRODUCT-universal-overlay",
-      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md \u2014 V1 Trusted Personal Vault foundation",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — V1 Trusted Personal Vault foundation",
       "task": "Author CollectibleTwin create/update helpers",
       "spec": "Create ESM module services/collectibles/twin-service.js. Export createCollectibleTwin(input) and updateCollectibleTwin(twin, patch). Enforce representation_level 1-4, needs_review boolean + reasons[], identity_status enums from SCHEMA_CONTRACTS. Keep ownership, possession, custody, and location as SEPARATE fields (do not collapse). Forbid MarketplaceCard type. Include @ssot docs/products/collectibles/PRODUCT_HOME.md.",
       "expected_exports": [
@@ -4447,9 +4473,9 @@
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "COLLECTIBLES-V1-MTG-ADAPTER-001",
       "mission_id": "PRODUCT-universal-overlay",
-      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md \u2014 V1 Trusted Personal Vault foundation",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — V1 Trusted Personal Vault foundation",
       "task": "Author MTG CategoryAdapter wrapping existing LifeOS modules",
-      "spec": "Create ESM module services/collectibles/adapters/mtg-adapter.js. Export createMtgCategoryAdapter() returning a CategoryAdapter. identify/price MUST import and call existing services/mtg-card-vision.js and services/mtg-card-pricing.js \u2014 do not duplicate Scryfall logic. Unresolved printing \u2192 needs_review reasons. Include @ssot docs/products/collectibles/PRODUCT_HOME.md.",
+      "spec": "Create ESM module services/collectibles/adapters/mtg-adapter.js. Export createMtgCategoryAdapter() returning a CategoryAdapter. identify/price MUST import and call existing services/mtg-card-vision.js and services/mtg-card-pricing.js — do not duplicate Scryfall logic. Unresolved printing → needs_review reasons. Include @ssot docs/products/collectibles/PRODUCT_HOME.md.",
       "expected_exports": [
         "createMtgCategoryAdapter"
       ],
@@ -4541,7 +4567,7 @@
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "COLLECTIBLES-V1-ROUTES-001",
       "mission_id": "PRODUCT-universal-overlay",
-      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md \u2014 V1 Trusted Personal Vault foundation",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — V1 Trusted Personal Vault foundation",
       "task": "Author collectibles capture/list route scaffold",
       "spec": "Create ESM module routes/collectibles-routes.js exporting registerCollectiblesRoutes(app, deps). Register POST/GET under /api/v1/collectibles for twin capture + list stubs per API_CONTRACTS. Import and call createCollectibleTwin from services/collectibles/twin-service.js and createMtgCategoryAdapter from adapters. Reuse LifeOS auth patterns from deps. Include @ssot docs/products/collectibles/PRODUCT_HOME.md.",
       "expected_exports": [
@@ -4618,7 +4644,7 @@
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "COLLECTIBLES-V1-ACCEPTANCE-001",
       "mission_id": "PRODUCT-universal-overlay",
-      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md \u2014 V1 Trusted Personal Vault foundation",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — V1 Trusted Personal Vault foundation",
       "task": "Author V1 foundation reachability acceptance test",
       "spec": "Create node:test file tests/collectibles-v1-foundation.test.js that imports createCategoryAdapterRegistry, createCollectibleTwin, createMtgCategoryAdapter, and reads routes/collectibles-routes.js source to assert it calls createCollectibleTwin (reachability, not exports-only). Fail if any import missing.",
       "file_contains": [
@@ -4681,12 +4707,12 @@
       "action_type": "author_then_write",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
-      "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md \u00a764",
+      "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md §64",
       "depends_on": [],
       "id": "TALOA-S64-ANDROID-BODY-001",
       "target_file": "services/taloa/android-body-adapter.js",
       "sandbox_boundary": "services/taloa/**",
-      "task": "The file MUST begin with a JSDoc block comment containing a line exactly \"@ssot docs/products/universal-overlay/PRODUCT_HOME.md\". Overlay print \u00a764 item 3: Android Universal Body adapter. Export exactly: export function createAndroidBodyAdapter(deps). Return { observe(scope), act(action), verify(goal, expected) }. observe MUST call deps.dumpVisibleText (injected) then CALL redactObservation from \"../drive-sensitive-content-filter.js\" on that text before returning. act MUST call deps.enqueueCommand. verify MUST use independent evidence from a fresh observe(). Do NOT rebuild runBrowserGoal. Do NOT invent a table. ES module. Do not edit server.js.",
+      "task": "The file MUST begin with a JSDoc block comment containing a line exactly \"@ssot docs/products/universal-overlay/PRODUCT_HOME.md\". Overlay print §64 item 3: Android Universal Body adapter. Export exactly: export function createAndroidBodyAdapter(deps). Return { observe(scope), act(action), verify(goal, expected) }. observe MUST call deps.dumpVisibleText (injected) then CALL redactObservation from \"../drive-sensitive-content-filter.js\" on that text before returning. act MUST call deps.enqueueCommand. verify MUST use independent evidence from a fresh observe(). Do NOT rebuild runBrowserGoal. Do NOT invent a table. ES module. Do not edit server.js.",
       "spec": "Reuse dumpVisibleText, enqueueCommand, redactObservation as injected deps. This file is only the Android Body observe/act/verify adapter.",
       "expected_exports": [
         "createAndroidBodyAdapter"
@@ -4733,7 +4759,7 @@
       "action_type": "write_file_exact",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
-      "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md \u00a764",
+      "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md §64",
       "depends_on": [
         "TALOA-S64-ANDROID-BODY-001"
       ],
@@ -4809,12 +4835,12 @@
       "action_type": "write_file_exact",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
-      "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md \u00a764",
+      "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md §64",
       "depends_on": [],
       "id": "TALOA-S64-MACOS-PERCEPTION-001",
       "target_file": "native/macos-overlay/SemanticPerception.swift",
       "sandbox_boundary": "native/macos-overlay/**",
-      "task": "Overlay print \u00a764 item 4: macOS semantic perception. Native Swift AXUIElement tree-walk plus vision-model fallback. factory-2 compiles. Do not edit services/ or routes/.",
+      "task": "Overlay print §64 item 4: macOS semantic perception. Native Swift AXUIElement tree-walk plus vision-model fallback. factory-2 compiles. Do not edit services/ or routes/.",
       "spec": "AX tree as primary observe(); vision fallback when AX is empty. No independent reasoning loop.",
       "file_contains": [
         "SemanticPerception",
@@ -4870,13 +4896,13 @@
       "action_type": "write_file_exact",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
-      "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md \u00a764",
+      "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md §64",
       "depends_on": [],
       "id": "TALOA-S64-AUTH-ENVELOPE-001",
       "target_file": "services/taloa/task-authorization-envelope.js",
       "sandbox_boundary": "services/taloa/**",
-      "task": "JSDoc @ssot docs/products/universal-overlay/PRODUCT_HOME.md. Overlay print \u00a764 item 6: Task Authorization Envelope. Export createTaskAuthorizationEnvelope({ pool, logger }). Persist on existing table agent_task_authority (NOT authority_ledger \u2014 that name is a bind alias). Do NOT invent tables or import types/logger.js. Injected deps only.",
-      "spec": "Blueprint \u00a723. Reuse agent_task_authority. Injected pool/logger. No new SQL tables. No types/ imports.",
+      "task": "JSDoc @ssot docs/products/universal-overlay/PRODUCT_HOME.md. Overlay print §64 item 6: Task Authorization Envelope. Export createTaskAuthorizationEnvelope({ pool, logger }). Persist on existing table agent_task_authority (NOT authority_ledger — that name is a bind alias). Do NOT invent tables or import types/logger.js. Injected deps only.",
+      "spec": "Blueprint §23. Reuse agent_task_authority. Injected pool/logger. No new SQL tables. No types/ imports.",
       "expected_exports": [
         "createTaskAuthorizationEnvelope"
       ],
@@ -4952,13 +4978,13 @@
       "action_type": "write_file_exact",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
-      "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md \u00a764",
+      "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md §64",
       "depends_on": [],
       "id": "TALOA-S64-TEMPLATE-REPLAY-001",
       "target_file": "services/taloa/template-replay-service.js",
       "sandbox_boundary": "services/taloa/**",
-      "task": "JSDoc @ssot docs/products/universal-overlay/PRODUCT_HOME.md. Overlay print \u00a764 item 7: template persistence + replay. Export createTemplateReplayService({ pool, logger }). Replay when environment_signature still matches. Do not invent a table. CRITICAL: do NOT invent capsule_store or any SQL table. Persist only via injected pool helpers / existing stores named in the blueprint. tables must stay empty unless already on HEAD.",
-      "spec": "Blueprint \u00a730\u201332. Reuse capsule_store. No invented SQL tables (capsule_store forbidden). Injected pool/logger only.",
+      "task": "JSDoc @ssot docs/products/universal-overlay/PRODUCT_HOME.md. Overlay print §64 item 7: template persistence + replay. Export createTemplateReplayService({ pool, logger }). Replay when environment_signature still matches. Do not invent a table. CRITICAL: do NOT invent capsule_store or any SQL table. Persist only via injected pool helpers / existing stores named in the blueprint. tables must stay empty unless already on HEAD.",
+      "spec": "Blueprint §30–32. Reuse capsule_store. No invented SQL tables (capsule_store forbidden). Injected pool/logger only.",
       "expected_exports": [
         "createTemplateReplayService"
       ],
@@ -5032,13 +5058,13 @@
       "action_type": "write_file_exact",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
-      "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md \u00a764",
+      "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md §64",
       "depends_on": [],
       "id": "TALOA-S64-PROMPT-INJECT-001",
       "target_file": "services/taloa/prompt-injection-authority-gate.js",
       "sandbox_boundary": "services/taloa/**",
-      "task": "JSDoc @ssot docs/products/universal-overlay/PRODUCT_HOME.md. Overlay print \u00a764 item 8: observed page text cannot become instructions. Export assertObservationIsNotAuthority(observation, envelope).",
-      "spec": "Blueprint \u00a746.",
+      "task": "JSDoc @ssot docs/products/universal-overlay/PRODUCT_HOME.md. Overlay print §64 item 8: observed page text cannot become instructions. Export assertObservationIsNotAuthority(observation, envelope).",
+      "spec": "Blueprint §46.",
       "expected_exports": [
         "assertObservationIsNotAuthority"
       ],
@@ -5105,12 +5131,12 @@
       "action_type": "write_file_exact",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
-      "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md \u00a764",
+      "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md §64",
       "depends_on": [],
       "id": "TALOA-S64-SENTRY-LAYER-B-001",
       "target_file": "scripts/sentry-overlay-layer-b.mjs",
       "sandbox_boundary": "scripts/**",
-      "task": "Overlay print \u00a764 item 9 / \u00a752: real Layer B browser walkthrough for universal-overlay. Every finding carries proposed_solution. Register in SENTRY_PRODUCT_REGISTRY.json.",
+      "task": "Overlay print §64 item 9 / §52: real Layer B browser walkthrough for universal-overlay. Every finding carries proposed_solution. Register in SENTRY_PRODUCT_REGISTRY.json.",
       "spec": "SO-002 Layer B. Layer A already exists (TALOA-SENTRY-LAYER-A-001).",
       "file_contains": [
         "universal-overlay",
@@ -5179,14 +5205,14 @@
       "action_type": "write_file_exact",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
-      "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md \u00a764",
+      "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md §64",
       "depends_on": [
         "TALOA-S64-MACOS-PERCEPTION-001"
       ],
       "id": "TALOA-S64-MACOS-BODY-001",
       "target_file": "native/macos-overlay/MacOsBodyAdapter.swift",
       "sandbox_boundary": "native/macos-overlay/**",
-      "task": "Overlay print \u00a764 item 5: macOS Universal Body adapter observe/act/verify over ScreenControl + SemanticPerception. factory-2 compiles. Do not rebuild a second Mind.",
+      "task": "Overlay print §64 item 5: macOS Universal Body adapter observe/act/verify over ScreenControl + SemanticPerception. factory-2 compiles. Do not rebuild a second Mind.",
       "spec": "Same contract as Android Body. verify from independent observe.",
       "file_contains": [
         "MacOsBodyAdapter",
@@ -5329,7 +5355,7 @@
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
-      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md \u2014 V1 Trusted Personal Vault",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — V1 Trusted Personal Vault",
       "depends_on": [
         "COLLECTIBLES-V1-ACCEPTANCE-001"
       ],
@@ -5337,7 +5363,7 @@
       "target_file": "db/migrations/20260813_collectible_twins_v1.sql",
       "sandbox_boundary": "db/migrations/**",
       "task": "Postgres migration for V1 Vault: collectible_twins, media_evidence, price_evidence, ownership_records, possession_records, custody_records, location_records, liquidity_preferences, offers stub, play_entitlement stub, partner stubs, audit_events per SCHEMA_CONTRACTS. Soft-delete columns. Indexes as specified. Do NOT invent MarketplaceCard tables. Pure SQL file.",
-      "spec": "SCHEMA_CONTRACTS \u00a7\u00a71\u201310 + stubs. Money = integer cents. UUID PKs. timestamptz UTC.",
+      "spec": "SCHEMA_CONTRACTS §§1–10 + stubs. Money = integer cents. UUID PKs. timestamptz UTC.",
       "file_contains": [
         "collectible_twins",
         "media_evidence",
@@ -5485,7 +5511,7 @@
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
-      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md \u2014 V1 Trusted Personal Vault",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — V1 Trusted Personal Vault",
       "depends_on": [
         "COLLECTIBLES-V1-SCHEMA-TWINS-001",
         "COLLECTIBLES-V1-TWIN-SERVICE-001"
@@ -5569,14 +5595,14 @@
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
-      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md \u2014 Architect-sealed print",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
       "depends_on": [
         "COLLECTIBLES-V1-SCHEMA-TWINS-001"
       ],
       "id": "COLLECTIBLES-V1-MEDIA-EVIDENCE-001",
       "target_file": "services/collectibles/media-evidence.js",
       "sandbox_boundary": "services/collectibles/**",
-      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createMediaEvidenceStore({ pool, logger }) \u2014 persistMedia, getMedia, listMediaForTwin against media_evidence. postgres_bytea OK for V1. sha256 required. ES module.",
+      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createMediaEvidenceStore({ pool, logger }) — persistMedia, getMedia, listMediaForTwin against media_evidence. postgres_bytea OK for V1. sha256 required. ES module.",
       "spec": "SCHEMA_CONTRACTS media_evidence; API_CONTRACTS media.",
       "expected_exports": [
         "createMediaEvidenceStore"
@@ -5652,7 +5678,7 @@
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
-      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md \u2014 Architect-sealed print",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
       "depends_on": [
         "COLLECTIBLES-V1-TWIN-STORE-001",
         "COLLECTIBLES-V1-MEDIA-EVIDENCE-001",
@@ -5661,8 +5687,8 @@
       "id": "COLLECTIBLES-V1-CAPTURE-API-001",
       "target_file": "routes/collectibles-routes.js",
       "sandbox_boundary": "routes/**",
-      "task": "Keep @ssot. Wire real POST /api/v1/collectibles/twins/capture + GET /twins + GET /twins/:id per API_CONTRACTS: persist media, identify via MTG adapter, insert Twin via twin-store, set needs_review on low confidence. Import createCollectibleTwinStore + createMediaEvidenceStore + createMtgCategoryAdapter. Additive \u2014 do not delete registerCollectiblesRoutes.",
-      "spec": "API_CONTRACTS \u00a71 Twin lifecycle. Default liquidity surprise_me. Never auto-list.",
+      "task": "Keep @ssot. Wire real POST /api/v1/collectibles/twins/capture + GET /twins + GET /twins/:id per API_CONTRACTS: persist media, identify via MTG adapter, insert Twin via twin-store, set needs_review on low confidence. Import createCollectibleTwinStore + createMediaEvidenceStore + createMtgCategoryAdapter. Additive — do not delete registerCollectiblesRoutes.",
+      "spec": "API_CONTRACTS §1 Twin lifecycle. Default liquidity surprise_me. Never auto-list.",
       "expected_exports": [
         "registerCollectiblesRoutes"
       ],
@@ -5734,7 +5760,7 @@
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
-      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md \u2014 Architect-sealed print",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
       "depends_on": [
         "COLLECTIBLES-V1-TWIN-STORE-001"
       ],
@@ -5742,7 +5768,7 @@
       "target_file": "services/collectibles/review-queue.js",
       "sandbox_boundary": "services/collectibles/**",
       "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createReviewQueueService({ pool, logger }) with listNeedsReview(ownerUserId) and resolveReview(twinId, correction). Corrections persist + audit. ES module.",
-      "spec": "MASTER_BLUEPRINT Needs Review workflow; API_CONTRACTS \u00a73.",
+      "spec": "MASTER_BLUEPRINT Needs Review workflow; API_CONTRACTS §3.",
       "expected_exports": [
         "createReviewQueueService"
       ],
@@ -5801,7 +5827,7 @@
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
-      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md \u2014 Architect-sealed print",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
       "depends_on": [
         "COLLECTIBLES-V1-CAPTURE-API-001"
       ],
@@ -5869,7 +5895,7 @@
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
-      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md \u2014 Architect-sealed print",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
       "depends_on": [
         "COLLECTIBLES-V1-VAULT-UI-001"
       ],
@@ -6569,7 +6595,7 @@
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
-      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md \u2014 Architect-sealed print",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
       "depends_on": [
         "COLLECTIBLES-V1-VAULT-UI-001"
       ],
@@ -6622,7 +6648,7 @@
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
-      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md \u2014 Architect-sealed print",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
       "depends_on": [
         "COLLECTIBLES-V1-TWIN-STORE-001"
       ],
@@ -6689,14 +6715,14 @@
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
-      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md \u2014 Architect-sealed print",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
       "depends_on": [
         "COLLECTIBLES-V1-TWIN-STORE-001"
       ],
       "id": "COLLECTIBLES-V1-HOUSEHOLD-001",
       "target_file": "services/collectibles/household-service.js",
       "sandbox_boundary": "services/collectibles/**",
-      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createHouseholdService({ pool }) \u2014 memberships + roles; Twins may attach household_id. ES module.",
+      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createHouseholdService({ pool }) — memberships + roles; Twins may attach household_id. ES module.",
       "spec": "MASTER_BLUEPRINT V1 Household.",
       "expected_exports": [
         "createHouseholdService"
@@ -6757,15 +6783,15 @@
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
-      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md \u2014 Architect-sealed print",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
       "depends_on": [
         "COLLECTIBLES-V1-CAPTURE-API-001"
       ],
       "id": "COLLECTIBLES-V1-GUEST-CLAIM-001",
       "target_file": "services/collectibles/guest-claim-service.js",
       "sandbox_boundary": "services/collectibles/**",
-      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createGuestClaimService({ pool }) \u2014 guest capture session \u2192 claim into authenticated Vault via guest_claim_token_hash. ES module.",
-      "spec": "MASTER_BLUEPRINT Guest scan \u2192 claim.",
+      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createGuestClaimService({ pool }) — guest capture session → claim into authenticated Vault via guest_claim_token_hash. ES module.",
+      "spec": "MASTER_BLUEPRINT Guest scan → claim.",
       "expected_exports": [
         "createGuestClaimService"
       ],
@@ -6840,7 +6866,7 @@
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
-      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md \u2014 Architect-sealed print",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
       "depends_on": [
         "COLLECTIBLES-V1-TWIN-STORE-001",
         "COLLECTIBLES-V1-MEDIA-EVIDENCE-001"
@@ -6848,7 +6874,7 @@
       "id": "COLLECTIBLES-V1-EXPORT-PRIVACY-001",
       "target_file": "services/collectibles/export-privacy.js",
       "sandbox_boundary": "services/collectibles/**",
-      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createExportPrivacyService({ pool }) \u2014 full owner export + soft-delete with audit. ES module.",
+      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createExportPrivacyService({ pool }) — full owner export + soft-delete with audit. ES module.",
       "spec": "MASTER_BLUEPRINT Export/delete/privacy.",
       "expected_exports": [
         "createExportPrivacyService"
@@ -6924,7 +6950,7 @@
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
-      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md \u2014 Architect-sealed print",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
       "depends_on": [
         "COLLECTIBLES-V1-ERA-WALL-001",
         "COLLECTIBLES-V1-DOSSIER-001",
@@ -6937,7 +6963,7 @@
       "id": "COLLECTIBLES-V1-LAYER-B-001",
       "target_file": "scripts/sentry-collectibles-layer-b.mjs",
       "sandbox_boundary": "scripts/**",
-      "task": "SO-002 Layer B: real browser walkthrough of Vault capture \u2192 review \u2192 Era Wall \u2192 Dossier. Every finding needs proposed_solution. Register product in SENTRY registry if required.",
+      "task": "SO-002 Layer B: real browser walkthrough of Vault capture → review → Era Wall → Dossier. Every finding needs proposed_solution. Register product in SENTRY registry if required.",
       "spec": "VERSION_ACCEPTANCE_GATES V1-B1. Foundation acceptance is not V1 done.",
       "file_contains": [
         "collectibles",
@@ -6999,14 +7025,14 @@
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
-      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md \u2014 Architect-sealed print",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
       "depends_on": [
         "COLLECTIBLES-V1-LAYER-B-001"
       ],
       "id": "COLLECTIBLES-V2-WANT-GRAPH-001",
       "target_file": "services/collectibles/want-graph.js",
       "sandbox_boundary": "services/collectibles/**",
-      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createWantGraphService({ pool }) \u2014 Want/Watch/Love/Need-for-deck/Need-for-set persistent wants. No auto-list. ES module.",
+      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createWantGraphService({ pool }) — Want/Watch/Love/Need-for-deck/Need-for-set persistent wants. No auto-list. ES module.",
       "spec": "MASTER_BLUEPRINT V2 Want Graph.",
       "expected_exports": [
         "createWantGraphService"
@@ -7085,14 +7111,14 @@
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
-      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md \u2014 Architect-sealed print",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
       "depends_on": [
         "COLLECTIBLES-V2-WANT-GRAPH-001"
       ],
       "id": "COLLECTIBLES-V2-INVISIBLE-LISTING-001",
       "target_file": "services/collectibles/invisible-listing.js",
       "sandbox_boundary": "services/collectibles/**",
-      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createInvisibleListingService({ pool }) \u2014 latent liquidity from liquidity_preferences; Quiet Mode; never auto-list without permission. ES module.",
+      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createInvisibleListingService({ pool }) — latent liquidity from liquidity_preferences; Quiet Mode; never auto-list without permission. ES module.",
       "spec": "MASTER_BLUEPRINT V2 Invisible Listing.",
       "expected_exports": [
         "createInvisibleListingService"
@@ -7169,14 +7195,14 @@
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
-      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md \u2014 Architect-sealed print",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
       "depends_on": [
         "COLLECTIBLES-V2-INVISIBLE-LISTING-001"
       ],
       "id": "COLLECTIBLES-V2-OFFER-INBOX-001",
       "target_file": "services/collectibles/offer-inbox.js",
       "sandbox_boundary": "services/collectibles/**",
-      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createOfferInboxService({ pool }) \u2014 standing offers, quality score, spam controls. Matching engine may be minimal; no payments. ES module.",
+      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createOfferInboxService({ pool }) — standing offers, quality score, spam controls. Matching engine may be minimal; no payments. ES module.",
       "spec": "MASTER_BLUEPRINT V2 offer inbox + trust foundation.",
       "expected_exports": [
         "createOfferInboxService"
@@ -7252,7 +7278,7 @@
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
-      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md \u2014 Architect-sealed print",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
       "depends_on": [
         "COLLECTIBLES-V2-OFFER-INBOX-001"
       ],
@@ -7260,7 +7286,7 @@
       "target_file": "tests/collectibles-v2-acceptance.test.js",
       "sandbox_boundary": "tests/**",
       "task": "node:test reachability for want-graph + invisible-listing + offer-inbox. Assert live imports/calls.",
-      "spec": "VERSION_ACCEPTANCE_GATES V2 \u2014 collector can receive offer without active listing (structure).",
+      "spec": "VERSION_ACCEPTANCE_GATES V2 — collector can receive offer without active listing (structure).",
       "file_contains": [
         "createWantGraphService",
         "createInvisibleListingService",
@@ -7332,14 +7358,14 @@
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
-      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md \u2014 Architect-sealed print",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
       "depends_on": [
         "COLLECTIBLES-V2-ACCEPTANCE-001"
       ],
       "id": "COLLECTIBLES-V3-TRANSACTION-001",
       "target_file": "services/collectibles/transaction-service.js",
       "sandbox_boundary": "services/collectibles/**",
-      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createTransactionService({ pool }) \u2014 buy/sell/trade state machine; object+cash balancing stubs. Transaction state SEPARATE from payment provider. Do NOT hold customer funds. ES module.",
+      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createTransactionService({ pool }) — buy/sell/trade state machine; object+cash balancing stubs. Transaction state SEPARATE from payment provider. Do NOT hold customer funds. ES module.",
       "spec": "MASTER_BLUEPRINT V3 Protected Exchange hard law.",
       "expected_exports": [
         "createTransactionService"
@@ -7417,14 +7443,14 @@
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
-      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md \u2014 Architect-sealed print",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
       "depends_on": [
         "COLLECTIBLES-V3-TRANSACTION-001"
       ],
       "id": "COLLECTIBLES-V3-PAYMENT-ADAPTER-001",
       "target_file": "services/collectibles/adapters/payment-adapter.js",
       "sandbox_boundary": "services/collectibles/**",
-      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createPaymentAdapterRegistry() \u2014 third-party held-funds abstraction only. Fail-closed if no provider. ES module.",
+      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createPaymentAdapterRegistry() — third-party held-funds abstraction only. Fail-closed if no provider. ES module.",
       "spec": "EXTERNAL_ADAPTERS payments; never invent in-house custody of funds.",
       "expected_exports": [
         "createPaymentAdapterRegistry"
@@ -7500,14 +7526,14 @@
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
-      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md \u2014 Architect-sealed print",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
       "depends_on": [
         "COLLECTIBLES-V3-TRANSACTION-001"
       ],
       "id": "COLLECTIBLES-V3-SHIPPING-001",
       "target_file": "services/collectibles/shipping-tracking.js",
       "sandbox_boundary": "services/collectibles/**",
-      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createShippingTrackingService({ pool }) \u2014 tracking + inspection window stubs behind carrier adapters. ES module.",
+      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createShippingTrackingService({ pool }) — tracking + inspection window stubs behind carrier adapters. ES module.",
       "spec": "MASTER_BLUEPRINT V3 shipping/tracking.",
       "expected_exports": [
         "createShippingTrackingService"
@@ -7585,7 +7611,7 @@
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
-      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md \u2014 Architect-sealed print",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
       "depends_on": [
         "COLLECTIBLES-V3-PAYMENT-ADAPTER-001",
         "COLLECTIBLES-V3-SHIPPING-001"
@@ -7665,14 +7691,14 @@
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
-      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md \u2014 Architect-sealed print",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
       "depends_on": [
         "COLLECTIBLES-V3-ACCEPTANCE-001"
       ],
       "id": "COLLECTIBLES-V4-SELL-AGENT-001",
       "target_file": "services/collectibles/sell-agent.js",
       "sandbox_boundary": "services/collectibles/**",
-      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createSellAgent({ pool }) \u2014 one-motion sell; net proceeds strategies fast/balanced/max-net; regret warnings for sentimental tags. ES module.",
+      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createSellAgent({ pool }) — one-motion sell; net proceeds strategies fast/balanced/max-net; regret warnings for sentimental tags. ES module.",
       "spec": "MASTER_BLUEPRINT V4 Intelligent Commerce.",
       "expected_exports": [
         "createSellAgent"
@@ -7748,14 +7774,14 @@
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
-      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md \u2014 Architect-sealed print",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
       "depends_on": [
         "COLLECTIBLES-V4-SELL-AGENT-001"
       ],
       "id": "COLLECTIBLES-V4-OPPORTUNITY-001",
       "target_file": "services/collectibles/opportunity-engine.js",
       "sandbox_boundary": "services/collectibles/**",
-      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createOpportunityEngine({ pool }) \u2014 set/run completion + least-cost path stubs. ES module.",
+      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createOpportunityEngine({ pool }) — set/run completion + least-cost path stubs. ES module.",
       "spec": "MASTER_BLUEPRINT V4 opportunity / completion economics.",
       "expected_exports": [
         "createOpportunityEngine"
@@ -7831,7 +7857,7 @@
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
-      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md \u2014 Architect-sealed print",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
       "depends_on": [
         "COLLECTIBLES-V4-OPPORTUNITY-001"
       ],
@@ -7910,14 +7936,14 @@
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
-      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md \u2014 Architect-sealed print",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
       "depends_on": [
         "COLLECTIBLES-V4-ACCEPTANCE-001"
       ],
       "id": "COLLECTIBLES-V5-PARTNER-REGISTRY-001",
       "target_file": "services/collectibles/partner-capability-registry.js",
       "sandbox_boundary": "services/collectibles/**",
-      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createPartnerCapabilityRegistry({ pool }) \u2014 partner-store accounts + capabilities. Sponsored placement MUST be labeled distinct from best recommendation. ES module.",
+      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createPartnerCapabilityRegistry({ pool }) — partner-store accounts + capabilities. Sponsored placement MUST be labeled distinct from best recommendation. ES module.",
       "spec": "MASTER_BLUEPRINT V5 + PARTNER_MODEL.",
       "expected_exports": [
         "createPartnerCapabilityRegistry"
@@ -7966,14 +7992,14 @@
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
-      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md \u2014 Architect-sealed print",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
       "depends_on": [
         "COLLECTIBLES-V5-PARTNER-REGISTRY-001"
       ],
       "id": "COLLECTIBLES-V5-LOCAL-DISCOVERY-001",
       "target_file": "services/collectibles/local-discovery.js",
       "sandbox_boundary": "services/collectibles/**",
-      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createLocalDiscoveryService({ pool }) \u2014 city/local inventory + event calendar stubs. ES module.",
+      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createLocalDiscoveryService({ pool }) — city/local inventory + event calendar stubs. ES module.",
       "spec": "MASTER_BLUEPRINT V5 local discovery / events.",
       "expected_exports": [
         "createLocalDiscoveryService"
@@ -8049,7 +8075,7 @@
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
-      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md \u2014 Architect-sealed print",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
       "depends_on": [
         "COLLECTIBLES-V5-LOCAL-DISCOVERY-001"
       ],
@@ -8118,14 +8144,14 @@
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
-      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md \u2014 Architect-sealed print",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
       "depends_on": [
         "COLLECTIBLES-V5-ACCEPTANCE-001"
       ],
       "id": "COLLECTIBLES-V6-CUSTODY-001",
       "target_file": "services/collectibles/custody-workflow.js",
       "sandbox_boundary": "services/collectibles/**",
-      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createCustodyWorkflow({ pool }) \u2014 owner vs possessor vs custodian vs location; check-in/out. Insurance marketing remain legal-gated comments only. ES module.",
+      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createCustodyWorkflow({ pool }) — owner vs possessor vs custodian vs location; check-in/out. Insurance marketing remain legal-gated comments only. ES module.",
       "spec": "MASTER_BLUEPRINT V6 Living Vault custody.",
       "expected_exports": [
         "createCustodyWorkflow"
@@ -8203,14 +8229,14 @@
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
-      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md \u2014 Architect-sealed print",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
       "depends_on": [
         "COLLECTIBLES-V6-CUSTODY-001"
       ],
       "id": "COLLECTIBLES-V6-REVEAL-STUDIO-001",
       "target_file": "services/collectibles/reveal-studio.js",
       "sandbox_boundary": "services/collectibles/**",
-      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createRevealStudio({ pool }) \u2014 reveal provenance + privacy filtering stubs; claim/revoke/takedown. ES module.",
+      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createRevealStudio({ pool }) — reveal provenance + privacy filtering stubs; claim/revoke/takedown. ES module.",
       "spec": "MASTER_BLUEPRINT V6 Reveal Network.",
       "expected_exports": [
         "createRevealStudio"
@@ -8288,7 +8314,7 @@
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
-      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md \u2014 Architect-sealed print",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
       "depends_on": [
         "COLLECTIBLES-V6-REVEAL-STUDIO-001"
       ],
@@ -8366,14 +8392,14 @@
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
-      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md \u2014 Architect-sealed print",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
       "depends_on": [
         "COLLECTIBLES-V6-ACCEPTANCE-001"
       ],
       "id": "COLLECTIBLES-V7-TABLETOP-RUNTIME-001",
       "target_file": "services/collectibles/tabletop-runtime.js",
       "sandbox_boundary": "services/collectibles/**",
-      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createTabletopRuntime({ pool }) \u2014 publisher-independent primitives + rules-adapter INTERFACE only. Do NOT ship third-party game adapters. IP gate fail-closed. play_entitlement separate from IP permission. ES module.",
+      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createTabletopRuntime({ pool }) — publisher-independent primitives + rules-adapter INTERFACE only. Do NOT ship third-party game adapters. IP gate fail-closed. play_entitlement separate from IP permission. ES module.",
       "spec": "MASTER_BLUEPRINT V7 + LEGAL_IP gates.",
       "expected_exports": [
         "createTabletopRuntime"
@@ -8450,7 +8476,7 @@
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
-      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md \u2014 Architect-sealed print",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
       "depends_on": [
         "COLLECTIBLES-V7-TABLETOP-RUNTIME-001"
       ],
@@ -8529,14 +8555,14 @@
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
-      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md \u2014 Architect-sealed print",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
       "depends_on": [
         "COLLECTIBLES-V7-ACCEPTANCE-001"
       ],
       "id": "COLLECTIBLES-V8-TOURNAMENT-001",
       "target_file": "services/collectibles/tournament-engine.js",
       "sandbox_boundary": "services/collectibles/**",
-      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createTournamentEngine({ pool }) \u2014 registrations/brackets/standings stubs; prize framework behind legal gate comments. ES module.",
+      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createTournamentEngine({ pool }) — registrations/brackets/standings stubs; prize framework behind legal gate comments. ES module.",
       "spec": "MASTER_BLUEPRINT V8.",
       "expected_exports": [
         "createTournamentEngine"
@@ -8612,14 +8638,14 @@
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
-      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md \u2014 Architect-sealed print",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
       "depends_on": [
         "COLLECTIBLES-V8-TOURNAMENT-001"
       ],
       "id": "COLLECTIBLES-V8-MEDIA-PIPELINE-001",
       "target_file": "services/collectibles/events-media-pipeline.js",
       "sandbox_boundary": "services/collectibles/**",
-      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createEventsMediaPipeline({ pool }) \u2014 events-to-content with explicit media consent. ES module.",
+      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createEventsMediaPipeline({ pool }) — events-to-content with explicit media consent. ES module.",
       "spec": "MASTER_BLUEPRINT V8 media consent/privacy.",
       "expected_exports": [
         "createEventsMediaPipeline"
@@ -8697,7 +8723,7 @@
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
-      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md \u2014 Architect-sealed print",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
       "depends_on": [
         "COLLECTIBLES-V8-MEDIA-PIPELINE-001"
       ],
@@ -8768,15 +8794,15 @@
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
-      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md \u2014 Architect-sealed print",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
       "depends_on": [
         "COLLECTIBLES-V8-ACCEPTANCE-001"
       ],
       "id": "COLLECTIBLES-V9-PROVENANCE-001",
       "target_file": "services/collectibles/provenance-graph.js",
       "sandbox_boundary": "services/collectibles/**",
-      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createProvenanceGraph({ pool }) \u2014 proof/provenance packaging for insurers/authenticators. Do NOT implement Teloa direct lending. ES module.",
-      "spec": "MASTER_BLUEPRINT V9 hard law \u2014 no direct lending.",
+      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createProvenanceGraph({ pool }) — proof/provenance packaging for insurers/authenticators. Do NOT implement Teloa direct lending. ES module.",
+      "spec": "MASTER_BLUEPRINT V9 hard law — no direct lending.",
       "expected_exports": [
         "createProvenanceGraph"
       ],
@@ -8851,14 +8877,14 @@
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
-      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md \u2014 Architect-sealed print",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
       "depends_on": [
         "COLLECTIBLES-V9-PROVENANCE-001"
       ],
       "id": "COLLECTIBLES-V9-PARTNER-ROUTING-001",
       "target_file": "services/collectibles/high-value-partner-routing.js",
       "sandbox_boundary": "services/collectibles/**",
-      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createHighValuePartnerRouting({ pool }) \u2014 grading/auth/insurance/financing partner registry referrals only. ES module.",
+      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createHighValuePartnerRouting({ pool }) — grading/auth/insurance/financing partner registry referrals only. ES module.",
       "spec": "MASTER_BLUEPRINT V9 partner routing.",
       "expected_exports": [
         "createHighValuePartnerRouting"
@@ -8934,7 +8960,7 @@
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
-      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md \u2014 Architect-sealed print",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
       "depends_on": [
         "COLLECTIBLES-V9-PARTNER-ROUTING-001"
       ],
@@ -9013,14 +9039,14 @@
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
-      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md \u2014 Architect-sealed print",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
       "depends_on": [
         "COLLECTIBLES-V9-ACCEPTANCE-001"
       ],
       "id": "COLLECTIBLES-V10-CATEGORY-PACKS-001",
       "target_file": "services/collectibles/category-pack-registry.js",
       "sandbox_boundary": "services/collectibles/**",
-      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createCategoryPackRegistry() \u2014 packs beyond TCG (sports/comics/coins/\u2026) atop universal Twin; adapter certification status. Do not alter ownership/transaction/trust semantics. ES module.",
+      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createCategoryPackRegistry() — packs beyond TCG (sports/comics/coins/…) atop universal Twin; adapter certification status. Do not alter ownership/transaction/trust semantics. ES module.",
       "spec": "MASTER_BLUEPRINT V10 category packs + certification.",
       "expected_exports": [
         "createCategoryPackRegistry"
@@ -9096,14 +9122,14 @@
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
-      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md \u2014 Architect-sealed print",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
       "depends_on": [
         "COLLECTIBLES-V10-CATEGORY-PACKS-001"
       ],
       "id": "COLLECTIBLES-V10-UNIVERSAL-GRAPH-001",
       "target_file": "services/collectibles/universal-desire-graph.js",
       "sandbox_boundary": "services/collectibles/**",
-      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createUniversalDesireGraph({ pool }) \u2014 cross-category Want/ownership/desire graph generalization. ES module.",
+      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createUniversalDesireGraph({ pool }) — cross-category Want/ownership/desire graph generalization. ES module.",
       "spec": "MASTER_BLUEPRINT V10 universal Want/ownership/desire graph.",
       "expected_exports": [
         "createUniversalDesireGraph"
@@ -9181,7 +9207,7 @@
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
-      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md \u2014 Architect-sealed print",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
       "depends_on": [
         "COLLECTIBLES-V10-UNIVERSAL-GRAPH-001"
       ],
@@ -9189,7 +9215,7 @@
       "target_file": "tests/collectibles-v10-acceptance.test.js",
       "sandbox_boundary": "tests/**",
       "task": "node:test reachability for category packs + universal desire graph. Assert Twin identity invariant preserved.",
-      "spec": "VERSION_ACCEPTANCE_GATES V10 structure \u2014 new category via pack without rewriting ownership/tx/trust.",
+      "spec": "VERSION_ACCEPTANCE_GATES V10 structure — new category via pack without rewriting ownership/tx/trust.",
       "file_contains": [
         "createCategoryPackRegistry",
         "createUniversalDesireGraph"
