@@ -8265,7 +8265,9 @@
           "content_sha256": "edfc08821a382bf098509f4a9713878c0575d43bca4ed87db9a4becc03701bed"
         }
       },
-      "shipped_at": "2026-08-14T00:27:12.597Z"
+      "shipped_at": "2026-08-14T00:27:12.597Z",
+      "skip_reason": null,
+      "revive_count": 0
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
