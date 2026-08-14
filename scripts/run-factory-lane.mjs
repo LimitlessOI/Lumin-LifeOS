@@ -11,8 +11,6 @@
  *
  * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
-import * as dotenv from 'dotenv';
-dotenv.config({ override: true });
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -554,5 +552,12 @@ function main() {
 }
 
 if (process.argv[1] && process.argv[1].endsWith('run-factory-lane.mjs')) {
+  // Only the CLI entrypoint loads a local .env -- a module importing
+  // runFactoryLane() (e.g. an in-process Railway scheduler) runs inside a
+  // process whose env Railway already owns; dotenv.config({override:true})
+  // at module-load time would have silently clobbered real service env vars
+  // with whatever a stray local .env file contained.
+  const dotenv = await import('dotenv');
+  dotenv.config({ override: true });
   main();
 }

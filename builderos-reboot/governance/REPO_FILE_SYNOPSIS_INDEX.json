@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-14T00:20:22.320Z",
+  "generated_at": "2026-08-14T00:21:23.222Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13599,
+  "file_count": 13600,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -44433,9 +44433,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 593430,
-      "mtime": "2026-08-14T00:08:04.645Z",
-      "indexed_at": "2026-08-14T00:08:11.108Z"
+      "bytes": 595644,
+      "mtime": "2026-08-14T00:21:16.183Z",
+      "indexed_at": "2026-08-14T00:21:23.222Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -80297,9 +80297,9 @@
     {
       "path": "scripts/run-factory-lane.mjs",
       "synopsis": "Dispatch one tick of work for a named factory lane. Production",
-      "bytes": 20213,
-      "mtime": "2026-08-14T00:08:04.646Z",
-      "indexed_at": "2026-08-14T00:08:11.108Z",
+      "bytes": 20574,
+      "mtime": "2026-08-14T00:21:16.187Z",
+      "indexed_at": "2026-08-14T00:21:23.222Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -104315,9 +104315,9 @@
     {
       "path": "startup/boot-domains.js",
       "synopsis": "boot-domains.js",
-      "bytes": 22898,
-      "mtime": "2026-08-06T23:20:54.943Z",
-      "indexed_at": "2026-08-06T23:23:47.311Z",
+      "bytes": 23173,
+      "mtime": "2026-08-14T00:21:16.188Z",
+      "indexed_at": "2026-08-14T00:21:23.222Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -104338,6 +104338,16 @@
       "bytes": 3437,
       "mtime": "2026-07-09T03:27:25.478Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "startup/factory-lane-scheduler.js",
+      "synopsis": "In-process ship loop for a secondary factory_id (e.g. Collectibles'",
+      "bytes": 3069,
+      "mtime": "2026-08-14T00:21:16.188Z",
+      "indexed_at": "2026-08-14T00:21:23.222Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "startup/governor.js",

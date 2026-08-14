@@ -20,6 +20,7 @@ import { generateDailyOILSummary } from '../services/oil-daily-summary.js';
 import { startBpPriorityScheduler } from '../services/builderos-bp-priority-scheduler.js';
 import { startNeverStopProductFactoryScheduler } from '../services/never-stop-product-factory-scheduler.js';
 import { startGovernedAutonomousShippingLoop } from '../services/governed-autonomous-shipping-loop.js';
+import { startConfiguredFactoryLanesInProcess } from './factory-lane-scheduler.js';
 import { getRuntimeProfile, isFullRuntimeProfile } from '../services/runtime-modes.js';
 
 const tcOperationsBootEnabled =
@@ -478,6 +479,11 @@ async function bootBuilderOSPriorityQueue(deps) {
     startGovernedAutonomousShippingLoop({ logger, pool });
   } catch (err) {
     logger?.warn?.({ err: err.message }, '[BOOT] Governed autonomous shipping loop failed to start (non-fatal)');
+  }
+  try {
+    startConfiguredFactoryLanesInProcess({ logger });
+  } catch (err) {
+    logger?.warn?.({ err: err.message }, '[BOOT] In-process factory lane(s) failed to start (non-fatal)');
   }
 }
 
