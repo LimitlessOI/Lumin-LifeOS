@@ -294,7 +294,9 @@
         }
       },
       "started_at": "2026-08-14T17:27:28.693Z",
-      "duration_ms": 8375
+      "duration_ms": 8375,
+      "tokens_used": 0,
+      "heal_reason": "promote_sealed_exact_on_thrash"
     },
     {
       "id": "6",
@@ -3532,7 +3534,7 @@
           "assertion_id": "reachability:createOverlayHostService"
         }
       ],
-      "action_type": "author_then_write",
+      "action_type": "write_file_exact",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "TALOA-WIRE-HOST-001",
       "mission_id": "PRODUCT-universal-overlay",
@@ -3558,7 +3560,33 @@
       "blocker_resolution": null,
       "same_signature_count": 0,
       "reclassified_at": "2026-08-14T17:23:22.771Z",
-      "reclassify_note": "isOriginalOverlayBlueprintStep fix 2026-08-14: was wrongly off_print due to old numeric id predating the TALOA-* convention; blueprint_id confirms real original-blueprint authorization."
+      "reclassify_note": "isOriginalOverlayBlueprintStep fix 2026-08-14: was wrongly off_print due to old numeric id predating the TALOA-* convention; blueprint_id confirms real original-blueprint authorization.",
+      "exact_inputs": {
+        "content_source_path": "docs/products/universal-overlay/twins/steps/TALOA-WIRE-HOST-001.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-08-14T17:27:48.668Z",
+        "shipped_at": "2026-08-14T17:27:48.668Z",
+        "commit_sha": null,
+        "content_sha256": "c81c420bd14b32bc66b719b2979eee078301a13688f1f33eb7fc480f7c8ff60d",
+        "target_file": "routes/taloa-overlay-host-routes.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "routes/taloa-overlay-host-routes.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "PASS"
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/universal-overlay/twins/steps/TALOA-WIRE-HOST-001.exact",
+          "content_sha256": "c81c420bd14b32bc66b719b2979eee078301a13688f1f33eb7fc480f7c8ff60d"
+        }
+      },
+      "shipped_at": "2026-08-14T17:27:48.668Z"
     },
     {
       "id": "TALOA-WIRE-HOST-REGISTER-001",

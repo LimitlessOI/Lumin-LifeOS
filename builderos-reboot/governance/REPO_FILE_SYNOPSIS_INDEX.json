@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-14T17:27:32.900Z",
+  "generated_at": "2026-08-14T17:27:51.513Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13612,
+  "file_count": 13613,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -76402,6 +76402,16 @@
       "bytes": 1479,
       "mtime": "2026-08-13T02:12:42.935Z",
       "indexed_at": "2026-08-13T02:12:42.935Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "routes/taloa-overlay-host-routes.js",
+      "synopsis": "Registers TaloaOverlayHostRoutes routes/handlers (routes/taloa-overlay-host-routes.js).",
+      "bytes": 734,
+      "mtime": "2026-08-14T17:27:51.513Z",
+      "indexed_at": "2026-08-14T17:27:51.513Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
