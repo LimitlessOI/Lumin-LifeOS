@@ -7895,9 +7895,9 @@
       "shipped_via": "governed_ship_queue"
     },
     {
-      "status": "pending",
+      "status": "done",
       "founder_gated": false,
-      "attempts": 3,
+      "attempts": 0,
       "action_type": "write_file_exact",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
@@ -7920,19 +7920,19 @@
         "capability"
       ],
       "blueprint_step_id": "COLLECTIBLES-V5-PARTNER-REGISTRY-001",
-      "commit_sha": null,
+      "commit_sha": "a78137f17dc86e8bfdecd8dec3bca8abfe931ae3",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-14T00:18:59.262Z",
-      "last_error": "github_commit_failed_after_local_ship",
-      "started_at": "2026-08-14T00:18:59.117Z",
+      "last_attempt_at": "2026-08-14T00:19:06.589Z",
+      "last_error": null,
+      "started_at": "2026-08-14T00:19:06.589Z",
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
       "park_until": null,
-      "heal_unblocked": true,
+      "heal_unblocked": false,
       "heal_reason": "collectibles_never_stop_heal",
-      "duration_ms": 1000,
+      "duration_ms": 10900,
       "tokens_used": 0,
       "same_signature_count": 0,
       "behavior_assertions": [
@@ -7972,7 +7972,35 @@
           "content_sha256": "16048ab85bd8f9fd03249634929730e2851b8fcdb0003096b073eca67ea646fc"
         }
       },
-      "shipped_at": "2026-08-14T00:19:09.550Z"
+      "shipped_at": "2026-08-14T00:19:17.489Z",
+      "shipped_via": "governed_ship_queue"
+    },
+    {
+      "status": "pending",
+      "founder_gated": false,
+      "attempts": 0,
+      "action_type": "author_then_write",
+      "product_id": "collectibles",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "mission_id": "PRODUCT-universal-overlay",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
+      "depends_on": [
+        "COLLECTIBLES-V5-PARTNER-REGISTRY-001"
+      ],
+      "id": "COLLECTIBLES-V5-LOCAL-DISCOVERY-001",
+      "target_file": "services/collectibles/local-discovery.js",
+      "sandbox_boundary": "services/collectibles/**",
+      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createLocalDiscoveryService({ pool }) — city/local inventory + event calendar stubs. ES module.",
+      "spec": "MASTER_BLUEPRINT V5 local discovery / events.",
+      "expected_exports": [
+        "createLocalDiscoveryService"
+      ],
+      "file_contains": [
+        "createLocalDiscoveryService",
+        "local",
+        "event"
+      ],
+      "blueprint_step_id": "COLLECTIBLES-V5-LOCAL-DISCOVERY-001"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
