@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/builderos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-08-14 — factory-3 can now run in-process on Railway instead of a local LaunchAgent (off by default: `FACTORY_LANE_INPROCESS_IDS`). |
+| **Last Updated** | 2026-08-14 — `FACTORY_LANE_INPROCESS_IDS` added to the managed-env allowlist so it can be set live without a manual Railway dashboard step. |
 ### Related docs (this product)
 
 | Doc | Path |

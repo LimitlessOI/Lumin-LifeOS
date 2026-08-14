@@ -136,6 +136,12 @@ const DEFAULT_ALLOWED_KEYS = new Set([
   "GOVERNED_AUTONOMOUS_SHIP_BOOT_DELAY_MS",
   "FOUNDER_RESUME_AUTONOMY",
   "PAUSE_AUTONOMY",
+  // In-process factory-lane loops (startup/factory-lane-scheduler.js) — moves
+  // a JS-only lane like factory-3/Collectibles off a laptop LaunchAgent and
+  // into the already-running Railway service. Comma-separated factory_ids.
+  "FACTORY_LANE_INPROCESS_IDS",
+  "FACTORY_LANE_ACTIVE_DELAY_MS",
+  "FACTORY_LANE_IDLE_DELAY_MS",
 
   // Runtime profile levers required to mount field-ops (TC, MLS) and external product routes in production.
   "LIFEOS_RUNTIME_PROFILE",
