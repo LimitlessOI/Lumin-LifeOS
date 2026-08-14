@@ -472,7 +472,7 @@ export function installLaunchAgent(factoryId = thisFactoryId()) {
   <key>EnvironmentVariables</key>
   <dict>
     <key>FACTORY_ID</key><string>${factoryId}</string>
-    <key>FACTORY_LANE_INTERVAL_MS</key><string>60000</string>
+    <key>FACTORY_LANE_INTERVAL_MS</key><string>3000</string>
     <key>PATH</key><string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
     <key>PUBLIC_BASE_URL</key><string>${tipBaseUrl()}</string>
     ${tipCommandKey() ? `<key>COMMAND_CENTER_KEY</key><string>${tipCommandKey().replace(/&/g, '&amp;').replace(/</g, '&lt;')}</string>` : ''}
@@ -525,17 +525,32 @@ function main() {
     return;
   }
   const loop = process.argv.includes('--loop');
+  // Self-scheduling, not setInterval: the next tick is scheduled `ms` after
+  // THIS one finishes, never while it's still running. setInterval fired on a
+  // fixed clock regardless of whether the prior tick had returned yet, which
+  // both wasted up to `ms` of dead time on fast ticks (nothing needed a 60s
+  // cooldown -- no rate limit or cost throttle depended on that number) and
+  // caused this process to overlap its own in-flight ship request on slow
+  // ticks (codegen + git can run past 60s), producing exactly the
+  // already_running collisions seen live 2026-08-13. Default lowered from
+  // 60_000 to 3_000: still enough to avoid a tight spin loop if every tick
+  // fails instantly, but no longer imposes an artificial cooldown on real work.
+  const ms = Number(process.env.FACTORY_LANE_INTERVAL_MS || 3_000);
   const tick = async () => {
-    const result = await runFactoryLane({ factoryId: thisFactoryId() });
-    console.log(JSON.stringify({ at: new Date().toISOString(), ...result }));
+    let result = { ok: false };
+    try {
+      result = await runFactoryLane({ factoryId: thisFactoryId() });
+      console.log(JSON.stringify({ at: new Date().toISOString(), ...result }));
+    } catch (err) {
+      console.error(String(err));
+    }
     if (!result.ok && !loop) process.exit(1);
+    if (loop) setTimeout(tick, ms);
   };
-  tick();
   if (loop) {
-    const ms = Number(process.env.FACTORY_LANE_INTERVAL_MS || 60_000);
-    console.error(`[factory-lane] looping every ${ms}ms as ${thisFactoryId()}`);
-    setInterval(() => { tick().catch((err) => console.error(String(err))); }, ms);
+    console.error(`[factory-lane] looping (next tick ${ms}ms after each completes) as ${thisFactoryId()}`);
   }
+  tick();
 }
 
 if (process.argv[1] && process.argv[1].endsWith('run-factory-lane.mjs')) {

@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-14T00:05:02.076Z",
+  "generated_at": "2026-08-14T00:08:11.108Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13595,
   "files": [
@@ -44433,9 +44433,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 591629,
-      "mtime": "2026-08-13T23:24:56.154Z",
-      "indexed_at": "2026-08-13T23:25:08.819Z"
+      "bytes": 593430,
+      "mtime": "2026-08-14T00:08:04.645Z",
+      "indexed_at": "2026-08-14T00:08:11.108Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -80297,9 +80297,9 @@
     {
       "path": "scripts/run-factory-lane.mjs",
       "synopsis": "Dispatch one tick of work for a named factory lane. Production",
-      "bytes": 19375,
-      "mtime": "2026-08-13T22:18:14.110Z",
-      "indexed_at": "2026-08-13T22:20:23.901Z",
+      "bytes": 20213,
+      "mtime": "2026-08-14T00:08:04.646Z",
+      "indexed_at": "2026-08-14T00:08:11.108Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
