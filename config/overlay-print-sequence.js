@@ -14,6 +14,16 @@ const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..
 
 export const OVERLAY_PRINT_SLICE_ID = /^(TALOA-S64-|TALOA-P1-|TALOA-G0-|TALOA-BADGE-|TALOA-NATIVE-|TALOA-SENTRY-)/;
 export const OVERLAY_PRINT_SOURCE = 'TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md';
+// Founder correction 2026-08-14: the original overlay blueprint's own steps
+// (ids "1".."9", authored 2026-07-15, founder_gated:false, un-gated by the
+// never-idle order) predate the TALOA-* id convention below and were being
+// wrongly caught by the invention filter as if they were unauthorized -- a
+// naming-convention migration gap, not real invention. blueprint_id is
+// already stamped on every real print-sequence step (see printStep() below);
+// recognizing it here closes the gap without weakening the actual guard
+// (a step still needs a real, known blueprint_id to pass -- nothing new
+// self-authorizes).
+export const OVERLAY_ORIGINAL_BLUEPRINT_ID = 'PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1';
 export const COLLECTIBLES_PRINT_SLICE_ID = /^COLLECTIBLES-V\d+-/;
 export const COLLECTIBLES_PRINT_SOURCE = /docs\/products\/collectibles\/MASTER_BLUEPRINT/i;
 
@@ -136,8 +146,12 @@ export function isCollectiblesPrintSlice(step) {
   return COLLECTIBLES_PRINT_SOURCE.test(String(step?.source || ''));
 }
 
+export function isOriginalOverlayBlueprintStep(step) {
+  return String(step?.blueprint_id || '') === OVERLAY_ORIGINAL_BLUEPRINT_ID;
+}
+
 export function isAuthorizedQueueSlice(step) {
-  return isOverlayPrintSliceId(step?.id) || isCollectiblesPrintSlice(step);
+  return isOverlayPrintSliceId(step?.id) || isCollectiblesPrintSlice(step) || isOriginalOverlayBlueprintStep(step);
 }
 
 function isOpen(step) {
