@@ -8435,9 +8435,9 @@
       "shipped_via": "governed_ship_queue"
     },
     {
-      "status": "pending",
+      "status": "done",
       "founder_gated": false,
-      "attempts": 2,
+      "attempts": 0,
       "action_type": "write_file_exact",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
@@ -8456,20 +8456,20 @@
         "fail-closed"
       ],
       "blueprint_step_id": "COLLECTIBLES-V7-ACCEPTANCE-001",
-      "commit_sha": null,
+      "commit_sha": "98307e134acec0b99b5bd8c0ec428cc130e4d184",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-14T02:27:14.611Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing:createTabletopRuntime; behavior_assertion: missing:fail-closed; behavior_assertion_failed; behavior_proof",
-      "started_at": "2026-08-14T02:26:44.747Z",
+      "last_attempt_at": "2026-08-14T02:27:21.482Z",
+      "last_error": null,
+      "started_at": "2026-08-14T02:27:21.482Z",
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
       "park_until": null,
-      "heal_unblocked": true,
+      "heal_unblocked": false,
       "heal_reason": "collectibles_never_stop_heal",
       "same_signature_count": 1,
-      "revive_count": 1,
+      "revive_count": 0,
       "revived_at": "2026-08-14T00:31:05.050Z",
       "last_attempt": null,
       "escalation_required": false,
@@ -8501,16 +8501,44 @@
           "content_sha256": "ae5b359f32efe6860496786c7f9359cc18a5dfc26440fb2fb9d31b2bfab99b8b"
         }
       },
-      "shipped_at": "2026-08-14T02:27:52.727Z",
+      "shipped_at": "2026-08-14T02:28:01.692Z",
       "skip_reason": null,
       "failure_signature": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing:createTabletopRuntime; behavior_assertion: missing:fail-closed; behavior_assertion_failed; behavior_proof",
       "escalation_class": "evidence_gap",
       "escalation_note": null,
       "tokens_used": 0,
-      "duration_ms": 1000,
+      "duration_ms": 40211,
       "exact_inputs": {
         "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V7-ACCEPTANCE-001.exact"
-      }
+      },
+      "shipped_via": "governed_ship_queue"
+    },
+    {
+      "status": "pending",
+      "founder_gated": false,
+      "attempts": 0,
+      "action_type": "author_then_write",
+      "product_id": "collectibles",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "mission_id": "PRODUCT-universal-overlay",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
+      "depends_on": [
+        "COLLECTIBLES-V7-ACCEPTANCE-001"
+      ],
+      "id": "COLLECTIBLES-V8-TOURNAMENT-001",
+      "target_file": "services/collectibles/tournament-engine.js",
+      "sandbox_boundary": "services/collectibles/**",
+      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createTournamentEngine({ pool }) — registrations/brackets/standings stubs; prize framework behind legal gate comments. ES module.",
+      "spec": "MASTER_BLUEPRINT V8.",
+      "expected_exports": [
+        "createTournamentEngine"
+      ],
+      "file_contains": [
+        "createTournamentEngine",
+        "bracket",
+        "standings"
+      ],
+      "blueprint_step_id": "COLLECTIBLES-V8-TOURNAMENT-001"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
