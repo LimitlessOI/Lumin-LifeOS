@@ -78,6 +78,13 @@ export async function initDatabase(pool, logger, { migrationsDir = defaultMigrat
   let ran = 0;
   let skipped = 0;
   const failed = [];
+  // Founder correction 2026-08-14: a migration failure previously left only
+  // the filename anywhere reachable (real error text went to console.error,
+  // which nobody outside a Railway shell can read) -- debugging a live
+  // migration failure required guessing at the cause blind, twice, before
+  // this was fixed. Now the real message travels with the filename all the
+  // way out to /healthz.
+  const failedDetails = [];
   const checksumDrift = [];
   const assertionFailures = [];
   const unverified = [];
@@ -145,6 +152,7 @@ export async function initDatabase(pool, logger, { migrationsDir = defaultMigrat
             proposed_solution: assertionFailureSolution(filename, detail),
           });
           failed.push(filename);
+          failedDetails.push({ filename, error: `ran but declared end state missing: ${detail.join(', ')}` });
           logger.error(
             `[DB] ❌ ${filename} ran but its declared end state is missing (${detail.join(', ')}) — `
             + `NOT marked applied, will retry. ${assertionFailureSolution(filename, detail)}`
@@ -180,6 +188,7 @@ export async function initDatabase(pool, logger, { migrationsDir = defaultMigrat
               proposed_solution: assertionFailureSolution(filename, detail),
             });
             failed.push(filename);
+            failedDetails.push({ filename, error: `${msg} (declared end state also missing: ${detail.join(', ')})` });
             logger.error(
               `[DB] ❌ ${filename} failed as "${msg}" AND its declared end state is missing `
               + `(${detail.join(', ')}) — the batch rolled back. NOT marked applied, will retry.`
@@ -207,6 +216,7 @@ export async function initDatabase(pool, logger, { migrationsDir = defaultMigrat
         // proceed. The daily loop can author a broken migration — that can
         // degrade one feature, never the whole server.
         failed.push(filename);
+        failedDetails.push({ filename, error: msg });
         logger.error(`[DB] ❌ Migration ${filename} FAILED — left unapplied, will retry next boot (boot continues): ${msg}`);
       }
     }
@@ -239,6 +249,7 @@ export async function initDatabase(pool, logger, { migrationsDir = defaultMigrat
     ran,
     skipped,
     failed: [...failed],
+    failed_details: failedDetails,
     checksum_drift: checksumDrift,
     assertion_failures: assertionFailures,
     unverified_applied: unverified,

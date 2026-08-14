@@ -10,6 +10,7 @@
  */
 export function buildStartupDegradedReport({
   migrationFailed = [],
+  migrationFailedDetails = [],
   moduleHealth = {},
   routeAssert = null,
   unhandledRejections = 0,
@@ -19,6 +20,11 @@ export function buildStartupDegradedReport({
   const modulesErrored = [];
   const routesMissing = [];
   const migrationsFailed = [...(migrationFailed || [])].filter(Boolean);
+  // Founder correction 2026-08-14: previously only the filename reached here
+  // -- the real error text was console-only, unreachable outside a Railway
+  // shell, which made a live migration failure impossible to debug remotely
+  // without guessing. Now the actual message travels with it.
+  const migrationsFailedDetails = Array.isArray(migrationFailedDetails) ? migrationFailedDetails : [];
 
   if (migrationsFailed.length) {
     reasons.push(`migrations_failed:${migrationsFailed.length}`);
@@ -67,6 +73,7 @@ export function buildStartupDegradedReport({
     modules_errored: modulesErrored,
     routes_missing: routesMissing,
     migrations_failed: migrationsFailed,
+    migrations_failed_details: migrationsFailedDetails,
   };
 }
 

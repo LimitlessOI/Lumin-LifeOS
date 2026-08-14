@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-14T18:14:18.882Z",
+  "generated_at": "2026-08-14T19:03:50.468Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13611,
   "files": [
@@ -45796,9 +45796,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 875448,
-      "mtime": "2026-08-14T00:30:27.849Z",
-      "indexed_at": "2026-08-14T00:30:41.394Z"
+      "bytes": 876727,
+      "mtime": "2026-08-14T19:03:11.603Z",
+      "indexed_at": "2026-08-14T19:03:50.468Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -93289,9 +93289,9 @@
     {
       "path": "server-founder-runtime.js",
       "synopsis": "Founder-builder minimal runtime entrypoint.",
-      "bytes": 26149,
-      "mtime": "2026-08-13T06:33:55.459Z",
-      "indexed_at": "2026-08-13T06:48:47.620Z",
+      "bytes": 26220,
+      "mtime": "2026-08-14T19:01:39.541Z",
+      "indexed_at": "2026-08-14T19:03:50.468Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -97202,9 +97202,9 @@
     {
       "path": "services/founder-runtime-boot-report.js",
       "synopsis": "Aggregate founder-lane boot degraded-state report (Wave 0 item 4).",
-      "bytes": 2629,
-      "mtime": "2026-07-09T01:07:53.233Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 3113,
+      "mtime": "2026-08-14T19:02:13.356Z",
+      "indexed_at": "2026-08-14T19:03:50.468Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -104395,9 +104395,9 @@
     {
       "path": "startup/database.js",
       "synopsis": "startup/database.js",
-      "bytes": 10497,
-      "mtime": "2026-07-28T22:38:51.338Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 11247,
+      "mtime": "2026-08-14T19:01:16.783Z",
+      "indexed_at": "2026-08-14T19:03:50.468Z",
       "ssot": [
         "docs/products/financial-revenue/PRODUCT_HOME.md"
       ]

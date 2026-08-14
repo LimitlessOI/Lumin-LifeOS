@@ -444,6 +444,7 @@ async function bootFounderRuntime() {
 
       const startupReport = buildStartupDegradedReport({
         migrationFailed: migrationResult?.failed || [],
+        migrationFailedDetails: migrationResult?.failed_details || [],
         moduleHealth: routeRegistration?.moduleHealth || {},
         routeAssert: routeRegistration?.routeAssert || null,
         unhandledRejections: _unhandledRejectionCount,
