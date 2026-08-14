@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-14T02:28:24.073Z",
+  "generated_at": "2026-08-14T02:30:51.421Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13602,
+  "file_count": 13603,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -95216,6 +95216,16 @@
       "bytes": 3063,
       "mtime": "2026-08-13T06:02:00.751Z",
       "indexed_at": "2026-08-13T06:02:00.751Z",
+      "ssot": [
+        "docs/products/collectibles/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/collectibles/events-media-pipeline.js",
+      "synopsis": "Exports createEventsMediaPipeline — services/collectibles/events-media-pipeline.js.",
+      "bytes": 4740,
+      "mtime": "2026-08-14T02:30:51.421Z",
+      "indexed_at": "2026-08-14T02:30:51.421Z",
       "ssot": [
         "docs/products/collectibles/PRODUCT_HOME.md"
       ]

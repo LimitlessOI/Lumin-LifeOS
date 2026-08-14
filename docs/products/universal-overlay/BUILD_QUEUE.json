@@ -8599,8 +8599,8 @@
     {
       "status": "pending",
       "founder_gated": false,
-      "attempts": 2,
-      "action_type": "author_then_write",
+      "attempts": 3,
+      "action_type": "write_file_exact",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
@@ -8625,9 +8625,9 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-14T02:28:58.598Z",
-      "last_error": "GROUNDING_FAIL: missing_sql_table: media_events, media_consent",
-      "started_at": "2026-08-14T02:28:39.716Z",
+      "last_attempt_at": "2026-08-14T02:30:42.511Z",
+      "last_error": "AIC_GATE_FAILURE",
+      "started_at": "2026-08-14T02:30:42.413Z",
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
@@ -8636,7 +8636,47 @@
       "heal_reason": "collectibles_never_stop_heal",
       "skip_reason": null,
       "escalation_required": false,
-      "revive_count": 0
+      "revive_count": 0,
+      "same_signature_count": 1,
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/collectibles/events-media-pipeline.js",
+          "exports": [
+            "createEventsMediaPipeline"
+          ],
+          "assertion_id": "expected_exports:services/collectibles/events-media-pipeline.js"
+        }
+      ],
+      "failure_signature": "AIC_GATE_FAILURE",
+      "escalation_class": "same_signature_repeat",
+      "escalation_note": null,
+      "exact_inputs": {
+        "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V8-MEDIA-PIPELINE-001.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-08-14T02:30:48.682Z",
+        "shipped_at": "2026-08-14T02:30:48.682Z",
+        "commit_sha": null,
+        "content_sha256": "6b6602a3578ac3100617a71c7f5d2351a4d736e206b692b25ef5afddca7dc7cf",
+        "target_file": "services/collectibles/events-media-pipeline.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/collectibles/events-media-pipeline.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "PASS"
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V8-MEDIA-PIPELINE-001.exact",
+          "content_sha256": "6b6602a3578ac3100617a71c7f5d2351a4d736e206b692b25ef5afddca7dc7cf"
+        }
+      },
+      "shipped_at": "2026-08-14T02:30:48.682Z"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
