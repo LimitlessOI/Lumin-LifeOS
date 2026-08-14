@@ -8552,7 +8552,7 @@
       ],
       "started_at": "2026-08-14T02:28:05.932Z",
       "last_attempt_at": "2026-08-14T02:28:19.515Z",
-      "duration_ms": 24089,
+      "duration_ms": 24082,
       "last_error": null,
       "commit_sha": "24052a5b44754997bda84f1f6bf64a9f89d0e0d6",
       "built_sha": null,
