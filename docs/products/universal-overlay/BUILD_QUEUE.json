@@ -8437,7 +8437,7 @@
     {
       "status": "blocked",
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "action_type": "author_then_write",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
@@ -8459,9 +8459,15 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-14T00:30:33.734Z",
-      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/local/bin/node --input-type=module -e import \"file:///usr/src/app/tests/.factory-import-check-1786667433668-1.mjs\";",
-      "started_at": "2026-08-14T00:29:55.015Z"
+      "last_attempt_at": "2026-08-14T00:30:55.221Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing:createTabletopRuntime; behavior_assertion: missing:fail-closed; behavior_assertion_failed; behavior_proof",
+      "started_at": "2026-08-14T00:30:46.429Z",
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "heal_unblocked": true,
+      "heal_reason": "collectibles_never_stop_heal"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
