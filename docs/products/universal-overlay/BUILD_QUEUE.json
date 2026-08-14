@@ -7816,9 +7816,9 @@
       "shipped_via": "governed_ship_queue"
     },
     {
-      "status": "pending",
+      "status": "done",
       "founder_gated": false,
-      "attempts": 3,
+      "attempts": 0,
       "action_type": "write_file_exact",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
@@ -7837,20 +7837,20 @@
         "createOpportunityEngine"
       ],
       "blueprint_step_id": "COLLECTIBLES-V4-ACCEPTANCE-001",
-      "commit_sha": null,
+      "commit_sha": "c6e9fbdc3f2ae061181aeab2964cdf5380f32eb9",
       "built_sha": null,
       "proof": null,
       "last_attempt_at": "2026-08-14T00:18:26.733Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing:createSellAgent; behavior_assertion: missing:createOpportunityEngine; behavior_assertion_failed; behavior_proof",
+      "last_error": null,
       "started_at": "2026-08-14T00:18:22.194Z",
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
       "park_until": null,
-      "heal_unblocked": true,
+      "heal_unblocked": false,
       "heal_reason": "collectibles_never_stop_heal",
       "last_attempt": null,
-      "revive_count": 4,
+      "revive_count": 0,
       "revived_at": "2026-08-14T00:13:24.529Z",
       "no_op": null,
       "pre_existing": null,
@@ -7889,7 +7889,37 @@
           "content_sha256": "644eb81a0cd97c9560fead6b7ae6e0d6cf6ac1cfc924b152a92aaf9e876dc948"
         }
       },
-      "shipped_at": "2026-08-14T00:18:28.440Z"
+      "shipped_at": "2026-08-14T00:18:34.790Z",
+      "duration_ms": 12599,
+      "tokens_used": 0,
+      "shipped_via": "governed_ship_queue"
+    },
+    {
+      "status": "pending",
+      "founder_gated": false,
+      "attempts": 0,
+      "action_type": "author_then_write",
+      "product_id": "collectibles",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "mission_id": "PRODUCT-universal-overlay",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
+      "depends_on": [
+        "COLLECTIBLES-V4-ACCEPTANCE-001"
+      ],
+      "id": "COLLECTIBLES-V5-PARTNER-REGISTRY-001",
+      "target_file": "services/collectibles/partner-capability-registry.js",
+      "sandbox_boundary": "services/collectibles/**",
+      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createPartnerCapabilityRegistry({ pool }) — partner-store accounts + capabilities. Sponsored placement MUST be labeled distinct from best recommendation. ES module.",
+      "spec": "MASTER_BLUEPRINT V5 + PARTNER_MODEL.",
+      "expected_exports": [
+        "createPartnerCapabilityRegistry"
+      ],
+      "file_contains": [
+        "createPartnerCapabilityRegistry",
+        "sponsored",
+        "capability"
+      ],
+      "blueprint_step_id": "COLLECTIBLES-V5-PARTNER-REGISTRY-001"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
