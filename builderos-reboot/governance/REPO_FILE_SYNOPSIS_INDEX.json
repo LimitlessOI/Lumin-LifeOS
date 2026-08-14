@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-14T00:29:17.753Z",
+  "generated_at": "2026-08-14T00:29:28.089Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13603,
   "files": [
@@ -105425,8 +105425,8 @@
       "path": "tests/collectibles-v6-acceptance.test.js",
       "synopsis": "Test utilities",
       "bytes": 7983,
-      "mtime": "2026-08-14T00:29:17.753Z",
-      "indexed_at": "2026-08-14T00:29:17.753Z"
+      "mtime": "2026-08-14T00:29:28.089Z",
+      "indexed_at": "2026-08-14T00:29:28.089Z"
     },
     {
       "path": "tests/completion-overclaim-guard.test.js",
