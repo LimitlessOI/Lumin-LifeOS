@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-14T19:49:17.866Z",
+  "generated_at": "2026-08-14T20:12:03.350Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13611,
   "files": [
@@ -32579,9 +32579,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 46390,
-      "mtime": "2026-08-14T19:46:48.506Z",
-      "indexed_at": "2026-08-14T19:47:33.595Z",
+      "bytes": 46975,
+      "mtime": "2026-08-14T20:10:44.796Z",
+      "indexed_at": "2026-08-14T20:12:03.350Z",
       "synopsis_index_only": true
     },
     {
@@ -44433,9 +44433,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 602807,
-      "mtime": "2026-08-14T17:24:37.973Z",
-      "indexed_at": "2026-08-14T17:25:09.480Z"
+      "bytes": 605349,
+      "mtime": "2026-08-14T20:11:14.632Z",
+      "indexed_at": "2026-08-14T20:12:03.350Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -44965,9 +44965,9 @@
     {
       "path": "docs/products/collectibles/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Collectibles (LimitlessOS)",
-      "bytes": 15569,
-      "mtime": "2026-08-14T19:16:54.229Z",
-      "indexed_at": "2026-08-14T19:16:59.521Z"
+      "bytes": 18183,
+      "mtime": "2026-08-14T20:11:33.456Z",
+      "indexed_at": "2026-08-14T20:12:03.350Z"
     },
     {
       "path": "docs/products/collectibles/SCHEMA_CONTRACTS.md",
@@ -73990,9 +73990,9 @@
     {
       "path": "routes/collectibles-routes.js",
       "synopsis": "Collectibles capture + Vault list/dossier routes.",
-      "bytes": 8044,
-      "mtime": "2026-08-13T20:22:56.381Z",
-      "indexed_at": "2026-08-13T20:22:56.381Z",
+      "bytes": 8571,
+      "mtime": "2026-08-14T20:10:44.797Z",
+      "indexed_at": "2026-08-14T20:12:03.350Z",
       "ssot": [
         "docs/products/collectibles/PRODUCT_HOME.md"
       ]
@@ -97545,9 +97545,9 @@
     {
       "path": "services/governed-build-queue-scheduler.js",
       "synopsis": "STEP 5f — the governed BUILD_QUEUE scheduler. Gathers the shippable",
-      "bytes": 10878,
-      "mtime": "2026-08-13T06:29:41.042Z",
-      "indexed_at": "2026-08-13T06:48:47.620Z",
+      "bytes": 12749,
+      "mtime": "2026-08-14T20:10:44.797Z",
+      "indexed_at": "2026-08-14T20:12:03.350Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

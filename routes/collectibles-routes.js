@@ -39,7 +39,15 @@ function mapTwinForStore(twin, ownerUserId) {
  * @param {object} deps
  */
 export function registerCollectiblesRoutes(app, deps = {}) {
-  const auth = typeof deps.requireAuth === 'function' ? deps.requireAuth : (_req, _res, next) => next();
+  // Auto-register only ever supplies deps.requireKey (never requireAuth) -- this
+  // route was unreachable in production until 2026-08-14 (never mounted on the
+  // founder_builder lane Railway actually boots), so the requireAuth-only check
+  // had never been exercised against the real deps bag. Fall back to requireKey,
+  // the pattern every other auto-registered route uses, so Vault/twin data is
+  // never served open once this is actually wired up.
+  const auth = typeof deps.requireAuth === 'function'
+    ? deps.requireAuth
+    : (typeof deps.requireKey === 'function' ? deps.requireKey : (_req, _res, next) => next());
   const adapter = createMtgCategoryAdapter();
   const logger = deps.logger || noopLogger();
   const twinStore = deps.twinStore

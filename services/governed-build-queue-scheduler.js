@@ -141,6 +141,41 @@ function inferQueueExpectations(queue) {
       const route = inferRouteFromSpec(step) || inferRouteFromFile(step.target_file);
       if (route) step.route = route;
     }
+
+    // Fix for a real, confirmed-live bug (2026-08-14): a route step's OWN
+    // blueprint-declared behavior_assertions can be a self-check (file_contains
+    // on the route file itself, verifying it mentions its own export/path
+    // string) -- that passes unconditionally, since a file always contains its
+    // own name. It proves the file exists, never that anything actually calls
+    // or mounts it. Exactly this let 46 Collectibles V1-V10 steps ship "done"
+    // while routes/collectibles-routes.js was never wired into the founder_
+    // builder lane Railway boots (confirmed live 404 on /api/v1/collectibles
+    // before this fix) -- the same failure class CLAUDE.md's "Acceptance must
+    // prove reachability" rule already documents from an earlier incident, but
+    // that rule was never made structural, only left as a convention blueprint
+    // authors could forget. module_mounts already exists and does a real live
+    // HTTP probe (fails closed on 404, even retries after a reload) -- it was
+    // just never auto-attached. Attach it here, unconditionally, whenever a
+    // route is known, regardless of what the blueprint already declared, so no
+    // future product can ship a route step on a self-referential proof alone.
+    if (step.route?.path) {
+      const assertions = Array.isArray(step.behavior_assertions) ? step.behavior_assertions : [];
+      const alreadyProbed = assertions.some(
+        (a) => a?.type === 'module_mounts' && a?.path === step.route.path,
+      );
+      if (!alreadyProbed) {
+        step.behavior_assertions = [
+          ...assertions,
+          {
+            type: 'module_mounts',
+            method: step.route.method || 'GET',
+            path: step.route.path,
+            target: step.target_file,
+            assertion_id: `module_mounts:${step.route.path}`,
+          },
+        ];
+      }
+    }
   }
 }
 
