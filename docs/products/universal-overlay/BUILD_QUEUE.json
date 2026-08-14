@@ -9081,9 +9081,9 @@
       "shipped_via": "governed_ship_queue"
     },
     {
-      "status": "blocked",
+      "status": "pending",
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "action_type": "author_then_write",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
@@ -9109,9 +9109,15 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-14T02:53:36.995Z",
+      "last_attempt_at": "2026-08-14T02:53:46.122Z",
       "last_error": "GROUNDING_FAIL: missing_sql_table: universal_desire_graph",
-      "started_at": "2026-08-14T02:53:31.482Z"
+      "started_at": "2026-08-14T02:53:31.482Z",
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "heal_unblocked": true,
+      "heal_reason": "collectibles_never_stop_heal"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
