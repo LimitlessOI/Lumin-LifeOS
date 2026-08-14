@@ -8351,9 +8351,9 @@
       "shipped_via": "governed_ship_queue"
     },
     {
-      "status": "pending",
+      "status": "done",
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "action_type": "write_file_exact",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
@@ -8390,8 +8390,8 @@
       ],
       "started_at": "2026-08-14T00:29:36.196Z",
       "last_attempt_at": "2026-08-14T00:29:36.279Z",
-      "last_error": "AIC_GATE_FAILURE",
-      "commit_sha": null,
+      "last_error": null,
+      "commit_sha": "be3ed219646f36c5e3ab3f9626a70be1152ca090",
       "built_sha": null,
       "proof": null,
       "failure_signature": "AIC_GATE_FAILURE",
@@ -8402,7 +8402,7 @@
       "escalation_required": false,
       "escalation_note": null,
       "park_until": null,
-      "heal_unblocked": true,
+      "heal_unblocked": false,
       "heal_reason": "collectibles_never_stop_heal",
       "exact_inputs": {
         "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V7-TABLETOP-RUNTIME-001.exact"
@@ -8429,7 +8429,33 @@
           "content_sha256": "029a1583ffdb262adcfa61964f5188aaaf02014815c6a34a017b423a9bb51976"
         }
       },
-      "shipped_at": "2026-08-14T00:29:42.832Z"
+      "shipped_at": "2026-08-14T00:29:49.658Z",
+      "duration_ms": 13465,
+      "tokens_used": 0,
+      "shipped_via": "governed_ship_queue"
+    },
+    {
+      "status": "pending",
+      "founder_gated": false,
+      "attempts": 0,
+      "action_type": "author_then_write",
+      "product_id": "collectibles",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "mission_id": "PRODUCT-universal-overlay",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
+      "depends_on": [
+        "COLLECTIBLES-V7-TABLETOP-RUNTIME-001"
+      ],
+      "id": "COLLECTIBLES-V7-ACCEPTANCE-001",
+      "target_file": "tests/collectibles-v7-acceptance.test.js",
+      "sandbox_boundary": "tests/**",
+      "task": "node:test: runtime exports; assert no third-party adapter modules shipped.",
+      "spec": "VERSION_ACCEPTANCE_GATES V7 structure (lawful test/original game only later).",
+      "file_contains": [
+        "createTabletopRuntime",
+        "fail-closed"
+      ],
+      "blueprint_step_id": "COLLECTIBLES-V7-ACCEPTANCE-001"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
