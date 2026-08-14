@@ -9083,8 +9083,8 @@
     {
       "status": "pending",
       "founder_gated": false,
-      "attempts": 2,
-      "action_type": "author_then_write",
+      "attempts": 3,
+      "action_type": "write_file_exact",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
@@ -9109,9 +9109,9 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-14T02:53:46.122Z",
-      "last_error": "GROUNDING_FAIL: missing_sql_table: universal_desire_graph",
-      "started_at": "2026-08-14T02:53:31.482Z",
+      "last_attempt_at": "2026-08-14T02:54:15.273Z",
+      "last_error": "AIC_GATE_FAILURE",
+      "started_at": "2026-08-14T02:54:15.204Z",
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
@@ -9120,7 +9120,47 @@
       "heal_reason": "collectibles_never_stop_heal",
       "skip_reason": null,
       "escalation_required": false,
-      "revive_count": 0
+      "revive_count": 0,
+      "same_signature_count": 1,
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/collectibles/universal-desire-graph.js",
+          "exports": [
+            "createUniversalDesireGraph"
+          ],
+          "assertion_id": "expected_exports:services/collectibles/universal-desire-graph.js"
+        }
+      ],
+      "failure_signature": "AIC_GATE_FAILURE",
+      "escalation_class": "same_signature_repeat",
+      "escalation_note": null,
+      "exact_inputs": {
+        "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V10-UNIVERSAL-GRAPH-001.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-08-14T02:54:20.463Z",
+        "shipped_at": "2026-08-14T02:54:20.463Z",
+        "commit_sha": null,
+        "content_sha256": "f148b7b1c49cae42098588be9c7b28586925138c9b69b5d68ac409d17018a024",
+        "target_file": "services/collectibles/universal-desire-graph.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/collectibles/universal-desire-graph.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "PASS"
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V10-UNIVERSAL-GRAPH-001.exact",
+          "content_sha256": "f148b7b1c49cae42098588be9c7b28586925138c9b69b5d68ac409d17018a024"
+        }
+      },
+      "shipped_at": "2026-08-14T02:54:20.463Z"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",

@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-14T02:53:21.053Z",
+  "generated_at": "2026-08-14T02:54:23.380Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13608,
+  "file_count": 13609,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -95398,6 +95398,16 @@
       "bytes": 10346,
       "mtime": "2026-08-13T17:03:12.832Z",
       "indexed_at": "2026-08-13T17:03:12.832Z",
+      "ssot": [
+        "docs/products/collectibles/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/collectibles/universal-desire-graph.js",
+      "synopsis": "Exports createUniversalDesireGraph — services/collectibles/universal-desire-graph.js.",
+      "bytes": 3711,
+      "mtime": "2026-08-14T02:54:23.380Z",
+      "indexed_at": "2026-08-14T02:54:23.380Z",
       "ssot": [
         "docs/products/collectibles/PRODUCT_HOME.md"
       ]
