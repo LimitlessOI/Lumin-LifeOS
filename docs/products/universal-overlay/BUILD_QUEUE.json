@@ -8005,7 +8005,7 @@
       "last_attempt_at": "2026-08-14T00:19:48.566Z",
       "last_error": null,
       "started_at": "2026-08-14T00:19:48.504Z",
-      "duration_ms": 14122,
+      "duration_ms": 14120,
       "same_signature_count": 1,
       "tokens_used": 0,
       "behavior_assertions": [
@@ -8034,9 +8034,9 @@
       "shipped_via": "governed_ship_queue"
     },
     {
-      "status": "pending",
+      "status": "blocked",
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "action_type": "author_then_write",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
@@ -8054,7 +8054,13 @@
         "createPartnerCapabilityRegistry",
         "createLocalDiscoveryService"
       ],
-      "blueprint_step_id": "COLLECTIBLES-V5-ACCEPTANCE-001"
+      "blueprint_step_id": "COLLECTIBLES-V5-ACCEPTANCE-001",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-08-14T00:20:15.912Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing:createPartnerCapabilityRegistry; behavior_assertion: missing:createLocalDiscoveryService; behavior_assertion_failed; behavior_proof",
+      "started_at": "2026-08-14T00:20:11.338Z"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
