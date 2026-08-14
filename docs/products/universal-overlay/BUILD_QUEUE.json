@@ -233,7 +233,7 @@
       ],
       "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": null,
-      "shipped_at": "2026-07-15T22:13:12.909Z",
+      "shipped_at": "2026-08-14T17:46:03.429Z",
       "commit_sha": null,
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "5",
@@ -256,8 +256,8 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "failure_signature": null,
-      "same_signature_count": 0,
+      "failure_signature": "STEP_STATUS_FORBIDDEN",
+      "same_signature_count": 1,
       "escalation_class": "same_signature_repeat",
       "escalation_required": false,
       "escalation_note": "M2PT-005B retroactive re-triage: stuck in revive-thrash before same_signature_count tracking was fixed (b3d9c838e). revive_count was already >=3 under the old broken tracking -- escalating directly rather than letting it silently re-thrash for several more cycles once never-stop resumes.",
@@ -268,15 +268,12 @@
       "reclassify_note": "isOriginalOverlayBlueprintStep fix 2026-08-14: was wrongly off_print due to old numeric id predating the TALOA-* convention; blueprint_id confirms real original-blueprint authorization.",
       "retarget_note": "Re-scoped 2026-08-14 per already-documented recommendation in TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md (currently-blocked build-queue step section) -- split into 3 smaller files instead of a 6th identical retry on the oversized original target.",
       "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/universal-overlay/twins/steps/5.exact"
-      },
       "exactness": {
         "sealed": true,
-        "sealed_at": "2026-08-14T17:27:29.980Z",
-        "shipped_at": "2026-08-14T17:27:29.980Z",
+        "sealed_at": "2026-08-14T17:46:03.429Z",
+        "shipped_at": "2026-08-14T17:46:03.429Z",
         "commit_sha": null,
-        "content_sha256": "54ee6d3ac2ccdfca99ea7794347b9a7a33172eca83814789aa20fc38feb35dd1",
+        "content_sha256": "c3e9c07de97d35d4e0cdc0c62331c7ef2804b18b7b530f40f6f5a4b00f8d6890",
         "target_file": "public/overlay/routeRegistry.js",
         "reverse": {
           "mode": "delete_file",
@@ -290,13 +287,16 @@
         "rebuild": {
           "action_type": "write_file_exact",
           "content_source_path": "docs/products/universal-overlay/twins/steps/5.exact",
-          "content_sha256": "54ee6d3ac2ccdfca99ea7794347b9a7a33172eca83814789aa20fc38feb35dd1"
+          "content_sha256": "c3e9c07de97d35d4e0cdc0c62331c7ef2804b18b7b530f40f6f5a4b00f8d6890"
         }
       },
       "started_at": "2026-08-14T17:45:57.913Z",
       "duration_ms": 8375,
       "tokens_used": 0,
-      "heal_reason": "demote_missing_exact_to_author"
+      "heal_reason": "demote_missing_exact_to_author",
+      "exact_inputs": {
+        "content_source_path": "docs/products/universal-overlay/twins/steps/5.exact"
+      }
     },
     {
       "id": "6",
