@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-14T20:12:03.350Z",
+  "generated_at": "2026-08-14T20:20:20.421Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13611,
+  "file_count": 13612,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21678,9 +21678,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 4131797,
-      "mtime": "2026-08-14T00:15:38.383Z",
-      "indexed_at": "2026-08-14T00:16:02.850Z"
+      "bytes": 4137373,
+      "mtime": "2026-08-14T20:19:55.948Z",
+      "indexed_at": "2026-08-14T20:20:20.421Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -44433,9 +44433,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 605349,
-      "mtime": "2026-08-14T20:11:14.632Z",
-      "indexed_at": "2026-08-14T20:12:03.350Z"
+      "bytes": 607886,
+      "mtime": "2026-08-14T20:18:18.222Z",
+      "indexed_at": "2026-08-14T20:19:55.863Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -97535,9 +97535,9 @@
     {
       "path": "services/governed-autonomous-shipping-loop.js",
       "synopsis": "STEP 5g — the governed AUTONOMOUS shipping loop. When the STEP 5a",
-      "bytes": 77640,
-      "mtime": "2026-08-13T21:06:42.091Z",
-      "indexed_at": "2026-08-13T21:06:42.091Z",
+      "bytes": 81636,
+      "mtime": "2026-08-14T20:19:36.432Z",
+      "indexed_at": "2026-08-14T20:19:55.863Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -106210,6 +106210,16 @@
       "bytes": 7854,
       "mtime": "2026-08-13T20:09:15.162Z",
       "indexed_at": "2026-08-13T20:09:15.162Z"
+    },
+    {
+      "path": "tests/mark-shipped-steps-done-module-health.test.js",
+      "synopsis": "markShippedStepsDone must not mark a routes/*.js step DONE unless",
+      "bytes": 4737,
+      "mtime": "2026-08-14T20:17:39.403Z",
+      "indexed_at": "2026-08-14T20:19:55.863Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "tests/marketing-social-publish.test.js",
