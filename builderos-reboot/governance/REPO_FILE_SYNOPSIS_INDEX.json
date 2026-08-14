@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-14T17:46:06.711Z",
+  "generated_at": "2026-08-14T18:11:34.845Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13612,
+  "file_count": 13611,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -39477,9 +39477,9 @@
     {
       "path": "db/migrations/20260813_collectibles_wants_v2_swap_physical.sql",
       "synopsis": "Fixes 20260813_collectibles_wants_v2.sql. That migration made",
-      "bytes": 3089,
-      "mtime": "2026-08-14T17:29:10.993Z",
-      "indexed_at": "2026-08-14T17:30:29.168Z"
+      "bytes": 5098,
+      "mtime": "2026-08-14T18:09:40.247Z",
+      "indexed_at": "2026-08-14T18:11:34.845Z"
     },
     {
       "path": "db/migrations/20260813_collectibles_wants_v2.sql",
@@ -44965,9 +44965,9 @@
     {
       "path": "docs/products/collectibles/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Collectibles (LimitlessOS)",
-      "bytes": 11767,
-      "mtime": "2026-08-14T17:30:01.053Z",
-      "indexed_at": "2026-08-14T17:30:29.168Z"
+      "bytes": 13752,
+      "mtime": "2026-08-14T18:11:05.074Z",
+      "indexed_at": "2026-08-14T18:11:34.845Z"
     },
     {
       "path": "docs/products/collectibles/SCHEMA_CONTRACTS.md",
@@ -72760,13 +72760,6 @@
       "bytes": 1390,
       "mtime": "2026-07-17T22:18:24.327Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
-    },
-    {
-      "path": "public/overlay/routeRegistry.js",
-      "synopsis": "LifeOS overlay UI — RouteRegistry.",
-      "bytes": 504,
-      "mtime": "2026-08-14T17:46:06.711Z",
-      "indexed_at": "2026-08-14T17:46:06.711Z"
     },
     {
       "path": "public/overlay/sales-coaching-overlay.js",
