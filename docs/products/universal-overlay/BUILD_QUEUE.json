@@ -8351,9 +8351,9 @@
       "shipped_via": "governed_ship_queue"
     },
     {
-      "status": "pending",
+      "status": "blocked",
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "action_type": "author_then_write",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
@@ -8376,7 +8376,13 @@
         "fail-closed",
         "play_entitlement"
       ],
-      "blueprint_step_id": "COLLECTIBLES-V7-TABLETOP-RUNTIME-001"
+      "blueprint_step_id": "COLLECTIBLES-V7-TABLETOP-RUNTIME-001",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-08-14T00:29:36.279Z",
+      "last_error": "AIC_GATE_FAILURE",
+      "started_at": "2026-08-14T00:29:36.196Z"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
