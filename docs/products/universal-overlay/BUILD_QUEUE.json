@@ -8714,7 +8714,10 @@
       "demoted_at": null,
       "park_until": null,
       "heal_unblocked": true,
-      "heal_reason": "collectibles_never_stop_heal"
+      "heal_reason": "collectibles_never_stop_heal",
+      "skip_reason": null,
+      "escalation_required": false,
+      "revive_count": 0
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
