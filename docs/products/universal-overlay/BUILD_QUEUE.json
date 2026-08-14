@@ -8188,9 +8188,9 @@
       "shipped_via": "governed_ship_queue"
     },
     {
-      "status": "pending",
+      "status": "done",
       "founder_gated": false,
-      "attempts": 3,
+      "attempts": 0,
       "action_type": "write_file_exact",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
@@ -8213,17 +8213,17 @@
         "privacy"
       ],
       "blueprint_step_id": "COLLECTIBLES-V6-REVEAL-STUDIO-001",
-      "commit_sha": null,
+      "commit_sha": "a7567ca4ee9d0a19f80e28c119ca52121f294a67",
       "built_sha": null,
       "proof": null,
       "last_attempt_at": "2026-08-14T00:27:20.790Z",
-      "last_error": "SLICE_COST_UNTRACKED: tokens_used required on every built slice (0 allowed for exact/no-codegen)",
+      "last_error": null,
       "started_at": "2026-08-14T00:27:05.914Z",
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
       "park_until": null,
-      "heal_unblocked": true,
+      "heal_unblocked": false,
       "heal_reason": "collectibles_never_stop_heal",
       "same_signature_count": 1,
       "skip_reason": null,
@@ -8239,7 +8239,7 @@
           "assertion_id": "expected_exports:services/collectibles/reveal-studio.js"
         }
       ],
-      "duration_ms": 14876,
+      "duration_ms": 23321,
       "failure_signature": "SLICE_COST_UNTRACKED: tokens_used required on every built slice (N allowed for exact/no-codegen)",
       "escalation_class": "same_signature_repeat",
       "escalation_note": null,
@@ -8269,7 +8269,31 @@
         }
       },
       "tokens_used": 0,
-      "shipped_at": "2026-08-14T00:27:22.282Z"
+      "shipped_at": "2026-08-14T00:27:29.233Z",
+      "shipped_via": "governed_ship_queue"
+    },
+    {
+      "status": "pending",
+      "founder_gated": false,
+      "attempts": 0,
+      "action_type": "author_then_write",
+      "product_id": "collectibles",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "mission_id": "PRODUCT-universal-overlay",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
+      "depends_on": [
+        "COLLECTIBLES-V6-REVEAL-STUDIO-001"
+      ],
+      "id": "COLLECTIBLES-V6-ACCEPTANCE-001",
+      "target_file": "tests/collectibles-v6-acceptance.test.js",
+      "sandbox_boundary": "tests/**",
+      "task": "node:test reachability for custody + reveal.",
+      "spec": "VERSION_ACCEPTANCE_GATES V6 structure.",
+      "file_contains": [
+        "createCustodyWorkflow",
+        "createRevealStudio"
+      ],
+      "blueprint_step_id": "COLLECTIBLES-V6-ACCEPTANCE-001"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
