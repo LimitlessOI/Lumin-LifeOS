@@ -8103,9 +8103,9 @@
       "shipped_via": "governed_ship_queue"
     },
     {
-      "status": "pending",
+      "status": "blocked",
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "action_type": "author_then_write",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
@@ -8127,7 +8127,13 @@
         "custodian",
         "check-in"
       ],
-      "blueprint_step_id": "COLLECTIBLES-V6-CUSTODY-001"
+      "blueprint_step_id": "COLLECTIBLES-V6-CUSTODY-001",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-08-14T00:20:31.368Z",
+      "last_error": "AIC_GATE_FAILURE",
+      "started_at": "2026-08-14T00:20:31.294Z"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
