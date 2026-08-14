@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-14T00:08:11.108Z",
+  "generated_at": "2026-08-14T00:16:02.850Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13595,
   "files": [
@@ -21678,9 +21678,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 4130417,
-      "mtime": "2026-08-13T23:35:19.735Z",
-      "indexed_at": "2026-08-13T23:35:32.577Z"
+      "bytes": 4131797,
+      "mtime": "2026-08-14T00:15:38.383Z",
+      "indexed_at": "2026-08-14T00:16:02.850Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -45796,9 +45796,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 872733,
-      "mtime": "2026-08-13T23:53:57.162Z",
-      "indexed_at": "2026-08-13T23:54:30.818Z"
+      "bytes": 874286,
+      "mtime": "2026-08-14T00:15:22.333Z",
+      "indexed_at": "2026-08-14T00:15:38.304Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -71728,9 +71728,9 @@
     {
       "path": "public/mtg-cards-upload.html",
       "synopsis": "Batch MTG card upload UI -- founder-facing page for routes/mtg-cards-routes.js.",
-      "bytes": 28617,
-      "mtime": "2026-08-12T22:46:29.979Z",
-      "indexed_at": "2026-08-12T22:46:29.979Z"
+      "bytes": 28707,
+      "mtime": "2026-08-14T00:11:28.677Z",
+      "indexed_at": "2026-08-14T00:15:38.304Z"
     },
     {
       "path": "public/onboarding.html",
@@ -75588,9 +75588,9 @@
     {
       "path": "routes/mtg-cards-routes.js",
       "synopsis": "Magic: The Gathering card cataloging, two intake paths sharing one",
-      "bytes": 40877,
-      "mtime": "2026-08-12T20:06:27.497Z",
-      "indexed_at": "2026-08-12T20:06:27.497Z",
+      "bytes": 42067,
+      "mtime": "2026-08-14T00:12:44.411Z",
+      "indexed_at": "2026-08-14T00:15:38.304Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -100257,9 +100257,9 @@
     {
       "path": "services/mtg-card-photo-store.js",
       "synopsis": "Durable MTG photo storage. Founder correction 2026-08-12: the",
-      "bytes": 7780,
-      "mtime": "2026-08-13T23:53:23.131Z",
-      "indexed_at": "2026-08-13T23:54:30.818Z",
+      "bytes": 8489,
+      "mtime": "2026-08-14T00:14:34.026Z",
+      "indexed_at": "2026-08-14T00:15:38.304Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

@@ -80,6 +80,20 @@
   <p>Your whole collection stays on this page. Upload more photos anytime — counts, prices, set/year/rarity, and sell status refresh live as cards finish identifying.</p>
   <div id="authBanner" class="auth-banner"></div>
 
+  <!-- Founder request 2026-08-13: add-photo at the very top, loader bar directly
+       below it, then all collection/details content below that. -->
+  <h2 style="margin-top:1rem; border-top:none; padding-top:0">Add photos</h2>
+  <p class="muted">Lay out as many cards as you want per photo — <strong>10, 15, 20+</strong> is fine if every face is readable. Select as many photos as you want (500+ is fine); they upload in groups of 150. New cards appear in the collection below as they finish.</p>
+
+  <div class="drop" id="drop">
+    <div id="dropLabel">Click to choose photos, or drag them here</div>
+    <input type="file" id="fileInput" accept="image/*" multiple>
+  </div>
+
+  <button id="uploadBtn" disabled>Upload batch</button>
+  <div id="dupWarn" class="warn" style="display:none"></div>
+  <div id="received" style="display:none; font-weight:700; color:#1a7a3a; margin:12px 0; padding:12px 14px; background:#0f2a18; border:1px solid #1a7a3a; border-radius:8px; font-size:1.05rem;"></div>
+
   <div id="progressWrap">
     <div id="progressLabel">Working…</div>
     <div class="progress-track"><div id="progressFill" class="progress-fill"></div></div>
@@ -88,8 +102,9 @@
       <span id="progressPct">0%</span>
     </div>
   </div>
+  <div id="status"></div>
 
-  <h2 style="margin-top:1rem; border-top:none; padding-top:0">Your collection <span id="liveLabel" class="muted"><span class="live-dot off" id="liveDot"></span>loading…</span></h2>
+  <h2>Your collection <span id="liveLabel" class="muted"><span class="live-dot off" id="liveDot"></span>loading…</span></h2>
   <p class="muted">Persists across uploads. Duplicate re-uploads of the same photo are counted once. Cards whose set couldn't be pinned down are flagged for review instead of bulk-lot guesses.</p>
   <div class="row">
     <button id="loadCollectionBtn" class="secondary">Refresh now</button>
@@ -112,19 +127,6 @@
     <tbody id="collectionBody"></tbody>
   </table>
 
-  <h2>Add more photos</h2>
-  <p class="muted">Lay out as many cards as you want per photo — <strong>10, 15, 20+</strong> is fine if every face is readable. Select as many photos as you want (500+ is fine); they upload in groups of 150. New cards appear in the collection above as they finish.</p>
-
-  <div class="drop" id="drop">
-    <div id="dropLabel">Click to choose photos, or drag them here</div>
-    <input type="file" id="fileInput" accept="image/*" multiple>
-  </div>
-
-  <button id="uploadBtn" disabled>Upload batch</button>
-  <div id="dupWarn" class="warn" style="display:none"></div>
-  <div id="received" style="display:none; font-weight:700; color:#1a7a3a; margin:12px 0; padding:12px 14px; background:#0f2a18; border:1px solid #1a7a3a; border-radius:8px; font-size:1.05rem;"></div>
-  <div id="status"></div>
-  <!-- progress bar is sticky at top (#progressWrap) -->
   <div class="summary" id="summary"></div>
   <table id="results" style="display:none">
     <thead><tr><th>Photo</th><th>Card</th><th>Set</th><th>Foil</th><th>Price</th><th>Tier</th><th>Venue</th><th>Status</th></tr></thead>

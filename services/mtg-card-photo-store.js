@@ -9,8 +9,18 @@
 import sharp from 'sharp';
 import { isR2Configured, uploadBufferToR2 } from './marketing-r2-upload.js';
 
-const MAX_EDGE_PX = 2000;
-const JPEG_QUALITY = 85;
+// Founder correction 2026-08-13: 2000px on the FULL multi-card source photo
+// (often 10-15 cards in one shot) left each individual card only a few
+// hundred real pixels wide once cropped -- not enough to see edge wear,
+// whitening, or corner condition. Resizing a crop back up doesn't recover
+// detail that was already thrown away. Raised so condition is actually
+// visible when zoomed in, both for buyers and for the vision model's own
+// condition_guess. Honest tradeoff: larger stored images means more
+// database storage over time, especially since R2 isn't configured yet
+// (photos fall back to Postgres bytea) -- worth revisiting R2 setup as
+// volume grows, but not a blocker for accuracy now.
+const MAX_EDGE_PX = 4000;
+const JPEG_QUALITY = 90;
 
 export async function ensurePhotoSchema(pool) {
   await pool.query(`
@@ -170,8 +180,8 @@ export async function saveCroppedListingPhoto({
 
   const cropped = await sharp(sourceBuffer, { failOn: 'none' })
     .extract({ left, top, width, height })
-    .resize({ width: 1000, height: 1400, fit: 'inside', withoutEnlargement: false })
-    .jpeg({ quality: 90, mozjpeg: true })
+    .resize({ width: 1600, height: 2240, fit: 'inside', withoutEnlargement: false })
+    .jpeg({ quality: 92, mozjpeg: true })
     .toBuffer();
 
   let r2Key = null;

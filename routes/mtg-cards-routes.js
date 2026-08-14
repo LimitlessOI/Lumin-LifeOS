@@ -46,7 +46,34 @@ import {
 import { isR2Configured } from '../services/marketing-r2-upload.js';
 
 const MAX_FILES = 150;
-const MAX_FILE_BYTES = 10 * 1024 * 1024;
+// Founder correction 2026-08-13: 10MB rejected normal, good phone photos with
+// no benefit -- every photo gets resized to a 2000px edge + recompressed
+// server-side regardless of original size, so a bigger cap costs nothing in
+// quality. 20MB balances that against multer's memoryStorage holding every
+// file in a batch in RAM at once (150 files x 20MB = up to 3GB worst case).
+const MAX_FILE_BYTES = 20 * 1024 * 1024;
+
+function multerErrorHandler(err, req, res, next) {
+  if (!err) return next();
+  if (err.code === 'LIMIT_FILE_SIZE') {
+    return res.status(413).json({
+      ok: false,
+      error: 'file_too_large',
+      message: `One or more photos is larger than ${(MAX_FILE_BYTES / 1024 / 1024).toFixed(0)}MB. Remove or resize that photo and upload again -- the rest of the batch did not go through.`,
+    });
+  }
+  if (err.code === 'LIMIT_FILE_COUNT') {
+    return res.status(413).json({
+      ok: false,
+      error: 'too_many_files',
+      message: `Too many photos in one batch (max ${MAX_FILES}). Split into smaller groups.`,
+    });
+  }
+  if (err.name === 'MulterError') {
+    return res.status(400).json({ ok: false, error: 'upload_error', message: err.message });
+  }
+  return next(err);
+}
 const MAX_CSV_BYTES = 5 * 1024 * 1024;
 const MAX_CSV_ROWS = 5000;
 const DEFAULT_USER_ID = 1;
@@ -578,7 +605,7 @@ export function createMtgCardsRoutes({ pool, requireKey, logger = console }) {
     }
   });
 
-  router.post('/batch-upload', requireKey, upload.array('cards', MAX_FILES), async (req, res) => {
+  router.post('/batch-upload', requireKey, upload.array('cards', MAX_FILES), multerErrorHandler, async (req, res) => {
     try {
       await ready();
       const files = req.files || [];
