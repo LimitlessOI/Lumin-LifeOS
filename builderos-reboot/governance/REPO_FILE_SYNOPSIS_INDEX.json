@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-14T02:37:49.262Z",
+  "generated_at": "2026-08-14T02:38:24.482Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13605,
+  "file_count": 13606,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -95246,6 +95246,16 @@
       "bytes": 2432,
       "mtime": "2026-08-13T21:31:57.356Z",
       "indexed_at": "2026-08-13T21:31:57.356Z",
+      "ssot": [
+        "docs/products/collectibles/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/collectibles/high-value-partner-routing.js",
+      "synopsis": "Exports createHighValuePartnerRouting — services/collectibles/high-value-partner-routing.js.",
+      "bytes": 2803,
+      "mtime": "2026-08-14T02:38:24.482Z",
+      "indexed_at": "2026-08-14T02:38:24.482Z",
       "ssot": [
         "docs/products/collectibles/PRODUCT_HOME.md"
       ]
