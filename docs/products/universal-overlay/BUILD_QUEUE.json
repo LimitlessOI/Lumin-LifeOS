@@ -7897,7 +7897,7 @@
     {
       "status": "blocked",
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "action_type": "author_then_write",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
@@ -7923,9 +7923,17 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-14T00:18:45.725Z",
+      "last_attempt_at": "2026-08-14T00:18:52.592Z",
       "last_error": "github_commit_failed_after_local_ship",
-      "started_at": "2026-08-14T00:18:39.925Z"
+      "started_at": "2026-08-14T00:18:52.479Z",
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "heal_unblocked": true,
+      "heal_reason": "collectibles_never_stop_heal",
+      "duration_ms": 1000,
+      "tokens_used": 0
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
