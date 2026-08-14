@@ -8684,8 +8684,8 @@
     {
       "status": "pending",
       "founder_gated": false,
-      "attempts": 2,
-      "action_type": "author_then_write",
+      "attempts": 4,
+      "action_type": "write_file_exact",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
@@ -8706,9 +8706,9 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-14T02:31:31.690Z",
+      "last_attempt_at": "2026-08-14T02:32:58.698Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing:createTournamentEngine; behavior_assertion: missing:createEventsMediaPipeline; behavior_assertion_failed; behavior_proof",
-      "started_at": "2026-08-14T02:31:25.317Z",
+      "started_at": "2026-08-14T02:32:52.353Z",
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
@@ -8717,7 +8717,37 @@
       "heal_reason": "collectibles_never_stop_heal",
       "skip_reason": null,
       "escalation_required": false,
-      "revive_count": 0
+      "revive_count": 0,
+      "same_signature_count": 1,
+      "failure_signature": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing:createTournamentEngine; behavior_assertion: missing:createEventsMediaPipeline; behavior_assertion_failed; behavior_proof",
+      "escalation_class": "evidence_gap",
+      "escalation_note": null,
+      "exact_inputs": {
+        "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V8-ACCEPTANCE-001.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-08-14T02:33:10.113Z",
+        "shipped_at": "2026-08-14T02:33:10.113Z",
+        "commit_sha": null,
+        "content_sha256": "1dd0315505c09153865d52d5a6c63d7737b44e099da034a8b1e3d0d5e379918a",
+        "target_file": "tests/collectibles-v8-acceptance.test.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "tests/collectibles-v8-acceptance.test.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "PASS"
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V8-ACCEPTANCE-001.exact",
+          "content_sha256": "1dd0315505c09153865d52d5a6c63d7737b44e099da034a8b1e3d0d5e379918a"
+        }
+      },
+      "shipped_at": "2026-08-14T02:33:10.113Z"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",

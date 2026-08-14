@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-14T02:30:51.421Z",
+  "generated_at": "2026-08-14T02:33:13.574Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13603,
+  "file_count": 13604,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -105427,6 +105427,13 @@
       "bytes": 14035,
       "mtime": "2026-08-14T02:27:56.818Z",
       "indexed_at": "2026-08-14T02:27:56.818Z"
+    },
+    {
+      "path": "tests/collectibles-v8-acceptance.test.js",
+      "synopsis": "Mock data for demonstration purposes",
+      "bytes": 6640,
+      "mtime": "2026-08-14T02:33:13.574Z",
+      "indexed_at": "2026-08-14T02:33:13.574Z"
     },
     {
       "path": "tests/completion-overclaim-guard.test.js",
