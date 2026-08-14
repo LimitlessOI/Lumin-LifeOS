@@ -7890,14 +7890,14 @@
         }
       },
       "shipped_at": "2026-08-14T00:18:34.790Z",
-      "duration_ms": 12599,
+      "duration_ms": 12596,
       "tokens_used": 0,
       "shipped_via": "governed_ship_queue"
     },
     {
-      "status": "pending",
+      "status": "blocked",
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "action_type": "author_then_write",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
@@ -7919,7 +7919,13 @@
         "sponsored",
         "capability"
       ],
-      "blueprint_step_id": "COLLECTIBLES-V5-PARTNER-REGISTRY-001"
+      "blueprint_step_id": "COLLECTIBLES-V5-PARTNER-REGISTRY-001",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-08-14T00:18:45.725Z",
+      "last_error": "github_commit_failed_after_local_ship",
+      "started_at": "2026-08-14T00:18:39.925Z"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
