@@ -8191,7 +8191,7 @@
       "status": "pending",
       "founder_gated": false,
       "attempts": 2,
-      "action_type": "author_then_write",
+      "action_type": "write_file_exact",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
@@ -8213,18 +8213,59 @@
         "privacy"
       ],
       "blueprint_step_id": "COLLECTIBLES-V6-REVEAL-STUDIO-001",
+      "same_signature_count": 1,
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/collectibles/reveal-studio.js",
+          "exports": [
+            "createRevealStudio"
+          ],
+          "assertion_id": "expected_exports:services/collectibles/reveal-studio.js"
+        }
+      ],
+      "started_at": "2026-08-14T00:26:50.261Z",
+      "last_attempt_at": "2026-08-14T00:26:59.346Z",
+      "last_error": "GROUNDING_FAIL: missing_sql_table: collectible_provenance, collectible_claims, collectible_takedowns",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-14T00:26:59.346Z",
-      "last_error": "GROUNDING_FAIL: missing_sql_table: collectible_provenance, collectible_claims, collectible_takedowns",
-      "started_at": "2026-08-14T00:26:50.261Z",
+      "failure_signature": "GROUNDING_FAIL: missing_sql_table: collectible_provenance, collectible_claims, collectible_takedowns",
+      "escalation_class": "same_signature_repeat",
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
+      "escalation_required": false,
+      "escalation_note": null,
       "park_until": null,
       "heal_unblocked": true,
-      "heal_reason": "collectibles_never_stop_heal"
+      "heal_reason": "collectibles_never_stop_heal",
+      "exact_inputs": {
+        "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V6-REVEAL-STUDIO-001.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-08-14T00:27:12.597Z",
+        "shipped_at": "2026-08-14T00:27:12.597Z",
+        "commit_sha": null,
+        "content_sha256": "edfc08821a382bf098509f4a9713878c0575d43bca4ed87db9a4becc03701bed",
+        "target_file": "services/collectibles/reveal-studio.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/collectibles/reveal-studio.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "PASS"
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V6-REVEAL-STUDIO-001.exact",
+          "content_sha256": "edfc08821a382bf098509f4a9713878c0575d43bca4ed87db9a4becc03701bed"
+        }
+      },
+      "shipped_at": "2026-08-14T00:27:12.597Z"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
