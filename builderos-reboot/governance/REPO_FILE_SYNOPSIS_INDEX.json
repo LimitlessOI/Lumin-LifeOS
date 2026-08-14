@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-14T02:27:56.818Z",
+  "generated_at": "2026-08-14T02:28:14.190Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13601,
+  "file_count": 13602,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -95329,6 +95329,16 @@
       "indexed_at": "2026-08-13T23:56:01.795Z",
       "ssot": [
         "docs/products/collectibles/PRODUCT_HOME.md",
+        "docs/products/collectibles/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/collectibles/tournament-engine.js",
+      "synopsis": "Exports createTournamentEngine — services/collectibles/tournament-engine.js.",
+      "bytes": 3327,
+      "mtime": "2026-08-14T02:28:14.190Z",
+      "indexed_at": "2026-08-14T02:28:14.190Z",
+      "ssot": [
         "docs/products/collectibles/PRODUCT_HOME.md"
       ]
     },
