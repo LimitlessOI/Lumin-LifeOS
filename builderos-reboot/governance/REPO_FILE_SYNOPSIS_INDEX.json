@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-14T16:49:14.389Z",
+  "generated_at": "2026-08-14T17:25:09.480Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13610,
+  "file_count": 13611,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -44433,9 +44433,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 601263,
-      "mtime": "2026-08-14T16:48:55.901Z",
-      "indexed_at": "2026-08-14T16:49:14.389Z"
+      "bytes": 602807,
+      "mtime": "2026-08-14T17:24:37.973Z",
+      "indexed_at": "2026-08-14T17:25:09.480Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -80018,6 +80018,16 @@
       "bytes": 8647,
       "mtime": "2026-07-10T01:14:05.374Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "scripts/reclassify-overlay-off-print-steps.mjs",
+      "synopsis": "One-time correction after the isOriginalOverlayBlueprintStep fix",
+      "bytes": 1812,
+      "mtime": "2026-08-14T17:23:09.384Z",
+      "indexed_at": "2026-08-14T17:25:09.480Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "scripts/record-ci-evidence.mjs",
