@@ -8552,7 +8552,7 @@
       ],
       "started_at": "2026-08-14T02:28:05.932Z",
       "last_attempt_at": "2026-08-14T02:28:19.515Z",
-      "duration_ms": 24082,
+      "duration_ms": 24089,
       "last_error": null,
       "commit_sha": "24052a5b44754997bda84f1f6bf64a9f89d0e0d6",
       "built_sha": null,
@@ -8682,9 +8682,9 @@
       "shipped_via": "governed_ship_queue"
     },
     {
-      "status": "pending",
+      "status": "blocked",
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "action_type": "author_then_write",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
@@ -8702,7 +8702,13 @@
         "createTournamentEngine",
         "createEventsMediaPipeline"
       ],
-      "blueprint_step_id": "COLLECTIBLES-V8-ACCEPTANCE-001"
+      "blueprint_step_id": "COLLECTIBLES-V8-ACCEPTANCE-001",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-08-14T02:31:25.376Z",
+      "last_error": "AIC_GATE_FAILURE",
+      "started_at": "2026-08-14T02:31:25.317Z"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
