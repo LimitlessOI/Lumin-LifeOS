@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-14T00:31:46.186Z",
+  "generated_at": "2026-08-14T02:27:56.818Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13601,
   "files": [
@@ -105403,10 +105403,10 @@
     },
     {
       "path": "tests/collectibles-v7-acceptance.test.js",
-      "synopsis": "Mock the runtime exports to ensure we're not using any third-party adapters.",
-      "bytes": 1911,
-      "mtime": "2026-08-14T00:31:12.596Z",
-      "indexed_at": "2026-08-14T00:31:12.596Z"
+      "synopsis": "V7 Runtime Exports — lawful test/original game only.",
+      "bytes": 14035,
+      "mtime": "2026-08-14T02:27:56.818Z",
+      "indexed_at": "2026-08-14T02:27:56.818Z"
     },
     {
       "path": "tests/completion-overclaim-guard.test.js",
