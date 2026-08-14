@@ -9166,9 +9166,9 @@
       "shipped_via": "governed_ship_queue"
     },
     {
-      "status": "pending",
+      "status": "done",
       "founder_gated": false,
-      "attempts": 3,
+      "attempts": 0,
       "action_type": "write_file_exact",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
@@ -9187,14 +9187,14 @@
         "createUniversalDesireGraph"
       ],
       "blueprint_step_id": "COLLECTIBLES-V10-ACCEPTANCE-001",
-      "commit_sha": null,
+      "commit_sha": "bf4797342e54bb1a8ae50e71438f952ebfbb6464",
       "built_sha": null,
       "proof": null,
       "last_attempt_at": "2026-08-14T04:18:20.841Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing:createCategoryPackRegistry; behavior_assertion: missing:createUniversalDesireGraph; behavior_assertion_failed; behavior_proof",
+      "last_error": null,
       "started_at": "2026-08-14T04:17:40.319Z",
       "last_attempt": null,
-      "revive_count": 1,
+      "revive_count": 0,
       "revived_at": "2026-08-14T03:14:43.777Z",
       "no_op": null,
       "pre_existing": null,
@@ -9206,7 +9206,7 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "heal_unblocked": true,
+      "heal_unblocked": false,
       "heal_reason": "collectibles_never_stop_heal",
       "skip_reason": null,
       "escalation_required": false,
@@ -9239,7 +9239,10 @@
           "content_sha256": "bdfb0b2428840fcfc22edcfdd45e019017c5c32abdfa657be66b56f18fd4e895"
         }
       },
-      "shipped_at": "2026-08-14T04:18:29.228Z"
+      "shipped_at": "2026-08-14T04:18:36.139Z",
+      "duration_ms": 55822,
+      "tokens_used": 0,
+      "shipped_via": "governed_ship_queue"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
