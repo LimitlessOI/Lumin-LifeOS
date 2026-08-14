@@ -8514,9 +8514,9 @@
       "shipped_via": "governed_ship_queue"
     },
     {
-      "status": "pending",
+      "status": "done",
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "action_type": "write_file_exact",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
@@ -8552,9 +8552,9 @@
       ],
       "started_at": "2026-08-14T02:28:05.932Z",
       "last_attempt_at": "2026-08-14T02:28:19.515Z",
-      "duration_ms": 13582,
-      "last_error": "SLICE_COST_UNTRACKED: tokens_used required on every built slice (0 allowed for exact/no-codegen)",
-      "commit_sha": null,
+      "duration_ms": 24089,
+      "last_error": null,
+      "commit_sha": "24052a5b44754997bda84f1f6bf64a9f89d0e0d6",
       "built_sha": null,
       "proof": null,
       "failure_signature": "SLICE_COST_UNTRACKED: tokens_used required on every built slice (N allowed for exact/no-codegen)",
@@ -8565,7 +8565,7 @@
       "escalation_required": false,
       "escalation_note": null,
       "park_until": null,
-      "heal_unblocked": true,
+      "heal_unblocked": false,
       "exact_inputs": {
         "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V8-TOURNAMENT-001.exact"
       },
@@ -8593,7 +8593,35 @@
       },
       "heal_reason": "collectibles_never_stop_heal",
       "tokens_used": 0,
-      "shipped_at": "2026-08-14T02:28:21.430Z"
+      "shipped_at": "2026-08-14T02:28:30.014Z",
+      "shipped_via": "governed_ship_queue"
+    },
+    {
+      "status": "pending",
+      "founder_gated": false,
+      "attempts": 0,
+      "action_type": "author_then_write",
+      "product_id": "collectibles",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "mission_id": "PRODUCT-universal-overlay",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
+      "depends_on": [
+        "COLLECTIBLES-V8-TOURNAMENT-001"
+      ],
+      "id": "COLLECTIBLES-V8-MEDIA-PIPELINE-001",
+      "target_file": "services/collectibles/events-media-pipeline.js",
+      "sandbox_boundary": "services/collectibles/**",
+      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createEventsMediaPipeline({ pool }) — events-to-content with explicit media consent. ES module.",
+      "spec": "MASTER_BLUEPRINT V8 media consent/privacy.",
+      "expected_exports": [
+        "createEventsMediaPipeline"
+      ],
+      "file_contains": [
+        "createEventsMediaPipeline",
+        "consent",
+        "media"
+      ],
+      "blueprint_step_id": "COLLECTIBLES-V8-MEDIA-PIPELINE-001"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
