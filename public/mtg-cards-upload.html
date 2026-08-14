@@ -157,8 +157,16 @@
   let pollTimer = null;
   let collectionRefreshTimer = null;
   // Server hard-caps each request at 150 (routes/mtg-cards-routes.js MAX_FILES).
-  // Founder: do not throttle below that — select 500+, system splits into 150s.
-  const CHUNK_SIZE = 150;
+  // Founder originally: do not throttle below that — select 500+, system splits
+  // automatically. That intent (user never manually splits their selection)
+  // stays true below -- only the per-request group size changed. Founder
+  // correction 2026-08-13: a 150-file single request (real high-res phone
+  // photos, tens of MB combined) failed with "failed to fetch" -- a network-
+  // level failure on a large/slow upload, not a server error, confirmed since
+  // the same photos succeeded server-side when sent in smaller groups.
+  // Smaller groups finish fast enough to survive a real mobile connection;
+  // the user still just selects everything at once.
+  const CHUNK_SIZE = 5;
   let activeBatches = [];
   let uploadInFlight = false;
   let lastUploadErrors = [];

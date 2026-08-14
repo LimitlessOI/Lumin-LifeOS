@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-14T00:29:45.330Z",
+  "generated_at": "2026-08-14T00:30:41.394Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13604,
+  "file_count": 13600,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -45796,9 +45796,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 874286,
-      "mtime": "2026-08-14T00:15:22.333Z",
-      "indexed_at": "2026-08-14T00:15:38.304Z"
+      "bytes": 875448,
+      "mtime": "2026-08-14T00:30:27.849Z",
+      "indexed_at": "2026-08-14T00:30:41.394Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -71728,9 +71728,9 @@
     {
       "path": "public/mtg-cards-upload.html",
       "synopsis": "Batch MTG card upload UI -- founder-facing page for routes/mtg-cards-routes.js.",
-      "bytes": 28707,
-      "mtime": "2026-08-14T00:11:28.677Z",
-      "indexed_at": "2026-08-14T00:15:38.304Z"
+      "bytes": 29289,
+      "mtime": "2026-08-14T00:30:03.140Z",
+      "indexed_at": "2026-08-14T00:30:41.394Z"
     },
     {
       "path": "public/onboarding.html",
@@ -95221,16 +95221,6 @@
       ]
     },
     {
-      "path": "services/collectibles/custody-workflow.js",
-      "synopsis": "Exports createCustodyWorkflow — services/collectibles/custody-workflow.js.",
-      "bytes": 6338,
-      "mtime": "2026-08-14T00:26:39.546Z",
-      "indexed_at": "2026-08-14T00:26:39.546Z",
-      "ssot": [
-        "docs/products/collectibles/PRODUCT_HOME.md"
-      ]
-    },
-    {
       "path": "services/collectibles/export-privacy.js",
       "synopsis": "Owner export + privacy redaction for Collectible projections.",
       "bytes": 1108,
@@ -95312,16 +95302,6 @@
       ]
     },
     {
-      "path": "services/collectibles/reveal-studio.js",
-      "synopsis": "Exports createRevealStudio — services/collectibles/reveal-studio.js.",
-      "bytes": 6765,
-      "mtime": "2026-08-14T00:27:24.924Z",
-      "indexed_at": "2026-08-14T00:27:24.924Z",
-      "ssot": [
-        "docs/products/collectibles/PRODUCT_HOME.md"
-      ]
-    },
-    {
       "path": "services/collectibles/review-queue.js",
       "synopsis": "Exports createReviewQueueService — services/collectibles/review-queue.js.",
       "bytes": 3534,
@@ -95349,16 +95329,6 @@
       "indexed_at": "2026-08-13T23:56:01.795Z",
       "ssot": [
         "docs/products/collectibles/PRODUCT_HOME.md",
-        "docs/products/collectibles/PRODUCT_HOME.md"
-      ]
-    },
-    {
-      "path": "services/collectibles/tabletop-runtime.js",
-      "synopsis": "Exports createTabletopRuntime — services/collectibles/tabletop-runtime.js.",
-      "bytes": 4232,
-      "mtime": "2026-08-14T00:29:45.330Z",
-      "indexed_at": "2026-08-14T00:29:45.330Z",
-      "ssot": [
         "docs/products/collectibles/PRODUCT_HOME.md"
       ]
     },
@@ -105430,13 +105400,6 @@
       "bytes": 4260,
       "mtime": "2026-08-14T00:20:22.320Z",
       "indexed_at": "2026-08-14T00:20:22.320Z"
-    },
-    {
-      "path": "tests/collectibles-v6-acceptance.test.js",
-      "synopsis": "Test utilities",
-      "bytes": 7983,
-      "mtime": "2026-08-14T00:29:28.089Z",
-      "indexed_at": "2026-08-14T00:29:28.089Z"
     },
     {
       "path": "tests/completion-overclaim-guard.test.js",
