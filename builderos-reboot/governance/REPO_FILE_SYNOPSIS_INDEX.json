@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-14T18:11:34.845Z",
+  "generated_at": "2026-08-14T18:14:18.882Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13611,
   "files": [
@@ -31549,9 +31549,9 @@
     {
       "path": "builderos-reboot/PROJECT_CERTIFICATION.json",
       "synopsis": "BuilderOS artifact — PROJECT CERTIFICATION.",
-      "bytes": 3954,
-      "mtime": "2026-08-11T22:12:18.852Z",
-      "indexed_at": "2026-08-11T22:15:50.764Z",
+      "bytes": 3955,
+      "mtime": "2026-08-14T18:13:26.717Z",
+      "indexed_at": "2026-08-14T18:14:18.882Z",
       "synopsis_index_only": true
     },
     {
