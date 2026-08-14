@@ -9036,7 +9036,7 @@
       ],
       "started_at": "2026-08-14T02:53:00.219Z",
       "last_attempt_at": "2026-08-14T02:53:16.389Z",
-      "duration_ms": 24487,
+      "duration_ms": 24485,
       "last_error": null,
       "commit_sha": "ab32a00618630a3025e83db0bbefe40757347397",
       "built_sha": null,
@@ -9081,9 +9081,9 @@
       "shipped_via": "governed_ship_queue"
     },
     {
-      "status": "pending",
+      "status": "blocked",
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "action_type": "author_then_write",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
@@ -9105,7 +9105,13 @@
         "cross-category",
         "desire"
       ],
-      "blueprint_step_id": "COLLECTIBLES-V10-UNIVERSAL-GRAPH-001"
+      "blueprint_step_id": "COLLECTIBLES-V10-UNIVERSAL-GRAPH-001",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-08-14T02:53:36.995Z",
+      "last_error": "GROUNDING_FAIL: missing_sql_table: universal_desire_graph",
+      "started_at": "2026-08-14T02:53:31.482Z"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
