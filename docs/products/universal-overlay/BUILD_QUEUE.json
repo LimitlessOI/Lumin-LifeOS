@@ -8998,9 +8998,9 @@
       "shipped_via": "governed_ship_queue"
     },
     {
-      "status": "pending",
+      "status": "done",
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "action_type": "write_file_exact",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
@@ -9036,9 +9036,9 @@
       ],
       "started_at": "2026-08-14T02:53:00.219Z",
       "last_attempt_at": "2026-08-14T02:53:16.389Z",
-      "duration_ms": 16170,
-      "last_error": "SLICE_COST_UNTRACKED: tokens_used required on every built slice (0 allowed for exact/no-codegen)",
-      "commit_sha": null,
+      "duration_ms": 24487,
+      "last_error": null,
+      "commit_sha": "ab32a00618630a3025e83db0bbefe40757347397",
       "built_sha": null,
       "proof": null,
       "failure_signature": "SLICE_COST_UNTRACKED: tokens_used required on every built slice (N allowed for exact/no-codegen)",
@@ -9049,7 +9049,7 @@
       "escalation_required": false,
       "escalation_note": null,
       "park_until": null,
-      "heal_unblocked": true,
+      "heal_unblocked": false,
       "exact_inputs": {
         "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V10-CATEGORY-PACKS-001.exact"
       },
@@ -9077,7 +9077,35 @@
       },
       "heal_reason": "collectibles_never_stop_heal",
       "tokens_used": 0,
-      "shipped_at": "2026-08-14T02:53:18.289Z"
+      "shipped_at": "2026-08-14T02:53:24.704Z",
+      "shipped_via": "governed_ship_queue"
+    },
+    {
+      "status": "pending",
+      "founder_gated": false,
+      "attempts": 0,
+      "action_type": "author_then_write",
+      "product_id": "collectibles",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "mission_id": "PRODUCT-universal-overlay",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
+      "depends_on": [
+        "COLLECTIBLES-V10-CATEGORY-PACKS-001"
+      ],
+      "id": "COLLECTIBLES-V10-UNIVERSAL-GRAPH-001",
+      "target_file": "services/collectibles/universal-desire-graph.js",
+      "sandbox_boundary": "services/collectibles/**",
+      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createUniversalDesireGraph({ pool }) — cross-category Want/ownership/desire graph generalization. ES module.",
+      "spec": "MASTER_BLUEPRINT V10 universal Want/ownership/desire graph.",
+      "expected_exports": [
+        "createUniversalDesireGraph"
+      ],
+      "file_contains": [
+        "createUniversalDesireGraph",
+        "cross-category",
+        "desire"
+      ],
+      "blueprint_step_id": "COLLECTIBLES-V10-UNIVERSAL-GRAPH-001"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
