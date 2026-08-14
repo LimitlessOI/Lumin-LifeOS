@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-14T00:04:05.074Z",
+  "generated_at": "2026-08-14T00:05:02.076Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13594,
+  "file_count": 13595,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -95269,6 +95269,16 @@
       "ssot": [
         "docs/products/collectibles/PRODUCT_HOME.md",
         "SCHEMA_CONTRACTS media_evidence"
+      ]
+    },
+    {
+      "path": "services/collectibles/opportunity-engine.js",
+      "synopsis": "Exports createOpportunityEngine — services/collectibles/opportunity-engine.js.",
+      "bytes": 3057,
+      "mtime": "2026-08-14T00:05:02.076Z",
+      "indexed_at": "2026-08-14T00:05:02.076Z",
+      "ssot": [
+        "docs/products/collectibles/PRODUCT_HOME.md"
       ]
     },
     {

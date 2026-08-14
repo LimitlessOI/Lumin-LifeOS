@@ -7733,10 +7733,10 @@
       "shipped_via": "governed_ship_queue"
     },
     {
-      "status": "blocked",
+      "status": "pending",
       "founder_gated": false,
       "attempts": 1,
-      "action_type": "author_then_write",
+      "action_type": "write_file_exact",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
@@ -7758,12 +7758,59 @@
         "least-cost"
       ],
       "blueprint_step_id": "COLLECTIBLES-V4-OPPORTUNITY-001",
+      "same_signature_count": 1,
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/collectibles/opportunity-engine.js",
+          "exports": [
+            "createOpportunityEngine"
+          ],
+          "assertion_id": "expected_exports:services/collectibles/opportunity-engine.js"
+        }
+      ],
+      "started_at": "2026-08-14T00:04:53.692Z",
+      "last_attempt_at": "2026-08-14T00:04:53.761Z",
+      "last_error": "AIC_GATE_FAILURE",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-14T00:04:53.761Z",
-      "last_error": "AIC_GATE_FAILURE",
-      "started_at": "2026-08-14T00:04:53.692Z"
+      "failure_signature": "AIC_GATE_FAILURE",
+      "escalation_class": "same_signature_repeat",
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "escalation_required": false,
+      "escalation_note": null,
+      "park_until": null,
+      "heal_unblocked": true,
+      "heal_reason": "collectibles_never_stop_heal",
+      "exact_inputs": {
+        "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V4-OPPORTUNITY-001.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-08-14T00:04:59.641Z",
+        "shipped_at": "2026-08-14T00:04:59.641Z",
+        "commit_sha": null,
+        "content_sha256": "658e37b0900643f95192967f63d9a53775620183c79d34fa58edb6d6caace548",
+        "target_file": "services/collectibles/opportunity-engine.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/collectibles/opportunity-engine.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "PASS"
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V4-OPPORTUNITY-001.exact",
+          "content_sha256": "658e37b0900643f95192967f63d9a53775620183c79d34fa58edb6d6caace548"
+        }
+      },
+      "shipped_at": "2026-08-14T00:04:59.641Z"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
