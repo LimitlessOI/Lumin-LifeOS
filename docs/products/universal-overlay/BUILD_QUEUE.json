@@ -8919,9 +8919,9 @@
       "shipped_via": "governed_ship_queue"
     },
     {
-      "status": "pending",
+      "status": "done",
       "founder_gated": false,
-      "attempts": 3,
+      "attempts": 0,
       "action_type": "write_file_exact",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
@@ -8940,20 +8940,20 @@
         "createHighValuePartnerRouting"
       ],
       "blueprint_step_id": "COLLECTIBLES-V9-ACCEPTANCE-001",
-      "commit_sha": null,
+      "commit_sha": "0f4714a05ba58b1203409df7388d3b87ecbb8b97",
       "built_sha": null,
       "proof": null,
       "last_attempt_at": "2026-08-14T02:52:30.908Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing:createProvenanceGraph; behavior_assertion: missing:createHighValuePartnerRouting; behavior_assertion_failed; behavior_proof",
+      "last_error": null,
       "started_at": "2026-08-14T02:52:16.144Z",
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
       "park_until": null,
-      "heal_unblocked": true,
+      "heal_unblocked": false,
       "heal_reason": "collectibles_never_stop_heal",
       "last_attempt": null,
-      "revive_count": 3,
+      "revive_count": 0,
       "revived_at": "2026-08-14T02:45:18.558Z",
       "no_op": null,
       "pre_existing": null,
@@ -8992,7 +8992,37 @@
           "content_sha256": "2179837db24f3c3b86ac9f447b70d8f358c9bbc65bcfda8b1102b420b73a7287"
         }
       },
-      "shipped_at": "2026-08-14T02:52:37.201Z"
+      "shipped_at": "2026-08-14T02:52:44.488Z",
+      "duration_ms": 28347,
+      "tokens_used": 0,
+      "shipped_via": "governed_ship_queue"
+    },
+    {
+      "status": "pending",
+      "founder_gated": false,
+      "attempts": 0,
+      "action_type": "author_then_write",
+      "product_id": "collectibles",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "mission_id": "PRODUCT-universal-overlay",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
+      "depends_on": [
+        "COLLECTIBLES-V9-ACCEPTANCE-001"
+      ],
+      "id": "COLLECTIBLES-V10-CATEGORY-PACKS-001",
+      "target_file": "services/collectibles/category-pack-registry.js",
+      "sandbox_boundary": "services/collectibles/**",
+      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createCategoryPackRegistry() — packs beyond TCG (sports/comics/coins/…) atop universal Twin; adapter certification status. Do not alter ownership/transaction/trust semantics. ES module.",
+      "spec": "MASTER_BLUEPRINT V10 category packs + certification.",
+      "expected_exports": [
+        "createCategoryPackRegistry"
+      ],
+      "file_contains": [
+        "createCategoryPackRegistry",
+        "certification",
+        "category pack"
+      ],
+      "blueprint_step_id": "COLLECTIBLES-V10-CATEGORY-PACKS-001"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
