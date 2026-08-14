@@ -226,7 +226,7 @@
       "spec": "Small, standalone mapping table only: exports ROUTE_CONTEXT_MAP, an object/array mapping URL-pattern strings (e.g. insurance portal, banking site, generic form) to a context-type label. No dispatch logic, no rendering — pure data + one lookup helper. This is Part 1 of 3 (routeRegistry.js data table -> thin moduleRouter.js dispatcher -> per-context view modules), re-scoped 2026-08-14 after 5 failed revives on a single monolithic moduleRouter.js exceeded the governed factory Zone-3 additive-patch working size (documented 150-line failure mode). Keep this file well under that limit.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 2,
+      "attempts": 1,
       "expected_exports": [
         "ROUTE_CONTEXT_MAP",
         "lookupRouteContext"
@@ -239,14 +239,14 @@
       "blueprint_step_id": "5",
       "mission_id": "PRODUCT-universal-overlay",
       "pre_existing": null,
-      "last_error": "SLICE_COST_UNTRACKED: tokens_used required on every built slice (0 allowed for exact/no-codegen)",
+      "last_error": "hidden_dependency",
       "reaudit_reset_at": "2026-07-30T18:55:06.758Z",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-14T17:27:37.069Z",
+      "last_attempt_at": "2026-08-14T17:30:47.630Z",
       "last_attempt": null,
-      "revive_count": 0,
-      "revived_at": "2026-07-31T10:49:18.403Z",
+      "revive_count": 1,
+      "revived_at": "2026-08-14T17:30:47.453Z",
       "no_op": null,
       "demoted": false,
       "demote_reason": null,
@@ -293,7 +293,7 @@
           "content_sha256": "54ee6d3ac2ccdfca99ea7794347b9a7a33172eca83814789aa20fc38feb35dd1"
         }
       },
-      "started_at": "2026-08-14T17:27:28.693Z",
+      "started_at": "2026-08-14T17:30:47.519Z",
       "duration_ms": 8375,
       "tokens_used": 0,
       "heal_reason": "promote_sealed_exact_on_thrash"
@@ -3493,7 +3493,7 @@
     },
     {
       "id": "TALOA-WIRE-HOST-001",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "routes/taloa-overlay-host-routes.js",
       "task": "The file MUST begin with a JSDoc block comment containing a line exactly \"@ssot docs/products/universal-overlay/PRODUCT_HOME.md\" (mandatory, enforced by a commit gate). Wire the already-built Phase 1 overlay host into a live HTTP surface so it has a real caller. Export exactly: export function registerTaloaOverlayHostRoutes(app, deps). Import createOverlayHostService from \"../services/taloa/overlay-host-service.js\" and CALL it (construction without a caller is false-done). Mount GET /api/v1/taloa/overlay-host/health behind deps.requireKey. The handler constructs the service with { pool: deps.pool, logger: deps.logger, preferenceStore: deps.preferenceStore || { get: async () => ({}), set: async () => ({}) } }, awaits displayOverlay(), and returns a plain serialisable JSON object that includes ok:true and the displayOverlay result. Do not invent a new table. Do not edit server.js. ES module syntax only. No top-level timers or model calls.",
       "spec": "The file MUST begin with a JSDoc block comment containing a line exactly \"@ssot docs/products/universal-overlay/PRODUCT_HOME.md\" (mandatory, enforced by a commit gate). Wire the already-built Phase 1 overlay host into a live HTTP surface so it has a real caller. Export exactly: export function registerTaloaOverlayHostRoutes(app, deps). Import createOverlayHostService from \"../services/taloa/overlay-host-service.js\" and CALL it (construction without a caller is false-done). Mount GET /api/v1/taloa/overlay-host/health behind deps.requireKey. The handler constructs the service with { pool: deps.pool, logger: deps.logger, preferenceStore: deps.preferenceStore || { get: async () => ({}), set: async () => ({}) } }, awaits displayOverlay(), and returns a plain serialisable JSON object that includes ok:true and the displayOverlay result. Do not invent a new table. Do not edit server.js. ES module syntax only. No top-level timers or model calls.",
@@ -3501,7 +3501,7 @@
         "TALOA-P1-008"
       ],
       "founder_gated": false,
-      "attempts": 2,
+      "attempts": 0,
       "expected_exports": [
         "registerTaloaOverlayHostRoutes"
       ],
@@ -3541,13 +3541,13 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-14T17:27:56.379Z",
+      "last_attempt_at": null,
       "last_error": "SLICE_COST_UNTRACKED: tokens_used required on every built slice (0 allowed for exact/no-codegen)",
       "skip_reason": null,
       "skipped_at": "2026-08-13T02:05:00.000Z",
       "last_attempt": null,
-      "revive_count": 6,
-      "revived_at": "2026-08-13T01:59:15.800Z",
+      "revive_count": 7,
+      "revived_at": "2026-08-14T17:30:47.453Z",
       "no_op": null,
       "pre_existing": null,
       "demoted": false,
@@ -3588,7 +3588,8 @@
       },
       "shipped_at": "2026-08-14T17:27:48.668Z",
       "started_at": "2026-08-14T17:27:42.609Z",
-      "duration_ms": 13770
+      "duration_ms": 13770,
+      "tokens_used": 0
     },
     {
       "id": "TALOA-WIRE-HOST-REGISTER-001",
