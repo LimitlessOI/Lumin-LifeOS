@@ -7652,8 +7652,8 @@
     {
       "status": "pending",
       "founder_gated": false,
-      "attempts": 2,
-      "action_type": "author_then_write",
+      "attempts": 3,
+      "action_type": "write_file_exact",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
@@ -7678,18 +7678,56 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-14T00:03:12.085Z",
-      "last_error": "GROUNDING_FAIL: import_source_missing: ../../types; missing_sql_table: user_collectible_inventory, collectibles, collectible_tags_map, collectible_tags",
-      "started_at": "2026-08-14T00:02:53.559Z",
+      "last_attempt_at": "2026-08-14T00:03:53.733Z",
+      "last_error": "AIC_GATE_FAILURE",
+      "started_at": "2026-08-14T00:03:53.662Z",
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
       "park_until": null,
       "heal_unblocked": true,
       "heal_reason": "collectibles_never_stop_heal",
-      "skip_reason": null,
+      "same_signature_count": 1,
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/collectibles/sell-agent.js",
+          "exports": [
+            "createSellAgent"
+          ],
+          "assertion_id": "expected_exports:services/collectibles/sell-agent.js"
+        }
+      ],
+      "failure_signature": "AIC_GATE_FAILURE",
+      "escalation_class": "same_signature_repeat",
       "escalation_required": false,
-      "revive_count": 0
+      "escalation_note": null,
+      "exact_inputs": {
+        "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V4-SELL-AGENT-001.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-08-14T00:04:02.315Z",
+        "shipped_at": "2026-08-14T00:04:02.315Z",
+        "commit_sha": null,
+        "content_sha256": "eaf21a0b54d5f2d849c35955b50556488ef3806ce105dd6780b9f6b0a64da592",
+        "target_file": "services/collectibles/sell-agent.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/collectibles/sell-agent.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "PASS"
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V4-SELL-AGENT-001.exact",
+          "content_sha256": "eaf21a0b54d5f2d849c35955b50556488ef3806ce105dd6780b9f6b0a64da592"
+        }
+      },
+      "shipped_at": "2026-08-14T00:04:02.315Z"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
