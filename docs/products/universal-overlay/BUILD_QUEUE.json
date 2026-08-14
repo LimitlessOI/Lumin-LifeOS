@@ -8922,7 +8922,7 @@
       "status": "done",
       "founder_gated": false,
       "attempts": 0,
-      "action_type": "write_file_exact",
+      "action_type": "author_then_write",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
@@ -8950,7 +8950,7 @@
       "demote_reason": null,
       "demoted_at": null,
       "park_until": null,
-      "heal_unblocked": false,
+      "heal_unblocked": true,
       "heal_reason": "collectibles_never_stop_heal",
       "last_attempt": null,
       "revive_count": 0,
@@ -8967,41 +8967,16 @@
       "failure_signature": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing:createProvenanceGraph; behavior_assertion: missing:createHighValuePartnerRouting; behavior_assertion_failed; behavior_pro",
       "escalation_class": "evidence_gap",
       "escalation_note": null,
-      "exact_inputs": {
-        "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V9-ACCEPTANCE-001.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-08-14T02:52:37.201Z",
-        "shipped_at": "2026-08-14T02:52:37.201Z",
-        "commit_sha": null,
-        "content_sha256": "2179837db24f3c3b86ac9f447b70d8f358c9bbc65bcfda8b1102b420b73a7287",
-        "target_file": "tests/collectibles-v9-acceptance.test.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "tests/collectibles-v9-acceptance.test.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "grounding": {
-          "status": "PASS"
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V9-ACCEPTANCE-001.exact",
-          "content_sha256": "2179837db24f3c3b86ac9f447b70d8f358c9bbc65bcfda8b1102b420b73a7287"
-        }
-      },
-      "shipped_at": "2026-08-14T02:52:44.488Z",
       "duration_ms": 28345,
       "tokens_used": 0,
-      "shipped_via": "governed_ship_queue"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-08-14T02:52:44.488Z"
     },
     {
       "status": "pending",
       "founder_gated": false,
       "attempts": 0,
-      "action_type": "author_then_write",
+      "action_type": "write_file_exact",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
@@ -9022,7 +8997,33 @@
         "certification",
         "category pack"
       ],
-      "blueprint_step_id": "COLLECTIBLES-V10-CATEGORY-PACKS-001"
+      "blueprint_step_id": "COLLECTIBLES-V10-CATEGORY-PACKS-001",
+      "exact_inputs": {
+        "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V10-CATEGORY-PACKS-001.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-08-14T02:53:05.469Z",
+        "shipped_at": "2026-08-14T02:53:05.469Z",
+        "commit_sha": null,
+        "content_sha256": "a146cf7de38c81142e3cf52d872d536859e5a25e074b7024a37d1c0bb2a51a61",
+        "target_file": "services/collectibles/category-pack-registry.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/collectibles/category-pack-registry.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "PASS"
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V10-CATEGORY-PACKS-001.exact",
+          "content_sha256": "a146cf7de38c81142e3cf52d872d536859e5a25e074b7024a37d1c0bb2a51a61"
+        }
+      },
+      "shipped_at": "2026-08-14T02:53:05.469Z"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",

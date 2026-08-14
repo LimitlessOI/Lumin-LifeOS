@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-14T02:52:39.881Z",
+  "generated_at": "2026-08-14T02:53:09.020Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13607,
+  "file_count": 13608,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -95216,6 +95216,16 @@
       "bytes": 3063,
       "mtime": "2026-08-13T06:02:00.751Z",
       "indexed_at": "2026-08-13T06:02:00.751Z",
+      "ssot": [
+        "docs/products/collectibles/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/collectibles/category-pack-registry.js",
+      "synopsis": "Exports createCategoryPackRegistry — services/collectibles/category-pack-registry.js.",
+      "bytes": 4612,
+      "mtime": "2026-08-14T02:53:09.020Z",
+      "indexed_at": "2026-08-14T02:53:09.020Z",
       "ssot": [
         "docs/products/collectibles/PRODUCT_HOME.md"
       ]
