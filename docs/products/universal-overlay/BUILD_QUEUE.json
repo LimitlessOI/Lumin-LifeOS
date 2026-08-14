@@ -220,30 +220,30 @@
     },
     {
       "id": "5",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "public/overlay/routeRegistry.js",
       "task": "build fluid UI context router — Part 1: route registry mapping table",
       "spec": "Small, standalone mapping table only: exports ROUTE_CONTEXT_MAP, an object/array mapping URL-pattern strings (e.g. insurance portal, banking site, generic form) to a context-type label. No dispatch logic, no rendering — pure data + one lookup helper. This is Part 1 of 3 (routeRegistry.js data table -> thin moduleRouter.js dispatcher -> per-context view modules), re-scoped 2026-08-14 after 5 failed revives on a single monolithic moduleRouter.js exceeded the governed factory Zone-3 additive-patch working size (documented 150-line failure mode). Keep this file well under that limit.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "expected_exports": [
         "ROUTE_CONTEXT_MAP",
         "lookupRouteContext"
       ],
       "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": null,
-      "shipped_at": "2026-08-14T17:27:29.980Z",
+      "shipped_at": "2026-07-15T22:13:12.909Z",
       "commit_sha": null,
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "5",
       "mission_id": "PRODUCT-universal-overlay",
       "pre_existing": null,
-      "last_error": "STEP_STATUS_FORBIDDEN",
+      "last_error": "SLICE_COST_UNTRACKED: tokens_used required on every built slice (0 allowed for exact/no-codegen)",
       "reaudit_reset_at": "2026-07-30T18:55:06.758Z",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-07-31T10:49:24.651Z",
+      "last_attempt_at": "2026-08-14T17:27:37.069Z",
       "last_attempt": null,
       "revive_count": 0,
       "revived_at": "2026-07-31T10:49:18.403Z",
@@ -292,7 +292,9 @@
           "content_source_path": "docs/products/universal-overlay/twins/steps/5.exact",
           "content_sha256": "54ee6d3ac2ccdfca99ea7794347b9a7a33172eca83814789aa20fc38feb35dd1"
         }
-      }
+      },
+      "started_at": "2026-08-14T17:27:28.693Z",
+      "duration_ms": 8375
     },
     {
       "id": "6",
