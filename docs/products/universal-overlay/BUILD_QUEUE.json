@@ -9081,9 +9081,9 @@
       "shipped_via": "governed_ship_queue"
     },
     {
-      "status": "pending",
+      "status": "done",
       "founder_gated": false,
-      "attempts": 3,
+      "attempts": 0,
       "action_type": "write_file_exact",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
@@ -9106,17 +9106,17 @@
         "desire"
       ],
       "blueprint_step_id": "COLLECTIBLES-V10-UNIVERSAL-GRAPH-001",
-      "commit_sha": null,
+      "commit_sha": "bfce5aa1561d5b489e81cfaae53ed0b991af9593",
       "built_sha": null,
       "proof": null,
       "last_attempt_at": "2026-08-14T02:54:15.273Z",
-      "last_error": "AIC_GATE_FAILURE",
+      "last_error": null,
       "started_at": "2026-08-14T02:54:15.204Z",
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
       "park_until": null,
-      "heal_unblocked": true,
+      "heal_unblocked": false,
       "heal_reason": "collectibles_never_stop_heal",
       "skip_reason": null,
       "escalation_required": false,
@@ -9160,7 +9160,33 @@
           "content_sha256": "f148b7b1c49cae42098588be9c7b28586925138c9b69b5d68ac409d17018a024"
         }
       },
-      "shipped_at": "2026-08-14T02:54:20.463Z"
+      "shipped_at": "2026-08-14T02:54:27.803Z",
+      "duration_ms": 12602,
+      "tokens_used": 0,
+      "shipped_via": "governed_ship_queue"
+    },
+    {
+      "status": "pending",
+      "founder_gated": false,
+      "attempts": 0,
+      "action_type": "author_then_write",
+      "product_id": "collectibles",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "mission_id": "PRODUCT-universal-overlay",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
+      "depends_on": [
+        "COLLECTIBLES-V10-UNIVERSAL-GRAPH-001"
+      ],
+      "id": "COLLECTIBLES-V10-ACCEPTANCE-001",
+      "target_file": "tests/collectibles-v10-acceptance.test.js",
+      "sandbox_boundary": "tests/**",
+      "task": "node:test reachability for category packs + universal desire graph. Assert Twin identity invariant preserved.",
+      "spec": "VERSION_ACCEPTANCE_GATES V10 structure — new category via pack without rewriting ownership/tx/trust.",
+      "file_contains": [
+        "createCategoryPackRegistry",
+        "createUniversalDesireGraph"
+      ],
+      "blueprint_step_id": "COLLECTIBLES-V10-ACCEPTANCE-001"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
