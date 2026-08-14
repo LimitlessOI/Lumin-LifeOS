@@ -8753,9 +8753,9 @@
       "shipped_via": "governed_ship_queue"
     },
     {
-      "status": "pending",
+      "status": "done",
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "action_type": "write_file_exact",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
@@ -8791,8 +8791,8 @@
       ],
       "started_at": "2026-08-14T02:37:38.946Z",
       "last_attempt_at": "2026-08-14T02:37:39.009Z",
-      "last_error": "AIC_GATE_FAILURE",
-      "commit_sha": null,
+      "last_error": null,
+      "commit_sha": "dd2b3eea6ec75656f67cde165cfe958344cf6596",
       "built_sha": null,
       "proof": null,
       "failure_signature": "AIC_GATE_FAILURE",
@@ -8803,7 +8803,7 @@
       "escalation_required": false,
       "escalation_note": null,
       "park_until": null,
-      "heal_unblocked": true,
+      "heal_unblocked": false,
       "heal_reason": "collectibles_never_stop_heal",
       "exact_inputs": {
         "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V9-PROVENANCE-001.exact"
@@ -8830,7 +8830,37 @@
           "content_sha256": "698563e22bc5e20911a8a058042a51a0392a0e126e93571f38df9da6b1292ae5"
         }
       },
-      "shipped_at": "2026-08-14T02:37:46.574Z"
+      "shipped_at": "2026-08-14T02:37:52.750Z",
+      "duration_ms": 13806,
+      "tokens_used": 0,
+      "shipped_via": "governed_ship_queue"
+    },
+    {
+      "status": "pending",
+      "founder_gated": false,
+      "attempts": 0,
+      "action_type": "author_then_write",
+      "product_id": "collectibles",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "mission_id": "PRODUCT-universal-overlay",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
+      "depends_on": [
+        "COLLECTIBLES-V9-PROVENANCE-001"
+      ],
+      "id": "COLLECTIBLES-V9-PARTNER-ROUTING-001",
+      "target_file": "services/collectibles/high-value-partner-routing.js",
+      "sandbox_boundary": "services/collectibles/**",
+      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createHighValuePartnerRouting({ pool }) — grading/auth/insurance/financing partner registry referrals only. ES module.",
+      "spec": "MASTER_BLUEPRINT V9 partner routing.",
+      "expected_exports": [
+        "createHighValuePartnerRouting"
+      ],
+      "file_contains": [
+        "createHighValuePartnerRouting",
+        "referral",
+        "grading"
+      ],
+      "blueprint_step_id": "COLLECTIBLES-V9-PARTNER-ROUTING-001"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
