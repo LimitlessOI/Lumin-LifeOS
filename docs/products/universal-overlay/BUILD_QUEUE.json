@@ -7650,9 +7650,9 @@
       "shipped_via": "governed_ship_queue"
     },
     {
-      "status": "pending",
+      "status": "done",
       "founder_gated": false,
-      "attempts": 3,
+      "attempts": 0,
       "action_type": "write_file_exact",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
@@ -7675,17 +7675,17 @@
         "sentimental"
       ],
       "blueprint_step_id": "COLLECTIBLES-V4-SELL-AGENT-001",
-      "commit_sha": null,
+      "commit_sha": "886038dc0840ff1a9218e97a0315ddf4208f9544",
       "built_sha": null,
       "proof": null,
       "last_attempt_at": "2026-08-14T00:03:53.733Z",
-      "last_error": "AIC_GATE_FAILURE",
+      "last_error": null,
       "started_at": "2026-08-14T00:03:53.662Z",
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
       "park_until": null,
-      "heal_unblocked": true,
+      "heal_unblocked": false,
       "heal_reason": "collectibles_never_stop_heal",
       "same_signature_count": 1,
       "behavior_assertions": [
@@ -7727,7 +7727,37 @@
           "content_sha256": "eaf21a0b54d5f2d849c35955b50556488ef3806ce105dd6780b9f6b0a64da592"
         }
       },
-      "shipped_at": "2026-08-14T00:04:02.315Z"
+      "shipped_at": "2026-08-14T00:04:08.905Z",
+      "duration_ms": 15246,
+      "tokens_used": 0,
+      "shipped_via": "governed_ship_queue"
+    },
+    {
+      "status": "pending",
+      "founder_gated": false,
+      "attempts": 0,
+      "action_type": "author_then_write",
+      "product_id": "collectibles",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "mission_id": "PRODUCT-universal-overlay",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
+      "depends_on": [
+        "COLLECTIBLES-V4-SELL-AGENT-001"
+      ],
+      "id": "COLLECTIBLES-V4-OPPORTUNITY-001",
+      "target_file": "services/collectibles/opportunity-engine.js",
+      "sandbox_boundary": "services/collectibles/**",
+      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createOpportunityEngine({ pool }) — set/run completion + least-cost path stubs. ES module.",
+      "spec": "MASTER_BLUEPRINT V4 opportunity / completion economics.",
+      "expected_exports": [
+        "createOpportunityEngine"
+      ],
+      "file_contains": [
+        "createOpportunityEngine",
+        "completion",
+        "least-cost"
+      ],
+      "blueprint_step_id": "COLLECTIBLES-V4-OPPORTUNITY-001"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
