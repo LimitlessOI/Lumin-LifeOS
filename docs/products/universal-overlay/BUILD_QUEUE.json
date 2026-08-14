@@ -9207,7 +9207,9 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "heal_unblocked": true,
-      "heal_reason": "collectibles_never_stop_heal"
+      "heal_reason": "collectibles_never_stop_heal",
+      "skip_reason": null,
+      "escalation_required": false
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
