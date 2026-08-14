@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-14T00:27:15.924Z",
+  "generated_at": "2026-08-14T00:27:24.924Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13602,
   "files": [
@@ -95315,8 +95315,8 @@
       "path": "services/collectibles/reveal-studio.js",
       "synopsis": "Exports createRevealStudio — services/collectibles/reveal-studio.js.",
       "bytes": 6765,
-      "mtime": "2026-08-14T00:27:15.924Z",
-      "indexed_at": "2026-08-14T00:27:15.924Z",
+      "mtime": "2026-08-14T00:27:24.924Z",
+      "indexed_at": "2026-08-14T00:27:24.924Z",
       "ssot": [
         "docs/products/collectibles/PRODUCT_HOME.md"
       ]
