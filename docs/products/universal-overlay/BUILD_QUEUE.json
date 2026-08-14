@@ -8430,14 +8430,14 @@
         }
       },
       "shipped_at": "2026-08-14T00:29:49.658Z",
-      "duration_ms": 13465,
+      "duration_ms": 13463,
       "tokens_used": 0,
       "shipped_via": "governed_ship_queue"
     },
     {
-      "status": "pending",
+      "status": "blocked",
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "action_type": "author_then_write",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
@@ -8455,7 +8455,13 @@
         "createTabletopRuntime",
         "fail-closed"
       ],
-      "blueprint_step_id": "COLLECTIBLES-V7-ACCEPTANCE-001"
+      "blueprint_step_id": "COLLECTIBLES-V7-ACCEPTANCE-001",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-08-14T00:30:33.734Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/local/bin/node --input-type=module -e import \"file:///usr/src/app/tests/.factory-import-check-1786667433668-1.mjs\";",
+      "started_at": "2026-08-14T00:29:55.015Z"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
