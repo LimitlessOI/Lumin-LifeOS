@@ -8468,7 +8468,7 @@
       "park_until": null,
       "heal_unblocked": false,
       "heal_reason": "collectibles_never_stop_heal",
-      "same_signature_count": 0,
+      "same_signature_count": 1,
       "revive_count": 0,
       "revived_at": "2026-08-14T00:31:05.050Z",
       "last_attempt": null,
@@ -8479,15 +8479,12 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "exact_inputs": {
-        "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V7-ACCEPTANCE-001.exact"
-      },
       "exactness": {
         "sealed": true,
-        "sealed_at": "2026-08-14T00:31:09.082Z",
-        "shipped_at": "2026-08-14T00:31:09.082Z",
+        "sealed_at": "2026-08-14T02:27:52.727Z",
+        "shipped_at": "2026-08-14T02:27:52.727Z",
         "commit_sha": null,
-        "content_sha256": "79c8aca54908edc546c085ecdcc7ecf1e37078d5bed09866fdb418cb8ab67e86",
+        "content_sha256": "ae5b359f32efe6860496786c7f9359cc18a5dfc26440fb2fb9d31b2bfab99b8b",
         "target_file": "tests/collectibles-v7-acceptance.test.js",
         "reverse": {
           "mode": "delete_file",
@@ -8501,17 +8498,23 @@
         "rebuild": {
           "action_type": "write_file_exact",
           "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V7-ACCEPTANCE-001.exact",
-          "content_sha256": "79c8aca54908edc546c085ecdcc7ecf1e37078d5bed09866fdb418cb8ab67e86"
+          "content_sha256": "ae5b359f32efe6860496786c7f9359cc18a5dfc26440fb2fb9d31b2bfab99b8b"
         }
       },
       "shipped_at": "2026-08-14T02:28:01.692Z",
       "skip_reason": null,
-      "duration_ms": 40211,
+      "failure_signature": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing:createTabletopRuntime; behavior_assertion: missing:fail-closed; behavior_assertion_failed; behavior_proof",
+      "escalation_class": "evidence_gap",
+      "escalation_note": null,
       "tokens_used": 0,
+      "duration_ms": 40211,
+      "exact_inputs": {
+        "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V7-ACCEPTANCE-001.exact"
+      },
       "shipped_via": "governed_ship_queue"
     },
     {
-      "status": "blocked",
+      "status": "pending",
       "founder_gated": false,
       "attempts": 1,
       "action_type": "write_file_exact",
@@ -8536,13 +8539,40 @@
         "standings"
       ],
       "blueprint_step_id": "COLLECTIBLES-V8-TOURNAMENT-001",
+      "same_signature_count": 1,
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/collectibles/tournament-engine.js",
+          "exports": [
+            "createTournamentEngine"
+          ],
+          "assertion_id": "expected_exports:services/collectibles/tournament-engine.js"
+        }
+      ],
+      "started_at": "2026-08-14T02:28:05.932Z",
+      "last_attempt_at": "2026-08-14T02:28:19.515Z",
+      "duration_ms": 13582,
+      "last_error": "SLICE_COST_UNTRACKED: tokens_used required on every built slice (0 allowed for exact/no-codegen)",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "failure_signature": "SLICE_COST_UNTRACKED: tokens_used required on every built slice (N allowed for exact/no-codegen)",
+      "escalation_class": "same_signature_repeat",
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "escalation_required": false,
+      "escalation_note": null,
+      "park_until": null,
+      "heal_unblocked": true,
       "exact_inputs": {
         "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V8-TOURNAMENT-001.exact"
       },
       "exactness": {
         "sealed": true,
-        "sealed_at": "2026-08-14T02:28:10.371Z",
-        "shipped_at": "2026-08-14T02:28:10.371Z",
+        "sealed_at": "2026-08-14T02:28:21.430Z",
+        "shipped_at": "2026-08-14T02:28:21.430Z",
         "commit_sha": null,
         "content_sha256": "d3bd19468061ef68e4df294d7956e7e3b5959d6475d90583473df60ce503a9a3",
         "target_file": "services/collectibles/tournament-engine.js",
@@ -8561,14 +8591,9 @@
           "content_sha256": "d3bd19468061ef68e4df294d7956e7e3b5959d6475d90583473df60ce503a9a3"
         }
       },
-      "shipped_at": "2026-08-14T02:28:10.371Z",
-      "commit_sha": null,
-      "built_sha": null,
-      "proof": null,
-      "last_attempt_at": "2026-08-14T02:28:19.515Z",
-      "last_error": "SLICE_COST_UNTRACKED: tokens_used required on every built slice (0 allowed for exact/no-codegen)",
-      "started_at": "2026-08-14T02:28:05.932Z",
-      "duration_ms": 13582
+      "heal_reason": "collectibles_never_stop_heal",
+      "tokens_used": 0,
+      "shipped_at": "2026-08-14T02:28:21.430Z"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
