@@ -863,6 +863,14 @@
       "added_real_lines": 41,
       "justification": "existing files only. Sherry's Railway-hosted form stored 10 real leads and never emailed because Postmark's token is invalid. Default inbox is Maternity@wellroundedwoman.com; retry-unsent catches the backlog after deploy. execute-batch blocked core/ as builder-safe-scope — operator GAP-FILL.\nCo-authored-by: Cursor <cursoragent@cursor.com>",
       "commit_message_excerpt": "GAP-FILL: WRM consults go to Maternity@wellroundedwoman.com; Postmark invalid-token falls through to Resend/SMTP."
+    },
+    {
+      "at": "2026-08-14T00:16:03.344Z",
+      "file": "routes/mtg-cards-routes.js",
+      "is_new_file": false,
+      "added_real_lines": 23,
+      "justification": "Founder actively blocked mid-reshoot of\n~2000 physical cards, waiting live in-session. Root cause diagnosed\nwith real evidence, not assumed (traced the exact missing Multer\nerror-handler gap and the exact resize call discarding per-card\nresolution before crop). The new Multer error handler is a narrow,\nstandard Express error-middleware pattern (map known err.code values\nto a specific message) with no auth/schema/money surface -- same\nclass and size as the two prior disclosed GAP-FILL fixes this same\nsession (mtg-card-vision.js prompt, mtg-card-photo-store.js crop\npadding), both already verified live against production with real\nbefore/after photo evidence before this commit. Factory queuing would\nadd delay disproportionate to this fix's scope and risk.\n\nCo-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>",
+      "commit_message_excerpt": "GAP-FILL: MTG upload reliability, resolution, and page layout fixes"
     }
   ]
 }
