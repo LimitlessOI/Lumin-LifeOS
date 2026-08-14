@@ -7645,14 +7645,14 @@
         }
       },
       "shipped_at": "2026-08-14T00:02:23.279Z",
-      "duration_ms": 30499,
+      "duration_ms": 30497,
       "tokens_used": 0,
       "shipped_via": "governed_ship_queue"
     },
     {
-      "status": "pending",
+      "status": "blocked",
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "action_type": "author_then_write",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
@@ -7674,7 +7674,13 @@
         "net proceeds",
         "sentimental"
       ],
-      "blueprint_step_id": "COLLECTIBLES-V4-SELL-AGENT-001"
+      "blueprint_step_id": "COLLECTIBLES-V4-SELL-AGENT-001",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-08-14T00:03:02.554Z",
+      "last_error": "GROUNDING_FAIL: import_source_missing: ../../types; missing_sql_table: user_collectible_inventory, collectibles, collectible_tags_map, collectible_tags",
+      "started_at": "2026-08-14T00:02:53.559Z"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
