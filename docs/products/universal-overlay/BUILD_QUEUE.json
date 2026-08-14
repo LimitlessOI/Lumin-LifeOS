@@ -8005,7 +8005,7 @@
       "last_attempt_at": "2026-08-14T00:19:48.566Z",
       "last_error": null,
       "started_at": "2026-08-14T00:19:48.504Z",
-      "duration_ms": 14120,
+      "duration_ms": 14122,
       "same_signature_count": 1,
       "tokens_used": 0,
       "behavior_assertions": [
