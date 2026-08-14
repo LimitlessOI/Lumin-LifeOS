@@ -7570,9 +7570,9 @@
       "shipped_via": "governed_ship_queue"
     },
     {
-      "status": "pending",
+      "status": "done",
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "action_type": "write_file_exact",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
@@ -7593,20 +7593,20 @@
         "createShippingTrackingService"
       ],
       "blueprint_step_id": "COLLECTIBLES-V3-ACCEPTANCE-001",
-      "commit_sha": null,
+      "commit_sha": "2571cced573a11744f06f1f0499f30f551cc99b6",
       "built_sha": null,
       "proof": null,
       "last_attempt_at": "2026-08-14T00:02:03.190Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing:createTransactionService; behavior_assertion: missing:createPaymentAdapterRegistry; behavior_assertion: missing:createShippingTrackingService; behavior_assertion_failed; behavior_proof",
+      "last_error": null,
       "started_at": "2026-08-14T00:01:52.783Z",
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
       "park_until": null,
-      "heal_unblocked": true,
+      "heal_unblocked": false,
       "heal_reason": "collectibles_never_stop_heal",
       "same_signature_count": 1,
-      "revive_count": 1,
+      "revive_count": 0,
       "revived_at": "2026-08-14T00:01:52.776Z",
       "last_attempt": null,
       "escalation_required": false,
@@ -7644,7 +7644,37 @@
           "content_sha256": "fa731027281fc9b1ccd07674bb9902d37ade394a76eccb69910b1e9f15fde8be"
         }
       },
-      "shipped_at": "2026-08-14T00:02:15.756Z"
+      "shipped_at": "2026-08-14T00:02:23.279Z",
+      "duration_ms": 30499,
+      "tokens_used": 0,
+      "shipped_via": "governed_ship_queue"
+    },
+    {
+      "status": "pending",
+      "founder_gated": false,
+      "attempts": 0,
+      "action_type": "author_then_write",
+      "product_id": "collectibles",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "mission_id": "PRODUCT-universal-overlay",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
+      "depends_on": [
+        "COLLECTIBLES-V3-ACCEPTANCE-001"
+      ],
+      "id": "COLLECTIBLES-V4-SELL-AGENT-001",
+      "target_file": "services/collectibles/sell-agent.js",
+      "sandbox_boundary": "services/collectibles/**",
+      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createSellAgent({ pool }) — one-motion sell; net proceeds strategies fast/balanced/max-net; regret warnings for sentimental tags. ES module.",
+      "spec": "MASTER_BLUEPRINT V4 Intelligent Commerce.",
+      "expected_exports": [
+        "createSellAgent"
+      ],
+      "file_contains": [
+        "createSellAgent",
+        "net proceeds",
+        "sentimental"
+      ],
+      "blueprint_step_id": "COLLECTIBLES-V4-SELL-AGENT-001"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
