@@ -8682,9 +8682,9 @@
       "shipped_via": "governed_ship_queue"
     },
     {
-      "status": "pending",
+      "status": "done",
       "founder_gated": false,
-      "attempts": 3,
+      "attempts": 0,
       "action_type": "write_file_exact",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
@@ -8703,23 +8703,23 @@
         "createEventsMediaPipeline"
       ],
       "blueprint_step_id": "COLLECTIBLES-V8-ACCEPTANCE-001",
-      "commit_sha": null,
+      "commit_sha": "3f5d5a07a29054422e175f91493133d8b60ef51e",
       "built_sha": null,
       "proof": null,
       "last_attempt_at": "2026-08-14T02:33:18.022Z",
-      "last_error": "SLICE_COST_UNTRACKED: tokens_used required on every built slice (0 allowed for exact/no-codegen)",
+      "last_error": null,
       "started_at": "2026-08-14T02:33:02.190Z",
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
       "park_until": null,
-      "heal_unblocked": true,
+      "heal_unblocked": false,
       "heal_reason": "collectibles_never_stop_heal",
       "skip_reason": null,
       "escalation_required": false,
       "revive_count": 0,
       "same_signature_count": 1,
-      "duration_ms": 15832,
+      "duration_ms": 24452,
       "failure_signature": "SLICE_COST_UNTRACKED: tokens_used required on every built slice (N allowed for exact/no-codegen)",
       "escalation_class": "same_signature_repeat",
       "escalation_note": null,
@@ -8749,7 +8749,35 @@
         }
       },
       "tokens_used": 0,
-      "shipped_at": "2026-08-14T02:33:18.414Z"
+      "shipped_at": "2026-08-14T02:33:26.638Z",
+      "shipped_via": "governed_ship_queue"
+    },
+    {
+      "status": "pending",
+      "founder_gated": false,
+      "attempts": 0,
+      "action_type": "author_then_write",
+      "product_id": "collectibles",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "mission_id": "PRODUCT-universal-overlay",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
+      "depends_on": [
+        "COLLECTIBLES-V8-ACCEPTANCE-001"
+      ],
+      "id": "COLLECTIBLES-V9-PROVENANCE-001",
+      "target_file": "services/collectibles/provenance-graph.js",
+      "sandbox_boundary": "services/collectibles/**",
+      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createProvenanceGraph({ pool }) — proof/provenance packaging for insurers/authenticators. Do NOT implement Teloa direct lending. ES module.",
+      "spec": "MASTER_BLUEPRINT V9 hard law — no direct lending.",
+      "expected_exports": [
+        "createProvenanceGraph"
+      ],
+      "file_contains": [
+        "createProvenanceGraph",
+        "provenance",
+        "no direct lending"
+      ],
+      "blueprint_step_id": "COLLECTIBLES-V9-PROVENANCE-001"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
