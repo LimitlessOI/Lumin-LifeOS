@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-14T19:32:48.617Z",
+  "generated_at": "2026-08-14T19:47:33.595Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13611,
   "files": [
@@ -32579,9 +32579,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 46163,
-      "mtime": "2026-08-13T06:11:04.923Z",
-      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "bytes": 46390,
+      "mtime": "2026-08-14T19:46:48.506Z",
+      "indexed_at": "2026-08-14T19:47:33.595Z",
       "synopsis_index_only": true
     },
     {
@@ -46652,9 +46652,9 @@
     {
       "path": "docs/products/universal-overlay/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Universal Overlay",
-      "bytes": 125938,
-      "mtime": "2026-08-14T19:32:42.365Z",
-      "indexed_at": "2026-08-14T19:32:48.617Z"
+      "bytes": 128509,
+      "mtime": "2026-08-14T19:47:26.569Z",
+      "indexed_at": "2026-08-14T19:47:33.595Z"
     },
     {
       "path": "docs/products/universal-overlay/SEND_PACKET_FLUID_UI_AND_TWO_FACTORIES_2026-08-11.md",
