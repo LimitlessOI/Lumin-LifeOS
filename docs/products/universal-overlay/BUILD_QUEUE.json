@@ -220,33 +220,33 @@
     },
     {
       "id": "5",
-      "status": "blocked",
+      "status": "done",
       "target_file": "public/overlay/routeRegistry.js",
       "task": "build fluid UI context router — Part 1: route registry mapping table",
       "spec": "Small, standalone mapping table only: exports ROUTE_CONTEXT_MAP, an object/array mapping URL-pattern strings (e.g. insurance portal, banking site, generic form) to a context-type label. No dispatch logic, no rendering — pure data + one lookup helper. This is Part 1 of 3 (routeRegistry.js data table -> thin moduleRouter.js dispatcher -> per-context view modules), re-scoped 2026-08-14 after 5 failed revives on a single monolithic moduleRouter.js exceeded the governed factory Zone-3 additive-patch working size (documented 150-line failure mode). Keep this file well under that limit.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "ROUTE_CONTEXT_MAP",
         "lookupRouteContext"
       ],
       "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
-      "shipped_via": null,
-      "shipped_at": "2026-08-14T17:46:03.429Z",
-      "commit_sha": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-08-14T17:46:11.807Z",
+      "commit_sha": "ca08356d4b6cc0699fc1cacd9d627684af99bac7",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "5",
       "mission_id": "PRODUCT-universal-overlay",
       "pre_existing": null,
-      "last_error": "STEP_STATUS_FORBIDDEN",
+      "last_error": null,
       "reaudit_reset_at": "2026-07-30T18:55:06.758Z",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-14T17:45:57.961Z",
+      "last_attempt_at": "2026-08-14T17:46:01.905Z",
       "last_attempt": null,
-      "revive_count": 2,
-      "revived_at": "2026-08-14T17:45:57.839Z",
+      "revive_count": 0,
+      "revived_at": "2026-08-14T17:46:01.858Z",
       "no_op": null,
       "demoted": false,
       "demote_reason": null,
@@ -290,13 +290,14 @@
           "content_sha256": "c3e9c07de97d35d4e0cdc0c62331c7ef2804b18b7b530f40f6f5a4b00f8d6890"
         }
       },
-      "started_at": "2026-08-14T17:45:57.913Z",
-      "duration_ms": 8375,
+      "started_at": "2026-08-14T17:46:01.905Z",
+      "duration_ms": 9902,
       "tokens_used": 0,
       "heal_reason": "demote_missing_exact_to_author",
       "exact_inputs": {
         "content_source_path": "docs/products/universal-overlay/twins/steps/5.exact"
-      }
+      },
+      "heal_unblocked": false
     },
     {
       "id": "6",
