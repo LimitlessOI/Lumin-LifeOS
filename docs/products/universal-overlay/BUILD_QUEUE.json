@@ -8034,9 +8034,9 @@
       "shipped_via": "governed_ship_queue"
     },
     {
-      "status": "pending",
+      "status": "done",
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "action_type": "write_file_exact",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
@@ -8058,8 +8058,8 @@
       "same_signature_count": 1,
       "started_at": "2026-08-14T00:20:11.338Z",
       "last_attempt_at": "2026-08-14T00:20:15.912Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing:createPartnerCapabilityRegistry; behavior_assertion: missing:createLocalDiscoveryService; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_error": null,
+      "commit_sha": "8eff6069ce90a74fe1db588def5e71ca007cfe55",
       "built_sha": null,
       "proof": null,
       "failure_signature": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing:createPartnerCapabilityRegistry; behavior_assertion: missing:createLocalDiscoveryService; behavior_assertion_failed; beha",
@@ -8070,7 +8070,7 @@
       "escalation_required": false,
       "escalation_note": null,
       "park_until": null,
-      "heal_unblocked": true,
+      "heal_unblocked": false,
       "heal_reason": "collectibles_never_stop_heal",
       "exact_inputs": {
         "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V5-ACCEPTANCE-001.exact"
@@ -8097,7 +8097,37 @@
           "content_sha256": "7a7dcd31bed840c201304c1ee437017c7224a9f234b8c01baab0605c0261344d"
         }
       },
-      "shipped_at": "2026-08-14T00:20:19.470Z"
+      "shipped_at": "2026-08-14T00:20:26.314Z",
+      "duration_ms": 14979,
+      "tokens_used": 0,
+      "shipped_via": "governed_ship_queue"
+    },
+    {
+      "status": "pending",
+      "founder_gated": false,
+      "attempts": 0,
+      "action_type": "author_then_write",
+      "product_id": "collectibles",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "mission_id": "PRODUCT-universal-overlay",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
+      "depends_on": [
+        "COLLECTIBLES-V5-ACCEPTANCE-001"
+      ],
+      "id": "COLLECTIBLES-V6-CUSTODY-001",
+      "target_file": "services/collectibles/custody-workflow.js",
+      "sandbox_boundary": "services/collectibles/**",
+      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createCustodyWorkflow({ pool }) — owner vs possessor vs custodian vs location; check-in/out. Insurance marketing remain legal-gated comments only. ES module.",
+      "spec": "MASTER_BLUEPRINT V6 Living Vault custody.",
+      "expected_exports": [
+        "createCustodyWorkflow"
+      ],
+      "file_contains": [
+        "createCustodyWorkflow",
+        "custodian",
+        "check-in"
+      ],
+      "blueprint_step_id": "COLLECTIBLES-V6-CUSTODY-001"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
