@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-14T00:19:30.860Z",
+  "generated_at": "2026-08-14T00:19:58.273Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13598,
   "files": [
@@ -95253,9 +95253,9 @@
     {
       "path": "services/collectibles/local-discovery.js",
       "synopsis": "Exports createLocalDiscoveryService — services/collectibles/local-discovery.js.",
-      "bytes": 2023,
-      "mtime": "2026-08-14T00:19:30.860Z",
-      "indexed_at": "2026-08-14T00:19:30.860Z",
+      "bytes": 3400,
+      "mtime": "2026-08-14T00:19:58.273Z",
+      "indexed_at": "2026-08-14T00:19:58.273Z",
       "ssot": [
         "docs/products/collectibles/PRODUCT_HOME.md"
       ]

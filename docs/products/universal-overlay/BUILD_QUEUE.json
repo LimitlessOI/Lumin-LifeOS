@@ -7976,15 +7976,12 @@
         "event"
       ],
       "blueprint_step_id": "COLLECTIBLES-V5-LOCAL-DISCOVERY-001",
-      "exact_inputs": {
-        "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V5-LOCAL-DISCOVERY-001.exact"
-      },
       "exactness": {
         "sealed": true,
-        "sealed_at": "2026-08-14T00:19:27.983Z",
-        "shipped_at": "2026-08-14T00:19:27.983Z",
+        "sealed_at": "2026-08-14T00:19:55.375Z",
+        "shipped_at": "2026-08-14T00:19:55.375Z",
         "commit_sha": null,
-        "content_sha256": "95556bc8a85e64798a8d93cd7e44f305d6d52d95dbb683e6e54143ecb148f672",
+        "content_sha256": "6b75624377aa769f5d0c99881ba3a5e2dec316971dd5935496063d51116e0c9a",
         "target_file": "services/collectibles/local-discovery.js",
         "reverse": {
           "mode": "delete_file",
@@ -7998,24 +7995,42 @@
         "rebuild": {
           "action_type": "write_file_exact",
           "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V5-LOCAL-DISCOVERY-001.exact",
-          "content_sha256": "95556bc8a85e64798a8d93cd7e44f305d6d52d95dbb683e6e54143ecb148f672"
+          "content_sha256": "6b75624377aa769f5d0c99881ba3a5e2dec316971dd5935496063d51116e0c9a"
         }
       },
-      "shipped_at": "2026-08-14T00:19:27.983Z",
+      "shipped_at": "2026-08-14T00:19:55.375Z",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "last_attempt_at": "2026-08-14T00:19:48.566Z",
-      "last_error": null,
+      "last_error": "codegen_authoring_failed:collectibles_never_stop_heal",
       "started_at": "2026-08-14T00:19:48.504Z",
       "duration_ms": 14622,
+      "same_signature_count": 1,
+      "tokens_used": 0,
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/collectibles/local-discovery.js",
+          "exports": [
+            "createLocalDiscoveryService"
+          ],
+          "assertion_id": "expected_exports:services/collectibles/local-discovery.js"
+        }
+      ],
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
+      "escalation_required": false,
+      "escalation_note": null,
       "park_until": null,
       "heal_unblocked": true,
-      "heal_reason": "collectibles_clear_missing_exact_to_author",
-      "tokens_used": 0
+      "heal_reason": "collectibles_never_stop_heal",
+      "failure_signature": "hidden_dependency",
+      "escalation_class": "same_signature_repeat",
+      "exact_inputs": {
+        "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V5-LOCAL-DISCOVERY-001.exact"
+      }
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
