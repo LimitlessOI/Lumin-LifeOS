@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-14T02:54:23.380Z",
+  "generated_at": "2026-08-14T04:18:32.151Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13609,
+  "file_count": 13610,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -105439,6 +105439,13 @@
       "ssot": [
         "docs/products/collectibles/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "tests/collectibles-v10-acceptance.test.js",
+      "synopsis": "---------------------------------------------------------------------------",
+      "bytes": 8054,
+      "mtime": "2026-08-14T04:18:32.151Z",
+      "indexed_at": "2026-08-14T04:18:32.151Z"
     },
     {
       "path": "tests/collectibles-v3-acceptance.test.js",
