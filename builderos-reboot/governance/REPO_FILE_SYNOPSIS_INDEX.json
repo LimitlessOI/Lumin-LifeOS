@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-14T17:27:51.513Z",
+  "generated_at": "2026-08-14T17:30:29.168Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13613,
+  "file_count": 13611,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -39477,9 +39477,9 @@
     {
       "path": "db/migrations/20260813_collectibles_wants_v2_swap_physical.sql",
       "synopsis": "Fixes 20260813_collectibles_wants_v2.sql. That migration made",
-      "bytes": 2349,
-      "mtime": "2026-08-13T23:24:20.474Z",
-      "indexed_at": "2026-08-13T23:25:08.819Z"
+      "bytes": 3089,
+      "mtime": "2026-08-14T17:29:10.993Z",
+      "indexed_at": "2026-08-14T17:30:29.168Z"
     },
     {
       "path": "db/migrations/20260813_collectibles_wants_v2.sql",
@@ -44965,9 +44965,9 @@
     {
       "path": "docs/products/collectibles/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Collectibles (LimitlessOS)",
-      "bytes": 10338,
-      "mtime": "2026-08-13T23:24:36.270Z",
-      "indexed_at": "2026-08-13T23:25:08.819Z"
+      "bytes": 11767,
+      "mtime": "2026-08-14T17:30:01.053Z",
+      "indexed_at": "2026-08-14T17:30:29.168Z"
     },
     {
       "path": "docs/products/collectibles/SCHEMA_CONTRACTS.md",
@@ -72762,13 +72762,6 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
-      "path": "public/overlay/routeRegistry.js",
-      "synopsis": "LifeOS overlay UI — RouteRegistry.",
-      "bytes": 504,
-      "mtime": "2026-08-14T17:27:32.900Z",
-      "indexed_at": "2026-08-14T17:27:32.900Z"
-    },
-    {
       "path": "public/overlay/sales-coaching-overlay.js",
       "synopsis": "public/overlay/sales-coaching-overlay.js",
       "bytes": 16066,
@@ -76402,16 +76395,6 @@
       "bytes": 1479,
       "mtime": "2026-08-13T02:12:42.935Z",
       "indexed_at": "2026-08-13T02:12:42.935Z",
-      "ssot": [
-        "docs/products/universal-overlay/PRODUCT_HOME.md"
-      ]
-    },
-    {
-      "path": "routes/taloa-overlay-host-routes.js",
-      "synopsis": "Registers TaloaOverlayHostRoutes routes/handlers (routes/taloa-overlay-host-routes.js).",
-      "bytes": 734,
-      "mtime": "2026-08-14T17:27:51.513Z",
-      "indexed_at": "2026-08-14T17:27:51.513Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]

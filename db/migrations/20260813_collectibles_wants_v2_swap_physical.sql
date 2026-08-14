@@ -19,6 +19,16 @@
 -- failing GROUNDING_FAIL 100% of the time, so it is guaranteed empty; the
 -- guard is defensive, not load-bearing, and never fires against real data.
 
+-- Founder-alert correction 2026-08-14: this migration was recorded as
+-- failed on every boot since 2026-08-13 (never inserted into
+-- schema_migrations, so the runner retries it fresh each time) --
+-- degrading /healthz continuously. Real cause: CREATE TABLE IF NOT EXISTS
+-- only guards against another TABLE of the same name; it errors if the
+-- name is currently occupied by a VIEW, which is exactly the state this
+-- migration's own comment says the prior migration left
+-- user_collectible_wants in. Made fully idempotent against either
+-- starting state (table or view, on both relations) so it converges
+-- safely regardless of which prior migration attempts partially applied.
 DO $$
 BEGIN
   IF EXISTS (
@@ -27,6 +37,8 @@ BEGIN
     DROP TABLE wants;
   END IF;
 END $$;
+
+DROP VIEW IF EXISTS user_collectible_wants CASCADE;
 
 CREATE TABLE IF NOT EXISTS user_collectible_wants (
   id UUID PRIMARY KEY,
