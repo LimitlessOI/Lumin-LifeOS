@@ -8105,7 +8105,7 @@
     {
       "status": "pending",
       "founder_gated": false,
-      "attempts": 3,
+      "attempts": 5,
       "action_type": "write_file_exact",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
@@ -8131,9 +8131,9 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-14T00:25:08.017Z",
-      "last_error": "AIC_GATE_FAILURE",
-      "started_at": "2026-08-14T00:25:07.934Z",
+      "last_attempt_at": "2026-08-14T00:26:23.142Z",
+      "last_error": "codegen_authoring_failed:collectibles_never_stop_heal",
+      "started_at": "2026-08-14T00:26:23.016Z",
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
@@ -8154,18 +8154,15 @@
           "assertion_id": "expected_exports:services/collectibles/custody-workflow.js"
         }
       ],
-      "failure_signature": "AIC_GATE_FAILURE",
+      "failure_signature": "hidden_dependency",
       "escalation_class": "same_signature_repeat",
       "escalation_note": null,
-      "exact_inputs": {
-        "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V6-CUSTODY-001.exact"
-      },
       "exactness": {
         "sealed": true,
-        "sealed_at": "2026-08-14T00:25:19.648Z",
-        "shipped_at": "2026-08-14T00:25:19.648Z",
+        "sealed_at": "2026-08-14T00:26:36.299Z",
+        "shipped_at": "2026-08-14T00:26:36.299Z",
         "commit_sha": null,
-        "content_sha256": "185dcf77e270eafd7df9a48f302471fb70cf234f4932e5f24c4214e9e64c3faa",
+        "content_sha256": "8100637d3a5af05f2bbe152cadf78fa5f69be2a083f76ddb5512f101e4cd0dc9",
         "target_file": "services/collectibles/custody-workflow.js",
         "reverse": {
           "mode": "delete_file",
@@ -8179,10 +8176,15 @@
         "rebuild": {
           "action_type": "write_file_exact",
           "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V6-CUSTODY-001.exact",
-          "content_sha256": "185dcf77e270eafd7df9a48f302471fb70cf234f4932e5f24c4214e9e64c3faa"
+          "content_sha256": "8100637d3a5af05f2bbe152cadf78fa5f69be2a083f76ddb5512f101e4cd0dc9"
         }
       },
-      "shipped_at": "2026-08-14T00:25:19.648Z"
+      "shipped_at": "2026-08-14T00:26:36.299Z",
+      "tokens_used": 0,
+      "duration_ms": 1000,
+      "exact_inputs": {
+        "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V6-CUSTODY-001.exact"
+      }
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
