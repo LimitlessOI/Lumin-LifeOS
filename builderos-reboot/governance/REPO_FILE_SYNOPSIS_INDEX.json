@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-14T00:29:28.089Z",
+  "generated_at": "2026-08-14T00:29:45.330Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13603,
+  "file_count": 13604,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -95349,6 +95349,16 @@
       "indexed_at": "2026-08-13T23:56:01.795Z",
       "ssot": [
         "docs/products/collectibles/PRODUCT_HOME.md",
+        "docs/products/collectibles/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/collectibles/tabletop-runtime.js",
+      "synopsis": "Exports createTabletopRuntime — services/collectibles/tabletop-runtime.js.",
+      "bytes": 4232,
+      "mtime": "2026-08-14T00:29:45.330Z",
+      "indexed_at": "2026-08-14T00:29:45.330Z",
+      "ssot": [
         "docs/products/collectibles/PRODUCT_HOME.md"
       ]
     },

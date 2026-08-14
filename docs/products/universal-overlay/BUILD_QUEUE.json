@@ -8351,10 +8351,10 @@
       "shipped_via": "governed_ship_queue"
     },
     {
-      "status": "blocked",
+      "status": "pending",
       "founder_gated": false,
       "attempts": 1,
-      "action_type": "author_then_write",
+      "action_type": "write_file_exact",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
@@ -8377,12 +8377,59 @@
         "play_entitlement"
       ],
       "blueprint_step_id": "COLLECTIBLES-V7-TABLETOP-RUNTIME-001",
+      "same_signature_count": 1,
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/collectibles/tabletop-runtime.js",
+          "exports": [
+            "createTabletopRuntime"
+          ],
+          "assertion_id": "expected_exports:services/collectibles/tabletop-runtime.js"
+        }
+      ],
+      "started_at": "2026-08-14T00:29:36.196Z",
+      "last_attempt_at": "2026-08-14T00:29:36.279Z",
+      "last_error": "AIC_GATE_FAILURE",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-14T00:29:36.279Z",
-      "last_error": "AIC_GATE_FAILURE",
-      "started_at": "2026-08-14T00:29:36.196Z"
+      "failure_signature": "AIC_GATE_FAILURE",
+      "escalation_class": "same_signature_repeat",
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "escalation_required": false,
+      "escalation_note": null,
+      "park_until": null,
+      "heal_unblocked": true,
+      "heal_reason": "collectibles_never_stop_heal",
+      "exact_inputs": {
+        "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V7-TABLETOP-RUNTIME-001.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-08-14T00:29:42.832Z",
+        "shipped_at": "2026-08-14T00:29:42.832Z",
+        "commit_sha": null,
+        "content_sha256": "029a1583ffdb262adcfa61964f5188aaaf02014815c6a34a017b423a9bb51976",
+        "target_file": "services/collectibles/tabletop-runtime.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/collectibles/tabletop-runtime.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "PASS"
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V7-TABLETOP-RUNTIME-001.exact",
+          "content_sha256": "029a1583ffdb262adcfa61964f5188aaaf02014815c6a34a017b423a9bb51976"
+        }
+      },
+      "shipped_at": "2026-08-14T00:29:42.832Z"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
