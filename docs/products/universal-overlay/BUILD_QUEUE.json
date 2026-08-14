@@ -8275,7 +8275,7 @@
     {
       "status": "blocked",
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "action_type": "author_then_write",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
@@ -8297,9 +8297,15 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-14T00:27:41.579Z",
-      "last_error": "AIC_GATE_FAILURE",
-      "started_at": "2026-08-14T00:27:41.504Z"
+      "last_attempt_at": "2026-08-14T00:28:35.131Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing:createCustodyWorkflow; behavior_assertion: missing:createRevealStudio; behavior_assertion_failed; behavior_proof",
+      "started_at": "2026-08-14T00:28:09.847Z",
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "heal_unblocked": true,
+      "heal_reason": "collectibles_never_stop_heal"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
