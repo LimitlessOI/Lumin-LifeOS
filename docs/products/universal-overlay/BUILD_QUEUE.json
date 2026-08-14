@@ -8103,9 +8103,9 @@
       "shipped_via": "governed_ship_queue"
     },
     {
-      "status": "pending",
+      "status": "done",
       "founder_gated": false,
-      "attempts": 5,
+      "attempts": 0,
       "action_type": "write_file_exact",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
@@ -8128,17 +8128,17 @@
         "check-in"
       ],
       "blueprint_step_id": "COLLECTIBLES-V6-CUSTODY-001",
-      "commit_sha": null,
+      "commit_sha": "481e80d64e09451b3ee0f89191b6d14c5bbf6f79",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-14T00:26:23.142Z",
-      "last_error": "codegen_authoring_failed:collectibles_never_stop_heal",
-      "started_at": "2026-08-14T00:26:23.016Z",
+      "last_attempt_at": "2026-08-14T00:26:28.691Z",
+      "last_error": null,
+      "started_at": "2026-08-14T00:26:28.691Z",
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
       "park_until": null,
-      "heal_unblocked": true,
+      "heal_unblocked": false,
       "heal_reason": "collectibles_never_stop_heal",
       "skip_reason": null,
       "escalation_required": false,
@@ -8179,12 +8179,40 @@
           "content_sha256": "8100637d3a5af05f2bbe152cadf78fa5f69be2a083f76ddb5512f101e4cd0dc9"
         }
       },
-      "shipped_at": "2026-08-14T00:26:36.299Z",
+      "shipped_at": "2026-08-14T00:26:43.583Z",
       "tokens_used": 0,
-      "duration_ms": 1000,
+      "duration_ms": 14892,
       "exact_inputs": {
         "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V6-CUSTODY-001.exact"
-      }
+      },
+      "shipped_via": "governed_ship_queue"
+    },
+    {
+      "status": "pending",
+      "founder_gated": false,
+      "attempts": 0,
+      "action_type": "author_then_write",
+      "product_id": "collectibles",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "mission_id": "PRODUCT-universal-overlay",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
+      "depends_on": [
+        "COLLECTIBLES-V6-CUSTODY-001"
+      ],
+      "id": "COLLECTIBLES-V6-REVEAL-STUDIO-001",
+      "target_file": "services/collectibles/reveal-studio.js",
+      "sandbox_boundary": "services/collectibles/**",
+      "task": "JSDoc @ssot docs/products/collectibles/PRODUCT_HOME.md. Export createRevealStudio({ pool }) — reveal provenance + privacy filtering stubs; claim/revoke/takedown. ES module.",
+      "spec": "MASTER_BLUEPRINT V6 Reveal Network.",
+      "expected_exports": [
+        "createRevealStudio"
+      ],
+      "file_contains": [
+        "createRevealStudio",
+        "reveal",
+        "privacy"
+      ],
+      "blueprint_step_id": "COLLECTIBLES-V6-REVEAL-STUDIO-001"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
