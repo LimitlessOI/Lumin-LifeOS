@@ -8597,9 +8597,9 @@
       "shipped_via": "governed_ship_queue"
     },
     {
-      "status": "pending",
+      "status": "done",
       "founder_gated": false,
-      "attempts": 3,
+      "attempts": 0,
       "action_type": "write_file_exact",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
@@ -8622,17 +8622,17 @@
         "media"
       ],
       "blueprint_step_id": "COLLECTIBLES-V8-MEDIA-PIPELINE-001",
-      "commit_sha": null,
+      "commit_sha": "e12fcf7c7e03afc76cd838c49b65ffe92c14cfa3",
       "built_sha": null,
       "proof": null,
       "last_attempt_at": "2026-08-14T02:30:42.511Z",
-      "last_error": "AIC_GATE_FAILURE",
+      "last_error": null,
       "started_at": "2026-08-14T02:30:42.413Z",
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
       "park_until": null,
-      "heal_unblocked": true,
+      "heal_unblocked": false,
       "heal_reason": "collectibles_never_stop_heal",
       "skip_reason": null,
       "escalation_required": false,
@@ -8676,7 +8676,33 @@
           "content_sha256": "6b6602a3578ac3100617a71c7f5d2351a4d736e206b692b25ef5afddca7dc7cf"
         }
       },
-      "shipped_at": "2026-08-14T02:30:48.682Z"
+      "shipped_at": "2026-08-14T02:30:55.433Z",
+      "duration_ms": 13023,
+      "tokens_used": 0,
+      "shipped_via": "governed_ship_queue"
+    },
+    {
+      "status": "pending",
+      "founder_gated": false,
+      "attempts": 0,
+      "action_type": "author_then_write",
+      "product_id": "collectibles",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "mission_id": "PRODUCT-universal-overlay",
+      "source": "docs/products/collectibles/MASTER_BLUEPRINT.md — Architect-sealed print",
+      "depends_on": [
+        "COLLECTIBLES-V8-MEDIA-PIPELINE-001"
+      ],
+      "id": "COLLECTIBLES-V8-ACCEPTANCE-001",
+      "target_file": "tests/collectibles-v8-acceptance.test.js",
+      "sandbox_boundary": "tests/**",
+      "task": "node:test reachability for tournament + media pipeline.",
+      "spec": "VERSION_ACCEPTANCE_GATES V8 structure.",
+      "file_contains": [
+        "createTournamentEngine",
+        "createEventsMediaPipeline"
+      ],
+      "blueprint_step_id": "COLLECTIBLES-V8-ACCEPTANCE-001"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
