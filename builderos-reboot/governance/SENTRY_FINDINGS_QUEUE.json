@@ -299,6 +299,141 @@
       "chair_reasoning": "product scope/priority is a business decision, not a technical one — routed to founder per D8, not auto-approved",
       "queue_status": "open",
       "first_detected_at": "2026-08-10T06:51:55.932Z"
+    },
+    {
+      "id": "governed_loop_stale",
+      "check": "system_still_working",
+      "severity": "P0",
+      "summary": "Governed shipping lastTick is older than 10 minutes — factory-1 is not manufacturing.",
+      "proposed_solution": "Governed shipping lastTick is older than 10m. The in-process watchdog in governed-autonomous-shipping-loop should reschedule; if this persists, Railway restart the founder_builder service.",
+      "detected_at": "2026-08-14T19:06:02.754Z",
+      "chair_status": "approved",
+      "chair_reasoning": "infrastructure/config finding with a concrete solution — within technical authority, no founder judgment required",
+      "repair_lane": "officer_panel",
+      "repair_officers": [
+        "sentry",
+        "conductor",
+        "architect",
+        "wisdom"
+      ],
+      "repair_reason": "breaking",
+      "sentry_solution_withheld": false,
+      "conductor_packet": {
+        "id": "governed_loop_stale",
+        "check": "system_still_working",
+        "severity": "P0",
+        "summary": "Governed shipping lastTick is older than 10 minutes — factory-1 is not manufacturing.",
+        "detected_at": "2026-08-14T19:06:02.754Z",
+        "proposed_solution": "Governed shipping lastTick is older than 10m. The in-process watchdog in governed-autonomous-shipping-loop should reschedule; if this persists, Railway restart the founder_builder service."
+      },
+      "conductor_status": "officer_panel",
+      "repair_consensus": null,
+      "forbidden_action": "majority_vote",
+      "consensus_protocol": {
+        "source": "builderos-reboot/LOOP_ESCALATION_CONTRACT.json#recovery_ladder_v2.consensus_protocol",
+        "also": "scripts/factory-allocation.mjs#compareRedundantResults",
+        "threshold": "unanimous_100_percent",
+        "partial_consensus_forbidden": true,
+        "soft_consensus_forbidden": true,
+        "forbidden_action": "majority_vote",
+        "protocol": [
+          "each side defends the peer solution",
+          "each side attacks its own solution",
+          "each side states its assumptions explicitly",
+          "seek a third solution neither proposed — combine pieces; the answer may be E",
+          "search how others solved this (web research)",
+          "name unintended consequences, positive and negative",
+          "if still unresolved, add more models (stage 3) — still unanimous, never majority",
+          "test against Reality wherever a test exists"
+        ]
+      },
+      "next_action": "consensus_protocol",
+      "architect_status": "officer_panel",
+      "queue_status": "open",
+      "first_detected_at": "2026-08-14T19:06:02.754Z"
+    },
+    {
+      "id": "fixer_failed:governed_loop_stale",
+      "check": "system_still_working",
+      "severity": "P0",
+      "summary": "SENTRY found \"Governed shipping lastTick is older than 10 minutes — factory-1 is not manufacturing.\" and it is still true after 5 minutes — the fixer did not take action (or the action did not land).",
+      "proposed_solution": "The original proposed_solution was: Governed shipping lastTick is older than 10m. The in-process watchdog in governed-autonomous-shipping-loop should reschedule; if this persists, Railway restart the founder_builder service. Investigate why that repair did not land, fix the fixer (the code or daemon that was supposed to apply it), then re-verify this check is green. Do not stop at the alert.",
+      "detected_at": "2026-08-14T19:11:21.519Z",
+      "chair_status": "approved",
+      "chair_reasoning": "infrastructure/config finding with a concrete solution — within technical authority, no founder judgment required",
+      "chair_reasoning_source": "rule_based_model_error",
+      "repair_lane": "dual_solve",
+      "repair_officers": [
+        "sentry",
+        "conductor"
+      ],
+      "repair_reason": "implications",
+      "sentry_solution_withheld": true,
+      "conductor_packet": {
+        "id": "fixer_failed:governed_loop_stale",
+        "check": "system_still_working",
+        "severity": "P0",
+        "summary": "SENTRY found \"Governed shipping lastTick is older than 10 minutes — factory-1 is not manufacturing.\" and it is still true after 5 minutes — the fixer did not take action (or the action did not land).",
+        "detected_at": "2026-08-14T19:11:21.519Z"
+      },
+      "conductor_status": "awaiting_conductor_solution",
+      "repair_consensus": null,
+      "architect_status": "awaiting_consensus",
+      "queue_status": "open",
+      "first_detected_at": "2026-08-14T19:11:21.519Z"
+    },
+    {
+      "id": "fixer_unrepaired:governed_loop_stale",
+      "check": "fixer_unrepaired",
+      "severity": "P0",
+      "summary": "Still true after 11 minutes (cap is 10). Escalating — the system did not fix itself.",
+      "proposed_solution": "The original proposed_solution was: Governed shipping lastTick is older than 10m. The in-process watchdog in governed-autonomous-shipping-loop should reschedule; if this persists, Railway restart the founder_builder service. The 5-minute fixer kick did not clear it. Name why the playbook failed, apply the next concrete repair, and re-verify. Do not wait another cycle.",
+      "detected_at": "2026-08-14T19:17:21.522Z",
+      "chair_status": "escalate_to_founder",
+      "chair_reasoning": "product scope/priority is a business decision, not a technical one — routed to founder per D8, not auto-approved",
+      "chair_reasoning_source": "rule_based_model_error",
+      "repair_lane": "officer_panel",
+      "repair_officers": [
+        "sentry",
+        "conductor",
+        "architect",
+        "wisdom"
+      ],
+      "repair_reason": "breaking",
+      "sentry_solution_withheld": false,
+      "conductor_packet": {
+        "id": "fixer_unrepaired:governed_loop_stale",
+        "check": "fixer_unrepaired",
+        "severity": "P0",
+        "summary": "Still true after 11 minutes (cap is 10). Escalating — the system did not fix itself.",
+        "detected_at": "2026-08-14T19:17:21.522Z",
+        "proposed_solution": "The original proposed_solution was: Governed shipping lastTick is older than 10m. The in-process watchdog in governed-autonomous-shipping-loop should reschedule; if this persists, Railway restart the founder_builder service. The 5-minute fixer kick did not clear it. Name why the playbook failed, apply the next concrete repair, and re-verify. Do not wait another cycle."
+      },
+      "conductor_status": "officer_panel",
+      "repair_consensus": null,
+      "forbidden_action": "majority_vote",
+      "consensus_protocol": {
+        "source": "builderos-reboot/LOOP_ESCALATION_CONTRACT.json#recovery_ladder_v2.consensus_protocol",
+        "also": "scripts/factory-allocation.mjs#compareRedundantResults",
+        "threshold": "unanimous_100_percent",
+        "partial_consensus_forbidden": true,
+        "soft_consensus_forbidden": true,
+        "forbidden_action": "majority_vote",
+        "protocol": [
+          "each side defends the peer solution",
+          "each side attacks its own solution",
+          "each side states its assumptions explicitly",
+          "seek a third solution neither proposed — combine pieces; the answer may be E",
+          "search how others solved this (web research)",
+          "name unintended consequences, positive and negative",
+          "if still unresolved, add more models (stage 3) — still unanimous, never majority",
+          "test against Reality wherever a test exists"
+        ]
+      },
+      "next_action": "consensus_protocol",
+      "architect_status": "officer_panel",
+      "queue_status": "open",
+      "first_detected_at": "2026-08-14T19:17:21.522Z"
     }
   ]
 }

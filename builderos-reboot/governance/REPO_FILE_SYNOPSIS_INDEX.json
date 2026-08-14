@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-14T19:47:33.595Z",
+  "generated_at": "2026-08-14T19:49:17.866Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13611,
   "files": [
@@ -21749,9 +21749,9 @@
     {
       "path": "builderos-reboot/governance/SENTRY_FINDINGS_QUEUE.json",
       "synopsis": "BuilderOS artifact — SENTRY FINDINGS QUEUE.",
-      "bytes": 26293,
-      "mtime": "2026-08-11T22:12:18.855Z",
-      "indexed_at": "2026-08-11T22:15:50.764Z",
+      "bytes": 33954,
+      "mtime": "2026-08-14T19:17:21.584Z",
+      "indexed_at": "2026-08-14T19:49:17.866Z",
       "synopsis_index_only": true
     },
     {
@@ -35108,9 +35108,9 @@
     {
       "path": "data/prod-health-watchdog-state.json",
       "synopsis": "JSON data/config — data/prod-health-watchdog-state.json.",
-      "bytes": 28,
-      "mtime": "2026-08-11T22:54:06.905Z",
-      "indexed_at": "2026-08-11T22:54:32.565Z",
+      "bytes": 55,
+      "mtime": "2026-08-14T19:48:21.719Z",
+      "indexed_at": "2026-08-14T19:49:17.866Z",
       "synopsis_index_only": true
     },
     {
