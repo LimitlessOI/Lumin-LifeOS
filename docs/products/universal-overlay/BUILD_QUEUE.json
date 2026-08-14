@@ -8684,7 +8684,7 @@
     {
       "status": "pending",
       "founder_gated": false,
-      "attempts": 4,
+      "attempts": 3,
       "action_type": "write_file_exact",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
@@ -8706,9 +8706,9 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-14T02:32:58.698Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing:createTournamentEngine; behavior_assertion: missing:createEventsMediaPipeline; behavior_assertion_failed; behavior_proof",
-      "started_at": "2026-08-14T02:32:52.353Z",
+      "last_attempt_at": "2026-08-14T02:33:18.022Z",
+      "last_error": "SLICE_COST_UNTRACKED: tokens_used required on every built slice (0 allowed for exact/no-codegen)",
+      "started_at": "2026-08-14T02:33:02.190Z",
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
@@ -8719,16 +8719,17 @@
       "escalation_required": false,
       "revive_count": 0,
       "same_signature_count": 1,
-      "failure_signature": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing:createTournamentEngine; behavior_assertion: missing:createEventsMediaPipeline; behavior_assertion_failed; behavior_proof",
-      "escalation_class": "evidence_gap",
+      "duration_ms": 15832,
+      "failure_signature": "SLICE_COST_UNTRACKED: tokens_used required on every built slice (N allowed for exact/no-codegen)",
+      "escalation_class": "same_signature_repeat",
       "escalation_note": null,
       "exact_inputs": {
         "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V8-ACCEPTANCE-001.exact"
       },
       "exactness": {
         "sealed": true,
-        "sealed_at": "2026-08-14T02:33:10.113Z",
-        "shipped_at": "2026-08-14T02:33:10.113Z",
+        "sealed_at": "2026-08-14T02:33:18.414Z",
+        "shipped_at": "2026-08-14T02:33:18.414Z",
         "commit_sha": null,
         "content_sha256": "1dd0315505c09153865d52d5a6c63d7737b44e099da034a8b1e3d0d5e379918a",
         "target_file": "tests/collectibles-v8-acceptance.test.js",
@@ -8747,7 +8748,8 @@
           "content_sha256": "1dd0315505c09153865d52d5a6c63d7737b44e099da034a8b1e3d0d5e379918a"
         }
       },
-      "shipped_at": "2026-08-14T02:33:10.113Z"
+      "tokens_used": 0,
+      "shipped_at": "2026-08-14T02:33:18.414Z"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
