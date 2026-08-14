@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-14T00:19:12.645Z",
+  "generated_at": "2026-08-14T00:19:30.860Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13597,
+  "file_count": 13598,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -95246,6 +95246,16 @@
       "bytes": 1697,
       "mtime": "2026-08-13T21:30:04.295Z",
       "indexed_at": "2026-08-13T21:30:04.295Z",
+      "ssot": [
+        "docs/products/collectibles/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/collectibles/local-discovery.js",
+      "synopsis": "Exports createLocalDiscoveryService — services/collectibles/local-discovery.js.",
+      "bytes": 2023,
+      "mtime": "2026-08-14T00:19:30.860Z",
+      "indexed_at": "2026-08-14T00:19:30.860Z",
       "ssot": [
         "docs/products/collectibles/PRODUCT_HOME.md"
       ]
