@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-14T19:03:50.468Z",
+  "generated_at": "2026-08-14T19:15:26.199Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13611,
   "files": [
@@ -39477,9 +39477,9 @@
     {
       "path": "db/migrations/20260813_collectibles_wants_v2_swap_physical.sql",
       "synopsis": "Fixes 20260813_collectibles_wants_v2.sql. That migration made",
-      "bytes": 5098,
-      "mtime": "2026-08-14T18:09:40.247Z",
-      "indexed_at": "2026-08-14T18:11:34.845Z"
+      "bytes": 5803,
+      "mtime": "2026-08-14T19:14:23.612Z",
+      "indexed_at": "2026-08-14T19:15:26.199Z"
     },
     {
       "path": "db/migrations/20260813_collectibles_wants_v2.sql",
@@ -44965,9 +44965,9 @@
     {
       "path": "docs/products/collectibles/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Collectibles (LimitlessOS)",
-      "bytes": 13752,
-      "mtime": "2026-08-14T18:11:05.074Z",
-      "indexed_at": "2026-08-14T18:11:34.845Z"
+      "bytes": 15434,
+      "mtime": "2026-08-14T19:15:16.175Z",
+      "indexed_at": "2026-08-14T19:15:26.199Z"
     },
     {
       "path": "docs/products/collectibles/SCHEMA_CONTRACTS.md",

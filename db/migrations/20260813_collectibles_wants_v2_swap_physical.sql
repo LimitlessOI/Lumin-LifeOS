@@ -34,6 +34,15 @@
 -- explicitly via pg_views/pg_tables for BOTH names before touching either,
 -- so this converges correctly no matter which of the real possible starting
 -- states production is actually in.
+--
+-- Round 3 (2026-08-14, real evidence via /healthz migrations_failed_details
+-- for the first time): round 2 still failed live with "cannot drop table
+-- wants because other objects depend on it". Cause: 20260813_collectibles_
+-- wants_v2.sql made `user_collectible_wants` a VIEW defined as
+-- `SELECT * FROM wants` -- so that view is a real dependent of the `wants`
+-- table. Round 2 dropped `wants` FIRST and the dependent view SECOND, the
+-- wrong order, and without CASCADE. Fix is ordering: drop the dependent
+-- view before the table it depends on.
 DO $$
 DECLARE
   wants_is_table boolean;
@@ -46,6 +55,14 @@ BEGIN
   SELECT EXISTS (SELECT 1 FROM pg_tables WHERE schemaname = 'public' AND tablename = 'user_collectible_wants') INTO ucw_is_table;
   SELECT EXISTS (SELECT 1 FROM pg_views  WHERE schemaname = 'public' AND viewname  = 'user_collectible_wants') INTO ucw_is_view;
 
+  -- user_collectible_wants: drop only if it's a VIEW (never drop a table
+  -- here -- if it's already a real table, leave its data alone entirely).
+  -- Must run BEFORE the `wants` table drop below: this view is defined as
+  -- `SELECT * FROM wants`, so it is a dependent of that table.
+  IF ucw_is_view THEN
+    EXECUTE 'DROP VIEW user_collectible_wants CASCADE';
+  END IF;
+
   -- wants: drop only if it's a TABLE and confirmed empty (guaranteed empty
   -- per the original migration's own reasoning -- its only write path was
   -- failing GROUNDING_FAIL 100% of the time). Nested IF, not a combined AND
@@ -56,14 +73,8 @@ BEGIN
   -- predating today's view/table-swap fix entirely.
   IF wants_is_table THEN
     IF (SELECT COUNT(*) FROM wants) = 0 THEN
-      EXECUTE 'DROP TABLE wants';
+      EXECUTE 'DROP TABLE wants CASCADE';
     END IF;
-  END IF;
-
-  -- user_collectible_wants: drop only if it's a VIEW (never drop a table
-  -- here -- if it's already a real table, leave its data alone entirely).
-  IF ucw_is_view THEN
-    EXECUTE 'DROP VIEW user_collectible_wants CASCADE';
   END IF;
 END $$;
 
