@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-14T16:42:19.507Z",
+  "generated_at": "2026-08-14T16:43:00.298Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13610,
   "files": [
@@ -44433,9 +44433,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 598031,
-      "mtime": "2026-08-14T16:41:54.974Z",
-      "indexed_at": "2026-08-14T16:42:19.507Z"
+      "bytes": 599423,
+      "mtime": "2026-08-14T16:42:46.147Z",
+      "indexed_at": "2026-08-14T16:43:00.298Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -79894,9 +79894,9 @@
     {
       "path": "scripts/prod-health-watchdog.mjs",
       "synopsis": "Production runtime-health watchdog — polls this server's own",
-      "bytes": 9572,
-      "mtime": "2026-08-13T05:59:55.684Z",
-      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "bytes": 12603,
+      "mtime": "2026-08-14T16:42:46.149Z",
+      "indexed_at": "2026-08-14T16:43:00.298Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -106514,9 +106514,9 @@
     {
       "path": "tests/prod-health-watchdog.test.js",
       "synopsis": "js — tests/prod-health-watchdog.test.js.",
-      "bytes": 5210,
-      "mtime": "2026-08-13T05:59:55.757Z",
-      "indexed_at": "2026-08-13T06:44:07.157Z"
+      "bytes": 6573,
+      "mtime": "2026-08-14T16:42:46.150Z",
+      "indexed_at": "2026-08-14T16:43:00.298Z"
     },
     {
       "path": "tests/product-build-orchestrator.test.js",

@@ -4,7 +4,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 
-import { evaluateProdHealth } from '../scripts/prod-health-watchdog.mjs';
+import { evaluateProdHealth, evaluateEscalation, collectiblesPrintClosedFinding } from '../scripts/prod-health-watchdog.mjs';
 import { evaluateSystemWatchdog } from '../scripts/lib/system-watchdog.mjs';
 
 const healthy = { httpOk: true, body: { startup: { startup_report: { reasons: [] } } } };
@@ -114,4 +114,29 @@ test('system watchdog flags a stale governed loop', () => {
   });
   assert.equal(ok, false);
   assert.equal(findings[0].id, 'governed_loop_stale');
+});
+
+test('evaluateEscalation: a stopped-build finding escalates to a call after the delay, same as health', () => {
+  const first = evaluateEscalation({ reasonKey: 'queue_ship_thrash:X', alerted: null, now: 2000 });
+  assert.equal(first.action, 'sms');
+  const stillWithin = evaluateEscalation({ reasonKey: 'queue_ship_thrash:X', alerted: first.newAlerted, now: 3000 });
+  assert.equal(stillWithin.action, 'none');
+  const pastDelay = evaluateEscalation({ reasonKey: 'queue_ship_thrash:X', alerted: first.newAlerted, now: 2000 + 11 * 60 * 1000 });
+  assert.equal(pastDelay.action, 'call');
+  assert.ok(pastDelay.newAlerted.calledAt);
+});
+
+test('collectiblesPrintClosedFinding: does not fire when the product has not started yet', () => {
+  const queue = { steps: [
+    { id: 'COLLECTIBLES-V1-A', target_file: 'services/collectibles/a.js', status: 'pending' },
+  ] };
+  assert.equal(collectiblesPrintClosedFinding(queue), null);
+});
+
+test('collectiblesPrintClosedFinding: does not fire while real work is still pending', () => {
+  const queue = { steps: [
+    { id: 'COLLECTIBLES-V1-A', target_file: 'services/collectibles/a.js', status: 'done' },
+    { id: 'COLLECTIBLES-V1-B', target_file: 'services/collectibles/b.js', status: 'pending' },
+  ] };
+  assert.equal(collectiblesPrintClosedFinding(queue), null);
 });
