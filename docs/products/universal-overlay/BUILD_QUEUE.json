@@ -8105,8 +8105,8 @@
     {
       "status": "pending",
       "founder_gated": false,
-      "attempts": 2,
-      "action_type": "author_then_write",
+      "attempts": 3,
+      "action_type": "write_file_exact",
       "product_id": "collectibles",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
@@ -8131,9 +8131,9 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-14T00:20:40.364Z",
-      "last_error": "GROUNDING_FAIL: missing_sql_table: collectible_custody",
-      "started_at": "2026-08-14T00:20:31.294Z",
+      "last_attempt_at": "2026-08-14T00:25:08.017Z",
+      "last_error": "AIC_GATE_FAILURE",
+      "started_at": "2026-08-14T00:25:07.934Z",
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
@@ -8142,7 +8142,47 @@
       "heal_reason": "collectibles_never_stop_heal",
       "skip_reason": null,
       "escalation_required": false,
-      "revive_count": 0
+      "revive_count": 0,
+      "same_signature_count": 1,
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/collectibles/custody-workflow.js",
+          "exports": [
+            "createCustodyWorkflow"
+          ],
+          "assertion_id": "expected_exports:services/collectibles/custody-workflow.js"
+        }
+      ],
+      "failure_signature": "AIC_GATE_FAILURE",
+      "escalation_class": "same_signature_repeat",
+      "escalation_note": null,
+      "exact_inputs": {
+        "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V6-CUSTODY-001.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-08-14T00:25:19.648Z",
+        "shipped_at": "2026-08-14T00:25:19.648Z",
+        "commit_sha": null,
+        "content_sha256": "185dcf77e270eafd7df9a48f302471fb70cf234f4932e5f24c4214e9e64c3faa",
+        "target_file": "services/collectibles/custody-workflow.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/collectibles/custody-workflow.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "PASS"
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/universal-overlay/twins/steps/COLLECTIBLES-V6-CUSTODY-001.exact",
+          "content_sha256": "185dcf77e270eafd7df9a48f302471fb70cf234f4932e5f24c4214e9e64c3faa"
+        }
+      },
+      "shipped_at": "2026-08-14T00:25:19.648Z"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",

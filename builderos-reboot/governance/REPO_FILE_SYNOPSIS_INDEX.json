@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-14T00:21:23.222Z",
+  "generated_at": "2026-08-14T00:25:22.430Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13600,
+  "file_count": 13601,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -95216,6 +95216,16 @@
       "bytes": 3063,
       "mtime": "2026-08-13T06:02:00.751Z",
       "indexed_at": "2026-08-13T06:02:00.751Z",
+      "ssot": [
+        "docs/products/collectibles/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/collectibles/custody-workflow.js",
+      "synopsis": "Exports createCustodyWorkflow — services/collectibles/custody-workflow.js.",
+      "bytes": 10158,
+      "mtime": "2026-08-14T00:25:22.430Z",
+      "indexed_at": "2026-08-14T00:25:22.430Z",
       "ssot": [
         "docs/products/collectibles/PRODUCT_HOME.md"
       ]
