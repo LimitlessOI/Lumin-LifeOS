@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-14T20:20:20.421Z",
+  "generated_at": "2026-08-15T22:16:00.870Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13612,
+  "file_count": 13619,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -31159,6 +31159,30 @@
       "synopsis_index_only": true
     },
     {
+      "path": "builderos-reboot/MISSIONS/TALOA-GATE-0-CLOSURE-0001/BLUEPRINT.json",
+      "synopsis": "BuilderOS artifact — BLUEPRINT.",
+      "bytes": 11691,
+      "mtime": "2026-08-15T21:41:23.274Z",
+      "indexed_at": "2026-08-15T22:16:00.870Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/TALOA-GATE-0-CLOSURE-0001/FOUNDER_PACKET.json",
+      "synopsis": "BuilderOS artifact — FOUNDER PACKET.",
+      "bytes": 6251,
+      "mtime": "2026-08-15T21:41:56.637Z",
+      "indexed_at": "2026-08-15T22:16:00.870Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/TALOA-GATE-0-CLOSURE-0001/OBJECTIVE_VERDICT.json",
+      "synopsis": "BuilderOS artifact — OBJECTIVE VERDICT.",
+      "bytes": 1087,
+      "mtime": "2026-08-15T21:42:38.865Z",
+      "indexed_at": "2026-08-15T22:16:00.870Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "builderos-reboot/MISSIONS/TALOA-OVERLAY-P1-0001/ASSET_REUSE_DECISION.json",
       "synopsis": "BuilderOS artifact — ASSET REUSE DECISION.",
       "bytes": 3253,
@@ -40725,6 +40749,13 @@
       "indexed_at": "2026-07-31T05:01:14.830Z"
     },
     {
+      "path": "docs/audits/OVERLAY_AND_COMMUNICATION_CURRENT_STATE_AUDIT_2026-08-15.md",
+      "synopsis": "Overlay + Taloa Communication — Current-State Audit",
+      "bytes": 34674,
+      "mtime": "2026-08-15T22:15:59.576Z",
+      "indexed_at": "2026-08-15T22:16:00.870Z"
+    },
+    {
       "path": "docs/AUTHORITY_CONSOLIDATION_MASTER_AUDIT_V1.md",
       "synopsis": "AUTHORITY CONSOLIDATION MASTER AUDIT V1",
       "bytes": 27067,
@@ -44082,9 +44113,9 @@
     {
       "path": "docs/products/ai-council/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — AI Council",
-      "bytes": 76312,
-      "mtime": "2026-08-01T08:48:17.387Z",
-      "indexed_at": "2026-08-01T08:48:17.387Z"
+      "bytes": 81660,
+      "mtime": "2026-08-15T22:09:18.290Z",
+      "indexed_at": "2026-08-15T22:16:00.870Z"
     },
     {
       "path": "docs/products/ai-receptionist/CREATIVE_BRIEF.md",
@@ -46669,6 +46700,13 @@
       "bytes": 12417,
       "mtime": "2026-08-11T15:28:20.346Z",
       "indexed_at": "2026-08-11T15:28:21.533Z"
+    },
+    {
+      "path": "docs/products/universal-overlay/TALOA_CHATGPT_RELAY_AND_CAPSULE_BLUEPRINT_2026-08-15.md",
+      "synopsis": "Founder-dictated blueprint — Taloa ChatGPT Relay Body/Capsule. Not yet mission-decomposed.",
+      "bytes": 11728,
+      "mtime": "2026-08-15T22:08:17.762Z",
+      "indexed_at": "2026-08-15T22:16:00.870Z"
     },
     {
       "path": "docs/products/universal-overlay/TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md",
@@ -71126,6 +71164,14 @@
       "synopsis_index_only": true
     },
     {
+      "path": "products/receipts/TALOA_GATE_0_CLOSURE_ACCEPTANCE.json",
+      "synopsis": "Product receipt — TALOA GATE 0 CLOSURE ACCEPTANCE.",
+      "bytes": 2187,
+      "mtime": "2026-08-15T21:42:38.865Z",
+      "indexed_at": "2026-08-15T22:16:00.870Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "products/receipts/TERMINOLOGY_COLLISION_RECEIPT.json",
       "synopsis": "Product receipt — TERMINOLOGY COLLISION RECEIPT.",
       "bytes": 5039,
@@ -82540,6 +82586,16 @@
       "indexed_at": "2026-07-28T22:54:46.666Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/verify-gate0-closure.mjs",
+      "synopsis": "Acceptance harness for TALOA-GATE-0-CLOSURE-0001.",
+      "bytes": 5711,
+      "mtime": "2026-08-15T21:42:31.262Z",
+      "indexed_at": "2026-08-15T22:16:00.870Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
     },
     {

@@ -1,0 +1,25 @@
+{
+  "schema": "objective_verdict_v1",
+  "generated_at": "2026-08-15T21:42:38.864Z",
+  "objective_id": "TALOA-GATE-0-CLOSURE-0001",
+  "objective_name": "Taloa blueprint §45a Gate 0 closure",
+  "verdict": "NOT_COMPLETE",
+  "receipt": "products/receipts/TALOA_GATE_0_CLOSURE_ACCEPTANCE.json",
+  "git_sha": "348e2f8d67444b8566f3a27ac3a0b7fb6bed8e5f",
+  "tests_passed": [],
+  "tests_failed": [
+    "GATE0-001_verify_exported",
+    "GATE0-001_verify_callable",
+    "GATE0-002_reachable_from_route",
+    "GATE0-002_no_bare_boolean_trust",
+    "GATE0-003_issueBodyToken",
+    "GATE0-003_verifyBodyToken",
+    "GATE0-003_constant_time_compare",
+    "GATE0-004_nonce_header",
+    "GATE0-004_timestamp_header"
+  ],
+  "founder_usability_pass": false,
+  "acceptance_command": "node scripts/verify-gate0-closure.mjs",
+  "unblocks": "docs/products/universal-overlay/TALOA_CHATGPT_RELAY_AND_CAPSULE_BLUEPRINT_2026-08-15.md",
+  "note_manual_action_still_required": "COMMAND_CENTER_KEY rotation (Gate 0 item 1) is not checked here — it is a manual founder-confirmed action, see FOUNDER_PACKET.json."
+}

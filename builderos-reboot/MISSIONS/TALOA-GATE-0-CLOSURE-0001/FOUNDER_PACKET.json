@@ -1,0 +1,75 @@
+{
+  "mission_id": "TALOA-GATE-0-CLOSURE-0001",
+  "priority": "Blocks all further Body-authority expansion, including the founder-requested ChatGPT relay Body/Capsule.",
+  "why_this_mission_exists": [
+    "Founder asked (2026-08-15) for Taloa to gain a ChatGPT Body adapter using real mouse/keyboard/Accessibility control.",
+    "Before drafting that adapter, checked whether it's currently allowed under this product's own already-ratified rules.",
+    "It isn't: every step of the sealed TALOA-OVERLAY-P1-0001 mission carries 'Do not widen any Body capability or authority — Gate 0 (blueprint §45a) is still open.'",
+    "Gate 0 (TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md:780-792) was agreed jointly by the founder, Claude, and ChatGPT on 2026-08-11 — this sequencing is not new caution invented for this mission.",
+    "Live-code-checked against all 7 Gate 0 items on 2026-08-15: 2 closed (DeviceRegistry is a real store via capability-registry-service.js; secret scanners wired into pre-commit), 5 open.",
+    "This mission closes 4 of the 5 open items. The 5th (rotate COMMAND_CENTER_KEY) is a live production secret change and is intentionally NOT dispatched to the automatic factory — see manual_action_required below."
+  ],
+  "scope": [
+    "GATE0-001: add a real verify() method to the already-built-but-unwired services/taloa/task-authorization-envelope.js.",
+    "GATE0-002: wire routes/general-browser-agent-routes.js's vault/payment authority check to that verify() instead of trusting a bare client-supplied founder_authority boolean.",
+    "GATE0-003: add per-Body-scoped credentials (issueBodyToken/verifyBodyToken) on top of the existing, already-real overlay_devices DeviceRegistry.",
+    "GATE0-004: add nonce+timestamp replay protection to the shared command-key middleware."
+  ],
+  "non_goals": [
+    "Do NOT build the ChatGPT Body adapter / Capsule in this mission — that is a separate, already-drafted blueprint (docs/products/universal-overlay/TALOA_CHATGPT_RELAY_AND_CAPSULE_BLUEPRINT_2026-08-15.md) explicitly sequenced to dispatch only after this mission's acceptance passes.",
+    "Do NOT rotate COMMAND_CENTER_KEY or any other live secret in this mission — that is manual_action_required below, not an author_then_write step.",
+    "Do NOT touch native/macos-overlay/.",
+    "Do NOT modify any file not named in BLUEPRINT.json's steps.",
+    "Do NOT introduce a new npm dependency."
+  ],
+  "manual_action_required": {
+    "action": "Rotate COMMAND_CENTER_KEY and the database connection string at the source (Railway env vars + local .env), per Gate 0 item 1.",
+    "why_not_automated": "This is a live shared secret used by every currently-authenticated Body and route today. An automated rotation with no explicit go-ahead risks locking out production traffic mid-flight if anything holds the old key in a cache or a not-yet-redeployed client. This is exactly the kind of hard-to-reverse, shared-system action that warrants a direct confirmation rather than silent execution.",
+    "mechanism_when_ready": "System self-execution already exists for this: generate a new random value, POST /api/v1/railway/env/bulk with the new COMMAND_CENTER_KEY (per CLAUDE.md's System Self-Execution Rule), update local .env to match, confirm the new value is live, then invalidate the old one.",
+    "status": "AWAITING_FOUNDER_GO"
+  },
+  "success_criteria": [
+    "All 4 target files pass their behavior_assertions.",
+    "node scripts/verify-gate0-closure.mjs passes.",
+    "task-authorization-envelope.js's verify() is actually called from general-browser-agent-routes.js, not just exported (grep-provable, per this repo's own 'acceptance must prove reachability, not just existence' rule).",
+    "The existing 15 Phase-1 Taloa services and 2 overlay routes continue to pass their own existing tests — this mission adds checks, it must not break what's already wired."
+  ],
+  "failure_criteria": [
+    "TECHNICAL_PASS claimed without founder_usability_pass.",
+    "verify()/issueBodyToken/verifyBodyToken exported but not called from any real route (same BUILT_UNWIRED failure mode already found once in this product's own history).",
+    "Any change outside the 4 named target files.",
+    "requireKey's existing key-comparison weakened or removed."
+  ],
+  "escalation": "Architect owns implementation-detail questions. Builder executes. Sentry verifies. Adam owns only the manual_action_required key rotation and the founder-usability verdict.",
+  "risk_register": [
+    {
+      "risk": "This mission touches the exact route (general-browser-agent-routes.js) that gates payment/vault authority.",
+      "severity": "high",
+      "mitigation": "GATE0-002's task explicitly requires the existing requireKey gate stay intact and only adds a check on top — reviewed for reachability, not just export, per success_criteria.",
+      "status": "MITIGATED_BY_DESIGN"
+    },
+    {
+      "risk": "Closing Gate 0 might be read as authorization to immediately widen Body authority further.",
+      "severity": "medium",
+      "mitigation": "This mission's own non_goals explicitly excludes building the ChatGPT adapter. Gate 0 closing unblocks the next blueprint; it does not auto-dispatch it.",
+      "status": "MITIGATED_BY_DESIGN"
+    }
+  ],
+  "founder_decision_log": [
+    {
+      "date": "2026-08-15",
+      "decision": "Requested a ChatGPT Body adapter using real mouse/keyboard/Accessibility control on the existing Overlay.",
+      "quote": "So what you're gonna do is use the overlay to interact with my ChatGPT account... I don't need a new system."
+    },
+    {
+      "date": "2026-08-11",
+      "decision": "Gate 0 (§45a) ratified jointly with ChatGPT's own review: no Body gains broader authority until 7 named items close.",
+      "quote": "expanding capability before fixing authority expands the exact blast radius §45/§45a document as a live liability"
+    }
+  ],
+  "provenance": {
+    "gate_definition": "docs/products/universal-overlay/TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md:780-792",
+    "prior_mission": "builderos-reboot/MISSIONS/TALOA-OVERLAY-P1-0001",
+    "unblocks": "docs/products/universal-overlay/TALOA_CHATGPT_RELAY_AND_CAPSULE_BLUEPRINT_2026-08-15.md"
+  }
+}

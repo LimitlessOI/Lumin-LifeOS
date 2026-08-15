@@ -1,0 +1,76 @@
+{
+  "schema": "taloa_gate0_closure_acceptance_v1",
+  "mission_id": "TALOA-GATE-0-CLOSURE-0001",
+  "started_at": "2026-08-15T21:42:38.851Z",
+  "tests_passed": [],
+  "tests_failed": [
+    "GATE0-001_verify_exported",
+    "GATE0-001_verify_callable",
+    "GATE0-002_reachable_from_route",
+    "GATE0-002_no_bare_boolean_trust",
+    "GATE0-003_issueBodyToken",
+    "GATE0-003_verifyBodyToken",
+    "GATE0-003_constant_time_compare",
+    "GATE0-004_nonce_header",
+    "GATE0-004_timestamp_header"
+  ],
+  "steps": [
+    {
+      "step": "GATE0-001_verify_exported",
+      "ok": false,
+      "detail": "verify() not found or does not query agent_task_authority",
+      "at": "2026-08-15T21:42:38.852Z"
+    },
+    {
+      "step": "GATE0-001_verify_callable",
+      "ok": false,
+      "detail": "verify missing on returned object",
+      "at": "2026-08-15T21:42:38.852Z"
+    },
+    {
+      "step": "GATE0-002_reachable_from_route",
+      "ok": false,
+      "detail": "not reachable from general-browser-agent-routes.js — exported but unwired",
+      "at": "2026-08-15T21:42:38.853Z"
+    },
+    {
+      "step": "GATE0-002_no_bare_boolean_trust",
+      "ok": false,
+      "detail": "route still trusts a bare founder_authority boolean with no verify() call",
+      "at": "2026-08-15T21:42:38.853Z"
+    },
+    {
+      "step": "GATE0-003_issueBodyToken",
+      "ok": false,
+      "detail": "missing",
+      "at": "2026-08-15T21:42:38.853Z"
+    },
+    {
+      "step": "GATE0-003_verifyBodyToken",
+      "ok": false,
+      "detail": "missing",
+      "at": "2026-08-15T21:42:38.853Z"
+    },
+    {
+      "step": "GATE0-003_constant_time_compare",
+      "ok": false,
+      "detail": "no constant-time comparison found — timing side-channel risk",
+      "at": "2026-08-15T21:42:38.853Z"
+    },
+    {
+      "step": "GATE0-004_nonce_header",
+      "ok": false,
+      "detail": "missing",
+      "at": "2026-08-15T21:42:38.853Z"
+    },
+    {
+      "step": "GATE0-004_timestamp_header",
+      "ok": false,
+      "detail": "missing",
+      "at": "2026-08-15T21:42:38.853Z"
+    }
+  ],
+  "completed_at": "2026-08-15T21:42:38.864Z",
+  "git_sha": "348e2f8d67444b8566f3a27ac3a0b7fb6bed8e5f",
+  "verdict": "FAIL"
+}
