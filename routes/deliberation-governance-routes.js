@@ -230,3 +230,16 @@ export function createDeliberationGovernanceRoutes({ pool, requireKey, logger })
 
   return router;
 }
+
+// Founder-runtime lane (the lane Railway always boots — server-founder-runtime.js)
+// never imported this module; only the full-runtime lane did. That left the gate
+// this file enforces (hist-case / cfo-receipt / pipeline seed) unreachable in
+// production. This adapter is glue only, matching the existing pattern in
+// config/auto-registered-product-modules.json (e.g. registerTaloaOverlayHostRoutes)
+// — it mounts the already-built router above, it adds no new route logic.
+export function registerDeliberationGovernanceRoutes(app, deps) {
+  app.use(
+    '/api/v1/lifeos/deliberation',
+    createDeliberationGovernanceRoutes({ pool: deps.pool, requireKey: deps.requireKey, logger: deps.logger })
+  );
+}

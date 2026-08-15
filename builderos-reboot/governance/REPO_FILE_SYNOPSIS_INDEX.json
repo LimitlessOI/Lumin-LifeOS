@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-15T22:16:00.870Z",
+  "generated_at": "2026-08-15T22:26:12.397Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13619,
   "files": [
@@ -32603,9 +32603,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 46975,
-      "mtime": "2026-08-14T20:10:44.796Z",
-      "indexed_at": "2026-08-14T20:12:03.350Z",
+      "bytes": 47778,
+      "mtime": "2026-08-15T22:25:17.880Z",
+      "indexed_at": "2026-08-15T22:26:12.397Z",
       "synopsis_index_only": true
     },
     {
@@ -44464,9 +44464,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 607886,
-      "mtime": "2026-08-14T20:18:18.222Z",
-      "indexed_at": "2026-08-14T20:19:55.863Z"
+      "bytes": 610517,
+      "mtime": "2026-08-15T22:25:59.034Z",
+      "indexed_at": "2026-08-15T22:26:12.397Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -74249,9 +74249,9 @@
     {
       "path": "routes/deliberation-governance-routes.js",
       "synopsis": "Deliberation governance API — v2.7 CnclRoster, scorecard, Hist, CFO, gate, consensus.",
-      "bytes": 7585,
-      "mtime": "2026-06-29T17:21:08.507Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 8299,
+      "mtime": "2026-08-15T22:25:01.358Z",
+      "indexed_at": "2026-08-15T22:26:12.397Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
