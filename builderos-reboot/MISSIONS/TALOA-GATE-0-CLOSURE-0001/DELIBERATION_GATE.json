@@ -1,0 +1,34 @@
+{
+  "session_id": "mission:TALOA-GATE-0-CLOSURE-0001",
+  "mission_id": "TALOA-GATE-0-CLOSURE-0001",
+  "authorities": ["BPB", "CDR", "SNT"],
+  "reps": [{"name": "Founder"}],
+  "models": [
+    {"id": "bpb-model", "focus": "BPB"},
+    {"id": "cdr-model", "focus": "CDR"}
+  ],
+  "load_bearing": false,
+  "hist_case": {
+    "session_id": "mission:TALOA-GATE-0-CLOSURE-0001",
+    "problem": "Blueprint §45a Gate 0 blocks any Body-authority expansion until 7 remediation items close. Founder requested a ChatGPT relay Body on 2026-08-15; live code check found 2/7 items closed, 5 open, including a bare `founder_authority === true` client-supplied boolean in routes/general-browser-agent-routes.js granting full vault/payment authority with zero independent confirmation — named in the source blueprint itself as its most severe adversarial finding.",
+    "case_text": "The relay Body the founder wants needs zero vault/payment authority — it only needs a real Task Authorization Envelope primitive to anchor per-task authorization to the founder's live instruction (never to observed ChatGPT/page text, closing the same prompt-injection gap §46 already names as undefended). services/taloa/task-authorization-envelope.js already exists with a working create() method but has zero real callers anywhere in the repo — confirmed by grep, not assumed. GATE0-001 adds exactly one method, verify(), to that already-built file. This is the single, minimal, already-scoped dependency the relay blueprint (TALOA_CHATGPT_RELAY_AND_CAPSULE_BLUEPRINT_2026-08-15.md) needs — GATE0-002/003/004 (payment-route wiring, per-Body credentials, replay protection) are real but unrelated to communication-only relay and are intentionally not being dispatched in this pass.",
+    "ideas": [
+      "Dispatch only GATE0-001 now, not the full 4-step Gate 0 closure mission — the relay blueprint declares GATE0-001 as its only real dependency.",
+      "Acceptance is reachability-checked (scripts/verify-gate0-closure.mjs), not just export presence — GATE0-002_reachable_from_route stays failing until the vault route is separately, deliberately wired, preventing a false-done claim on the part that matters most."
+    ],
+    "opportunity": "Closing this one primitive unblocks the founder-requested ChatGPT relay Body without touching the payment/vault route at all, and gives every future Body (Android, macOS perception, this relay) a real authorization anchor instead of another bare boolean.",
+    "uncertainty": "KNOW"
+  },
+  "cfo_receipt": {
+    "session_id": "mission:TALOA-GATE-0-CLOSURE-0001",
+    "dept": "CFO",
+    "role": "gate0_minimum_dependency_seed",
+    "model": "factory-local",
+    "tokens": 0,
+    "cost_usd": 0,
+    "founder_priority_mode": true,
+    "note": "Founder-directed urgent build (2026-08-15, 'do not convert a runtime failure into another planning exercise'); authoring cost accrues per step under the standard tier ladder for exactly one step, GATE0-001."
+  },
+  "seeded_at": "2026-08-15T22:30:00.000Z",
+  "auto_seeded": false
+}

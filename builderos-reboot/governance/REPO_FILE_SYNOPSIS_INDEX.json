@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-15T22:26:12.397Z",
+  "generated_at": "2026-08-15T22:30:23.035Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13619,
+  "file_count": 13620,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -31164,6 +31164,14 @@
       "bytes": 11691,
       "mtime": "2026-08-15T21:41:23.274Z",
       "indexed_at": "2026-08-15T22:16:00.870Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/TALOA-GATE-0-CLOSURE-0001/DELIBERATION_GATE.json",
+      "synopsis": "BuilderOS artifact — DELIBERATION GATE.",
+      "bytes": 3045,
+      "mtime": "2026-08-15T22:29:54.817Z",
+      "indexed_at": "2026-08-15T22:30:23.035Z",
       "synopsis_index_only": true
     },
     {
