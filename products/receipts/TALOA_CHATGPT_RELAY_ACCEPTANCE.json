@@ -1,0 +1,111 @@
+{
+  "schema": "taloa_chatgpt_relay_acceptance_v1",
+  "mission_id": "TALOA-CHATGPT-RELAY-0001",
+  "started_at": "2026-08-16T17:58:04.063Z",
+  "tests_passed": [
+    "RELAY-001_file_exists",
+    "RELAY-001_startRelayTask_declared",
+    "RELAY-001_recordTurn_declared",
+    "RELAY-001_getRelayState_declared",
+    "RELAY-001_authorizeAction_declared",
+    "RELAY-001_authorization_uses_envelope_verify",
+    "RELAY-001_startRelayTask_callable",
+    "RELAY-001_recordTurn_callable",
+    "RELAY-001_getRelayState_callable",
+    "RELAY-001_authorizeAction_callable",
+    "RELAY-002_file_exists",
+    "RELAY-002_creates_table",
+    "bp_sync_mandatory"
+  ],
+  "tests_failed": [],
+  "steps": [
+    {
+      "step": "RELAY-001_file_exists",
+      "ok": true,
+      "detail": "present",
+      "at": "2026-08-16T17:58:04.064Z"
+    },
+    {
+      "step": "RELAY-001_startRelayTask_declared",
+      "ok": true,
+      "detail": "present",
+      "at": "2026-08-16T17:58:04.064Z"
+    },
+    {
+      "step": "RELAY-001_recordTurn_declared",
+      "ok": true,
+      "detail": "present",
+      "at": "2026-08-16T17:58:04.064Z"
+    },
+    {
+      "step": "RELAY-001_getRelayState_declared",
+      "ok": true,
+      "detail": "present",
+      "at": "2026-08-16T17:58:04.064Z"
+    },
+    {
+      "step": "RELAY-001_authorizeAction_declared",
+      "ok": true,
+      "detail": "present",
+      "at": "2026-08-16T17:58:04.064Z"
+    },
+    {
+      "step": "RELAY-001_authorization_uses_envelope_verify",
+      "ok": true,
+      "detail": "authorizeAction calls envelope.verify()",
+      "at": "2026-08-16T17:58:04.064Z"
+    },
+    {
+      "step": "RELAY-001_startRelayTask_callable",
+      "ok": true,
+      "detail": "real function",
+      "at": "2026-08-16T17:58:04.069Z"
+    },
+    {
+      "step": "RELAY-001_recordTurn_callable",
+      "ok": true,
+      "detail": "real function",
+      "at": "2026-08-16T17:58:04.069Z"
+    },
+    {
+      "step": "RELAY-001_getRelayState_callable",
+      "ok": true,
+      "detail": "real function",
+      "at": "2026-08-16T17:58:04.069Z"
+    },
+    {
+      "step": "RELAY-001_authorizeAction_callable",
+      "ok": true,
+      "detail": "real function",
+      "at": "2026-08-16T17:58:04.069Z"
+    },
+    {
+      "step": "RELAY-002_file_exists",
+      "ok": true,
+      "detail": "present",
+      "at": "2026-08-16T17:58:04.070Z"
+    },
+    {
+      "step": "RELAY-002_creates_table",
+      "ok": true,
+      "detail": "checked for idempotent CREATE TABLE",
+      "at": "2026-08-16T17:58:04.070Z"
+    }
+  ],
+  "completed_at": "2026-08-16T17:58:04.080Z",
+  "git_sha": "fe77752b5e29968a1bd37b23257420122d4cd174",
+  "verdict": "PASS",
+  "bp_sync": {
+    "updated": [
+      "builderos-reboot/BP_PRIORITY.json",
+      "builderos-reboot/MISSIONS/TALOA-CHATGPT-RELAY-0001/BLUEPRINT.json",
+      "builderos-reboot/MISSIONS/TALOA-CHATGPT-RELAY-0001/FOUNDER_PACKET.json"
+    ],
+    "skipped": []
+  },
+  "artifact_sync": {
+    "mode": "technical_acceptance",
+    "readiness_report": "builderos-reboot/PRODUCT_READINESS_REPORT.json",
+    "freshness_status": "CURRENT"
+  }
+}

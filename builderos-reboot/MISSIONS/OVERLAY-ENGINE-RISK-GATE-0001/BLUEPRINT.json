@@ -103,8 +103,8 @@
         "checking `type` actions -- only click is the point of no return"
       ],
       "status": "complete",
-      "completed_at": "2026-08-09T00:06:39.022Z",
-      "git_sha": "f20b60d7ddeccd7a8ccb0a9c42cee181edb84de1"
+      "completed_at": "2026-08-14T22:12:22.864Z",
+      "git_sha": "348e2f8d67444b8566f3a27ac3a0b7fb6bed8e5f"
     },
     {
       "step_id": "RGE-S02",
@@ -138,8 +138,8 @@
         "changing the existing confirmContext guardrail's own behavior"
       ],
       "status": "complete",
-      "completed_at": "2026-08-09T00:06:39.022Z",
-      "git_sha": "f20b60d7ddeccd7a8ccb0a9c42cee181edb84de1"
+      "completed_at": "2026-08-14T22:12:22.864Z",
+      "git_sha": "348e2f8d67444b8566f3a27ac3a0b7fb6bed8e5f"
     },
     {
       "step_id": "RGE-S03",
@@ -169,8 +169,8 @@
         "a full-file rewrite -- use patch mode only"
       ],
       "status": "complete",
-      "completed_at": "2026-08-09T00:06:39.022Z",
-      "git_sha": "f20b60d7ddeccd7a8ccb0a9c42cee181edb84de1"
+      "completed_at": "2026-08-14T22:12:22.864Z",
+      "git_sha": "348e2f8d67444b8566f3a27ac3a0b7fb6bed8e5f"
     },
     {
       "step_id": "RGE-S04",
@@ -210,8 +210,8 @@
         "changing any other behavior of this wrapper"
       ],
       "status": "complete",
-      "completed_at": "2026-08-09T00:06:39.022Z",
-      "git_sha": "f20b60d7ddeccd7a8ccb0a9c42cee181edb84de1"
+      "completed_at": "2026-08-14T22:12:22.864Z",
+      "git_sha": "348e2f8d67444b8566f3a27ac3a0b7fb6bed8e5f"
     },
     {
       "step_id": "RGE-S05",
@@ -239,8 +239,8 @@
         "a full-file rewrite -- use patch mode only"
       ],
       "status": "complete",
-      "completed_at": "2026-08-09T00:06:39.022Z",
-      "git_sha": "f20b60d7ddeccd7a8ccb0a9c42cee181edb84de1"
+      "completed_at": "2026-08-14T22:12:22.864Z",
+      "git_sha": "348e2f8d67444b8566f3a27ac3a0b7fb6bed8e5f"
     },
     {
       "step_id": "RGE-S06",
@@ -272,13 +272,13 @@
         "touching the wrm-wix-dns-cutover or signup handlers"
       ],
       "status": "complete",
-      "completed_at": "2026-08-09T00:06:39.022Z",
-      "git_sha": "f20b60d7ddeccd7a8ccb0a9c42cee181edb84de1"
+      "completed_at": "2026-08-14T22:12:22.864Z",
+      "git_sha": "348e2f8d67444b8566f3a27ac3a0b7fb6bed8e5f"
     }
   ],
   "blueprint_status": "complete",
-  "completed_at": "2026-08-09T00:06:39.022Z",
-  "git_sha": "f20b60d7ddeccd7a8ccb0a9c42cee181edb84de1",
+  "completed_at": "2026-08-14T22:12:22.864Z",
+  "git_sha": "348e2f8d67444b8566f3a27ac3a0b7fb6bed8e5f",
   "receipt_path": "products/receipts/OVERLAY_ENGINE_RISK_GATE_ACCEPTANCE.json",
   "receipt_verdict": "PASS",
   "build_method": "system-build"

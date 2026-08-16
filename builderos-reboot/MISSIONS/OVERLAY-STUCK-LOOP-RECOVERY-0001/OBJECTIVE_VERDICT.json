@@ -1,11 +1,11 @@
 {
   "schema": "objective_verdict_v1",
-  "generated_at": "2026-08-09T01:40:25.410Z",
+  "generated_at": "2026-08-14T22:12:23.058Z",
   "objective_id": "OVERLAY-STUCK-LOOP-RECOVERY-0001",
   "objective_name": "Overlay Stuck-Loop Recovery",
   "verdict": "OBJECTIVE_COMPLETE",
   "receipt": "products/receipts/OVERLAY_STUCK_LOOP_RECOVERY_ACCEPTANCE.json",
-  "git_sha": "e0fef2b5b8b2a2810e272069e5c2a33f3c6476af",
+  "git_sha": "348e2f8d67444b8566f3a27ac3a0b7fb6bed8e5f",
   "tests_passed": [
     "core_engine_exists",
     "exports_fingerprintObservation",

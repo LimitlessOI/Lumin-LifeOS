@@ -70,8 +70,8 @@
         "modifying services/general-browser-agent.js"
       ],
       "status": "complete",
-      "completed_at": "2026-08-09T18:14:26.097Z",
-      "git_sha": "6c05aea4fd72188b5b84120045bd75193322a9de"
+      "completed_at": "2026-08-14T22:12:23.318Z",
+      "git_sha": "348e2f8d67444b8566f3a27ac3a0b7fb6bed8e5f"
     },
     {
       "step_id": "ODC-S02",
@@ -123,8 +123,8 @@
         "any site-specific logic"
       ],
       "status": "complete",
-      "completed_at": "2026-08-09T18:14:26.097Z",
-      "git_sha": "6c05aea4fd72188b5b84120045bd75193322a9de"
+      "completed_at": "2026-08-14T22:12:23.318Z",
+      "git_sha": "348e2f8d67444b8566f3a27ac3a0b7fb6bed8e5f"
     },
     {
       "step_id": "ODC-S03",
@@ -162,8 +162,8 @@
         "a full-file rewrite -- use patch mode only"
       ],
       "status": "complete",
-      "completed_at": "2026-08-09T18:14:26.097Z",
-      "git_sha": "6c05aea4fd72188b5b84120045bd75193322a9de"
+      "completed_at": "2026-08-14T22:12:23.318Z",
+      "git_sha": "348e2f8d67444b8566f3a27ac3a0b7fb6bed8e5f"
     },
     {
       "step_id": "ODC-S04",
@@ -210,13 +210,13 @@
         "touching any other route mount in this file"
       ],
       "status": "complete",
-      "completed_at": "2026-08-09T18:14:26.097Z",
-      "git_sha": "6c05aea4fd72188b5b84120045bd75193322a9de"
+      "completed_at": "2026-08-14T22:12:23.318Z",
+      "git_sha": "348e2f8d67444b8566f3a27ac3a0b7fb6bed8e5f"
     }
   ],
   "blueprint_status": "complete",
-  "completed_at": "2026-08-09T18:14:26.097Z",
-  "git_sha": "6c05aea4fd72188b5b84120045bd75193322a9de",
+  "completed_at": "2026-08-14T22:12:23.318Z",
+  "git_sha": "348e2f8d67444b8566f3a27ac3a0b7fb6bed8e5f",
   "receipt_path": "products/receipts/OVERLAY_DRIVE_CHANNEL_ACCEPTANCE.json",
   "receipt_verdict": "PASS",
   "build_method": "system-build + hand-authored composition-root mount (GAP-FILL)"

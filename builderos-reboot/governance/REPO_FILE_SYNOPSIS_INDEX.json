@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-16T05:33:07.611Z",
+  "generated_at": "2026-08-16T18:00:04.830Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13626,
+  "file_count": 13628,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21307,9 +21307,9 @@
     {
       "path": "builderos-reboot/BP_PRIORITY.json",
       "synopsis": "BuilderOS artifact — BP PRIORITY.",
-      "bytes": 41175,
-      "mtime": "2026-08-12T19:17:52.138Z",
-      "indexed_at": "2026-08-12T19:17:52.138Z",
+      "bytes": 50428,
+      "mtime": "2026-08-16T17:58:12.856Z",
+      "indexed_at": "2026-08-16T18:00:04.830Z",
       "synopsis_index_only": true
     },
     {
@@ -31161,9 +31161,9 @@
     {
       "path": "builderos-reboot/MISSIONS/TALOA-CHATGPT-RELAY-0001/BLUEPRINT.json",
       "synopsis": "Exports createChatGptRelayService — builderos-reboot/MISSIONS/TALOA-CHATGPT-RELAY-0001/BLUEPRINT.json.",
-      "bytes": 10021,
-      "mtime": "2026-08-16T05:30:04.726Z",
-      "indexed_at": "2026-08-16T05:30:51.760Z",
+      "bytes": 10534,
+      "mtime": "2026-08-16T17:58:04.083Z",
+      "indexed_at": "2026-08-16T18:00:04.830Z",
       "synopsis_index_only": true
     },
     {
@@ -31177,9 +31177,17 @@
     {
       "path": "builderos-reboot/MISSIONS/TALOA-CHATGPT-RELAY-0001/FOUNDER_PACKET.json",
       "synopsis": "BuilderOS artifact — FOUNDER PACKET.",
-      "bytes": 3758,
-      "mtime": "2026-08-16T05:27:53.768Z",
-      "indexed_at": "2026-08-16T05:30:51.760Z",
+      "bytes": 4124,
+      "mtime": "2026-08-16T17:58:04.083Z",
+      "indexed_at": "2026-08-16T18:00:04.830Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/TALOA-CHATGPT-RELAY-0001/OBJECTIVE_VERDICT.json",
+      "synopsis": "BuilderOS artifact — OBJECTIVE VERDICT.",
+      "bytes": 1174,
+      "mtime": "2026-08-16T17:58:04.087Z",
+      "indexed_at": "2026-08-16T18:00:04.830Z",
       "synopsis_index_only": true
     },
     {
@@ -70909,17 +70917,17 @@
     {
       "path": "products/receipts/OVERLAY_DRIVE_CHANNEL_ACCEPTANCE.json",
       "synopsis": "Product receipt — OVERLAY DRIVE CHANNEL ACCEPTANCE.",
-      "bytes": 5191,
-      "mtime": "2026-08-09T18:14:26.103Z",
-      "indexed_at": "2026-08-09T18:14:44.802Z",
+      "bytes": 5218,
+      "mtime": "2026-08-14T22:12:23.327Z",
+      "indexed_at": "2026-08-16T18:00:04.830Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/OVERLAY_ENGINE_RISK_GATE_ACCEPTANCE.json",
       "synopsis": "Product receipt — OVERLAY ENGINE RISK GATE ACCEPTANCE.",
-      "bytes": 6342,
-      "mtime": "2026-08-09T00:06:39.031Z",
-      "indexed_at": "2026-08-09T00:07:27.839Z",
+      "bytes": 6117,
+      "mtime": "2026-08-14T22:12:22.872Z",
+      "indexed_at": "2026-08-16T18:00:04.830Z",
       "synopsis_index_only": true
     },
     {
@@ -70941,9 +70949,9 @@
     {
       "path": "products/receipts/OVERLAY_STUCK_LOOP_RECOVERY_ACCEPTANCE.json",
       "synopsis": "Product receipt — OVERLAY STUCK LOOP RECOVERY ACCEPTANCE.",
-      "bytes": 6308,
-      "mtime": "2026-08-09T01:40:25.417Z",
-      "indexed_at": "2026-08-09T01:41:04.130Z",
+      "bytes": 6047,
+      "mtime": "2026-08-14T22:12:23.066Z",
+      "indexed_at": "2026-08-16T18:00:04.830Z",
       "synopsis_index_only": true
     },
     {
@@ -71200,6 +71208,14 @@
       "bytes": 1525,
       "mtime": "2026-06-30T04:09:55.833Z",
       "indexed_at": "2026-07-28T22:54:46.666Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/TALOA_CHATGPT_RELAY_ACCEPTANCE.json",
+      "synopsis": "Product receipt — TALOA CHATGPT RELAY ACCEPTANCE.",
+      "bytes": 3071,
+      "mtime": "2026-08-16T17:58:04.087Z",
+      "indexed_at": "2026-08-16T18:00:04.830Z",
       "synopsis_index_only": true
     },
     {

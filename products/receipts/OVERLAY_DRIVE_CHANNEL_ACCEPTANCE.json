@@ -1,7 +1,7 @@
 {
   "schema": "overlay_drive_channel_acceptance_v1",
   "mission_id": "OVERLAY-DRIVE-CHANNEL-0001",
-  "started_at": "2026-08-09T18:14:26.017Z",
+  "started_at": "2026-08-14T22:12:23.242Z",
   "tests_passed": [
     "bridge_file_exists",
     "exports_all_functions",
@@ -25,7 +25,7 @@
       "step": "bridge_file_exists",
       "ok": true,
       "detail": "/Users/adamhopkins/Projects/Lumin-LifeOS/services/extension-drive-bridge.js",
-      "at": "2026-08-09T18:14:26.018Z"
+      "at": "2026-08-14T22:12:23.242Z"
     },
     {
       "step": "exports_all_functions",
@@ -43,7 +43,7 @@
           "stopDriveSession"
         ]
       },
-      "at": "2026-08-09T18:14:26.018Z"
+      "at": "2026-08-14T22:12:23.243Z"
     },
     {
       "step": "observe_creates_pending_request",
@@ -53,7 +53,7 @@
           "type": "observe"
         }
       },
-      "at": "2026-08-09T18:14:26.041Z"
+      "at": "2026-08-14T22:12:23.265Z"
     },
     {
       "step": "observation_shape_correct",
@@ -79,9 +79,10 @@
             "text": "Submit",
             "selector": "#submit"
           }
-        ]
+        ],
+        "_redactions": []
       },
-      "at": "2026-08-09T18:14:26.041Z"
+      "at": "2026-08-14T22:12:23.266Z"
     },
     {
       "step": "act_creates_pending_act_request",
@@ -95,7 +96,7 @@
           }
         }
       },
-      "at": "2026-08-09T18:14:26.062Z"
+      "at": "2026-08-14T22:12:23.287Z"
     },
     {
       "step": "act_resolves_with_posted_result",
@@ -103,7 +104,7 @@
       "detail": {
         "ok": true
       },
-      "at": "2026-08-09T18:14:26.062Z"
+      "at": "2026-08-14T22:12:23.287Z"
     },
     {
       "step": "verify_creates_confirm_done_request_not_auto_pass",
@@ -118,7 +119,7 @@
           }
         }
       },
-      "at": "2026-08-09T18:14:26.083Z"
+      "at": "2026-08-14T22:12:23.307Z"
     },
     {
       "step": "verify_respects_founder_rejection",
@@ -130,47 +131,47 @@
           "url": "https://example.com"
         }
       },
-      "at": "2026-08-09T18:14:26.083Z"
+      "at": "2026-08-14T22:12:23.307Z"
     },
     {
       "step": "route_file_exists",
       "ok": true,
       "detail": "/Users/adamhopkins/Projects/Lumin-LifeOS/routes/extension-drive-routes.js",
-      "at": "2026-08-09T18:14:26.083Z"
+      "at": "2026-08-14T22:12:23.307Z"
     },
     {
       "step": "route_imports_bridge_and_core_loop",
       "ok": true,
       "detail": "routes/extension-drive-routes.js must import from and call both the bridge and the existing runBrowserGoal loop, not a second engine",
-      "at": "2026-08-09T18:14:26.083Z"
+      "at": "2026-08-14T22:12:23.309Z"
     },
     {
       "step": "mount_file_exists",
       "ok": true,
       "detail": "/Users/adamhopkins/Projects/Lumin-LifeOS/startup/register-founder-runtime-routes.js",
-      "at": "2026-08-09T18:14:26.083Z"
+      "at": "2026-08-14T22:12:23.309Z"
     },
     {
       "step": "route_is_actually_mounted",
       "ok": true,
       "detail": "startup/register-founder-runtime-routes.js must import and mount createExtensionDriveRoutes at /api/v1/extension/drive",
-      "at": "2026-08-09T18:14:26.085Z"
+      "at": "2026-08-14T22:12:23.309Z"
     },
     {
       "step": "core_loop_unmodified_reused",
       "ok": true,
       "detail": "/Users/adamhopkins/Projects/Lumin-LifeOS/services/general-browser-agent.js",
-      "at": "2026-08-09T18:14:26.085Z"
+      "at": "2026-08-14T22:12:23.309Z"
     },
     {
       "step": "reuses_makeDecider_not_a_new_decider",
       "ok": true,
       "detail": "must reuse the existing pure decider functions, not hand-roll a new one",
-      "at": "2026-08-09T18:14:26.085Z"
+      "at": "2026-08-14T22:12:23.309Z"
     }
   ],
-  "completed_at": "2026-08-09T18:14:26.097Z",
-  "git_sha": "6c05aea4fd72188b5b84120045bd75193322a9de",
+  "completed_at": "2026-08-14T22:12:23.318Z",
+  "git_sha": "348e2f8d67444b8566f3a27ac3a0b7fb6bed8e5f",
   "verdict": "PASS",
   "bp_sync": {
     "updated": [

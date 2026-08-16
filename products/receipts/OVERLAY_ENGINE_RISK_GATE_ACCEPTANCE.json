@@ -1,7 +1,7 @@
 {
   "schema": "overlay_engine_risk_gate_acceptance_v1",
   "mission_id": "OVERLAY-ENGINE-RISK-GATE-0001",
-  "started_at": "2026-08-09T00:06:39.009Z",
+  "started_at": "2026-08-14T22:12:22.853Z",
   "tests_passed": [
     "core_engine_exists",
     "exports_isRiskyClick_and_patterns",
@@ -24,8 +24,8 @@
     {
       "step": "core_engine_exists",
       "ok": true,
-      "detail": "/private/tmp/claude-501/-Users-adamhopkins-Projects-Lumin-LifeOS/b98a9c4f-30b0-4efc-94d3-7e9a8ac44905/scratchpad/v1-build-retry/services/general-browser-agent.js",
-      "at": "2026-08-09T00:06:39.010Z"
+      "detail": "/Users/adamhopkins/Projects/Lumin-LifeOS/services/general-browser-agent.js",
+      "at": "2026-08-14T22:12:22.854Z"
     },
     {
       "step": "exports_isRiskyClick_and_patterns",
@@ -36,13 +36,14 @@
           "BrowserAgentError",
           "RISKY_ACTION_LABEL_PATTERNS",
           "default",
+          "fingerprintObservation",
           "isLiveAction",
           "isRiskyClick",
           "normalizeAction",
           "runBrowserGoal"
         ]
       },
-      "at": "2026-08-09T00:06:39.010Z"
+      "at": "2026-08-14T22:12:22.855Z"
     },
     {
       "step": "detects_risky_purchase_click",
@@ -50,7 +51,7 @@
       "detail": {
         "risky": true
       },
-      "at": "2026-08-09T00:06:39.010Z"
+      "at": "2026-08-14T22:12:22.855Z"
     },
     {
       "step": "detects_risky_delete_click",
@@ -58,7 +59,7 @@
       "detail": {
         "deleteRisky": true
       },
-      "at": "2026-08-09T00:06:39.010Z"
+      "at": "2026-08-14T22:12:22.855Z"
     },
     {
       "step": "does_not_flag_login_click",
@@ -66,7 +67,7 @@
       "detail": {
         "safe": false
       },
-      "at": "2026-08-09T00:06:39.010Z"
+      "at": "2026-08-14T22:12:22.855Z"
     },
     {
       "step": "does_not_flag_non_click_actions",
@@ -74,7 +75,7 @@
       "detail": {
         "notClick": false
       },
-      "at": "2026-08-09T00:06:39.010Z"
+      "at": "2026-08-14T22:12:22.855Z"
     },
     {
       "step": "runBrowserGoal_blocks_risky_click_by_default",
@@ -100,7 +101,7 @@
         },
         "acted": false
       },
-      "at": "2026-08-09T00:06:39.010Z"
+      "at": "2026-08-14T22:12:22.855Z"
     },
     {
       "step": "runBrowserGoal_allows_risky_click_when_authorized",
@@ -127,7 +128,7 @@
         },
         "acted": true
       },
-      "at": "2026-08-09T00:06:39.010Z"
+      "at": "2026-08-14T22:12:22.855Z"
     },
     {
       "step": "runBrowserGoal_unaffected_for_non_risky_goals",
@@ -167,46 +168,46 @@
                 "selector": "#login-btn"
               }
             ],
-            "captured_at": "2026-08-09T00:06:39.011Z"
+            "captured_at": "2026-08-14T22:12:22.855Z"
           }
         },
         "safeActed": true
       },
-      "at": "2026-08-09T00:06:39.011Z"
+      "at": "2026-08-14T22:12:22.855Z"
     },
     {
       "step": "wrapper_exists",
       "ok": true,
-      "detail": "/private/tmp/claude-501/-Users-adamhopkins-Projects-Lumin-LifeOS/b98a9c4f-30b0-4efc-94d3-7e9a8ac44905/scratchpad/v1-build-retry/services/general-browser-agent-live.js",
-      "at": "2026-08-09T00:06:39.011Z"
+      "detail": "/Users/adamhopkins/Projects/Lumin-LifeOS/services/general-browser-agent-live.js",
+      "at": "2026-08-14T22:12:22.855Z"
     },
     {
       "step": "wrapper_threads_allowRiskyActions",
       "ok": true,
       "detail": "services/general-browser-agent-live.js must accept AND forward allowRiskyActions into runBrowserGoal",
-      "at": "2026-08-09T00:06:39.011Z"
+      "at": "2026-08-14T22:12:22.855Z"
     },
     {
       "step": "route_exists",
       "ok": true,
-      "detail": "/private/tmp/claude-501/-Users-adamhopkins-Projects-Lumin-LifeOS/b98a9c4f-30b0-4efc-94d3-7e9a8ac44905/scratchpad/v1-build-retry/routes/general-browser-agent-routes.js",
-      "at": "2026-08-09T00:06:39.011Z"
+      "detail": "/Users/adamhopkins/Projects/Lumin-LifeOS/routes/general-browser-agent-routes.js",
+      "at": "2026-08-14T22:12:22.855Z"
     },
     {
       "step": "route_accepts_allowRiskyActions_from_request_body",
       "ok": true,
       "detail": "must be a real req.body field with a safe default",
-      "at": "2026-08-09T00:06:39.011Z"
+      "at": "2026-08-14T22:12:22.856Z"
     },
     {
       "step": "route_forwards_allowRiskyActions_into_runGoalOnSession",
       "ok": true,
       "detail": "the live /run endpoint must actually pass the flag through, not just accept it",
-      "at": "2026-08-09T00:06:39.011Z"
+      "at": "2026-08-14T22:12:22.856Z"
     }
   ],
-  "completed_at": "2026-08-09T00:06:39.022Z",
-  "git_sha": "f20b60d7ddeccd7a8ccb0a9c42cee181edb84de1",
+  "completed_at": "2026-08-14T22:12:22.864Z",
+  "git_sha": "348e2f8d67444b8566f3a27ac3a0b7fb6bed8e5f",
   "verdict": "PASS",
   "bp_sync": {
     "updated": [

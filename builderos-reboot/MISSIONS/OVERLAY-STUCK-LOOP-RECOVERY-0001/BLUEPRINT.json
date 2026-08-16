@@ -75,8 +75,8 @@
         "any site-specific logic"
       ],
       "status": "complete",
-      "completed_at": "2026-08-09T01:40:25.410Z",
-      "git_sha": "e0fef2b5b8b2a2810e272069e5c2a33f3c6476af"
+      "completed_at": "2026-08-14T22:12:23.058Z",
+      "git_sha": "348e2f8d67444b8566f3a27ac3a0b7fb6bed8e5f"
     },
     {
       "step_id": "OSL-S01b",
@@ -119,8 +119,8 @@
         "changing the risky-action or context guardrails"
       ],
       "status": "complete",
-      "completed_at": "2026-08-09T01:40:25.410Z",
-      "git_sha": "e0fef2b5b8b2a2810e272069e5c2a33f3c6476af"
+      "completed_at": "2026-08-14T22:12:23.058Z",
+      "git_sha": "348e2f8d67444b8566f3a27ac3a0b7fb6bed8e5f"
     },
     {
       "step_id": "OSL-S02",
@@ -199,8 +199,8 @@
         "changing observePage's capture logic"
       ],
       "status": "complete",
-      "completed_at": "2026-08-09T01:40:25.410Z",
-      "git_sha": "e0fef2b5b8b2a2810e272069e5c2a33f3c6476af"
+      "completed_at": "2026-08-14T22:12:23.058Z",
+      "git_sha": "348e2f8d67444b8566f3a27ac3a0b7fb6bed8e5f"
     },
     {
       "step_id": "OSL-S03",
@@ -236,13 +236,13 @@
         "changing any other browser-agent.js function"
       ],
       "status": "complete",
-      "completed_at": "2026-08-09T01:40:25.410Z",
-      "git_sha": "e0fef2b5b8b2a2810e272069e5c2a33f3c6476af"
+      "completed_at": "2026-08-14T22:12:23.058Z",
+      "git_sha": "348e2f8d67444b8566f3a27ac3a0b7fb6bed8e5f"
     }
   ],
   "blueprint_status": "complete",
-  "completed_at": "2026-08-09T01:40:25.410Z",
-  "git_sha": "e0fef2b5b8b2a2810e272069e5c2a33f3c6476af",
+  "completed_at": "2026-08-14T22:12:23.058Z",
+  "git_sha": "348e2f8d67444b8566f3a27ac3a0b7fb6bed8e5f",
   "receipt_path": "products/receipts/OVERLAY_STUCK_LOOP_RECOVERY_ACCEPTANCE.json",
   "receipt_verdict": "PASS",
   "build_method": "system-build"

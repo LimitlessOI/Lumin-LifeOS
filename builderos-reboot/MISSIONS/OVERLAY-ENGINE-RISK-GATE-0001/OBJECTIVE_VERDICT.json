@@ -1,11 +1,11 @@
 {
   "schema": "objective_verdict_v1",
-  "generated_at": "2026-08-09T00:06:39.022Z",
+  "generated_at": "2026-08-14T22:12:22.864Z",
   "objective_id": "OVERLAY-ENGINE-RISK-GATE-0001",
   "objective_name": "Overlay Engine Risk Gate",
   "verdict": "OBJECTIVE_COMPLETE",
   "receipt": "products/receipts/OVERLAY_ENGINE_RISK_GATE_ACCEPTANCE.json",
-  "git_sha": "f20b60d7ddeccd7a8ccb0a9c42cee181edb84de1",
+  "git_sha": "348e2f8d67444b8566f3a27ac3a0b7fb6bed8e5f",
   "tests_passed": [
     "core_engine_exists",
     "exports_isRiskyClick_and_patterns",

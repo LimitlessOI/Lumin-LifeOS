@@ -16,7 +16,7 @@
     {
       "step_id": "RELAY-001",
       "phase_id": "R1",
-      "title": "chatgpt-relay-service.js \u2014 task authorization + relay-turn state machine",
+      "title": "chatgpt-relay-service.js — task authorization + relay-turn state machine",
       "target_file": "services/taloa/chatgpt-relay-service.js",
       "target_files": [
         "services/taloa/chatgpt-relay-service.js"
@@ -71,12 +71,15 @@
       "dependencies": [],
       "acceptance_test_ids": [
         "AT-RELAY-001"
-      ]
+      ],
+      "status": "complete",
+      "completed_at": "2026-08-16T17:58:04.080Z",
+      "git_sha": "fe77752b5e29968a1bd37b23257420122d4cd174"
     },
     {
       "step_id": "RELAY-002",
       "phase_id": "R1",
-      "title": "db/migrations \u2014 taloa_chatgpt_relay_turns table",
+      "title": "db/migrations — taloa_chatgpt_relay_turns table",
       "target_file": "db/migrations/20260816000001_create_taloa_chatgpt_relay_turns_table.sql",
       "target_files": [
         "db/migrations/20260816000001_create_taloa_chatgpt_relay_turns_table.sql"
@@ -120,7 +123,15 @@
       "dependencies": [],
       "acceptance_test_ids": [
         "AT-RELAY-002"
-      ]
+      ],
+      "status": "complete",
+      "completed_at": "2026-08-16T17:58:04.080Z",
+      "git_sha": "fe77752b5e29968a1bd37b23257420122d4cd174"
     }
-  ]
+  ],
+  "completed_at": "2026-08-16T17:58:04.080Z",
+  "git_sha": "fe77752b5e29968a1bd37b23257420122d4cd174",
+  "receipt_path": "products/receipts/TALOA_CHATGPT_RELAY_ACCEPTANCE.json",
+  "receipt_verdict": "PASS",
+  "build_method": "system-build"
 }

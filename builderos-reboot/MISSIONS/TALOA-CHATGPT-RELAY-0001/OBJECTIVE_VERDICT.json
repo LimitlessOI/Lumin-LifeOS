@@ -1,0 +1,28 @@
+{
+  "schema": "objective_verdict_v1",
+  "generated_at": "2026-08-16T17:58:04.080Z",
+  "objective_id": "TALOA-CHATGPT-RELAY-0001",
+  "objective_name": "Taloa ChatGPT relay -- server-side orchestration",
+  "verdict": "OBJECTIVE_COMPLETE",
+  "receipt": "products/receipts/TALOA_CHATGPT_RELAY_ACCEPTANCE.json",
+  "git_sha": "fe77752b5e29968a1bd37b23257420122d4cd174",
+  "tests_passed": [
+    "RELAY-001_file_exists",
+    "RELAY-001_startRelayTask_declared",
+    "RELAY-001_recordTurn_declared",
+    "RELAY-001_getRelayState_declared",
+    "RELAY-001_authorizeAction_declared",
+    "RELAY-001_authorization_uses_envelope_verify",
+    "RELAY-001_startRelayTask_callable",
+    "RELAY-001_recordTurn_callable",
+    "RELAY-001_getRelayState_callable",
+    "RELAY-001_authorizeAction_callable",
+    "RELAY-002_file_exists",
+    "RELAY-002_creates_table",
+    "bp_sync_mandatory"
+  ],
+  "tests_failed": [],
+  "founder_usability_pass": false,
+  "acceptance_command": "node scripts/verify-chatgpt-relay-service.mjs",
+  "scope_note": "Server-side orchestration + authorization only. Native macOS UI-control code is separate, unbuilt-by-this-mission work verifiable only on a real Mac."
+}

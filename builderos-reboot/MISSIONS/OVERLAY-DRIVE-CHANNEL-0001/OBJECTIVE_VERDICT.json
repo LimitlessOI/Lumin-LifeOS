@@ -1,11 +1,11 @@
 {
   "schema": "objective_verdict_v1",
-  "generated_at": "2026-08-09T18:14:26.097Z",
+  "generated_at": "2026-08-14T22:12:23.318Z",
   "objective_id": "OVERLAY-DRIVE-CHANNEL-0001",
   "objective_name": "Overlay Drive Channel",
   "verdict": "OBJECTIVE_COMPLETE",
   "receipt": "products/receipts/OVERLAY_DRIVE_CHANNEL_ACCEPTANCE.json",
-  "git_sha": "6c05aea4fd72188b5b84120045bd75193322a9de",
+  "git_sha": "348e2f8d67444b8566f3a27ac3a0b7fb6bed8e5f",
   "tests_passed": [
     "bridge_file_exists",
     "exports_all_functions",

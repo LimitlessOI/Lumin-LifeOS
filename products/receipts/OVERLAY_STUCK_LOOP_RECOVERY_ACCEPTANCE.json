@@ -1,7 +1,7 @@
 {
   "schema": "overlay_stuck_loop_recovery_acceptance_v1",
   "mission_id": "OVERLAY-STUCK-LOOP-RECOVERY-0001",
-  "started_at": "2026-08-09T01:40:25.384Z",
+  "started_at": "2026-08-14T22:12:23.047Z",
   "tests_passed": [
     "core_engine_exists",
     "exports_fingerprintObservation",
@@ -25,8 +25,8 @@
     {
       "step": "core_engine_exists",
       "ok": true,
-      "detail": "/private/tmp/claude-501/-Users-adamhopkins-Projects-Lumin-LifeOS/b98a9c4f-30b0-4efc-94d3-7e9a8ac44905/scratchpad/v1-build-retry/services/general-browser-agent.js",
-      "at": "2026-08-09T01:40:25.385Z"
+      "detail": "/Users/adamhopkins/Projects/Lumin-LifeOS/services/general-browser-agent.js",
+      "at": "2026-08-14T22:12:23.047Z"
     },
     {
       "step": "exports_fingerprintObservation",
@@ -44,7 +44,7 @@
           "runBrowserGoal"
         ]
       },
-      "at": "2026-08-09T01:40:25.386Z"
+      "at": "2026-08-14T22:12:23.048Z"
     },
     {
       "step": "fingerprint_deterministic_same_state_same_print",
@@ -53,7 +53,7 @@
         "fp1": "https://x.com/a::A::1::a:#x",
         "fp2": "https://x.com/a::A::1::a:#x"
       },
-      "at": "2026-08-09T01:40:25.386Z"
+      "at": "2026-08-14T22:12:23.048Z"
     },
     {
       "step": "fingerprint_differs_on_different_state",
@@ -62,7 +62,7 @@
         "fp1": "https://x.com/a::A::1::a:#x",
         "fp3": "https://x.com/b::B::1::button:#y"
       },
-      "at": "2026-08-09T01:40:25.386Z"
+      "at": "2026-08-14T22:12:23.048Z"
     },
     {
       "step": "first_iteration_never_flagged_stuck",
@@ -71,7 +71,7 @@
         "stuck": false,
         "stuckCount": 0
       },
-      "at": "2026-08-09T01:40:25.387Z"
+      "at": "2026-08-14T22:12:23.048Z"
     },
     {
       "step": "repeated_identical_observation_flags_stuck_with_rising_count",
@@ -94,7 +94,7 @@
           "stuckCount": 3
         }
       ],
-      "at": "2026-08-09T01:40:25.387Z"
+      "at": "2026-08-14T22:12:23.048Z"
     },
     {
       "step": "loop_still_honestly_reports_exhaustion_not_fake_success",
@@ -148,7 +148,7 @@
         "evidence": null,
         "template": null
       },
-      "at": "2026-08-09T01:40:25.387Z"
+      "at": "2026-08-14T22:12:23.048Z"
     },
     {
       "step": "genuine_progress_never_false_positives_stuck",
@@ -158,25 +158,25 @@
         false,
         false
       ],
-      "at": "2026-08-09T01:40:25.387Z"
+      "at": "2026-08-14T22:12:23.048Z"
     },
     {
       "step": "runtime_adapter_exists",
       "ok": true,
-      "detail": "/private/tmp/claude-501/-Users-adamhopkins-Projects-Lumin-LifeOS/b98a9c4f-30b0-4efc-94d3-7e9a8ac44905/scratchpad/v1-build-retry/services/general-browser-agent-runtime.js",
-      "at": "2026-08-09T01:40:25.387Z"
+      "detail": "/Users/adamhopkins/Projects/Lumin-LifeOS/services/general-browser-agent-runtime.js",
+      "at": "2026-08-14T22:12:23.048Z"
     },
     {
       "step": "formatObservation_includes_stuck_warning",
       "ok": true,
       "detail": "must append an explicit corrective note when stuck:true",
-      "at": "2026-08-09T01:40:25.387Z"
+      "at": "2026-08-14T22:12:23.049Z"
     },
     {
       "step": "formatObservation_no_warning_when_not_stuck",
       "ok": true,
       "detail": "must not append the warning on normal turns",
-      "at": "2026-08-09T01:40:25.387Z"
+      "at": "2026-08-14T22:12:23.049Z"
     },
     {
       "step": "escalates_to_strongest_tier_first_when_meaningfully_stuck",
@@ -186,7 +186,7 @@
         "cheap2",
         "strong"
       ],
-      "at": "2026-08-09T01:40:25.387Z"
+      "at": "2026-08-14T22:12:23.050Z"
     },
     {
       "step": "normal_turns_still_try_cheapest_tier_first",
@@ -196,23 +196,23 @@
         "cheap2",
         "strong"
       ],
-      "at": "2026-08-09T01:40:25.387Z"
+      "at": "2026-08-14T22:12:23.050Z"
     },
     {
       "step": "browser_agent_exists",
       "ok": true,
-      "detail": "/private/tmp/claude-501/-Users-adamhopkins-Projects-Lumin-LifeOS/b98a9c4f-30b0-4efc-94d3-7e9a8ac44905/scratchpad/v1-build-retry/services/browser-agent.js",
-      "at": "2026-08-09T01:40:25.387Z"
+      "detail": "/Users/adamhopkins/Projects/Lumin-LifeOS/services/browser-agent.js",
+      "at": "2026-08-14T22:12:23.050Z"
     },
     {
       "step": "navigate_has_settle_delay",
       "ok": true,
       "detail": "navigate() must wait after goto() before returning",
-      "at": "2026-08-09T01:40:25.388Z"
+      "at": "2026-08-14T22:12:23.050Z"
     }
   ],
-  "completed_at": "2026-08-09T01:40:25.410Z",
-  "git_sha": "e0fef2b5b8b2a2810e272069e5c2a33f3c6476af",
+  "completed_at": "2026-08-14T22:12:23.058Z",
+  "git_sha": "348e2f8d67444b8566f3a27ac3a0b7fb6bed8e5f",
   "verdict": "PASS",
   "bp_sync": {
     "updated": [
