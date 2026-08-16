@@ -781,6 +781,48 @@ ${text.slice(0, 24000)}`;
             outcome.ok = false;
             continue;
           }
+          // sealExactChangeIntoTwin writes the authored content + the twin
+          // mutation to local disk only -- confirmed by reading it directly,
+          // no git operation anywhere in that function or in dispatchExecuteStep.
+          // commitRunner (commitToGitHub) is already threaded into this file's
+          // dispatchOptions for exactly this purpose but was never called from
+          // this loop, so a sealed, SENTRY-verified MECHANICAL-tier step had no
+          // path to actually land on main -- confirmed live 2026-08-16 dispatching
+          // TALOA-GATE-0-CLOSURE-0001's GATE0-001. Call it now with the real
+          // just-written bytes for this step's target file.
+          if (commitRunner && seal.ok && seal.target_file) {
+            try {
+              const abs = resolveRepoPath(seal.target_file);
+              const content = fs.readFileSync(abs, 'utf8');
+              const commitResult = await commitRunner(
+                seal.target_file,
+                content,
+                `GAP-FILL: ${sid} (${mission_id || twinProbe.mission_id}) -- MECHANICAL-tier ship-queue commit`,
+              );
+              const realCommitSha = commitResult?.commit_sha || commitResult?.sha || null;
+              if (realCommitSha) {
+                seal.commit_sha = realCommitSha;
+                appendHistorianRecord({
+                  type: 'exact_change_committed',
+                  mission_id: mission_id || twinProbe.mission_id,
+                  blueprint_id: blueprint_id || twinProbe.blueprint_id,
+                  step_id: sid,
+                  commit_sha: realCommitSha,
+                  trust_level: 'outcome-linked',
+                });
+              }
+            } catch (commitErr) {
+              seal.commit_error = commitErr?.message || String(commitErr);
+              appendHistorianRecord({
+                type: 'exact_change_commit_failed',
+                mission_id: mission_id || twinProbe.mission_id,
+                blueprint_id: blueprint_id || twinProbe.blueprint_id,
+                step_id: sid,
+                error: seal.commit_error,
+                trust_level: 'outcome-linked',
+              });
+            }
+          }
           seals.push(seal);
           appendHistorianRecord({
             type: 'exact_change_sealed',
