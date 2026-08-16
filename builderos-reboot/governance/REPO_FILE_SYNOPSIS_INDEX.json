@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-16T18:00:04.830Z",
+  "generated_at": "2026-08-16T23:24:43.027Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13628,
+  "file_count": 13642,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21678,9 +21678,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 4139874,
-      "mtime": "2026-08-16T05:22:28.605Z",
-      "indexed_at": "2026-08-16T05:23:00.979Z"
+      "bytes": 4147107,
+      "mtime": "2026-08-16T23:24:31.395Z",
+      "indexed_at": "2026-08-16T23:24:43.027Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -44308,6 +44308,13 @@
       "indexed_at": "2026-08-12T04:41:47.841Z"
     },
     {
+      "path": "docs/products/builderos/BUILDEROS_MASTER_BLUEPRINT_V2_2026-08-14.md",
+      "synopsis": "BuilderOS Master Blueprint V2 — Intent-to-Reality Manufacturing System",
+      "bytes": 105105,
+      "mtime": "2026-08-16T23:24:22.080Z",
+      "indexed_at": "2026-08-16T23:24:43.027Z"
+    },
+    {
       "path": "docs/products/builderos/CHAIR_RESEARCH_DIRECTIVES_2026-08-11.md",
       "synopsis": "Chair research packet + two-factory run directives, 2026-08-11, with honest build status per item.",
       "bytes": 20331,
@@ -45870,6 +45877,13 @@
       "mtime": "2026-08-07T01:06:53.397Z",
       "indexed_at": "2026-08-07T01:39:55.456Z",
       "synopsis_index_only": true
+    },
+    {
+      "path": "docs/products/lifeos/LIFEOS_MASTER_BLUEPRINT_V2_2026-08-14.md",
+      "synopsis": "LifeOS Master Blueprint V2 — Consolidated Working Blueprint",
+      "bytes": 87072,
+      "mtime": "2026-08-16T23:24:22.090Z",
+      "indexed_at": "2026-08-16T23:24:43.027Z"
     },
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
@@ -72863,6 +72877,13 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "public/overlay/routeRegistry.js",
+      "synopsis": "LifeOS overlay UI — RouteRegistry.",
+      "bytes": 504,
+      "mtime": "2026-08-14T17:30:42.228Z",
+      "indexed_at": "2026-08-16T23:24:29.278Z"
+    },
+    {
       "path": "public/overlay/sales-coaching-overlay.js",
       "synopsis": "public/overlay/sales-coaching-overlay.js",
       "bytes": 16066,
@@ -76496,6 +76517,16 @@
       "bytes": 1479,
       "mtime": "2026-08-13T02:12:42.935Z",
       "indexed_at": "2026-08-13T02:12:42.935Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "routes/taloa-overlay-host-routes.js",
+      "synopsis": "Registers TaloaOverlayHostRoutes routes/handlers (routes/taloa-overlay-host-routes.js).",
+      "bytes": 734,
+      "mtime": "2026-08-14T17:30:42.229Z",
+      "indexed_at": "2026-08-16T23:24:29.278Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
@@ -95342,6 +95373,16 @@
       ]
     },
     {
+      "path": "services/collectibles/adapters/payment-adapter.js",
+      "synopsis": "Exports createPaymentAdapterRegistry — services/collectibles/adapters/payment-adapter.js.",
+      "bytes": 2109,
+      "mtime": "2026-08-13T23:55:03.886Z",
+      "indexed_at": "2026-08-16T23:24:29.278Z",
+      "ssot": [
+        "docs/products/collectibles/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "services/collectibles/category-adapter.js",
       "synopsis": "Exports createCategoryAdapterRegistry — services/collectibles/category-adapter.js.",
       "bytes": 3063,
@@ -95357,6 +95398,16 @@
       "bytes": 4612,
       "mtime": "2026-08-14T02:53:21.053Z",
       "indexed_at": "2026-08-14T02:53:21.053Z",
+      "ssot": [
+        "docs/products/collectibles/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/collectibles/custody-workflow.js",
+      "synopsis": "Exports createCustodyWorkflow — services/collectibles/custody-workflow.js.",
+      "bytes": 6338,
+      "mtime": "2026-08-14T00:30:58.752Z",
+      "indexed_at": "2026-08-16T23:24:29.278Z",
       "ssot": [
         "docs/products/collectibles/PRODUCT_HOME.md"
       ]
@@ -95412,6 +95463,16 @@
       ]
     },
     {
+      "path": "services/collectibles/invisible-listing.js",
+      "synopsis": "Exports createInvisibleListingService — services/collectibles/invisible-listing.js.",
+      "bytes": 2984,
+      "mtime": "2026-08-13T23:36:04.084Z",
+      "indexed_at": "2026-08-16T23:24:29.278Z",
+      "ssot": [
+        "docs/products/collectibles/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "services/collectibles/local-discovery.js",
       "synopsis": "Exports createLocalDiscoveryService — services/collectibles/local-discovery.js.",
       "bytes": 3400,
@@ -95443,6 +95504,16 @@
       ]
     },
     {
+      "path": "services/collectibles/offer-inbox.js",
+      "synopsis": "Exports createOfferInboxService — services/collectibles/offer-inbox.js.",
+      "bytes": 5161,
+      "mtime": "2026-08-13T23:36:04.084Z",
+      "indexed_at": "2026-08-16T23:24:29.278Z",
+      "ssot": [
+        "docs/products/collectibles/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "services/collectibles/opportunity-engine.js",
       "synopsis": "Exports createOpportunityEngine — services/collectibles/opportunity-engine.js.",
       "bytes": 3057,
@@ -95468,6 +95539,16 @@
       "bytes": 3941,
       "mtime": "2026-08-14T02:37:49.262Z",
       "indexed_at": "2026-08-14T02:37:49.262Z",
+      "ssot": [
+        "docs/products/collectibles/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/collectibles/reveal-studio.js",
+      "synopsis": "Exports createRevealStudio — services/collectibles/reveal-studio.js.",
+      "bytes": 6765,
+      "mtime": "2026-08-14T00:30:58.752Z",
+      "indexed_at": "2026-08-16T23:24:29.278Z",
       "ssot": [
         "docs/products/collectibles/PRODUCT_HOME.md"
       ]
@@ -95504,11 +95585,31 @@
       ]
     },
     {
+      "path": "services/collectibles/tabletop-runtime.js",
+      "synopsis": "Exports createTabletopRuntime — services/collectibles/tabletop-runtime.js.",
+      "bytes": 4232,
+      "mtime": "2026-08-14T00:30:58.752Z",
+      "indexed_at": "2026-08-16T23:24:29.278Z",
+      "ssot": [
+        "docs/products/collectibles/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "services/collectibles/tournament-engine.js",
       "synopsis": "Exports createTournamentEngine — services/collectibles/tournament-engine.js.",
       "bytes": 3327,
       "mtime": "2026-08-14T02:28:24.073Z",
       "indexed_at": "2026-08-14T02:28:24.073Z",
+      "ssot": [
+        "docs/products/collectibles/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/collectibles/transaction-service.js",
+      "synopsis": "Exports createTransactionService — services/collectibles/transaction-service.js.",
+      "bytes": 15059,
+      "mtime": "2026-08-13T23:55:03.887Z",
+      "indexed_at": "2026-08-16T23:24:29.278Z",
       "ssot": [
         "docs/products/collectibles/PRODUCT_HOME.md"
       ]
@@ -95539,6 +95640,16 @@
       "bytes": 3711,
       "mtime": "2026-08-14T02:54:23.380Z",
       "indexed_at": "2026-08-14T02:54:23.380Z",
+      "ssot": [
+        "docs/products/collectibles/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/collectibles/want-graph.js",
+      "synopsis": "Exports createWantGraphService — services/collectibles/want-graph.js.",
+      "bytes": 7356,
+      "mtime": "2026-08-13T23:36:04.084Z",
+      "indexed_at": "2026-08-16T23:24:29.278Z",
       "ssot": [
         "docs/products/collectibles/PRODUCT_HOME.md"
       ]
@@ -105589,6 +105700,13 @@
       "indexed_at": "2026-08-14T04:18:32.151Z"
     },
     {
+      "path": "tests/collectibles-v2-acceptance.test.js",
+      "synopsis": "In a real scenario, these would be proper imports from your application's modules.",
+      "bytes": 8691,
+      "mtime": "2026-08-13T23:55:03.887Z",
+      "indexed_at": "2026-08-16T23:24:29.278Z"
+    },
+    {
       "path": "tests/collectibles-v3-acceptance.test.js",
       "synopsis": "Mock adapters to prevent actual external calls",
       "bytes": 11207,
@@ -105608,6 +105726,13 @@
       "bytes": 4260,
       "mtime": "2026-08-14T00:20:22.320Z",
       "indexed_at": "2026-08-14T00:20:22.320Z"
+    },
+    {
+      "path": "tests/collectibles-v6-acceptance.test.js",
+      "synopsis": "Test utilities",
+      "bytes": 7983,
+      "mtime": "2026-08-14T00:30:58.753Z",
+      "indexed_at": "2026-08-16T23:24:29.278Z"
     },
     {
       "path": "tests/collectibles-v7-acceptance.test.js",
