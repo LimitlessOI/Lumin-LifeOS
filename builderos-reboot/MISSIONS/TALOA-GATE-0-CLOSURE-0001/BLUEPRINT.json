@@ -1,10 +1,12 @@
 {
   "mission_id": "TALOA-GATE-0-CLOSURE-0001",
   "blueprint_id": "TALOA-GATE-0-CLOSURE-0001-BP1",
-  "scope": "Close blueprint §45a Gate 0 (TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md:780-792). Gate 0 sits before any Body (including a future ChatGPT relay Body) may be granted broader authority. Checked live against code on 2026-08-15: 2 of 7 remediation items are closed (DeviceRegistry is a real store via services/taloa/capability-registry-service.js; secret scanners are wired into githooks/pre-commit). This mission closes the remaining 4 code-level items. Item 1 (rotate COMMAND_CENTER_KEY) is intentionally excluded from this mission — it is a live production secret change, tracked separately in FOUNDER_PACKET.md as a founder-confirmed manual action, not auto-dispatched.",
+  "scope": "Close blueprint \u00a745a Gate 0 (TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md:780-792). Gate 0 sits before any Body (including a future ChatGPT relay Body) may be granted broader authority. Checked live against code on 2026-08-15: 2 of 7 remediation items are closed (DeviceRegistry is a real store via services/taloa/capability-registry-service.js; secret scanners are wired into githooks/pre-commit). This mission closes the remaining 4 code-level items. Item 1 (rotate COMMAND_CENTER_KEY) is intentionally excluded from this mission \u2014 it is a live production secret change, tracked separately in FOUNDER_PACKET.md as a founder-confirmed manual action, not auto-dispatched.",
   "authority": "BPB",
   "acceptance_command": "node scripts/verify-gate0-closure.mjs",
-  "allowed_action_types": ["author_then_write"],
+  "allowed_action_types": [
+    "author_then_write"
+  ],
   "blueprint_status": "complete",
   "derived_from": {
     "sealed_blueprint": "docs/products/universal-overlay/TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md",
@@ -17,44 +19,81 @@
       "phase_id": "G0",
       "title": "Extend services/taloa/task-authorization-envelope.js with a verify method",
       "target_file": "services/taloa/task-authorization-envelope.js",
-      "target_files": ["services/taloa/task-authorization-envelope.js"],
+      "target_files": [
+        "services/taloa/task-authorization-envelope.js"
+      ],
       "action_type": "author_then_write",
       "patch_mode": true,
-      "task": "The file already exports createTaskAuthorizationEnvelope({ pool, logger }) returning { create(agentId, taskId, envelopeData, metadata) }, which INSERTs into agent_task_authority and returns the new id. Add exactly one new method to the returned object: verify(agentId, taskId, requiredScope). It must SELECT the most recent row from agent_task_authority WHERE agent_id = $1 AND task_id = $2, and return a plain object { authorized: boolean, reason: string, envelope_id: string|null }. authorized is true only if: a row exists; envelope_data.scope (JSONB field) includes requiredScope or equals '*'; and envelope_data.expires_at (ISO string, if present) is either absent or in the future relative to `new Date()`. Every rejection path (no row, scope mismatch, expired) must set a distinct, specific reason string — never a generic 'unauthorized'. Do not modify the existing create method. Do not add any new npm dependency. Do not touch any file other than the target file.",
+      "task": "The file already exports createTaskAuthorizationEnvelope({ pool, logger }) returning { create(agentId, taskId, envelopeData, metadata) }, which INSERTs into agent_task_authority and returns the new id. Add exactly one new method to the returned object: verify(agentId, taskId, requiredScope). It must SELECT the most recent row from agent_task_authority WHERE agent_id = $1 AND task_id = $2, and return a plain object { authorized: boolean, reason: string, envelope_id: string|null }. authorized is true only if: a row exists; envelope_data.scope (JSONB field) includes requiredScope or equals '*'; and envelope_data.expires_at (ISO string, if present) is either absent or in the future relative to `new Date()`. Every rejection path (no row, scope mismatch, expired) must set a distinct, specific reason string \u2014 never a generic 'unauthorized'. Do not modify the existing create method. Do not add any new npm dependency. Do not touch any file other than the target file.",
       "assertion_spec": {
-        "expected_exports": ["createTaskAuthorizationEnvelope"],
-        "file_contains": ["verify", "agent_task_authority", "authorized", "reason"]
+        "expected_exports": [
+          "createTaskAuthorizationEnvelope"
+        ],
+        "file_contains": [
+          "verify",
+          "agent_task_authority",
+          "authorized",
+          "reason"
+        ]
       },
       "behavior_assertions": [
-        { "type": "exports_smoke", "target": "services/taloa/task-authorization-envelope.js" },
-        { "type": "file_contains", "target": "services/taloa/task-authorization-envelope.js", "substring": "verify" },
-        { "type": "file_contains", "target": "services/taloa/task-authorization-envelope.js", "substring": "authorized" }
+        {
+          "type": "exports_smoke",
+          "target": "services/taloa/task-authorization-envelope.js"
+        },
+        {
+          "type": "file_contains",
+          "target": "services/taloa/task-authorization-envelope.js",
+          "substring": "verify"
+        },
+        {
+          "type": "file_contains",
+          "target": "services/taloa/task-authorization-envelope.js",
+          "substring": "authorized"
+        }
       ],
       "sandbox_boundary": "services/taloa/**",
       "authority_owner": "BPB",
       "on_block": "BLOCKED_RETURN_TO_BPB",
       "non_goals": [
         "Do not modify any file other than the target file.",
-        "Do not widen any Body's authority — this step only adds a check, it grants nothing."
+        "Do not widen any Body's authority \u2014 this step only adds a check, it grants nothing."
       ],
       "dependencies": [],
-      "acceptance_test_ids": ["AT-GATE0-001"]
+      "acceptance_test_ids": [
+        "AT-GATE0-001"
+      ],
+      "spec": "{\"step_id\": \"GATE0-001\", \"purpose\": \"Add verify(agentId, taskId, requiredScope) to the already-built createTaskAuthorizationEnvelope service, so a real envelope check replaces bare-boolean authority claims.\", \"sealed_contract\": {\"tables\": [], \"exports\": [\"createTaskAuthorizationEnvelope\"], \"ai_calls\": [], \"endpoints\": [], \"test_assertions\": [\"verify is callable\", \"authorized field present\", \"reason field present\"], \"factory_signature\": \"export const createTaskAuthorizationEnvelope = ({ pool, logger })\"}, \"ssot_tag\": \"docs/products/universal-overlay/PRODUCT_HOME.md\", \"amended_by\": \"conductor_gate0_remediation\"}"
     },
     {
       "step_id": "GATE0-002",
       "phase_id": "G0",
       "title": "Gate general-browser-agent-routes.js payment/vault authority on a real Task Authorization Envelope",
       "target_file": "routes/general-browser-agent-routes.js",
-      "target_files": ["routes/general-browser-agent-routes.js"],
+      "target_files": [
+        "routes/general-browser-agent-routes.js"
+      ],
       "action_type": "author_then_write",
       "patch_mode": true,
-      "task": "Today, POST /api/v1/browser-agent/signup and /signup/sync (lines ~621-680) derive founderAuthority from a bare client-supplied boolean: body.founder_authority === true || body.founderAuthority === true — this is Gate 0 item 6, the exact 'confused deputy' liability named in blueprint §57: any caller holding the shared COMMAND_CENTER_KEY can self-declare full vault/payment authority in the request body with zero independent confirmation. Fix: import createTaskAuthorizationEnvelope from ../services/taloa/task-authorization-envelope.js, construct it once with the existing pool/logger already in scope in this file, and in both routes, when the caller claims founder_authority/founderAuthority true, call envelope.verify(agentId, taskId, 'vault_payment') before honoring it — agentId and taskId should come from body.agentId/body.taskId if present, else a stable literal like 'unscoped-caller' and the route path, so unscoped callers cannot forge a scope they don't have. Only set the effective founderAuthority flag used later in the function to true if verify() returns authorized: true; otherwise treat the request exactly as if founder_authority had been omitted (i.e. it still proceeds up to the existing payment-consent stop, it just does not get vault authority from an unverified claim), and log the specific reason from verify() at logger.warn. Do not remove or weaken the existing requireKey middleware — this is an additional check, not a replacement for it. Do not touch any file other than the target file.",
+      "task": "Today, POST /api/v1/browser-agent/signup and /signup/sync (lines ~621-680) derive founderAuthority from a bare client-supplied boolean: body.founder_authority === true || body.founderAuthority === true \u2014 this is Gate 0 item 6, the exact 'confused deputy' liability named in blueprint \u00a757: any caller holding the shared COMMAND_CENTER_KEY can self-declare full vault/payment authority in the request body with zero independent confirmation. Fix: import createTaskAuthorizationEnvelope from ../services/taloa/task-authorization-envelope.js, construct it once with the existing pool/logger already in scope in this file, and in both routes, when the caller claims founder_authority/founderAuthority true, call envelope.verify(agentId, taskId, 'vault_payment') before honoring it \u2014 agentId and taskId should come from body.agentId/body.taskId if present, else a stable literal like 'unscoped-caller' and the route path, so unscoped callers cannot forge a scope they don't have. Only set the effective founderAuthority flag used later in the function to true if verify() returns authorized: true; otherwise treat the request exactly as if founder_authority had been omitted (i.e. it still proceeds up to the existing payment-consent stop, it just does not get vault authority from an unverified claim), and log the specific reason from verify() at logger.warn. Do not remove or weaken the existing requireKey middleware \u2014 this is an additional check, not a replacement for it. Do not touch any file other than the target file.",
       "assertion_spec": {
-        "file_contains": ["task-authorization-envelope", "verify(", "authorized"]
+        "file_contains": [
+          "task-authorization-envelope",
+          "verify(",
+          "authorized"
+        ]
       },
       "behavior_assertions": [
-        { "type": "file_contains", "target": "routes/general-browser-agent-routes.js", "substring": "task-authorization-envelope" },
-        { "type": "file_contains", "target": "routes/general-browser-agent-routes.js", "substring": "verify(" }
+        {
+          "type": "file_contains",
+          "target": "routes/general-browser-agent-routes.js",
+          "substring": "task-authorization-envelope"
+        },
+        {
+          "type": "file_contains",
+          "target": "routes/general-browser-agent-routes.js",
+          "substring": "verify("
+        }
       ],
       "sandbox_boundary": "routes/general-browser-agent-routes.js",
       "authority_owner": "BPB",
@@ -64,25 +103,47 @@
         "Do not remove the existing requireKey gate.",
         "Do not change the dryRun or recipe-based signup paths."
       ],
-      "dependencies": ["GATE0-001"],
-      "acceptance_test_ids": ["AT-GATE0-002"]
+      "dependencies": [
+        "GATE0-001"
+      ],
+      "acceptance_test_ids": [
+        "AT-GATE0-002"
+      ],
+      "spec": "{\"step_id\": \"GATE0-002\", \"purpose\": \"Gate general-browser-agent-routes.js vault/payment authority on task-authorization-envelope.verify() instead of a bare client-supplied boolean.\", \"sealed_contract\": {\"tables\": [], \"exports\": [], \"ai_calls\": [], \"endpoints\": [\"/api/v1/browser-agent/signup\", \"/api/v1/browser-agent/signup/sync\"], \"test_assertions\": [\"imports task-authorization-envelope\", \"calls verify(\"], \"factory_signature\": \"\"}, \"ssot_tag\": \"docs/products/universal-overlay/PRODUCT_HOME.md\", \"amended_by\": \"conductor_gate0_remediation\"}"
     },
     {
       "step_id": "GATE0-003",
       "phase_id": "G0",
       "title": "Per-Body-scoped credentials on top of the existing DeviceRegistry",
       "target_file": "services/taloa/capability-registry-service.js",
-      "target_files": ["services/taloa/capability-registry-service.js"],
+      "target_files": [
+        "services/taloa/capability-registry-service.js"
+      ],
       "action_type": "author_then_write",
       "patch_mode": true,
-      "task": "The file already exports createCapabilityRegistryService({ pool, logger }) with reportCapabilities and getCapabilities, both keyed on the real overlay_devices table (device_key column). Today every Body still authenticates to general-browser-agent-routes.js and taloa-overlay-host-routes.js with the same single COMMAND_CENTER_KEY (Gate 0 item 2 — no per-Body scoping exists). Add exactly two new methods to the returned object: issueBodyToken(device_key, scopes) and verifyBodyToken(device_key, token, requiredScope). issueBodyToken must reject if device_key is not already present in overlay_devices (a Body must register via reportCapabilities before it can be issued a token — do not auto-create rows here), generate a random token via node:crypto randomBytes(32).toString('hex'), UPDATE overlay_devices SET capabilities = jsonb_set(capabilities, '{auth_token}', to_jsonb(token::text)) and also store scopes the same way under '{auth_scopes}', and return the token. verifyBodyToken must SELECT capabilities FROM overlay_devices WHERE device_key = $1, compare the stored auth_token to the supplied token with a constant-time comparison (node:crypto timingSafeEqual on equal-length buffers, treating any length mismatch as a mismatch rather than throwing), and return { authorized: boolean, reason: string }, checking requiredScope is present in the stored auth_scopes array (or auth_scopes contains '*'). Use only node builtins and the injected pool/logger — no new npm dependency. Do not modify reportCapabilities or getCapabilities. Do not touch any file other than the target file.",
+      "task": "The file already exports createCapabilityRegistryService({ pool, logger }) with reportCapabilities and getCapabilities, both keyed on the real overlay_devices table (device_key column). Today every Body still authenticates to general-browser-agent-routes.js and taloa-overlay-host-routes.js with the same single COMMAND_CENTER_KEY (Gate 0 item 2 \u2014 no per-Body scoping exists). Add exactly two new methods to the returned object: issueBodyToken(device_key, scopes) and verifyBodyToken(device_key, token, requiredScope). issueBodyToken must reject if device_key is not already present in overlay_devices (a Body must register via reportCapabilities before it can be issued a token \u2014 do not auto-create rows here), generate a random token via node:crypto randomBytes(32).toString('hex'), UPDATE overlay_devices SET capabilities = jsonb_set(capabilities, '{auth_token}', to_jsonb(token::text)) and also store scopes the same way under '{auth_scopes}', and return the token. verifyBodyToken must SELECT capabilities FROM overlay_devices WHERE device_key = $1, compare the stored auth_token to the supplied token with a constant-time comparison (node:crypto timingSafeEqual on equal-length buffers, treating any length mismatch as a mismatch rather than throwing), and return { authorized: boolean, reason: string }, checking requiredScope is present in the stored auth_scopes array (or auth_scopes contains '*'). Use only node builtins and the injected pool/logger \u2014 no new npm dependency. Do not modify reportCapabilities or getCapabilities. Do not touch any file other than the target file.",
       "assertion_spec": {
-        "file_contains": ["issueBodyToken", "verifyBodyToken", "timingSafeEqual"]
+        "file_contains": [
+          "issueBodyToken",
+          "verifyBodyToken",
+          "timingSafeEqual"
+        ]
       },
       "behavior_assertions": [
-        { "type": "exports_smoke", "target": "services/taloa/capability-registry-service.js" },
-        { "type": "file_contains", "target": "services/taloa/capability-registry-service.js", "substring": "issueBodyToken" },
-        { "type": "file_contains", "target": "services/taloa/capability-registry-service.js", "substring": "verifyBodyToken" }
+        {
+          "type": "exports_smoke",
+          "target": "services/taloa/capability-registry-service.js"
+        },
+        {
+          "type": "file_contains",
+          "target": "services/taloa/capability-registry-service.js",
+          "substring": "issueBodyToken"
+        },
+        {
+          "type": "file_contains",
+          "target": "services/taloa/capability-registry-service.js",
+          "substring": "verifyBodyToken"
+        }
       ],
       "sandbox_boundary": "services/taloa/**",
       "authority_owner": "BPB",
@@ -93,23 +154,39 @@
         "Do not auto-register a device_key that hasn't reported capabilities first."
       ],
       "dependencies": [],
-      "acceptance_test_ids": ["AT-GATE0-003"]
+      "acceptance_test_ids": [
+        "AT-GATE0-003"
+      ],
+      "spec": "{\"step_id\": \"GATE0-003\", \"purpose\": \"Add issueBodyToken/verifyBodyToken to capability-registry-service.js on top of the existing overlay_devices DeviceRegistry, for per-Body-scoped credentials.\", \"sealed_contract\": {\"tables\": [], \"exports\": [\"createCapabilityRegistryService\"], \"ai_calls\": [], \"endpoints\": [], \"test_assertions\": [\"issueBodyToken is callable\", \"verifyBodyToken is callable\"], \"factory_signature\": \"export function createCapabilityRegistryService({ pool, logger })\"}, \"ssot_tag\": \"docs/products/universal-overlay/PRODUCT_HOME.md\", \"amended_by\": \"conductor_gate0_remediation\"}"
     },
     {
       "step_id": "GATE0-004",
       "phase_id": "G0",
       "title": "Replay protection on the shared command-key transport",
       "target_file": "routes/general-browser-agent-routes.js",
-      "target_files": ["routes/general-browser-agent-routes.js"],
+      "target_files": [
+        "routes/general-browser-agent-routes.js"
+      ],
       "action_type": "author_then_write",
       "patch_mode": true,
-      "task": "requireKey (defined in this file around line 377, reading process.env.COMMAND_CENTER_KEY / LIFEOS_COMMAND_KEY) currently only checks the key value — a captured request with a valid key can be replayed indefinitely (Gate 0 item 5, no replay protection exists). Add nonce + timestamp replay protection to requireKey without changing its exported shape or call sites: require two additional headers on every request it gates, x-taloa-nonce and x-taloa-timestamp; reject with 401 if timestamp is missing, is not a valid integer, or differs from Date.now() by more than 120000ms in either direction; maintain an in-process Map of seen nonces to expiry (module-level, not exported), reject with 401 if the nonce has been seen before within the last 120000ms, otherwise record it and prune entries older than 120000ms on every call (no setInterval, no timers started at import — prune lazily on each request). Do not add a database table for this — in-process is sufficient because this guards a single-instance command surface, and the existing 120-second timestamp window already bounds the memory growth. Do not touch any file other than the target file. Do not change requireKey's existing key-comparison logic, only add to it.",
+      "task": "requireKey (defined in this file around line 377, reading process.env.COMMAND_CENTER_KEY / LIFEOS_COMMAND_KEY) currently only checks the key value \u2014 a captured request with a valid key can be replayed indefinitely (Gate 0 item 5, no replay protection exists). Add nonce + timestamp replay protection to requireKey without changing its exported shape or call sites: require two additional headers on every request it gates, x-taloa-nonce and x-taloa-timestamp; reject with 401 if timestamp is missing, is not a valid integer, or differs from Date.now() by more than 120000ms in either direction; maintain an in-process Map of seen nonces to expiry (module-level, not exported), reject with 401 if the nonce has been seen before within the last 120000ms, otherwise record it and prune entries older than 120000ms on every call (no setInterval, no timers started at import \u2014 prune lazily on each request). Do not add a database table for this \u2014 in-process is sufficient because this guards a single-instance command surface, and the existing 120-second timestamp window already bounds the memory growth. Do not touch any file other than the target file. Do not change requireKey's existing key-comparison logic, only add to it.",
       "assertion_spec": {
-        "file_contains": ["x-taloa-nonce", "x-taloa-timestamp"]
+        "file_contains": [
+          "x-taloa-nonce",
+          "x-taloa-timestamp"
+        ]
       },
       "behavior_assertions": [
-        { "type": "file_contains", "target": "routes/general-browser-agent-routes.js", "substring": "x-taloa-nonce" },
-        { "type": "file_contains", "target": "routes/general-browser-agent-routes.js", "substring": "x-taloa-timestamp" }
+        {
+          "type": "file_contains",
+          "target": "routes/general-browser-agent-routes.js",
+          "substring": "x-taloa-nonce"
+        },
+        {
+          "type": "file_contains",
+          "target": "routes/general-browser-agent-routes.js",
+          "substring": "x-taloa-timestamp"
+        }
       ],
       "sandbox_boundary": "routes/general-browser-agent-routes.js",
       "authority_owner": "BPB",
@@ -119,8 +196,13 @@
         "Do not change the existing key-value comparison.",
         "Do not add a new npm dependency or a database table."
       ],
-      "dependencies": ["GATE0-002"],
-      "acceptance_test_ids": ["AT-GATE0-004"]
+      "dependencies": [
+        "GATE0-002"
+      ],
+      "acceptance_test_ids": [
+        "AT-GATE0-004"
+      ],
+      "spec": "{\"step_id\": \"GATE0-004\", \"purpose\": \"Add nonce+timestamp replay protection to the shared command-key middleware in general-browser-agent-routes.js.\", \"sealed_contract\": {\"tables\": [], \"exports\": [], \"ai_calls\": [], \"endpoints\": [], \"test_assertions\": [\"x-taloa-nonce header checked\", \"x-taloa-timestamp header checked\"], \"factory_signature\": \"\"}, \"ssot_tag\": \"docs/products/universal-overlay/PRODUCT_HOME.md\", \"amended_by\": \"conductor_gate0_remediation\"}"
     }
   ]
 }
