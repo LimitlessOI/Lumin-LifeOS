@@ -528,6 +528,27 @@ The cross-blueprint contract must survive these adversarial journeys:
 
 ## 8. Current reality and critical gaps — refreshed 2026-08-16
 
+### Tonight reality check — CURRENT REALITY
+
+- Universal Overlay remains **0 of 7 versions independently proven**. Existing files, component receipts, queue rows, server scaffolding, or Gate 0 controls cannot increment a version count without that version's authentic front-door acceptance contract.
+- GATE0-001 is now a real component closure. Commit `f7223d878cd8ba09a334ee2cca92ef00848537f9` adds callable `verify(agentId, taskId, requiredScope)` behavior to `services/taloa/task-authorization-envelope.js`, checking the latest matching envelope and returning distinct absent, scope-mismatch, expired, or authorized results. It landed only after the governed factory's MECHANICAL commit gap was repaired in `routes/factory-mount-routes.js` at `5ec5acc8d1fa761b52d19f085682b316e2392633`.
+- Gate 0 is **not** complete. Of the seven remediation obligations currently tracked, DeviceRegistry, secret-scanner/pre-commit wiring, and GATE0-001 are closed. Vault/payment route wiring to the envelope, per-Body scoped credentials, replay protection, and production shared-key rotation remain open. The three remaining code items are not yet dispatched; rotation remains a separate authorized operational action.
+- The aggregate `TALOA_GATE_0_CLOSURE_ACCEPTANCE.json` still records the earlier full-mission FAIL. That stale aggregate receipt does not negate GATE0-001's component proof, but no component proof may be promoted into aggregate Gate 0 PASS. The full verifier and receipt must be refreshed only after every prerequisite is implemented, reachable, behaviorally attacked, and independently verified.
+- `services/taloa/chatgpt-relay-service.js` and `db/migrations/20260816000001_create_taloa_chatgpt_relay_turns_table.sql` are real server-side construction. `TALOA-CHATGPT-RELAY-0001` passed 13/13 structural/callability checks at `fe77752b5e29968a1bd37b23257420122d4cd174` and is registered in `BP_PRIORITY.json`. The proven surface starts authorized relay tasks, records/retrieves turns, and calls `envelope.verify()` for action authorization.
+- This relay evidence is intentionally bounded: it does not prove native macOS Accessibility control, authenticated Chrome operation, correct account/tab/thread/composer binding, actual send/read/continue/upload behavior, Capsule recovery under UI drift, production reachability, or Founder usability.
+
+### Relay trust boundary — ESTABLISHED
+
+Conversation and page content are observed data, never authority. A ChatGPT response, hostile page instruction, transcript, turn-ledger row, DOM observation, Capsule mapping, model recommendation, verifier result, or inferred Founder preference cannot create, widen, renew, or transfer permission. Authorization comes only from a valid, current, founder-originated Task Authorization Envelope bound to the intended principal, Body, task, action type, target/scope, expiry, replay state, and revocation state.
+
+The relay must enforce the requested `actionType`; a valid `chatgpt_relay` envelope is not blanket permission for uploads, external sends, account changes, purchases, vault access, or any other consequential operation. Relay-state persistence records what was observed and attempted; it never widens scope. Capsule mappings may help locate controls but cannot certify identity, destination, consent, success, or safety. Before every consequential transition, the authentic Taloa Body must bind the visible account, tab, thread, composer/control, intended content, and current authorization; after action it must independently verify the before/after effect. Low confidence, stale Capsule state, login expiry, wrong destination, UI drift, revocation, replay, or prompt-injection conflict fails closed or enters an explicit recovery path.
+
+Only authoritative runtime evidence proving that Taloa—not Codex, SENTRY, the verifier, or a test harness—performed the real visible action can satisfy the product predicate. Server-side callability, a passing receipt, or another agent controlling its own browser cannot substitute for that front-door proof.
+
+### Explicit non-changes in this refresh
+
+This evidence refresh does **not** change the LifeOS product intention, Taloa/Digital Imprint target terminology, human-sovereignty and consent boundaries, L0–L7 version definitions, acceptance contract, or BuilderOS cross-contract. It does not mark Gate 0 complete, authorize broader Overlay action, count GATE0-001 as an Overlay version, claim the ChatGPT relay works end to end, close any of the seven Overlay versions, or promote implementation evidence into Founder/product authority. V0 read-only comprehension may still be proven independently, but it cannot grant mutation authority; complete Gate 0 may make later action eligible, but it cannot itself accept a product version.
+
 ### CURRENT REALITY
 
 - The repository contains real communication, memory, Cognitive Core, overlay, and product services, but wiring and reachability vary by feature.
