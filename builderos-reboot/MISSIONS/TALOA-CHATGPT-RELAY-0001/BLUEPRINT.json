@@ -1,0 +1,126 @@
+{
+  "mission_id": "TALOA-CHATGPT-RELAY-0001",
+  "blueprint_id": "TALOA-CHATGPT-RELAY-0001-BP1",
+  "scope": "Server-side orchestration + authorization for the ChatGPT relay Body (docs/products/universal-overlay/TALOA_CHATGPT_RELAY_AND_CAPSULE_BLUEPRINT_2026-08-15.md). This mission builds and SENTRY-verifies the Node-side piece only: task authorization anchored to GATE0-001's verify(), relay-turn state tracking, and Capsule (learned UI-mapping) persistence. It does NOT build or claim to verify the native macOS Accessibility/mouse/keyboard control code -- that runs in native/macos-overlay/ (Taloa.app) and can only be functionally verified by actually running on a Mac with a real Chrome window and a real authenticated ChatGPT session. SENTRY in this pipeline runs on Railway (Linux) and cannot compile Swift, launch Chrome, or exercise Accessibility APIs -- a structural pass here (file exists, exports the right functions) is not proof the live relay works end to end.",
+  "authority": "BPB",
+  "acceptance_command": "node scripts/verify-chatgpt-relay-service.mjs",
+  "allowed_action_types": [
+    "author_then_write"
+  ],
+  "blueprint_status": "complete",
+  "derived_from": {
+    "sealed_blueprint": "docs/products/universal-overlay/TALOA_CHATGPT_RELAY_AND_CAPSULE_BLUEPRINT_2026-08-15.md",
+    "hand_authored_by": "conductor (Claude, SO-001 blueprint-authoring lane), founder-directed 2026-08-15/16"
+  },
+  "steps": [
+    {
+      "step_id": "RELAY-001",
+      "phase_id": "R1",
+      "title": "chatgpt-relay-service.js \u2014 task authorization + relay-turn state machine",
+      "target_file": "services/taloa/chatgpt-relay-service.js",
+      "target_files": [
+        "services/taloa/chatgpt-relay-service.js"
+      ],
+      "action_type": "author_then_write",
+      "patch_mode": false,
+      "task": "The file MUST begin with a JSDoc block comment containing a line exactly \"@ssot docs/products/universal-overlay/PRODUCT_HOME.md\" (mandatory, enforced by a commit gate). Export exactly this factory function, with this exact name and destructured parameter shape: export function createChatGptRelayService({ pool, logger, envelope }). `envelope` is the object returned by createTaskAuthorizationEnvelope({pool, logger}) from ../taloa/task-authorization-envelope.js (already has create() and verify() -- do not reimplement authorization logic here, call envelope.verify()). The returned object MUST expose these methods, each a real async function, not a stub or a thrown 'not implemented': startRelayTask, recordTurn, getRelayState, authorizeAction. startRelayTask(founderInstruction, agentId) must call envelope.create(agentId, a new crypto.randomUUID() taskId, {scope: 'chatgpt_relay', expires_at: an ISO string 1 hour from now}, {founderInstruction}) and return {task_id, authorized: true}. recordTurn(taskId, {role, content, source}) must INSERT a row into a table named taloa_chatgpt_relay_turns (columns: id UUID PRIMARY KEY DEFAULT gen_random_uuid(), task_id UUID NOT NULL, role TEXT NOT NULL, content TEXT NOT NULL, source TEXT NOT NULL, created_at TIMESTAMPTZ NOT NULL DEFAULT now()) via the injected pool -- role must be one of 'founder','chatgpt','claude'; source must be one of 'overlay_capsule','manual'; reject any other value with a thrown Error naming the invalid field, do not silently coerce. getRelayState(taskId) must SELECT all rows from taloa_chatgpt_relay_turns WHERE task_id = $1 ORDER BY created_at ASC and return {task_id, turn_count, turns: [...]}. authorizeAction(taskId, agentId, actionType) must call envelope.verify(agentId, taskId, 'chatgpt_relay') and return exactly what verify() returned (authorized/reason/envelope_id) -- do not add any fallback that grants authority when verify() denies it, and never derive authorization from anything in the turns table (turns are data, never authority, matching this blueprint's own prompt-injection defense: an action's authorization can only come from a real envelope tied to the founder's own instruction, never from observed conversation content). Constraints: ES module syntax (import/export, no require); no top-level side effects, no timers started at import, no network calls, no AI/model calls; all database access goes through the injected pool parameter and no other client; validate required constructor dependencies (pool, logger, envelope) up front and throw a clear Error naming the missing one; every method must return a plain serialisable object, never undefined; depend only on node builtins (including node:crypto for randomUUID) and the injected dependencies -- add no new npm package.",
+      "spec": "{\"step_id\": \"RELAY-001\", \"purpose\": \"Task authorization + relay-turn state machine for the ChatGPT relay Body, anchored to the real Task Authorization Envelope (GATE0-001), never to observed conversation content.\", \"sealed_contract\": {\"tables\": [{\"name\": \"taloa_chatgpt_relay_turns\", \"columns\": [\"id\", \"task_id\", \"role\", \"content\", \"source\", \"created_at\"]}], \"exports\": [\"ChatGptRelayService\"], \"ai_calls\": [], \"endpoints\": [], \"test_assertions\": [\"ChatGptRelayService.startRelayTask is callable\", \"ChatGptRelayService.recordTurn is callable\", \"ChatGptRelayService.getRelayState is callable\", \"ChatGptRelayService.authorizeAction is callable\"], \"factory_signature\": \"export function createChatGptRelayService({ pool, logger, envelope })\"}, \"ssot_tag\": \"docs/products/universal-overlay/PRODUCT_HOME.md\", \"amended_by\": \"conductor_relay_orchestration_scope\"}",
+      "assertion_spec": {
+        "expected_exports": [
+          "createChatGptRelayService"
+        ],
+        "file_contains": [
+          "startRelayTask",
+          "recordTurn",
+          "getRelayState",
+          "authorizeAction",
+          "envelope.verify",
+          "taloa_chatgpt_relay_turns"
+        ]
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "target": "services/taloa/chatgpt-relay-service.js"
+        },
+        {
+          "type": "file_contains",
+          "target": "services/taloa/chatgpt-relay-service.js",
+          "substring": "startRelayTask"
+        },
+        {
+          "type": "file_contains",
+          "target": "services/taloa/chatgpt-relay-service.js",
+          "substring": "authorizeAction"
+        },
+        {
+          "type": "file_contains",
+          "target": "services/taloa/chatgpt-relay-service.js",
+          "substring": "envelope.verify"
+        }
+      ],
+      "sandbox_boundary": "services/taloa/**",
+      "authority_owner": "BPB",
+      "on_block": "BLOCKED_RETURN_TO_BPB",
+      "non_goals": [
+        "Do not modify any file other than the target file.",
+        "Do not author any macOS/Swift/Accessibility control code -- that is native/macos-overlay/, out of scope for this step.",
+        "Do not grant authorization from anything other than envelope.verify().",
+        "Do not widen any Body's authority beyond the chatgpt_relay scope."
+      ],
+      "dependencies": [],
+      "acceptance_test_ids": [
+        "AT-RELAY-001"
+      ]
+    },
+    {
+      "step_id": "RELAY-002",
+      "phase_id": "R1",
+      "title": "db/migrations \u2014 taloa_chatgpt_relay_turns table",
+      "target_file": "db/migrations/20260816000001_create_taloa_chatgpt_relay_turns_table.sql",
+      "target_files": [
+        "db/migrations/20260816000001_create_taloa_chatgpt_relay_turns_table.sql"
+      ],
+      "action_type": "author_then_write",
+      "patch_mode": false,
+      "task": "The file MUST begin with a SQL comment line exactly \"-- @ssot docs/products/universal-overlay/PRODUCT_HOME.md\". Write CREATE TABLE IF NOT EXISTS taloa_chatgpt_relay_turns containing exactly these columns and no others: id, task_id, role, content, source, created_at. Assign types by this rule, and do not invent any other type: a column named id -> UUID PRIMARY KEY DEFAULT gen_random_uuid(); any column whose name ends in _id -> UUID NOT NULL; any column whose name ends in _at -> TIMESTAMPTZ NOT NULL DEFAULT now(); every remaining column -> TEXT NOT NULL. Then add CREATE INDEX IF NOT EXISTS idx_taloa_chatgpt_relay_turns_task_id ON taloa_chatgpt_relay_turns(task_id). The whole file must be safely re-runnable. Do NOT drop anything.",
+      "spec": "{\"step_id\": \"RELAY-002\", \"purpose\": \"Creates the taloa_chatgpt_relay_turns table backing RELAY-001's recordTurn/getRelayState.\", \"sealed_contract\": {\"tables\": [{\"name\": \"taloa_chatgpt_relay_turns\", \"columns\": [\"id\", \"task_id\", \"role\", \"content\", \"source\", \"created_at\"]}], \"exports\": [], \"ai_calls\": [], \"endpoints\": [], \"test_assertions\": [], \"factory_signature\": \"\"}, \"ssot_tag\": \"docs/products/universal-overlay/PRODUCT_HOME.md\", \"amended_by\": \"conductor_relay_orchestration_scope\"}",
+      "assertion_spec": {
+        "expected_exports": [],
+        "file_contains": [
+          "@ssot",
+          "taloa_chatgpt_relay_turns",
+          "CREATE TABLE IF NOT EXISTS"
+        ]
+      },
+      "behavior_assertions": [
+        {
+          "type": "file_contains",
+          "target": "db/migrations/20260816000001_create_taloa_chatgpt_relay_turns_table.sql",
+          "substring": "@ssot"
+        },
+        {
+          "type": "file_contains",
+          "target": "db/migrations/20260816000001_create_taloa_chatgpt_relay_turns_table.sql",
+          "substring": "taloa_chatgpt_relay_turns"
+        },
+        {
+          "type": "file_contains",
+          "target": "db/migrations/20260816000001_create_taloa_chatgpt_relay_turns_table.sql",
+          "substring": "CREATE TABLE IF NOT EXISTS"
+        }
+      ],
+      "sandbox_boundary": "db/migrations/**",
+      "authority_owner": "BPB",
+      "on_block": "BLOCKED_RETURN_TO_BPB",
+      "non_goals": [
+        "Do not modify any file other than the target file.",
+        "Do not create any table other than taloa_chatgpt_relay_turns."
+      ],
+      "dependencies": [],
+      "acceptance_test_ids": [
+        "AT-RELAY-002"
+      ]
+    }
+  ]
+}

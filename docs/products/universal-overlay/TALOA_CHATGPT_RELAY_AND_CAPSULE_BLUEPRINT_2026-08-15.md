@@ -4,7 +4,8 @@
 
 | Field | Value |
 |---|---|
-| **Status** | `DRAFTED — awaiting mission decomposition`. Not yet a `BLUEPRINT.json` mission. |
+| **Status** | `PARTIALLY DECOMPOSED — server-side orchestration mission dispatched`. `builderos-reboot/MISSIONS/TALOA-CHATGPT-RELAY-0001` covers task authorization + relay-turn state tracking (RELAY-001/002) only. Native macOS UI-control code is intentionally not decomposed here — it requires real Mac-side execution to verify, not a Railway-hosted SENTRY pass. |
+| **Last Updated** | 2026-08-16 — Mission `TALOA-CHATGPT-RELAY-0001` created and dispatched (server-side orchestration scope only), immediately after `TALOA-GATE-0-CLOSURE-0001`'s `GATE0-001` landed on `main` (commit `f7223d878cd8ba09a334ee2cca92ef00848537f9`), per founder direction not to stop for another procedural stage. |
 | **Authority** | Founder-dictated 2026-08-15, captured verbatim/structured by Claude (SO-001 blueprint-authoring lane) — not Claude's own design. |
 | **Depends on** | `builderos-reboot/MISSIONS/TALOA-GATE-0-CLOSURE-0001` step `GATE0-001` only (the Task Authorization Envelope `verify()` primitive) — **not** the full §45a Gate 0 closure. See §3. |
 | **Explicitly excludes** | Any vault, payment, or purchase authority. This Body cannot reach `routes/general-browser-agent-routes.js` or anything gated by `founder_authority`. |

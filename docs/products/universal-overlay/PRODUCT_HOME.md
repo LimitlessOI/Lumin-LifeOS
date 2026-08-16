@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/universal-overlay/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-08-13 — Founder: do not start using the overlay as the hands; it is not good yet. |
+| **Last Updated** | 2026-08-16 — `TALOA-GATE-0-CLOSURE-0001`'s `GATE0-001` landed on `main` for real (commit `f7223d878cd8ba09a334ee2cca92ef00848537f9`) after finding and fixing a real gap in the governed factory itself: the MECHANICAL-tier mission-execute path (`/factory/execute-step`, `/factory/ship-queue`) could author and SENTRY-verify code but never actually committed it (only `fs.writeFileSync`, confirmed by direct code read) — wired the already-threaded `commitToGitHub` dependency into `/factory/ship-queue`'s seal loop (`routes/factory-mount-routes.js`). Then dispatched `TALOA-CHATGPT-RELAY-0001` (server-side task-authorization + relay-turn orchestration only — native macOS UI-control code stays explicitly out of scope, since Railway-hosted SENTRY cannot compile Swift or exercise Accessibility APIs to prove it works). Prior: 2026-08-13 — Founder: do not start using the overlay as the hands; it is not good yet. |
 
 ---
 ---

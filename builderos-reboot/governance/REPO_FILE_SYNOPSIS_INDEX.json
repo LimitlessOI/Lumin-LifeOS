@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-16T05:25:09.499Z",
+  "generated_at": "2026-08-16T05:30:51.760Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13620,
+  "file_count": 13624,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -31159,6 +31159,30 @@
       "synopsis_index_only": true
     },
     {
+      "path": "builderos-reboot/MISSIONS/TALOA-CHATGPT-RELAY-0001/BLUEPRINT.json",
+      "synopsis": "Exports createChatGptRelayService — builderos-reboot/MISSIONS/TALOA-CHATGPT-RELAY-0001/BLUEPRINT.json.",
+      "bytes": 10021,
+      "mtime": "2026-08-16T05:30:04.726Z",
+      "indexed_at": "2026-08-16T05:30:51.760Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/TALOA-CHATGPT-RELAY-0001/DELIBERATION_GATE.json",
+      "synopsis": "BuilderOS artifact — DELIBERATION GATE.",
+      "bytes": 2752,
+      "mtime": "2026-08-16T05:28:08.749Z",
+      "indexed_at": "2026-08-16T05:30:51.760Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/TALOA-CHATGPT-RELAY-0001/FOUNDER_PACKET.json",
+      "synopsis": "BuilderOS artifact — FOUNDER PACKET.",
+      "bytes": 3758,
+      "mtime": "2026-08-16T05:27:53.768Z",
+      "indexed_at": "2026-08-16T05:30:51.760Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "builderos-reboot/MISSIONS/TALOA-GATE-0-CLOSURE-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
       "bytes": 14873,
@@ -46691,9 +46715,9 @@
     {
       "path": "docs/products/universal-overlay/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Universal Overlay",
-      "bytes": 128509,
-      "mtime": "2026-08-14T19:47:26.569Z",
-      "indexed_at": "2026-08-14T19:47:33.595Z"
+      "bytes": 129339,
+      "mtime": "2026-08-16T05:30:33.561Z",
+      "indexed_at": "2026-08-16T05:30:51.760Z"
     },
     {
       "path": "docs/products/universal-overlay/SEND_PACKET_FLUID_UI_AND_TWO_FACTORIES_2026-08-11.md",
@@ -46712,9 +46736,9 @@
     {
       "path": "docs/products/universal-overlay/TALOA_CHATGPT_RELAY_AND_CAPSULE_BLUEPRINT_2026-08-15.md",
       "synopsis": "Founder-dictated blueprint — Taloa ChatGPT Relay Body/Capsule. Not yet mission-decomposed.",
-      "bytes": 11728,
-      "mtime": "2026-08-15T22:08:17.762Z",
-      "indexed_at": "2026-08-15T22:16:00.870Z"
+      "bytes": 12329,
+      "mtime": "2026-08-16T05:29:17.097Z",
+      "indexed_at": "2026-08-16T05:30:51.760Z"
     },
     {
       "path": "docs/products/universal-overlay/TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md",
@@ -82078,6 +82102,16 @@
       "bytes": 4566,
       "mtime": "2026-06-24T02:57:23.341Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "scripts/verify-chatgpt-relay-service.mjs",
+      "synopsis": "Acceptance harness for TALOA-CHATGPT-RELAY-0001 (server-side orchestration only).",
+      "bytes": 4704,
+      "mtime": "2026-08-16T05:29:52.790Z",
+      "indexed_at": "2026-08-16T05:30:51.760Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "scripts/verify-clientcarebillingrecovery.mjs",

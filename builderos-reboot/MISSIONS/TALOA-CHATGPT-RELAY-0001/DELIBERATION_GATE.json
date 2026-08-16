@@ -1,0 +1,34 @@
+{
+  "session_id": "mission:TALOA-CHATGPT-RELAY-0001",
+  "mission_id": "TALOA-CHATGPT-RELAY-0001",
+  "authorities": ["BPB", "CDR", "SNT"],
+  "reps": [{"name": "Founder"}],
+  "models": [
+    {"id": "bpb-model", "focus": "BPB"},
+    {"id": "cdr-model", "focus": "CDR"}
+  ],
+  "load_bearing": false,
+  "hist_case": {
+    "session_id": "mission:TALOA-CHATGPT-RELAY-0001",
+    "problem": "Founder requested a live, autonomous Taloa-ChatGPT-Claude relay (3+ round trips, no manual copy/paste). GATE0-001 (the one real dependency the relay blueprint declared) landed on main 2026-08-16 (commit f7223d878cd8ba09a334ee2cca92ef00848537f9), verified by reading the committed bytes directly, not the dispatch response alone.",
+    "case_text": "The relay blueprint (TALOA_CHATGPT_RELAY_AND_CAPSULE_BLUEPRINT_2026-08-15.md) covers a long list of capabilities (perception, composer control, file transfer, Capsule learning). This mission deliberately scopes to only the piece that is honestly buildable and SENTRY-verifiable through the Railway-hosted governed factory: server-side task authorization (via GATE0-001's verify()) and relay-turn state tracking. The native macOS Accessibility/mouse/keyboard control code that actually operates a real Chrome/ChatGPT window is explicitly out of scope for this mission, because SENTRY here runs on Linux and cannot compile Swift or exercise Accessibility APIs -- a structural pass there would not be proof the live relay works, and claiming otherwise would violate this repo's own honesty standard.",
+    "ideas": [
+      "Split the relay into a server-verifiable orchestration layer (this mission) and a Mac-verifiable UI-control layer (native/macos-overlay/, requires running on a real Mac to prove anything).",
+      "Authorization for every relay action routes through the same envelope.verify() primitive GATE0-001 built, never from observed conversation content -- closes the same prompt-injection gap the source blueprint's §46 names as undefended."
+    ],
+    "opportunity": "This mission produces the real, verifiable half of the relay now. The remaining half (actual browser/window control) is a distinct, honestly-scoped follow-up that needs Mac-side execution to mean anything.",
+    "uncertainty": "KNOW"
+  },
+  "cfo_receipt": {
+    "session_id": "mission:TALOA-CHATGPT-RELAY-0001",
+    "dept": "CFO",
+    "role": "gate0_dependent_relay_orchestration",
+    "model": "factory-local",
+    "tokens": 0,
+    "cost_usd": 0,
+    "founder_priority_mode": true,
+    "note": "Founder-directed continuation immediately following GATE0-001 landing; authoring cost accrues per step (2 steps: RELAY-001, RELAY-002) under the standard tier ladder."
+  },
+  "seeded_at": "2026-08-16T05:35:00.000Z",
+  "auto_seeded": false
+}

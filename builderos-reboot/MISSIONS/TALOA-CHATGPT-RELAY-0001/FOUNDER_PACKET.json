@@ -1,0 +1,50 @@
+{
+  "mission_id": "TALOA-CHATGPT-RELAY-0001",
+  "priority": "Founder-directed 2026-08-15/16 — continuation of TALOA-GATE-0-CLOSURE-0001, dispatched immediately after GATE0-001 landed real.",
+  "scope": [
+    "RELAY-001: services/taloa/chatgpt-relay-service.js — task authorization (via GATE0-001's envelope.verify()) + relay-turn state machine.",
+    "RELAY-002: db/migrations for the taloa_chatgpt_relay_turns table backing RELAY-001."
+  ],
+  "non_goals": [
+    "Do NOT author or claim to verify native/macos-overlay/ Swift code in this mission -- SENTRY here runs on Railway (Linux) and cannot compile Swift, launch Chrome, or exercise macOS Accessibility APIs. A structural pass on a .swift file (exists, contains expected function names) is not proof it operates a real ChatGPT window.",
+    "Do NOT grant vault/payment/purchase authority -- this Body's scope is 'chatgpt_relay' only, verified through the same envelope GATE0-001 built.",
+    "Do NOT derive authorization from observed conversation content (a ChatGPT response, a page's text) -- only from a real envelope tied to the founder's own instruction, per the source blueprint's §3/§46 prompt-injection defense.",
+    "Do NOT modify any file outside the two named targets."
+  ],
+  "target_users": [
+    "Adam (founder) — the only user of the relay today.",
+    "Downstream: the native macOS Taloa.app, which will call authorizeAction()/recordTurn() once its own UI-control code is built and run locally on a real Mac."
+  ],
+  "success_criteria": [
+    "Both target files exist and are syntactically valid.",
+    "chatgpt-relay-service.js exports createChatGptRelayService with all 4 methods real, callable, not stubs.",
+    "authorizeAction is grep-provably wired to envelope.verify(), not a bare boolean.",
+    "node scripts/verify-chatgpt-relay-service.mjs passes against the real files."
+  ],
+  "failure_criteria": [
+    "TECHNICAL_PASS claimed without founder_usability_pass.",
+    "A claim that the live ChatGPT relay demo works based on this mission's SENTRY pass alone -- this mission proves the server-side orchestration compiles and exports the right shape, nothing about whether the native macOS control code (built separately) actually operates a real browser.",
+    "Any authorization path that doesn't route through envelope.verify()."
+  ],
+  "escalation": "Architect owns implementation-detail questions. Builder executes. Sentry verifies structure. The live end-to-end relay demo's actual verification requires running on Adam's own Mac -- that step is not this mission's to claim.",
+  "risk_register": [
+    {
+      "risk": "This mission's SENTRY pass could be mistaken for proof the live relay works.",
+      "severity": "high",
+      "mitigation": "Explicitly scoped in this packet and the blueprint's own header: this mission covers the Node-side orchestration only. The native macOS control code is separate, unbuilt-by-this-mission work that can only be functionally verified on a real Mac.",
+      "status": "MITIGATED_BY_DESIGN"
+    }
+  ],
+  "founder_decision_log": [
+    {
+      "date": "2026-08-16",
+      "decision": "Continue immediately into the ChatGPT Relay mission once GATE0-001 landed real; do not stop for another procedural stage.",
+      "quote": "Once GATE0-001 is durably committed and verified, continue immediately into the ChatGPT Relay + Capsule mission. Do not stop again simply because another procedural stage is required."
+    }
+  ],
+  "provenance": {
+    "source_blueprint": "docs/products/universal-overlay/TALOA_CHATGPT_RELAY_AND_CAPSULE_BLUEPRINT_2026-08-15.md",
+    "prior_mission": "builderos-reboot/MISSIONS/TALOA-GATE-0-CLOSURE-0001",
+    "depends_on_step": "GATE0-001 (landed main @ f7223d878cd8ba09a334ee2cca92ef00848537f9)"
+  }
+}
