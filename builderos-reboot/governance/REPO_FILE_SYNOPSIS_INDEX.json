@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-16T05:32:50.410Z",
+  "generated_at": "2026-08-16T05:33:07.611Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13625,
+  "file_count": 13626,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -102776,6 +102776,16 @@
       "bytes": 2071,
       "mtime": "2026-08-12T21:38:58.588Z",
       "indexed_at": "2026-08-12T21:38:58.588Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/taloa/chatgpt-relay-service.js",
+      "synopsis": "Exports createChatGptRelayService — services/taloa/chatgpt-relay-service.js.",
+      "bytes": 2667,
+      "mtime": "2026-08-16T05:33:07.611Z",
+      "indexed_at": "2026-08-16T05:33:07.611Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
