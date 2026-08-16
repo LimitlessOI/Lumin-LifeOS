@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-16T05:30:51.760Z",
+  "generated_at": "2026-08-16T05:32:50.410Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13624,
+  "file_count": 13625,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -39550,6 +39550,13 @@
       "bytes": 237,
       "mtime": "2026-08-13T02:12:05.049Z",
       "indexed_at": "2026-08-13T02:12:05.049Z"
+    },
+    {
+      "path": "db/migrations/20260816000001_create_taloa_chatgpt_relay_turns_table.sql",
+      "synopsis": "Database migration — 20260816000001_create_taloa_chatgpt_relay_turns_table.sql.",
+      "bytes": 507,
+      "mtime": "2026-08-16T05:32:50.410Z",
+      "indexed_at": "2026-08-16T05:32:50.410Z"
     },
     {
       "path": "db/migrations/20261101_habit_tables.sql",
