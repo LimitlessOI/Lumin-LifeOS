@@ -511,6 +511,20 @@ A front-door relay into ChatGPT is manufactured as a bounded Taloa Body/Capsule 
 
 ## 8. Current reality audit — refreshed 2026-08-16
 
+### Tonight reality check — CURRENT REALITY
+
+- The governed factory has now demonstrated one real MECHANICAL-tier `author -> independent SENTRY verification -> commit` path. During `TALOA-GATE-0-CLOSURE-0001`, the factory twice authored and verified the GATE0-001 bytes but returned `commit_sha:null`. Direct code inspection proved that the MECHANICAL mission-execute path sealed verified bytes without invoking the already-injected `commitRunner`.
+- Commit `5ec5acc8d1fa761b52d19f085682b316e2392633` repaired `routes/factory-mount-routes.js` by invoking `commitRunner` after a successful seal. Commit `f7223d878cd8ba09a334ee2cca92ef00848537f9` then landed the independently SENTRY-verified `verify(agentId, taskId, requiredScope)` method in `services/taloa/task-authorization-envelope.js` through that repaired path.
+- This proves the repaired MECHANICAL path once; it does **not** prove every execution tier, multi-file mission, migration, deployment, retry, or recovery path commits correctly. A successful authoring result with no immutable commit SHA is not shipped. `EXACT_SEALED`, local bytes, or SENTRY PASS cannot independently satisfy delivery.
+- The required delivery chain is now explicit: `authorized -> authored -> independently verified -> committed -> commit reachable from main`. A mission reporting success with `commit_sha:null`, a commit that does not contain the verified bytes, or a commit not reachable from the intended branch remains failed/nonterminal.
+- The escaped defect becomes a factory obligation, not only a product anecdote: add regression coverage for null commit SHA after successful seal, prove committed-byte identity, exercise a second MECHANICAL mission, exercise multi-file and migration-bearing missions, and prove bounded recovery from commit failure without duplicate or partial delivery.
+- `services/taloa/chatgpt-relay-service.js` and its backing migration are now real server-side construction. `TALOA-CHATGPT-RELAY-0001` passed 13/13 structural/callability checks at `fe77752b5e29968a1bd37b23257420122d4cd174` and is registered in `BP_PRIORITY.json` on current main. That is server-side orchestration evidence only; no native macOS/Chrome/Accessibility, authenticated round-trip, or Founder front-door acceptance follows from it.
+- Universal Overlay remains **0 of 7 versions independently proven**. GATE0-001 is complete, but aggregate Gate 0 remains open: vault/payment route wiring, per-Body scoped credentials, replay protection, and the separate production shared-key rotation obligation are not closed. The stale aggregate Gate 0 FAIL receipt must not erase the component proof or be misreported as aggregate PASS.
+
+### Explicit non-changes in this refresh
+
+This evidence refresh does **not** change Builder's zero-consequential-`WHAT` boundary, the one-live-queue law, Architect ownership of print completeness, SENTRY's independent non-builder role, the distinction between construction/deployment/acceptance/outcome, or any blueprint terminal predicate. It does not mark BuilderOS generally self-repairing, Gate 0 complete, the ChatGPT relay usable end to end, or any Overlay version accepted. It records bounded current reality and the remaining proof burden; it does not rewrite product authority from implementation evidence.
+
 ### Proven now
 
 - At the 2026-08-15 09:17 PDT refresh, all five continuity/watchdog/SENTRY runtime files remained syntax-clean and the focused suite passed 45/45 against the then-current working bytes.
