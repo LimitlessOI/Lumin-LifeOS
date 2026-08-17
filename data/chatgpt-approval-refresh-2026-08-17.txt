@@ -1,0 +1,1 @@
+Taloa approval refresh checkpoint. This harmless file exists only to generate a fresh current GitHub permission request near the active conversation frontier. It does not modify product behavior.
