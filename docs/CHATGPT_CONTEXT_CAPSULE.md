@@ -58,6 +58,7 @@ This ability is **not yet claimed functionally proven**. Code/tests have been au
 - SO-004 applies: preserve every substantive founder conversation in both the owning product/topic conversation space and `docs/conversation_dumps/`.
 - Preserve the actual load-bearing founder language and the responding AI decision/action, not only a reference or lossy summary.
 - Clip relevant exchanges into each specific product space when a conversation spans projects; the project folder must contain the relevant substance itself.
+- **Idea Vault routing rule:** whenever a new idea emerges and there is no current project/product folder that already owns it, capture the idea in the Idea Vault immediately rather than leaving it floating only in conversation. If an owning project folder already exists, route the idea into that project history/backlog instead of duplicating it in Idea Vault.
 - Keep this capsule refreshed when priorities, names, rules, blockers, or next actions materially change.
 - Conversation capture is part of system history and founder-imprint learning; it is not optional session cleanup.
 
