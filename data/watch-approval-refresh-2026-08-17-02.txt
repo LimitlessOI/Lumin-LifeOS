@@ -1,0 +1,1 @@
+Harmless approval-frontier refresh requested by founder on 2026-08-17. Purpose: generate a fresh current GitHub permission request at the bottom of the BuilderOS Watch conversation. No product or governance semantics.
