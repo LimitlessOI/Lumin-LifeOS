@@ -17,7 +17,7 @@
 2. Prove Costello can claim an already-authored BP slice, build it, pass independent acceptance, persist the result remotely, and advance lawfully.
 3. Reconcile the **Taloa Overlay** BP to measured current reality and a revenue-producing Point B.
 4. Use Costello's available lanes on independent pre-authored Overlay slices.
-5. Get Overlay functionally accepted and into a real revenue path as soon as lawfully possible.
+5. Get Overlay functionally accepted and into a real revenue path as soon as lawfully possible, targeted today.
 6. After Costello is proven, use what it teaches to repair/simplify **Abbott**. Two healthy three-lane systems can provide up to six lawful concurrent lanes when dependencies permit.
 
 ## Non-negotiable BuilderOS laws
@@ -29,14 +29,15 @@
 - If the authored path is exhausted while acceptance fails, fail closed and route evidence to Architect; do not improvise.
 - Architect owns blueprint reconciliation. Material decisions are intended to use independent Conductor challenge/synthesis under the developing 1+1=3 protocol.
 - Models may be imaginative about possibilities, never about current facts. Unknown remains UNKNOWN until evidence resolves it.
-- Every agreed load-bearing law must be written into authoritative governance and backed by an executable gate/receipt/verifier; prose-only rules are incomplete.
+- Every agreed load-bearing law must be written into authoritative governance in the same working session and backed by an executable gate/receipt/verifier; prose-only rules are incomplete. If executable enforcement cannot be installed immediately, record the enforcement gap explicitly and never represent the law as fully enforced.
 
 ## Conversation protocol
 
 - SO-004 applies: preserve every substantive founder conversation in both the owning product/topic conversation space and `docs/conversation_dumps/`.
-- Preserve load-bearing founder language and the responding decision/action, not only a reference or lossy summary.
-- Clip relevant exchanges into each specific product space when a conversation spans projects.
+- Preserve the actual load-bearing founder language and the responding AI decision/action, not only a reference or lossy summary.
+- Clip relevant exchanges into each specific product space when a conversation spans projects; the project folder must contain the relevant substance itself.
 - Keep this capsule refreshed when priorities, names, rules, blockers, or next actions materially change.
+- Conversation capture is part of system history and founder-imprint learning; it is not optional session cleanup.
 
 ## Brainstorming protocol
 
