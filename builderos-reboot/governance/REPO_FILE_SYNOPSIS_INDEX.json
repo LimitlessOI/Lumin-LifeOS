@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-17T03:32:26.091Z",
+  "generated_at": "2026-08-17T22:07:21.299Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13646,
+  "file_count": 13657,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -52,6 +52,13 @@
       "bytes": 2176,
       "mtime": "2026-06-21T21:40:25.432Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": ".github/workflows/founder-ai-operating-protocol.yml",
+      "synopsis": "yml — .github/workflows/founder-ai-operating-protocol.yml.",
+      "bytes": 349,
+      "mtime": "2026-08-17T22:06:32.651Z",
+      "indexed_at": "2026-08-17T22:07:03.399Z"
     },
     {
       "path": ".github/workflows/keep-alive.yml",
@@ -21308,8 +21315,8 @@
       "path": "builderos-reboot/BP_PRIORITY.json",
       "synopsis": "BuilderOS artifact — BP PRIORITY.",
       "bytes": 50428,
-      "mtime": "2026-08-16T17:58:12.856Z",
-      "indexed_at": "2026-08-16T18:00:04.830Z",
+      "mtime": "2026-08-17T22:06:33.044Z",
+      "indexed_at": "2026-08-17T22:07:03.399Z",
       "synopsis_index_only": true
     },
     {
@@ -21678,9 +21685,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 4148433,
-      "mtime": "2026-08-17T00:40:34.239Z",
-      "indexed_at": "2026-08-17T00:40:50.087Z"
+      "bytes": 4151720,
+      "mtime": "2026-08-17T22:07:06.879Z",
+      "indexed_at": "2026-08-17T22:07:21.299Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -21772,9 +21779,9 @@
     {
       "path": "builderos-reboot/governance/TERMINOLOGY_BRIDGE.json",
       "synopsis": "BuilderOS artifact — TERMINOLOGY BRIDGE.",
-      "bytes": 4942,
-      "mtime": "2026-08-11T22:44:58.445Z",
-      "indexed_at": "2026-08-11T22:45:26.446Z",
+      "bytes": 5963,
+      "mtime": "2026-08-17T22:06:32.652Z",
+      "indexed_at": "2026-08-17T22:07:03.399Z",
       "synopsis_index_only": true
     },
     {
@@ -23840,10 +23847,10 @@
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001/FOUNDER_PACKET.md",
-      "synopsis": "Founder Packet — Lumin Founder Alpha Gap-Fill",
-      "bytes": 2359,
-      "mtime": "2026-06-29T00:43:01.099Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "synopsis": "Founder Packet — Taloa Founder Alpha Gap-Fill; historical mission id retained for lineage.",
+      "bytes": 6576,
+      "mtime": "2026-08-17T22:06:32.652Z",
+      "indexed_at": "2026-08-17T22:07:03.399Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001/IDC_CONSENSUS_RECEIPT.json",
@@ -40134,6 +40141,13 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "docs/ai-collaboration/CHATGPT_CLAUDE_CODE_CHANNEL.md",
+      "synopsis": "ChatGPT ↔ Claude Code Engineering Channel",
+      "bytes": 4657,
+      "mtime": "2026-08-17T22:06:32.653Z",
+      "indexed_at": "2026-08-17T22:07:03.399Z"
+    },
+    {
       "path": "docs/AMENDMENT_02_MIGRATION_RUNBOOK.md",
       "synopsis": "Migration Runbook: Amendment 02",
       "bytes": 2134,
@@ -40999,6 +41013,13 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "docs/CHATGPT_CONTEXT_CAPSULE.md",
+      "synopsis": "ChatGPT Context Capsule",
+      "bytes": 8066,
+      "mtime": "2026-08-17T22:06:32.653Z",
+      "indexed_at": "2026-08-17T22:07:03.399Z"
+    },
+    {
       "path": "docs/COMMAND_CENTER_QUICK_START.md",
       "synopsis": "LEGACY / REFERENCE ONLY",
       "bytes": 7227,
@@ -41158,6 +41179,13 @@
       "bytes": 10567,
       "mtime": "2026-08-06T20:02:30.812Z",
       "indexed_at": "2026-08-06T20:03:43.942Z"
+    },
+    {
+      "path": "docs/constitution/FOUNDER_AI_OPERATING_PROTOCOL.md",
+      "synopsis": "Founder AI Operating Protocol",
+      "bytes": 5688,
+      "mtime": "2026-08-17T22:06:32.653Z",
+      "indexed_at": "2026-08-17T22:07:03.399Z"
     },
     {
       "path": "docs/constitution/FOUNDER_PACKET_V2_BUILDEROS_MASTER_ARCHITECTURE.md",
@@ -41802,6 +41830,27 @@
       "bytes": 711,
       "mtime": "2026-08-13T16:34:44.012Z",
       "indexed_at": "2026-08-13T16:34:44.012Z"
+    },
+    {
+      "path": "docs/conversation_dumps/2026-08-17-costello-builderos-governance-and-overlay-priority.md",
+      "synopsis": "Founder Conversation Capture — Costello BuilderOS, Governance, and Overlay Priority",
+      "bytes": 4215,
+      "mtime": "2026-08-17T22:06:32.654Z",
+      "indexed_at": "2026-08-17T22:07:03.399Z"
+    },
+    {
+      "path": "docs/conversation_dumps/2026-08-17-costello-overlay-revenue-priority.md",
+      "synopsis": "Founder Conversation Capture — Costello / Overlay Revenue Priority",
+      "bytes": 4043,
+      "mtime": "2026-08-17T22:06:32.654Z",
+      "indexed_at": "2026-08-17T22:07:03.399Z"
+    },
+    {
+      "path": "docs/conversation_dumps/2026-08-17-taloa-watch-supervisor.md",
+      "synopsis": "Founder Conversation Capture — Taloa Watch Supervisor",
+      "bytes": 1611,
+      "mtime": "2026-08-17T22:06:32.654Z",
+      "indexed_at": "2026-08-17T22:07:03.399Z"
     },
     {
       "path": "docs/conversation_dumps/by-product/sessions/2a4739f2/BUILDEROS-AUTONOMOUS.md",
@@ -45878,6 +45927,13 @@
       "indexed_at": "2026-08-13T06:44:07.157Z"
     },
     {
+      "path": "docs/products/lifeos/conversations/2026-08-17-taloa-watch-supervisor.md",
+      "synopsis": "Founder decision to use Taloa Overlay as the intelligent supervision/heartbeat layer for BuilderOS Watch.",
+      "bytes": 2424,
+      "mtime": "2026-08-17T22:06:32.654Z",
+      "indexed_at": "2026-08-17T22:07:03.399Z"
+    },
+    {
       "path": "docs/products/lifeos/CREATIVE_BRIEF.md",
       "synopsis": "Creative Brief — LifeOS (lifeos)",
       "bytes": 4211,
@@ -46529,9 +46585,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 224598,
-      "mtime": "2026-08-13T16:57:18.107Z",
-      "indexed_at": "2026-08-13T16:57:18.107Z"
+      "bytes": 226296,
+      "mtime": "2026-08-17T21:58:40.239Z",
+      "indexed_at": "2026-08-17T22:00:21.009Z"
     },
     {
       "path": "docs/products/site-builder/SITE_TEMPLATE_CATALOG.md",
@@ -76915,9 +76971,9 @@
     {
       "path": "routes/wrm-consult-routes.js",
       "synopsis": "Well Rounded Momma consult lead capture.",
-      "bytes": 19940,
-      "mtime": "2026-08-13T16:57:18.107Z",
-      "indexed_at": "2026-08-13T16:57:18.107Z",
+      "bytes": 22162,
+      "mtime": "2026-08-17T21:57:30.238Z",
+      "indexed_at": "2026-08-17T22:00:21.009Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -81616,6 +81672,16 @@
       ]
     },
     {
+      "path": "scripts/taloa-chatgpt-watch-supervisor.mjs",
+      "synopsis": "Taloa ChatGPT Watch Supervisor — supervised browser loop for BuilderOS Watch.",
+      "bytes": 17381,
+      "mtime": "2026-08-17T22:06:32.656Z",
+      "indexed_at": "2026-08-17T22:07:03.399Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "scripts/taloa.mjs",
       "synopsis": "CLI for the Taloa overlay command channel (native macOS app).",
       "bytes": 4558,
@@ -82422,6 +82488,13 @@
       "ssot": [
         "docs/products/unknown/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "scripts/verify-founder-ai-operating-protocol.mjs",
+      "synopsis": "Script — Verify Founder Ai Operating Protocol.",
+      "bytes": 1955,
+      "mtime": "2026-08-17T22:06:32.656Z",
+      "indexed_at": "2026-08-17T22:07:03.399Z"
     },
     {
       "path": "scripts/verify-founder-css-live.mjs",
@@ -107232,6 +107305,16 @@
       "indexed_at": "2026-08-13T07:43:24.720Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "tests/taloa-chatgpt-watch-supervisor.test.js",
+      "synopsis": "Behavioral tests for Taloa ChatGPT Watch Supervisor classification and continuation policy.",
+      "bytes": 4077,
+      "mtime": "2026-08-17T22:06:32.656Z",
+      "indexed_at": "2026-08-17T22:07:03.399Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
       ]
     },
     {
