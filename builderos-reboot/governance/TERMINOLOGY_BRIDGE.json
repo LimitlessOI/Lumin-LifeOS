@@ -1,14 +1,34 @@
 {
   "schema": "terminology_bridge_v1",
-  "updated_at": "2026-08-11",
+  "updated_at": "2026-08-17",
   "purpose": "Machine-readable ratified-rename source. Closes B5: a rename cannot rely on a model reading prose. A generated artifact that requires a deprecated term in founder-facing intent text is a defect, detected deterministically — never by asking a model whether the wording 'seems current'.",
-  "authority": "Founder ratification, captured in docs/products/lifeos/conversations/2026-08-11-taloa-blueprint-consensus-and-live-intake-test.md",
+  "authority": "Founder ratification, including 2026-08-17 instruction that Taloa is the current product name and Lumin is historical lineage only unless required by a live compatibility contract.",
   "enforcement": {
     "detector": "services/blueprint-invention-detector.js",
     "defect_id": "STALE_RATIFIED_TERMINOLOGY",
-    "scope_note": "Only `prose_scopes` are checked. Code identifiers are deliberately NOT checked here — renaming a live identifier is a separate governed migration, and flagging it at intake would block manufacturing on work outside the mission's scope."
+    "scope_note": "Only prose scopes are checked automatically. Code identifiers, paths, env vars, database names, receipt ids, mission ids, hashes, and compatibility aliases require governed migration rather than blind replacement."
   },
   "terms": [
+    {
+      "canonical": "Taloa",
+      "former": [
+        "Lumin"
+      ],
+      "effective_from": "2026-08-17",
+      "migration_state": "ratified_target_active_migration",
+      "prose_scopes": [
+        "acceptance_criteria",
+        "product_purpose",
+        "non_goals",
+        "desired_outcome",
+        "current_state",
+        "founder_success_test"
+      ],
+      "code_migration_state": "governed_sweep_required",
+      "note": "Current product identity is Taloa. Historical records may retain Lumin when describing prior state or explaining how/why the system changed. Live identifiers are not blindly renamed: each must be classified as current prose, compatibility surface, historical evidence, or governed code/schema migration before change.",
+      "prohibited_in_new_artifacts": true,
+      "historical_exception": "Allowed only when explicitly labeled as historical/former naming or when preserving an existing technical contract until a governed migration replaces it."
+    },
     {
       "canonical": "Conductor",
       "former": [
@@ -54,7 +74,7 @@
         "product_purpose"
       ],
       "code_migration_state": "partial",
-      "note": "DEPARTMENT_ROLE_CONTRACT.json already carries `Efficiency Officer` with `legacy_name: CFO`. Founder: 'I like efficiency officer better. It just gets better than a CFO.'",
+      "note": "DEPARTMENT_ROLE_CONTRACT.json already carries Efficiency Officer with legacy_name: CFO. Founder: 'I like efficiency officer better. It just gets better than a CFO.'",
       "prohibited_in_new_artifacts": true,
       "match_mode": "word_boundary_case_sensitive_for_acronyms"
     },
@@ -86,7 +106,7 @@
           "former": [
             "Conductor"
           ],
-          "note": "The cold-start/session-supervision role measured in savings tracking. Renamed because a governance document saying \"the Conductor must seal this\" was ambiguous between two unrelated things."
+          "note": "The cold-start/session-supervision role measured in savings tracking. Renamed because a governance document saying 'the Conductor must seal this' was ambiguous between two unrelated things."
         }
       ],
       "code_migration_state": "identifiers_renamed_tables_pending",
