@@ -19,6 +19,28 @@
 4. Use Costello's available lanes on independent pre-authored Overlay slices.
 5. Get Overlay functionally accepted and into a real revenue path as soon as lawfully possible, targeted today.
 6. After Costello is proven, use what it teaches to repair/simplify **Abbott**. Two healthy three-lane systems can provide up to six lawful concurrent lanes when dependencies permit.
+7. After the Watch Supervisor ability is implemented/proven, founder + ChatGPT will set explicit income targets and revenue strategy; founder intends to focus on fundraising and selling therapists on the importance/power of LifeOS while supervised build execution continues.
+
+## Taloa Watch Supervisor — implementation in progress
+
+Founder authorized Taloa Overlay to become the intelligent supervision/heartbeat layer for a dedicated ChatGPT **BuilderOS Watch** thread rather than using a blind clicker.
+
+Current implementation artifacts:
+- `scripts/taloa-chatgpt-watch-supervisor.mjs`
+- `tests/taloa-chatgpt-watch-supervisor.test.js`
+- `docs/products/lifeos/conversations/2026-08-17-taloa-watch-supervisor.md`
+
+Intended loop:
+- attach to an already-authenticated Chromium session via CDP; do not store ChatGPT credentials;
+- observe the dedicated Watch thread;
+- while ChatGPT is working, do nothing;
+- approve only a recognized GitHub `Allow once` prompt when the page also contains evidence tying it to `LimitlessOI/Lumin-LifeOS`;
+- refuse unrecognized approvals and stop on account/usage/security blockers;
+- after a completed turn, inject a bounded continuation prompt that reloads this capsule and focuses work on Costello -> lawful BP proof -> Overlay -> revenue Point B;
+- log every classification/action as JSONL receipts;
+- material reality changes must update this capsule and relevant project history.
+
+This ability is **not yet claimed functionally proven**. Code/tests have been authored in GitHub, but a real authenticated ChatGPT browser-session acceptance run is still required.
 
 ## Non-negotiable BuilderOS laws
 
