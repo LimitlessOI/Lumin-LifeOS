@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-17T00:27:50.301Z",
+  "generated_at": "2026-08-17T00:40:50.087Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13644,
+  "file_count": 13646,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21678,9 +21678,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 4147743,
-      "mtime": "2026-08-17T00:27:29.539Z",
-      "indexed_at": "2026-08-17T00:27:50.301Z"
+      "bytes": 4148433,
+      "mtime": "2026-08-17T00:40:34.239Z",
+      "indexed_at": "2026-08-17T00:40:50.087Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -44308,6 +44308,13 @@
       "indexed_at": "2026-08-17T00:27:27.215Z"
     },
     {
+      "path": "docs/products/builderos/blueprint-versions/BUILDEROS_BLUEPRINT_VERSION_B.md",
+      "synopsis": "BuilderOS Master Blueprint — Version B (Architect pass: founder-voice provenance + preserved doctrine)",
+      "bytes": 123256,
+      "mtime": "2026-08-17T00:35:54.493Z",
+      "indexed_at": "2026-08-17T00:40:31.972Z"
+    },
+    {
       "path": "docs/products/builderos/BUILDEROS_GOVERNANCE_REPAIR_BLUEPRINT_2026-08-11.md",
       "synopsis": "BuilderOS governance repair blueprint — no-invention, typed gates, durable jobs, Sentry taxonomy, office coordination.",
       "bytes": 100594,
@@ -44317,9 +44324,9 @@
     {
       "path": "docs/products/builderos/BUILDEROS_MASTER_BLUEPRINT_V2_2026-08-14.md",
       "synopsis": "BuilderOS Master Blueprint V2 — Intent-to-Reality Manufacturing System",
-      "bytes": 105105,
-      "mtime": "2026-08-16T23:24:22.080Z",
-      "indexed_at": "2026-08-16T23:24:43.027Z"
+      "bytes": 108394,
+      "mtime": "2026-08-17T00:28:34.577Z",
+      "indexed_at": "2026-08-17T00:40:31.972Z"
     },
     {
       "path": "docs/products/builderos/CHAIR_RESEARCH_DIRECTIVES_2026-08-11.md",
@@ -45675,6 +45682,13 @@
       "indexed_at": "2026-08-17T00:27:27.215Z"
     },
     {
+      "path": "docs/products/lifeos/blueprint-versions/LIFEOS_BLUEPRINT_VERSION_B.md",
+      "synopsis": "LifeOS Master Blueprint — Version B (Architect pass: Education/Healing mission, Six Laws, Overlay mechanics)",
+      "bytes": 102924,
+      "mtime": "2026-08-17T00:40:11.539Z",
+      "indexed_at": "2026-08-17T00:40:31.972Z"
+    },
+    {
       "path": "docs/products/lifeos/COMMUNICATION_SYSTEM_BLUEPRINT.md",
       "synopsis": "LifeOS-scoped communication / cognitive-interaction blueprint — source: TALOA Cognitive Interaction System complete blueprint 2026-08-04, cross-referenced with existing LifeOS communication canon.",
       "bytes": 41744,
@@ -45895,9 +45909,9 @@
     {
       "path": "docs/products/lifeos/LIFEOS_MASTER_BLUEPRINT_V2_2026-08-14.md",
       "synopsis": "LifeOS Master Blueprint V2 — Consolidated Working Blueprint",
-      "bytes": 87072,
-      "mtime": "2026-08-16T23:24:22.090Z",
-      "indexed_at": "2026-08-16T23:24:43.027Z"
+      "bytes": 91861,
+      "mtime": "2026-08-17T00:28:34.580Z",
+      "indexed_at": "2026-08-17T00:40:31.972Z"
     },
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
