@@ -523,6 +523,59 @@ export function registerWrmConsultRoutes(app, deps = {}) {
     }
   });
 
+  // Diagnostic only -- never returns secret values, only presence booleans and
+  // Resend's own reported domain-verification status (queried server-side with
+  // the already-configured key, so no credential ever needs to be shared or
+  // typed into a browser to answer "is mail actually able to send yet").
+  router.get("/consult/email-provider-status", guard, async (req, res) => {
+    try {
+      const provider = String(process.env.EMAIL_PROVIDER || "postmark").toLowerCase();
+      const hasResend = Boolean(String(process.env.RESEND_API_KEY || "").trim());
+      const hasPostmark = Boolean(String(process.env.POSTMARK_SERVER_TOKEN || "").trim());
+      const hasSendgrid = Boolean(String(process.env.SENDGRID_API_KEY || "").trim());
+      const hasSmtp = Boolean(
+        String(process.env.SMTP_USER || process.env.WORK_EMAIL || "").trim() &&
+          String(process.env.SMTP_PASS || process.env.WORK_EMAIL_APP_PASSWORD || "").trim()
+      );
+
+      let resendDomains = null;
+      let resendError = null;
+      if (hasResend) {
+        try {
+          const resp = await fetch("https://api.resend.com/domains", {
+            headers: { Authorization: `Bearer ${String(process.env.RESEND_API_KEY).trim()}` },
+          });
+          const json = await resp.json();
+          if (!resp.ok) {
+            resendError = json?.message || `Resend HTTP ${resp.status}`;
+          } else {
+            resendDomains = (json?.data || []).map((d) => ({
+              name: d.name,
+              status: d.status,
+              region: d.region,
+              records_status: Array.isArray(d.records)
+                ? d.records.map((r) => ({ type: r.type, name: r.record, status: r.status }))
+                : undefined,
+            }));
+          }
+        } catch (err) {
+          resendError = err.message;
+        }
+      }
+
+      res.json({
+        ok: true,
+        active_provider: provider,
+        configured: { resend: hasResend, postmark: hasPostmark, sendgrid: hasSendgrid, smtp: hasSmtp },
+        resend_domains: resendDomains,
+        resend_error: resendError,
+        consult_to: CONSULT_TO(),
+      });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
   app.use("/api/v1/wrm", router);
   logger.info?.("✅ [WRM] Consult routes mounted at /api/v1/wrm/consult");
 }
