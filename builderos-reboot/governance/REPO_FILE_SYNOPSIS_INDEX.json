@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-16T23:24:43.027Z",
+  "generated_at": "2026-08-17T00:27:50.301Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13642,
+  "file_count": 13644,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21678,9 +21678,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 4147107,
-      "mtime": "2026-08-16T23:24:31.395Z",
-      "indexed_at": "2026-08-16T23:24:43.027Z"
+      "bytes": 4147743,
+      "mtime": "2026-08-17T00:27:29.539Z",
+      "indexed_at": "2026-08-17T00:27:50.301Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -44301,6 +44301,13 @@
       "indexed_at": "2026-07-30T22:32:11.913Z"
     },
     {
+      "path": "docs/products/builderos/blueprint-versions/BUILDEROS_BLUEPRINT_VERSION_A.md",
+      "synopsis": "BuilderOS Master Blueprint — Version A (first draft of the A-Z convergence loop)",
+      "bytes": 105829,
+      "mtime": "2026-08-17T00:26:38.066Z",
+      "indexed_at": "2026-08-17T00:27:27.215Z"
+    },
+    {
       "path": "docs/products/builderos/BUILDEROS_GOVERNANCE_REPAIR_BLUEPRINT_2026-08-11.md",
       "synopsis": "BuilderOS governance repair blueprint — no-invention, typed gates, durable jobs, Sentry taxonomy, office coordination.",
       "bytes": 100594,
@@ -45659,6 +45666,13 @@
       "bytes": 813,
       "mtime": "2026-06-29T17:21:07.993Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "docs/products/lifeos/blueprint-versions/LIFEOS_BLUEPRINT_VERSION_A.md",
+      "synopsis": "LifeOS Master Blueprint — Version A (first draft of the A-Z convergence loop)",
+      "bytes": 87843,
+      "mtime": "2026-08-17T00:27:01.979Z",
+      "indexed_at": "2026-08-17T00:27:27.215Z"
     },
     {
       "path": "docs/products/lifeos/COMMUNICATION_SYSTEM_BLUEPRINT.md",
