@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-17T22:07:21.299Z",
+  "generated_at": "2026-08-18T20:20:55.620Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13657,
+  "file_count": 13672,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -31240,9 +31240,9 @@
     {
       "path": "builderos-reboot/MISSIONS/TALOA-OVERLAY-P1-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
-      "bytes": 44831,
-      "mtime": "2026-08-12T20:17:16.800Z",
-      "indexed_at": "2026-08-12T20:17:16.800Z",
+      "bytes": 13771,
+      "mtime": "2026-08-18T18:44:32.930Z",
+      "indexed_at": "2026-08-18T20:20:55.620Z",
       "synopsis_index_only": true
     },
     {
@@ -31279,10 +31279,10 @@
     },
     {
       "path": "builderos-reboot/MISSIONS/TALOA-OVERLAY-P1-0001/FOUNDER_PACKET.md",
-      "synopsis": "Founder Packet — Taloa Overlay Phase 1 foundation layer: seven store bindings and eight services from the sealed blueprint.",
-      "bytes": 2861,
-      "mtime": "2026-08-12T19:17:52.138Z",
-      "indexed_at": "2026-08-12T19:17:52.138Z"
+      "synopsis": "Founder Packet — Taloa Overlay Phase 1 foundation layer plus founder-directed A-to-Z completion authority.",
+      "bytes": 16456,
+      "mtime": "2026-08-18T18:41:07.193Z",
+      "indexed_at": "2026-08-18T20:20:55.620Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/TALOA-OVERLAY-P1-0001/IDC_CONSENSUS_RECEIPT.json",
@@ -31596,9 +31596,9 @@
     {
       "path": "builderos-reboot/POINT_B_TARGET.json",
       "synopsis": "BuilderOS artifact — POINT B TARGET.",
-      "bytes": 2589,
-      "mtime": "2026-06-29T08:36:04.977Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 3413,
+      "mtime": "2026-08-18T18:41:07.194Z",
+      "indexed_at": "2026-08-18T20:20:55.620Z",
       "synopsis_index_only": true
     },
     {
@@ -35198,6 +35198,14 @@
       "bytes": 4280,
       "mtime": "2026-05-14T20:51:31.514Z",
       "indexed_at": "2026-07-28T22:54:46.666Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "data/runtime-redeploy-trigger-2026-08-18T1742Z.json",
+      "synopsis": "JSON data/config — data/runtime-redeploy-trigger-2026-08-18T1742Z.json.",
+      "bytes": 424,
+      "mtime": "2026-08-18T18:41:07.194Z",
+      "indexed_at": "2026-08-18T20:20:55.620Z",
       "synopsis_index_only": true
     },
     {
@@ -40143,9 +40151,9 @@
     {
       "path": "docs/ai-collaboration/CHATGPT_CLAUDE_CODE_CHANNEL.md",
       "synopsis": "ChatGPT ↔ Claude Code Engineering Channel",
-      "bytes": 4657,
-      "mtime": "2026-08-17T22:06:32.653Z",
-      "indexed_at": "2026-08-17T22:07:03.399Z"
+      "bytes": 5235,
+      "mtime": "2026-08-18T18:41:07.196Z",
+      "indexed_at": "2026-08-18T20:20:55.620Z"
     },
     {
       "path": "docs/AMENDMENT_02_MIGRATION_RUNBOOK.md",
@@ -41011,6 +41019,13 @@
       "bytes": 3228,
       "mtime": "2026-06-21T21:37:57.721Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "docs/CHATGPT_CONTEXT_CAPSULE_ADDENDUM_2026-08-17.md",
+      "synopsis": "ChatGPT Context Capsule Addendum — 2026-08-17",
+      "bytes": 1474,
+      "mtime": "2026-08-18T18:41:07.195Z",
+      "indexed_at": "2026-08-18T20:20:55.620Z"
     },
     {
       "path": "docs/CHATGPT_CONTEXT_CAPSULE.md",
@@ -43499,6 +43514,14 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "docs/history/lifeos/blueprints/LIFEOS_BLUEPRINT_VERSION_A_ARCHIVED.json",
+      "synopsis": "Documentation — LIFEOS BLUEPRINT VERSION A ARCHIVED.",
+      "bytes": 748,
+      "mtime": "2026-08-18T18:41:07.196Z",
+      "indexed_at": "2026-08-18T20:20:55.620Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "docs/history/product-build-queues/ai-council/BUILD_QUEUE.json",
       "synopsis": "Documentation — BUILD QUEUE.",
       "bytes": 35298,
@@ -45724,6 +45747,14 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "docs/products/lifeos/blueprint-versions/CURRENT.json",
+      "synopsis": "Documentation — CURRENT.",
+      "bytes": 1174,
+      "mtime": "2026-08-18T18:41:07.196Z",
+      "indexed_at": "2026-08-18T20:20:55.620Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "docs/products/lifeos/blueprint-versions/LIFEOS_BLUEPRINT_VERSION_A.md",
       "synopsis": "LifeOS Master Blueprint — Version A (first draft of the A-Z convergence loop)",
       "bytes": 87843,
@@ -46828,9 +46859,9 @@
     {
       "path": "docs/products/universal-overlay/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Universal Overlay",
-      "bytes": 129339,
-      "mtime": "2026-08-16T05:30:33.561Z",
-      "indexed_at": "2026-08-16T05:30:51.760Z"
+      "bytes": 130954,
+      "mtime": "2026-08-18T20:19:35.516Z",
+      "indexed_at": "2026-08-18T20:20:55.620Z"
     },
     {
       "path": "docs/products/universal-overlay/SEND_PACKET_FLUID_UI_AND_TWO_FACTORIES_2026-08-11.md",
@@ -76143,6 +76174,16 @@
       ]
     },
     {
+      "path": "routes/runtime-heartbeat-routes.js",
+      "synopsis": "Public runtime heartbeat for deployment liveness and credential-presence observability.",
+      "bytes": 3485,
+      "mtime": "2026-08-18T18:41:07.196Z",
+      "indexed_at": "2026-08-18T20:20:55.620Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "routes/sacredContentReview.js",
       "synopsis": "faith-studio BUILD_QUEUE artifact repair stub.",
       "bytes": 273,
@@ -77393,6 +77434,13 @@
       ]
     },
     {
+      "path": "scripts/bp-priority-dispatch.mjs",
+      "synopsis": "Continuous BP dispatcher that executes handoff-ready blueprints directly.",
+      "bytes": 3575,
+      "mtime": "2026-08-18T18:41:07.196Z",
+      "indexed_at": "2026-08-18T20:20:55.620Z"
+    },
+    {
       "path": "scripts/bp-priority-never-stop.mjs",
       "synopsis": "Never-stop BP_PRIORITY runner — retries FAIL until TECHNICAL_PASS or founder_stop.",
       "bytes": 12791,
@@ -78379,6 +78427,13 @@
       "ssot": [
         "docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "scripts/execute-handoff-blueprint.mjs",
+      "synopsis": "Execute a founder/architect handoff blueprint without re-authoring it in ARC.",
+      "bytes": 11542,
+      "mtime": "2026-08-18T18:41:07.197Z",
+      "indexed_at": "2026-08-18T20:20:55.620Z"
     },
     {
       "path": "scripts/extract-all-ideas.js",
@@ -80174,9 +80229,9 @@
     {
       "path": "scripts/prototype-overlay-action-v4.mjs",
       "synopsis": "Prototype V4 — Verbal AI Director & Autonomous Overlay Action.",
-      "bytes": 7492,
-      "mtime": "2026-08-06T08:18:52.061Z",
-      "indexed_at": "2026-08-06T08:23:02.648Z",
+      "bytes": 10541,
+      "mtime": "2026-08-18T18:41:07.197Z",
+      "indexed_at": "2026-08-18T20:20:55.620Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -93288,6 +93343,16 @@
       ]
     },
     {
+      "path": "scripts/verify-taloa-overlay-a2z.mjs",
+      "synopsis": "TALOA-A2Z-008 -- zero-deception acceptance harness for the",
+      "bytes": 10823,
+      "mtime": "2026-08-18T20:17:57.090Z",
+      "indexed_at": "2026-08-18T20:20:55.620Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "scripts/verify-tcservice.mjs",
       "synopsis": "Acceptance test for tc-service product.",
       "bytes": 3752,
@@ -94141,9 +94206,9 @@
     {
       "path": "services/bp-priority-completion.js",
       "synopsis": "Canonical BP completion semantics for queue, Point B, and readiness truth.",
-      "bytes": 4117,
-      "mtime": "2026-07-03T00:17:45.093Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 4395,
+      "mtime": "2026-08-18T18:41:07.198Z",
+      "indexed_at": "2026-08-18T20:20:55.620Z",
       "ssot": [
         "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/BLUEPRINT.json"
       ]
@@ -94412,13 +94477,12 @@
     },
     {
       "path": "services/builderos-bp-priority-scheduler.js",
-      "synopsis": "BP_PRIORITY autonomous queue scheduler — useful-work-guard wrapped.",
-      "bytes": 10336,
-      "mtime": "2026-07-31T06:06:37.207Z",
-      "indexed_at": "2026-07-31T06:09:02.116Z",
+      "synopsis": "Continuous supervisor for canonical BP dispatch, including handoff-ready blueprints.",
+      "bytes": 6332,
+      "mtime": "2026-08-18T18:41:07.199Z",
+      "indexed_at": "2026-08-18T20:20:55.620Z",
       "ssot": [
-        "builderos-reboot/BP_PRIORITY.json",
-        "docs/products/AUTHORITY_BOUNDARIES.md"
+        "builderos-reboot/BP_PRIORITY.json"
       ]
     },
     {
@@ -103009,6 +103073,16 @@
       ]
     },
     {
+      "path": "services/taloa/chatgpt-browser-conversation-adapter.js",
+      "synopsis": "TALOA-A2Z-005 -- app-specific ChatGPT browser adapter over the",
+      "bytes": 3443,
+      "mtime": "2026-08-18T20:15:19.940Z",
+      "indexed_at": "2026-08-18T20:20:55.620Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "services/taloa/chatgpt-relay-service.js",
       "synopsis": "Exports createChatGptRelayService — services/taloa/chatgpt-relay-service.js.",
       "bytes": 2667,
@@ -103019,11 +103093,71 @@
       ]
     },
     {
+      "path": "services/taloa/overlay-action-router.js",
+      "synopsis": "TALOA-A2Z-003 -- bounded multi-tree action router. Plans an",
+      "bytes": 2901,
+      "mtime": "2026-08-18T20:14:06.208Z",
+      "indexed_at": "2026-08-18T20:20:55.620Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/taloa/overlay-continuation-supervisor.js",
+      "synopsis": "TALOA-A2Z-007 -- composes the observation engine, target",
+      "bytes": 6506,
+      "mtime": "2026-08-18T20:16:21.598Z",
+      "indexed_at": "2026-08-18T20:20:55.620Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "services/taloa/overlay-host-service.js",
       "synopsis": "Manages the universal overlay display and interactions for the Digital Imprint system.",
       "bytes": 1636,
       "mtime": "2026-08-12T19:47:00.532Z",
       "indexed_at": "2026-08-12T19:47:00.532Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/taloa/overlay-observation-engine.js",
+      "synopsis": "TALOA-A2Z-001 -- converts a raw browser/UI snapshot (the shape",
+      "bytes": 3925,
+      "mtime": "2026-08-18T20:12:14.232Z",
+      "indexed_at": "2026-08-18T20:20:55.620Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/taloa/overlay-result-verifier.js",
+      "synopsis": "TALOA-A2Z-004 -- post-action result verification. A click/type/",
+      "bytes": 2784,
+      "mtime": "2026-08-18T20:14:38.628Z",
+      "indexed_at": "2026-08-18T20:20:55.620Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/taloa/overlay-runtime-truth.js",
+      "synopsis": "TALOA-A2Z-006 -- read-only runtime truth state emitter for Taloa.",
+      "bytes": 2600,
+      "mtime": "2026-08-18T20:13:25.236Z",
+      "indexed_at": "2026-08-18T20:20:55.620Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/taloa/overlay-target-selector.js",
+      "synopsis": "TALOA-A2Z-002 -- deterministic target selection over an",
+      "bytes": 3088,
+      "mtime": "2026-08-18T20:12:49.688Z",
+      "indexed_at": "2026-08-18T20:20:55.620Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
@@ -104718,9 +104852,9 @@
     {
       "path": "startup/auto-register-product-modules.js",
       "synopsis": "Convention-based auto-registration for product modules + a boot",
-      "bytes": 6613,
-      "mtime": "2026-08-01T13:51:07.555Z",
-      "indexed_at": "2026-08-01T13:52:20.896Z",
+      "bytes": 7163,
+      "mtime": "2026-08-18T18:45:18.490Z",
+      "indexed_at": "2026-08-18T20:20:55.620Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

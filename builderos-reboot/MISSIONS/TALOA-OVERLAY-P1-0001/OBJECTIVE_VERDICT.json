@@ -1,0 +1,31 @@
+{
+  "schema": "objective_verdict_v1",
+  "generated_at": "2026-08-18T20:18:16.534Z",
+  "objective_id": "TALOA-OVERLAY-P1-0001",
+  "objective_name": "Taloa Overlay A-to-Z pipeline",
+  "verdict": "NOT_COMPLETE",
+  "receipt": "products/receipts/TALOA_OVERLAY_A2Z_ACCEPTANCE.json",
+  "git_sha": "c3f419a23cd8df875aa0c867f2da6f5600f8c50b",
+  "tests_passed": [
+    "A2Z001_observe_returns_required_fields",
+    "A2Z001_classify_returns_label",
+    "A2Z002_select_returns_evidence_and_confidence",
+    "A2Z002_low_confidence_blocker_on_no_candidates",
+    "A2Z003_plan_accepts_supported_action",
+    "A2Z003_execute_succeeds_with_wired_adapter",
+    "A2Z003_execute_fails_closed_with_no_adapters",
+    "A2Z004_verify_detects_real_state_change",
+    "A2Z004_verify_never_silent_success_on_unchanged_state",
+    "A2Z005_classifies_working_state",
+    "A2Z005_classifies_approval_required",
+    "A2Z005_classifies_turn_complete",
+    "A2Z006_offline_before_first_heartbeat",
+    "A2Z006_fresh_after_heartbeat",
+    "A2Z007_cycle_reaches_non_idle_terminal_or_continue",
+    "A2Z007_no_snapshot_source_is_blueprint_exhausted_not_idle"
+  ],
+  "tests_failed": [],
+  "founder_usability_pass": false,
+  "taloa_a2z_verdict": "LIVE_SESSION_NOT_PROVEN",
+  "acceptance_command": "node scripts/verify-taloa-overlay-a2z.mjs"
+}

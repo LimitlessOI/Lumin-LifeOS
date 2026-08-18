@@ -1,0 +1,130 @@
+{
+  "schema": "taloa_overlay_a2z_acceptance_v1",
+  "mission_id": "TALOA-OVERLAY-P1-0001",
+  "started_at": "2026-08-18T20:18:16.522Z",
+  "tests_passed": [
+    "A2Z001_observe_returns_required_fields",
+    "A2Z001_classify_returns_label",
+    "A2Z002_select_returns_evidence_and_confidence",
+    "A2Z002_low_confidence_blocker_on_no_candidates",
+    "A2Z003_plan_accepts_supported_action",
+    "A2Z003_execute_succeeds_with_wired_adapter",
+    "A2Z003_execute_fails_closed_with_no_adapters",
+    "A2Z004_verify_detects_real_state_change",
+    "A2Z004_verify_never_silent_success_on_unchanged_state",
+    "A2Z005_classifies_working_state",
+    "A2Z005_classifies_approval_required",
+    "A2Z005_classifies_turn_complete",
+    "A2Z006_offline_before_first_heartbeat",
+    "A2Z006_fresh_after_heartbeat",
+    "A2Z007_cycle_reaches_non_idle_terminal_or_continue",
+    "A2Z007_no_snapshot_source_is_blueprint_exhausted_not_idle"
+  ],
+  "tests_failed": [],
+  "steps": [
+    {
+      "step": "A2Z001_observe_returns_required_fields",
+      "ok": true,
+      "detail": "checked observed_at/confidence/actionable",
+      "at": "2026-08-18T20:18:16.523Z"
+    },
+    {
+      "step": "A2Z001_classify_returns_label",
+      "ok": true,
+      "detail": "classify() -> idle_composer_ready",
+      "at": "2026-08-18T20:18:16.523Z"
+    },
+    {
+      "step": "A2Z002_select_returns_evidence_and_confidence",
+      "ok": true,
+      "detail": "checked select() output shape",
+      "at": "2026-08-18T20:18:16.523Z"
+    },
+    {
+      "step": "A2Z002_low_confidence_blocker_on_no_candidates",
+      "ok": true,
+      "detail": "checked LOW_CONFIDENCE path",
+      "at": "2026-08-18T20:18:16.523Z"
+    },
+    {
+      "step": "A2Z003_plan_accepts_supported_action",
+      "ok": true,
+      "detail": "checked plan() for click",
+      "at": "2026-08-18T20:18:16.523Z"
+    },
+    {
+      "step": "A2Z003_execute_succeeds_with_wired_adapter",
+      "ok": true,
+      "detail": "checked execute() fallback resolution",
+      "at": "2026-08-18T20:18:16.524Z"
+    },
+    {
+      "step": "A2Z003_execute_fails_closed_with_no_adapters",
+      "ok": true,
+      "detail": "checked no-silent-success when no tree is wired",
+      "at": "2026-08-18T20:18:16.524Z"
+    },
+    {
+      "step": "A2Z004_verify_detects_real_state_change",
+      "ok": true,
+      "detail": "verify() -> VERIFIED",
+      "at": "2026-08-18T20:18:16.524Z"
+    },
+    {
+      "step": "A2Z004_verify_never_silent_success_on_unchanged_state",
+      "ok": true,
+      "detail": "verify() -> FALLBACK_REQUIRED",
+      "at": "2026-08-18T20:18:16.524Z"
+    },
+    {
+      "step": "A2Z005_classifies_working_state",
+      "ok": true,
+      "detail": "classifyState() -> CHATGPT_WORKING",
+      "at": "2026-08-18T20:18:16.524Z"
+    },
+    {
+      "step": "A2Z005_classifies_approval_required",
+      "ok": true,
+      "detail": "classifyState() -> APPROVAL_REQUIRED_CURRENT",
+      "at": "2026-08-18T20:18:16.524Z"
+    },
+    {
+      "step": "A2Z005_classifies_turn_complete",
+      "ok": true,
+      "detail": "classifyState() -> TURN_COMPLETE",
+      "at": "2026-08-18T20:18:16.524Z"
+    },
+    {
+      "step": "A2Z006_offline_before_first_heartbeat",
+      "ok": true,
+      "detail": "checked pre-heartbeat state",
+      "at": "2026-08-18T20:18:16.524Z"
+    },
+    {
+      "step": "A2Z006_fresh_after_heartbeat",
+      "ok": true,
+      "detail": "checked post-heartbeat state",
+      "at": "2026-08-18T20:18:16.524Z"
+    },
+    {
+      "step": "A2Z007_cycle_reaches_non_idle_terminal_or_continue",
+      "ok": true,
+      "detail": "runCycle() -> CONTINUE",
+      "at": "2026-08-18T20:18:16.525Z"
+    },
+    {
+      "step": "A2Z007_no_snapshot_source_is_blueprint_exhausted_not_idle",
+      "ok": true,
+      "detail": "runCycle(no source) -> BLUEPRINT_EXHAUSTED",
+      "at": "2026-08-18T20:18:16.525Z"
+    }
+  ],
+  "taloa_a2z_verdict": "LIVE_SESSION_NOT_PROVEN",
+  "live_session_check": {
+    "present": false,
+    "reason": "no evidence file at products/receipts/TALOA_OVERLAY_A2Z_LIVE_SESSION.json"
+  },
+  "completed_at": "2026-08-18T20:18:16.534Z",
+  "git_sha": "c3f419a23cd8df875aa0c867f2da6f5600f8c50b",
+  "verdict": "FAIL"
+}
