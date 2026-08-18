@@ -1,7 +1,11 @@
 /**
- * SYNOPSIS: BP_PRIORITY autonomous queue scheduler — useful-work-guard wrapped.
+ * SYNOPSIS: Continuous supervisor for the canonical BP_PRIORITY runner.
  * @ssot builderos-reboot/BP_PRIORITY.json
  * @ssot docs/products/AUTHORITY_BOUNDARIES.md
+ *
+ * Invariant: while current Point B is incomplete, a successful scheduler state
+ * may not be idle. The runner is a long-lived child process and is restarted if
+ * it exits. BUILDEROS_AUTOPILOT=0 is the explicit runtime stop.
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -11,12 +15,7 @@ import { createUsefulWorkGuard } from './useful-work-guard.js';
 import { isQueueItemIncomplete } from './bp-priority-completion.js';
 import { loadPointBTarget } from './point-b-target-lite.js';
 import { loadFactoryArcModules } from './factory-arc-loader.js';
-import {
-  countProductWork,
-  neverStopProductsEnabled,
-  hasTokenCapacity,
-  runProductExpansionCycle,
-} from './never-stop-product-factory.js';
+import { hasTokenCapacity } from './never-stop-product-factory.js';
 import { registerScheduler, updateScheduler } from './scheduler-registry.js';
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -26,257 +25,215 @@ const RECEIPT_PATH = path.join(REPO_ROOT, 'data/builderos-bp-priority-scheduler-
 
 const state = {
   running: false,
+  childPid: null,
+  child: null,
+  bootAt: new Date().toISOString(),
   lastRunAt: null,
+  lastExitAt: null,
   lastExitCode: null,
   lastError: null,
   lastSkipReason: null,
-  totalRuns: 0,
-  bootAt: new Date().toISOString(),
+  totalStarts: 0,
+  stdoutTail: '',
+  stderrTail: '',
 };
 
 function schedulerEnabled() {
-  // Founder directive 2026-08-17: canonical BP scheduler is default-on.
-  // It may be explicitly stopped only with BUILDEROS_AUTOPILOT=0.
   return process.env.BUILDEROS_AUTOPILOT !== '0';
 }
 
-function queueHasIncompleteWork() {
-  if (!fs.existsSync(BP_PATH)) return false;
+function loadQueue() {
   try {
-    const queue = JSON.parse(fs.readFileSync(BP_PATH, 'utf8'));
-    const items = queue.items || [];
-    return items.some((i) => isQueueItemIncomplete(i));
-  } catch {
-    return false;
-  }
-}
-
-function safeReadJson(filePath) {
-  try {
-    return JSON.parse(fs.readFileSync(filePath, 'utf8'));
+    return JSON.parse(fs.readFileSync(BP_PATH, 'utf8'));
   } catch {
     return null;
   }
 }
 
+function queueHasIncompleteWork() {
+  const queue = loadQueue();
+  if (!queue) return false;
+  const pointBTarget = loadPointBTarget();
+  return (queue.items || []).some((item) => isQueueItemIncomplete(item, { pointBTarget }));
+}
+
 function writeReceipt(payload) {
   try {
     fs.mkdirSync(path.dirname(RECEIPT_PATH), { recursive: true });
-    fs.writeFileSync(
-      RECEIPT_PATH,
-      `${JSON.stringify({ schema: 'bp_priority_scheduler_receipt_v1', ...payload, written_at: new Date().toISOString() }, null, 2)}\n`,
-    );
+    fs.writeFileSync(RECEIPT_PATH, `${JSON.stringify({
+      schema: 'bp_priority_scheduler_receipt_v2',
+      ...payload,
+      written_at: new Date().toISOString(),
+    }, null, 2)}\n`);
   } catch {
-    // non-fatal on read-only filesystem
+    // Runtime may be read-only; status still remains in memory/registry.
   }
 }
 
+function appendTail(existing, chunk, max = 4000) {
+  return `${existing}${String(chunk || '')}`.slice(-max);
+}
+
 export function getBpPrioritySchedulerState() {
-  return { ...state, receipt_path: RECEIPT_PATH };
+  return {
+    running: state.running,
+    child_pid: state.childPid,
+    boot_at: state.bootAt,
+    last_run_at: state.lastRunAt,
+    last_exit_at: state.lastExitAt,
+    last_exit_code: state.lastExitCode,
+    last_error: state.lastError,
+    last_skip_reason: state.lastSkipReason,
+    total_starts: state.totalStarts,
+    stdout_tail: state.stdoutTail,
+    stderr_tail: state.stderrTail,
+    receipt_path: RECEIPT_PATH,
+  };
 }
 
 export function getBpPrioritySchedulerStatus() {
-  const receipt = safeReadJson(RECEIPT_PATH);
   const pointB = loadPointBTarget();
   const incomplete = queueHasIncompleteWork();
-  const neverStop = neverStopProductsEnabled();
-  const token = hasTokenCapacity();
-  const enabled = schedulerEnabled();
-  const lastRunAt = state.lastRunAt || receipt?.ran_at || null;
-  const lastRunAgeMs = lastRunAt ? Math.max(0, Date.now() - new Date(lastRunAt).getTime()) : null;
-  const recentWindowMs = Number(process.env.BUILDEROS_AUTOPILOT_RECENT_WINDOW_MS || 2 * 60 * 60 * 1000);
-  const recent = lastRunAgeMs != null && lastRunAgeMs <= recentWindowMs;
-  const bootDelayMs = Number(process.env.BUILDEROS_AUTOPILOT_BOOT_DELAY_MS || 2 * 60 * 1000);
-  const msSinceBoot = Date.now() - new Date(state.bootAt).getTime();
-  const inBootWindow = msSinceBoot < bootDelayMs + 30_000;
-  const healthy =
-    enabled &&
-    !state.running &&
-    receipt?.ok === true &&
-    recent;
-
   return {
     ok: true,
     scheduler: {
-      enabled,
+      enabled: schedulerEnabled(),
+      mode: 'continuous_child_supervisor',
       running: state.running,
-      recent,
-      healthy,
-      in_boot_window: inBootWindow,
-      boot_at: state.bootAt,
-      recent_window_ms: recentWindowMs,
-      interval_ms: Number(process.env.BUILDEROS_AUTOPILOT_INTERVAL_MS || 30 * 60 * 1000),
-      boot_delay_ms: bootDelayMs,
-      state: getBpPrioritySchedulerState(),
-      receipt,
+      healthy: schedulerEnabled() && (!incomplete || state.running),
       queue_has_incomplete_work: incomplete,
-      never_stop_products: neverStop,
-      token_capacity: token,
       point_b_target: pointB || null,
-      last_run_at: lastRunAt,
-      last_run_age_ms: lastRunAgeMs,
-      last_skip_reason: state.lastSkipReason,
+      token_capacity: hasTokenCapacity(),
+      state: getBpPrioritySchedulerState(),
       canonical_runner: path.relative(REPO_ROOT, RUNNER_SCRIPT),
       canonical_receipt: path.relative(REPO_ROOT, RECEIPT_PATH),
     },
   };
 }
 
-export function runBpPriorityOnce({ logger } = {}) {
-  if (state.running) {
-    return Promise.resolve({ ok: false, skipped: true, reason: 'already_running' });
+function startContinuousRunner({ logger } = {}) {
+  if (!schedulerEnabled()) {
+    state.lastSkipReason = 'BUILDEROS_AUTOPILOT_explicitly_disabled';
+    return { ok: false, skipped: true, reason: state.lastSkipReason };
+  }
+  if (state.running && state.child) {
+    return { ok: true, skipped: true, reason: 'already_running', pid: state.childPid };
   }
   if (!fs.existsSync(RUNNER_SCRIPT)) {
-    return Promise.resolve({ ok: false, skipped: true, reason: 'runner_script_missing', path: RUNNER_SCRIPT });
+    state.lastError = 'runner_script_missing';
+    return { ok: false, skipped: true, reason: state.lastError };
   }
 
-  state.running = true;
-  state.lastRunAt = new Date().toISOString();
-  state.lastError = null;
-  state.totalRuns += 1;
-
-  const child = spawn(process.execPath, [RUNNER_SCRIPT, '--once'], {
+  const child = spawn(process.execPath, [RUNNER_SCRIPT, '--sleep-ms=60000'], {
     cwd: REPO_ROOT,
-    env: { ...process.env },
+    env: {
+      ...process.env,
+      BUILDEROS_AUTOPILOT: '1',
+      BUILDEROS_NEVER_STOP: '1',
+      NEVER_STOP_PRODUCTS: process.env.NEVER_STOP_PRODUCTS === '0' ? '0' : '1',
+    },
     stdio: ['ignore', 'pipe', 'pipe'],
   });
 
-  let stdout = '';
-  let stderr = '';
-  child.stdout.on('data', (d) => { stdout += d; });
-  child.stderr.on('data', (d) => { stderr += d; });
-
-  return new Promise((resolve) => {
-    child.on('close', (code) => {
-      state.running = false;
-      state.lastExitCode = code;
-      const result = {
-        ok: code === 0,
-        exit_code: code,
-        ran_at: state.lastRunAt,
-        stdout_tail: stdout.slice(-3000),
-        stderr_tail: stderr.slice(-1000),
-      };
-      writeReceipt(result);
-      if (code === 0) {
-        logger?.info?.({ exit_code: code }, '[BP-PRIORITY-SCHEDULER] queue cycle complete');
-      } else {
-        logger?.warn?.({ exit_code: code, stderr: stderr.slice(-500) }, '[BP-PRIORITY-SCHEDULER] queue cycle defect — fix blocker');
-      }
-      resolve(result);
-    });
-    child.on('error', (err) => {
-      state.running = false;
-      state.lastError = err.message;
-      writeReceipt({ ok: false, error: err.message, ran_at: state.lastRunAt });
-      logger?.warn?.({ err: err.message }, '[BP-PRIORITY-SCHEDULER] spawn failed');
-      resolve({ ok: false, error: err.message });
-    });
-  });
-}
-
-function recordGuardedOutcome(outcome, { logger } = {}) {
-  const ranAt = new Date().toISOString();
-  state.lastRunAt = ranAt;
+  state.child = child;
+  state.running = true;
+  state.childPid = child.pid || null;
+  state.lastRunAt = new Date().toISOString();
   state.lastError = null;
-  if (outcome?.reason === 'no_work') {
-    state.lastExitCode = 0;
+  state.lastSkipReason = null;
+  state.totalStarts += 1;
+  state.stdoutTail = '';
+  state.stderrTail = '';
+
+  writeReceipt({
+    ok: true,
+    status: 'RUNNING',
+    pid: state.childPid,
+    ran_at: state.lastRunAt,
+    point_b: loadPointBTarget()?.label || null,
+    invariant: 'POINT_B_INCOMPLETE_IMPLIES_RUNNER_ACTIVE',
+  });
+
+  child.stdout?.on('data', (chunk) => {
+    state.stdoutTail = appendTail(state.stdoutTail, chunk);
+  });
+  child.stderr?.on('data', (chunk) => {
+    state.stderrTail = appendTail(state.stderrTail, chunk);
+  });
+
+  child.on('error', (err) => {
+    state.lastError = err.message;
+    logger?.warn?.({ err: err.message }, '[BP-PRIORITY-SCHEDULER] continuous runner spawn error');
+  });
+
+  child.on('close', (code, signal) => {
+    state.running = false;
+    state.child = null;
+    state.childPid = null;
+    state.lastExitAt = new Date().toISOString();
+    state.lastExitCode = code;
+    const workStillOpen = queueHasIncompleteWork();
     writeReceipt({
-      ok: true,
-      skipped: true,
-      reason: outcome.reason,
-      detail: outcome.detail || 'BP_PRIORITY queue complete',
-      ran_at: ranAt,
+      ok: !workStillOpen && code === 0,
+      status: workStillOpen ? 'RUNNER_EXITED_WITH_POINT_B_OPEN' : 'RUNNER_EXITED',
+      exit_code: code,
+      signal: signal || null,
+      ran_at: state.lastRunAt,
+      exited_at: state.lastExitAt,
+      queue_has_incomplete_work: workStillOpen,
+      stdout_tail: state.stdoutTail,
+      stderr_tail: state.stderrTail,
     });
-    logger?.info?.({ reason: outcome.reason }, '[BP-PRIORITY-SCHEDULER] healthy idle — queue complete');
-  } else if (outcome?.skipped) {
-    state.lastSkipReason = outcome.reason || 'skipped';
-    writeReceipt({
-      ok: false,
-      skipped: true,
-      reason: outcome.reason || 'skipped',
-      detail: outcome.detail || null,
-      ran_at: ranAt,
-    });
-  }
+    if (workStillOpen) {
+      logger?.warn?.({ code, signal }, '[BP-PRIORITY-SCHEDULER] runner exited while Point B work remains; supervisor will restart it');
+    }
+  });
+
+  logger?.info?.({ pid: state.childPid }, '[BP-PRIORITY-SCHEDULER] continuous never-stop runner started');
+  return { ok: true, started: true, pid: state.childPid };
 }
 
-const guardedBpPriorityTick = createUsefulWorkGuard({
-  taskName: 'BP-PRIORITY-SCHEDULER',
-  purpose: 'Advance Point B mission via foundation pipeline when BP_PRIORITY has incomplete work',
-  // Canonical BuilderOS autopilot is a founder-authorized runtime lane.
-  // Directed mode should block generic schedulers, not the governed BP queue.
+// Legacy export retained for callers/tests. It now guarantees the canonical
+// continuous runner exists rather than launching a one-shot child that can
+// silently exit 0 after a failed pre-build gate.
+export function runBpPriorityOnce({ logger } = {}) {
+  return Promise.resolve(startContinuousRunner({ logger }));
+}
+
+const guardedSupervisorTick = createUsefulWorkGuard({
+  taskName: 'BP-PRIORITY-CONTINUOUS-SUPERVISOR',
+  purpose: 'Keep the canonical BP runner alive while current Point B is incomplete',
   allowInDirectedMode: true,
   prerequisites: async () => {
-    if (!schedulerEnabled()) {
-      return { ok: false, reason: 'BUILDEROS_AUTOPILOT explicitly disabled' };
-    }
+    if (!schedulerEnabled()) return { ok: false, reason: 'BUILDEROS_AUTOPILOT explicitly disabled' };
+    if (!fs.existsSync(RUNNER_SCRIPT)) return { ok: false, reason: 'runner_script_missing' };
     const token = hasTokenCapacity();
-    if (!token.ok && neverStopProductsEnabled()) {
-      return { ok: false, reason: `token_capacity: ${token.reason}` };
-    }
+    if (!token.ok) return { ok: false, reason: `token_capacity: ${token.reason}` };
     try {
       const { founderStopActive } = await loadFactoryArcModules();
       const stop = founderStopActive();
-      if (stop.active && !neverStopProductsEnabled()) {
-        return { ok: false, reason: 'founder_stop_active' };
-      }
+      if (stop.active) return { ok: false, reason: 'founder_stop_active' };
     } catch {
       return { ok: false, reason: 'factory_staging_unavailable' };
     }
-    if (!fs.existsSync(RUNNER_SCRIPT)) {
-      return { ok: false, reason: 'runner_script_missing' };
-    }
-    return { ok: true, reason: null };
+    return { ok: true };
   },
-  workCheck: async () => {
-    const token = hasTokenCapacity();
-    if (!token.ok) {
-      return { count: 0, description: `token_capacity: ${token.reason}` };
-    }
-    if (queueHasIncompleteWork()) {
-      const target = loadPointBTarget();
-      return {
-        count: 1,
-        description: `Incomplete BP_PRIORITY work toward ${target?.label || 'Point B'}`,
-      };
-    }
-    if (neverStopProductsEnabled()) {
-      return countProductWork();
-    }
-    return { count: 0, description: 'BP_PRIORITY queue complete' };
-  },
-  execute: async ({ logger } = {}) => {
-    if (!queueHasIncompleteWork() && neverStopProductsEnabled()) {
-      const result = await runProductExpansionCycle({ logger });
-      writeReceipt({
-        ok: result.ok !== false,
-        expansion: true,
-        task_id: result.task_id,
-        detail: result.detail,
-        ran_at: new Date().toISOString(),
-      });
-      return result;
-    }
-    return runBpPriorityOnce({ logger });
-  },
+  workCheck: async () => ({
+    count: queueHasIncompleteWork() ? 1 : 0,
+    description: queueHasIncompleteWork() ? 'Current Point B has incomplete BP work' : 'Current Point B complete',
+  }),
+  execute: async ({ logger } = {}) => startContinuousRunner({ logger }),
 });
 
-/**
- * Start the scheduler. Founder directive 2026-08-17: default ON.
- * Set BUILDEROS_AUTOPILOT=0 only for an explicit stop.
- */
 export function startBpPriorityScheduler({ logger } = {}) {
   const enabled = schedulerEnabled();
-  const intervalMs = Number(process.env.BUILDEROS_AUTOPILOT_INTERVAL_MS || 30 * 60 * 1000);
-  const bootDelayMs = Number(process.env.BUILDEROS_AUTOPILOT_BOOT_DELAY_MS || 2 * 60 * 1000);
+  const supervisorIntervalMs = Number(process.env.BUILDEROS_AUTOPILOT_SUPERVISOR_INTERVAL_MS || 60_000);
 
   registerScheduler('bp_priority', {
-    type: 'default_on_env_stop',
+    type: 'continuous_supervisor_default_on',
     env_gate: 'BUILDEROS_AUTOPILOT',
     enabled,
-    interval_ms: intervalMs,
-    boot_delay_ms: bootDelayMs,
+    interval_ms: supervisorIntervalMs,
     started_at: new Date().toISOString(),
   });
 
@@ -285,26 +242,30 @@ export function startBpPriorityScheduler({ logger } = {}) {
     return null;
   }
 
-  logger?.info?.({ intervalMs, bootDelayMs }, '[BP-PRIORITY-SCHEDULER] starting — canonical autonomous mission queue active');
-
   const tick = async () => {
     updateScheduler('bp_priority', { last_tick_started_at: new Date().toISOString() });
-    const outcome = await guardedBpPriorityTick({ logger });
-    if (outcome?.skipped) {
-      recordGuardedOutcome(outcome, { logger });
-    }
+    const outcome = await guardedSupervisorTick({ logger });
+    if (outcome?.skipped) state.lastSkipReason = outcome.reason || 'skipped';
     updateScheduler('bp_priority', {
       last_tick_completed_at: new Date().toISOString(),
       last_outcome: outcome || null,
+      child_pid: state.childPid,
+      child_running: state.running,
     });
+    return outcome;
   };
 
-  // Run one immediate tick so a deploy does not sit idle for the boot delay.
-  tick().catch((err) => logger?.warn?.({ err: err.message }, '[BP-PRIORITY-SCHEDULER] immediate boot tick failed'));
+  tick().catch((err) => {
+    state.lastError = err.message;
+    logger?.warn?.({ err: err.message }, '[BP-PRIORITY-SCHEDULER] immediate supervisor tick failed');
+  });
 
   const timer = setInterval(() => {
-    tick().catch((err) => logger?.warn?.({ err: err.message }, '[BP-PRIORITY-SCHEDULER] interval tick failed'));
-  }, intervalMs);
+    tick().catch((err) => {
+      state.lastError = err.message;
+      logger?.warn?.({ err: err.message }, '[BP-PRIORITY-SCHEDULER] supervisor tick failed');
+    });
+  }, supervisorIntervalMs);
 
   updateScheduler('bp_priority', { timer_set: true });
   return timer;
