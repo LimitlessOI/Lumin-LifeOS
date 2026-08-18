@@ -28,6 +28,38 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
+      - name: Persist workflow start receipt
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          SHA: ${{ github.sha }}
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          python - <<'PY'
+          import base64, json, os, urllib.request, urllib.error
+          path = 'products/receipts/ABBOTT_EMERGENCY_DEPLOY.json'
+          receipt = {
+              'schema': 'abbott_emergency_deploy_v1',
+              'verdict': 'RUNNING',
+              'source_sha': os.environ['SHA'],
+              'run_id': os.environ['RUN_ID'],
+              'deploy_step_outcome': 'pending',
+              'log_tail': '',
+          }
+          api = f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}"
+          headers = {'Authorization': f"Bearer {os.environ['GH_TOKEN']}", 'Accept': 'application/vnd.github+json'}
+          existing = None
+          try:
+              with urllib.request.urlopen(urllib.request.Request(api, headers=headers)) as r:
+                  existing = json.load(r).get('sha')
+          except urllib.error.HTTPError as e:
+              if e.code != 404: raise
+          payload = {'message': '[deploy] Abbott emergency deploy started', 'content': base64.b64encode((json.dumps(receipt, indent=2)+'\n').encode()).decode(), 'branch': 'main'}
+          if existing: payload['sha'] = existing
+          req = urllib.request.Request(api, data=json.dumps(payload).encode(), headers={**headers, 'Content-Type':'application/json'}, method='PUT')
+          with urllib.request.urlopen(req) as r:
+              print(json.load(r)['commit']['sha'])
+          PY
       - name: Syntax check changed runtime files
         run: |
           node --check services/costello-infrastructure-guardian-supervisor.js
@@ -65,7 +97,6 @@ jobs:
           import base64, json, os, pathlib, urllib.request, urllib.error
           path = 'products/receipts/ABBOTT_EMERGENCY_DEPLOY.json'
           log = pathlib.Path('/tmp/railway-deploy.log').read_text(errors='replace') if pathlib.Path('/tmp/railway-deploy.log').exists() else ''
-          # Keep only non-secret operational tail. GitHub masks known secrets before output.
           tail = '\n'.join(log.splitlines()[-30:])[-6000:]
           receipt = {
               'schema': 'abbott_emergency_deploy_v1',
@@ -83,11 +114,7 @@ jobs:
                   existing = json.load(r).get('sha')
           except urllib.error.HTTPError as e:
               if e.code != 404: raise
-          payload = {
-              'message': '[deploy] persist Abbott emergency deploy receipt',
-              'content': base64.b64encode((json.dumps(receipt, indent=2)+'\n').encode()).decode(),
-              'branch': 'main',
-          }
+          payload = {'message': '[deploy] persist Abbott emergency deploy receipt', 'content': base64.b64encode((json.dumps(receipt, indent=2)+'\n').encode()).decode(), 'branch': 'main'}
           if existing: payload['sha'] = existing
           req = urllib.request.Request(api, data=json.dumps(payload).encode(), headers={**headers, 'Content-Type':'application/json'}, method='PUT')
           with urllib.request.urlopen(req) as r:
