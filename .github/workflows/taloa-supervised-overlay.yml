@@ -12,7 +12,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   prove-supervised-overlay:
@@ -25,3 +25,51 @@ jobs:
           node-version: '20'
       - name: Verify supervised multi-session A2Z adapter
         run: node scripts/verify-taloa-supervised-overlay.mjs
+      - name: Persist proof receipt
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          SHA: ${{ github.sha }}
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          python - <<'PY'
+          import base64, json, os, urllib.request, urllib.error
+          path = 'products/receipts/TALOA_SUPERVISED_OVERLAY_CI.json'
+          repo = os.environ['REPO']
+          receipt = {
+              'schema': 'taloa_supervised_overlay_ci_v1',
+              'verdict': 'PASS',
+              'tested_sha': os.environ['SHA'],
+              'run_id': os.environ['RUN_ID'],
+              'proofs': [
+                  'observe_real_shape',
+                  'type_executes_through_dom_adapter',
+                  'type_requires_observed_effect_for_verified',
+                  'parallel_session_state_isolated',
+                  'second_session_advances_independently',
+                  'first_session_not_contaminated',
+                  'navigate_translation_preserves_url',
+                  'navigate_verified_from_fresh_observation',
+                  'route_requires_explicit_founder_approval',
+                  'route_exposes_work_item_inventory',
+                  'route_uses_supervised_mode_not_legacy_autonomous_loop'
+              ]
+          }
+          content = base64.b64encode((json.dumps(receipt, indent=2) + '\n').encode()).decode()
+          api = f'https://api.github.com/repos/{repo}/contents/{path}'
+          headers = {'Authorization': f'Bearer {os.environ["GH_TOKEN"]}', 'Accept': 'application/vnd.github+json'}
+          existing_sha = None
+          try:
+              req = urllib.request.Request(api, headers=headers)
+              with urllib.request.urlopen(req) as r:
+                  existing_sha = json.load(r).get('sha')
+          except urllib.error.HTTPError as e:
+              if e.code != 404:
+                  raise
+          payload = {'message': '[ci] persist supervised overlay proof', 'content': content, 'branch': 'main'}
+          if existing_sha:
+              payload['sha'] = existing_sha
+          req = urllib.request.Request(api, data=json.dumps(payload).encode(), headers={**headers, 'Content-Type': 'application/json'}, method='PUT')
+          with urllib.request.urlopen(req) as r:
+              print(json.load(r)['commit']['sha'])
+          PY
