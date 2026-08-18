@@ -1,0 +1,24 @@
+{
+  "schema": "product_blueprint_pointer_v1",
+  "product_id": "lifeos",
+  "assigned_builderos": "ABBOTT",
+  "repository": "LimitlessOI/Lumin-LifeOS",
+  "current_blueprint": "docs/products/lifeos/blueprint-versions/LIFEOS_BLUEPRINT_VERSION_B.md",
+  "current_version": "B",
+  "status": "CURRENT_CANONICAL_PRODUCT_BLUEPRINT",
+  "supersedes": [
+    "docs/products/lifeos/blueprint-versions/LIFEOS_BLUEPRINT_VERSION_A.md"
+  ],
+  "archive_policy": {
+    "active_directory_may_contain_only_current_or_future_review_candidate_blueprints": true,
+    "superseded_blueprints_are_history_only": true,
+    "factory_must_not_build_from_archived_blueprints": true,
+    "factory_must_not_reactivate_superseded_blueprints_without_new_founder_direction": true
+  },
+  "assignment": {
+    "abbott": "Own LifeOS blueprint continuation from Version B forward.",
+    "costello": "Remain on Taloa Overlay; do not consume LifeOS Version B unless explicitly reassigned."
+  },
+  "truth_rule": "This pointer establishes blueprint authority only. It does not claim Version B is an executable factory mission or that any LifeOS implementation has started.",
+  "updated_at": "2026-08-18T01:19:00-07:00"
+}
