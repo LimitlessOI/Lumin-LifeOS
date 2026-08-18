@@ -1,0 +1,13 @@
+{
+  "schema": "archived_blueprint_record_v1",
+  "product_id": "lifeos",
+  "version": "A",
+  "status": "ARCHIVED_HISTORY_ONLY_DO_NOT_EXECUTE",
+  "former_active_path": "docs/products/lifeos/blueprint-versions/LIFEOS_BLUEPRINT_VERSION_A.md",
+  "historical_blob_sha": "804d8fa367e56f6e2089ac9372298fdf89098d25",
+  "superseded_by": "docs/products/lifeos/blueprint-versions/LIFEOS_BLUEPRINT_VERSION_B.md",
+  "canonical_pointer": "docs/products/lifeos/blueprint-versions/CURRENT.json",
+  "factory_policy": "DO_NOT_BUILD_DO_NOT_QUEUE_DO_NOT_REACTIVATE",
+  "reason": "Version B supersedes Version A as the current LifeOS product blueprint. Version A remains recoverable from git history for provenance only.",
+  "archived_at": "2026-08-18T01:23:00-07:00"
+}
