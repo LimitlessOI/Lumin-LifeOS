@@ -1,0 +1,159 @@
+name: Railway curl auth probe
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/railway-auth-curl-probe.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Probe Railway API with curl and explicit user agent
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          RUN_ID: ${{ github.run_id }}
+          SOURCE_SHA: ${{ github.sha }}
+          RAILWAY_API_TOKEN: ${{ secrets.RAILWAY_API_TOKEN }}
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          RAILWAY_PROJECT_TOKEN: ${{ secrets.RAILWAY_PROJECT_TOKEN }}
+          RAILWAY_PROJECT_ID: ${{ vars.RAILWAY_PROJECT_ID }}
+        shell: bash
+        run: |
+          set -u
+          python - <<'PY'
+          import base64, json, os, subprocess, tempfile, urllib.request, urllib.error
+
+          project_id = os.environ.get('RAILWAY_PROJECT_ID','').strip()
+          endpoints = [
+            'https://backboard.railway.com/graphql/v2',
+            'https://backboard.railway.app/graphql/v2',
+          ]
+          tokens = [
+            ('api_token', os.environ.get('RAILWAY_API_TOKEN','').strip()),
+            ('railway_token', os.environ.get('RAILWAY_TOKEN','').strip()),
+            ('project_token', os.environ.get('RAILWAY_PROJECT_TOKEN','').strip()),
+          ]
+          topo_query = '''query ProbeProject($projectId: String!) {
+            project(id: $projectId) {
+              id
+              name
+              services { edges { node { id name } } }
+              environments { edges { node { id name } } }
+            }
+          }'''
+          project_token_query = 'query { projectToken { projectId environmentId } }'
+
+          receipt = {
+            'schema': 'railway_auth_curl_probe_v1',
+            'source_sha': os.environ.get('SOURCE_SHA'),
+            'run_id': os.environ.get('RUN_ID'),
+            'project_id_present': bool(project_id),
+            'attempts': [],
+            'working': None,
+            'project': None,
+            'project_token_scope': None,
+          }
+
+          def curl_gql(endpoint, token, header_mode, query, variables):
+            payload = json.dumps({'query': query, 'variables': variables})
+            with tempfile.NamedTemporaryFile('w', delete=False) as body:
+              body.write(payload)
+              body_path = body.name
+            out_path = body_path + '.out'
+            if header_mode == 'bearer':
+              auth = f'Authorization: Bearer {token}'
+            else:
+              auth = f'Project-Access-Token: {token}'
+            cmd = [
+              'curl','-sS','--connect-timeout','10','--max-time','20',
+              '-A','curl/8.0 GitHub-Actions-Railway-Probe',
+              '-H','Content-Type: application/json',
+              '-H',auth,
+              '-o',out_path,'-w','%{http_code}',
+              '--data-binary','@'+body_path,endpoint,
+            ]
+            try:
+              p = subprocess.run(cmd, text=True, capture_output=True, timeout=25)
+              code = p.stdout.strip() or '000'
+              try:
+                text = open(out_path, encoding='utf-8', errors='replace').read()
+              except Exception:
+                text = ''
+              try:
+                data = json.loads(text)
+              except Exception:
+                data = {'raw': text[:500]}
+              return code, data, (p.stderr or '')[:500]
+            finally:
+              for pth in (body_path,out_path):
+                try: os.unlink(pth)
+                except Exception: pass
+
+          for endpoint in endpoints:
+            for token_name, token in tokens:
+              if not token:
+                receipt['attempts'].append({'endpoint':endpoint,'token':token_name,'header':'none','configured':False,'http':None,'ok':False,'error':'not_configured'})
+                continue
+              for header_mode in ('bearer','project'):
+                query = project_token_query if header_mode == 'project' else topo_query
+                variables = {} if header_mode == 'project' else {'projectId': project_id}
+                code, data, stderr = curl_gql(endpoint, token, header_mode, query, variables)
+                errors = data.get('errors') if isinstance(data,dict) else None
+                ok = code == '200' and not errors and bool((data.get('data') or {}) if isinstance(data,dict) else False)
+                attempt = {
+                  'endpoint':endpoint,'token':token_name,'header':header_mode,'configured':True,
+                  'http':code,'ok':ok,'error':('; '.join(str(e.get('message',e)) for e in errors) if errors else (data.get('raw') if isinstance(data,dict) else None) or stderr or None)
+                }
+                receipt['attempts'].append(attempt)
+                if not ok:
+                  continue
+                if header_mode == 'project':
+                  scope = (data.get('data') or {}).get('projectToken')
+                  if scope:
+                    receipt['project_token_scope'] = scope
+                    if receipt['working'] is None:
+                      receipt['working'] = {'endpoint':endpoint,'token':token_name,'header':header_mode}
+                else:
+                  project = (data.get('data') or {}).get('project')
+                  if project:
+                    receipt['working'] = {'endpoint':endpoint,'token':token_name,'header':header_mode}
+                    receipt['project'] = {
+                      'id': project.get('id'),
+                      'name': project.get('name'),
+                      'services': [{'id': e['node']['id'], 'name': e['node']['name']} for e in (project.get('services') or {}).get('edges', [])],
+                      'environments': [{'id': e['node']['id'], 'name': e['node']['name']} for e in (project.get('environments') or {}).get('edges', [])],
+                    }
+                    break
+              if receipt['project']:
+                break
+            if receipt['project']:
+              break
+
+          path = 'products/receipts/RAILWAY_AUTH_CURL_PROBE.json'
+          api = f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}"
+          headers = {'Authorization': f"Bearer {os.environ['GH_TOKEN']}", 'Accept':'application/vnd.github+json'}
+          existing = None
+          try:
+            with urllib.request.urlopen(urllib.request.Request(api, headers=headers)) as r:
+              existing = json.load(r).get('sha')
+          except urllib.error.HTTPError as e:
+            if e.code != 404: raise
+          payload = {'message':'[railway] persist curl auth probe','content':base64.b64encode((json.dumps(receipt,indent=2)+'\n').encode()).decode(),'branch':'main'}
+          if existing: payload['sha'] = existing
+          req = urllib.request.Request(api,data=json.dumps(payload).encode(),headers={**headers,'Content-Type':'application/json'},method='PUT')
+          with urllib.request.urlopen(req) as r:
+            print(json.load(r)['commit']['sha'])
+
+          print(json.dumps(receipt, indent=2))
+          if receipt['working'] is None:
+            raise SystemExit(1)
+          PY
