@@ -1,4 +1,4 @@
-<!-- SYNOPSIS: Founder Packet — Taloa Overlay Phase 1 foundation layer: seven store bindings and eight services from the sealed blueprint. -->
+<!-- SYNOPSIS: Founder Packet — Taloa Overlay Phase 1 foundation layer plus founder-directed A-to-Z completion authority. -->
 
 # Founder Packet — Taloa Overlay Phase 1 Foundation
 
@@ -95,4 +95,168 @@ This directive governs the next Overlay architecture/build cycle and is part of 
     - `KEEP_CANONICAL_AND_BUILD` — identify the one canonical blueprint and the next lawful Overlay slices; or
     - `SUPERSEDE_AND_REBLUEPRINT` — archive/supersede the inadequate authority artifact(s), author one replacement canonical blueprint, then release its pre-authored slices to Costello.
 
-The founder's current priority is execution: resolve blueprint authority quickly, then keep Costello building Overlay toward the live interaction Point B.
+---
+
+# Founder Directive — 2026-08-17 — FINISH OVERLAY A TO Z
+
+The mission is no longer satisfied by a Phase-1 technical pass. The founder directs Architecture and Costello to finish Taloa Overlay from current reality all the way to a working, real-session, end-to-end Point B. This section defines the A-to-Z completion path that Architecture must encode into the **one canonical Overlay blueprint**. Factories may only execute slices once Architecture has pre-authored them.
+
+## A — Authority and Blueprint Uniqueness
+- Inventory every current/superseded Overlay blueprint-like artifact.
+- Select exactly one current canonical blueprint path.
+- Mark every competing predecessor `SUPERSEDED`, `ARCHIVED`, or historical-only with provenance.
+- Keep `builderos-reboot/BP_PRIORITY.json` as the sole scheduler queue.
+
+## B — Baseline Reality
+- Record what actually exists today: native macOS body, browser extension/body, Android body, overlay host, watch supervisor, click engine, services, stores, receipts, routes, deployment state.
+- Classify each claim FACT / INFERENCE / HYPOTHESIS / UNKNOWN.
+- Do not treat previous technical PASS receipts as end-to-end proof.
+
+## C — Core Shared Services
+- Finish the shared store/service foundation already begun in Phase 1.
+- Reuse canonical stores where available; create only architect-authorized net-new structures.
+- Make every service callable, tested, and receipt-producing.
+
+## D — Device / Body Registry
+- Every controllable body/browser/device must register identity, capabilities, availability, and health.
+- Taloa must know which body can perform which action.
+
+## E — Environment Observation
+- Observe the active UI/session and build a structured scene/state representation.
+- Detect current page/app, visible controls, active composer/input, dialogs, permission prompts, current execution frontier, and latest result state.
+
+## F — Fallback Interaction Trees
+Implement and verify multiple independent control paths, in this order unless the environment requires otherwise:
+1. DOM / accessibility semantics.
+2. Browser / Chrome automation controls.
+3. App-specific hooks.
+4. Visual / coordinate targeting.
+5. Keyboard navigation / shortcuts.
+Failure of one tree must permit bounded fallback to the next rather than silent abandonment.
+
+## G — Grounded Target Selection
+- Choose the current actionable control from observed evidence.
+- Prefer the bottom-most/current execution frontier for ChatGPT approval flows.
+- Reject stale/historical approval cards and stale action targets.
+- Never click indiscriminately.
+
+## H — Human Authority and Safety
+- Respect explicit founder-only decisions, credential boundaries, irreversible actions, financial commitments, destructive actions, and external communications requiring human authority.
+- Ordinary bounded UI interaction should not require founder clicking when already authorized.
+
+## I — Intent Interpreter
+- Convert founder/conductor natural-language intent into bounded executable actions.
+- Preserve task context, constraints, success condition, and prohibited actions.
+
+## J — Job / Task State Machine
+Each action loop must have explicit states such as:
+`OBSERVE -> SELECT -> ACT -> VERIFY -> UPDATE_CONTEXT -> CONTINUE`
+with typed exits:
+`POINT_B_REACHED`, `FOUNDER_DECISION_REQUIRED`, `HARD_CAPABILITY_BLOCKER`, `BLUEPRINT_EXHAUSTED`.
+
+## K — Keyboard Control
+- Provide reliable keyboard fallback for navigation, focus, typing, submission, escape/cancel, and app shortcuts.
+- Verify focus before sending keystrokes.
+
+## L — Live ChatGPT Conversation Loop
+Prove Taloa can operate a real authenticated ChatGPT browser session:
+- locate the correct conversation,
+- read latest visible state sufficiently to decide whether action is needed,
+- type a bounded continuation/instruction into the composer,
+- submit it,
+- wait while ChatGPT is working,
+- detect completion or permission frontier,
+- approve only the current lawful approval when authorized,
+- observe the resulting reply,
+- continue the conversation without founder clicking every ordinary control.
+This is the first mandatory real-session Point-B proof.
+
+## M — Memory / Context Update
+- After material state change, update compact operating context and durable history/provenance.
+- Do not repeatedly inject stale context.
+- Preserve the founder's actual decisions and the system's evidence-based state.
+
+## N — Navigation Across Apps / Sites
+- Generalize from ChatGPT to multiple browser tabs/sites/apps.
+- Resolve target app/site/window before acting.
+- Support bounded switching, opening, navigation, and return-to-origin.
+
+## O — Observability / Runtime Truth
+- Expose live status for Overlay runtime and active bodies: heartbeat, current commit/build, current task/slice, last action, last verified result, blockers, receipts.
+- Abbott/observability work may support this, but Overlay itself must emit the necessary truth events.
+
+## P — Permission and Prompt Handling
+- Detect permission prompts and confirmation dialogs.
+- Distinguish current frontier from historical prompts.
+- Apply explicit policy for auto-approve vs founder-required decision.
+- Receipt every approval/denial.
+
+## Q — Quality / Confidence
+- Every target-selection/action decision must carry confidence/evidence.
+- Low confidence routes to fallback observation or typed blocker, not random action.
+
+## R — Result Verification
+- Never treat a click/type/send as success by itself.
+- Verify resulting UI/state change and compare against the action's acceptance condition.
+- If verification fails, retry only within bounded policy, then escalate/fallback.
+
+## S — Supervisor
+- Finish Watch Supervisor as an event-driven supervisor, not timer spam.
+- If ChatGPT is working: wait.
+- If current authorized approval frontier exists: act once and verify.
+- If turn is complete and Point B is not reached: send bounded continuation.
+- If founder attention is required: surface it clearly; read-aloud may be used where available and proven.
+
+## T — Task Receipts
+- Emit structured receipts for observation, selected action, target evidence, action execution, verification, fallback path, blocker, and terminal state.
+- Receipts must support reconstruction of what happened without trusting prose summaries.
+
+## U — Universal Action Vocabulary
+- Support a bounded universal vocabulary: click/tap/press, type, focus, select, scroll, navigate, open/close, submit, copy/paste, inspect/read, wait, switch target, back/forward, refresh, and app-specific bounded actions.
+- Extend only through Architecture-approved capability definitions.
+
+## V — Visual Control
+- Provide visual/coordinate fallback for cases where semantic controls are unavailable.
+- Couple visual targets to screenshots/scene evidence and post-action verification.
+- Avoid blind coordinate replay when layout has materially changed.
+
+## W — Workflows Beyond ChatGPT
+After ChatGPT loop proof, validate at least representative multi-step workflows such as:
+- developer/programming workflow,
+- research/data-entry workflow,
+- e-commerce/admin workflow,
+- sales/CRM workflow,
+without claiming general universality until each capability class is evidenced.
+
+## X — Cross-Environment Resilience
+- Recover from stale DOM nodes, navigation, tab changes, reloads, login/session expiry, overlays/modals, focus loss, and intermittent control-path failure.
+- Resume from observed state rather than blindly replaying previous actions.
+
+## Y — Yield / Revenue Readiness
+- Once the live control loop is proven, package the first revenue-use workflow under founder direction.
+- Do not let revenue workflow design block the core A-to-Z interaction proof, but ensure the completed Overlay can be used for real paid work under founder authority.
+
+## Z — Zero-Deception End-to-End Acceptance
+Overlay is not COMPLETE until a real authenticated end-to-end test proves:
+1. Taloa attaches to the real target session/body.
+2. Taloa observes current state.
+3. Taloa selects the correct current control.
+4. Taloa acts through at least the primary interaction tree and demonstrates fallback capability where testable.
+5. Taloa verifies the result.
+6. Taloa updates context/receipt history.
+7. Taloa continues the ChatGPT conversation autonomously through multiple turns or reaches a typed terminal state.
+8. Founder does not have to perform ordinary authorized clicks/typing during the proof.
+9. Runtime observability shows what it is doing in near real time.
+10. The acceptance receipt identifies exact environment, commit, session proof, actions, verifications, failures/fallbacks, and final verdict.
+
+## Manufacturing order and lane use
+Architecture must convert the A-to-Z path above into pre-authored executable slices in the single canonical Overlay blueprint. Costello uses `COSTELLO-C1/C2/C3` concurrently only for slices whose dependencies make them genuinely independent. Suggested independent early workstreams, subject to Architecture's dependency graph, are:
+- C1: observation + target selection + verification core,
+- C2: browser/Chrome + DOM/accessibility + keyboard interaction trees,
+- C3: Watch Supervisor + ChatGPT conversation adapter + receipt/observability integration.
+These are not separate queues and are not authorization for factories to invent missing slices.
+
+## Completion rule
+Do not stop because the old Phase-1 verification command passes. Do not stop because all currently listed slices are consumed if Point B still fails. If the canonical blueprint exhausts before Z passes, factories fail closed with `BLUEPRINT_EXHAUSTED` and Architecture immediately authors the missing lawful continuation. The mission ends only when Z is directly proven or a genuine founder decision/hard capability blocker is surfaced.
+
+The founder's instruction is: **finish the Overlay from A to Z. Keep Costello building it. Architecture owns the whole decision tree; Costello executes it.**
