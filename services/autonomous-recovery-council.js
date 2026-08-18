@@ -1,14 +1,82 @@
 import { runGovernanceAuditCycle } from '../scripts/sentry-chair-governance-audit.mjs';
+import { gatherSystemWorkingSignals } from './sentry-system-audit.js';
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+export const CATASTROPHIC_STOP_STALE_MS = Number(
+  process.env.SENTRY_CATASTROPHIC_STOP_STALE_MS || 6 * 60 * 1000,
+);
+
+async function postFounderAlert(path, body, {
+  baseUrl = process.env.PUBLIC_BASE_URL,
+  commandKey = process.env.COMMAND_CENTER_KEY,
+  fetchFn = fetch,
+} = {}) {
+  if (!baseUrl || !commandKey) {
+    return { ok: false, reason: 'missing_alert_transport_config' };
+  }
+  try {
+    const response = await fetchFn(`${baseUrl}${path}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-command-center-key': commandKey,
+      },
+      body: JSON.stringify(body),
+    });
+    return { ok: response.ok, status: response.status };
+  } catch (error) {
+    return { ok: false, reason: error.message };
+  }
+}
+
+export async function sendCatastrophicStopAlarm({
+  ageMs,
+  stage = 'initial',
+  logger = console,
+  fetchFn = fetch,
+} = {}) {
+  const phone = process.env.ALERT_PHONE || process.env.ADAM_SMS_NUMBER;
+  const minutes = Math.max(1, Math.round(Number(ageMs || 0) / 60000));
+  const text = `FIVE-ALARM BUILDEROS FAILURE: autonomous manufacturing stopped. No governed build tick for ${minutes} minute(s). SENTRY recovery is active now. Stage=${stage}. This is a P0 system failure until manufacturing resumes.`;
+
+  const [sms, call] = await Promise.all([
+    postFounderAlert('/api/v1/lifeos/founder/sms', { body: text }, { fetchFn }),
+    phone
+      ? postFounderAlert('/api/v1/lifeos/founder/voice/call', { to: phone, say: text }, { fetchFn })
+      : Promise.resolve({ ok: false, reason: 'missing_alert_phone' }),
+  ]);
+
+  logger?.error?.({ stage, ageMs, sms, call }, '[SENTRY-RECOVERY] FIVE-ALARM catastrophic stop notification dispatched');
+  return { sms, call };
+}
+
+export function detectCatastrophicGovernedStop(signals, {
+  now = Date.now(),
+  staleMs = CATASTROPHIC_STOP_STALE_MS,
+} = {}) {
+  const governed = signals?.governed;
+  if (!governed || governed.hardHalt === true || governed.enabled !== true || !governed.lastTickAt) {
+    return { stopped: false };
+  }
+  const tickMs = Date.parse(governed.lastTickAt);
+  if (!Number.isFinite(tickMs)) return { stopped: false };
+  const ageMs = now - tickMs;
+  return {
+    stopped: ageMs > staleMs,
+    ageMs,
+    staleMs,
+    lastTickAt: governed.lastTickAt,
+  };
+}
 
 /**
  * Autonomous recovery orchestrator.
  *
  * SENTRY observes and proposes. Conductor governs the repair path. Architect
  * receives only a lawfully sealed repair. Builder executes. SENTRY then
- * re-checks reality. Founder escalation is a record after exhaustion, never
- * the mechanism that keeps the machine moving.
+ * re-checks reality. A stopped builder is a catastrophic failure: alert the
+ * founder, recover autonomously, and verify that manufacturing resumes.
  */
 export async function runAutonomousRecoveryCouncil({
   maxRounds = 3,
@@ -54,15 +122,55 @@ export async function runAutonomousRecoveryCouncil({
 export function startAutonomousRecoveryCouncilScheduler({
   logger = console,
   pool = undefined,
-  intervalMs = Number(process.env.SENTRY_RECOVERY_INTERVAL_MS || 5 * 60 * 1000),
-  bootDelayMs = Number(process.env.SENTRY_RECOVERY_BOOT_DELAY_MS || 45_000),
+  intervalMs = Number(process.env.SENTRY_RECOVERY_INTERVAL_MS || 60 * 1000),
+  bootDelayMs = Number(process.env.SENTRY_RECOVERY_BOOT_DELAY_MS || 15_000),
+  signalReader = gatherSystemWorkingSignals,
+  restartProcess = () => {
+    const handle = setTimeout(() => process.exit(1), 250);
+    handle.unref?.();
+  },
 } = {}) {
   let inFlight = false;
+  let incidentStartedAt = null;
+  const alarmedStages = new Set();
+
+  const alarmStage = (ageSinceIncident) => {
+    if (ageSinceIncident >= 10 * 60 * 1000) return 'still_stopped_10m';
+    if (ageSinceIncident >= 5 * 60 * 1000) return 'still_stopped_5m';
+    return 'initial';
+  };
 
   const tick = async () => {
     if (inFlight) return;
     inFlight = true;
     try {
+      const signals = await signalReader().catch(() => null);
+      const catastrophic = detectCatastrophicGovernedStop(signals);
+
+      if (catastrophic.stopped) {
+        incidentStartedAt = incidentStartedAt || Date.now();
+        const stage = alarmStage(Date.now() - incidentStartedAt);
+        if (!alarmedStages.has(stage)) {
+          alarmedStages.add(stage);
+          await sendCatastrophicStopAlarm({ ageMs: catastrophic.ageMs, stage, logger });
+        }
+
+        // First-line self-heal for a logically stalled in-process factory:
+        // terminate the unhealthy container after alert delivery so Railway's
+        // restart policy boots a clean founder_builder runtime and re-arms all
+        // never-stop loops. The recovery council remains the deeper repair path
+        // if a fresh container still cannot manufacture.
+        if (stage === 'initial') {
+          logger?.error?.({ catastrophic }, '[SENTRY-RECOVERY] governed builder stopped; forcing Railway process restart');
+          restartProcess();
+          return;
+        }
+      } else if (incidentStartedAt) {
+        logger?.info?.('[SENTRY-RECOVERY] catastrophic stop cleared; manufacturing heartbeat resumed');
+        incidentStartedAt = null;
+        alarmedStages.clear();
+      }
+
       const result = await runAutonomousRecoveryCouncil({
         logger,
         auditArgs: { logger, pool },
@@ -77,7 +185,7 @@ export function startAutonomousRecoveryCouncilScheduler({
     }
   };
 
-  logger?.info?.({ intervalMs, bootDelayMs }, '[SENTRY-RECOVERY] autonomous recovery scheduler armed');
+  logger?.info?.({ intervalMs, bootDelayMs, catastrophicStaleMs: CATASTROPHIC_STOP_STALE_MS }, '[SENTRY-RECOVERY] autonomous recovery + five-alarm stop supervisor armed');
   const bootHandle = setTimeout(() => { tick(); }, bootDelayMs);
   bootHandle.unref?.();
   const intervalHandle = setInterval(() => { tick(); }, intervalMs);
