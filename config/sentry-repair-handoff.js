@@ -119,9 +119,6 @@ function hiddenAlternativesCleared(round) {
   const explicitSearch = round?.hidden_alternatives_checked === true;
   if (explicitSearch && (explicitCandidate.length >= 10 || explicitExhaustive)) return true;
 
-  // Compatibility with the live Conductor consensus receipt: the prompt
-  // already requires a third solution, both-side argument, and +/- consequence
-  // search, but historically emitted those facts under these fields.
   const synthesized = String(round?.synthesized || '').trim();
   const argued = round?.argued_both_sides === true;
   const positive = String(round?.unintended_positive || '').trim();
@@ -221,10 +218,10 @@ export function applyRepairHandoff(finding, { conductorSolution = undefined, con
 }
 
 export function readyForArchitect(finding) {
-  const approval = finding?.conductor_status === 'consensus' || finding?.conductor_status === 'accepted_sentry_conclusion';
-  if (!finding || !approval) return false;
-  if (finding.repair_consensus !== true) return false;
-  if (finding.repair_lane === REPAIR_LANE.SEND_CONCLUSION) return true;
-  if (finding.repair_lane === REPAIR_LANE.DUAL_SOLVE) return true;
-  return false;
+  if (!finding) return false;
+  const conductorApproved = finding.chair_status === 'approved' || finding.conductor_review_status === 'approved';
+  if (!conductorApproved) return false;
+  const deliberationApproved = finding.conductor_status === 'consensus' || finding.conductor_status === 'accepted_sentry_conclusion';
+  if (!deliberationApproved || finding.repair_consensus !== true) return false;
+  return finding.repair_lane === REPAIR_LANE.SEND_CONCLUSION || finding.repair_lane === REPAIR_LANE.DUAL_SOLVE;
 }
