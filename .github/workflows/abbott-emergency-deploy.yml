@@ -1,0 +1,98 @@
+name: Abbott emergency deploy
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'services/costello-infrastructure-guardian-supervisor.js'
+      - 'routes/autonomous-recovery-runtime-routes.js'
+      - 'services/taloa/overlay-extension-drive-runtime.js'
+      - 'routes/taloa-supervised-overlay-routes.js'
+      - 'startup/auto-register-product-modules.js'
+      - '.github/workflows/abbott-emergency-deploy.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: abbott-emergency-deploy
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Syntax check changed runtime files
+        run: |
+          node --check services/costello-infrastructure-guardian-supervisor.js
+          node --check routes/autonomous-recovery-runtime-routes.js
+          node --check services/taloa/overlay-extension-drive-runtime.js
+          node --check routes/taloa-supervised-overlay-routes.js
+      - name: Trigger Railway deployment
+        id: railway
+        continue-on-error: true
+        env:
+          APP_URL: ${{ secrets.APP_URL }}
+          PUBLIC_BASE_URL: ${{ secrets.APP_URL }}
+          COMMAND_CENTER_KEY: ${{ secrets.COMMAND_CENTER_KEY }}
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          RAILWAY_API_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          RAILWAY_PROJECT_ID: ${{ vars.RAILWAY_PROJECT_ID }}
+          RAILWAY_SERVICE_ID: ${{ vars.RAILWAY_SERVICE_ID }}
+          RAILWAY_SERVICE_NAME: ${{ vars.RAILWAY_SERVICE_NAME }}
+          RAILWAY_ENVIRONMENT_ID: ${{ vars.RAILWAY_ENVIRONMENT_ID }}
+          RAILWAY_ENVIRONMENT_NAME: ${{ vars.RAILWAY_ENVIRONMENT_NAME }}
+          GITHUB_SHA: ${{ github.sha }}
+        run: |
+          set -o pipefail
+          node scripts/railway-github-deploy.mjs 2>&1 | tee /tmp/railway-deploy.log
+      - name: Persist deploy receipt
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          SHA: ${{ github.sha }}
+          RUN_ID: ${{ github.run_id }}
+          OUTCOME: ${{ steps.railway.outcome }}
+        run: |
+          python - <<'PY'
+          import base64, json, os, pathlib, urllib.request, urllib.error
+          path = 'products/receipts/ABBOTT_EMERGENCY_DEPLOY.json'
+          log = pathlib.Path('/tmp/railway-deploy.log').read_text(errors='replace') if pathlib.Path('/tmp/railway-deploy.log').exists() else ''
+          # Keep only non-secret operational tail. GitHub masks known secrets before output.
+          tail = '\n'.join(log.splitlines()[-30:])[-6000:]
+          receipt = {
+              'schema': 'abbott_emergency_deploy_v1',
+              'verdict': 'ACCEPTED' if os.environ['OUTCOME'] == 'success' else 'FAILED',
+              'source_sha': os.environ['SHA'],
+              'run_id': os.environ['RUN_ID'],
+              'deploy_step_outcome': os.environ['OUTCOME'],
+              'log_tail': tail,
+          }
+          api = f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}"
+          headers = {'Authorization': f"Bearer {os.environ['GH_TOKEN']}", 'Accept': 'application/vnd.github+json'}
+          existing = None
+          try:
+              with urllib.request.urlopen(urllib.request.Request(api, headers=headers)) as r:
+                  existing = json.load(r).get('sha')
+          except urllib.error.HTTPError as e:
+              if e.code != 404: raise
+          payload = {
+              'message': '[deploy] persist Abbott emergency deploy receipt',
+              'content': base64.b64encode((json.dumps(receipt, indent=2)+'\n').encode()).decode(),
+              'branch': 'main',
+          }
+          if existing: payload['sha'] = existing
+          req = urllib.request.Request(api, data=json.dumps(payload).encode(), headers={**headers, 'Content-Type':'application/json'}, method='PUT')
+          with urllib.request.urlopen(req) as r:
+              print(json.load(r)['commit']['sha'])
+          PY
+      - name: Fail workflow if deploy failed
+        if: steps.railway.outcome != 'success'
+        run: exit 1
