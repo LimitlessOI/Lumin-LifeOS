@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-18T20:20:55.620Z",
+  "generated_at": "2026-08-18T20:33:58.335Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13672,
+  "file_count": 13681,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21314,9 +21314,9 @@
     {
       "path": "builderos-reboot/BP_PRIORITY.json",
       "synopsis": "BuilderOS artifact — BP PRIORITY.",
-      "bytes": 50428,
-      "mtime": "2026-08-17T22:06:33.044Z",
-      "indexed_at": "2026-08-17T22:07:03.399Z",
+      "bytes": 52472,
+      "mtime": "2026-08-18T20:33:17.350Z",
+      "indexed_at": "2026-08-18T20:33:58.335Z",
       "synopsis_index_only": true
     },
     {
@@ -21685,9 +21685,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 4151720,
-      "mtime": "2026-08-17T22:07:06.879Z",
-      "indexed_at": "2026-08-17T22:07:21.299Z"
+      "bytes": 4156562,
+      "mtime": "2026-08-18T20:33:17.354Z",
+      "indexed_at": "2026-08-18T20:33:58.335Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -31341,6 +31341,14 @@
       "synopsis_index_only": true
     },
     {
+      "path": "builderos-reboot/MISSIONS/TALOA-OVERLAY-P1-0001/OBJECTIVE_VERDICT.json",
+      "synopsis": "BuilderOS artifact — OBJECTIVE VERDICT.",
+      "bytes": 1304,
+      "mtime": "2026-08-18T20:33:17.350Z",
+      "indexed_at": "2026-08-18T20:33:58.335Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "builderos-reboot/MISSIONS/TALOA-OVERLAY-P1-0001/PRE_ARC_INPUT_PACKET.json",
       "synopsis": "BuilderOS artifact — PRE ARC INPUT PACKET.",
       "bytes": 2145,
@@ -33249,10 +33257,10 @@
     },
     {
       "path": "config/sentry-repair-handoff.js",
-      "synopsis": "SENTRY → Conductor repair handoff. SENTRY must solve what it",
-      "bytes": 10712,
-      "mtime": "2026-08-13T05:59:55.567Z",
-      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "synopsis": "SENTRY -> Conductor repair handoff. SENTRY must solve what it",
+      "bytes": 10228,
+      "mtime": "2026-08-18T20:33:17.226Z",
+      "indexed_at": "2026-08-18T20:33:58.335Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -41868,6 +41876,20 @@
       "indexed_at": "2026-08-17T22:07:03.399Z"
     },
     {
+      "path": "docs/conversation_dumps/2026-08-18-five-alarm-never-stop-law.md",
+      "synopsis": "Founder Conversation Capture — Five-Alarm Never-Stop Law",
+      "bytes": 1346,
+      "mtime": "2026-08-18T20:33:17.226Z",
+      "indexed_at": "2026-08-18T20:33:58.335Z"
+    },
+    {
+      "path": "docs/conversation_dumps/2026-08-18-governance-enforcement-repair.md",
+      "synopsis": "Founder Conversation Capture — Governance Enforcement Repair",
+      "bytes": 3666,
+      "mtime": "2026-08-18T20:33:17.226Z",
+      "indexed_at": "2026-08-18T20:33:58.335Z"
+    },
+    {
       "path": "docs/conversation_dumps/by-product/sessions/2a4739f2/BUILDEROS-AUTONOMOUS.md",
       "synopsis": "BuilderOS / TSOS / autonomous / alpha",
       "bytes": 85566,
@@ -44504,6 +44526,20 @@
       "bytes": 1585,
       "mtime": "2026-08-13T07:30:50.044Z",
       "indexed_at": "2026-08-13T07:30:50.044Z"
+    },
+    {
+      "path": "docs/products/builderos/conversations/2026-08-18-five-alarm-never-stop-law.md",
+      "synopsis": "Founder Conversation Capture — Five-Alarm Never-Stop Law",
+      "bytes": 1634,
+      "mtime": "2026-08-18T20:33:17.226Z",
+      "indexed_at": "2026-08-18T20:33:58.335Z"
+    },
+    {
+      "path": "docs/products/builderos/conversations/2026-08-18-governance-enforcement-repair.md",
+      "synopsis": "BuilderOS Governance Enforcement Repair — 2026-08-18",
+      "bytes": 5958,
+      "mtime": "2026-08-18T20:33:17.226Z",
+      "indexed_at": "2026-08-18T20:33:58.335Z"
     },
     {
       "path": "docs/products/builderos/CREATIVE_BRIEF.md",
@@ -71356,6 +71392,14 @@
       "synopsis_index_only": true
     },
     {
+      "path": "products/receipts/TALOA_OVERLAY_A2Z_ACCEPTANCE.json",
+      "synopsis": "Product receipt — TALOA OVERLAY A2Z ACCEPTANCE.",
+      "bytes": 4169,
+      "mtime": "2026-08-18T20:33:17.354Z",
+      "indexed_at": "2026-08-18T20:33:58.335Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "products/receipts/TERMINOLOGY_COLLISION_RECEIPT.json",
       "synopsis": "Product receipt — TERMINOLOGY COLLISION RECEIPT.",
       "bytes": 5039,
@@ -73915,6 +73959,13 @@
       "bytes": 1783,
       "mtime": "2026-07-05T19:10:02.189Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "routes/autonomous-recovery-runtime-routes.js",
+      "synopsis": "Production boot hook for autonomous SENTRY recovery.",
+      "bytes": 1307,
+      "mtime": "2026-08-18T20:33:17.227Z",
+      "indexed_at": "2026-08-18T20:33:58.335Z"
     },
     {
       "path": "routes/autonomous-telemetry-routes.js",
@@ -82547,9 +82598,9 @@
     {
       "path": "scripts/verify-founder-ai-operating-protocol.mjs",
       "synopsis": "Script — Verify Founder Ai Operating Protocol.",
-      "bytes": 1955,
-      "mtime": "2026-08-17T22:06:32.656Z",
-      "indexed_at": "2026-08-17T22:07:03.399Z"
+      "bytes": 4435,
+      "mtime": "2026-08-18T20:33:17.227Z",
+      "indexed_at": "2026-08-18T20:33:58.335Z"
     },
     {
       "path": "scripts/verify-founder-css-live.mjs",
@@ -94064,6 +94115,13 @@
       ]
     },
     {
+      "path": "services/autonomous-recovery-council.js",
+      "synopsis": "Autonomous recovery orchestrator.",
+      "bytes": 7095,
+      "mtime": "2026-08-18T20:33:17.227Z",
+      "indexed_at": "2026-08-18T20:33:58.335Z"
+    },
+    {
       "path": "services/autonomous-telemetry-instrumentation.js",
       "synopsis": "Thin instrumentation helpers — map domain events → telemetry rows.",
       "bytes": 5425,
@@ -94961,10 +95019,10 @@
     },
     {
       "path": "services/chair-findings-review.js",
-      "synopsis": "Chair review of SENTRY findings — the \"Chair reviews\" half of the",
-      "bytes": 9246,
-      "mtime": "2026-08-12T22:46:49.115Z",
-      "indexed_at": "2026-08-12T22:46:49.115Z",
+      "synopsis": "Conductor review of SENTRY findings. Legacy persisted field names",
+      "bytes": 5824,
+      "mtime": "2026-08-18T20:33:17.228Z",
+      "indexed_at": "2026-08-18T20:33:58.335Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -104852,9 +104910,9 @@
     {
       "path": "startup/auto-register-product-modules.js",
       "synopsis": "Convention-based auto-registration for product modules + a boot",
-      "bytes": 7163,
-      "mtime": "2026-08-18T18:45:18.490Z",
-      "indexed_at": "2026-08-18T20:20:55.620Z",
+      "bytes": 5497,
+      "mtime": "2026-08-18T20:33:17.228Z",
+      "indexed_at": "2026-08-18T20:33:58.335Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -105708,10 +105766,10 @@
     },
     {
       "path": "tests/chair-findings-review.test.js",
-      "synopsis": "SO-003: \"the Chair debate/counsel channel ... must never be served a",
-      "bytes": 8475,
-      "mtime": "2026-08-12T22:46:49.115Z",
-      "indexed_at": "2026-08-12T22:46:49.115Z"
+      "synopsis": "Conductor review regression tests. Persisted chair_* fields remain",
+      "bytes": 6590,
+      "mtime": "2026-08-18T20:33:17.228Z",
+      "indexed_at": "2026-08-18T20:33:58.335Z"
     },
     {
       "path": "tests/chair-founder-packet-v2-enforcement.test.js",
@@ -107263,6 +107321,13 @@
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "tests/sentry-recovery-governance.test.js",
+      "synopsis": "js — tests/sentry-recovery-governance.test.js.",
+      "bytes": 4664,
+      "mtime": "2026-08-18T20:33:17.228Z",
+      "indexed_at": "2026-08-18T20:33:58.335Z"
     },
     {
       "path": "tests/sentry-repair-handoff.test.js",
