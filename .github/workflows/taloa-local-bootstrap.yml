@@ -1,0 +1,35 @@
+name: Taloa Local Bootstrap
+
+on:
+  push:
+    paths:
+      - '.github/workflows/taloa-local-bootstrap.yml'
+  workflow_dispatch:
+
+jobs:
+  bootstrap:
+    runs-on: [self-hosted, macOS]
+    timeout-minutes: 5
+    steps:
+      - name: Update founder checkout
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT=/Users/adamhopkins/Projects/Lumin-LifeOS
+          test -d "$ROOT/.git"
+          git -C "$ROOT" fetch origin main
+          git -C "$ROOT" checkout main
+          git -C "$ROOT" pull --ff-only origin main
+      - name: Install and start Taloa GitHub relay
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT=/Users/adamhopkins/Projects/Lumin-LifeOS
+          TALOA_REPO_ROOT="$ROOT" bash "$ROOT/scripts/install-taloa-github-relay.sh"
+      - name: Verify relay process
+        shell: bash
+        run: |
+          set -euo pipefail
+          LABEL=com.limitlessoi.taloa-github-relay
+          launchctl print "gui/$(id -u)/${LABEL}" >/dev/null
+          echo 'Taloa relay LaunchAgent is registered'
