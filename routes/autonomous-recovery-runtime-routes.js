@@ -13,10 +13,10 @@ let costelloGuardian = null;
  * runs. Idempotent so route reloads cannot create duplicate recovery loops.
  */
 export function registerAutonomousRecoveryRuntimeRoutes(app, deps = {}) {
-  const { logger = console, pool, requireKey } = deps;
+  const { logger = console, pool, requireKey, commitToGitHub } = deps;
   if (!scheduler) scheduler = startAutonomousRecoveryCouncilScheduler({ logger, pool });
   if (!costelloGuardian) {
-    costelloGuardian = startCostelloInfrastructureGuardian({ logger }) || { already_armed: true };
+    costelloGuardian = startCostelloInfrastructureGuardian({ logger, commitToGitHub }) || { already_armed: true };
   }
 
   const guard = typeof requireKey === 'function' ? requireKey : (_req, _res, next) => next();
