@@ -1,0 +1,117 @@
+name: Railway inventory probe
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/railway-inventory-probe.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Query Railway variable names only
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          RUN_ID: ${{ github.run_id }}
+          SOURCE_SHA: ${{ github.sha }}
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          RAILWAY_API_TOKEN: ${{ secrets.RAILWAY_API_TOKEN }}
+          RAILWAY_PROJECT_ID: ${{ vars.RAILWAY_PROJECT_ID }}
+          RAILWAY_SERVICE_ID: ${{ vars.RAILWAY_SERVICE_ID }}
+          RAILWAY_ENVIRONMENT_ID: ${{ vars.RAILWAY_ENVIRONMENT_ID }}
+        run: |
+          python - <<'PY'
+          import base64, json, os, urllib.request, urllib.error
+
+          endpoint = 'https://backboard.railway.com/graphql/v2'
+          project_id = os.environ.get('RAILWAY_PROJECT_ID','').strip()
+          service_id = os.environ.get('RAILWAY_SERVICE_ID','').strip()
+          environment_id = os.environ.get('RAILWAY_ENVIRONMENT_ID','').strip()
+          project_token = os.environ.get('RAILWAY_TOKEN','').strip()
+          api_token = os.environ.get('RAILWAY_API_TOKEN','').strip()
+
+          receipt = {
+            'schema': 'railway_inventory_probe_v1',
+            'source_sha': os.environ.get('SOURCE_SHA'),
+            'run_id': os.environ.get('RUN_ID'),
+            'ok': False,
+            'auth_mode': None,
+            'project_id_present': bool(project_id),
+            'service_id_present': bool(service_id),
+            'environment_id_present': bool(environment_id),
+            'variable_names': [],
+            'relevant_presence': {},
+            'error': None,
+          }
+
+          try:
+            if not (project_id and service_id and environment_id):
+              raise RuntimeError('Railway project/service/environment IDs are not configured in GitHub variables')
+            headers = {'Content-Type':'application/json'}
+            if project_token:
+              headers['Project-Access-Token'] = project_token
+              receipt['auth_mode'] = 'project_token'
+            elif api_token:
+              headers['Authorization'] = f'Bearer {api_token}'
+              receipt['auth_mode'] = 'api_token'
+            else:
+              raise RuntimeError('No Railway token is configured in GitHub Actions')
+
+            query = '''query variables($projectId: String!, $environmentId: String!, $serviceId: String) {
+              variables(projectId: $projectId, environmentId: $environmentId, serviceId: $serviceId)
+            }'''
+            body = json.dumps({'query': query, 'variables': {
+              'projectId': project_id,
+              'environmentId': environment_id,
+              'serviceId': service_id,
+            }}).encode()
+            req = urllib.request.Request(endpoint, data=body, headers=headers, method='POST')
+            with urllib.request.urlopen(req, timeout=20) as r:
+              payload = json.load(r)
+            if payload.get('errors'):
+              raise RuntimeError('; '.join(str(e.get('message', e)) for e in payload['errors']))
+            variables = (payload.get('data') or {}).get('variables') or {}
+            names = sorted(variables.keys())
+            receipt['variable_names'] = names
+            relevant = [
+              'RAILWAY_TOKEN','RAILWAY_API_TOKEN','RAILWAY_PROJECT_TOKEN','RAILWAY_SERVICE_TOKEN',
+              'RAILWAY_PROJECT_ID','RAILWAY_SERVICE_ID','RAILWAY_ENVIRONMENT_ID',
+              'GITHUB_TOKEN','GITHUB_REPO','GITHUB_DEPLOY_BRANCH','COMMAND_CENTER_KEY',
+              'TWILIO_ACCOUNT_SID','TWILIO_AUTH_TOKEN','TWILIO_PHONE_NUMBER'
+            ]
+            receipt['relevant_presence'] = {k: (k in variables and variables.get(k) not in (None,'')) for k in relevant}
+            receipt['ok'] = True
+          except Exception as e:
+            receipt['error'] = str(e)[:1000]
+
+          # Never persist values, only key names and booleans.
+          path = 'products/receipts/RAILWAY_INVENTORY_PROBE.json'
+          api = f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}"
+          gh_headers = {'Authorization': f"Bearer {os.environ['GH_TOKEN']}", 'Accept':'application/vnd.github+json'}
+          existing = None
+          try:
+            with urllib.request.urlopen(urllib.request.Request(api, headers=gh_headers)) as r:
+              existing = json.load(r).get('sha')
+          except urllib.error.HTTPError as e:
+            if e.code != 404: raise
+          payload = {
+            'message': '[railway] persist variable inventory probe',
+            'content': base64.b64encode((json.dumps(receipt, indent=2)+'\n').encode()).decode(),
+            'branch': 'main',
+          }
+          if existing: payload['sha'] = existing
+          req = urllib.request.Request(api, data=json.dumps(payload).encode(), headers={**gh_headers,'Content-Type':'application/json'}, method='PUT')
+          with urllib.request.urlopen(req) as r:
+            print(json.load(r)['commit']['sha'])
+
+          if not receipt['ok']:
+            raise SystemExit(1)
+          PY
