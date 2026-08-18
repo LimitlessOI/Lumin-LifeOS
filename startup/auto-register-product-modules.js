@@ -14,6 +14,13 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
 const REGISTRY_PATH = path.join(ROOT, 'config/auto-registered-product-modules.json');
+const RUNTIME_HEARTBEAT_SPEC = {
+  path: 'routes/runtime-heartbeat-routes.js',
+  register: 'registerRuntimeHeartbeatRoutes',
+  mount_path: '/api/v1/runtime/heartbeat',
+  enabled: true,
+  note: 'Abbott public runtime heartbeat. Fresh liveness/model-key-presence/git/Railway metadata plus boot receipt on runtime-receipts branch.',
+};
 
 // In-memory boot health manifest, keyed by module repo-relative path. Each entry:
 //   { module, register, status: 'mounted'|'error', mounted_at, error }
@@ -48,9 +55,15 @@ export function loadAutoRegisterRegistry() {
   try {
     const raw = fs.readFileSync(REGISTRY_PATH, 'utf8');
     const parsed = JSON.parse(raw);
-    if (parsed && Array.isArray(parsed.modules)) return parsed.modules;
-  } catch { /* no registry yet → nothing to auto-register */ }
-  return [];
+    if (parsed && Array.isArray(parsed.modules)) {
+      const modules = [...parsed.modules];
+      if (!modules.some((spec) => spec?.path === RUNTIME_HEARTBEAT_SPEC.path)) {
+        modules.push(RUNTIME_HEARTBEAT_SPEC);
+      }
+      return modules;
+    }
+  } catch { /* no registry yet → heartbeat still remains observable */ }
+  return [RUNTIME_HEARTBEAT_SPEC];
 }
 
 function resolveRegisterFn(mod, registerName) {
