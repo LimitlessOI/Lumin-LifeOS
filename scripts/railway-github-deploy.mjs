@@ -6,6 +6,10 @@
  * Preferred path: call the live service's managed-env build endpoint.
  * Fallback path: Railway Public GraphQL API using an account/workspace token
  * or an environment-scoped project token.
+ *
+ * Current Railway CLI/API convention:
+ *   RAILWAY_TOKEN     = project-scoped token (Project-Access-Token header)
+ *   RAILWAY_API_TOKEN = account/workspace token (Authorization: Bearer)
  */
 
 const RAILWAY_GQL = "https://backboard.railway.com/graphql/v2";
@@ -36,19 +40,27 @@ function getLiveBaseUrl() {
   return (getEnv("APP_URL") || getEnv("PUBLIC_BASE_URL")).replace(/\/$/, "");
 }
 
+function getProjectToken() {
+  return getEnv("RAILWAY_PROJECT_TOKEN") || getEnv("RAILWAY_SERVICE_TOKEN") || getEnv("RAILWAY_TOKEN");
+}
+
+function getApiToken() {
+  return getEnv("RAILWAY_API_TOKEN");
+}
+
 function railwayAuthHeaders() {
-  const projectToken = getEnv("RAILWAY_PROJECT_TOKEN") || getEnv("RAILWAY_SERVICE_TOKEN");
+  const projectToken = getProjectToken();
   if (projectToken) {
     return {
       "content-type": "application/json",
       "Project-Access-Token": projectToken,
     };
   }
-  const token = getEnv("RAILWAY_API_TOKEN") || getEnv("RAILWAY_TOKEN");
-  if (!token) throw new Error("Railway token is required");
+  const apiToken = getApiToken();
+  if (!apiToken) throw new Error("Railway token is required");
   return {
     "content-type": "application/json",
-    authorization: `Bearer ${token}`,
+    authorization: `Bearer ${apiToken}`,
   };
 }
 
@@ -151,11 +163,8 @@ async function deployViaLiveManagedEnv({ baseUrl, commandKey, commitSha }) {
 async function deployViaDirectRailwayGraphql({ commitSha }) {
   const requestedServiceId = getEnv("RAILWAY_SERVICE_ID");
   const requestedEnvironmentId = getEnv("RAILWAY_ENVIRONMENT_ID");
-  const projectTokenPresent = Boolean(getEnv("RAILWAY_PROJECT_TOKEN") || getEnv("RAILWAY_SERVICE_TOKEN"));
+  const projectTokenPresent = Boolean(getProjectToken());
 
-  // A project token is already scoped to one project/environment. When stable
-  // service/environment IDs are configured, avoid a broader topology query and
-  // deploy directly with the scoped token.
   if (projectTokenPresent && requestedServiceId && requestedEnvironmentId) {
     console.log("Deploy path: direct Railway GraphQL with scoped project token");
     console.log(`Target service: ${requestedServiceId}`);
@@ -210,10 +219,7 @@ async function main() {
       await deployViaLiveManagedEnv({ baseUrl, commandKey, commitSha });
       return;
     } catch (error) {
-      const hasDirectToken = Boolean(
-        getEnv("RAILWAY_PROJECT_TOKEN") || getEnv("RAILWAY_SERVICE_TOKEN") ||
-        getEnv("RAILWAY_API_TOKEN") || getEnv("RAILWAY_TOKEN")
-      );
+      const hasDirectToken = Boolean(getProjectToken() || getApiToken());
       if (!hasDirectToken) throw error;
       console.warn(`Live managed-env deploy failed (${error.message}); falling back to direct GraphQL`);
     }
