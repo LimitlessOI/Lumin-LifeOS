@@ -29,6 +29,13 @@ const REQUIRED_RUNTIME_SPECS = Object.freeze([
     enabled: true,
     note: 'Production SENTRY recovery hook. Keeps technical recovery inside SENTRY -> Conductor -> Architect, re-verifies reality, forbids terminal stop/founder-as-router, and runs the external Costello infrastructure guardian.',
   },
+  {
+    path: 'routes/taloa-supervised-overlay-routes.js',
+    register: 'registerTaloaSupervisedOverlayRoutes',
+    mount_path: '/api/v1/extension/a2z',
+    enabled: true,
+    note: 'Live supervised multi-session Taloa A2Z control plane. Connects the new observe/select/act/verify runtime to the proven extension-drive bridge; browser mutations require explicit founder approval.',
+  },
 ]);
 
 const moduleHealth = new Map();
