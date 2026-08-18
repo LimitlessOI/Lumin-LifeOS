@@ -64,3 +64,35 @@ acceptance script that passes by checking files that already existed.
 ```bash
 node scripts/verify-universaloverlay.mjs
 ```
+
+---
+
+## Founder Directive — 2026-08-17 — Single Overlay Blueprint + Build Now
+
+This directive governs the next Overlay architecture/build cycle and is part of the existing mission authority. It does **not** create a second queue.
+
+1. **Uniqueness audit first.** Architect must inventory every artifact that claims current blueprint authority for Taloa / Universal Overlay, including this mission blueprint and any sealed/amended predecessor artifacts. There must be exactly **one current canonical Overlay blueprint** after the review. Historical, superseded, partial, and planning artifacts may remain only if explicitly marked non-authoritative/history.
+
+2. **Reality test the current blueprint.** Compare the current blueprint against the founder's present Point B: Taloa Overlay must become a practical universal interaction layer, beginning with the ability to observe and operate a real browser/ChatGPT session, carry on a bounded conversation with the Chief Architect/Conductor, use multiple control trees/fallbacks, verify results, update context/history, and continue without requiring the founder to click every ordinary control.
+
+3. **If the current blueprint is materially stale, incomplete, contradictory, or optimized for an obsolete Point B, do not let factories patch around it.** Return it to Architecture. Preserve it in history with a clear `SUPERSEDED` / `ARCHIVED` disposition and provenance. Architecture must author the replacement decision tree and acceptance criteria before manufacturing resumes.
+
+4. **If the current blueprint is still sufficient, keep it as the single authority and continue from its next lawful unfinished slice.** Do not create a parallel Overlay blueprint merely to rename or restate the same work.
+
+5. **Factories build; factories do not redesign.** Costello may consume up to three independent pre-authored Overlay slices concurrently (`COSTELLO-C1/C2/C3`) only when the canonical blueprint exposes those independent slices. Factories must never invent work to fill lanes.
+
+6. **Build priority after architecture disposition:** finish the live control loop:
+   `browser/Chrome session -> Taloa observation -> identify current actionable control -> bounded action -> verify result -> update context/history -> continue`.
+   Required interaction trees/fallbacks: DOM/accessibility, browser/Chrome automation controls, visual/coordinate fallback, keyboard fallback, plus app-specific hooks where appropriate.
+
+7. **Acceptance must prove real behavior, not file presence.** A technical file/syntax pass is insufficient for the current Point B. The canonical acceptance must include a real authenticated-session proof that Taloa can perform a bounded conversational loop with ChatGPT/Chief Architect or else emit a concrete typed blocker explaining exactly why not.
+
+8. **No deception.** Until the real-session acceptance passes, status must remain partial/not-proven. Architecture, factories, receipts, and supervisors may not label the Overlay autonomous, complete, deployed, or working end-to-end without direct evidence.
+
+9. **Single scheduler authority remains `builderos-reboot/BP_PRIORITY.json`.** This directive changes architecture/build disposition for Overlay; it does not authorize a second mission queue.
+
+10. **Outcome required:** Architect records one of exactly two dispositions before the next manufacturing cycle:
+    - `KEEP_CANONICAL_AND_BUILD` — identify the one canonical blueprint and the next lawful Overlay slices; or
+    - `SUPERSEDE_AND_REBLUEPRINT` — archive/supersede the inadequate authority artifact(s), author one replacement canonical blueprint, then release its pre-authored slices to Costello.
+
+The founder's current priority is execution: resolve blueprint authority quickly, then keep Costello building Overlay toward the live interaction Point B.
