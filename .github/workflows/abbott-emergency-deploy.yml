@@ -9,6 +9,7 @@ on:
       - 'services/taloa/overlay-extension-drive-runtime.js'
       - 'routes/taloa-supervised-overlay-routes.js'
       - 'startup/auto-register-product-modules.js'
+      - 'scripts/railway-github-deploy.mjs'
       - '.github/workflows/abbott-emergency-deploy.yml'
   workflow_dispatch:
 
@@ -66,6 +67,7 @@ jobs:
           node --check routes/autonomous-recovery-runtime-routes.js
           node --check services/taloa/overlay-extension-drive-runtime.js
           node --check routes/taloa-supervised-overlay-routes.js
+          node --check scripts/railway-github-deploy.mjs
       - name: Trigger Railway deployment
         id: railway
         continue-on-error: true
@@ -74,7 +76,9 @@ jobs:
           PUBLIC_BASE_URL: ${{ secrets.APP_URL }}
           COMMAND_CENTER_KEY: ${{ secrets.COMMAND_CENTER_KEY }}
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-          RAILWAY_API_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          RAILWAY_API_TOKEN: ${{ secrets.RAILWAY_API_TOKEN || secrets.RAILWAY_TOKEN }}
+          RAILWAY_PROJECT_TOKEN: ${{ secrets.RAILWAY_PROJECT_TOKEN }}
+          RAILWAY_SERVICE_TOKEN: ${{ secrets.RAILWAY_SERVICE_TOKEN }}
           RAILWAY_PROJECT_ID: ${{ vars.RAILWAY_PROJECT_ID }}
           RAILWAY_SERVICE_ID: ${{ vars.RAILWAY_SERVICE_ID }}
           RAILWAY_SERVICE_NAME: ${{ vars.RAILWAY_SERVICE_NAME }}
