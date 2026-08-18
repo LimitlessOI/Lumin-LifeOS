@@ -1,0 +1,83 @@
+{
+  "schema": "railway_auth_curl_probe_v1",
+  "source_sha": "0fbc1b8fb2cd6e3aac10f4b2bd854989f1e082ff",
+  "run_id": "32199017517",
+  "project_id_present": true,
+  "attempts": [
+    {
+      "endpoint": "https://backboard.railway.com/graphql/v2",
+      "token": "api_token",
+      "header": "none",
+      "configured": false,
+      "http": null,
+      "ok": false,
+      "error": "not_configured"
+    },
+    {
+      "endpoint": "https://backboard.railway.com/graphql/v2",
+      "token": "railway_token",
+      "header": "bearer",
+      "configured": true,
+      "http": "200",
+      "ok": false,
+      "error": "Not Authorized"
+    },
+    {
+      "endpoint": "https://backboard.railway.com/graphql/v2",
+      "token": "railway_token",
+      "header": "project",
+      "configured": true,
+      "http": "200",
+      "ok": false,
+      "error": "Project Token not found"
+    },
+    {
+      "endpoint": "https://backboard.railway.com/graphql/v2",
+      "token": "project_token",
+      "header": "none",
+      "configured": false,
+      "http": null,
+      "ok": false,
+      "error": "not_configured"
+    },
+    {
+      "endpoint": "https://backboard.railway.app/graphql/v2",
+      "token": "api_token",
+      "header": "none",
+      "configured": false,
+      "http": null,
+      "ok": false,
+      "error": "not_configured"
+    },
+    {
+      "endpoint": "https://backboard.railway.app/graphql/v2",
+      "token": "railway_token",
+      "header": "bearer",
+      "configured": true,
+      "http": "200",
+      "ok": false,
+      "error": "Not Authorized"
+    },
+    {
+      "endpoint": "https://backboard.railway.app/graphql/v2",
+      "token": "railway_token",
+      "header": "project",
+      "configured": true,
+      "http": "200",
+      "ok": false,
+      "error": "Project Token not found"
+    },
+    {
+      "endpoint": "https://backboard.railway.app/graphql/v2",
+      "token": "project_token",
+      "header": "none",
+      "configured": false,
+      "http": null,
+      "ok": false,
+      "error": "not_configured"
+    }
+  ],
+  "working": null,
+  "project": null,
+  "project_token_scope": null
+}
