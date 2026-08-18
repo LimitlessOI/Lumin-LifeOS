@@ -1,0 +1,63 @@
+{
+  "schema": "railway_cli_capability_probe_v1",
+  "source_sha": "ae36e660c4d13585860531c371a5d779e6d91791",
+  "run_id": "32199371283",
+  "project_id_present": true,
+  "project_token_present": true,
+  "commands": {
+    "config_costello": {
+      "exit": 1,
+      "output": "### config_costello\nInvalid RAILWAY_TOKEN. Please check that it is valid and has access to the resource you're trying to use.\n"
+    },
+    "config_lumin_sandbox": {
+      "exit": 1,
+      "output": "### config_lumin_sandbox\nInvalid RAILWAY_TOKEN. Please check that it is valid and has access to the resource you're trying to use.\n"
+    },
+    "environments": {
+      "exit": 1,
+      "output": "### environments\nInvalid RAILWAY_TOKEN. Please check that it is valid and has access to the resource you're trying to use.\n"
+    },
+    "link_costello": {
+      "exit": 1,
+      "output": "### link_costello\nUnauthorized. Please check that your RAILWAY_TOKEN is valid and has access to the resource you're trying to use.\n"
+    },
+    "link_lumin_sandbox": {
+      "exit": 1,
+      "output": "### link_lumin_sandbox\nUnauthorized. Please check that your RAILWAY_TOKEN is valid and has access to the resource you're trying to use.\n"
+    },
+    "link_production": {
+      "exit": 1,
+      "output": "### link_production\nUnauthorized. Please check that your RAILWAY_TOKEN is valid and has access to the resource you're trying to use.\n"
+    },
+    "services_costello": {
+      "exit": 1,
+      "output": "### services_costello\nInvalid RAILWAY_TOKEN. Please check that it is valid and has access to the resource you're trying to use.\n"
+    },
+    "services_lumin_sandbox": {
+      "exit": 1,
+      "output": "### services_lumin_sandbox\nInvalid RAILWAY_TOKEN. Please check that it is valid and has access to the resource you're trying to use.\n"
+    },
+    "services_production": {
+      "exit": 1,
+      "output": "### services_production\nInvalid RAILWAY_TOKEN. Please check that it is valid and has access to the resource you're trying to use.\n"
+    },
+    "status_costello": {
+      "exit": 1,
+      "output": "### status_costello\nInvalid RAILWAY_TOKEN. Please check that it is valid and has access to the resource you're trying to use.\n"
+    },
+    "status_lumin_sandbox": {
+      "exit": 1,
+      "output": "### status_lumin_sandbox\nInvalid RAILWAY_TOKEN. Please check that it is valid and has access to the resource you're trying to use.\n"
+    },
+    "status_production": {
+      "exit": 1,
+      "output": "### status_production\nInvalid RAILWAY_TOKEN. Please check that it is valid and has access to the resource you're trying to use.\n"
+    },
+    "version": {
+      "exit": 0,
+      "output": "### version\nrailway 5.41.2\n\n"
+    }
+  },
+  "cli_read_authority_proven": false,
+  "sandbox_read_authority_proven": false
+}
