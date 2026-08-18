@@ -29,6 +29,13 @@ const REQUIRED_RUNTIME_SPECS = Object.freeze([
     enabled: true,
     note: 'Production SENTRY recovery hook. Keeps technical recovery inside SENTRY -> Conductor -> Architect, re-verifies reality, and forbids terminal stop/founder-as-router.',
   },
+  {
+    path: 'routes/costello-infrastructure-guardian-routes.js',
+    register: 'registerCostelloInfrastructureGuardianRoutes',
+    mount_path: '/api/v1/runtime/costello-guardian/status',
+    enabled: true,
+    note: 'Abbott-side external failure-domain guardian. Provisions/monitors/redeploys Costello as an independent Railway service and requires real manufacturing proof.',
+  },
 ]);
 
 const moduleHealth = new Map();
