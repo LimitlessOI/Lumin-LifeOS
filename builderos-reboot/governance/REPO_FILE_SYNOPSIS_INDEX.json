@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-18T19:43:50.765Z",
+  "generated_at": "2026-08-18T19:44:14.864Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13658,
   "files": [
@@ -71120,8 +71120,8 @@
       "path": "products/receipts/RUNTIME_HEARTBEAT_ABBOTT.json",
       "synopsis": "Product receipt — RUNTIME HEARTBEAT ABBOTT.",
       "bytes": 341,
-      "mtime": "2026-08-18T19:43:50.765Z",
-      "indexed_at": "2026-08-18T19:43:50.765Z",
+      "mtime": "2026-08-18T19:44:14.864Z",
+      "indexed_at": "2026-08-18T19:44:14.864Z",
       "synopsis_index_only": true
     },
     {
