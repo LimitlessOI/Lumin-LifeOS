@@ -31,9 +31,11 @@ function bridgeActionFromPlan(plan) {
       return { ok: true, action: { type: 'type', selector, text: String(plan?.value ?? '') } };
     case 'wait':
       return { ok: true, action: { type: 'wait', ms: Number(plan?.value) || 800 } };
-    case 'navigate':
-      if (!plan?.url) return { ok: false, error: 'navigate_requires_url' };
-      return { ok: true, action: { type: 'navigate', url: plan.url } };
+    case 'navigate': {
+      const url = String(plan?.value || '').trim();
+      if (!url) return { ok: false, error: 'navigate_requires_url' };
+      return { ok: true, action: { type: 'navigate', url } };
+    }
     default:
       return { ok: false, error: `extension_drive_unsupported_action:${plan?.type || 'unknown'}` };
   }
@@ -89,7 +91,7 @@ export function createOverlayExtensionDriveRuntime({
     const planned = actionRouter.plan({
       ...action,
       type,
-      value: action.value ?? action.text ?? action.ms ?? null,
+      value: action.value ?? action.text ?? action.url ?? action.ms ?? null,
     }, target, { authorized });
 
     if (!planned.ok) {
