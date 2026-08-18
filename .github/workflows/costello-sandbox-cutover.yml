@@ -1,0 +1,308 @@
+name: Costello sandbox cutover
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/costello-sandbox-cutover.yml'
+  schedule:
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: costello-sandbox-cutover
+  cancel-in-progress: false
+
+jobs:
+  cutover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      GH_TOKEN: ${{ github.token }}
+      REPO: ${{ github.repository }}
+      SOURCE_SHA: ${{ github.sha }}
+      RUN_ID: ${{ github.run_id }}
+      RAILWAY_API_TOKEN: ${{ secrets.RAILWAY_API_TOKEN }}
+      RAILWAY_PROJECT_ID: ${{ vars.RAILWAY_PROJECT_ID }}
+      COSTELLO_REPO: LimitlessOI/Lumin-LifeOS-BuilderOS-B
+      COSTELLO_BRANCH: costello-sandbox-autonomy
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cut over abandoned sandbox to isolated Costello
+        shell: bash
+        run: |
+          python - <<'PY'
+          import base64, json, os, secrets, string, time, urllib.request, urllib.error
+
+          endpoint = 'https://backboard.railway.com/graphql/v2'
+          token = os.environ.get('RAILWAY_API_TOKEN','').strip()
+          project_id = os.environ.get('RAILWAY_PROJECT_ID','').strip()
+          receipt = {
+            'schema': 'costello_sandbox_cutover_v1',
+            'source_sha': os.environ.get('SOURCE_SHA'),
+            'run_id': os.environ.get('RUN_ID'),
+            'verdict': 'BLOCKED',
+            'blocker': None,
+            'production_untouched': True,
+            'target_environment': 'Costello',
+            'costello_repo': os.environ.get('COSTELLO_REPO'),
+            'costello_branch': os.environ.get('COSTELLO_BRANCH'),
+            'actions': [],
+            'costello': {},
+          }
+
+          def persist():
+            path = 'products/receipts/COSTELLO_SANDBOX_CUTOVER.json'
+            api = f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}"
+            headers = {'Authorization': f"Bearer {os.environ['GH_TOKEN']}", 'Accept':'application/vnd.github+json'}
+            existing = None
+            try:
+              with urllib.request.urlopen(urllib.request.Request(api, headers=headers), timeout=20) as r:
+                existing = json.load(r).get('sha')
+            except urllib.error.HTTPError as e:
+              if e.code != 404: raise
+            payload = {
+              'message':'[railway] persist Costello sandbox cutover receipt',
+              'content':base64.b64encode((json.dumps(receipt, indent=2)+'\n').encode()).decode(),
+              'branch':'main',
+            }
+            if existing: payload['sha'] = existing
+            req = urllib.request.Request(api, data=json.dumps(payload).encode(), headers={**headers,'Content-Type':'application/json'}, method='PUT')
+            with urllib.request.urlopen(req, timeout=20) as r:
+              print(json.load(r)['commit']['sha'])
+
+          def gql(query, variables=None):
+            body = json.dumps({'query':query,'variables':variables or {}}).encode()
+            req = urllib.request.Request(endpoint, data=body, headers={
+              'Content-Type':'application/json',
+              'Authorization': f'Bearer {token}',
+              'User-Agent':'Lumin-Costello-Cutover/1.0',
+            }, method='POST')
+            try:
+              with urllib.request.urlopen(req, timeout=30) as r:
+                payload = json.load(r)
+            except urllib.error.HTTPError as e:
+              text = e.read().decode('utf-8','replace')
+              raise RuntimeError(f'Railway HTTP {e.code}: {text[:800]}')
+            if payload.get('errors'):
+              raise RuntimeError('; '.join(str(e.get('message',e)) for e in payload['errors']))
+            return payload.get('data') or {}
+
+          if not project_id:
+            receipt['blocker'] = 'RAILWAY_PROJECT_ID_NOT_CONFIGURED'
+            persist(); raise SystemExit(0)
+          if not token:
+            receipt['blocker'] = 'RAILWAY_API_TOKEN_NOT_CONFIGURED'
+            persist(); raise SystemExit(0)
+
+          try:
+            topo = gql('''query Topology($id:String!){
+              project(id:$id){
+                id name
+                environments{edges{node{id name}}}
+                services{edges{node{id name}}}
+              }
+            }''', {'id':project_id}).get('project')
+            if not topo:
+              raise RuntimeError('project_not_accessible')
+          except Exception as e:
+            receipt['blocker'] = 'RAILWAY_API_TOKEN_INVALID_OR_UNAUTHORIZED'
+            receipt['costello']['authorization_error'] = str(e)[:1000]
+            persist(); raise SystemExit(0)
+
+          envs = [e['node'] for e in topo.get('environments',{}).get('edges',[])]
+          services = [e['node'] for e in topo.get('services',{}).get('edges',[])]
+          by_env = {e['name'].strip().lower():e for e in envs}
+          by_service = {s['name'].strip().lower():s for s in services}
+          prod = by_env.get('production')
+          legacy = by_env.get('lumin sandbox') or by_env.get('lumin-sandbox') or by_env.get('sandbox')
+          costello_env = by_env.get('costello')
+          if not prod:
+            receipt['blocker'] = 'PRODUCTION_ENVIRONMENT_NOT_FOUND'
+            persist(); raise SystemExit(0)
+
+          # Snapshot source variables in memory only. Values are never written to receipts.
+          def variables(environment_id, service_id=None):
+            return gql('''query Vars($p:String!,$e:String!,$s:String){variables(projectId:$p,environmentId:$e,serviceId:$s,unrendered:true)}''',
+                       {'p':project_id,'e':environment_id,'s':service_id}).get('variables') or {}
+
+          shared_prod = variables(prod['id'])
+          source_service = by_service.get('costello-builderos') or by_service.get('lumin-web')
+          source_vars = variables(prod['id'], source_service['id']) if source_service else {}
+          legacy_shared = variables(legacy['id']) if legacy else {}
+
+          # Create a truly empty target environment rather than cloning Production.
+          if not costello_env:
+            data = gql('''mutation CreateEnv($input:EnvironmentCreateInput!){environmentCreate(input:$input){id name}}''', {
+              'input': {
+                'projectId':project_id,
+                'name':'Costello',
+                'skipInitialDeploys':True,
+                'stageInitialChanges':False,
+              }
+            })
+            costello_env = data['environmentCreate']
+            receipt['actions'].append('created_empty_costello_environment')
+          receipt['costello']['environment_id'] = costello_env['id']
+
+          # Copy non-Railway shared application variables, while explicitly preventing
+          # production routing/identity from leaking into Costello.
+          deny = {
+            'RAILWAY_PROJECT_ID','RAILWAY_SERVICE_ID','RAILWAY_ENVIRONMENT_ID',
+            'RAILWAY_PUBLIC_DOMAIN','RAILWAY_PRIVATE_DOMAIN','RAILWAY_STATIC_URL',
+            'APP_URL','PUBLIC_BASE_URL','HOST','PORT','DATABASE_URL',
+            'PGHOST','PGPORT','PGUSER','PGPASSWORD','PGDATABASE',
+          }
+          merged_shared = {}
+          for src in (shared_prod, legacy_shared):
+            for k,v in src.items():
+              if k not in deny and not k.startswith('RAILWAY_'):
+                merged_shared[k] = v
+          merged_shared.update({
+            'NODE_ENV':'production',
+            'BUILDEROS_RUNTIME_ENV':'costello',
+            'GITHUB_DEPLOY_BRANCH':os.environ['COSTELLO_BRANCH'],
+          })
+          if merged_shared:
+            gql('''mutation Upsert($input:VariableCollectionUpsertInput!){variableCollectionUpsert(input:$input)}''', {
+              'input': {'projectId':project_id,'environmentId':costello_env['id'],'variables':merged_shared,'replace':False,'skipDeploys':True}
+            })
+            receipt['actions'].append(f'copied_shared_variables:{len(merged_shared)}')
+
+          # Dedicated Postgres for Costello: no production DB dependency.
+          postgres = by_service.get('costello-postgres')
+          if not postgres:
+            pw = secrets.token_urlsafe(32)
+            data = gql('''mutation CreateService($input:ServiceCreateInput!){serviceCreate(input:$input){id name}}''', {
+              'input': {
+                'projectId':project_id,
+                'environmentId':costello_env['id'],
+                'name':'costello-postgres',
+                'source':{'image':'postgres:16-alpine'},
+                'variables':{
+                  'POSTGRES_USER':'costello',
+                  'POSTGRES_PASSWORD':pw,
+                  'POSTGRES_DB':'costello',
+                },
+              }
+            })
+            postgres = data['serviceCreate']
+            receipt['actions'].append('created_costello_postgres')
+            gql('''mutation Volume($input:VolumeCreateInput!){volumeCreate(input:$input){id name}}''', {
+              'input': {'projectId':project_id,'environmentId':costello_env['id'],'serviceId':postgres['id'],'mountPath':'/var/lib/postgresql/data'}
+            })
+            receipt['actions'].append('attached_costello_postgres_volume')
+          receipt['costello']['postgres_service_id'] = postgres['id']
+
+          # Create the new autonomy runtime service in Costello only.
+          app = by_service.get('costello-autonomy')
+          app_vars = {}
+          for k,v in source_vars.items():
+            if k not in deny and not k.startswith('RAILWAY_'):
+              app_vars[k] = v
+          app_vars.update({
+            'NODE_ENV':'production',
+            'BUILDEROS_RUNTIME_ENV':'costello',
+            'GITHUB_DEPLOY_BRANCH':os.environ['COSTELLO_BRANCH'],
+            'DATABASE_URL':'postgresql://${{costello-postgres.POSTGRES_USER}}:${{costello-postgres.POSTGRES_PASSWORD}}@${{costello-postgres.RAILWAY_PRIVATE_DOMAIN}}:5432/${{costello-postgres.POSTGRES_DB}}',
+          })
+          if not app:
+            data = gql('''mutation CreateService($input:ServiceCreateInput!){serviceCreate(input:$input){id name}}''', {
+              'input': {
+                'projectId':project_id,
+                'environmentId':costello_env['id'],
+                'name':'costello-autonomy',
+                'branch':os.environ['COSTELLO_BRANCH'],
+                'source':{'repo':os.environ['COSTELLO_REPO']},
+                'variables':app_vars,
+              }
+            })
+            app = data['serviceCreate']
+            receipt['actions'].append('created_costello_autonomy_service')
+          else:
+            gql('''mutation Upsert($input:VariableCollectionUpsertInput!){variableCollectionUpsert(input:$input)}''', {
+              'input': {'projectId':project_id,'environmentId':costello_env['id'],'serviceId':app['id'],'variables':app_vars,'replace':False,'skipDeploys':True}
+            })
+            gql('''mutation Connect($id:String!,$input:ServiceConnectInput!){serviceConnect(id:$id,input:$input){id}}''', {
+              'id':app['id'],'input':{'repo':os.environ['COSTELLO_REPO'],'branch':os.environ['COSTELLO_BRANCH']}
+            })
+            receipt['actions'].append('reconciled_costello_autonomy_service')
+          receipt['costello']['app_service_id'] = app['id']
+
+          # Runtime settings and deploy.
+          gql('''mutation Update($s:String!,$e:String!,$input:ServiceInstanceUpdateInput!){serviceInstanceUpdate(serviceId:$s,environmentId:$e,input:$input)}''', {
+            's':app['id'],'e':costello_env['id'],'input':{'startCommand':'npm start','healthcheckPath':'/healthz','restartPolicyType':'ALWAYS'}
+          })
+          try:
+            domain = gql('''mutation Domain($s:String!,$e:String!){serviceDomainCreate(serviceId:$s,environmentId:$e){id domain}}''', {
+              's':app['id'],'e':costello_env['id']
+            }).get('serviceDomainCreate')
+            if domain:
+              receipt['costello']['domain'] = domain.get('domain')
+              receipt['actions'].append('created_costello_domain')
+          except Exception as e:
+            # Existing domain is acceptable; resolve below.
+            receipt['costello']['domain_create_note'] = str(e)[:500]
+
+          deployment_id = gql('''mutation Deploy($s:String!,$e:String!){serviceInstanceDeployV2(serviceId:$s,environmentId:$e)}''', {
+            's':app['id'],'e':costello_env['id']
+          }).get('serviceInstanceDeployV2')
+          receipt['costello']['deployment_id'] = deployment_id
+          receipt['actions'].append('triggered_costello_deploy')
+
+          # Resolve Railway domain and wait for health before deleting the abandoned sandbox.
+          try:
+            domains = gql('''query Domains($p:String!,$e:String!,$s:String!){domains(projectId:$p,environmentId:$e,serviceId:$s)}''', {
+              'p':project_id,'e':costello_env['id'],'s':app['id']
+            }).get('domains') or {}
+            candidates = []
+            if isinstance(domains,dict):
+              for key in ('serviceDomains','customDomains'):
+                val = domains.get(key) or []
+                if isinstance(val,list): candidates.extend(val)
+            for item in candidates:
+              if isinstance(item,dict) and item.get('domain'):
+                receipt['costello']['domain'] = item['domain']; break
+          except Exception as e:
+            receipt['costello']['domain_lookup_note'] = str(e)[:500]
+
+          healthy = False
+          domain = receipt['costello'].get('domain')
+          if domain:
+            url = 'https://' + domain.rstrip('/') + '/healthz'
+            for _ in range(30):
+              try:
+                with urllib.request.urlopen(url, timeout=8) as r:
+                  if 200 <= r.status < 300:
+                    healthy = True; break
+              except Exception:
+                pass
+              time.sleep(10)
+          receipt['costello']['health_verified'] = healthy
+
+          if not healthy:
+            receipt['verdict'] = 'BLOCKED'
+            receipt['blocker'] = 'COSTELLO_HEALTH_NOT_VERIFIED'
+            # Critical safety invariant: preserve legacy sandbox until replacement works.
+            persist(); raise SystemExit(0)
+
+          # Only after replacement health is proven do we remove the abandoned sandbox.
+          if legacy and legacy['id'] != costello_env['id']:
+            gql('''mutation DeleteEnv($id:String!){environmentDelete(id:$id)}''', {'id':legacy['id']})
+            receipt['actions'].append('deleted_abandoned_lumin_sandbox')
+
+          # Final verification: Production still exists; Costello exists; old sandbox is gone.
+          verify = gql('''query Verify($id:String!){project(id:$id){environments{edges{node{id name}}}}}''', {'id':project_id}).get('project') or {}
+          final_names = [e['node']['name'] for e in verify.get('environments',{}).get('edges',[])]
+          receipt['costello']['final_environment_names'] = final_names
+          ok = ('production' in [n.lower() for n in final_names] and 'costello' in [n.lower() for n in final_names]
+                and 'lumin sandbox' not in [n.lower() for n in final_names])
+          receipt['verdict'] = 'PASS' if ok else 'BLOCKED'
+          receipt['blocker'] = None if ok else 'FINAL_TOPOLOGY_NOT_PROVEN'
+          persist()
+          PY
