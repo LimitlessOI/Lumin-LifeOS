@@ -12,29 +12,16 @@ const TECHNICAL_VERDICTS = new Set(['TECHNICAL_PASS', 'PASS', 'OBJECTIVE_COMPLET
 
 function safeReadJson(relPath) {
   if (!relPath) return null;
-  try {
-    return JSON.parse(fs.readFileSync(path.join(ROOT, relPath), 'utf8'));
-  } catch {
-    return null;
-  }
+  try { return JSON.parse(fs.readFileSync(path.join(ROOT, relPath), 'utf8')); }
+  catch { return null; }
 }
 
-export function normalizeVerdict(value) {
-  return String(value || '').trim().toUpperCase();
-}
-
-export function isTechnicalPassVerdict(value) {
-  return TECHNICAL_VERDICTS.has(normalizeVerdict(value));
-}
-
+export function normalizeVerdict(value) { return String(value || '').trim().toUpperCase(); }
+export function isTechnicalPassVerdict(value) { return TECHNICAL_VERDICTS.has(normalizeVerdict(value)); }
 export function isScrappedSalvage(item = {}) {
-  return /SCRAPPED_SALVAGE/i.test(String(item.status || ''))
-    || /SCRAPPED_SALVAGE/i.test(String(item.verdict || ''));
+  return /SCRAPPED_SALVAGE/i.test(String(item.status || '')) || /SCRAPPED_SALVAGE/i.test(String(item.verdict || ''));
 }
-
-export function loadObjectiveVerdict(item = {}) {
-  return safeReadJson(item.objective_verdict || null);
-}
+export function loadObjectiveVerdict(item = {}) { return safeReadJson(item.objective_verdict || null); }
 
 export function getCompletionState(item = {}, options = {}) {
   const pointBTarget = options.pointBTarget || loadPointBTarget();
@@ -58,10 +45,15 @@ export function getCompletionState(item = {}, options = {}) {
   } else if (pointBComplete) {
     readinessState = 'POINT_B_COMPLETE';
     requiredNextAction = 'none';
-  } else if (technicalPass && pointBMission && !founderUsabilityPass) {
-    readinessState = 'TECHNICAL_PASS_ONLY';
-    requiredNextAction = 'founder_usability_confirmation';
-    blockingReason = 'point_b_founder_confirmation_required';
+  } else if (pointBMission && !founderUsabilityPass) {
+    // A technical pass from an earlier/partial acceptance is never allowed to
+    // turn the current Point B into a human-only wait state. If Point B is false,
+    // the builder remains responsible for implementation/acceptance work until
+    // the current founder success condition is actually proven or a typed blocker
+    // is emitted. This prevents silent idle after blueprint/Point-B changes.
+    readinessState = technicalPass ? 'POINT_B_INCOMPLETE_AFTER_TECHNICAL_PASS' : 'BLUEPRINT_ACTIVE';
+    requiredNextAction = 'implementation_or_acceptance';
+    blockingReason = 'point_b_not_proven';
   } else if (technicalPass) {
     readinessState = 'TECHNICAL_PASS_ONLY';
     requiredNextAction = 'none';
@@ -72,14 +64,9 @@ export function getCompletionState(item = {}, options = {}) {
   } else if (blueprintStatus) {
     readinessState = 'BLUEPRINT_ACTIVE';
     requiredNextAction = 'blueprint_execution';
-  } else {
-    readinessState = 'READY_FOR_PRODUCT_DEVELOPMENT';
-    requiredNextAction = 'product_development';
   }
 
-  const queueCompleteForScheduler = isScrappedSalvage(item)
-    || archived
-    || (pointBMission ? pointBComplete : technicalPass);
+  const queueCompleteForScheduler = isScrappedSalvage(item) || archived || (pointBMission ? pointBComplete : technicalPass);
 
   return {
     verdict,
