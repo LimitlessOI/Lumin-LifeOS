@@ -7,7 +7,11 @@ import {
   readyForArchitect,
   sealConsensusRound,
 } from '../config/sentry-repair-handoff.js';
-import { runAutonomousRecoveryCouncil } from '../services/autonomous-recovery-council.js';
+import {
+  runAutonomousRecoveryCouncil,
+  detectCatastrophicGovernedStop,
+  CATASTROPHIC_STOP_STALE_MS,
+} from '../services/autonomous-recovery-council.js';
 
 const complexFinding = {
   id: 'fixer_failed:governed_loop_stale',
@@ -66,7 +70,7 @@ test('autonomous recovery re-verifies until recovered and never routes founder a
     if (calls === 1) return { raw_findings: 1, escalations: 0 };
     return { raw_findings: 0, escalations: 0 };
   };
-  const result = await runAutonomousRecoveryCouncil({ audit, maxRounds: 3 });
+  const result = await runAutonomousRecoveryCouncil({ audit, maxRounds: 3, roundDelayMs: 0 });
   assert.equal(result.ok, true);
   assert.equal(result.disposition, 'RECOVERED');
   assert.equal(calls, 2);
@@ -74,9 +78,46 @@ test('autonomous recovery re-verifies until recovered and never routes founder a
 
 test('exhausted autonomous recovery records UNSOLVED without authorizing terminal stop', async () => {
   const audit = async () => ({ raw_findings: 1, escalations: 1 });
-  const result = await runAutonomousRecoveryCouncil({ audit, maxRounds: 2 });
+  const result = await runAutonomousRecoveryCouncil({ audit, maxRounds: 2, roundDelayMs: 0 });
   assert.equal(result.ok, false);
   assert.equal(result.disposition, 'UNSOLVED');
   assert.equal(result.founder_alert_is_record_only, true);
   assert.equal(result.terminal_stop_forbidden, true);
+});
+
+test('governed builder staleness beyond catastrophic threshold is a P0 stop', () => {
+  const now = Date.now();
+  const result = detectCatastrophicGovernedStop({
+    governed: {
+      enabled: true,
+      hardHalt: false,
+      lastTickAt: new Date(now - CATASTROPHIC_STOP_STALE_MS - 1).toISOString(),
+    },
+  }, { now });
+  assert.equal(result.stopped, true);
+  assert.ok(result.ageMs > CATASTROPHIC_STOP_STALE_MS);
+});
+
+test('healthy governed builder heartbeat does not trigger catastrophic stop', () => {
+  const now = Date.now();
+  const result = detectCatastrophicGovernedStop({
+    governed: {
+      enabled: true,
+      hardHalt: false,
+      lastTickAt: new Date(now - 30_000).toISOString(),
+    },
+  }, { now });
+  assert.equal(result.stopped, false);
+});
+
+test('explicit founder hard halt is not misclassified as an accidental catastrophic stop', () => {
+  const now = Date.now();
+  const result = detectCatastrophicGovernedStop({
+    governed: {
+      enabled: true,
+      hardHalt: true,
+      lastTickAt: new Date(now - CATASTROPHIC_STOP_STALE_MS - 1).toISOString(),
+    },
+  }, { now });
+  assert.equal(result.stopped, false);
 });
