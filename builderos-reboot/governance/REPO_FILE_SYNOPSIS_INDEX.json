@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-18T20:33:58.335Z",
+  "generated_at": "2026-08-18T21:12:49.268Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13681,
+  "file_count": 13683,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21685,9 +21685,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 4156562,
-      "mtime": "2026-08-18T20:33:17.354Z",
-      "indexed_at": "2026-08-18T20:33:58.335Z"
+      "bytes": 4159746,
+      "mtime": "2026-08-18T21:08:55.137Z",
+      "indexed_at": "2026-08-18T21:12:49.268Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -32658,9 +32658,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 47105,
-      "mtime": "2026-08-17T03:31:18.625Z",
-      "indexed_at": "2026-08-17T03:32:26.091Z",
+      "bytes": 47380,
+      "mtime": "2026-08-18T21:12:20.232Z",
+      "indexed_at": "2026-08-18T21:12:49.268Z",
       "synopsis_index_only": true
     },
     {
@@ -46039,9 +46039,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 876727,
-      "mtime": "2026-08-14T19:03:11.603Z",
-      "indexed_at": "2026-08-14T19:03:50.468Z"
+      "bytes": 877747,
+      "mtime": "2026-08-18T21:08:36.899Z",
+      "indexed_at": "2026-08-18T21:08:53.507Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -74523,6 +74523,16 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": "routes/dropship-research-routes.js",
+      "synopsis": "Dropship product research -- observes Amazon's real public",
+      "bytes": 1991,
+      "mtime": "2026-08-18T21:05:55.377Z",
+      "indexed_at": "2026-08-18T21:08:53.507Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "routes/egress-proxy-routes.js",
       "synopsis": "Exports createEaiRoutes — routes/egress-proxy-routes.js.",
       "bytes": 3161,
@@ -93928,6 +93938,16 @@
       "indexed_at": "2026-08-01T14:13:46.547Z",
       "ssot": [
         "docs/products/productized-sprint/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/amazon-product-research.js",
+      "synopsis": "Observes Amazon's real public search results for a candidate",
+      "bytes": 5980,
+      "mtime": "2026-08-18T21:04:47.244Z",
+      "indexed_at": "2026-08-18T21:08:53.507Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
       ]
     },
     {
