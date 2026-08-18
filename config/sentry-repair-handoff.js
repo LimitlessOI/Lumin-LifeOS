@@ -114,10 +114,19 @@ export function compareRepairSolutions(sentrySolution, conductorSolution) {
 }
 
 function hiddenAlternativesCleared(round) {
-  const candidate = String(round?.materially_new_candidate || '').trim();
-  const exhaustive = round?.exhaustive_search_no_superior === true;
-  const searched = round?.hidden_alternatives_checked === true;
-  return searched && (candidate.length >= 10 || exhaustive);
+  const explicitCandidate = String(round?.materially_new_candidate || '').trim();
+  const explicitExhaustive = round?.exhaustive_search_no_superior === true;
+  const explicitSearch = round?.hidden_alternatives_checked === true;
+  if (explicitSearch && (explicitCandidate.length >= 10 || explicitExhaustive)) return true;
+
+  // Compatibility with the live Conductor consensus receipt: the prompt
+  // already requires a third solution, both-side argument, and +/- consequence
+  // search, but historically emitted those facts under these fields.
+  const synthesized = String(round?.synthesized || '').trim();
+  const argued = round?.argued_both_sides === true;
+  const positive = String(round?.unintended_positive || '').trim();
+  const negative = String(round?.unintended_negative || '').trim();
+  return argued && synthesized.length >= 10 && positive.length >= 3 && negative.length >= 3;
 }
 
 export function sealConsensusRound(round) {
@@ -129,7 +138,7 @@ export function sealConsensusRound(round) {
     return {
       unanimous: false,
       reason: 'hidden_alternatives_not_cleared',
-      required: ['hidden_alternatives_checked', 'materially_new_candidate_or_exhaustive_search_no_superior'],
+      required: ['hidden_alternatives_search', 'argue_both_sides', 'positive_and_negative_consequences'],
       forbidden_action: 'early_consensus_terminal',
     };
   }
