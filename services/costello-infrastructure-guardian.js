@@ -5,14 +5,18 @@ export const COSTELLO_REPO = process.env.COSTELLO_GITHUB_REPO || 'LimitlessOI/Lu
 const CHECK_INTERVAL_MS = Number(process.env.COSTELLO_INFRA_GUARDIAN_INTERVAL_MS || 2 * 60 * 1000);
 const DEPLOY_COOLDOWN_MS = Number(process.env.COSTELLO_INFRA_DEPLOY_COOLDOWN_MS || 5 * 60 * 1000);
 const ALERT_REPEAT_MS = Number(process.env.COSTELLO_FIVE_ALARM_REPEAT_MS || 10 * 60 * 1000);
+const RAILWAY_API_TIMEOUT_MS = Number(process.env.COSTELLO_RAILWAY_API_TIMEOUT_MS || 15_000);
 const RECEIPT_REL = 'products/receipts/COSTELLO_INFRA_GUARDIAN.json';
 const RECEIPT_BRANCH = 'runtime-receipts';
 
 const state = {
   armed: false,
+  inFlight: false,
+  currentStage: 'idle',
   serviceId: null,
   domain: null,
   lastTickAt: null,
+  lastTickCompletedAt: null,
   lastHealthyAt: null,
   lastDeployAt: null,
   lastProvisionAt: null,
@@ -54,11 +58,14 @@ function safeStateReceipt(extra = {}) {
     guardian: 'abbott_external_failure_domain',
     at: new Date().toISOString(),
     armed: state.armed,
+    in_flight: state.inFlight,
+    current_stage: state.currentStage,
     service_id: state.serviceId,
     service_name: COSTELLO_SERVICE_NAME,
     repository: COSTELLO_REPO,
     domain: state.domain,
     last_tick_at: state.lastTickAt,
+    last_tick_completed_at: state.lastTickCompletedAt,
     last_healthy_at: state.lastHealthyAt,
     last_deploy_at: state.lastDeployAt,
     last_provision_at: state.lastProvisionAt,
@@ -74,6 +81,7 @@ function safeStateReceipt(extra = {}) {
       voice_accepted: state.lastAlertResult.voice_accepted,
       transport_configured: state.lastAlertResult.transport_configured,
     } : null,
+    railway_api_timeout_ms: RAILWAY_API_TIMEOUT_MS,
     terminal_stop_forbidden: true,
     recovery_closes_only_on_manufacturing_proof: true,
     ...extra,
@@ -81,7 +89,10 @@ function safeStateReceipt(extra = {}) {
 }
 
 async function persistReceipt(commitToGitHub, extra = {}, logger = console) {
-  if (typeof commitToGitHub !== 'function') return false;
+  if (typeof commitToGitHub !== 'function') {
+    logger?.warn?.('[COSTELLO-INFRA] commitToGitHub unavailable; durable receipt cannot be written');
+    return false;
+  }
   const content = `${JSON.stringify(safeStateReceipt(extra), null, 2)}\n`;
   try {
     await commitToGitHub(
@@ -100,11 +111,18 @@ async function persistReceipt(commitToGitHub, extra = {}, logger = console) {
 async function railwayGql(query, variables = {}) {
   const token = env('RAILWAY_TOKEN');
   if (!token) throw new Error('RAILWAY_TOKEN missing on Abbott runtime');
-  const res = await fetch(RAILWAY_GQL, {
-    method: 'POST',
-    headers: { 'content-type': 'application/json', authorization: `Bearer ${token}` },
-    body: JSON.stringify({ query, variables }),
-  });
+  let res;
+  try {
+    res = await fetch(RAILWAY_GQL, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', authorization: `Bearer ${token}` },
+      body: JSON.stringify({ query, variables }),
+      signal: AbortSignal.timeout(RAILWAY_API_TIMEOUT_MS),
+    });
+  } catch (error) {
+    const kind = error?.name === 'TimeoutError' || error?.name === 'AbortError' ? 'RAILWAY_API_TIMEOUT' : 'RAILWAY_API_NETWORK_ERROR';
+    throw new Error(`${kind}:${String(error?.message || error)}`);
+  }
   const text = await res.text();
   let json;
   try { json = JSON.parse(text); } catch { throw new Error(`Railway non-JSON ${res.status}: ${text.slice(0, 300)}`); }
@@ -266,6 +284,7 @@ async function twilioPost(resource, params) {
       'content-type': 'application/x-www-form-urlencoded',
     },
     body,
+    signal: AbortSignal.timeout(15_000),
   });
   return { ok: response.ok, configured: true, status: response.status };
 }
@@ -324,6 +343,7 @@ function clearIncidentIfRecovered(status, logger) {
 
 export async function ensureCostelloInfrastructure({ logger = console, forceDeploy = false, commitToGitHub = null } = {}) {
   state.lastTickAt = new Date().toISOString();
+  state.currentStage = 'identity';
   const projectId = env('RAILWAY_PROJECT_ID');
   const environmentId = env('RAILWAY_ENVIRONMENT_ID');
   const sourceServiceId = env('RAILWAY_SERVICE_ID');
@@ -331,16 +351,20 @@ export async function ensureCostelloInfrastructure({ logger = console, forceDepl
   if (!projectId || !environmentId || !sourceServiceId) {
     state.lastError = 'Abbott Railway identity incomplete';
     await handleIncident({ reason: state.lastError }, logger);
+    state.currentStage = 'identity_failed';
+    state.lastTickCompletedAt = new Date().toISOString();
     await persistReceipt(commitToGitHub, { phase: 'identity_failed' }, logger);
     return { ok: false, error: state.lastError };
   }
 
   try {
+    state.currentStage = 'topology';
     const topology = await projectTopology(projectId);
     if (!topology) throw new Error('Abbott Railway project not accessible');
     let service = (topology.services?.edges || []).map((e) => e.node).find((s) => s?.name === COSTELLO_SERVICE_NAME) || null;
     let created = false;
     if (!service) {
+      state.currentStage = 'service_create';
       service = await createCostelloService(projectId);
       created = true;
       state.lastProvisionAt = new Date().toISOString();
@@ -349,14 +373,18 @@ export async function ensureCostelloInfrastructure({ logger = console, forceDepl
     if (!service?.id) throw new Error('Costello service creation/resolution returned no service id');
     state.serviceId = service.id;
 
+    state.currentStage = 'variables';
     await configureCostelloVariables({ projectId, environmentId, serviceId: service.id, sourceServiceName, sourceServiceId });
+    state.currentStage = 'domain';
     const domain = await ensureServiceDomain({ projectId, environmentId, serviceId: service.id, sourceServiceId });
     await setCostelloPublicUrl({ projectId, environmentId, serviceId: service.id, domain });
 
+    state.currentStage = 'probe';
     let status = await probeManufacturing(domain);
     const deployAge = state.lastDeployAt ? Date.now() - Date.parse(state.lastDeployAt) : Infinity;
     if (forceDeploy || created || (!status.ok && deployAge >= DEPLOY_COOLDOWN_MS)) {
       await handleIncident(status, logger);
+      state.currentStage = 'deploy';
       await deployCostello(service.id, environmentId);
       logger?.error?.({ service_id: service.id, domain, reason: status.reason || status.failure_reasons }, '[COSTELLO-INFRA] forced Costello deployment/recovery');
       status = { ...status, recovery_deploy_triggered: true };
@@ -373,10 +401,14 @@ export async function ensureCostelloInfrastructure({ logger = console, forceDepl
       state.lastError = status.reason || (status.failure_reasons || []).join(',') || 'manufacturing_not_proven';
     }
 
-    await persistReceipt(commitToGitHub, { phase: status.ok ? 'healthy' : 'recovering', provisioned_this_tick: created }, logger);
+    state.currentStage = status.ok ? 'healthy' : 'recovering';
+    state.lastTickCompletedAt = new Date().toISOString();
+    await persistReceipt(commitToGitHub, { phase: state.currentStage, provisioned_this_tick: created }, logger);
     return { ok: status.ok, provisioned: created, service_id: service.id, service_name: COSTELLO_SERVICE_NAME, domain, status };
   } catch (error) {
     state.lastError = error.message;
+    state.currentStage = 'guardian_error';
+    state.lastTickCompletedAt = new Date().toISOString();
     await handleIncident({ reason: error.message }, logger);
     await persistReceipt(commitToGitHub, { phase: 'guardian_error' }, logger);
     logger?.error?.({ error: error.message }, '[COSTELLO-INFRA] guardian tick failed');
@@ -391,15 +423,23 @@ export function getCostelloInfrastructureGuardianStatus() {
 export function startCostelloInfrastructureGuardian({ logger = console, commitToGitHub = null } = {}) {
   if (state.armed) return null;
   state.armed = true;
-  const tick = () => ensureCostelloInfrastructure({ logger, commitToGitHub }).catch((error) => {
-    state.lastError = error.message;
-    logger?.error?.({ error: error.message }, '[COSTELLO-INFRA] unhandled guardian failure');
-  });
-  const boot = setTimeout(tick, Number(process.env.COSTELLO_INFRA_BOOT_DELAY_MS || 20_000));
+  const tick = async () => {
+    if (state.inFlight) {
+      logger?.warn?.({ stage: state.currentStage }, '[COSTELLO-INFRA] skipped overlapping guardian tick');
+      return;
+    }
+    state.inFlight = true;
+    try {
+      await ensureCostelloInfrastructure({ logger, commitToGitHub });
+    } finally {
+      state.inFlight = false;
+    }
+  };
+  const boot = setTimeout(() => { tick().catch((error) => logger?.error?.({ error: error.message }, '[COSTELLO-INFRA] boot tick failed')); }, Number(process.env.COSTELLO_INFRA_BOOT_DELAY_MS || 20_000));
   boot.unref?.();
-  const timer = setInterval(tick, CHECK_INTERVAL_MS);
+  const timer = setInterval(() => { tick().catch((error) => logger?.error?.({ error: error.message }, '[COSTELLO-INFRA] scheduled tick failed')); }, CHECK_INTERVAL_MS);
   timer.unref?.();
-  logger?.info?.({ interval_ms: CHECK_INTERVAL_MS, target: COSTELLO_SERVICE_NAME }, '[COSTELLO-INFRA] Abbott-side guardian armed');
+  logger?.info?.({ interval_ms: CHECK_INTERVAL_MS, api_timeout_ms: RAILWAY_API_TIMEOUT_MS, target: COSTELLO_SERVICE_NAME }, '[COSTELLO-INFRA] Abbott-side guardian armed');
   return { boot, timer };
 }
 
