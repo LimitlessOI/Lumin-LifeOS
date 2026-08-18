@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-17T22:07:21.299Z",
+  "generated_at": "2026-08-18T18:43:07.816Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13657,
+  "file_count": 13658,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -71114,6 +71114,14 @@
       "bytes": 1461,
       "mtime": "2026-08-01T20:09:43.922Z",
       "indexed_at": "2026-08-01T20:09:43.922Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/RUNTIME_HEARTBEAT_ABBOTT.json",
+      "synopsis": "Product receipt — RUNTIME HEARTBEAT ABBOTT.",
+      "bytes": 341,
+      "mtime": "2026-08-18T18:43:07.816Z",
+      "indexed_at": "2026-08-18T18:43:07.816Z",
       "synopsis_index_only": true
     },
     {
