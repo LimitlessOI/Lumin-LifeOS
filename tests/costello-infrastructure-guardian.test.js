@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 
 const serviceText = fs.readFileSync(new URL('../services/costello-infrastructure-guardian.js', import.meta.url), 'utf8');
+const recoveryRouteText = fs.readFileSync(new URL('../routes/autonomous-recovery-runtime-routes.js', import.meta.url), 'utf8');
 const autoRegisterText = fs.readFileSync(new URL('../startup/auto-register-product-modules.js', import.meta.url), 'utf8');
 
 test('Costello infrastructure guardian targets independent repo and service', () => {
@@ -24,7 +25,9 @@ test('Costello guardian never hardcodes Abbott public domain as Costello target'
   assert.match(serviceText, /serviceDomainCreate/);
 });
 
-test('Costello guardian is a required Abbott runtime module', () => {
-  assert.match(autoRegisterText, /routes\/costello-infrastructure-guardian-routes\.js/);
-  assert.match(autoRegisterText, /registerCostelloInfrastructureGuardianRoutes/);
+test('Costello guardian runs inside the already-required Abbott recovery runtime', () => {
+  assert.match(recoveryRouteText, /startCostelloInfrastructureGuardian/);
+  assert.match(recoveryRouteText, /getCostelloInfrastructureGuardianStatus/);
+  assert.match(autoRegisterText, /routes\/autonomous-recovery-runtime-routes\.js/);
+  assert.doesNotMatch(autoRegisterText, /routes\/costello-infrastructure-guardian-routes\.js/);
 });
