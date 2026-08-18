@@ -3,30 +3,12 @@
  * SYNOPSIS: Deploy the repo to Railway from GitHub Actions.
  * @authority Legacy production spine — deploy path repair only.
  *
- * Preferred path (post lumin-web cutover):
- *   Call the live service's managed-env build-from-latest endpoint.
- *   Production already holds a working RAILWAY_TOKEN + correct
- *   RAILWAY_SERVICE_ID / RAILWAY_ENVIRONMENT_ID for lumin-web.
- *   This avoids the stale GitHub RAILWAY_TOKEN secret (pre-cutover).
- *
- * Fallback path:
- *   Direct Railway GraphQL using RAILWAY_TOKEN + project topology.
- *
- * Required env (preferred):
- *   APP_URL or PUBLIC_BASE_URL
- *   COMMAND_CENTER_KEY (or LIFEOS_KEY / API_KEY)
- *
- * Required env (fallback):
- *   RAILWAY_TOKEN or RAILWAY_API_TOKEN
- *   RAILWAY_PROJECT_ID
- *   RAILWAY_SERVICE_NAME or RAILWAY_SERVICE_ID
- *   RAILWAY_ENVIRONMENT_NAME or RAILWAY_ENVIRONMENT_ID
- *
- * Optional env:
- *   GITHUB_SHA
+ * Preferred path: call the live service's managed-env build endpoint.
+ * Fallback path: Railway Public GraphQL API using an account/workspace token
+ * or an environment-scoped project token.
  */
 
-const RAILWAY_GQL = "https://backboard.railway.app/graphql/v2";
+const RAILWAY_GQL = "https://backboard.railway.com/graphql/v2";
 
 function getEnv(name, fallback = "") {
   return String(process.env[name] || fallback).trim();
@@ -34,44 +16,46 @@ function getEnv(name, fallback = "") {
 
 function requireEnv(name) {
   const value = getEnv(name);
-  if (!value) {
-    throw new Error(`${name} is required`);
-  }
+  if (!value) throw new Error(`${name} is required`);
   return value;
 }
 
 function normalizeConnection(value) {
   if (!value) return [];
   if (Array.isArray(value)) return value;
-  if (Array.isArray(value.edges)) {
-    return value.edges.map((edge) => edge?.node).filter(Boolean);
-  }
+  if (Array.isArray(value.edges)) return value.edges.map((edge) => edge?.node).filter(Boolean);
   if (Array.isArray(value.nodes)) return value.nodes.filter(Boolean);
   return [];
 }
 
 function getCommandKey() {
-  return (
-    getEnv("COMMAND_CENTER_KEY") ||
-    getEnv("LIFEOS_KEY") ||
-    getEnv("API_KEY")
-  );
+  return getEnv("COMMAND_CENTER_KEY") || getEnv("LIFEOS_KEY") || getEnv("API_KEY");
 }
 
 function getLiveBaseUrl() {
   return (getEnv("APP_URL") || getEnv("PUBLIC_BASE_URL")).replace(/\/$/, "");
 }
 
-async function railwayGql(query, variables = {}) {
+function railwayAuthHeaders() {
+  const projectToken = getEnv("RAILWAY_PROJECT_TOKEN") || getEnv("RAILWAY_SERVICE_TOKEN");
+  if (projectToken) {
+    return {
+      "content-type": "application/json",
+      "Project-Access-Token": projectToken,
+    };
+  }
   const token = getEnv("RAILWAY_API_TOKEN") || getEnv("RAILWAY_TOKEN");
-  if (!token) throw new Error("RAILWAY_API_TOKEN or RAILWAY_TOKEN is required");
+  if (!token) throw new Error("Railway token is required");
+  return {
+    "content-type": "application/json",
+    authorization: `Bearer ${token}`,
+  };
+}
 
+async function railwayGql(query, variables = {}) {
   const res = await fetch(RAILWAY_GQL, {
     method: "POST",
-    headers: {
-      "content-type": "application/json",
-      authorization: `Bearer ${token}`,
-    },
+    headers: railwayAuthHeaders(),
     body: JSON.stringify({ query, variables }),
   });
 
@@ -82,13 +66,8 @@ async function railwayGql(query, variables = {}) {
   } catch {
     throw new Error(`Railway API returned non-JSON (${res.status}): ${text.slice(0, 500)}`);
   }
-
-  if (!res.ok) {
-    throw new Error(`Railway API HTTP ${res.status}: ${text.slice(0, 500)}`);
-  }
-  if (json.errors?.length) {
-    throw new Error(json.errors.map((err) => err.message).join("; "));
-  }
+  if (!res.ok) throw new Error(`Railway API HTTP ${res.status}: ${text.slice(0, 500)}`);
+  if (json.errors?.length) throw new Error(json.errors.map((err) => err.message).join("; "));
   return json.data;
 }
 
@@ -98,22 +77,8 @@ async function resolveProjectTopology(projectId) {
       project(id: $projectId) {
         id
         name
-        services {
-          edges {
-            node {
-              id
-              name
-            }
-          }
-        }
-        environments {
-          edges {
-            node {
-              id
-              name
-            }
-          }
-        }
+        services { edges { node { id name } } }
+        environments { edges { node { id name } } }
       }
     }`,
     { projectId },
@@ -153,15 +118,7 @@ async function fetchLatestDeployment({ serviceId, environmentId }) {
   const data = await railwayGql(
     `query LatestDeployment($serviceId: String!, $environmentId: String!) {
       deployments(first: 1, input: { serviceId: $serviceId, environmentId: $environmentId }) {
-        edges {
-          node {
-            id
-            status
-            meta
-            createdAt
-            updatedAt
-          }
-        }
+        edges { node { id status meta createdAt updatedAt } }
       }
     }`,
     { serviceId, environmentId },
@@ -173,63 +130,62 @@ async function deployViaLiveManagedEnv({ baseUrl, commandKey, commitSha }) {
   const url = `${baseUrl}/api/v1/railway/managed-env/build-from-latest`;
   console.log(`Deploy path: live managed-env → ${baseUrl}`);
   if (commitSha) console.log(`Deploying commit: ${commitSha}`);
-
   const res = await fetch(url, {
     method: "POST",
-    headers: {
-      "content-type": "application/json",
-      "x-command-key": commandKey,
-    },
+    headers: { "content-type": "application/json", "x-command-key": commandKey },
     body: JSON.stringify(commitSha ? { commit_sha: commitSha } : {}),
   });
-
   const text = await res.text();
   let json;
-  try {
-    json = JSON.parse(text);
-  } catch {
+  try { json = JSON.parse(text); } catch {
     throw new Error(`managed-env deploy returned non-JSON (${res.status}): ${text.slice(0, 500)}`);
   }
-
   if (!res.ok || json?.ok === false) {
     throw new Error(json?.error || `managed-env deploy HTTP ${res.status}: ${text.slice(0, 500)}`);
   }
-
   console.log("Live managed-env deploy accepted:");
-  console.log(JSON.stringify({
-    ok: json.ok,
-    message: json.message,
-    commit_sha: json.commit_sha,
-    data: json.data,
-  }, null, 2));
+  console.log(JSON.stringify({ ok: json.ok, message: json.message, commit_sha: json.commit_sha, data: json.data }, null, 2));
   return json;
 }
 
 async function deployViaDirectRailwayGraphql({ commitSha }) {
-  const projectId = requireEnv("RAILWAY_PROJECT_ID");
   const requestedServiceId = getEnv("RAILWAY_SERVICE_ID");
-  const requestedServiceName = getEnv("RAILWAY_SERVICE_NAME", "lumin-web");
   const requestedEnvironmentId = getEnv("RAILWAY_ENVIRONMENT_ID");
+  const projectTokenPresent = Boolean(getEnv("RAILWAY_PROJECT_TOKEN") || getEnv("RAILWAY_SERVICE_TOKEN"));
+
+  // A project token is already scoped to one project/environment. When stable
+  // service/environment IDs are configured, avoid a broader topology query and
+  // deploy directly with the scoped token.
+  if (projectTokenPresent && requestedServiceId && requestedEnvironmentId) {
+    console.log("Deploy path: direct Railway GraphQL with scoped project token");
+    console.log(`Target service: ${requestedServiceId}`);
+    console.log(`Target environment: ${requestedEnvironmentId}`);
+    if (commitSha) console.log(`Deploying commit: ${commitSha}`);
+    const deploy = await triggerDeploy({ serviceId: requestedServiceId, environmentId: requestedEnvironmentId, commitSha });
+    console.log("Railway deploy mutation accepted:");
+    console.log(JSON.stringify(deploy, null, 2));
+    const latest = await fetchLatestDeployment({ serviceId: requestedServiceId, environmentId: requestedEnvironmentId });
+    if (latest) console.log(JSON.stringify(latest, null, 2));
+    return;
+  }
+
+  const projectId = requireEnv("RAILWAY_PROJECT_ID");
+  const requestedServiceName = getEnv("RAILWAY_SERVICE_NAME", "lumin-web");
   const requestedEnvironmentName = getEnv("RAILWAY_ENVIRONMENT_NAME", "production");
 
-  console.log("Deploy path: direct Railway GraphQL (fallback)");
+  console.log("Deploy path: direct Railway GraphQL (topology fallback)");
   console.log(`Target project: ${projectId}`);
   console.log(`Target service: ${requestedServiceId || requestedServiceName}`);
   console.log(`Target environment: ${requestedEnvironmentId || requestedEnvironmentName}`);
 
   const topology = await resolveProjectTopology(projectId);
   const project = topology?.project;
-  if (!project?.id) {
-    throw new Error(`Project "${projectId}" not found or not accessible`);
-  }
-
+  if (!project?.id) throw new Error(`Project "${projectId}" not found or not accessible`);
   const services = normalizeConnection(project.services);
   const environments = normalizeConnection(project.environments);
-
   const service = requestedServiceId
     ? services.find((item) => item.id === requestedServiceId) || (() => { throw new Error(`Service ID "${requestedServiceId}" not found in project`); })()
     : findByName(services, requestedServiceName, "Service");
-
   const environment = requestedEnvironmentId
     ? environments.find((item) => item.id === requestedEnvironmentId) || (() => { throw new Error(`Environment ID "${requestedEnvironmentId}" not found in project`); })()
     : findByName(environments, requestedEnvironmentName, "Environment");
@@ -238,42 +194,30 @@ async function deployViaDirectRailwayGraphql({ commitSha }) {
   console.log(`Resolved service: ${service.name} (${service.id})`);
   console.log(`Resolved environment: ${environment.name} (${environment.id})`);
   if (commitSha) console.log(`Deploying commit: ${commitSha}`);
-
-  const deploy = await triggerDeploy({
-    serviceId: service.id,
-    environmentId: environment.id,
-    commitSha,
-  });
-
+  const deploy = await triggerDeploy({ serviceId: service.id, environmentId: environment.id, commitSha });
   console.log("Railway deploy mutation accepted:");
   console.log(JSON.stringify(deploy, null, 2));
-
-  const latest = await fetchLatestDeployment({
-    serviceId: service.id,
-    environmentId: environment.id,
-  });
-  if (latest) {
-    console.log("Latest deployment after trigger:");
-    console.log(JSON.stringify(latest, null, 2));
-  }
+  const latest = await fetchLatestDeployment({ serviceId: service.id, environmentId: environment.id });
+  if (latest) console.log(JSON.stringify(latest, null, 2));
 }
 
 async function main() {
   const commitSha = getEnv("GITHUB_SHA");
   const baseUrl = getLiveBaseUrl();
   const commandKey = getCommandKey();
-
   if (baseUrl && commandKey) {
     try {
       await deployViaLiveManagedEnv({ baseUrl, commandKey, commitSha });
       return;
     } catch (error) {
-      const hasDirectToken = Boolean(getEnv("RAILWAY_API_TOKEN") || getEnv("RAILWAY_TOKEN"));
+      const hasDirectToken = Boolean(
+        getEnv("RAILWAY_PROJECT_TOKEN") || getEnv("RAILWAY_SERVICE_TOKEN") ||
+        getEnv("RAILWAY_API_TOKEN") || getEnv("RAILWAY_TOKEN")
+      );
       if (!hasDirectToken) throw error;
       console.warn(`Live managed-env deploy failed (${error.message}); falling back to direct GraphQL`);
     }
   }
-
   await deployViaDirectRailwayGraphql({ commitSha });
 }
 
