@@ -14,19 +14,23 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
 const REGISTRY_PATH = path.join(ROOT, 'config/auto-registered-product-modules.json');
-const RUNTIME_HEARTBEAT_SPEC = {
-  path: 'routes/runtime-heartbeat-routes.js',
-  register: 'registerRuntimeHeartbeatRoutes',
-  mount_path: '/api/v1/runtime/heartbeat',
-  enabled: true,
-  note: 'Abbott public runtime heartbeat. Fresh liveness/model-key-presence/git/Railway metadata plus boot receipt on runtime-receipts branch.',
-};
+const REQUIRED_RUNTIME_SPECS = Object.freeze([
+  {
+    path: 'routes/runtime-heartbeat-routes.js',
+    register: 'registerRuntimeHeartbeatRoutes',
+    mount_path: '/api/v1/runtime/heartbeat',
+    enabled: true,
+    note: 'Abbott public runtime heartbeat. Fresh liveness/model-key-presence/git/Railway metadata plus boot receipt on runtime-receipts branch.',
+  },
+  {
+    path: 'routes/autonomous-recovery-runtime-routes.js',
+    register: 'registerAutonomousRecoveryRuntimeRoutes',
+    mount_path: '/api/v1/runtime/recovery/status',
+    enabled: true,
+    note: 'Production SENTRY recovery hook. Keeps technical recovery inside SENTRY -> Conductor -> Architect, re-verifies reality, and forbids terminal stop/founder-as-router.',
+  },
+]);
 
-// In-memory boot health manifest, keyed by module repo-relative path. Each entry:
-//   { module, register, status: 'mounted'|'error', mounted_at, error }
-// A build step that adds a module is not "done" until its module reports
-// `mounted` here; a module that failed to import/mount surfaces its exact error
-// so the loop can repair the ROOT CAUSE instead of spinning.
 const moduleHealth = new Map();
 
 export function getModuleHealth() {
@@ -36,34 +40,25 @@ export function getModuleHealth() {
   };
 }
 
-/** Health for a single module by its repo-relative path (e.g. "routes/x-routes.js"). */
 export function getModuleHealthFor(relPath) {
   if (!relPath) return null;
   const key = String(relPath).split(path.sep).join('/');
   return moduleHealth.get(key) || null;
 }
 
-/**
- * Load the explicit opt-in registry. Only modules listed here are imported and
- * mounted — legacy/broken files are never touched. Because the path is known
- * from the registry, an import failure is still RECORDED (with its verbatim
- * error), which is exactly the failure mode a functional gate must catch.
- * Shape: { "modules": [ { "path": "routes/x-routes.js", "register": "registerX",
- *          "mount_path"?: "/api/v1/x", "enabled"?: true } ] }
- */
 export function loadAutoRegisterRegistry() {
   try {
     const raw = fs.readFileSync(REGISTRY_PATH, 'utf8');
     const parsed = JSON.parse(raw);
     if (parsed && Array.isArray(parsed.modules)) {
       const modules = [...parsed.modules];
-      if (!modules.some((spec) => spec?.path === RUNTIME_HEARTBEAT_SPEC.path)) {
-        modules.push(RUNTIME_HEARTBEAT_SPEC);
+      for (const required of REQUIRED_RUNTIME_SPECS) {
+        if (!modules.some((spec) => spec?.path === required.path)) modules.push(required);
       }
       return modules;
     }
-  } catch { /* no registry yet → heartbeat still remains observable */ }
-  return [RUNTIME_HEARTBEAT_SPEC];
+  } catch { /* required runtime modules remain observable even if registry parsing fails */ }
+  return [...REQUIRED_RUNTIME_SPECS];
 }
 
 function resolveRegisterFn(mod, registerName) {
@@ -74,31 +69,15 @@ function resolveRegisterFn(mod, registerName) {
   return hit ? hit[1] : null;
 }
 
-/**
- * Import + mount every enabled module in the registry, recording health for each.
- * Fail-open per module: one broken module never aborts the others or boot.
- */
 export async function autoRegisterProductModules(app, deps = {}, { logger = console, modules: injectedModules, root } = {}) {
   const rawModules = Array.isArray(injectedModules) ? injectedModules : loadAutoRegisterRegistry();
-  // Dedupe by path: independent BUILD_QUEUE steps repeatedly add a second
-  // registry entry for a file that's already registered (confirmed live —
-  // routes/boldtrail-routes.js, routes/curriculumRoutes.js, routes/issueApprovalRoutes.js
-  // all shipped with two enabled:true entries in the same commit). A file whose
-  // register function mounts routes via app.post/app.get directly (not a scoped
-  // sub-router) gets double-mounted, and every matching request runs the handler
-  // twice. Keep the LAST enabled entry per path (later entries have consistently
-  // been the more complete one — mount_path set, fuller note — in every case
-  // observed); only fall back to a disabled entry if every entry for that path
-  // is disabled, so this never flips an already-working registration off.
   const byPath = new Map();
   for (const spec of rawModules) {
     if (!spec || !spec.path) continue;
     const key = String(spec.path).split(path.sep).join('/');
     const isEnabled = spec.enabled !== false;
     const existing = byPath.get(key);
-    if (!existing || isEnabled || existing.enabled === false) {
-      byPath.set(key, spec);
-    }
+    if (!existing || isEnabled || existing.enabled === false) byPath.set(key, spec);
   }
   const modules = Array.from(byPath.values());
   const baseDir = root || ROOT;
@@ -111,9 +90,6 @@ export async function autoRegisterProductModules(app, deps = {}, { logger = cons
     let mod;
     try {
       if (!fs.existsSync(abs)) throw new Error(`module file does not exist: ${key}`);
-      // Cache-busting reload path: a module that was absent/failed at boot can be
-      // re-imported at runtime with a unique query so Node ESM does not return the
-      // stale rejected promise.
       const importUrl = spec.reload
         ? `${pathToFileURL(abs).href}?import_reload=${Date.now()}`
         : pathToFileURL(abs).href;
