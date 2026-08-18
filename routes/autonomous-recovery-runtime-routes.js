@@ -1,6 +1,11 @@
 import { startAutonomousRecoveryCouncilScheduler, CATASTROPHIC_STOP_STALE_MS } from '../services/autonomous-recovery-council.js';
+import {
+  startCostelloInfrastructureGuardian,
+  getCostelloInfrastructureGuardianStatus,
+} from '../services/costello-infrastructure-guardian.js';
 
 let scheduler = null;
+let costelloGuardian = null;
 
 /**
  * Production boot hook for autonomous SENTRY recovery.
@@ -9,8 +14,9 @@ let scheduler = null;
  */
 export function registerAutonomousRecoveryRuntimeRoutes(app, deps = {}) {
   const { logger = console, pool, requireKey } = deps;
-  if (!scheduler) {
-    scheduler = startAutonomousRecoveryCouncilScheduler({ logger, pool });
+  if (!scheduler) scheduler = startAutonomousRecoveryCouncilScheduler({ logger, pool });
+  if (!costelloGuardian) {
+    costelloGuardian = startCostelloInfrastructureGuardian({ logger }) || { already_armed: true };
   }
 
   const guard = typeof requireKey === 'function' ? requireKey : (_req, _res, next) => next();
@@ -25,10 +31,11 @@ export function registerAutonomousRecoveryRuntimeRoutes(app, deps = {}) {
       recovery_continues_after_alert: true,
       interval_ms: Number(process.env.SENTRY_RECOVERY_INTERVAL_MS || 60 * 1000),
       catastrophic_stale_ms: CATASTROPHIC_STOP_STALE_MS,
+      costello_external_guardian: getCostelloInfrastructureGuardianStatus(),
     });
   });
 
-  logger?.info?.('[SENTRY-RECOVERY] runtime recovery hook mounted');
+  logger?.info?.('[SENTRY-RECOVERY] runtime recovery hook mounted with Costello infrastructure guardian');
 }
 
 export default registerAutonomousRecoveryRuntimeRoutes;
