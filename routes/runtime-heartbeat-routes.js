@@ -11,7 +11,9 @@ import { fileURLToPath } from "node:url";
 const STARTED_AT_MS = Date.now();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
-const RECEIPT_PATH = path.join(ROOT, "products/receipts/RUNTIME_HEARTBEAT_ABBOTT.json");
+const RECEIPT_REL = "products/receipts/RUNTIME_HEARTBEAT_ABBOTT.json";
+const RECEIPT_PATH = path.join(ROOT, RECEIPT_REL);
+const RECEIPT_BRANCH = "runtime-receipts";
 
 function present(name) {
   return Boolean(String(process.env[name] || "").trim());
@@ -49,28 +51,51 @@ export function buildRuntimeHeartbeat() {
   };
 }
 
-function writeBootReceipt(logger = console) {
+async function writeBootReceipt({ logger = console, commitToGitHub } = {}) {
   const heartbeat = buildRuntimeHeartbeat();
+  const content = `${JSON.stringify(heartbeat, null, 2)}\n`;
+
   try {
     fs.mkdirSync(path.dirname(RECEIPT_PATH), { recursive: true });
-    fs.writeFileSync(RECEIPT_PATH, `${JSON.stringify(heartbeat, null, 2)}\n`, "utf8");
-    logger.info?.("[RUNTIME-HEARTBEAT] Abbott boot receipt written", {
-      path: "products/receipts/RUNTIME_HEARTBEAT_ABBOTT.json",
+    fs.writeFileSync(RECEIPT_PATH, content, "utf8");
+    logger.info?.("[RUNTIME-HEARTBEAT] Abbott boot receipt written locally", {
+      path: RECEIPT_REL,
       git_sha: heartbeat.git_sha,
     });
   } catch (error) {
-    logger.warn?.("[RUNTIME-HEARTBEAT] Abbott boot receipt write failed", {
+    logger.warn?.("[RUNTIME-HEARTBEAT] Abbott local boot receipt write failed", {
       error: error.message,
     });
   }
+
+  if (typeof commitToGitHub === "function") {
+    try {
+      await commitToGitHub(
+        RECEIPT_REL,
+        content,
+        `Runtime heartbeat: Abbott boot ${heartbeat.git_sha || "unknown"}`,
+        RECEIPT_BRANCH,
+      );
+      logger.info?.("[RUNTIME-HEARTBEAT] Abbott boot receipt committed", {
+        branch: RECEIPT_BRANCH,
+        path: RECEIPT_REL,
+      });
+    } catch (error) {
+      logger.warn?.("[RUNTIME-HEARTBEAT] Abbott GitHub boot receipt commit failed", {
+        branch: RECEIPT_BRANCH,
+        error: error.message,
+      });
+    }
+  }
+
   return heartbeat;
 }
 
-export function registerRuntimeHeartbeatRoutes(app, deps = {}) {
-  const { logger = console } = deps;
+export async function registerRuntimeHeartbeatRoutes(app, deps = {}) {
+  const { logger = console, commitToGitHub } = deps;
   const router = express.Router();
 
-  writeBootReceipt(logger);
+  await writeBootReceipt({ logger, commitToGitHub });
 
   router.get("/", (_req, res) => {
     res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
