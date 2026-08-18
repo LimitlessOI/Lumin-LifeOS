@@ -1,0 +1,39 @@
+{
+  "schema": "railway_auth_topology_probe_v1",
+  "source_sha": "139bc9275427185aef96b834c48b663b5772c47e",
+  "run_id": "32198029964",
+  "project_id_present": true,
+  "attempts": [
+    {
+      "mode": "api_token_bearer",
+      "configured": false,
+      "ok": false,
+      "http": null,
+      "error": "not_configured"
+    },
+    {
+      "mode": "railway_token_bearer",
+      "configured": true,
+      "ok": false,
+      "http": 403,
+      "error": "error code: 1010\n"
+    },
+    {
+      "mode": "railway_token_project_header",
+      "configured": true,
+      "ok": false,
+      "http": 403,
+      "error": "error code: 1010\n"
+    },
+    {
+      "mode": "project_token_project_header",
+      "configured": false,
+      "ok": false,
+      "http": null,
+      "error": "not_configured"
+    }
+  ],
+  "working_auth_mode": null,
+  "project": null,
+  "project_token_scope": null
+}
