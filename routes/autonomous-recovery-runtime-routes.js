@@ -1,4 +1,4 @@
-import { startAutonomousRecoveryCouncilScheduler } from '../services/autonomous-recovery-council.js';
+import { startAutonomousRecoveryCouncilScheduler, CATASTROPHIC_STOP_STALE_MS } from '../services/autonomous-recovery-council.js';
 
 let scheduler = null;
 
@@ -19,8 +19,12 @@ export function registerAutonomousRecoveryRuntimeRoutes(app, deps = {}) {
       ok: true,
       armed: Boolean(scheduler),
       terminal_stop_forbidden: true,
-      founder_is_last_resort_never_router: true,
-      interval_ms: Number(process.env.SENTRY_RECOVERY_INTERVAL_MS || 5 * 60 * 1000),
+      catastrophic_stop_is_p0: true,
+      immediate_founder_sms: true,
+      immediate_founder_voice_call: true,
+      recovery_continues_after_alert: true,
+      interval_ms: Number(process.env.SENTRY_RECOVERY_INTERVAL_MS || 60 * 1000),
+      catastrophic_stale_ms: CATASTROPHIC_STOP_STALE_MS,
     });
   });
 
