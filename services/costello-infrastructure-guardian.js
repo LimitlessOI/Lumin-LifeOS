@@ -95,6 +95,17 @@ async function sourceVariableNames(projectId, environmentId, serviceId) {
   return Object.keys(data?.variables || {});
 }
 
+async function upsertVariables({ projectId, environmentId, serviceId, variables, skipDeploys = true }) {
+  if (!serviceId || !variables || Object.keys(variables).length === 0) return;
+  await railwayGql(`
+    mutation GuardianVariables($input: VariableCollectionUpsertInput!) {
+      variableCollectionUpsert(input: $input)
+    }
+  `, {
+    input: { projectId, environmentId, serviceId, variables, skipDeploys },
+  });
+}
+
 async function configureCostelloVariables({ projectId, environmentId, serviceId, sourceServiceName, sourceServiceId }) {
   const sourceNames = new Set(await sourceVariableNames(projectId, environmentId, sourceServiceId));
   const variables = {
@@ -107,63 +118,51 @@ async function configureCostelloVariables({ projectId, environmentId, serviceId,
   };
 
   for (const name of RUNTIME_VAR_ALLOWLIST) {
-    if (sourceNames.has(name) && sourceServiceName) {
-      variables[name] = `\${{${sourceServiceName}.${name}}}`;
-    }
+    if (sourceNames.has(name) && sourceServiceName) variables[name] = `\${{${sourceServiceName}.${name}}}`;
   }
 
-  await railwayGql(`
-    mutation ConfigureCostello($input: VariableCollectionUpsertInput!) {
-      variableCollectionUpsert(input: $input)
-    }
-  `, {
-    input: {
-      projectId,
-      environmentId,
-      serviceId,
-      variables,
-      skipDeploys: true,
-    },
+  await upsertVariables({ projectId, environmentId, serviceId, variables });
+}
+
+async function persistCostelloDomain({ projectId, environmentId, sourceServiceId, domain }) {
+  if (!domain || !sourceServiceId) return;
+  await upsertVariables({
+    projectId,
+    environmentId,
+    serviceId: sourceServiceId,
+    variables: { COSTELLO_PUBLIC_DOMAIN: domain },
+    skipDeploys: true,
   });
 }
 
-async function ensureServiceDomain(serviceId, environmentId) {
+async function ensureServiceDomain({ projectId, environmentId, serviceId, sourceServiceId }) {
   if (state.domain) return state.domain;
-  try {
-    const data = await railwayGql(`
-      mutation CostelloDomain($input: ServiceDomainCreateInput!) {
-        serviceDomainCreate(input: $input) { domain }
-      }
-    `, { input: { serviceId, environmentId } });
-    state.domain = data?.serviceDomainCreate?.domain || null;
+  const configured = env('COSTELLO_PUBLIC_DOMAIN').replace(/^https?:\/\//, '').replace(/\/$/, '');
+  if (configured) {
+    state.domain = configured;
     return state.domain;
-  } catch (error) {
-    // Existing services may already have a Railway domain. Allow an explicit
-    // persisted override to resolve it without creating duplicate domains.
-    const configured = env('COSTELLO_PUBLIC_DOMAIN').replace(/^https?:\/\//, '').replace(/\/$/, '');
-    if (configured) {
-      state.domain = configured;
-      return state.domain;
-    }
-    throw error;
   }
+  const data = await railwayGql(`
+    mutation CostelloDomain($input: ServiceDomainCreateInput!) {
+      serviceDomainCreate(input: $input) { domain }
+    }
+  `, { input: { serviceId, environmentId } });
+  state.domain = data?.serviceDomainCreate?.domain || null;
+  if (state.domain) {
+    await persistCostelloDomain({ projectId, environmentId, sourceServiceId, domain: state.domain });
+  }
+  return state.domain;
 }
 
 async function setCostelloPublicUrl({ projectId, environmentId, serviceId, domain }) {
   if (!domain) return;
   const base = `https://${domain}`;
-  await railwayGql(`
-    mutation CostelloPublicUrl($input: VariableCollectionUpsertInput!) {
-      variableCollectionUpsert(input: $input)
-    }
-  `, {
-    input: {
-      projectId,
-      environmentId,
-      serviceId,
-      variables: { PUBLIC_BASE_URL: base, APP_URL: base },
-      skipDeploys: true,
-    },
+  await upsertVariables({
+    projectId,
+    environmentId,
+    serviceId,
+    variables: { PUBLIC_BASE_URL: base, APP_URL: base },
+    skipDeploys: true,
   });
 }
 
@@ -223,15 +222,8 @@ export async function ensureCostelloInfrastructure({ logger = console, forceDepl
     if (!service?.id) throw new Error('Costello service creation/resolution returned no service id');
     state.serviceId = service.id;
 
-    await configureCostelloVariables({
-      projectId,
-      environmentId,
-      serviceId: service.id,
-      sourceServiceName,
-      sourceServiceId,
-    });
-
-    const domain = await ensureServiceDomain(service.id, environmentId);
+    await configureCostelloVariables({ projectId, environmentId, serviceId: service.id, sourceServiceName, sourceServiceId });
+    const domain = await ensureServiceDomain({ projectId, environmentId, serviceId: service.id, sourceServiceId });
     await setCostelloPublicUrl({ projectId, environmentId, serviceId: service.id, domain });
 
     let status = await probeManufacturing(domain);
@@ -250,14 +242,7 @@ export async function ensureCostelloInfrastructure({ logger = console, forceDepl
       state.lastError = status.reason || (status.failure_reasons || []).join(',') || 'manufacturing_not_proven';
     }
 
-    return {
-      ok: status.ok,
-      provisioned: created,
-      service_id: service.id,
-      service_name: COSTELLO_SERVICE_NAME,
-      domain,
-      status,
-    };
+    return { ok: status.ok, provisioned: created, service_id: service.id, service_name: COSTELLO_SERVICE_NAME, domain, status };
   } catch (error) {
     state.lastError = error.message;
     logger?.error?.({ error: error.message }, '[COSTELLO-INFRA] guardian tick failed');
@@ -266,13 +251,7 @@ export async function ensureCostelloInfrastructure({ logger = console, forceDepl
 }
 
 export function getCostelloInfrastructureGuardianStatus() {
-  return {
-    ...state,
-    serviceName: COSTELLO_SERVICE_NAME,
-    repository: COSTELLO_REPO,
-    intervalMs: CHECK_INTERVAL_MS,
-    external_to_costello_process: true,
-  };
+  return { ...state, serviceName: COSTELLO_SERVICE_NAME, repository: COSTELLO_REPO, intervalMs: CHECK_INTERVAL_MS, external_to_costello_process: true };
 }
 
 export function startCostelloInfrastructureGuardian({ logger = console } = {}) {
