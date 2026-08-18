@@ -1,0 +1,13 @@
+{
+  "schema": "railway_inventory_probe_v1",
+  "source_sha": "2faa36a9ac27654faaca3f74ddcb6bccdfc390e1",
+  "run_id": "32190121719",
+  "ok": false,
+  "auth_mode": "project_token",
+  "project_id_present": true,
+  "service_id_present": true,
+  "environment_id_present": true,
+  "variable_names": [],
+  "relevant_presence": {},
+  "error": "HTTP Error 403: Forbidden"
+}
