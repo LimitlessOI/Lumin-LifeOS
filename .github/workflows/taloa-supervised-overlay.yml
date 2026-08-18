@@ -1,0 +1,27 @@
+name: Taloa supervised overlay proof
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'services/taloa/overlay-extension-drive-runtime.js'
+      - 'routes/taloa-supervised-overlay-routes.js'
+      - 'startup/auto-register-product-modules.js'
+      - 'scripts/verify-taloa-supervised-overlay.mjs'
+      - '.github/workflows/taloa-supervised-overlay.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  prove-supervised-overlay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Verify supervised multi-session A2Z adapter
+        run: node scripts/verify-taloa-supervised-overlay.mjs
