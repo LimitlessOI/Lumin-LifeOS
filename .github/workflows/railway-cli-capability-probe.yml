@@ -1,0 +1,136 @@
+name: Railway CLI capability probe
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/railway-cli-capability-probe.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    env:
+      # Deliberately use only the existing project-scoped token here.
+      # Railway CLI rejects having RAILWAY_TOKEN and RAILWAY_API_TOKEN set together.
+      RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+      RAILWAY_PROJECT_ID: ${{ vars.RAILWAY_PROJECT_ID }}
+      GH_TOKEN: ${{ github.token }}
+      REPO: ${{ github.repository }}
+      RUN_ID: ${{ github.run_id }}
+      SOURCE_SHA: ${{ github.sha }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install official Railway CLI
+        run: npm install -g @railway/cli
+
+      - name: Exercise project-token capabilities
+        shell: bash
+        run: |
+          set +e
+          mkdir -p /tmp/railway-cli-probe
+
+          record() {
+            local name="$1"; shift
+            echo "### $name" > "/tmp/railway-cli-probe/$name.txt"
+            "$@" >> "/tmp/railway-cli-probe/$name.txt" 2>&1
+            echo $? > "/tmp/railway-cli-probe/$name.exit"
+          }
+
+          record version railway --version
+          record link_production railway link --project "$RAILWAY_PROJECT_ID" --environment production --json
+          record status_production railway status --json
+          record environments railway environment list --json
+          record services_production railway service list --json
+
+          # Re-link to the abandoned sandbox if it exists. This is read-only.
+          record link_lumin_sandbox railway link --project "$RAILWAY_PROJECT_ID" --environment "Lumin sandbox" --json
+          record status_lumin_sandbox railway status --json
+          record services_lumin_sandbox railway service list --json
+          record config_lumin_sandbox railway environment config --environment "Lumin sandbox" --json
+
+          # Also test the desired final name in case it has already been renamed.
+          record link_costello railway link --project "$RAILWAY_PROJECT_ID" --environment Costello --json
+          record status_costello railway status --json
+          record services_costello railway service list --json
+          record config_costello railway environment config --environment Costello --json
+
+          python - <<'PY'
+          import base64, json, os, pathlib, urllib.request, urllib.error
+
+          root = pathlib.Path('/tmp/railway-cli-probe')
+          commands = {}
+          for exit_file in sorted(root.glob('*.exit')):
+            name = exit_file.stem
+            try:
+              exit_code = int(exit_file.read_text().strip())
+            except Exception:
+              exit_code = None
+            text_file = root / f'{name}.txt'
+            text = text_file.read_text(errors='replace') if text_file.exists() else ''
+            # Do not persist possible secret-looking values. These commands should only
+            # emit topology/config metadata, but redact long token-like runs defensively.
+            import re
+            text = re.sub(r'(?i)(token|secret|password|key)(["\s:=]+)[A-Za-z0-9_\-./+=]{20,}', r'\1\2[REDACTED]', text)
+            commands[name] = {
+              'exit': exit_code,
+              'output': text[-12000:],
+            }
+
+          receipt = {
+            'schema': 'railway_cli_capability_probe_v1',
+            'source_sha': os.environ.get('SOURCE_SHA'),
+            'run_id': os.environ.get('RUN_ID'),
+            'project_id_present': bool(os.environ.get('RAILWAY_PROJECT_ID')),
+            'project_token_present': bool(os.environ.get('RAILWAY_TOKEN')),
+            'commands': commands,
+            'cli_read_authority_proven': any(
+              commands.get(k,{}).get('exit') == 0
+              for k in ('status_production','environments','services_production')
+            ),
+            'sandbox_read_authority_proven': any(
+              commands.get(k,{}).get('exit') == 0
+              for k in ('status_lumin_sandbox','status_costello','config_lumin_sandbox','config_costello')
+            ),
+          }
+
+          path = 'products/receipts/RAILWAY_CLI_CAPABILITY_PROBE.json'
+          api = f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}"
+          headers = {
+            'Authorization': f"Bearer {os.environ['GH_TOKEN']}",
+            'Accept': 'application/vnd.github+json',
+          }
+          existing = None
+          try:
+            with urllib.request.urlopen(urllib.request.Request(api, headers=headers)) as r:
+              existing = json.load(r).get('sha')
+          except urllib.error.HTTPError as e:
+            if e.code != 404:
+              raise
+          payload = {
+            'message': '[railway] persist CLI capability probe',
+            'content': base64.b64encode((json.dumps(receipt, indent=2)+'\n').encode()).decode(),
+            'branch': 'main',
+          }
+          if existing:
+            payload['sha'] = existing
+          req = urllib.request.Request(
+            api,
+            data=json.dumps(payload).encode(),
+            headers={**headers, 'Content-Type':'application/json'},
+            method='PUT',
+          )
+          with urllib.request.urlopen(req) as r:
+            print(json.load(r)['commit']['sha'])
+          print(json.dumps(receipt, indent=2))
+          PY
