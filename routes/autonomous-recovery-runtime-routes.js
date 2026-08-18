@@ -1,11 +1,11 @@
 import { startAutonomousRecoveryCouncilScheduler, CATASTROPHIC_STOP_STALE_MS } from '../services/autonomous-recovery-council.js';
 import {
-  startCostelloInfrastructureGuardian,
-  getCostelloInfrastructureGuardianStatus,
-} from '../services/costello-infrastructure-guardian.js';
+  startCostelloInfrastructureGuardianSupervisor,
+  getCostelloInfrastructureGuardianSupervisorStatus,
+} from '../services/costello-infrastructure-guardian-supervisor.js';
 
 let scheduler = null;
-let costelloGuardian = null;
+let costelloGuardianSupervisor = null;
 
 /**
  * Production boot hook for autonomous SENTRY recovery.
@@ -13,18 +13,19 @@ let costelloGuardian = null;
  * runs. Idempotent so route reloads cannot create duplicate recovery loops.
  */
 export function registerAutonomousRecoveryRuntimeRoutes(app, deps = {}) {
-  const { logger = console, pool, requireKey, commitToGitHub } = deps;
+  const { logger = console, pool, requireKey } = deps;
   if (!scheduler) scheduler = startAutonomousRecoveryCouncilScheduler({ logger, pool });
-  if (!costelloGuardian) {
-    costelloGuardian = startCostelloInfrastructureGuardian({ logger, commitToGitHub }) || { already_armed: true };
+  if (!costelloGuardianSupervisor) {
+    costelloGuardianSupervisor = startCostelloInfrastructureGuardianSupervisor({ logger }) || { already_armed: true };
   }
 
   // Public, read-only, non-secret observability so an independent watchdog can
   // verify Abbott is actually guarding Costello even when Costello itself is
-  // dead and has no shared secrets configured.
+  // dead and has no shared secrets configured. Railway/network provisioning is
+  // never executed on this web process; it lives in the supervised child worker.
   app.get('/api/v1/runtime/costello-guardian/status', (_req, res) => {
     res.setHeader('Cache-Control', 'no-store');
-    res.json({ ok: true, guardian: getCostelloInfrastructureGuardianStatus() });
+    res.json({ ok: true, guardian: getCostelloInfrastructureGuardianSupervisorStatus() });
   });
 
   const guard = typeof requireKey === 'function' ? requireKey : (_req, _res, next) => next();
@@ -39,11 +40,11 @@ export function registerAutonomousRecoveryRuntimeRoutes(app, deps = {}) {
       recovery_continues_after_alert: true,
       interval_ms: Number(process.env.SENTRY_RECOVERY_INTERVAL_MS || 60 * 1000),
       catastrophic_stale_ms: CATASTROPHIC_STOP_STALE_MS,
-      costello_external_guardian: getCostelloInfrastructureGuardianStatus(),
+      costello_external_guardian: getCostelloInfrastructureGuardianSupervisorStatus(),
     });
   });
 
-  logger?.info?.('[SENTRY-RECOVERY] runtime recovery hook mounted with Costello infrastructure guardian');
+  logger?.info?.('[SENTRY-RECOVERY] runtime recovery hook mounted with isolated Costello guardian supervisor');
 }
 
 export default registerAutonomousRecoveryRuntimeRoutes;
