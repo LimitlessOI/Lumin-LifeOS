@@ -1,0 +1,141 @@
+name: Railway auth topology probe
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/railway-auth-topology-probe.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Probe Railway auth modes and topology
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          RUN_ID: ${{ github.run_id }}
+          SOURCE_SHA: ${{ github.sha }}
+          RAILWAY_API_TOKEN: ${{ secrets.RAILWAY_API_TOKEN }}
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          RAILWAY_PROJECT_TOKEN: ${{ secrets.RAILWAY_PROJECT_TOKEN }}
+          RAILWAY_PROJECT_ID: ${{ vars.RAILWAY_PROJECT_ID }}
+        run: |
+          python - <<'PY'
+          import base64, json, os, urllib.request, urllib.error
+
+          endpoint = 'https://backboard.railway.com/graphql/v2'
+          project_id = os.environ.get('RAILWAY_PROJECT_ID','').strip()
+          candidates = [
+            ('api_token_bearer', os.environ.get('RAILWAY_API_TOKEN','').strip(), 'Authorization', 'Bearer '),
+            ('railway_token_bearer', os.environ.get('RAILWAY_TOKEN','').strip(), 'Authorization', 'Bearer '),
+            ('railway_token_project_header', os.environ.get('RAILWAY_TOKEN','').strip(), 'Project-Access-Token', ''),
+            ('project_token_project_header', os.environ.get('RAILWAY_PROJECT_TOKEN','').strip(), 'Project-Access-Token', ''),
+          ]
+
+          receipt = {
+            'schema': 'railway_auth_topology_probe_v1',
+            'source_sha': os.environ.get('SOURCE_SHA'),
+            'run_id': os.environ.get('RUN_ID'),
+            'project_id_present': bool(project_id),
+            'attempts': [],
+            'working_auth_mode': None,
+            'project': None,
+            'project_token_scope': None,
+          }
+
+          def gql(query, variables, header_name, header_value):
+            body = json.dumps({'query': query, 'variables': variables}).encode()
+            headers = {'Content-Type':'application/json', header_name: header_value}
+            req = urllib.request.Request(endpoint, data=body, headers=headers, method='POST')
+            try:
+              with urllib.request.urlopen(req, timeout=20) as r:
+                text = r.read().decode('utf-8','replace')
+                status = r.status
+            except urllib.error.HTTPError as e:
+              text = e.read().decode('utf-8','replace')
+              status = e.code
+            try:
+              payload = json.loads(text)
+            except Exception:
+              payload = {'raw': text[:500]}
+            return status, payload
+
+          topo_query = '''query ProbeProject($projectId: String!) {
+            project(id: $projectId) {
+              id
+              name
+              services { edges { node { id name } } }
+              environments { edges { node { id name } } }
+            }
+          }'''
+          project_token_query = 'query { projectToken { projectId environmentId } }'
+
+          for mode, token, header, prefix in candidates:
+            attempt = {'mode': mode, 'configured': bool(token), 'ok': False, 'http': None, 'error': None}
+            receipt['attempts'].append(attempt)
+            if not token:
+              attempt['error'] = 'not_configured'
+              continue
+            value = prefix + token
+            if header == 'Project-Access-Token':
+              status, payload = gql(project_token_query, {}, header, value)
+              attempt['http'] = status
+              if status == 200 and not payload.get('errors') and (payload.get('data') or {}).get('projectToken'):
+                attempt['ok'] = True
+                scope = payload['data']['projectToken']
+                receipt['project_token_scope'] = scope
+                if not receipt['working_auth_mode']:
+                  receipt['working_auth_mode'] = mode
+                # Project-token auth is environment-scoped; do not treat it as project-wide mutation authority.
+                continue
+              attempt['error'] = '; '.join(str(e.get('message', e)) for e in payload.get('errors', [])) or str(payload.get('raw') or payload)[:500]
+              continue
+
+            if not project_id:
+              attempt['error'] = 'project_id_missing'
+              continue
+            status, payload = gql(topo_query, {'projectId': project_id}, header, value)
+            attempt['http'] = status
+            if status == 200 and not payload.get('errors') and (payload.get('data') or {}).get('project'):
+              attempt['ok'] = True
+              receipt['working_auth_mode'] = mode
+              project = payload['data']['project']
+              receipt['project'] = {
+                'id': project.get('id'),
+                'name': project.get('name'),
+                'services': [{'id': e['node']['id'], 'name': e['node']['name']} for e in (project.get('services') or {}).get('edges', [])],
+                'environments': [{'id': e['node']['id'], 'name': e['node']['name']} for e in (project.get('environments') or {}).get('edges', [])],
+              }
+              break
+            attempt['error'] = '; '.join(str(e.get('message', e)) for e in payload.get('errors', [])) or str(payload.get('raw') or payload)[:500]
+
+          path = 'products/receipts/RAILWAY_AUTH_TOPOLOGY_PROBE.json'
+          api = f"https://api.github.com/repos/{os.environ['REPO']}/contents/{path}"
+          gh_headers = {'Authorization': f"Bearer {os.environ['GH_TOKEN']}", 'Accept':'application/vnd.github+json'}
+          existing = None
+          try:
+            with urllib.request.urlopen(urllib.request.Request(api, headers=gh_headers)) as r:
+              existing = json.load(r).get('sha')
+          except urllib.error.HTTPError as e:
+            if e.code != 404: raise
+          payload = {
+            'message': '[railway] persist auth topology probe',
+            'content': base64.b64encode((json.dumps(receipt, indent=2)+'\n').encode()).decode(),
+            'branch': 'main',
+          }
+          if existing: payload['sha'] = existing
+          req = urllib.request.Request(api, data=json.dumps(payload).encode(), headers={**gh_headers,'Content-Type':'application/json'}, method='PUT')
+          with urllib.request.urlopen(req) as r:
+            print(json.load(r)['commit']['sha'])
+
+          print(json.dumps(receipt, indent=2))
+          if not receipt['working_auth_mode']:
+            raise SystemExit(1)
+          PY
