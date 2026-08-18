@@ -19,6 +19,14 @@ export function registerAutonomousRecoveryRuntimeRoutes(app, deps = {}) {
     costelloGuardian = startCostelloInfrastructureGuardian({ logger, commitToGitHub }) || { already_armed: true };
   }
 
+  // Public, read-only, non-secret observability so an independent watchdog can
+  // verify Abbott is actually guarding Costello even when Costello itself is
+  // dead and has no shared secrets configured.
+  app.get('/api/v1/runtime/costello-guardian/status', (_req, res) => {
+    res.setHeader('Cache-Control', 'no-store');
+    res.json({ ok: true, guardian: getCostelloInfrastructureGuardianStatus() });
+  });
+
   const guard = typeof requireKey === 'function' ? requireKey : (_req, _res, next) => next();
   app.get('/api/v1/runtime/recovery/status', guard, (_req, res) => {
     res.json({
