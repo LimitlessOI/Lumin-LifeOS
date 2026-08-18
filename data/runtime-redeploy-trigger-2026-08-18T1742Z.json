@@ -1,0 +1,8 @@
+{
+  "schema": "runtime_redeploy_trigger_v1",
+  "builder": "ABBOTT",
+  "reason": "Founder-authorized runtime pickup of handoff dispatcher and continuous BP execution lane",
+  "required_head": "a7db4441673f74ebe1d1063a04e57354bfad8c9d",
+  "issued_at": "2026-08-18T17:42:00Z",
+  "success_condition": "runtime deploys this commit chain and produces autonomous post-deploy factory receipts/commits while Point B is incomplete"
+}
