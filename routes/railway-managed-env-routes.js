@@ -121,9 +121,13 @@ async function internalRailwayTopology() {
  */
 async function internalRailwayDeleteServiceInstance(serviceId, environmentId) {
   if (!serviceId || !environmentId) throw new Error('serviceId and environmentId required');
+  // Real mutation confirmed via live schema introspection 2026-08-19:
+  // serviceInstanceDelete does not exist. serviceDelete(id, environmentId)
+  // is the correct one — environmentId scopes the delete to just that
+  // environment's instance; omitting it would delete the service everywhere.
   return railwayGql(
-    `mutation DeleteInstance($serviceId: String!, $environmentId: String!) {
-      serviceInstanceDelete(serviceId: $serviceId, environmentId: $environmentId)
+    `mutation DeleteServiceInstance($serviceId: String!, $environmentId: String!) {
+      serviceDelete(id: $serviceId, environmentId: $environmentId)
     }`,
     { serviceId, environmentId },
   );
