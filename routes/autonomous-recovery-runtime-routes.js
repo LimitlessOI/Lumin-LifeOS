@@ -6,6 +6,7 @@ import {
   startCostelloInfrastructureGuardianSupervisor,
   getCostelloInfrastructureGuardianSupervisorStatus,
 } from '../services/costello-infrastructure-guardian-supervisor.js';
+import { detectGenuineStalls, getBoostState } from '../services/sentry-stall-recovery.js';
 
 let scheduler = null;
 let costelloGuardianSupervisor = null;
@@ -37,6 +38,7 @@ export function registerAutonomousRecoveryRuntimeRoutes(app, deps = {}) {
 
   const guard = typeof requireKey === 'function' ? requireKey : (_req, _res, next) => next();
   app.get('/api/v1/runtime/recovery/status', guard, (_req, res) => {
+    const genuineStalls = detectGenuineStalls();
     res.json({
       ok: true,
       armed: Boolean(scheduler),
@@ -48,6 +50,10 @@ export function registerAutonomousRecoveryRuntimeRoutes(app, deps = {}) {
       interval_ms: Number(process.env.SENTRY_RECOVERY_INTERVAL_MS || 60 * 1000),
       catastrophic_stale_ms: CATASTROPHIC_STOP_STALE_MS,
       costello_external_guardian: getCostelloInfrastructureGuardianSupervisorStatus(),
+      stall_recovery: {
+        genuine_stalls_currently_stamped: genuineStalls,
+        boost_states: genuineStalls.map((s) => ({ productId: s.productId, boost: getBoostState(s.productId) })),
+      },
     });
   });
 
