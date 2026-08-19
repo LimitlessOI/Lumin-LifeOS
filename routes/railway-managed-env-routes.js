@@ -974,6 +974,31 @@ export function createRailwayManagedEnvRoutes({ requireKey, managedEnvService })
   });
 
   /**
+   * GET /service-latest-deployment?serviceId=...&environmentId=...
+   * Same as /deployments/latest but for any service, not just Abbott.
+   */
+  router.get("/service-latest-deployment", requireKey, async (req, res) => {
+    try {
+      const { serviceId, environmentId } = req.query || {};
+      if (!serviceId || !environmentId) {
+        return res.status(400).json({ ok: false, error: 'serviceId and environmentId required' });
+      }
+      const data = await railwayGql(
+        `query LatestDeployment($serviceId: String!, $environmentId: String!) {
+          deployments(first: 1, input: { serviceId: $serviceId, environmentId: $environmentId }) {
+            edges { node { id status createdAt meta url } }
+          }
+        }`,
+        { serviceId, environmentId },
+      );
+      const node = data?.deployments?.edges?.[0]?.node ?? null;
+      res.json({ ok: true, deployment: node });
+    } catch (error) {
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  /**
    * GET /deployments/:id/logs
    * Returns build logs for a specific Railway deployment ID.
    * Query param: ?limit=200 (default 200, max 1000)
