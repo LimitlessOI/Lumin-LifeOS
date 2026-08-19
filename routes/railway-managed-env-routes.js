@@ -215,6 +215,17 @@ async function internalRailwayRepointSecretsFromAbbott(serviceId, environmentId,
   return { repointed: Object.keys(toSet), skipped_not_set_on_abbott: skipped };
 }
 
+/** Redeploy any service+environment (not just Abbott, unlike /self-redeploy). */
+async function internalRailwayRedeployService(serviceId, environmentId) {
+  if (!serviceId || !environmentId) throw new Error('serviceId and environmentId required');
+  return railwayGql(
+    `mutation RedeployService($serviceId: String!, $environmentId: String!) {
+      serviceInstanceRedeploy(serviceId: $serviceId, environmentId: $environmentId)
+    }`,
+    { serviceId, environmentId },
+  );
+}
+
 /**
  * Point Costello's DATABASE_URL / APP_URL / PUBLIC_BASE_URL at its own real
  * dedicated database + its own real current Railway domain, WITHOUT the
@@ -851,6 +862,23 @@ export function createRailwayManagedEnvRoutes({ requireKey, managedEnvService })
       res.json({ ok: true, ...result });
     } catch (error) {
       console.error('[RAILWAY-REPOINT-SECRETS] Error:', error.message);
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  /**
+   * POST /redeploy-service
+   * Body: { serviceId, environmentId }
+   * Redeploys any service, unlike /self-redeploy which is Abbott-only.
+   */
+  router.post("/redeploy-service", requireKey, async (req, res) => {
+    try {
+      const { serviceId, environmentId } = req.body || {};
+      const data = await internalRailwayRedeployService(serviceId, environmentId);
+      console.log(`[TSOS-MACHINE] KNOW: STATE=RECEIPT VERB=REDEPLOY_SERVICE | serviceId=${serviceId} environmentId=${environmentId}`);
+      res.json({ ok: true, serviceId, environmentId, data });
+    } catch (error) {
+      console.error('[RAILWAY-REDEPLOY-SERVICE] Error:', error.message);
       res.status(500).json({ ok: false, error: error.message });
     }
   });
