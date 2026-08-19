@@ -162,7 +162,7 @@ async function internalRailwayServiceVars(serviceId, environmentId) {
   const masked = {};
   for (const [k, v] of Object.entries(vars)) {
     const s = String(v);
-    masked[k] = s.length > 6 ? `${s.slice(0, 4)}****${s.slice(-2)}` : '****';
+    masked[k] = s.length === 0 ? '(empty)' : s.length > 6 ? `${s.slice(0, 4)}****${s.slice(-2)}` : `(len:${s.length})`;
   }
   return masked;
 }
