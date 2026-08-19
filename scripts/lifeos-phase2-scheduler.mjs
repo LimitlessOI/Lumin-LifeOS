@@ -28,7 +28,14 @@ async function notifyFn(db, userId, type, payload) {
   );
 }
 
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
 async function refreshEnergyCurveIfNeeded(db, baseUrl, userId) {
+  // lifeos_users.id is an integer PK, but energy_logs.user_id is uuid-typed —
+  // every non-uuid id fails this query. Found live 2026-08-19: this ran
+  // immediately on every boot against up to 200 users, serially awaiting a
+  // guaranteed DB error per user right after startup.
+  if (!UUID_RE.test(String(userId))) return false;
   const res = await db.query(
     'SELECT 1 FROM energy_logs WHERE user_id = $1 ORDER BY created_at DESC LIMIT 1',
     [userId],

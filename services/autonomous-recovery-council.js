@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Autonomous recovery orchestrator.
+ */
 import { runGovernanceAuditCycle } from '../scripts/sentry-chair-governance-audit.mjs';
 import { gatherSystemWorkingSignals } from './sentry-system-audit.js';
 
@@ -155,12 +158,16 @@ export function startAutonomousRecoveryCouncilScheduler({
           await sendCatastrophicStopAlarm({ ageMs: catastrophic.ageMs, stage, logger });
         }
 
-        // First-line self-heal for a logically stalled in-process factory:
-        // terminate the unhealthy container after alert delivery so Railway's
-        // restart policy boots a clean founder_builder runtime and re-arms all
-        // never-stop loops. The recovery council remains the deeper repair path
-        // if a fresh container still cannot manufacture.
-        if (stage === 'initial') {
+        // Disabled 2026-08-19: this self-restart caused a real production
+        // outage — signals.governed.enabled was reporting true even though
+        // the governed builder was deliberately idle (BUILDEROS_NEVER_STOP/
+        // BUILDEROS_AUTOPILOT/GOVERNED_FACTORY_ONLY all off), so every boot
+        // saw a ~5-day-stale "catastrophic stop" and restarted itself ~15s
+        // later, forever. Alerting stays on; the founder decides whether a
+        // restart is warranted instead of the process killing itself blind.
+        // Re-enable by setting SENTRY_RECOVERY_AUTO_RESTART=true once
+        // signals.governed.enabled is fixed to reflect real runtime state.
+        if (stage === 'initial' && process.env.SENTRY_RECOVERY_AUTO_RESTART === 'true') {
           logger?.error?.({ catastrophic }, '[SENTRY-RECOVERY] governed builder stopped; forcing Railway process restart');
           restartProcess();
           return;
