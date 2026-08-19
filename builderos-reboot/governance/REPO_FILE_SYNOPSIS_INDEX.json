@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-19T17:27:08.054Z",
+  "generated_at": "2026-08-19T17:33:12.233Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13708,
   "files": [
@@ -76271,9 +76271,9 @@
     {
       "path": "routes/railway-managed-env-routes.js",
       "synopsis": "Railway env vault + sync (production spine).",
-      "bytes": 42357,
-      "mtime": "2026-08-19T17:24:03.496Z",
-      "indexed_at": "2026-08-19T17:27:08.054Z",
+      "bytes": 43889,
+      "mtime": "2026-08-19T17:32:40.002Z",
+      "indexed_at": "2026-08-19T17:33:12.233Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
