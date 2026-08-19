@@ -9,6 +9,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { loadBuildQueue } from './build-queue-core.js';
+import { persistQueue } from './product-build-orchestrator.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const STAMP_PATH = path.join(ROOT, 'data/sentry-unplannable-stamps.json');
@@ -64,6 +66,25 @@ function removeUnplannableStamp(productId) {
 }
 
 /**
+ * discoverSentryFixWork's own skip-check also reads sentry_unplannable_at/
+ * sentry_signature baked directly into the product's own BUILD_QUEUE.json —
+ * clearing only the external stamps file (removeUnplannableStamp) leaves
+ * this second copy in place and the product stays skipped regardless.
+ * Found live 2026-08-19: unblocking lifeos via the stamps file alone did
+ * NOT make it retry, because this queue-level marker was never touched.
+ */
+function clearQueueLevelStamp(productId, logger = console) {
+  try {
+    const queue = loadBuildQueue(productId);
+    if (!queue?.sentry_unplannable_at && !queue?.sentry_signature) return;
+    const { sentry_unplannable_at, sentry_signature, sentry_unplannable_reason, ...clean } = queue;
+    persistQueue(clean);
+  } catch (error) {
+    logger?.warn?.({ productId, error: error.message }, '[STALL-RECOVERY] could not clear queue-level stamp (queue may not exist yet)');
+  }
+}
+
+/**
  * Priority override for discoverSentryFixWork: 1 (above concrete product
  * builds) while a product is under active boosted repair, otherwise the
  * normal low priority the caller already computed. Additive only — never
@@ -97,6 +118,7 @@ export async function reconcileStalls({ logger = console, sendSms, sendCall } = 
 
     if (!existing) {
       removeUnplannableStamp(stall.productId);
+      clearQueueLevelStamp(stall.productId, logger);
       setBoostState(stall.productId, {
         active: true,
         signature: stall.signature,
@@ -117,6 +139,7 @@ export async function reconcileStalls({ logger = console, sendSms, sendCall } = 
 
     if (existing.signature !== stall.signature) {
       removeUnplannableStamp(stall.productId);
+      clearQueueLevelStamp(stall.productId, logger);
       setBoostState(stall.productId, { ...existing, signature: stall.signature, retry_count: (existing.retry_count || 0) + 1, last_touched_at: new Date().toISOString() });
       actions.push({ productId: stall.productId, action: 'reboosted_new_failure' });
       continue;
@@ -135,6 +158,7 @@ export async function reconcileStalls({ logger = console, sendSms, sendCall } = 
       actions.push({ productId: stall.productId, action: 'escalated_to_call' });
     } else {
       removeUnplannableStamp(stall.productId);
+      clearQueueLevelStamp(stall.productId, logger);
       setBoostState(stall.productId, { ...existing, retry_count: retryCount, last_touched_at: new Date().toISOString() });
       actions.push({ productId: stall.productId, action: 'reboosted_retry', retryCount });
     }
