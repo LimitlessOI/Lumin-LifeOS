@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Production boot hook for autonomous SENTRY recovery.
+ */
 import { startAutonomousRecoveryCouncilScheduler, CATASTROPHIC_STOP_STALE_MS } from '../services/autonomous-recovery-council.js';
 import {
   startCostelloInfrastructureGuardianSupervisor,
@@ -15,7 +18,11 @@ let costelloGuardianSupervisor = null;
 export function registerAutonomousRecoveryRuntimeRoutes(app, deps = {}) {
   const { logger = console, pool, requireKey } = deps;
   if (!scheduler) scheduler = startAutonomousRecoveryCouncilScheduler({ logger, pool });
-  if (!costelloGuardianSupervisor) {
+  // Disarmed 2026-08-19 per founder decision: Costello (BuilderOS-B) never
+  // produced a finished, verified result and its guardian's own Railway API
+  // calls were adding risk surface to Abbott, the system that actually needs
+  // to stay stable. Re-enable by setting COSTELLO_GUARDIAN_ENABLED=true.
+  if (!costelloGuardianSupervisor && process.env.COSTELLO_GUARDIAN_ENABLED === 'true') {
     costelloGuardianSupervisor = startCostelloInfrastructureGuardianSupervisor({ logger }) || { already_armed: true };
   }
 
