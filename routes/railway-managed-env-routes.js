@@ -135,11 +135,13 @@ async function internalRailwayDeleteServiceInstance(serviceId, environmentId) {
 
 async function internalRailwayRenameEnvironment(environmentId, newName) {
   if (!environmentId || !newName) throw new Error('environmentId and newName required');
+  // Real mutation confirmed via live schema introspection 2026-08-19:
+  // environmentUpdate does not exist; environmentRename(id, input) does.
   return railwayGql(
-    `mutation RenameEnv($id: String!, $name: String!) {
-      environmentUpdate(id: $id, input: { name: $name }) { id name }
+    `mutation RenameEnv($id: String!, $input: EnvironmentRenameInput!) {
+      environmentRename(id: $id, input: $input) { id name }
     }`,
-    { id: environmentId, name: newName },
+    { id: environmentId, input: { name: newName } },
   );
 }
 
