@@ -1,8 +1,8 @@
 {
   "schema": "abbott_emergency_deploy_v1",
-  "verdict": "FAILED",
-  "source_sha": "d83b74f219c180fee2a264e3a53444c6aba71e8c",
-  "run_id": "32190059779",
-  "deploy_step_outcome": "failure",
-  "log_tail": "Deploy path: live managed-env \u2192 https://lumin-web-production-e3a9.up.railway.app\nDeploying commit: d83b74f219c180fee2a264e3a53444c6aba71e8c\nLive managed-env deploy failed (managed-env deploy HTTP 502: {\"status\":\"error\",\"code\":502,\"message\":\"Application failed to respond\",\"request_id\":\"k7MasZhRTSuPZLKmnpoFkQ\"}); falling back to direct GraphQL\nDeploy path: direct Railway GraphQL with scoped project token\nTarget service: c3b803d7-9ee7-436e-833c-7b986ab545b7\nTarget environment: a2cdebc3-d417-480b-a1d6-23fc07c47c3c\nDeploying commit: d83b74f219c180fee2a264e3a53444c6aba71e8c\nRailway deploy failed: Not Authorized"
+  "verdict": "RUNNING",
+  "source_sha": "23224f8483ea015aeebdf8f63b96b009e8d20225",
+  "run_id": "32270994410",
+  "deploy_step_outcome": "pending",
+  "log_tail": ""
 }
