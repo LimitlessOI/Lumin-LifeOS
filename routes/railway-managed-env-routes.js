@@ -224,6 +224,91 @@ async function internalRailwayWireCostelloDatabase({ serviceId, environmentId, d
 }
 
 /**
+ * Provision a genuinely isolated, persistent Postgres service inside a
+ * given environment (its own compute, its own volume — not a shared-server
+ * database), then wire the target app service's DATABASE_URL to it via
+ * Railway's private-network DNS convention (<service-name>.railway.internal)
+ * and fix its APP_URL/PUBLIC_BASE_URL to its real current domain.
+ *
+ * The generated Postgres password never leaves this function — it's used
+ * locally to build both the new Postgres service's own env vars and the
+ * target service's DATABASE_URL, and is never returned to the caller.
+ */
+async function internalRailwayProvisionIsolatedPostgres({
+  projectId,
+  environmentId,
+  postgresServiceName = 'costello-postgres',
+  targetServiceId,
+  targetDbName = 'railway',
+}) {
+  if (!projectId || !environmentId || !targetServiceId) {
+    throw new Error('projectId, environmentId, and targetServiceId required');
+  }
+
+  const createData = await railwayGql(
+    `mutation CreatePostgres($input: ServiceCreateInput!) {
+      serviceCreate(input: $input) { id name }
+    }`,
+    { input: { projectId, environmentId, name: postgresServiceName, source: { image: 'postgres:16' } } },
+  );
+  const pgServiceId = createData?.serviceCreate?.id;
+  if (!pgServiceId) throw new Error('serviceCreate did not return a service id');
+
+  await railwayGql(
+    `mutation CreateVolume($input: VolumeCreateInput!) {
+      volumeCreate(input: $input) { id }
+    }`,
+    { input: { projectId, environmentId, serviceId: pgServiceId, mountPath: '/var/lib/postgresql/data' } },
+  );
+
+  const pgPassword = randomBytes(24).toString('base64url');
+  await internalRailwaySetServiceVars(pgServiceId, environmentId, {
+    POSTGRES_PASSWORD: pgPassword,
+    POSTGRES_DB: targetDbName,
+    PGDATA: '/var/lib/postgresql/data/pgdata',
+  });
+
+  await railwayGql(
+    `mutation DeployPostgres($serviceId: String!, $environmentId: String!) {
+      serviceInstanceDeploy(serviceId: $serviceId, environmentId: $environmentId)
+    }`,
+    { serviceId: pgServiceId, environmentId },
+  );
+
+  // Railway's documented private-network convention: services in the same
+  // project+environment reach each other at <service-name>.railway.internal
+  // over the private network, no public exposure needed for this.
+  const internalHost = `${postgresServiceName}.railway.internal`;
+  const targetDatabaseUrl = `postgresql://postgres:${pgPassword}@${internalHost}:5432/${targetDbName}`;
+
+  const targetVars = await internalRailwayServiceVars(targetServiceId, environmentId);
+  const realDomain = targetVars.RAILWAY_PUBLIC_DOMAIN;
+  const realAppUrl = realDomain && realDomain !== '(empty)' ? `https://${realDomain}` : undefined;
+
+  const targetUpdate = { DATABASE_URL: targetDatabaseUrl };
+  if (realAppUrl) {
+    targetUpdate.APP_URL = realAppUrl;
+    targetUpdate.PUBLIC_BASE_URL = realAppUrl;
+  }
+  await internalRailwaySetServiceVars(targetServiceId, environmentId, targetUpdate);
+
+  await railwayGql(
+    `mutation RedeployTarget($serviceId: String!, $environmentId: String!) {
+      serviceInstanceRedeploy(serviceId: $serviceId, environmentId: $environmentId)
+    }`,
+    { serviceId: targetServiceId, environmentId },
+  );
+
+  return {
+    postgresServiceId: pgServiceId,
+    postgresServiceName,
+    internalHost,
+    targetDbName,
+    targetAppUrl: realAppUrl || null,
+  };
+}
+
+/**
  * One-time schema discovery helper: lists Mutation fields whose name
  * contains any of the given substrings, with their arg names/types.
  * Used to find the real mutation name for removing a service instance
@@ -701,6 +786,28 @@ export function createRailwayManagedEnvRoutes({ requireKey, managedEnvService })
       res.json({ ok: true, serviceId, environmentId, dbName: result.dbName, dbHost: result.dbHost, appUrl: result.appUrl });
     } catch (error) {
       console.error('[RAILWAY-WIRE-COSTELLO-DB] Error:', error.message);
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  /**
+   * POST /provision-isolated-postgres
+   * Body: { projectId, environmentId, targetServiceId, postgresServiceName?, targetDbName? }
+   * Creates a genuinely separate Postgres service (own compute, own volume)
+   * in the given environment, wires targetServiceId's DATABASE_URL to it via
+   * Railway private networking, fixes APP_URL/PUBLIC_BASE_URL, redeploys the
+   * target. The generated password is never returned or logged.
+   */
+  router.post("/provision-isolated-postgres", requireKey, async (req, res) => {
+    try {
+      const { projectId, environmentId, targetServiceId, postgresServiceName, targetDbName } = req.body || {};
+      const result = await internalRailwayProvisionIsolatedPostgres({
+        projectId, environmentId, targetServiceId, postgresServiceName, targetDbName,
+      });
+      console.log(`[TSOS-MACHINE] KNOW: STATE=RECEIPT VERB=PROVISION_POSTGRES | pgService=${result.postgresServiceId} target=${targetServiceId}`);
+      res.json({ ok: true, ...result });
+    } catch (error) {
+      console.error('[RAILWAY-PROVISION-POSTGRES] Error:', error.message);
       res.status(500).json({ ok: false, error: error.message });
     }
   });
