@@ -250,6 +250,26 @@ async function internalRailwayIntrospectMutations(nameContains = []) {
   );
 }
 
+/**
+ * Introspect a named GraphQL input/object type's own fields — used after
+ * internalRailwayIntrospectMutations to see what a mutation's `input`
+ * argument actually accepts.
+ */
+async function internalRailwayIntrospectType(typeName) {
+  const data = await railwayGql(
+    `query IntrospectType($name: String!) {
+      __type(name: $name) {
+        name
+        kind
+        inputFields { name type { name kind ofType { name kind ofType { name kind } } } }
+        fields { name type { name kind ofType { name kind ofType { name kind } } } }
+      }
+    }`,
+    { name: typeName },
+  );
+  return data?.__type || null;
+}
+
 function getActor(req) {
   return req.get("x-actor") || req.body?.actor || req.query?.actor || "system";
 }
@@ -633,6 +653,19 @@ export function createRailwayManagedEnvRoutes({ requireKey, managedEnvService })
       res.json({ ok: true, fields });
     } catch (error) {
       console.error('[RAILWAY-INTROSPECT] Error:', error.message);
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  /**
+   * GET /introspect-type?name=ServiceCreateInput
+   */
+  router.get("/introspect-type", requireKey, async (req, res) => {
+    try {
+      const type = await internalRailwayIntrospectType(String(req.query.name || ''));
+      res.json({ ok: true, type });
+    } catch (error) {
+      console.error('[RAILWAY-INTROSPECT-TYPE] Error:', error.message);
       res.status(500).json({ ok: false, error: error.message });
     }
   });
