@@ -17,6 +17,7 @@ import { extractCorpusBacklog, backlogSignature, planBuildQueue } from './build-
 import { buildIntegrationContext } from './build-integration-context.js';
 import { assertUngovernedShippingAllowed } from './governed-factory-guard.js';
 import { ownerFor, thisFactoryId, queueForThisFactory } from '../config/lane-assignment.js';
+import { stallBoostPriority } from './sentry-stall-recovery.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const BP_PATH = path.join(ROOT, 'builderos-reboot/BP_PRIORITY.json');
@@ -850,8 +851,11 @@ export function discoverSentryFixWork() {
       id: `sentry_fix_plan_${queueDir}`,
       kind: 'plan_build_queue',
       // Below concrete builds (2.x) and founder-priority extend (2.05.x).
-      // Fake unplannable loops at priority≈2 were starving LifeOS.
-      priority: 8 + productRankFraction(queueDir, priorityList),
+      // Fake unplannable loops at priority≈2 were starving LifeOS. Overridden
+      // to priority 1 by stallBoostPriority while services/sentry-stall-
+      // recovery.js has this product under active boosted repair (founder
+      // order 2026-08-19: prioritize fixing whatever caused a real stall).
+      priority: stallBoostPriority(queueDir, 8 + productRankFraction(queueDir, priorityList)),
       product: queueDir,
       product_id: queueDir,
       home_path: path.join(ROOT, product.ssot),

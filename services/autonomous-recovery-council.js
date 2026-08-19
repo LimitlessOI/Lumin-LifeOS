@@ -3,6 +3,7 @@
  */
 import { runGovernanceAuditCycle } from '../scripts/sentry-chair-governance-audit.mjs';
 import { gatherSystemWorkingSignals } from './sentry-system-audit.js';
+import { reconcileStalls } from './sentry-stall-recovery.js';
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -52,6 +53,16 @@ export async function sendCatastrophicStopAlarm({
 
   logger?.error?.({ stage, ageMs, sms, call }, '[SENTRY-RECOVERY] FIVE-ALARM catastrophic stop notification dispatched');
   return { sms, call };
+}
+
+async function sendStallSms(text, { fetchFn = fetch } = {}) {
+  return postFounderAlert('/api/v1/lifeos/founder/sms', { body: text }, { fetchFn });
+}
+
+async function sendStallCall(text, { fetchFn = fetch } = {}) {
+  const phone = process.env.ALERT_PHONE || process.env.ADAM_SMS_NUMBER;
+  if (!phone) return { ok: false, reason: 'missing_alert_phone' };
+  return postFounderAlert('/api/v1/lifeos/founder/voice/call', { to: phone, say: text }, { fetchFn });
 }
 
 export function detectCatastrophicGovernedStop(signals, {
@@ -176,6 +187,17 @@ export function startAutonomousRecoveryCouncilScheduler({
         logger?.info?.('[SENTRY-RECOVERY] catastrophic stop cleared; manufacturing heartbeat resumed');
         incidentStartedAt = null;
         alarmedStages.clear();
+      }
+
+      // Founder order 2026-08-19: SENTRY must get any genuinely stalled
+      // product going again itself, prioritizing the actual fix, before
+      // ever just alerting — text first, escalate to a call only if the
+      // prioritized retry fails the same way repeatedly. Deliberate
+      // founder spin-breaks are never touched (see sentry-stall-recovery.js).
+      try {
+        await reconcileStalls({ logger, sendSms: sendStallSms, sendCall: sendStallCall });
+      } catch (error) {
+        logger?.error?.({ error: error.message }, '[STALL-RECOVERY] reconcile tick failed; next tick remains armed');
       }
 
       const result = await runAutonomousRecoveryCouncil({
