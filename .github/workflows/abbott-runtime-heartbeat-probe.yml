@@ -1,0 +1,33 @@
+name: Abbott Runtime Heartbeat Probe
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "*/15 * * * *"
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Probe production heartbeat
+        env:
+          HEARTBEAT_URL: https://lumin-web-production.up.railway.app/api/v1/runtime/heartbeat
+        run: |
+          set -euo pipefail
+          body="$(curl --fail --silent --show-error --location --max-time 15 "$HEARTBEAT_URL")"
+          printf '%s\n' "$body"
+          BODY="$body" python3 - <<'PY'
+          import json
+          import os
+
+          payload = json.loads(os.environ["BODY"])
+          assert payload.get("system") == "abbott", payload
+          assert payload.get("alive") is True, payload
+          assert payload.get("model_keys_present") is True, payload
+          assert payload.get("git_sha"), payload
+          print(f"Abbott is live at git_sha={payload['git_sha']}")
+          PY
