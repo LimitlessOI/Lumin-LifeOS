@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-19T23:25:05.574Z",
+  "generated_at": "2026-08-19T23:31:18.319Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13709,
   "files": [
@@ -21741,9 +21741,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 4167069,
-      "mtime": "2026-08-19T15:35:17.885Z",
-      "indexed_at": "2026-08-19T16:22:36.481Z"
+      "bytes": 4167402,
+      "mtime": "2026-08-19T23:25:07.330Z",
+      "indexed_at": "2026-08-19T23:31:18.319Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -44704,9 +44704,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 626107,
-      "mtime": "2026-08-19T23:24:30.362Z",
-      "indexed_at": "2026-08-19T23:25:05.574Z"
+      "bytes": 626575,
+      "mtime": "2026-08-19T23:30:54.852Z",
+      "indexed_at": "2026-08-19T23:31:18.319Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -74075,9 +74075,9 @@
     {
       "path": "routes/autonomous-recovery-runtime-routes.js",
       "synopsis": "Production boot hook for autonomous SENTRY recovery.",
-      "bytes": 2773,
-      "mtime": "2026-08-19T15:34:06.905Z",
-      "indexed_at": "2026-08-19T15:35:16.166Z"
+      "bytes": 3116,
+      "mtime": "2026-08-19T23:29:33.960Z",
+      "indexed_at": "2026-08-19T23:31:18.319Z"
     },
     {
       "path": "routes/autonomous-telemetry-routes.js",
