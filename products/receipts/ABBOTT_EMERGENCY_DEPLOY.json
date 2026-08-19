@@ -1,8 +1,8 @@
 {
   "schema": "abbott_emergency_deploy_v1",
-  "verdict": "RUNNING",
+  "verdict": "ACCEPTED",
   "source_sha": "6f622d5d464dfb14b1b50af07f10d81c810dc7f3",
   "run_id": "32313603068",
-  "deploy_step_outcome": "pending",
-  "log_tail": ""
+  "deploy_step_outcome": "success",
+  "log_tail": "Deploy path: live managed-env \u2192 https://lumin-web-production-e3a9.up.railway.app\nDeploying commit: 6f622d5d464dfb14b1b50af07f10d81c810dc7f3\nLive managed-env deploy accepted:\n{\n  \"ok\": true,\n  \"message\": \"Railway build triggered for commit 6f622d5d464dfb14b1b50af07f10d81c810dc7f3\",\n  \"commit_sha\": \"6f622d5d464dfb14b1b50af07f10d81c810dc7f3\",\n  \"data\": {\n    \"serviceInstanceDeploy\": true\n  }\n}"
 }
