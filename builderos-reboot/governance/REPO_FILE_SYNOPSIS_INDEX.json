@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-19T19:52:33.454Z",
+  "generated_at": "2026-08-19T19:57:40.991Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13708,
   "files": [
@@ -44704,9 +44704,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 622935,
-      "mtime": "2026-08-19T19:52:17.064Z",
-      "indexed_at": "2026-08-19T19:52:33.454Z"
+      "bytes": 623342,
+      "mtime": "2026-08-19T19:57:20.700Z",
+      "indexed_at": "2026-08-19T19:57:40.991Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -76271,9 +76271,9 @@
     {
       "path": "routes/railway-managed-env-routes.js",
       "synopsis": "Railway env vault + sync (production spine).",
-      "bytes": 58196,
-      "mtime": "2026-08-19T19:51:46.064Z",
-      "indexed_at": "2026-08-19T19:52:33.454Z",
+      "bytes": 59421,
+      "mtime": "2026-08-19T19:56:30.529Z",
+      "indexed_at": "2026-08-19T19:57:40.991Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
