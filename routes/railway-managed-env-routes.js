@@ -85,6 +85,60 @@ async function internalRailwayRedeployDeployment(deploymentId) {
   );
 }
 
+/**
+ * Read-only: environments + services in the project, plus per-environment
+ * service instance presence. Used to verify real state before any
+ * environment-cleanup mutation — never mutate blind on a live project.
+ */
+async function internalRailwayTopology() {
+  const projectId = process.env.RAILWAY_PROJECT_ID;
+  if (!projectId) throw new Error('RAILWAY_PROJECT_ID not set in environment');
+  return railwayGql(
+    `query Topology($id: String!) {
+      project(id: $id) {
+        id
+        name
+        environments { edges { node { id name } } }
+        services {
+          edges {
+            node {
+              id
+              name
+              serviceInstances { edges { node { id environmentId } } }
+            }
+          }
+        }
+      }
+    }`,
+    { id: projectId },
+  );
+}
+
+/**
+ * Remove a service's instance from one specific environment only — does not
+ * touch its instances in other environments. Used for environment cleanup
+ * after a founder-driven environment duplication.
+ */
+async function internalRailwayDeleteServiceInstance(serviceId, environmentId) {
+  if (!serviceId || !environmentId) throw new Error('serviceId and environmentId required');
+  return railwayGql(
+    `mutation DeleteInstance($serviceId: String!, $environmentId: String!) {
+      serviceInstanceDelete(serviceId: $serviceId, environmentId: $environmentId)
+    }`,
+    { serviceId, environmentId },
+  );
+}
+
+async function internalRailwayRenameEnvironment(environmentId, newName) {
+  if (!environmentId || !newName) throw new Error('environmentId and newName required');
+  return railwayGql(
+    `mutation RenameEnv($id: String!, $name: String!) {
+      environmentUpdate(id: $id, input: { name: $name }) { id name }
+    }`,
+    { id: environmentId, name: newName },
+  );
+}
+
 function getActor(req) {
   return req.get("x-actor") || req.body?.actor || req.query?.actor || "system";
 }
@@ -436,6 +490,56 @@ export function createRailwayManagedEnvRoutes({ requireKey, managedEnvService })
       });
     } catch (error) {
       console.error('[RAILWAY-SELF-REDEPLOY] Error:', error.message);
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  /**
+   * GET /topology
+   * Read-only: real environments + services + per-environment instance
+   * presence, straight from Railway's API. Always call before any
+   * environment-cleanup mutation on this project.
+   */
+  router.get("/topology", requireKey, async (req, res) => {
+    try {
+      const data = await internalRailwayTopology();
+      res.json({ ok: true, project: data?.project || null });
+    } catch (error) {
+      console.error('[RAILWAY-TOPOLOGY] Error:', error.message);
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  /**
+   * POST /delete-service-instance
+   * Body: { serviceId, environmentId }
+   * Removes ONE service's instance from ONE environment. Does not touch the
+   * same service's instance in any other environment.
+   */
+  router.post("/delete-service-instance", requireKey, async (req, res) => {
+    try {
+      const { serviceId, environmentId } = req.body || {};
+      const data = await internalRailwayDeleteServiceInstance(serviceId, environmentId);
+      console.log(`[TSOS-MACHINE] KNOW: STATE=RECEIPT VERB=DELETE_INSTANCE | serviceId=${serviceId} environmentId=${environmentId}`);
+      res.json({ ok: true, serviceId, environmentId, data });
+    } catch (error) {
+      console.error('[RAILWAY-DELETE-INSTANCE] Error:', error.message);
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  /**
+   * POST /rename-environment
+   * Body: { environmentId, newName }
+   */
+  router.post("/rename-environment", requireKey, async (req, res) => {
+    try {
+      const { environmentId, newName } = req.body || {};
+      const data = await internalRailwayRenameEnvironment(environmentId, newName);
+      console.log(`[TSOS-MACHINE] KNOW: STATE=RECEIPT VERB=RENAME_ENV | environmentId=${environmentId} newName=${newName}`);
+      res.json({ ok: true, environmentId, newName, data });
+    } catch (error) {
+      console.error('[RAILWAY-RENAME-ENV] Error:', error.message);
       res.status(500).json({ ok: false, error: error.message });
     }
   });
