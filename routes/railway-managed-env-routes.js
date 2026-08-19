@@ -174,6 +174,56 @@ async function internalRailwayServiceVars(serviceId, environmentId) {
 }
 
 /**
+ * Set one or more variables on one service in one specific environment.
+ * Values pass through exactly as given — caller is responsible for not
+ * logging/echoing secret values back out.
+ */
+async function internalRailwaySetServiceVars(serviceId, environmentId, variables) {
+  const projectId = process.env.RAILWAY_PROJECT_ID;
+  if (!projectId) throw new Error('RAILWAY_PROJECT_ID not set in environment');
+  if (!serviceId || !environmentId) throw new Error('serviceId and environmentId required');
+  if (!variables || typeof variables !== 'object' || Array.isArray(variables)) {
+    throw new Error('variables must be a plain object of {NAME: value}');
+  }
+  return railwayGql(
+    `mutation SetServiceVars($input: VariableCollectionUpsertInput!) {
+      variableCollectionUpsert(input: $input)
+    }`,
+    { input: { projectId, environmentId, serviceId, variables, skipDeploys: true } },
+  );
+}
+
+/**
+ * Point Costello's DATABASE_URL / APP_URL / PUBLIC_BASE_URL at its own real
+ * dedicated database + its own real current Railway domain, WITHOUT the
+ * caller ever needing to see or pass the raw connection string — built
+ * entirely server-side from Abbott's own already-loaded process.env, using
+ * the real RAILWAY_PUBLIC_DOMAIN this environment already reports.
+ */
+async function internalRailwayWireCostelloDatabase({ serviceId, environmentId, dbName = 'costello' }) {
+  const abbottUrl = process.env.DATABASE_URL;
+  if (!abbottUrl) throw new Error('DATABASE_URL not set in Abbott environment — cannot derive Costello URL');
+  const u = new URL(abbottUrl);
+  u.pathname = `/${dbName}`;
+  const costelloDatabaseUrl = u.toString();
+
+  const vars = await internalRailwayServiceVars(serviceId, environmentId);
+  const realDomain = vars.RAILWAY_PUBLIC_DOMAIN;
+  if (!realDomain || realDomain === '(empty)') {
+    throw new Error('RAILWAY_PUBLIC_DOMAIN not available for this service/environment');
+  }
+  const realAppUrl = `https://${realDomain}`;
+
+  await internalRailwaySetServiceVars(serviceId, environmentId, {
+    DATABASE_URL: costelloDatabaseUrl,
+    APP_URL: realAppUrl,
+    PUBLIC_BASE_URL: realAppUrl,
+  });
+
+  return { dbName, appUrl: realAppUrl, dbHost: u.hostname };
+}
+
+/**
  * One-time schema discovery helper: lists Mutation fields whose name
  * contains any of the given substrings, with their arg names/types.
  * Used to find the real mutation name for removing a service instance
@@ -598,6 +648,26 @@ export function createRailwayManagedEnvRoutes({ requireKey, managedEnvService })
       res.json({ ok: true, serviceId, environmentId, vars });
     } catch (error) {
       console.error('[RAILWAY-SERVICE-VARS] Error:', error.message);
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  /**
+   * POST /wire-costello-database
+   * Body: { serviceId, environmentId, dbName? }
+   * Points Costello's DATABASE_URL at its own dedicated Neon database
+   * (derived server-side from Abbott's own DATABASE_URL — never passed
+   * through the request) and fixes its stale APP_URL/PUBLIC_BASE_URL to
+   * its real current Railway domain. Response never echoes the URL.
+   */
+  router.post("/wire-costello-database", requireKey, async (req, res) => {
+    try {
+      const { serviceId, environmentId, dbName } = req.body || {};
+      const result = await internalRailwayWireCostelloDatabase({ serviceId, environmentId, dbName });
+      console.log(`[TSOS-MACHINE] KNOW: STATE=RECEIPT VERB=WIRE_DATABASE | serviceId=${serviceId} environmentId=${environmentId} dbName=${result.dbName}`);
+      res.json({ ok: true, serviceId, environmentId, dbName: result.dbName, dbHost: result.dbHost, appUrl: result.appUrl });
+    } catch (error) {
+      console.error('[RAILWAY-WIRE-COSTELLO-DB] Error:', error.message);
       res.status(500).json({ ok: false, error: error.message });
     }
   });
