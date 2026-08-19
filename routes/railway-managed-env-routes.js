@@ -194,6 +194,28 @@ async function internalRailwaySetServiceVars(serviceId, environmentId, variables
 }
 
 /**
+ * Repoints a whitelisted set of secret var NAMES on a target service+
+ * environment to LITERAL copies of Abbott's own already-loaded process.env
+ * values. Fixes the real failure mode found live 2026-08-19: those vars
+ * were previously Railway reference variables (${{lumin-web.NAME}}) that
+ * silently resolved to empty once lumin-web's instance was removed from
+ * that environment during the Castello/Abbott split — the keys stayed,
+ * the values broke. Raw values never appear in the request or response.
+ */
+async function internalRailwayRepointSecretsFromAbbott(serviceId, environmentId, names) {
+  const toSet = {};
+  const skipped = [];
+  for (const name of names) {
+    const v = process.env[name];
+    if (v) toSet[name] = v; else skipped.push(name);
+  }
+  if (Object.keys(toSet).length > 0) {
+    await internalRailwaySetServiceVars(serviceId, environmentId, toSet);
+  }
+  return { repointed: Object.keys(toSet), skipped_not_set_on_abbott: skipped };
+}
+
+/**
  * Point Costello's DATABASE_URL / APP_URL / PUBLIC_BASE_URL at its own real
  * dedicated database + its own real current Railway domain, WITHOUT the
  * caller ever needing to see or pass the raw connection string — built
@@ -808,6 +830,27 @@ export function createRailwayManagedEnvRoutes({ requireKey, managedEnvService })
       res.json({ ok: true, ...result });
     } catch (error) {
       console.error('[RAILWAY-PROVISION-POSTGRES] Error:', error.message);
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  /**
+   * POST /repoint-secrets-from-abbott
+   * Body: { serviceId, environmentId, names: [...] }
+   * Repoints broken reference variables to literal copies of Abbott's own
+   * process.env values. Never echoes the values themselves.
+   */
+  router.post("/repoint-secrets-from-abbott", requireKey, async (req, res) => {
+    try {
+      const { serviceId, environmentId, names } = req.body || {};
+      if (!Array.isArray(names) || names.length === 0) {
+        return res.status(400).json({ ok: false, error: 'names array required' });
+      }
+      const result = await internalRailwayRepointSecretsFromAbbott(serviceId, environmentId, names);
+      console.log(`[TSOS-MACHINE] KNOW: STATE=RECEIPT VERB=REPOINT_SECRETS | serviceId=${serviceId} count=${result.repointed.length}`);
+      res.json({ ok: true, ...result });
+    } catch (error) {
+      console.error('[RAILWAY-REPOINT-SECRETS] Error:', error.message);
       res.status(500).json({ ok: false, error: error.message });
     }
   });
