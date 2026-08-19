@@ -144,6 +144,30 @@ async function internalRailwayRenameEnvironment(environmentId, newName) {
 }
 
 /**
+ * Read-only: variable names + masked values for one service in one specific
+ * environment — used to verify DB wiring is correct per-environment after
+ * an environment duplication/cleanup, without ever printing real secrets.
+ */
+async function internalRailwayServiceVars(serviceId, environmentId) {
+  const projectId = process.env.RAILWAY_PROJECT_ID;
+  if (!projectId) throw new Error('RAILWAY_PROJECT_ID not set in environment');
+  if (!serviceId || !environmentId) throw new Error('serviceId and environmentId required');
+  const data = await railwayGql(
+    `query GetVars($projectId: String!, $environmentId: String!, $serviceId: String!) {
+      variables(projectId: $projectId, environmentId: $environmentId, serviceId: $serviceId)
+    }`,
+    { projectId, environmentId, serviceId },
+  );
+  const vars = data?.variables || {};
+  const masked = {};
+  for (const [k, v] of Object.entries(vars)) {
+    const s = String(v);
+    masked[k] = s.length > 6 ? `${s.slice(0, 4)}****${s.slice(-2)}` : '****';
+  }
+  return masked;
+}
+
+/**
  * One-time schema discovery helper: lists Mutation fields whose name
  * contains any of the given substrings, with their arg names/types.
  * Used to find the real mutation name for removing a service instance
@@ -553,6 +577,21 @@ export function createRailwayManagedEnvRoutes({ requireKey, managedEnvService })
       res.json({ ok: true, fields });
     } catch (error) {
       console.error('[RAILWAY-INTROSPECT] Error:', error.message);
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  /**
+   * GET /service-vars?serviceId=...&environmentId=...
+   * Read-only, masked values only — verify DB wiring per environment.
+   */
+  router.get("/service-vars", requireKey, async (req, res) => {
+    try {
+      const { serviceId, environmentId } = req.query || {};
+      const vars = await internalRailwayServiceVars(serviceId, environmentId);
+      res.json({ ok: true, serviceId, environmentId, vars });
+    } catch (error) {
+      console.error('[RAILWAY-SERVICE-VARS] Error:', error.message);
       res.status(500).json({ ok: false, error: error.message });
     }
   });
