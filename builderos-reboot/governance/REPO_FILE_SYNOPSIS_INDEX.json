@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-19T19:57:40.991Z",
+  "generated_at": "2026-08-19T23:25:05.574Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13708,
+  "file_count": 13709,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -44704,9 +44704,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 623342,
-      "mtime": "2026-08-19T19:57:20.700Z",
-      "indexed_at": "2026-08-19T19:57:40.991Z"
+      "bytes": 626107,
+      "mtime": "2026-08-19T23:24:30.362Z",
+      "indexed_at": "2026-08-19T23:25:05.574Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -94300,9 +94300,9 @@
     {
       "path": "services/autonomous-recovery-council.js",
       "synopsis": "Autonomous recovery orchestrator.",
-      "bytes": 7514,
-      "mtime": "2026-08-19T16:19:44.615Z",
-      "indexed_at": "2026-08-19T16:22:36.481Z"
+      "bytes": 8658,
+      "mtime": "2026-08-19T21:57:01.010Z",
+      "indexed_at": "2026-08-19T23:25:05.574Z"
     },
     {
       "path": "services/autonomous-telemetry-instrumentation.js",
@@ -101113,9 +101113,9 @@
     {
       "path": "services/never-stop-product-factory.js",
       "synopsis": "Permanent product expansion lane — work exists even when BP_PRIORITY queue reads complete.",
-      "bytes": 95244,
-      "mtime": "2026-08-13T08:03:13.668Z",
-      "indexed_at": "2026-08-13T08:03:13.668Z",
+      "bytes": 95575,
+      "mtime": "2026-08-19T21:55:31.163Z",
+      "indexed_at": "2026-08-19T23:25:05.574Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -102458,6 +102458,16 @@
       "bytes": 7395,
       "mtime": "2026-07-31T18:43:21.917Z",
       "indexed_at": "2026-07-31T18:43:21.917Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/sentry-stall-recovery.js",
+      "synopsis": "Detects genuinely stalled autonomous work (SENTRY unplannable",
+      "bytes": 7284,
+      "mtime": "2026-08-19T21:52:24.349Z",
+      "indexed_at": "2026-08-19T23:25:05.574Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
