@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-19T23:31:18.319Z",
+  "generated_at": "2026-08-19T23:41:53.521Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13709,
   "files": [
@@ -44704,9 +44704,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 626575,
-      "mtime": "2026-08-19T23:30:54.852Z",
-      "indexed_at": "2026-08-19T23:31:18.319Z"
+      "bytes": 627798,
+      "mtime": "2026-08-19T23:41:34.486Z",
+      "indexed_at": "2026-08-19T23:41:53.521Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -102465,9 +102465,9 @@
     {
       "path": "services/sentry-stall-recovery.js",
       "synopsis": "Detects genuinely stalled autonomous work (SENTRY unplannable",
-      "bytes": 7284,
-      "mtime": "2026-08-19T21:52:24.349Z",
-      "indexed_at": "2026-08-19T23:25:05.574Z",
+      "bytes": 8496,
+      "mtime": "2026-08-19T23:39:26.833Z",
+      "indexed_at": "2026-08-19T23:41:53.521Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
