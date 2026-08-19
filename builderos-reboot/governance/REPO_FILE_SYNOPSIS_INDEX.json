@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-18T21:12:49.268Z",
+  "generated_at": "2026-08-19T15:35:16.166Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13683,
+  "file_count": 13708,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -10,6 +10,13 @@
       "bytes": 1354,
       "mtime": "2026-06-21T21:36:30.433Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": ".github/workflows/abbott-emergency-deploy.yml",
+      "synopsis": "yml — .github/workflows/abbott-emergency-deploy.yml.",
+      "bytes": 5958,
+      "mtime": "2026-08-19T00:46:34.009Z",
+      "indexed_at": "2026-08-19T15:35:16.166Z"
     },
     {
       "path": ".github/workflows/auto-lint.yml",
@@ -54,6 +61,13 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": ".github/workflows/costello-sandbox-cutover.yml",
+      "synopsis": "yml — .github/workflows/costello-sandbox-cutover.yml.",
+      "bytes": 15174,
+      "mtime": "2026-08-19T00:46:34.010Z",
+      "indexed_at": "2026-08-19T15:35:16.166Z"
+    },
+    {
       "path": ".github/workflows/founder-ai-operating-protocol.yml",
       "synopsis": "yml — .github/workflows/founder-ai-operating-protocol.yml.",
       "bytes": 349,
@@ -96,11 +110,39 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": ".github/workflows/railway-auth-curl-probe.yml",
+      "synopsis": "yml — .github/workflows/railway-auth-curl-probe.yml.",
+      "bytes": 7223,
+      "mtime": "2026-08-19T00:46:34.010Z",
+      "indexed_at": "2026-08-19T15:35:16.166Z"
+    },
+    {
+      "path": ".github/workflows/railway-auth-topology-probe.yml",
+      "synopsis": "yml — .github/workflows/railway-auth-topology-probe.yml.",
+      "bytes": 6530,
+      "mtime": "2026-08-19T00:46:34.010Z",
+      "indexed_at": "2026-08-19T15:35:16.166Z"
+    },
+    {
+      "path": ".github/workflows/railway-cli-capability-probe.yml",
+      "synopsis": "yml — .github/workflows/railway-cli-capability-probe.yml.",
+      "bytes": 5466,
+      "mtime": "2026-08-19T00:46:34.010Z",
+      "indexed_at": "2026-08-19T15:35:16.166Z"
+    },
+    {
       "path": ".github/workflows/railway-deploy.yml",
       "synopsis": "yml — .github/workflows/railway-deploy.yml.",
       "bytes": 2136,
       "mtime": "2026-07-15T09:10:10.667Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": ".github/workflows/railway-inventory-probe.yml",
+      "synopsis": "yml — .github/workflows/railway-inventory-probe.yml.",
+      "bytes": 5260,
+      "mtime": "2026-08-19T00:46:34.011Z",
+      "indexed_at": "2026-08-19T15:35:16.166Z"
     },
     {
       "path": ".github/workflows/self-build.yml",
@@ -129,6 +171,20 @@
       "bytes": 1077,
       "mtime": "2026-07-09T01:03:41.473Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": ".github/workflows/taloa-local-bootstrap.yml",
+      "synopsis": "yml — .github/workflows/taloa-local-bootstrap.yml.",
+      "bytes": 1057,
+      "mtime": "2026-08-19T00:46:34.011Z",
+      "indexed_at": "2026-08-19T15:35:16.166Z"
+    },
+    {
+      "path": ".github/workflows/taloa-supervised-overlay.yml",
+      "synopsis": "yml — .github/workflows/taloa-supervised-overlay.yml.",
+      "bytes": 3091,
+      "mtime": "2026-08-19T00:46:34.011Z",
+      "indexed_at": "2026-08-19T15:35:16.166Z"
     },
     {
       "path": ".gitlab-ci.yml",
@@ -33464,6 +33520,14 @@
       "bytes": 146,
       "mtime": "2026-06-21T21:40:26.304Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "control/taloa-live-command.json",
+      "synopsis": "JSON data/config — control/taloa-live-command.json.",
+      "bytes": 76,
+      "mtime": "2026-08-19T00:46:34.012Z",
+      "indexed_at": "2026-08-19T15:35:16.166Z",
+      "synopsis_index_only": true
     },
     {
       "path": "CONVERSATION_EXTRACTOR_GUIDE.md",
@@ -69977,6 +70041,14 @@
       "synopsis_index_only": true
     },
     {
+      "path": "products/receipts/ABBOTT_EMERGENCY_DEPLOY.json",
+      "synopsis": "Product receipt — ABBOTT EMERGENCY DEPLOY.",
+      "bytes": 847,
+      "mtime": "2026-08-19T00:46:34.012Z",
+      "indexed_at": "2026-08-19T15:35:16.166Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "products/receipts/ACTION_INBOX_V1_ACCEPTANCE.json",
       "synopsis": "Product receipt — ACTION INBOX V1 ACCEPTANCE.",
       "bytes": 1004,
@@ -71160,6 +71232,38 @@
       "synopsis_index_only": true
     },
     {
+      "path": "products/receipts/RAILWAY_AUTH_CURL_PROBE.json",
+      "synopsis": "Product receipt — RAILWAY AUTH CURL PROBE.",
+      "bytes": 2103,
+      "mtime": "2026-08-19T00:46:34.012Z",
+      "indexed_at": "2026-08-19T15:35:16.166Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/RAILWAY_AUTH_TOPOLOGY_PROBE.json",
+      "synopsis": "Product receipt — RAILWAY AUTH TOPOLOGY PROBE.",
+      "bytes": 877,
+      "mtime": "2026-08-19T00:46:34.013Z",
+      "indexed_at": "2026-08-19T15:35:16.166Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/RAILWAY_CLI_CAPABILITY_PROBE.json",
+      "synopsis": "Product receipt — RAILWAY CLI CAPABILITY PROBE.",
+      "bytes": 2810,
+      "mtime": "2026-08-19T00:46:34.013Z",
+      "indexed_at": "2026-08-19T15:35:16.166Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/RAILWAY_INVENTORY_PROBE.json",
+      "synopsis": "Product receipt — RAILWAY INVENTORY PROBE.",
+      "bytes": 364,
+      "mtime": "2026-08-19T00:46:34.013Z",
+      "indexed_at": "2026-08-19T15:35:16.166Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "products/receipts/REAL_APP_E2E.json",
       "synopsis": "Product receipt — REAL APP E2E.",
       "bytes": 2553,
@@ -71397,6 +71501,14 @@
       "bytes": 4169,
       "mtime": "2026-08-18T20:33:17.354Z",
       "indexed_at": "2026-08-18T20:33:58.335Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/TALOA_SUPERVISED_OVERLAY_CI.json",
+      "synopsis": "Product receipt — TALOA SUPERVISED OVERLAY CI.",
+      "bytes": 654,
+      "mtime": "2026-08-19T00:46:34.014Z",
+      "indexed_at": "2026-08-19T15:35:16.166Z",
       "synopsis_index_only": true
     },
     {
@@ -73963,9 +74075,9 @@
     {
       "path": "routes/autonomous-recovery-runtime-routes.js",
       "synopsis": "Production boot hook for autonomous SENTRY recovery.",
-      "bytes": 1307,
-      "mtime": "2026-08-18T20:33:17.227Z",
-      "indexed_at": "2026-08-18T20:33:58.335Z"
+      "bytes": 2773,
+      "mtime": "2026-08-19T15:34:06.905Z",
+      "indexed_at": "2026-08-19T15:35:16.166Z"
     },
     {
       "path": "routes/autonomous-telemetry-routes.js",
@@ -74406,6 +74518,13 @@
       "bytes": 5418,
       "mtime": "2026-06-21T21:39:03.487Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "routes/costello-infrastructure-guardian-routes.js",
+      "synopsis": "Registers CostelloInfrastructureGuardianRoutes routes/handlers (routes/costello-infrastructure-guardian-routes.js).",
+      "bytes": 1002,
+      "mtime": "2026-08-18T21:15:25.813Z",
+      "indexed_at": "2026-08-19T15:35:16.166Z"
     },
     {
       "path": "routes/course-routes.js",
@@ -76718,6 +76837,16 @@
       ]
     },
     {
+      "path": "routes/taloa-supervised-overlay-routes.js",
+      "synopsis": "Supervised multi-session HTTP surface for the live Taloa A-to-Z",
+      "bytes": 8326,
+      "mtime": "2026-08-19T00:46:34.014Z",
+      "indexed_at": "2026-08-19T15:35:16.166Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "routes/tc-billing-routes.js",
       "synopsis": "Registers TcBillingRoutes routes/handlers (routes/tc-billing-routes.js).",
       "bytes": 4436,
@@ -78141,6 +78270,13 @@
       ]
     },
     {
+      "path": "scripts/costello-infrastructure-guardian-worker.mjs",
+      "synopsis": "Keep the worker alive independently of unref'd timers.",
+      "bytes": 2723,
+      "mtime": "2026-08-18T21:15:25.813Z",
+      "indexed_at": "2026-08-19T15:35:16.166Z"
+    },
+    {
       "path": "scripts/council-builder-preflight.mjs",
       "synopsis": "Proves the Council Builder is reachable and reports why POST /api/v1/lifeos/builder/build",
       "bytes": 14804,
@@ -78898,6 +79034,13 @@
       "ssot": [
         "docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "scripts/install-taloa-github-relay.sh",
+      "synopsis": "Install/start the local Taloa GitHub relay as a per-user LaunchAgent.",
+      "bytes": 1885,
+      "mtime": "2026-08-19T00:46:34.015Z",
+      "indexed_at": "2026-08-19T15:35:16.166Z"
     },
     {
       "path": "scripts/interview-summary.mjs",
@@ -80347,9 +80490,9 @@
     {
       "path": "scripts/railway-github-deploy.mjs",
       "synopsis": "Deploy the repo to Railway from GitHub Actions.",
-      "bytes": 8647,
-      "mtime": "2026-07-10T01:14:05.374Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z"
+      "bytes": 9030,
+      "mtime": "2026-08-19T00:46:34.016Z",
+      "indexed_at": "2026-08-19T15:35:16.166Z"
     },
     {
       "path": "scripts/reclassify-overlay-off-print-steps.mjs",
@@ -81795,6 +81938,16 @@
       "indexed_at": "2026-08-17T22:07:03.399Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/taloa-github-relay.mjs",
+      "synopsis": "Local Mac relay between a GitHub control file and Taloa's proven",
+      "bytes": 8570,
+      "mtime": "2026-08-19T00:46:34.016Z",
+      "indexed_at": "2026-08-19T15:35:16.166Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
     },
     {
@@ -93414,6 +93567,16 @@
       ]
     },
     {
+      "path": "scripts/verify-taloa-supervised-overlay.mjs",
+      "synopsis": "Behavioral regression proof for the supervised live-overlay adapter.",
+      "bytes": 3877,
+      "mtime": "2026-08-19T00:46:34.017Z",
+      "indexed_at": "2026-08-19T15:35:16.166Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "scripts/verify-tcservice.mjs",
       "synopsis": "Acceptance test for tc-service product.",
       "bytes": 3752,
@@ -96238,6 +96401,23 @@
       "ssot": [
         "docs/products/kids-os/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/costello-infrastructure-guardian-supervisor.js",
+      "synopsis": "Supervises the Costello infrastructure guardian in a separate Node",
+      "bytes": 5432,
+      "mtime": "2026-08-19T00:46:34.017Z",
+      "indexed_at": "2026-08-19T15:35:16.166Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/costello-infrastructure-guardian.js",
+      "synopsis": "Service module — Costello Infrastructure Guardian.",
+      "bytes": 17966,
+      "mtime": "2026-08-18T21:15:25.813Z",
+      "indexed_at": "2026-08-19T15:35:16.166Z"
     },
     {
       "path": "services/council-bypass-audit.js",
@@ -103191,6 +103371,16 @@
       ]
     },
     {
+      "path": "services/taloa/overlay-extension-drive-runtime.js",
+      "synopsis": "Live supervised adapter between the Taloa A-to-Z pipeline and the",
+      "bytes": 5137,
+      "mtime": "2026-08-19T00:46:34.017Z",
+      "indexed_at": "2026-08-19T15:35:16.166Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "services/taloa/overlay-host-service.js",
       "synopsis": "Manages the universal overlay display and interactions for the Digital Imprint system.",
       "bytes": 1636,
@@ -104930,9 +105120,9 @@
     {
       "path": "startup/auto-register-product-modules.js",
       "synopsis": "Convention-based auto-registration for product modules + a boot",
-      "bytes": 5497,
-      "mtime": "2026-08-18T20:33:17.228Z",
-      "indexed_at": "2026-08-18T20:33:58.335Z",
+      "bytes": 5936,
+      "mtime": "2026-08-19T00:46:34.017Z",
+      "indexed_at": "2026-08-19T15:35:16.166Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -106108,6 +106298,13 @@
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "tests/costello-infrastructure-guardian.test.js",
+      "synopsis": "js — tests/costello-infrastructure-guardian.test.js.",
+      "bytes": 1825,
+      "mtime": "2026-08-18T21:15:25.814Z",
+      "indexed_at": "2026-08-19T15:35:16.166Z"
     },
     {
       "path": "tests/council-model-availability.test.js",
