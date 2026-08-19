@@ -161,9 +161,13 @@ async function internalRailwayServiceVars(serviceId, environmentId) {
     { projectId, environmentId, serviceId },
   );
   const vars = data?.variables || {};
+  // These are genuinely public (they ARE the public URL / non-secret name),
+  // never mask them — everything else stays masked.
+  const NEVER_SECRET = new Set(['RAILWAY_PUBLIC_DOMAIN', 'RAILWAY_STATIC_URL', 'RAILWAY_SERVICE_NAME', 'RAILWAY_ENVIRONMENT_NAME', 'APP_URL', 'PUBLIC_BASE_URL']);
   const masked = {};
   for (const [k, v] of Object.entries(vars)) {
     const s = String(v);
+    if (NEVER_SECRET.has(k)) { masked[k] = s; continue; }
     masked[k] = s.length === 0 ? '(empty)' : s.length > 6 ? `${s.slice(0, 4)}****${s.slice(-2)}` : `(len:${s.length})`;
   }
   return masked;
