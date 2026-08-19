@@ -139,6 +139,33 @@ async function internalRailwayRenameEnvironment(environmentId, newName) {
   );
 }
 
+/**
+ * One-time schema discovery helper: lists Mutation fields whose name
+ * contains any of the given substrings, with their arg names/types.
+ * Used to find the real mutation name for removing a service instance
+ * from one environment — Railway's schema doesn't expose this in docs.
+ */
+async function internalRailwayIntrospectMutations(nameContains = []) {
+  const data = await railwayGql(
+    `query IntrospectMutations {
+      __schema {
+        mutationType {
+          fields {
+            name
+            args { name type { name kind ofType { name kind } } }
+          }
+        }
+      }
+    }`,
+    {},
+  );
+  const fields = data?.__schema?.mutationType?.fields || [];
+  const needles = nameContains.map((s) => String(s).toLowerCase());
+  return fields.filter((f) =>
+    needles.length === 0 || needles.some((n) => f.name.toLowerCase().includes(n)),
+  );
+}
+
 function getActor(req) {
   return req.get("x-actor") || req.body?.actor || req.query?.actor || "system";
 }
@@ -506,6 +533,22 @@ export function createRailwayManagedEnvRoutes({ requireKey, managedEnvService })
       res.json({ ok: true, project: data?.project || null });
     } catch (error) {
       console.error('[RAILWAY-TOPOLOGY] Error:', error.message);
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  /**
+   * GET /introspect-mutations?contains=delete,instance
+   * One-time schema discovery for finding the real mutation name to remove
+   * a service instance from a single environment.
+   */
+  router.get("/introspect-mutations", requireKey, async (req, res) => {
+    try {
+      const contains = String(req.query.contains || '').split(',').map((s) => s.trim()).filter(Boolean);
+      const fields = await internalRailwayIntrospectMutations(contains);
+      res.json({ ok: true, fields });
+    } catch (error) {
+      console.error('[RAILWAY-INTROSPECT] Error:', error.message);
       res.status(500).json({ ok: false, error: error.message });
     }
   });
