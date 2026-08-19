@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-19T15:35:16.166Z",
+  "generated_at": "2026-08-19T16:22:36.481Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13708,
   "files": [
@@ -21741,9 +21741,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 4159746,
-      "mtime": "2026-08-18T21:08:55.137Z",
-      "indexed_at": "2026-08-18T21:12:49.268Z"
+      "bytes": 4167069,
+      "mtime": "2026-08-19T15:35:17.885Z",
+      "indexed_at": "2026-08-19T16:22:36.481Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -46103,9 +46103,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 877747,
-      "mtime": "2026-08-18T21:08:36.899Z",
-      "indexed_at": "2026-08-18T21:08:53.507Z"
+      "bytes": 880676,
+      "mtime": "2026-08-19T16:21:10.687Z",
+      "indexed_at": "2026-08-19T16:22:36.481Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -79434,9 +79434,9 @@
     {
       "path": "scripts/lifeos-phase2-scheduler.mjs",
       "synopsis": "Phase2 daily ticks — future-self letter delivery + important-dates scan.",
-      "bytes": 3524,
-      "mtime": "2026-07-15T06:36:00.563Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 3944,
+      "mtime": "2026-08-19T16:10:59.774Z",
+      "indexed_at": "2026-08-19T16:22:36.481Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -94300,9 +94300,9 @@
     {
       "path": "services/autonomous-recovery-council.js",
       "synopsis": "Autonomous recovery orchestrator.",
-      "bytes": 7095,
-      "mtime": "2026-08-18T20:33:17.227Z",
-      "indexed_at": "2026-08-18T20:33:58.335Z"
+      "bytes": 7514,
+      "mtime": "2026-08-19T16:19:44.615Z",
+      "indexed_at": "2026-08-19T16:22:36.481Z"
     },
     {
       "path": "services/autonomous-telemetry-instrumentation.js",
