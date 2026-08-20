@@ -9304,7 +9304,7 @@
       "shipped_via": "governed_ship_queue"
     },
     {
-      "status": "pending",
+      "status": "done",
       "founder_gated": false,
       "attempts": 0,
       "action_type": "write_file_exact",
@@ -9336,14 +9336,14 @@
         }
       ],
       "blueprint_step_id": "TALOA-S64-MACOS-BODY-WIRE-001",
-      "commit_sha": null,
+      "commit_sha": "251687a91871f4d188915c89acf4e830cc40a7b3",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing:SemanticPerception; behavior_assertion_failed; behavior_proof",
-      "started_at": "2026-08-20T07:28:26.184Z",
+      "last_attempt_at": "2026-08-20T07:29:08.136Z",
+      "last_error": null,
+      "started_at": "2026-08-20T07:29:08.136Z",
       "same_signature_count": 0,
-      "revive_count": 1,
+      "revive_count": 0,
       "revived_at": "2026-08-20T07:29:02.415Z",
       "last_attempt": null,
       "demoted": false,
@@ -9381,7 +9381,11 @@
           "content_sha256": "2f947953cfa13f7cdc34e618f770ea8b070322bde56d1acca4f1ed05cda6cfdf"
         }
       },
-      "shipped_at": "2026-08-20T07:29:33.327Z"
+      "shipped_at": "2026-08-20T07:29:39.580Z",
+      "duration_ms": 31444,
+      "tokens_used": 0,
+      "shipped_via": "governed_ship_queue",
+      "heal_unblocked": false
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
