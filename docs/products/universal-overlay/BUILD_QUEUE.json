@@ -4809,7 +4809,7 @@
       "status": "blocked",
       "founder_gated": false,
       "attempts": 1,
-      "action_type": "write_file_exact",
+      "action_type": "author_then_write",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
       "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md §64",
@@ -4850,7 +4850,7 @@
       ],
       "blueprint_step_id": "TALOA-S64-ANDROID-BODY-WIRE-001",
       "exactness": {
-        "sealed": true,
+        "sealed": false,
         "sealed_at": "2026-08-20T07:21:55.922Z",
         "shipped_at": "2026-08-20T07:21:55.922Z",
         "commit_sha": null,
@@ -4900,16 +4900,13 @@
       "duration_ms": 21677,
       "tokens_used": 0,
       "failure_signature": "hidden_dependency",
-      "escalation_class": "same_signature_repeat",
-      "exact_inputs": {
-        "content_source_path": "docs/products/universal-overlay/twins/steps/TALOA-S64-ANDROID-BODY-WIRE-001.exact"
-      }
+      "escalation_class": "same_signature_repeat"
     },
     {
       "status": "blocked",
       "founder_gated": false,
       "attempts": 1,
-      "action_type": "write_file_exact",
+      "action_type": "author_then_write",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
       "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md §64",
@@ -4926,7 +4923,7 @@
       "blueprint_step_id": "TALOA-S64-MACOS-PERCEPTION-001",
       "same_signature_count": 0,
       "exactness": {
-        "sealed": true,
+        "sealed": false,
         "sealed_at": "2026-08-20T07:43:20.853Z",
         "shipped_at": "2026-08-20T07:43:20.853Z",
         "commit_sha": null,
@@ -4974,9 +4971,6 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "exact_inputs": {
-        "content_source_path": "docs/products/universal-overlay/twins/steps/TALOA-S64-MACOS-PERCEPTION-001.exact"
-      },
       "behavior_assertions": [
         {
           "type": "file_contains",
@@ -5071,10 +5065,10 @@
       "shipped_via": "governed_ship_queue"
     },
     {
-      "status": "blocked",
+      "status": "pending",
       "founder_gated": false,
-      "attempts": 1,
-      "action_type": "author_then_write",
+      "attempts": 0,
+      "action_type": "write_file_exact",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
       "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md §64",
@@ -5095,7 +5089,7 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-20T07:54:41.325Z",
+      "last_attempt_at": null,
       "last_error": "hidden_dependency",
       "started_at": "2026-08-20T07:54:41.164Z",
       "blocker_class": null,
@@ -5107,7 +5101,7 @@
       "demoted_at": null,
       "skip_reason": null,
       "escalation_required": false,
-      "revive_count": 5,
+      "revive_count": 6,
       "same_signature_count": 1,
       "behavior_assertions": [
         {
@@ -5120,9 +5114,9 @@
         }
       ],
       "exactness": {
-        "sealed": false,
-        "sealed_at": "2026-08-20T07:38:25.679Z",
-        "shipped_at": "2026-08-20T07:38:25.679Z",
+        "sealed": true,
+        "sealed_at": "2026-08-20T08:11:56.920Z",
+        "shipped_at": "2026-08-20T08:11:56.920Z",
         "commit_sha": null,
         "content_sha256": "9d313427884d2fd6599ce511275726c1940c5838d80b3fad32d77084bef43642",
         "target_file": "services/taloa/template-replay-service.js",
@@ -5141,27 +5135,30 @@
           "content_sha256": "9d313427884d2fd6599ce511275726c1940c5838d80b3fad32d77084bef43642"
         }
       },
-      "shipped_at": "2026-08-13T08:16:12.850Z",
+      "shipped_at": "2026-08-20T08:11:56.920Z",
       "failure_signature": "STEP_STATUS_FORBIDDEN",
       "tokens_used": 0,
       "duration_ms": 12000,
       "shipped_via": "governed_ship_queue",
       "reopened_at": "2026-08-20T06:30:52.529Z",
       "reopen_reason": "reachability_audit_2026-08-20: marked done via governed_ship_queue but has ZERO real callers anywhere in the live codebase (confirmed by direct grep across routes/, services/, startup/, and native Swift sources) -- exported/compiled but never invoked. Reopened per CLAUDE.md \"Acceptance Must Prove Reachability, Not Just Existence.\" Founder directive: universal-overlay blueprint is top priority, build it for real, do not stop.",
-      "revived_at": "2026-08-20T07:54:41.078Z",
+      "revived_at": "2026-08-20T08:11:04.650Z",
       "last_attempt": null,
       "no_op": null,
       "pre_existing": null,
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "escalation_class": "same_signature_repeat"
+      "escalation_class": "same_signature_repeat",
+      "exact_inputs": {
+        "content_source_path": "docs/products/universal-overlay/twins/steps/TALOA-S64-TEMPLATE-REPLAY-001.exact"
+      }
     },
     {
       "status": "blocked",
       "founder_gated": false,
       "attempts": 1,
-      "action_type": "write_file_exact",
+      "action_type": "author_then_write",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
       "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md §64",
@@ -5190,7 +5187,7 @@
         }
       ],
       "exactness": {
-        "sealed": true,
+        "sealed": false,
         "sealed_at": "2026-08-20T08:01:17.595Z",
         "shipped_at": "2026-08-20T08:01:17.595Z",
         "commit_sha": null,
@@ -5238,10 +5235,7 @@
       "pre_existing": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null,
-      "exact_inputs": {
-        "content_source_path": "docs/products/universal-overlay/twins/steps/TALOA-S64-PROMPT-INJECT-001.exact"
-      }
+      "blocker_resolution": null
     },
     {
       "status": "done",
