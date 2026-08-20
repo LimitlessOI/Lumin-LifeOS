@@ -251,6 +251,43 @@ async function internalRailwayDeployServiceLatest(serviceId, environmentId, comm
 }
 
 /**
+ * Trigger another service's own internal autopilot/cron build endpoint,
+ * reading its raw COMMAND_CENTER_KEY server-side and using it only for this
+ * one call -- never returned to the caller. Needed 2026-08-20: Costello's
+ * scheduled GitHub Actions workflows (including the ones that call this same
+ * endpoint on a cron) are blocked by a repo-level GitHub billing issue, so
+ * nothing has been telling its otherwise-healthy server to actually start
+ * building. This lets the conductor trigger a real build cycle directly
+ * against Costello's own already-working /internal/cron/autopilot route,
+ * independent of the blocked CI path -- same shape as
+ * internalRailwayWireCostelloDatabase's existing "read a real secret
+ * server-side, never expose it" pattern.
+ */
+async function internalRailwayTriggerAutopilot(serviceId, environmentId, { force = false } = {}) {
+  const projectId = process.env.RAILWAY_PROJECT_ID;
+  if (!projectId) throw new Error('RAILWAY_PROJECT_ID not set in environment');
+  if (!serviceId || !environmentId) throw new Error('serviceId and environmentId required');
+  const data = await railwayGql(
+    `query GetVarsRaw($projectId: String!, $environmentId: String!, $serviceId: String!) {
+      variables(projectId: $projectId, environmentId: $environmentId, serviceId: $serviceId)
+    }`,
+    { projectId, environmentId, serviceId },
+  );
+  const vars = data?.variables || {};
+  const targetDomain = vars.RAILWAY_PUBLIC_DOMAIN || vars.PUBLIC_BASE_URL || vars.APP_URL;
+  const key = vars.COMMAND_CENTER_KEY;
+  if (!targetDomain) throw new Error('target service has no RAILWAY_PUBLIC_DOMAIN/PUBLIC_BASE_URL/APP_URL');
+  if (!key) throw new Error('target service has no COMMAND_CENTER_KEY');
+  const base = targetDomain.startsWith('http') ? targetDomain.replace(/\/$/, '') : `https://${targetDomain}`;
+  const url = `${base}/internal/cron/autopilot?key=${encodeURIComponent(key)}${force ? '&force=1' : ''}`;
+  const res = await fetch(url, { method: 'GET' });
+  const text = await res.text();
+  let body;
+  try { body = JSON.parse(text); } catch { body = { raw: text.slice(0, 2000) }; }
+  return { http_status: res.status, target_domain: targetDomain, body };
+}
+
+/**
  * Point Costello's DATABASE_URL / APP_URL / PUBLIC_BASE_URL at its own real
  * dedicated database + its own real current Railway domain, WITHOUT the
  * caller ever needing to see or pass the raw connection string — built
@@ -922,6 +959,25 @@ export function createRailwayManagedEnvRoutes({ requireKey, managedEnvService })
       res.json({ ok: true, serviceId, environmentId, commit_sha: commit_sha || 'latest', data });
     } catch (error) {
       console.error('[RAILWAY-DEPLOY-SERVICE-LATEST] Error:', error.message);
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  /**
+   * POST /trigger-autopilot
+   * Body: { serviceId, environmentId, force? }
+   * Calls another service's own /internal/cron/autopilot endpoint using its
+   * real COMMAND_CENTER_KEY, read and used server-side only -- the key
+   * itself is never included in the response.
+   */
+  router.post("/trigger-autopilot", requireKey, async (req, res) => {
+    try {
+      const { serviceId, environmentId, force = false } = req.body || {};
+      const result = await internalRailwayTriggerAutopilot(serviceId, environmentId, { force: !!force });
+      console.log(`[TSOS-MACHINE] KNOW: STATE=RECEIPT VERB=TRIGGER_AUTOPILOT | serviceId=${serviceId} environmentId=${environmentId} http_status=${result.http_status}`);
+      res.json({ ok: true, serviceId, environmentId, ...result });
+    } catch (error) {
+      console.error('[RAILWAY-TRIGGER-AUTOPILOT] Error:', error.message);
       res.status(500).json({ ok: false, error: error.message });
     }
   });
