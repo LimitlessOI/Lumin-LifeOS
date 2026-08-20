@@ -8,5 +8,10 @@
     "signature": "35969169debb4115",
     "reason": "[BUILD-QUEUE-PLANNER] all proposed steps filtered (dedupe/already-done/no target_file) — fail closed",
     "stamped_at": "2026-08-01T15:56:05.913Z"
+  },
+  "stall-recovery-live-test": {
+    "signature": "test-signature-founder-observed-2026-08-19",
+    "reason": "[LIVE-TEST] deliberate founder-requested test stamp to observe SENTRY stall-recovery detect/unblock/alert in real production, not an organic failure. Isolated product_id with no real registry entry -- cannot touch any real build work.",
+    "stamped_at": "2026-08-19T23:55:00.000Z"
   }
 }
