@@ -4898,7 +4898,7 @@
       }
     },
     {
-      "status": "pending",
+      "status": "done",
       "founder_gated": false,
       "attempts": 0,
       "action_type": "write_file_exact",
@@ -4939,14 +4939,14 @@
           "content_sha256": "02e817eb2ebe3bcce3623a5a280979eadb0c0ea8f8523b6dc8bb88bc60472ba8"
         }
       },
-      "shipped_at": "2026-08-20T07:43:20.853Z",
-      "commit_sha": null,
+      "shipped_at": "2026-08-20T07:43:26.166Z",
+      "commit_sha": "5704e45ad2d27e17bd2a5d845bd789dacec97c9d",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-20T07:27:45.808Z",
+      "last_attempt_at": "2026-08-20T07:43:15.236Z",
       "last_error": null,
-      "started_at": "2026-08-20T07:27:45.808Z",
-      "duration_ms": 11330,
+      "started_at": "2026-08-20T07:43:15.236Z",
+      "duration_ms": 10930,
       "tokens_used": 0,
       "shipped_via": "governed_ship_queue",
       "heal_unblocked": false,
