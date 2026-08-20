@@ -288,6 +288,44 @@ async function internalRailwayTriggerAutopilot(serviceId, environmentId, { force
 }
 
 /**
+ * General-purpose sibling of internalRailwayTriggerAutopilot: call ANY
+ * internal endpoint on another service, authenticated with that service's
+ * own real COMMAND_CENTER_KEY as the x-command-key header (the convention
+ * every requireKey/requireUserOrKey middleware in this codebase checks) --
+ * never the query-string key= convention that only /internal/cron/autopilot
+ * happens to use. Same "read a real secret server-side, never expose it"
+ * pattern, generalized so a second one-off function isn't needed per route.
+ */
+async function internalRailwayCallInternalEndpoint(serviceId, environmentId, { path: targetPath, method = 'GET', body: reqBody = null } = {}) {
+  const projectId = process.env.RAILWAY_PROJECT_ID;
+  if (!projectId) throw new Error('RAILWAY_PROJECT_ID not set in environment');
+  if (!serviceId || !environmentId) throw new Error('serviceId and environmentId required');
+  if (!targetPath) throw new Error('path required');
+  const data = await railwayGql(
+    `query GetVarsRaw($projectId: String!, $environmentId: String!, $serviceId: String!) {
+      variables(projectId: $projectId, environmentId: $environmentId, serviceId: $serviceId)
+    }`,
+    { projectId, environmentId, serviceId },
+  );
+  const vars = data?.variables || {};
+  const targetDomain = vars.RAILWAY_PUBLIC_DOMAIN || vars.PUBLIC_BASE_URL || vars.APP_URL;
+  const key = vars.COMMAND_CENTER_KEY;
+  if (!targetDomain) throw new Error('target service has no RAILWAY_PUBLIC_DOMAIN/PUBLIC_BASE_URL/APP_URL');
+  if (!key) throw new Error('target service has no COMMAND_CENTER_KEY');
+  const base = targetDomain.startsWith('http') ? targetDomain.replace(/\/$/, '') : `https://${targetDomain}`;
+  const url = `${base}${targetPath.startsWith('/') ? '' : '/'}${targetPath}`;
+  const res = await fetch(url, {
+    method,
+    headers: { 'x-command-key': key, 'content-type': 'application/json' },
+    ...(reqBody != null ? { body: JSON.stringify(reqBody) } : {}),
+  });
+  const text = await res.text();
+  let respBody;
+  try { respBody = JSON.parse(text); } catch { respBody = { raw: text.slice(0, 2000) }; }
+  return { http_status: res.status, target_domain: targetDomain, body: respBody };
+}
+
+/**
  * Point Costello's DATABASE_URL / APP_URL / PUBLIC_BASE_URL at its own real
  * dedicated database + its own real current Railway domain, WITHOUT the
  * caller ever needing to see or pass the raw connection string — built
@@ -978,6 +1016,25 @@ export function createRailwayManagedEnvRoutes({ requireKey, managedEnvService })
       res.json({ ok: true, serviceId, environmentId, ...result });
     } catch (error) {
       console.error('[RAILWAY-TRIGGER-AUTOPILOT] Error:', error.message);
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  /**
+   * POST /call-internal-endpoint
+   * Body: { serviceId, environmentId, path, method?, body? }
+   * Calls any internal endpoint on another service, authenticated with that
+   * service's own real COMMAND_CENTER_KEY as the x-command-key header
+   * (never returned in the response).
+   */
+  router.post("/call-internal-endpoint", requireKey, async (req, res) => {
+    try {
+      const { serviceId, environmentId, path: targetPath, method = 'GET', body: reqBody = null } = req.body || {};
+      const result = await internalRailwayCallInternalEndpoint(serviceId, environmentId, { path: targetPath, method, body: reqBody });
+      console.log(`[TSOS-MACHINE] KNOW: STATE=RECEIPT VERB=CALL_INTERNAL_ENDPOINT | serviceId=${serviceId} environmentId=${environmentId} path=${targetPath} http_status=${result.http_status}`);
+      res.json({ ok: true, serviceId, environmentId, ...result });
+    } catch (error) {
+      console.error('[RAILWAY-CALL-INTERNAL-ENDPOINT] Error:', error.message);
       res.status(500).json({ ok: false, error: error.message });
     }
   });
