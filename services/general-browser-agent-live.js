@@ -3,7 +3,7 @@
  * @ssot docs/products/tc-service/PRODUCT_HOME.md
  */
 import { runBrowserGoal } from './general-browser-agent.js';
-import { observePage, makeDecider, makeEvidenceVerifier, makeAccountConfirmer, executeAction } from './general-browser-agent-runtime.js';
+import { observePage, makeDecider, makeEvidenceVerifier, makeAccountConfirmer, executeAction, makeAndroidBody } from './general-browser-agent-runtime.js';
 
 export async function runGoalOnSession({
     session,
@@ -19,11 +19,12 @@ export async function runGoalOnSession({
     allowRiskyActions = false,
     onScreenshot = null,
     onAfterStep = null,
-    logger = console
+    logger = console,
+    body = undefined // New optional body parameter
 }) {
-    const observe = async () => observePage(session);
+    const observe = body ? async () => body.observe(session) : async () => observePage(session);
     const decideAction = makeDecider({ callModel, tiers });
-    const act = async (action) => executeAction(session, action);
+    const act = body ? async (action) => body.act(session, action) : async (action) => executeAction(session, action);
     const verifyGoal = makeEvidenceVerifier({ mustContain, mustHaveSelector });
     const confirmContext = expectSiteHost || expectAccountText ? makeAccountConfirmer({ expectSiteHost, expectAccountText }) : null;
     const expectedContext = expectSiteHost || expectAccountText ? { site: expectSiteHost, account: expectAccountText } : null;
