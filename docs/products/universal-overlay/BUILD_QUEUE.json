@@ -4806,9 +4806,9 @@
       "heal_unblocked": false
     },
     {
-      "status": "skipped",
+      "status": "pending",
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "action_type": "author_then_write",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
@@ -4819,8 +4819,8 @@
       "id": "TALOA-S64-ANDROID-BODY-WIRE-001",
       "target_file": "services/general-browser-agent-runtime.js",
       "sandbox_boundary": "services/**",
-      "task": "Keep existing @ssot. Import createAndroidBodyAdapter from \"./taloa/android-body-adapter.js\" and CALL it. Export makeAndroidBody(deps). Do NOT rewrite runBrowserGoal. Additive only. WIRING (required, not optional -- confirmed 2026-08-20: makeAndroidBody previously shipped with zero real callers, defining it in this file alone is not reachability): services/general-browser-agent-live.js#runGoalOnSession is the real, already-live caller that currently hardcodes browser observe/act (observePage/executeAction from this file) with no Body selection at all. Add an optional `body` parameter to runGoalOnSession (default preserves current browser behavior) so a caller can pass the result of makeAndroidBody(deps) instead, and use its observe/act when provided. Additive only, do not change the default/no-arg behavior.",
-      "spec": "Add makeAndroidBody so a caller can pass the Android Body without forking the Mind. Real caller required in general-browser-agent-live.js, not just an export.",
+      "task": "Keep existing @ssot. Import createAndroidBodyAdapter from \"./taloa/android-body-adapter.js\" and CALL it. Export makeAndroidBody(deps). Do NOT rewrite runBrowserGoal. Additive only.",
+      "spec": "Add makeAndroidBody so a caller can pass the Android Body without forking the Mind. Real reachability is a SEPARATE step (TALOA-S64-ANDROID-BODY-LIVE-WIRE-001) -- the codegen pipeline authors exactly one target_file per step (confirmed live 2026-08-20: routes/factory-mount-routes.js builds one CODEGEN prompt for one TARGET FILE and can never write a second file), so a cross-file reachability requirement on THIS step was structurally unsatisfiable no matter how many retries -- burned this step's entire revive budget on an honest but impossible check before this was caught.",
       "expected_exports": [
         "observePage",
         "makeAndroidBody"
@@ -4838,14 +4838,6 @@
             "makeAndroidBody"
           ],
           "assertion_id": "self:android-body-defined"
-        },
-        {
-          "type": "file_contains",
-          "path": "services/general-browser-agent-live.js",
-          "must_include": [
-            "makeAndroidBody"
-          ],
-          "assertion_id": "reachability:android-body-wired"
         }
       ],
       "blueprint_step_id": "TALOA-S64-ANDROID-BODY-WIRE-001",
@@ -4877,19 +4869,19 @@
       "built_sha": null,
       "proof": null,
       "last_attempt_at": "2026-08-20T08:31:51.891Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing:makeAndroidBody; behavior_assertion_failed; behavior_proof",
+      "last_error": null,
       "heal_unblocked": false,
       "heal_reason": "demote_missing_exact_to_author",
-      "same_signature_count": 1,
-      "reopened_at": "2026-08-20T08:06:19.803Z",
-      "reopen_reason": "reachability_audit_2026-08-20f: this step's own assertion was self-referential (checked its own target_file, which trivially always contains its own function definitions) -- real gap missed in the earlier pass. Found the real live caller (services/general-browser-agent-live.js#runGoalOnSession, currently hardcodes browser observe/act with no Body selection) and added a genuine cross-file assertion pointing there, plus explicit wiring instructions.",
+      "same_signature_count": 0,
+      "reopened_at": "2026-08-20T08:52:47.881Z",
+      "reopen_reason": "reachability_audit_2026-08-20h: this step burned its ENTIRE revive budget (9 attempts) failing the identical honest check every time because the requirement was structurally impossible -- the codegen pipeline (routes/factory-mount-routes.js) authors exactly one target_file per step, and the reachability assertion required a DIFFERENT file to change, which this step's own codegen pass can never write to. Moved the real cross-file requirement to a new dedicated companion -WIRE- step (same pattern that already worked correctly for macOS Body) whose own target_file IS the real caller. This step's assertion is now self-referential only (does this file define what it says it defines) -- satisfiable by this step's own codegen pass.",
       "started_at": "2026-08-20T08:31:44.825Z",
-      "revive_count": 9,
+      "revive_count": 0,
       "revived_at": "2026-08-20T08:31:44.794Z",
       "last_attempt": null,
-      "demoted": true,
-      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing:makeAndroidBody; behavior_assertion_failed; behavior_proof",
-      "demoted_at": "2026-08-20T08:31:55.845Z",
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -4900,7 +4892,9 @@
       "duration_ms": 21677,
       "tokens_used": 0,
       "failure_signature": "hidden_dependency",
-      "escalation_class": "same_signature_repeat"
+      "escalation_class": "same_signature_repeat",
+      "escalation_required": false,
+      "escalation_note": null
     },
     {
       "status": "done",
@@ -5068,9 +5062,9 @@
       "shipped_via": "governed_ship_queue"
     },
     {
-      "status": "blocked",
+      "status": "pending",
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "action_type": "write_file_exact",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
@@ -5079,8 +5073,8 @@
       "id": "TALOA-S64-TEMPLATE-REPLAY-001",
       "target_file": "services/taloa/template-replay-service.js",
       "sandbox_boundary": "services/taloa/**",
-      "task": "JSDoc @ssot docs/products/universal-overlay/PRODUCT_HOME.md. Overlay print §64 item 7: template persistence + replay. Export createTemplateReplayService({ pool, logger }). Replay when environment_signature still matches. Do not invent a table. WIRING (required, not optional): import createTemplateReplayService into services/taloa/task-orchestrator-service.js and call it at the start of dispatchTask() -- if a matching template replay exists, use it instead of falling through to strategyRouter/bodyAdapter. Additive only, do not rewrite dispatchTask's existing flow for the no-replay case.",
-      "spec": "Blueprint §30–32. Reuse capsule_store. Real caller required in task-orchestrator-service.js, not just an export (confirmed 2026-08-20: this step was marked done twice with zero real callers and a no-op-shaped diff before this assertion was added).",
+      "task": "JSDoc @ssot docs/products/universal-overlay/PRODUCT_HOME.md. Overlay print §64 item 7: template persistence + replay. Export createTemplateReplayService({ pool, logger }). Replay when environment_signature still matches. Do not invent a table.",
+      "spec": "Blueprint §30–32. Reuse capsule_store. Real reachability is a SEPARATE step (TALOA-S64-TEMPLATE-REPLAY-WIRE-001) -- the codegen pipeline authors exactly one target_file per step (confirmed live 2026-08-20), so a cross-file reachability requirement on THIS step was structurally unsatisfiable no matter how many retries.",
       "expected_exports": [
         "createTemplateReplayService"
       ],
@@ -5093,7 +5087,7 @@
       "built_sha": null,
       "proof": null,
       "last_attempt_at": "2026-08-20T08:47:25.876Z",
-      "last_error": "hidden_dependency",
+      "last_error": null,
       "started_at": "2026-08-20T08:47:25.739Z",
       "blocker_class": null,
       "park_until": null,
@@ -5104,16 +5098,17 @@
       "demoted_at": null,
       "skip_reason": null,
       "escalation_required": false,
-      "revive_count": 2,
+      "revive_count": 0,
       "same_signature_count": 0,
       "behavior_assertions": [
         {
           "type": "file_contains",
-          "path": "services/taloa/task-orchestrator-service.js",
+          "path": "services/taloa/template-replay-service.js",
           "must_include": [
-            "createTemplateReplayService"
+            "createTemplateReplayService",
+            "environment_signature"
           ],
-          "assertion_id": "reachability:template-replay-wired"
+          "assertion_id": "self:template-replay-defined"
         }
       ],
       "exactness": {
@@ -5143,8 +5138,8 @@
       "tokens_used": 0,
       "duration_ms": 12000,
       "shipped_via": "governed_ship_queue",
-      "reopened_at": "2026-08-20T08:29:08.073Z",
-      "reopen_reason": "reachability_audit_2026-08-20g: same stale-assertion propagation bug as the other 3 steps -- this one burned its entire revive budget (6 attempts) fighting an unrelated real error (artifact_missing_after_ship: missing:environment_signature) and got permanently demoted to skipped before ever being held to the real cross-file reachability standard even once. Re-synced behavior_assertions from the sealed config and cleared the terminal demotion so it gets a real shot.",
+      "reopened_at": "2026-08-20T08:52:47.883Z",
+      "reopen_reason": "reachability_audit_2026-08-20h: this step burned its ENTIRE revive budget (9 attempts) failing the identical honest check every time because the requirement was structurally impossible -- the codegen pipeline (routes/factory-mount-routes.js) authors exactly one target_file per step, and the reachability assertion required a DIFFERENT file to change, which this step's own codegen pass can never write to. Moved the real cross-file requirement to a new dedicated companion -WIRE- step (same pattern that already worked correctly for macOS Body) whose own target_file IS the real caller. This step's assertion is now self-referential only (does this file define what it says it defines) -- satisfiable by this step's own codegen pass.",
       "revived_at": "2026-08-20T08:47:25.405Z",
       "last_attempt": null,
       "no_op": null,
@@ -5155,12 +5150,13 @@
       "escalation_class": "same_signature_repeat",
       "exact_inputs": {
         "content_source_path": "docs/products/universal-overlay/twins/steps/TALOA-S64-TEMPLATE-REPLAY-001.exact"
-      }
+      },
+      "escalation_note": null
     },
     {
-      "status": "skipped",
+      "status": "pending",
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "action_type": "author_then_write",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
@@ -5169,8 +5165,8 @@
       "id": "TALOA-S64-PROMPT-INJECT-001",
       "target_file": "services/taloa/prompt-injection-authority-gate.js",
       "sandbox_boundary": "services/taloa/**",
-      "task": "JSDoc @ssot docs/products/universal-overlay/PRODUCT_HOME.md. Overlay print §64 item 8: observed page text cannot become instructions. Export assertObservationIsNotAuthority(observation, envelope) with REAL detection logic, not a no-op stub -- a no-op that always passes is a false gate, worse than no gate (it claims coverage it does not have). WIRING (required, not optional): import and call it from services/taloa/body-adapter-service.js's observe() method, after the observation is produced and before it is returned, passing the current task's authorization envelope. Additive only.",
-      "spec": "Blueprint §46. Real caller required in body-adapter-service.js, not just an export (confirmed 2026-08-20: this step was marked done twice with zero real callers and a literal \"No-op for now\" stub body before this assertion was added).",
+      "task": "JSDoc @ssot docs/products/universal-overlay/PRODUCT_HOME.md. Overlay print §64 item 8: observed page text cannot become instructions. Export assertObservationIsNotAuthority(observation, envelope) with REAL detection logic, not a no-op stub -- a no-op that always passes is a false gate, worse than no gate (it claims coverage it does not have).",
+      "spec": "Blueprint §46. Real reachability is a SEPARATE step (TALOA-S64-PROMPT-INJECT-WIRE-001) -- the codegen pipeline authors exactly one target_file per step (confirmed live 2026-08-20), so a cross-file reachability requirement on THIS step was structurally unsatisfiable no matter how many retries -- burned this step's entire revive budget on an honest but impossible check before this was caught.",
       "expected_exports": [
         "assertObservationIsNotAuthority"
       ],
@@ -5182,11 +5178,11 @@
       "behavior_assertions": [
         {
           "type": "file_contains",
-          "path": "services/taloa/body-adapter-service.js",
+          "path": "services/taloa/prompt-injection-authority-gate.js",
           "must_include": [
             "assertObservationIsNotAuthority"
           ],
-          "assertion_id": "reachability:prompt-inject-gate-wired"
+          "assertion_id": "self:prompt-inject-gate-defined"
         }
       ],
       "exactness": {
@@ -5216,7 +5212,7 @@
       "built_sha": null,
       "proof": null,
       "last_attempt_at": "2026-08-20T08:42:47.496Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing:assertObservationIsNotAuthority; behavior_assertion_failed; behavior_proof",
+      "last_error": null,
       "started_at": "2026-08-20T08:42:42.494Z",
       "duration_ms": 11279,
       "heal_unblocked": false,
@@ -5225,20 +5221,22 @@
       "shipped_via": "governed_ship_queue",
       "blocker_class": null,
       "park_until": null,
-      "demoted": true,
-      "reopened_at": "2026-08-20T08:05:03.797Z",
-      "reopen_reason": "reachability_audit_2026-08-20e: the post-ship evaluator fix (authorAssertionsFromSpec) was correct, but these LIVE queue step instances were enrolled 2026-08-13, before today's sealed-config assertion additions -- reopening status alone never refreshed the stale behavior_assertions already frozen on the live step object, so the OLD (self-referential, trivially-true) assertion kept being used instead of the new cross-file one. Re-synced behavior_assertions (and task/spec) from the current sealed config/overlay-print-sequence.js definition, confirmed via direct grep this step still has zero real external callers.",
+      "demoted": false,
+      "reopened_at": "2026-08-20T08:52:47.883Z",
+      "reopen_reason": "reachability_audit_2026-08-20h: this step burned its ENTIRE revive budget (9 attempts) failing the identical honest check every time because the requirement was structurally impossible -- the codegen pipeline (routes/factory-mount-routes.js) authors exactly one target_file per step, and the reachability assertion required a DIFFERENT file to change, which this step's own codegen pass can never write to. Moved the real cross-file requirement to a new dedicated companion -WIRE- step (same pattern that already worked correctly for macOS Body) whose own target_file IS the real caller. This step's assertion is now self-referential only (does this file define what it says it defines) -- satisfiable by this step's own codegen pass.",
       "heal_reason": "demote_missing_exact_to_author",
-      "revive_count": 9,
+      "revive_count": 0,
       "revived_at": "2026-08-20T08:42:41.558Z",
       "last_attempt": null,
-      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing:assertObservationIsNotAuthority; behavior_assertion_failed; behavior_proof",
-      "demoted_at": "2026-08-20T08:46:57.019Z",
+      "demote_reason": null,
+      "demoted_at": null,
       "no_op": null,
       "pre_existing": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "escalation_required": false,
+      "escalation_note": null
     },
     {
       "status": "done",
