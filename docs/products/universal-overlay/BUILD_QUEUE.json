@@ -9486,12 +9486,13 @@
       "blocker_resolution": null,
       "tokens_used": 0,
       "failure_signature": "hidden_dependency",
-      "escalation_class": "same_signature_repeat"
+      "escalation_class": "same_signature_repeat",
+      "heal_reason": "demote_missing_exact_to_author"
     },
     {
-      "status": "pending",
+      "status": "blocked",
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "action_type": "write_file_exact",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
@@ -9544,7 +9545,14 @@
           "content_sha256": "6fb024a6773775c8f48170c469669407ab3f5b28874d57b2bf9bb173955fdba6"
         }
       },
-      "shipped_at": "2026-08-20T09:02:45.479Z"
+      "shipped_at": "2026-08-20T09:02:45.479Z",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-08-20T09:03:01.607Z",
+      "last_error": "SLICE_COST_UNTRACKED: tokens_used required on every built slice (0 allowed for exact/no-codegen)",
+      "started_at": "2026-08-20T09:02:40.769Z",
+      "duration_ms": 20838
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
