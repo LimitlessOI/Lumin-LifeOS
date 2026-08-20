@@ -4809,7 +4809,7 @@
       "status": "blocked",
       "founder_gated": false,
       "attempts": 1,
-      "action_type": "write_file_exact",
+      "action_type": "author_then_write",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
       "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md §64",
@@ -4841,11 +4841,8 @@
         }
       ],
       "blueprint_step_id": "TALOA-S64-ANDROID-BODY-WIRE-001",
-      "exact_inputs": {
-        "content_source_path": "docs/products/universal-overlay/twins/steps/TALOA-S64-ANDROID-BODY-WIRE-001.exact"
-      },
       "exactness": {
-        "sealed": true,
+        "sealed": false,
         "sealed_at": "2026-08-13T06:54:09.126Z",
         "shipped_at": "2026-08-13T06:54:09.126Z",
         "commit_sha": "cf51b3bcd28c0908e199d720daa4be8a9aa63a60",
@@ -4881,9 +4878,9 @@
       "started_at": "2026-08-20T06:44:32.104Z"
     },
     {
-      "status": "blocked",
+      "status": "pending",
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "action_type": "write_file_exact",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
@@ -4900,15 +4897,12 @@
       ],
       "blueprint_step_id": "TALOA-S64-MACOS-PERCEPTION-001",
       "same_signature_count": 0,
-      "exact_inputs": {
-        "content_source_path": "docs/products/universal-overlay/twins/steps/TALOA-S64-MACOS-PERCEPTION-001.exact"
-      },
       "exactness": {
         "sealed": true,
-        "sealed_at": "2026-08-13T07:44:49.071Z",
-        "shipped_at": "2026-08-13T07:44:49.071Z",
+        "sealed_at": "2026-08-20T06:58:48.695Z",
+        "shipped_at": "2026-08-20T06:58:48.695Z",
         "commit_sha": null,
-        "content_sha256": "27aaa0ed1519adae39ac5d5120e579ff76d4136aa9ed81b7aabd1a26f69dee56",
+        "content_sha256": "02e817eb2ebe3bcce3623a5a280979eadb0c0ea8f8523b6dc8bb88bc60472ba8",
         "target_file": "native/macos-overlay/SemanticPerception.swift",
         "reverse": {
           "mode": "delete_file",
@@ -4922,14 +4916,14 @@
         "rebuild": {
           "action_type": "write_file_exact",
           "content_source_path": "docs/products/universal-overlay/twins/steps/TALOA-S64-MACOS-PERCEPTION-001.exact",
-          "content_sha256": "27aaa0ed1519adae39ac5d5120e579ff76d4136aa9ed81b7aabd1a26f69dee56"
+          "content_sha256": "02e817eb2ebe3bcce3623a5a280979eadb0c0ea8f8523b6dc8bb88bc60472ba8"
         }
       },
-      "shipped_at": "2026-08-13T07:44:49.071Z",
+      "shipped_at": "2026-08-20T06:58:48.695Z",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-20T06:43:39.026Z",
+      "last_attempt_at": null,
       "last_error": "hidden_dependency",
       "started_at": "2026-08-20T06:43:38.960Z",
       "duration_ms": 15745,
@@ -4938,7 +4932,23 @@
       "heal_unblocked": false,
       "heal_reason": "demote_missing_exact_to_author",
       "reopened_at": "2026-08-20T06:30:52.529Z",
-      "reopen_reason": "reachability_audit_2026-08-20: marked done via governed_ship_queue but has ZERO real callers anywhere in the live codebase (confirmed by direct grep across routes/, services/, startup/, and native Swift sources) -- exported/compiled but never invoked. Reopened per CLAUDE.md \"Acceptance Must Prove Reachability, Not Just Existence.\" Founder directive: universal-overlay blueprint is top priority, build it for real, do not stop."
+      "reopen_reason": "reachability_audit_2026-08-20: marked done via governed_ship_queue but has ZERO real callers anywhere in the live codebase (confirmed by direct grep across routes/, services/, startup/, and native Swift sources) -- exported/compiled but never invoked. Reopened per CLAUDE.md \"Acceptance Must Prove Reachability, Not Just Existence.\" Founder directive: universal-overlay blueprint is top priority, build it for real, do not stop.",
+      "revive_count": 1,
+      "revived_at": "2026-08-20T06:58:42.979Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "exact_inputs": {
+        "content_source_path": "docs/products/universal-overlay/twins/steps/TALOA-S64-MACOS-PERCEPTION-001.exact"
+      }
     },
     {
       "status": "done",
@@ -5026,7 +5036,7 @@
       "status": "blocked",
       "founder_gated": false,
       "attempts": 1,
-      "action_type": "write_file_exact",
+      "action_type": "author_then_write",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
       "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md §64",
@@ -5071,11 +5081,8 @@
           "assertion_id": "expected_exports:services/taloa/template-replay-service.js"
         }
       ],
-      "exact_inputs": {
-        "content_source_path": "docs/products/universal-overlay/twins/steps/TALOA-S64-TEMPLATE-REPLAY-001.exact"
-      },
       "exactness": {
-        "sealed": true,
+        "sealed": false,
         "sealed_at": "2026-08-13T08:16:12.850Z",
         "shipped_at": "2026-08-13T08:16:12.850Z",
         "commit_sha": null,
@@ -5108,7 +5115,7 @@
       "status": "blocked",
       "founder_gated": false,
       "attempts": 1,
-      "action_type": "write_file_exact",
+      "action_type": "author_then_write",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
       "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md §64",
@@ -5136,11 +5143,8 @@
           "assertion_id": "expected_exports:services/taloa/prompt-injection-authority-gate.js"
         }
       ],
-      "exact_inputs": {
-        "content_source_path": "docs/products/universal-overlay/twins/steps/TALOA-S64-PROMPT-INJECT-001.exact"
-      },
       "exactness": {
-        "sealed": true,
+        "sealed": false,
         "sealed_at": "2026-08-13T08:19:33.589Z",
         "shipped_at": "2026-08-13T08:19:33.589Z",
         "commit_sha": null,
@@ -5177,7 +5181,8 @@
       "park_until": null,
       "demoted": false,
       "reopened_at": "2026-08-20T06:30:52.529Z",
-      "reopen_reason": "reachability_audit_2026-08-20: marked done via governed_ship_queue but has ZERO real callers anywhere in the live codebase (confirmed by direct grep across routes/, services/, startup/, and native Swift sources) -- exported/compiled but never invoked. Reopened per CLAUDE.md \"Acceptance Must Prove Reachability, Not Just Existence.\" Founder directive: universal-overlay blueprint is top priority, build it for real, do not stop."
+      "reopen_reason": "reachability_audit_2026-08-20: marked done via governed_ship_queue but has ZERO real callers anywhere in the live codebase (confirmed by direct grep across routes/, services/, startup/, and native Swift sources) -- exported/compiled but never invoked. Reopened per CLAUDE.md \"Acceptance Must Prove Reachability, Not Just Existence.\" Founder directive: universal-overlay blueprint is top priority, build it for real, do not stop.",
+      "heal_reason": "demote_missing_exact_to_author"
     },
     {
       "status": "done",
