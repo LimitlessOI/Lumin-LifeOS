@@ -4806,7 +4806,7 @@
       "heal_unblocked": false
     },
     {
-      "status": "pending",
+      "status": "done",
       "founder_gated": false,
       "attempts": 0,
       "action_type": "write_file_exact",
@@ -4863,19 +4863,19 @@
           "content_sha256": "f4d99ad6e76f8e8405b57989bb0e2ee0c8c7ec6adca69c1a5085726f791e1623"
         }
       },
-      "shipped_at": "2026-08-20T08:56:07.992Z",
+      "shipped_at": "2026-08-20T08:56:21.525Z",
       "shipped_via": "governed_ship_queue",
-      "commit_sha": null,
+      "commit_sha": "c4561443cabbc0979e858d48dde12cb8126644fd",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-20T08:31:51.891Z",
+      "last_attempt_at": "2026-08-20T08:56:00.982Z",
       "last_error": null,
       "heal_unblocked": false,
       "heal_reason": "demote_missing_exact_to_author",
       "same_signature_count": 0,
       "reopened_at": "2026-08-20T08:52:47.881Z",
       "reopen_reason": "reachability_audit_2026-08-20h: this step burned its ENTIRE revive budget (9 attempts) failing the identical honest check every time because the requirement was structurally impossible -- the codegen pipeline (routes/factory-mount-routes.js) authors exactly one target_file per step, and the reachability assertion required a DIFFERENT file to change, which this step's own codegen pass can never write to. Moved the real cross-file requirement to a new dedicated companion -WIRE- step (same pattern that already worked correctly for macOS Body) whose own target_file IS the real caller. This step's assertion is now self-referential only (does this file define what it says it defines) -- satisfiable by this step's own codegen pass.",
-      "started_at": "2026-08-20T08:31:44.825Z",
+      "started_at": "2026-08-20T08:56:00.982Z",
       "revive_count": 0,
       "revived_at": "2026-08-20T08:31:44.794Z",
       "last_attempt": null,
@@ -4889,7 +4889,7 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "duration_ms": 21677,
+      "duration_ms": 20543,
       "tokens_used": 0,
       "failure_signature": "hidden_dependency",
       "escalation_class": "same_signature_repeat",
@@ -9409,6 +9409,37 @@
       "tokens_used": 0,
       "shipped_via": "governed_ship_queue",
       "heal_unblocked": false
+    },
+    {
+      "status": "pending",
+      "founder_gated": false,
+      "attempts": 0,
+      "action_type": "author_then_write",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "mission_id": "PRODUCT-universal-overlay",
+      "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md §64",
+      "depends_on": [
+        "TALOA-S64-ANDROID-BODY-WIRE-001"
+      ],
+      "id": "TALOA-S64-ANDROID-BODY-LIVE-WIRE-001",
+      "target_file": "services/general-browser-agent-live.js",
+      "sandbox_boundary": "services/**",
+      "task": "Real reachability companion to TALOA-S64-ANDROID-BODY-WIRE-001, same pattern as TALOA-S64-MACOS-BODY-WIRE-001 for the macOS Body: THIS step's target_file is the actual live caller, so its own codegen pass can satisfy the check. runGoalOnSession currently hardcodes browser observe/act (observePage/executeAction from ./general-browser-agent-runtime.js) with no Body selection. Import makeAndroidBody from ./general-browser-agent-runtime.js. Add an optional `body` parameter to runGoalOnSession (default undefined, preserving current browser-only behavior exactly). When body is provided, use body.observe/body.act instead of the hardcoded browser observe/act. Additive only -- do not change default/no-arg behavior.",
+      "spec": "Closes the real gap TALOA-S64-ANDROID-BODY-WIRE-001 could not close itself: makeAndroidBody existed but had zero callers anywhere (confirmed by direct grep, 2026-08-20).",
+      "file_contains": [
+        "makeAndroidBody"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "file_contains",
+          "path": "services/general-browser-agent-live.js",
+          "must_include": [
+            "makeAndroidBody"
+          ],
+          "assertion_id": "reachability:android-body-live-wired"
+        }
+      ],
+      "blueprint_step_id": "TALOA-S64-ANDROID-BODY-LIVE-WIRE-001"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
