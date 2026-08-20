@@ -4898,10 +4898,10 @@
       }
     },
     {
-      "status": "blocked",
+      "status": "pending",
       "founder_gated": false,
-      "attempts": 1,
-      "action_type": "author_then_write",
+      "attempts": 0,
+      "action_type": "write_file_exact",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
       "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md §64",
@@ -4918,9 +4918,9 @@
       "blueprint_step_id": "TALOA-S64-MACOS-PERCEPTION-001",
       "same_signature_count": 0,
       "exactness": {
-        "sealed": false,
-        "sealed_at": "2026-08-20T06:58:48.695Z",
-        "shipped_at": "2026-08-20T06:58:48.695Z",
+        "sealed": true,
+        "sealed_at": "2026-08-20T07:27:51.251Z",
+        "shipped_at": "2026-08-20T07:27:51.251Z",
         "commit_sha": null,
         "content_sha256": "02e817eb2ebe3bcce3623a5a280979eadb0c0ea8f8523b6dc8bb88bc60472ba8",
         "target_file": "native/macos-overlay/SemanticPerception.swift",
@@ -4939,11 +4939,11 @@
           "content_sha256": "02e817eb2ebe3bcce3623a5a280979eadb0c0ea8f8523b6dc8bb88bc60472ba8"
         }
       },
-      "shipped_at": "2026-08-20T06:58:55.197Z",
+      "shipped_at": "2026-08-20T07:27:51.251Z",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-20T07:12:45.770Z",
+      "last_attempt_at": null,
       "last_error": "hidden_dependency",
       "started_at": "2026-08-20T07:12:45.694Z",
       "duration_ms": 12213,
@@ -4953,8 +4953,8 @@
       "heal_reason": "demote_missing_exact_to_author",
       "reopened_at": "2026-08-20T07:08:28.181Z",
       "reopen_reason": "reachability_audit_2026-08-20b: re-closed done a second time via a trivial, non-substantive diff (`import Vision` + a comment) that does not add any real call site -- confirmed zero callers anywhere in the native Swift sources both before and after this ship. Root cause: this step never had a reachability behavior_assertion, so nothing could force real wiring. Fixed at the source: added a reachability assertion (native/macos-overlay/ScreenControlCommands.swift must reference SemanticPerception) plus a new companion TALOA-S64-MACOS-BODY-WIRE-001 step mirroring the existing Android wire pattern. Reopening so the next attempt is held to the real standard.",
-      "revive_count": 0,
-      "revived_at": "2026-08-20T06:58:42.979Z",
+      "revive_count": 1,
+      "revived_at": "2026-08-20T07:27:45.795Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -4965,7 +4965,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "exact_inputs": {
+        "content_source_path": "docs/products/universal-overlay/twins/steps/TALOA-S64-MACOS-PERCEPTION-001.exact"
+      }
     },
     {
       "status": "done",
@@ -5053,7 +5056,7 @@
       "status": "blocked",
       "founder_gated": false,
       "attempts": 1,
-      "action_type": "write_file_exact",
+      "action_type": "author_then_write",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
       "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md §64",
@@ -5099,7 +5102,7 @@
         }
       ],
       "exactness": {
-        "sealed": true,
+        "sealed": false,
         "sealed_at": "2026-08-20T07:02:43.299Z",
         "shipped_at": "2026-08-20T07:02:43.299Z",
         "commit_sha": null,
@@ -5133,10 +5136,7 @@
       "pre_existing": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null,
-      "exact_inputs": {
-        "content_source_path": "docs/products/universal-overlay/twins/steps/TALOA-S64-TEMPLATE-REPLAY-001.exact"
-      }
+      "blocker_resolution": null
     },
     {
       "status": "blocked",
