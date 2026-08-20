@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-20T08:56:17.515Z",
+  "generated_at": "2026-08-20T08:56:39.194Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13714,
   "files": [
@@ -103480,9 +103480,9 @@
     {
       "path": "services/taloa/prompt-injection-authority-gate.js",
       "synopsis": "Exports assertObservationIsNotAuthority — services/taloa/prompt-injection-authority-gate.js.",
-      "bytes": 1526,
-      "mtime": "2026-08-20T08:01:21.768Z",
-      "indexed_at": "2026-08-20T08:01:21.768Z",
+      "bytes": 5864,
+      "mtime": "2026-08-20T08:56:39.194Z",
+      "indexed_at": "2026-08-20T08:56:39.194Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md Overlay print §64 item 8"
       ]
