@@ -5259,9 +5259,9 @@
       }
     },
     {
-      "status": "pending",
+      "status": "blocked",
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "action_type": "write_file_exact",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
@@ -5281,12 +5281,12 @@
         "verify"
       ],
       "blueprint_step_id": "TALOA-S64-MACOS-BODY-001",
-      "commit_sha": "7617bd0b1b52ee45681cbc5f16d64e5afdcfc095",
+      "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-13T08:06:34.464Z",
-      "last_error": null,
-      "started_at": "2026-08-13T08:06:34.464Z",
+      "last_attempt_at": "2026-08-20T06:59:02.223Z",
+      "last_error": "hidden_dependency",
+      "started_at": "2026-08-20T06:59:02.150Z",
       "heal_unblocked": false,
       "heal_reason": "clear_false_NOT_ON_BLUEPRINT_2026-08-13",
       "blocker_class": null,
