@@ -5074,9 +5074,9 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-20T07:38:15.772Z",
-      "last_error": "STEP_STATUS_FORBIDDEN",
-      "started_at": "2026-08-20T07:38:15.736Z",
+      "last_attempt_at": "2026-08-20T07:38:32.902Z",
+      "last_error": "artifact_missing_after_ship: artifact_proof_failed: missing:environment_signature",
+      "started_at": "2026-08-20T07:38:19.603Z",
       "blocker_class": null,
       "park_until": null,
       "heal_unblocked": false,
@@ -5086,7 +5086,7 @@
       "demoted_at": null,
       "skip_reason": null,
       "escalation_required": false,
-      "revive_count": 3,
+      "revive_count": 4,
       "same_signature_count": 1,
       "behavior_assertions": [
         {
@@ -5120,14 +5120,14 @@
           "content_sha256": "9d313427884d2fd6599ce511275726c1940c5838d80b3fad32d77084bef43642"
         }
       },
-      "shipped_at": "2026-08-20T07:38:25.679Z",
+      "shipped_at": "2026-08-13T08:16:12.850Z",
       "failure_signature": "STEP_STATUS_FORBIDDEN",
       "tokens_used": 0,
       "duration_ms": 12000,
       "shipped_via": "governed_ship_queue",
       "reopened_at": "2026-08-20T06:30:52.529Z",
       "reopen_reason": "reachability_audit_2026-08-20: marked done via governed_ship_queue but has ZERO real callers anywhere in the live codebase (confirmed by direct grep across routes/, services/, startup/, and native Swift sources) -- exported/compiled but never invoked. Reopened per CLAUDE.md \"Acceptance Must Prove Reachability, Not Just Existence.\" Founder directive: universal-overlay blueprint is top priority, build it for real, do not stop.",
-      "revived_at": "2026-08-20T07:38:15.691Z",
+      "revived_at": "2026-08-20T07:38:19.569Z",
       "last_attempt": null,
       "no_op": null,
       "pre_existing": null,
