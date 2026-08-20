@@ -131,6 +131,10 @@ extension ScreenControl {
         let requestId = cmd["request_id"] as? String ?? UUID().uuidString
         TaloaLog.write("cmd.recv", "op=\(op) id=\(requestId)")
 
+        // Instantiate MacOsBodyAdapter here. It will use SemanticPerception.
+        // This closes the reachability gap.
+        let bodyAdapter = MacOsBodyAdapter()
+
         switch op {
         case "state":
             writeResult([
@@ -330,12 +334,46 @@ extension ScreenControl {
             }
             writeResult(["ok": true, "op": op, "request_id": requestId, "typed_characters": text.count])
 
+        // MARK: - Semantic Body commands
+        case "observe":
+            let result = bodyAdapter.observe()
+            writeResult(["ok": result.ok, "op": op, "request_id": requestId, "semantic_frame": result.semanticFrame])
+
+        case "capture_semantic":
+            let result = bodyAdapter.capture()
+            writeResult(["ok": result.ok, "op": op, "request_id": requestId, "semantic_frame": result.semanticFrame])
+
+        case "click_semantic":
+            guard let x = number(cmd["x"]), let y = number(cmd["y"]) else {
+                writeResult(["ok": false, "op": op, "request_id": requestId, "error": "x_and_y_required"])
+                return
+            }
+            let target = CGPoint(x: x, y: y)
+            let result = bodyAdapter.click(at: target)
+            writeResult(["ok": result.ok, "op": op, "request_id": requestId, "action_outcome": result.actionOutcome])
+
+        case "type_semantic":
+            let text = cmd["text"] as? String ?? ""
+            let result = bodyAdapter.type(text: text)
+            writeResult(["ok": result.ok, "op": op, "request_id": requestId, "action_outcome": result.actionOutcome])
+
+        case "point_semantic":
+            guard let x = number(cmd["x"]), let y = number(cmd["y"]) else {
+                writeResult(["ok": false, "op": op, "request_id": requestId, "error": "x_and_y_required"])
+                return
+            }
+            let target = CGPoint(x: x, y: y)
+            let result = bodyAdapter.point(at: target)
+            writeResult(["ok": result.ok, "op": op, "request_id": requestId, "action_outcome": result.actionOutcome])
+
+
         default:
             writeResult(["ok": false, "op": op, "request_id": requestId,
                          "error": "unknown_op",
                          "supported": ["state", "highlight", "point", "caption", "spotlight",
                                        "arrow", "walkthrough", "clear",
-                                       "capture", "capture_all", "click", "type"]])
+                                       "capture", "capture_all", "click", "type",
+                                       "observe", "capture_semantic", "click_semantic", "type_semantic", "point_semantic"]])
         }
     }
 
