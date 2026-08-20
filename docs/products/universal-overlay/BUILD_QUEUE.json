@@ -4806,9 +4806,9 @@
       "heal_unblocked": false
     },
     {
-      "status": "pending",
+      "status": "blocked",
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "action_type": "write_file_exact",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
@@ -4863,19 +4863,19 @@
           "content_sha256": "f4d99ad6e76f8e8405b57989bb0e2ee0c8c7ec6adca69c1a5085726f791e1623"
         }
       },
-      "shipped_at": "2026-08-20T07:02:24.143Z",
+      "shipped_at": "2026-08-13T06:54:09.126Z",
       "shipped_via": "governed_ship_queue",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
-      "last_error": "hidden_dependency",
+      "last_attempt_at": "2026-08-20T07:02:33.146Z",
+      "last_error": "SLICE_COST_UNTRACKED: tokens_used required on every built slice (0 allowed for exact/no-codegen)",
       "heal_unblocked": false,
       "heal_reason": "demote_missing_exact_to_author",
       "same_signature_count": 0,
       "reopened_at": "2026-08-20T06:30:52.527Z",
       "reopen_reason": "reachability_audit_2026-08-20: marked done via governed_ship_queue but has ZERO real callers anywhere in the live codebase (confirmed by direct grep across routes/, services/, startup/, and native Swift sources) -- exported/compiled but never invoked. Reopened per CLAUDE.md \"Acceptance Must Prove Reachability, Not Just Existence.\" Founder directive: universal-overlay blueprint is top priority, build it for real, do not stop.",
-      "started_at": "2026-08-20T06:44:32.104Z",
+      "started_at": "2026-08-20T07:02:15.397Z",
       "revive_count": 1,
       "revived_at": "2026-08-20T07:01:25.940Z",
       "last_attempt": null,
@@ -4891,7 +4891,8 @@
       "blocker_resolution": null,
       "exact_inputs": {
         "content_source_path": "docs/products/universal-overlay/twins/steps/TALOA-S64-ANDROID-BODY-WIRE-001.exact"
-      }
+      },
+      "duration_ms": 17748
     },
     {
       "status": "done",
