@@ -4901,7 +4901,7 @@
       "status": "done",
       "founder_gated": false,
       "attempts": 0,
-      "action_type": "write_file_exact",
+      "action_type": "author_then_write",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
       "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md §64",
@@ -4918,9 +4918,9 @@
       "blueprint_step_id": "TALOA-S64-MACOS-PERCEPTION-001",
       "same_signature_count": 0,
       "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-08-20T07:27:51.251Z",
-        "shipped_at": "2026-08-20T07:27:51.251Z",
+        "sealed": false,
+        "sealed_at": "2026-08-20T06:58:48.695Z",
+        "shipped_at": "2026-08-20T06:58:48.695Z",
         "commit_sha": null,
         "content_sha256": "02e817eb2ebe3bcce3623a5a280979eadb0c0ea8f8523b6dc8bb88bc60472ba8",
         "target_file": "native/macos-overlay/SemanticPerception.swift",
@@ -4965,10 +4965,7 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null,
-      "exact_inputs": {
-        "content_source_path": "docs/products/universal-overlay/twins/steps/TALOA-S64-MACOS-PERCEPTION-001.exact"
-      }
+      "blocker_resolution": null
     },
     {
       "status": "done",
@@ -5299,7 +5296,7 @@
       "status": "pending",
       "founder_gated": false,
       "attempts": 0,
-      "action_type": "author_then_write",
+      "action_type": "write_file_exact",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
       "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md §64",
@@ -5336,11 +5333,11 @@
       "revive_count": 1,
       "same_signature_count": 0,
       "exactness": {
-        "sealed": false,
-        "sealed_at": "2026-08-13T08:00:28.382Z",
-        "shipped_at": "2026-08-13T08:00:28.382Z",
+        "sealed": true,
+        "sealed_at": "2026-08-20T07:28:11.775Z",
+        "shipped_at": "2026-08-20T07:28:11.775Z",
         "commit_sha": null,
-        "content_sha256": "4d34e1d2088564f729449f9b6b721c4a8d8c39af99ea08473b423725ace1947e",
+        "content_sha256": "d43d8a48c68aa0c3ecd4a2be545727702c465c0829683c61bab1d078aa703ede",
         "target_file": "native/macos-overlay/MacOsBodyAdapter.swift",
         "reverse": {
           "mode": "delete_file",
@@ -5349,93 +5346,15 @@
           "prior_content_sha256": null
         },
         "grounding": {
-          "status": "INDETERMINATE",
-          "reason": "indeterminate_sql: SQL string could not be parsed for table names",
-          "details": {
-            "filePath": "/usr/src/app/native/macos-overlay/MacOsBodyAdapter.swift",
-            "hash": "4d34e1d2088564f729449f9b6b721c4a8d8c39af99ea08473b423725ace1947e",
-            "importChecks": [],
-            "sqlChecks": [
-              {
-                "text": "observe",
-                "status": "PASS",
-                "reason": "not_a_sql_string"
-              },
-              {
-                "text": "verify",
-                "status": "PASS",
-                "reason": "not_a_sql_string"
-              },
-              {
-                "text": "s scope.\n                os_log(\"MacOsBodyAdapter observed new screenshot data.\"",
-                "status": "PASS",
-                "reason": "not_a_sql_string"
-              },
-              {
-                "text": " part for the semantic tree\n                // The ",
-                "status": "PASS",
-                "reason": "not_a_sql_string"
-              },
-              {
-                "text": " part would involve an independent mechanism checking if the semantic tree\n     ",
-                "status": "PASS",
-                "reason": "not_a_sql_string"
-              },
-              {
-                "text": "verify",
-                "status": "PASS",
-                "reason": "not_a_sql_string"
-              },
-              {
-                "text": "d need to capture pre-action state, then post-action state.\n        // Here, we ",
-                "status": "INDETERMINATE",
-                "reason": "sql_keywords_present_but_no_table_extracted"
-              },
-              {
-                "text": "MacOsBodyAdapter initialized.",
-                "status": "PASS",
-                "reason": "not_a_sql_string"
-              },
-              {
-                "text": "MacOsBodyAdapter received action: %@",
-                "status": "PASS",
-                "reason": "not_a_sql_string"
-              },
-              {
-                "text": "MacOsBodyAdapter observed new screenshot data.",
-                "status": "PASS",
-                "reason": "not_a_sql_string"
-              },
-              {
-                "text": "MacOsBodyAdapter observed new semantic tree data.",
-                "status": "PASS",
-                "reason": "not_a_sql_string"
-              },
-              {
-                "text": "MacOsBodyAdapter initiating verification cycle for action: %@",
-                "status": "PASS",
-                "reason": "not_a_sql_string"
-              },
-              {
-                "text": "MacOsBodyAdapter verification initiated. Observations will follow independently.",
-                "status": "PASS",
-                "reason": "not_a_sql_string"
-              },
-              {
-                "text": "MacOsBodyAdapter produced observation: %@",
-                "status": "PASS",
-                "reason": "not_a_sql_string"
-              }
-            ]
-          }
+          "status": "PASS"
         },
         "rebuild": {
           "action_type": "write_file_exact",
           "content_source_path": "docs/products/universal-overlay/twins/steps/TALOA-S64-MACOS-BODY-001.exact",
-          "content_sha256": "4d34e1d2088564f729449f9b6b721c4a8d8c39af99ea08473b423725ace1947e"
+          "content_sha256": "d43d8a48c68aa0c3ecd4a2be545727702c465c0829683c61bab1d078aa703ede"
         }
       },
-      "shipped_at": "2026-08-13T08:06:45.767Z",
+      "shipped_at": "2026-08-20T07:28:11.775Z",
       "tokens_used": 0,
       "duration_ms": 11303,
       "shipped_via": "governed_ship_queue",
@@ -5448,7 +5367,10 @@
       "pre_existing": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "exact_inputs": {
+        "content_source_path": "docs/products/universal-overlay/twins/steps/TALOA-S64-MACOS-BODY-001.exact"
+      }
     },
     {
       "status": "done",
