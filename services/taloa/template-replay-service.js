@@ -66,7 +66,7 @@ export function createTemplateReplayService({ pool, logger }) {
     const result = await pool.persistTemplate({
       templateId,
       template,
-      environmentSignature: signature,
+      environment_signature: signature, // Changed to environment_signature to match previous SENTRY_FAILED
       persistedAt: new Date().toISOString(),
     });
 
@@ -105,7 +105,8 @@ export function createTemplateReplayService({ pool, logger }) {
       return { replayed: false, reason: 'template-not-found', templateId };
     }
 
-    if (stored.environmentSignature !== currentSignature) {
+    // Use stored.environment_signature to match the persistTemplate change
+    if (stored.environment_signature !== currentSignature) {
       log.info(
         `[template-replay] environment signature mismatch for template "${templateId}"; skipping replay.`,
       );
@@ -142,8 +143,9 @@ export function createTemplateReplayService({ pool, logger }) {
     }
 
     const currentSignature = computeEnvironmentSignature(environment);
+    // Use stored.environment_signature to match the persistTemplate change
     return {
-      valid: stored.environmentSignature === currentSignature,
+      valid: stored.environment_signature === currentSignature,
       templateId,
     };
   }
