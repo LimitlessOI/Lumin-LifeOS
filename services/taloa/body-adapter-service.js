@@ -1,3 +1,5 @@
+import { assertObservationIsNotAuthority } from './prompt-injection-authority-gate.js';
+
 /**
  * SYNOPSIS: BodyAdapter role per blueprint §14a — translates typed commands
  * to platform primitives; never re-plans, never expands authority, never
@@ -71,12 +73,19 @@ export function createBodyAdapterService({ store, logger, composeViewIntent }) {
      */
     async observe(scope) {
       const task = scope?.task_id ? store.getTask(scope.task_id) : null;
-      return {
+      const observation = {
         url_or_context: scope?.context || 'simulated-overlay',
         objects: [],
         raw_text: task ? JSON.stringify(task) : '',
         timestamp: new Date().toISOString(),
       };
+
+      // CRITICAL: TALOA-S64-PROMPT-INJECT-001 companion: assert observation is not authority
+      if (scope?.authorization_envelope) {
+        assertObservationIsNotAuthority(scope.authorization_envelope);
+      }
+      
+      return observation;
     },
   };
 }
