@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-20T09:20:27.940Z",
+  "generated_at": "2026-08-20T09:24:22.762Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13714,
   "files": [
@@ -103320,9 +103320,9 @@
     {
       "path": "services/taloa/body-adapter-service.js",
       "synopsis": "BodyAdapter role per blueprint §14a — translates typed commands",
-      "bytes": 3827,
-      "mtime": "2026-08-20T09:02:56.766Z",
-      "indexed_at": "2026-08-20T09:02:56.766Z",
+      "bytes": 3960,
+      "mtime": "2026-08-20T09:24:22.762Z",
+      "indexed_at": "2026-08-20T09:24:22.762Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
