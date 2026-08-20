@@ -3,14 +3,10 @@
  * @ssot docs/products/universal-overlay/PRODUCT_HOME.md
  */
 
-import { createOverlayHostService } from '../services/taloa/overlay-host-service.js';
+import { getTaloaRuntime } from '../services/taloa/taloa-runtime.js';
 
 export function registerTaloaOverlayHostRoutes(app, deps) {
-  const overlayHostService = createOverlayHostService({
-    pool: deps.pool,
-    logger: deps.logger,
-    preferenceStore: deps.preferenceStore || { get: async () => ({}), set: async () => ({}) }
-  });
+  const overlayHostService = getTaloaRuntime({ pool: deps.pool, logger: deps.logger }).overlayHost;
 
   app.get(
     '/api/v1/taloa/overlay-host/health',
