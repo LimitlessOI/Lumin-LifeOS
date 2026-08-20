@@ -9304,9 +9304,9 @@
       "shipped_via": "governed_ship_queue"
     },
     {
-      "status": "pending",
+      "status": "blocked",
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "action_type": "author_then_write",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
@@ -9335,7 +9335,13 @@
           "assertion_id": "reachability:macos-body-wire-real-call-site"
         }
       ],
-      "blueprint_step_id": "TALOA-S64-MACOS-BODY-WIRE-001"
+      "blueprint_step_id": "TALOA-S64-MACOS-BODY-WIRE-001",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-08-20T07:28:46.443Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing:SemanticPerception; behavior_assertion_failed; behavior_proof",
+      "started_at": "2026-08-20T07:28:26.184Z"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
