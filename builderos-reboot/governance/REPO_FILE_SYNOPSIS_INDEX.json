@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-20T10:03:08.923Z",
+  "generated_at": "2026-08-20T17:32:51.959Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13714,
+  "file_count": 13716,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -32491,9 +32491,9 @@
     {
       "path": "CLAUDE.md",
       "synopsis": "CLAUDE.md — LifeOS/LimitlessOS Project Instructions",
-      "bytes": 16714,
-      "mtime": "2026-08-08T12:30:07.565Z",
-      "indexed_at": "2026-08-08T12:30:15.196Z"
+      "bytes": 17560,
+      "mtime": "2026-08-20T17:31:42.312Z",
+      "indexed_at": "2026-08-20T17:32:51.959Z"
     },
     {
       "path": "client/orchestrator-app/main.js",
@@ -33236,9 +33236,9 @@
     {
       "path": "config/overlay-print-sequence.js",
       "synopsis": "Sealed manufacturing sequences for the ONE queue — factory may not",
-      "bytes": 22922,
-      "mtime": "2026-08-20T08:52:17.399Z",
-      "indexed_at": "2026-08-20T08:53:44.977Z",
+      "bytes": 24634,
+      "mtime": "2026-08-20T17:31:03.450Z",
+      "indexed_at": "2026-08-20T17:32:51.959Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md",
         "docs/products/universal-overlay/PRODUCT_HOME.md\". Overlay print §64 item 3: Android Universal Body adapter. Export exactly: export function createAndroidBodyAdapter(deps). Return { observe(scope), act(action), verify(goal, expected) }. observe MUST call deps.dumpVisibleText (injected) then CALL redactObservation from \"../drive-sensitive-content-filter.js\" on that text before returning. act MUST call deps.enqueueCommand. verify MUST use independent evidence from a fresh observe(). Do NOT rebuild runBrowserGoal. Do NOT invent a table. ES module. Do not edit server.js.',"
@@ -44704,9 +44704,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 635388,
-      "mtime": "2026-08-20T08:53:39.004Z",
-      "indexed_at": "2026-08-20T08:53:44.977Z"
+      "bytes": 637986,
+      "mtime": "2026-08-20T17:32:45.558Z",
+      "indexed_at": "2026-08-20T17:32:51.959Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -69876,9 +69876,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\":\"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",\"lifeos:file-synopsis:backfill\":\"node scripts/file-synopsis-enforce.mjs --all --auto-fix && node scripts/generate-file-synopsis-index.mjs\",\"lifeos:file-synopsis:index\":\"n",
-      "bytes": 39562,
-      "mtime": "2026-08-13T16:54:50.206Z",
-      "indexed_at": "2026-08-13T16:54:50.206Z",
+      "bytes": 39623,
+      "mtime": "2026-08-20T17:29:48.169Z",
+      "indexed_at": "2026-08-20T17:32:51.959Z",
       "synopsis_index_only": true
     },
     {
@@ -83110,6 +83110,16 @@
       "bytes": 2928,
       "mtime": "2026-06-21T21:39:10.274Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": "scripts/verify-layer-b-required-before-done.mjs",
+      "synopsis": "SO-002 mechanical enforcement — a product's BUILD_QUEUE reaching",
+      "bytes": 4440,
+      "mtime": "2026-08-20T17:29:27.160Z",
+      "indexed_at": "2026-08-20T17:32:51.959Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "scripts/verify-lifecoaching.mjs",
@@ -102457,6 +102467,16 @@
       "indexed_at": "2026-07-28T22:54:46.666Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/sentry-layer-b-mandatory-gate.js",
+      "synopsis": "SO-002 mechanical enforcement — a product's BUILD_QUEUE reaching",
+      "bytes": 3300,
+      "mtime": "2026-08-20T17:27:47.477Z",
+      "indexed_at": "2026-08-20T17:32:51.959Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
       ]
     },
     {
