@@ -9567,9 +9567,9 @@
       "heal_reason": "demote_missing_exact_to_author"
     },
     {
-      "status": "pending",
+      "status": "blocked",
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "action_type": "author_then_write",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
@@ -9595,7 +9595,13 @@
           "assertion_id": "reachability:template-replay-wired"
         }
       ],
-      "blueprint_step_id": "TALOA-S64-TEMPLATE-REPLAY-WIRE-001"
+      "blueprint_step_id": "TALOA-S64-TEMPLATE-REPLAY-WIRE-001",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-08-20T09:12:52.445Z",
+      "last_error": "github_commit_failed_after_local_ship",
+      "started_at": "2026-08-20T09:12:47.612Z"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
