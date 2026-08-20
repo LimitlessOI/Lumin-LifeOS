@@ -80,6 +80,9 @@ export const OVERLAY_PRINT_SEQUENCE = Object.freeze([
     task: 'Overlay print §64 item 4: macOS semantic perception. Native Swift AXUIElement tree-walk plus vision-model fallback. factory-2 compiles. Do not edit services/ or routes/.',
     spec: 'AX tree as primary observe(); vision fallback when AX is empty. No independent reasoning loop.',
     file_contains: ['SemanticPerception', 'AXUIElement'],
+    behavior_assertions: [
+      { type: 'file_contains', path: 'native/macos-overlay/ScreenControlCommands.swift', must_include: ['SemanticPerception'], assertion_id: 'reachability:macos-perception-wired' },
+    ],
   }),
   printStep({
     id: 'TALOA-S64-MACOS-BODY-001',
@@ -89,6 +92,21 @@ export const OVERLAY_PRINT_SEQUENCE = Object.freeze([
     task: 'Overlay print §64 item 5: macOS Universal Body adapter observe/act/verify over ScreenControl + SemanticPerception. factory-2 compiles. Do not rebuild a second Mind.',
     spec: 'Same contract as Android Body. verify from independent observe.',
     file_contains: ['MacOsBodyAdapter', 'observe', 'act', 'verify'],
+    behavior_assertions: [
+      { type: 'file_contains', path: 'native/macos-overlay/ScreenControlCommands.swift', must_include: ['MacOsBodyAdapter'], assertion_id: 'reachability:macos-body-wired' },
+    ],
+  }),
+  printStep({
+    id: 'TALOA-S64-MACOS-BODY-WIRE-001',
+    target_file: 'native/macos-overlay/ScreenControlCommands.swift',
+    sandbox_boundary: 'native/macos-overlay/**',
+    depends_on: ['TALOA-S64-MACOS-BODY-001', 'TALOA-S64-MACOS-PERCEPTION-001'],
+    task: 'Overlay print §64 item 5 (wire, companion to TALOA-S64-MACOS-BODY-001 -- mirrors TALOA-S64-ANDROID-BODY-WIRE-001\'s existing pattern for the Android Body). Real command dispatch file for the /tmp/taloa-cmd channel. Instantiate MacOsBodyAdapter (which itself uses SemanticPerception) and route the existing observe/capture/click/type/point commands through its observe/act/verify contract instead of leaving the adapter unreachable. Additive only -- do not rewrite the existing command dispatch switch, add a real call site alongside it. factory-2 compiles.',
+    spec: 'Closes the same reachability gap the Android Body had before its own -WIRE- step: MacOsBodyAdapter and SemanticPerception compiled but had zero call sites anywhere in the native app (confirmed by direct grep, 2026-08-20).',
+    file_contains: ['MacOsBodyAdapter', 'SemanticPerception'],
+    behavior_assertions: [
+      { type: 'file_contains', path: 'native/macos-overlay/ScreenControlCommands.swift', must_include: ['MacOsBodyAdapter', 'SemanticPerception'], assertion_id: 'reachability:macos-body-wire-real-call-site' },
+    ],
   }),
   printStep({
     id: 'TALOA-S64-AUTH-ENVELOPE-001',

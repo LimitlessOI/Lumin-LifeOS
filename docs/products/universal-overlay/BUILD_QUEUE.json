@@ -4898,7 +4898,7 @@
       "escalation_class": "same_signature_repeat"
     },
     {
-      "status": "done",
+      "status": "pending",
       "founder_gated": false,
       "attempts": 0,
       "action_type": "write_file_exact",
@@ -4940,7 +4940,7 @@
         }
       },
       "shipped_at": "2026-08-20T06:58:55.197Z",
-      "commit_sha": "d7419ab17733104b37252f3d8227eacbebe7ebe8",
+      "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "last_attempt_at": "2026-08-20T06:58:42.985Z",
@@ -4951,8 +4951,8 @@
       "shipped_via": "governed_ship_queue",
       "heal_unblocked": false,
       "heal_reason": "demote_missing_exact_to_author",
-      "reopened_at": "2026-08-20T06:30:52.529Z",
-      "reopen_reason": "reachability_audit_2026-08-20: marked done via governed_ship_queue but has ZERO real callers anywhere in the live codebase (confirmed by direct grep across routes/, services/, startup/, and native Swift sources) -- exported/compiled but never invoked. Reopened per CLAUDE.md \"Acceptance Must Prove Reachability, Not Just Existence.\" Founder directive: universal-overlay blueprint is top priority, build it for real, do not stop.",
+      "reopened_at": "2026-08-20T07:08:28.181Z",
+      "reopen_reason": "reachability_audit_2026-08-20b: re-closed done a second time via a trivial, non-substantive diff (`import Vision` + a comment) that does not add any real call site -- confirmed zero callers anywhere in the native Swift sources both before and after this ship. Root cause: this step never had a reachability behavior_assertion, so nothing could force real wiring. Fixed at the source: added a reachability assertion (native/macos-overlay/ScreenControlCommands.swift must reference SemanticPerception) plus a new companion TALOA-S64-MACOS-BODY-WIRE-001 step mirroring the existing Android wire pattern. Reopening so the next attempt is held to the real standard.",
       "revive_count": 0,
       "revived_at": "2026-08-20T06:58:42.979Z",
       "last_attempt": null,
