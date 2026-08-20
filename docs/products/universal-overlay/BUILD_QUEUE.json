@@ -9437,7 +9437,7 @@
         }
       ],
       "blueprint_step_id": "TALOA-S64-ANDROID-BODY-LIVE-WIRE-001",
-      "same_signature_count": 0,
+      "same_signature_count": 1,
       "exact_inputs": {
         "content_source_path": "docs/products/universal-overlay/twins/steps/TALOA-S64-ANDROID-BODY-LIVE-WIRE-001.exact"
       },
@@ -9471,26 +9471,28 @@
       "last_error": "hidden_dependency",
       "started_at": "2026-08-20T09:02:36.365Z",
       "duration_ms": 16101,
-      "last_attempt": null,
       "revive_count": 1,
       "revived_at": "2026-08-20T09:02:36.292Z",
-      "no_op": null,
-      "pre_existing": null,
+      "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
       "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "tokens_used": 0
+      "tokens_used": 0,
+      "failure_signature": "hidden_dependency",
+      "escalation_class": "same_signature_repeat"
     },
     {
       "status": "pending",
       "founder_gated": false,
       "attempts": 0,
-      "action_type": "author_then_write",
+      "action_type": "write_file_exact",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
       "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md §64",
@@ -9515,7 +9517,34 @@
           "assertion_id": "reachability:prompt-inject-gate-wired"
         }
       ],
-      "blueprint_step_id": "TALOA-S64-PROMPT-INJECT-WIRE-001"
+      "blueprint_step_id": "TALOA-S64-PROMPT-INJECT-WIRE-001",
+      "same_signature_count": 0,
+      "exact_inputs": {
+        "content_source_path": "docs/products/universal-overlay/twins/steps/TALOA-S64-PROMPT-INJECT-WIRE-001.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-08-20T09:02:45.479Z",
+        "shipped_at": "2026-08-20T09:02:45.479Z",
+        "commit_sha": null,
+        "content_sha256": "6fb024a6773775c8f48170c469669407ab3f5b28874d57b2bf9bb173955fdba6",
+        "target_file": "services/taloa/body-adapter-service.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/taloa/body-adapter-service.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "PASS"
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/universal-overlay/twins/steps/TALOA-S64-PROMPT-INJECT-WIRE-001.exact",
+          "content_sha256": "6fb024a6773775c8f48170c469669407ab3f5b28874d57b2bf9bb173955fdba6"
+        }
+      },
+      "shipped_at": "2026-08-20T09:02:45.479Z"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
