@@ -6,6 +6,7 @@
 import Foundation
 import AppKit
 import ApplicationServices
+import Vision // Add Vision framework for potential future vision model integration
 
 struct SemanticElement: Identifiable, Equatable {
     let id: String
