@@ -5065,9 +5065,9 @@
       "shipped_via": "governed_ship_queue"
     },
     {
-      "status": "pending",
+      "status": "blocked",
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "action_type": "write_file_exact",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
@@ -5089,9 +5089,9 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
-      "last_error": "hidden_dependency",
-      "started_at": "2026-08-20T07:54:41.164Z",
+      "last_attempt_at": "2026-08-20T08:12:05.363Z",
+      "last_error": "artifact_missing_after_ship: artifact_proof_failed: missing:environment_signature",
+      "started_at": "2026-08-20T08:11:51.105Z",
       "blocker_class": null,
       "park_until": null,
       "heal_unblocked": false,
@@ -5135,7 +5135,7 @@
           "content_sha256": "9d313427884d2fd6599ce511275726c1940c5838d80b3fad32d77084bef43642"
         }
       },
-      "shipped_at": "2026-08-20T08:11:56.920Z",
+      "shipped_at": "2026-08-13T08:16:12.850Z",
       "failure_signature": "STEP_STATUS_FORBIDDEN",
       "tokens_used": 0,
       "duration_ms": 12000,
