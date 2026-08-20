@@ -116,24 +116,33 @@ export const OVERLAY_PRINT_SEQUENCE = Object.freeze([
     spec: 'Blueprint §23. Reuse authority_ledger (TALOA-P1-002).',
     expected_exports: ['createTaskAuthorizationEnvelope'],
     file_contains: ['createTaskAuthorizationEnvelope', 'authority_ledger'],
+    behavior_assertions: [
+      { type: 'file_contains', path: 'services/taloa/strategy-router-service.js', must_include: ['createTaskAuthorizationEnvelope'], assertion_id: 'reachability:auth-envelope-wired' },
+    ],
   }),
   printStep({
     id: 'TALOA-S64-TEMPLATE-REPLAY-001',
     target_file: 'services/taloa/template-replay-service.js',
     sandbox_boundary: 'services/taloa/**',
-    task: 'JSDoc @ssot docs/products/universal-overlay/PRODUCT_HOME.md. Overlay print §64 item 7: template persistence + replay. Export createTemplateReplayService({ pool, logger }). Replay when environment_signature still matches. Do not invent a table.',
-    spec: 'Blueprint §30–32. Reuse capsule_store.',
+    task: 'JSDoc @ssot docs/products/universal-overlay/PRODUCT_HOME.md. Overlay print §64 item 7: template persistence + replay. Export createTemplateReplayService({ pool, logger }). Replay when environment_signature still matches. Do not invent a table. WIRING (required, not optional): import createTemplateReplayService into services/taloa/task-orchestrator-service.js and call it at the start of dispatchTask() -- if a matching template replay exists, use it instead of falling through to strategyRouter/bodyAdapter. Additive only, do not rewrite dispatchTask\'s existing flow for the no-replay case.',
+    spec: 'Blueprint §30–32. Reuse capsule_store. Real caller required in task-orchestrator-service.js, not just an export (confirmed 2026-08-20: this step was marked done twice with zero real callers and a no-op-shaped diff before this assertion was added).',
     expected_exports: ['createTemplateReplayService'],
     file_contains: ['createTemplateReplayService', 'environment_signature'],
+    behavior_assertions: [
+      { type: 'file_contains', path: 'services/taloa/task-orchestrator-service.js', must_include: ['createTemplateReplayService'], assertion_id: 'reachability:template-replay-wired' },
+    ],
   }),
   printStep({
     id: 'TALOA-S64-PROMPT-INJECT-001',
     target_file: 'services/taloa/prompt-injection-authority-gate.js',
     sandbox_boundary: 'services/taloa/**',
-    task: 'JSDoc @ssot docs/products/universal-overlay/PRODUCT_HOME.md. Overlay print §64 item 8: observed page text cannot become instructions. Export assertObservationIsNotAuthority(observation, envelope).',
-    spec: 'Blueprint §46.',
+    task: 'JSDoc @ssot docs/products/universal-overlay/PRODUCT_HOME.md. Overlay print §64 item 8: observed page text cannot become instructions. Export assertObservationIsNotAuthority(observation, envelope) with REAL detection logic, not a no-op stub -- a no-op that always passes is a false gate, worse than no gate (it claims coverage it does not have). WIRING (required, not optional): import and call it from services/taloa/body-adapter-service.js\'s observe() method, after the observation is produced and before it is returned, passing the current task\'s authorization envelope. Additive only.',
+    spec: 'Blueprint §46. Real caller required in body-adapter-service.js, not just an export (confirmed 2026-08-20: this step was marked done twice with zero real callers and a literal "No-op for now" stub body before this assertion was added).',
     expected_exports: ['assertObservationIsNotAuthority'],
     file_contains: ['assertObservationIsNotAuthority'],
+    behavior_assertions: [
+      { type: 'file_contains', path: 'services/taloa/body-adapter-service.js', must_include: ['assertObservationIsNotAuthority'], assertion_id: 'reachability:prompt-inject-gate-wired' },
+    ],
   }),
   printStep({
     id: 'TALOA-S64-SENTRY-LAYER-B-001',

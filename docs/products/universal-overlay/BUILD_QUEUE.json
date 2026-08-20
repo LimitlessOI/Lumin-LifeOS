@@ -5142,7 +5142,7 @@
       }
     },
     {
-      "status": "done",
+      "status": "pending",
       "founder_gated": false,
       "attempts": 0,
       "action_type": "write_file_exact",
@@ -5196,7 +5196,7 @@
         }
       },
       "shipped_at": "2026-08-20T07:06:46.515Z",
-      "commit_sha": "eead62a48c781524c45885af7dc4a397724ddc65",
+      "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "last_attempt_at": "2026-08-20T07:06:31.219Z",
@@ -5210,8 +5210,8 @@
       "blocker_class": null,
       "park_until": null,
       "demoted": false,
-      "reopened_at": "2026-08-20T06:30:52.529Z",
-      "reopen_reason": "reachability_audit_2026-08-20: marked done via governed_ship_queue but has ZERO real callers anywhere in the live codebase (confirmed by direct grep across routes/, services/, startup/, and native Swift sources) -- exported/compiled but never invoked. Reopened per CLAUDE.md \"Acceptance Must Prove Reachability, Not Just Existence.\" Founder directive: universal-overlay blueprint is top priority, build it for real, do not stop.",
+      "reopened_at": "2026-08-20T07:10:29.101Z",
+      "reopen_reason": "reachability_audit_2026-08-20c: re-closed done via a trailing-newline-only diff -- the function body is still a literal \"No-op for now\" stub, zero real callers before or after this ship. The only completion check this step had was a same-file string-literal check that was true from the original authoring and could never fail. Fixed at the source: added a real reachability assertion (services/taloa/body-adapter-service.js must reference assertObservationIsNotAuthority) plus an explicit wiring instruction. Reopening so the next attempt is held to the real standard.",
       "heal_reason": "demote_missing_exact_to_author",
       "revive_count": 0,
       "revived_at": "2026-08-20T07:05:42.119Z",
