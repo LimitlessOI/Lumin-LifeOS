@@ -52,6 +52,13 @@ export function getBoostState(productId) {
   return boosts[productId] || null;
 }
 
+/** All boost records, regardless of whether their product is currently
+ * stamped — a boost is often active precisely BECAUSE its stamp was just
+ * cleared, so filtering by "currently stamped" would hide it. */
+export function getAllBoostStates() {
+  return readJson(BOOST_PATH, {});
+}
+
 function setBoostState(productId, state) {
   const boosts = readJson(BOOST_PATH, {});
   if (state === null) delete boosts[productId];

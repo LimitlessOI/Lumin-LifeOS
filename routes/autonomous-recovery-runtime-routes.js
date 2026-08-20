@@ -6,7 +6,7 @@ import {
   startCostelloInfrastructureGuardianSupervisor,
   getCostelloInfrastructureGuardianSupervisorStatus,
 } from '../services/costello-infrastructure-guardian-supervisor.js';
-import { detectGenuineStalls, getBoostState } from '../services/sentry-stall-recovery.js';
+import { detectGenuineStalls, getAllBoostStates } from '../services/sentry-stall-recovery.js';
 
 let scheduler = null;
 let costelloGuardianSupervisor = null;
@@ -52,7 +52,9 @@ export function registerAutonomousRecoveryRuntimeRoutes(app, deps = {}) {
       costello_external_guardian: getCostelloInfrastructureGuardianSupervisorStatus(),
       stall_recovery: {
         genuine_stalls_currently_stamped: genuineStalls,
-        boost_states: genuineStalls.map((s) => ({ productId: s.productId, boost: getBoostState(s.productId) })),
+        // ALL boost records, not just currently-stamped ones — a boost is
+        // usually active precisely because its stamp was just cleared.
+        boost_states: getAllBoostStates(),
       },
     });
   });
