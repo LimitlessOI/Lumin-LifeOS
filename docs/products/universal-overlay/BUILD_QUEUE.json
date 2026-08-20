@@ -9408,9 +9408,9 @@
       "heal_unblocked": false
     },
     {
-      "status": "pending",
+      "status": "blocked",
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "action_type": "write_file_exact",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
@@ -9463,7 +9463,14 @@
           "content_sha256": "ab02748b8e47e8b5c148242ce2358377e10da6e015b0bbe6c607b45c3ab0b86c"
         }
       },
-      "shipped_at": "2026-08-20T08:56:57.733Z"
+      "shipped_at": "2026-08-20T08:56:57.733Z",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-08-20T08:57:10.479Z",
+      "last_error": "SLICE_COST_UNTRACKED: tokens_used required on every built slice (0 allowed for exact/no-codegen)",
+      "started_at": "2026-08-20T08:56:54.378Z",
+      "duration_ms": 16101
     },
     {
       "status": "pending",
