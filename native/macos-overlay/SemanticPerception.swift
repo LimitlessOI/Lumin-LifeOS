@@ -117,7 +117,7 @@ final class SemanticPerception {
     }
 
     private func captureScreenAndAnalyzeWithVision(completion: @escaping (SemanticData) -> Void) {
-        guard let visionService, let image = captureScreen() else {
+        guard let visionService = self.visionService, let image = captureScreen() else { // Explicitly use self.visionService
             completion(SemanticData(elements: [], source: .visionModel))
             return
         }
