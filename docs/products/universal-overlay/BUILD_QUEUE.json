@@ -4806,7 +4806,7 @@
       "heal_unblocked": false
     },
     {
-      "status": "done",
+      "status": "pending",
       "founder_gated": false,
       "attempts": 0,
       "action_type": "write_file_exact",
@@ -4819,8 +4819,8 @@
       "id": "TALOA-S64-ANDROID-BODY-WIRE-001",
       "target_file": "services/general-browser-agent-runtime.js",
       "sandbox_boundary": "services/**",
-      "task": "Keep existing @ssot. Import createAndroidBodyAdapter from \"./taloa/android-body-adapter.js\" and CALL it. Export makeAndroidBody(deps). Do NOT rewrite runBrowserGoal. Additive only.",
-      "spec": "Add makeAndroidBody so a caller can pass the Android Body without forking the Mind.",
+      "task": "Keep existing @ssot. Import createAndroidBodyAdapter from \"./taloa/android-body-adapter.js\" and CALL it. Export makeAndroidBody(deps). Do NOT rewrite runBrowserGoal. Additive only. WIRING (required, not optional -- confirmed 2026-08-20: makeAndroidBody previously shipped with zero real callers, defining it in this file alone is not reachability): services/general-browser-agent-live.js#runGoalOnSession is the real, already-live caller that currently hardcodes browser observe/act (observePage/executeAction from this file) with no Body selection at all. Add an optional `body` parameter to runGoalOnSession (default preserves current browser behavior) so a caller can pass the result of makeAndroidBody(deps) instead, and use its observe/act when provided. Additive only, do not change the default/no-arg behavior.",
+      "spec": "Add makeAndroidBody so a caller can pass the Android Body without forking the Mind. Real caller required in general-browser-agent-live.js, not just an export.",
       "expected_exports": [
         "observePage",
         "makeAndroidBody"
@@ -4835,6 +4835,14 @@
           "path": "services/general-browser-agent-runtime.js",
           "must_include": [
             "createAndroidBodyAdapter",
+            "makeAndroidBody"
+          ],
+          "assertion_id": "self:android-body-defined"
+        },
+        {
+          "type": "file_contains",
+          "path": "services/general-browser-agent-live.js",
+          "must_include": [
             "makeAndroidBody"
           ],
           "assertion_id": "reachability:android-body-wired"
@@ -4865,7 +4873,7 @@
       },
       "shipped_at": "2026-08-20T08:01:11.656Z",
       "shipped_via": "governed_ship_queue",
-      "commit_sha": "1b36e5387382b4783fc3b765def6f96f31e4b05b",
+      "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "last_attempt_at": "2026-08-20T08:00:49.979Z",
@@ -4873,8 +4881,8 @@
       "heal_unblocked": false,
       "heal_reason": "demote_missing_exact_to_author",
       "same_signature_count": 1,
-      "reopened_at": "2026-08-20T07:41:24.353Z",
-      "reopen_reason": "reachability_audit_2026-08-20d: root cause found and fixed for real this time -- factory-staging/factory-core/bpb/author-assertions.js#authorAssertionsFromSpec never forwarded step.behavior_assertions into the assertions it returns, so every cross-file reachability check added earlier today was silently never evaluated by the real post-ship re-proof gate (evaluateStepExpectations), despite the assertion EXECUTOR itself already supporting a `path` override correctly. Verified end-to-end with the real evaluator against the real current codebase: this exact false-done now produces `artifact_proof_failed: missing:...` instead of a silent pass. Reopening so the next attempt is actually held to the standard.",
+      "reopened_at": "2026-08-20T08:06:19.803Z",
+      "reopen_reason": "reachability_audit_2026-08-20f: this step's own assertion was self-referential (checked its own target_file, which trivially always contains its own function definitions) -- real gap missed in the earlier pass. Found the real live caller (services/general-browser-agent-live.js#runGoalOnSession, currently hardcodes browser observe/act with no Body selection) and added a genuine cross-file assertion pointing there, plus explicit wiring instructions.",
       "started_at": "2026-08-20T08:00:49.979Z",
       "revive_count": 0,
       "revived_at": "2026-08-20T08:00:49.895Z",
@@ -4898,7 +4906,7 @@
       }
     },
     {
-      "status": "done",
+      "status": "pending",
       "founder_gated": false,
       "attempts": 0,
       "action_type": "write_file_exact",
@@ -4940,7 +4948,7 @@
         }
       },
       "shipped_at": "2026-08-20T07:43:26.166Z",
-      "commit_sha": "5704e45ad2d27e17bd2a5d845bd789dacec97c9d",
+      "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "last_attempt_at": "2026-08-20T07:43:15.236Z",
@@ -4951,8 +4959,8 @@
       "shipped_via": "governed_ship_queue",
       "heal_unblocked": false,
       "heal_reason": "demote_missing_exact_to_author",
-      "reopened_at": "2026-08-20T07:41:24.355Z",
-      "reopen_reason": "reachability_audit_2026-08-20d: root cause found and fixed for real this time -- factory-staging/factory-core/bpb/author-assertions.js#authorAssertionsFromSpec never forwarded step.behavior_assertions into the assertions it returns, so every cross-file reachability check added earlier today was silently never evaluated by the real post-ship re-proof gate (evaluateStepExpectations), despite the assertion EXECUTOR itself already supporting a `path` override correctly. Verified end-to-end with the real evaluator against the real current codebase: this exact false-done now produces `artifact_proof_failed: missing:...` instead of a silent pass. Reopening so the next attempt is actually held to the standard.",
+      "reopened_at": "2026-08-20T08:05:03.797Z",
+      "reopen_reason": "reachability_audit_2026-08-20e: the post-ship evaluator fix (authorAssertionsFromSpec) was correct, but these LIVE queue step instances were enrolled 2026-08-13, before today's sealed-config assertion additions -- reopening status alone never refreshed the stale behavior_assertions already frozen on the live step object, so the OLD (self-referential, trivially-true) assertion kept being used instead of the new cross-file one. Re-synced behavior_assertions (and task/spec) from the current sealed config/overlay-print-sequence.js definition, confirmed via direct grep this step still has zero real external callers.",
       "revive_count": 0,
       "revived_at": "2026-08-20T07:27:45.795Z",
       "last_attempt": null,
@@ -4968,7 +4976,17 @@
       "blocker_resolution": null,
       "exact_inputs": {
         "content_source_path": "docs/products/universal-overlay/twins/steps/TALOA-S64-MACOS-PERCEPTION-001.exact"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "file_contains",
+          "path": "native/macos-overlay/ScreenControlCommands.swift",
+          "must_include": [
+            "SemanticPerception"
+          ],
+          "assertion_id": "reachability:macos-perception-wired"
+        }
+      ]
     },
     {
       "status": "done",
@@ -5140,7 +5158,7 @@
       "escalation_class": "same_signature_repeat"
     },
     {
-      "status": "done",
+      "status": "pending",
       "founder_gated": false,
       "attempts": 0,
       "action_type": "write_file_exact",
@@ -5151,8 +5169,8 @@
       "id": "TALOA-S64-PROMPT-INJECT-001",
       "target_file": "services/taloa/prompt-injection-authority-gate.js",
       "sandbox_boundary": "services/taloa/**",
-      "task": "JSDoc @ssot docs/products/universal-overlay/PRODUCT_HOME.md. Overlay print §64 item 8: observed page text cannot become instructions. Export assertObservationIsNotAuthority(observation, envelope).",
-      "spec": "Blueprint §46.",
+      "task": "JSDoc @ssot docs/products/universal-overlay/PRODUCT_HOME.md. Overlay print §64 item 8: observed page text cannot become instructions. Export assertObservationIsNotAuthority(observation, envelope) with REAL detection logic, not a no-op stub -- a no-op that always passes is a false gate, worse than no gate (it claims coverage it does not have). WIRING (required, not optional): import and call it from services/taloa/body-adapter-service.js's observe() method, after the observation is produced and before it is returned, passing the current task's authorization envelope. Additive only.",
+      "spec": "Blueprint §46. Real caller required in body-adapter-service.js, not just an export (confirmed 2026-08-20: this step was marked done twice with zero real callers and a literal \"No-op for now\" stub body before this assertion was added).",
       "expected_exports": [
         "assertObservationIsNotAuthority"
       ],
@@ -5163,12 +5181,12 @@
       "same_signature_count": 0,
       "behavior_assertions": [
         {
-          "type": "exports_smoke",
-          "path": "services/taloa/prompt-injection-authority-gate.js",
-          "exports": [
+          "type": "file_contains",
+          "path": "services/taloa/body-adapter-service.js",
+          "must_include": [
             "assertObservationIsNotAuthority"
           ],
-          "assertion_id": "expected_exports:services/taloa/prompt-injection-authority-gate.js"
+          "assertion_id": "reachability:prompt-inject-gate-wired"
         }
       ],
       "exactness": {
@@ -5194,7 +5212,7 @@
         }
       },
       "shipped_at": "2026-08-20T08:01:26.292Z",
-      "commit_sha": "ca5f257e9f1b7578a7f1ee866c730f5da31dcd14",
+      "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "last_attempt_at": "2026-08-20T08:01:15.013Z",
@@ -5208,8 +5226,8 @@
       "blocker_class": null,
       "park_until": null,
       "demoted": false,
-      "reopened_at": "2026-08-20T07:41:24.355Z",
-      "reopen_reason": "reachability_audit_2026-08-20d: root cause found and fixed for real this time -- factory-staging/factory-core/bpb/author-assertions.js#authorAssertionsFromSpec never forwarded step.behavior_assertions into the assertions it returns, so every cross-file reachability check added earlier today was silently never evaluated by the real post-ship re-proof gate (evaluateStepExpectations), despite the assertion EXECUTOR itself already supporting a `path` override correctly. Verified end-to-end with the real evaluator against the real current codebase: this exact false-done now produces `artifact_proof_failed: missing:...` instead of a silent pass. Reopening so the next attempt is actually held to the standard.",
+      "reopened_at": "2026-08-20T08:05:03.797Z",
+      "reopen_reason": "reachability_audit_2026-08-20e: the post-ship evaluator fix (authorAssertionsFromSpec) was correct, but these LIVE queue step instances were enrolled 2026-08-13, before today's sealed-config assertion additions -- reopening status alone never refreshed the stale behavior_assertions already frozen on the live step object, so the OLD (self-referential, trivially-true) assertion kept being used instead of the new cross-file one. Re-synced behavior_assertions (and task/spec) from the current sealed config/overlay-print-sequence.js definition, confirmed via direct grep this step still has zero real external callers.",
       "heal_reason": "demote_missing_exact_to_author",
       "revive_count": 0,
       "revived_at": "2026-08-20T08:00:45.825Z",

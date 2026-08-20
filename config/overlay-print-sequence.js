@@ -65,12 +65,13 @@ export const OVERLAY_PRINT_SEQUENCE = Object.freeze([
     target_file: 'services/general-browser-agent-runtime.js',
     sandbox_boundary: 'services/**',
     depends_on: ['TALOA-S64-ANDROID-BODY-001'],
-    task: 'Keep existing @ssot. Import createAndroidBodyAdapter from "./taloa/android-body-adapter.js" and CALL it. Export makeAndroidBody(deps). Do NOT rewrite runBrowserGoal. Additive only.',
-    spec: 'Add makeAndroidBody so a caller can pass the Android Body without forking the Mind.',
+    task: 'Keep existing @ssot. Import createAndroidBodyAdapter from "./taloa/android-body-adapter.js" and CALL it. Export makeAndroidBody(deps). Do NOT rewrite runBrowserGoal. Additive only. WIRING (required, not optional -- confirmed 2026-08-20: makeAndroidBody previously shipped with zero real callers, defining it in this file alone is not reachability): services/general-browser-agent-live.js#runGoalOnSession is the real, already-live caller that currently hardcodes browser observe/act (observePage/executeAction from this file) with no Body selection at all. Add an optional `body` parameter to runGoalOnSession (default preserves current browser behavior) so a caller can pass the result of makeAndroidBody(deps) instead, and use its observe/act when provided. Additive only, do not change the default/no-arg behavior.',
+    spec: 'Add makeAndroidBody so a caller can pass the Android Body without forking the Mind. Real caller required in general-browser-agent-live.js, not just an export.',
     expected_exports: ['observePage', 'makeAndroidBody'],
     file_contains: ['createAndroidBodyAdapter', 'makeAndroidBody'],
     behavior_assertions: [
-      { type: 'file_contains', path: 'services/general-browser-agent-runtime.js', must_include: ['createAndroidBodyAdapter', 'makeAndroidBody'], assertion_id: 'reachability:android-body-wired' },
+      { type: 'file_contains', path: 'services/general-browser-agent-runtime.js', must_include: ['createAndroidBodyAdapter', 'makeAndroidBody'], assertion_id: 'self:android-body-defined' },
+      { type: 'file_contains', path: 'services/general-browser-agent-live.js', must_include: ['makeAndroidBody'], assertion_id: 'reachability:android-body-wired' },
     ],
   }),
   printStep({
