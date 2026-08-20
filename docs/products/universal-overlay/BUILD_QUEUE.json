@@ -5142,7 +5142,7 @@
       }
     },
     {
-      "status": "pending",
+      "status": "done",
       "founder_gated": false,
       "attempts": 0,
       "action_type": "write_file_exact",
@@ -5195,14 +5195,14 @@
           "content_sha256": "dfbd05ab35c83c19b49f2991c3a7b3a9824153b4972490cc6c2faaa31748f069"
         }
       },
-      "shipped_at": "2026-08-20T07:06:33.465Z",
-      "commit_sha": null,
+      "shipped_at": "2026-08-20T07:06:46.515Z",
+      "commit_sha": "eead62a48c781524c45885af7dc4a397724ddc65",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
-      "last_error": "github_commit_failed_after_local_ship",
-      "started_at": "2026-08-20T07:02:56.065Z",
-      "duration_ms": 9804,
+      "last_attempt_at": "2026-08-20T07:06:31.219Z",
+      "last_error": null,
+      "started_at": "2026-08-20T07:06:31.219Z",
+      "duration_ms": 15297,
       "heal_unblocked": false,
       "failure_signature": null,
       "tokens_used": 0,
@@ -5213,7 +5213,7 @@
       "reopened_at": "2026-08-20T06:30:52.529Z",
       "reopen_reason": "reachability_audit_2026-08-20: marked done via governed_ship_queue but has ZERO real callers anywhere in the live codebase (confirmed by direct grep across routes/, services/, startup/, and native Swift sources) -- exported/compiled but never invoked. Reopened per CLAUDE.md \"Acceptance Must Prove Reachability, Not Just Existence.\" Founder directive: universal-overlay blueprint is top priority, build it for real, do not stop.",
       "heal_reason": "demote_missing_exact_to_author",
-      "revive_count": 2,
+      "revive_count": 0,
       "revived_at": "2026-08-20T07:05:42.119Z",
       "last_attempt": null,
       "demote_reason": null,
