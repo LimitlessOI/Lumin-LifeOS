@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-20T09:02:56.766Z",
+  "generated_at": "2026-08-20T09:12:31.841Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13714,
   "files": [
@@ -103551,9 +103551,9 @@
     {
       "path": "services/taloa/template-replay-service.js",
       "synopsis": "Template Replay Service",
-      "bytes": 5303,
-      "mtime": "2026-08-20T08:12:01.473Z",
-      "indexed_at": "2026-08-20T08:12:01.473Z",
+      "bytes": 5526,
+      "mtime": "2026-08-20T09:12:31.841Z",
+      "indexed_at": "2026-08-20T09:12:31.841Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
