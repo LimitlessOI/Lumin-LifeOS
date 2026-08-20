@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-19T23:41:53.521Z",
+  "generated_at": "2026-08-20T00:11:24.679Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13709,
   "files": [
@@ -35283,9 +35283,9 @@
     {
       "path": "data/sentry-unplannable-stamps.json",
       "synopsis": "JSON data/config — data/sentry-unplannable-stamps.json.",
-      "bytes": 390,
-      "mtime": "2026-08-01T15:56:05.909Z",
-      "indexed_at": "2026-08-01T15:59:15.107Z",
+      "bytes": 787,
+      "mtime": "2026-08-20T00:10:11.109Z",
+      "indexed_at": "2026-08-20T00:11:24.679Z",
       "synopsis_index_only": true
     },
     {
@@ -70043,9 +70043,9 @@
     {
       "path": "products/receipts/ABBOTT_EMERGENCY_DEPLOY.json",
       "synopsis": "Product receipt — ABBOTT EMERGENCY DEPLOY.",
-      "bytes": 847,
-      "mtime": "2026-08-19T00:46:34.012Z",
-      "indexed_at": "2026-08-19T15:35:16.166Z",
+      "bytes": 633,
+      "mtime": "2026-08-19T23:42:10.489Z",
+      "indexed_at": "2026-08-20T00:11:24.679Z",
       "synopsis_index_only": true
     },
     {
