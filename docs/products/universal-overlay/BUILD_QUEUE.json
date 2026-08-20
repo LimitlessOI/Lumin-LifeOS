@@ -4806,9 +4806,9 @@
       "heal_unblocked": false
     },
     {
-      "status": "pending",
+      "status": "blocked",
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "action_type": "write_file_exact",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
@@ -4868,20 +4868,17 @@
       },
       "shipped_at": "2026-08-13T06:54:09.126Z",
       "shipped_via": "governed_ship_queue",
-      "commit_sha": "cf51b3bcd28c0908e199d720daa4be8a9aa63a60",
-      "built_sha": "cf51b3bcd28c0908e199d720daa4be8a9aa63a60",
-      "proof": {
-        "kind": "pre_existing_claim",
-        "reason": "makeAndroidBody exported on HEAD after false artifact_missing_after_ship",
-        "claimed_at": "2026-08-13T07:05:00.000Z"
-      },
-      "last_attempt_at": "2026-08-13T06:54:16.061Z",
-      "last_error": null,
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": "2026-08-20T06:44:32.240Z",
+      "last_error": "hidden_dependency",
       "heal_unblocked": false,
       "heal_reason": "observation_claim_wire_export_present_2026-08-13",
       "same_signature_count": 0,
       "reopened_at": "2026-08-20T06:30:52.527Z",
-      "reopen_reason": "reachability_audit_2026-08-20: marked done via governed_ship_queue but has ZERO real callers anywhere in the live codebase (confirmed by direct grep across routes/, services/, startup/, and native Swift sources) -- exported/compiled but never invoked. Reopened per CLAUDE.md \"Acceptance Must Prove Reachability, Not Just Existence.\" Founder directive: universal-overlay blueprint is top priority, build it for real, do not stop."
+      "reopen_reason": "reachability_audit_2026-08-20: marked done via governed_ship_queue but has ZERO real callers anywhere in the live codebase (confirmed by direct grep across routes/, services/, startup/, and native Swift sources) -- exported/compiled but never invoked. Reopened per CLAUDE.md \"Acceptance Must Prove Reachability, Not Just Existence.\" Founder directive: universal-overlay blueprint is top priority, build it for real, do not stop.",
+      "started_at": "2026-08-20T06:44:32.104Z"
     },
     {
       "status": "blocked",
@@ -4939,7 +4936,7 @@
       "tokens_used": 0,
       "shipped_via": "governed_ship_queue",
       "heal_unblocked": false,
-      "heal_reason": "native_swift_tokens_0_claim_2026-08-13",
+      "heal_reason": "demote_missing_exact_to_author",
       "reopened_at": "2026-08-20T06:30:52.529Z",
       "reopen_reason": "reachability_audit_2026-08-20: marked done via governed_ship_queue but has ZERO real callers anywhere in the live codebase (confirmed by direct grep across routes/, services/, startup/, and native Swift sources) -- exported/compiled but never invoked. Reopened per CLAUDE.md \"Acceptance Must Prove Reachability, Not Just Existence.\" Founder directive: universal-overlay blueprint is top priority, build it for real, do not stop."
     },
