@@ -9495,7 +9495,7 @@
       "heal_unblocked": false
     },
     {
-      "status": "pending",
+      "status": "done",
       "founder_gated": false,
       "attempts": 0,
       "action_type": "write_file_exact",
@@ -9547,16 +9547,16 @@
           "content_sha256": "ca93da285e1d85f6b22c7e0e45aa463477a82fe51d4b26bc34427d95f4a03c8a"
         }
       },
-      "shipped_at": "2026-08-20T09:24:20.706Z",
-      "commit_sha": null,
+      "shipped_at": "2026-08-20T09:24:34.492Z",
+      "commit_sha": "77393233bf6275be80b55828611aae66c28dcb80",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
-      "last_error": "STEP_STATUS_FORBIDDEN",
-      "started_at": "2026-08-20T09:22:20.266Z",
-      "duration_ms": 20838,
+      "last_attempt_at": "2026-08-20T09:24:11.335Z",
+      "last_error": null,
+      "started_at": "2026-08-20T09:24:11.335Z",
+      "duration_ms": 23157,
       "last_attempt": null,
-      "revive_count": 3,
+      "revive_count": 0,
       "revived_at": "2026-08-20T09:23:24.978Z",
       "no_op": null,
       "pre_existing": null,
@@ -9572,7 +9572,9 @@
       "heal_reason": "demote_missing_exact_to_author",
       "exact_inputs": {
         "content_source_path": "docs/products/universal-overlay/twins/steps/TALOA-S64-PROMPT-INJECT-WIRE-001.exact"
-      }
+      },
+      "shipped_via": "governed_ship_queue",
+      "heal_unblocked": false
     },
     {
       "status": "blocked",
