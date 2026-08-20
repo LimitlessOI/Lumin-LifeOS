@@ -1,0 +1,16 @@
+{
+  "schema": "sentry_layer_b_receipt_v1",
+  "product": "universal-overlay",
+  "ran_at": "2026-08-20T18:12:17.067Z",
+  "ok": false,
+  "verdict": "LIVE_SESSION_NOT_PROVEN",
+  "session_id": "c9e865da-4b82-4e73-b4fe-9695e6651be5",
+  "findings": [
+    {
+      "code": "no_live_browser_tab",
+      "detail": "Session c9e865da-4b82-4e73-b4fe-9695e6651be5 started but produced zero steps within the poll budget (final status=failed, reason=crashed:frame_timeout) -- no real browser tab with the Universal Overlay extension active was polling GET /api/v1/extension/drive/next to drive it.",
+      "proposed_solution": "Open a real browser tab with the Universal Overlay extension installed and active on any page, then re-run this script (or POST /api/v1/extension/drive/start directly) while that tab is open -- the extension auto-picks up the session via GET /pending-for-user.",
+      "product": "universal-overlay"
+    }
+  ]
+}
