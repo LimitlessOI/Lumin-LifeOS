@@ -4901,7 +4901,7 @@
       "status": "pending",
       "founder_gated": false,
       "attempts": 0,
-      "action_type": "author_then_write",
+      "action_type": "write_file_exact",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
       "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md §64",
@@ -4918,9 +4918,9 @@
       "blueprint_step_id": "TALOA-S64-MACOS-PERCEPTION-001",
       "same_signature_count": 0,
       "exactness": {
-        "sealed": false,
-        "sealed_at": "2026-08-20T06:58:48.695Z",
-        "shipped_at": "2026-08-20T06:58:48.695Z",
+        "sealed": true,
+        "sealed_at": "2026-08-20T07:43:20.853Z",
+        "shipped_at": "2026-08-20T07:43:20.853Z",
         "commit_sha": null,
         "content_sha256": "02e817eb2ebe3bcce3623a5a280979eadb0c0ea8f8523b6dc8bb88bc60472ba8",
         "target_file": "native/macos-overlay/SemanticPerception.swift",
@@ -4939,7 +4939,7 @@
           "content_sha256": "02e817eb2ebe3bcce3623a5a280979eadb0c0ea8f8523b6dc8bb88bc60472ba8"
         }
       },
-      "shipped_at": "2026-08-20T07:27:57.138Z",
+      "shipped_at": "2026-08-20T07:43:20.853Z",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
@@ -4965,7 +4965,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "exact_inputs": {
+        "content_source_path": "docs/products/universal-overlay/twins/steps/TALOA-S64-MACOS-PERCEPTION-001.exact"
+      }
     },
     {
       "status": "done",
