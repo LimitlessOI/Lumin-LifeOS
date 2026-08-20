@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-20T18:13:44.998Z",
+  "generated_at": "2026-08-20T20:43:35.518Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13717,
   "files": [
@@ -21741,9 +21741,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 4169522,
-      "mtime": "2026-08-20T17:32:53.800Z",
-      "indexed_at": "2026-08-20T18:13:44.998Z"
+      "bytes": 4169817,
+      "mtime": "2026-08-20T18:13:46.742Z",
+      "indexed_at": "2026-08-20T20:43:35.518Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -44704,9 +44704,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 637986,
-      "mtime": "2026-08-20T17:32:45.558Z",
-      "indexed_at": "2026-08-20T17:32:51.959Z"
+      "bytes": 639205,
+      "mtime": "2026-08-20T20:43:29.767Z",
+      "indexed_at": "2026-08-20T20:43:35.518Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -76279,9 +76279,9 @@
     {
       "path": "routes/railway-managed-env-routes.js",
       "synopsis": "Railway env vault + sync (production spine).",
-      "bytes": 59421,
-      "mtime": "2026-08-19T19:56:30.529Z",
-      "indexed_at": "2026-08-19T19:57:40.991Z",
+      "bytes": 61558,
+      "mtime": "2026-08-20T20:42:42.392Z",
+      "indexed_at": "2026-08-20T20:43:35.518Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
