@@ -184,9 +184,12 @@ export const OVERLAY_PRINT_SEQUENCE = Object.freeze([
     id: 'TALOA-S64-SENTRY-LAYER-B-001',
     target_file: 'scripts/sentry-overlay-layer-b.mjs',
     sandbox_boundary: 'scripts/**',
-    task: 'Overlay print §64 item 9 / §52: real Layer B browser walkthrough for universal-overlay. Every finding carries proposed_solution. Register in SENTRY_PRODUCT_REGISTRY.json.',
-    spec: 'SO-002 Layer B. Layer A already exists (TALOA-SENTRY-LAYER-A-001).',
-    file_contains: ['universal-overlay', 'proposed_solution', 'layer-b'],
+    task: 'MANDATORY, SO-002, founder directive 2026-08-20 ("add it to the BP and make it a requirement for all BPs, that\'s the standard"): real Layer B browser walkthrough for universal-overlay -- not a health-endpoint ping. The current file only calls GET /api/v1/lifeos/builder/ready and calls that a pass; its own comment admits "Scaffold gate -- expand to full browser walk when overlay Layer B endpoint exists." Rewrite it to drive a REAL session using the already-proven session primitives in services/extension-drive-bridge.js (createDriveSession, makeExtensionObserve, makeExtensionAct, makeExtensionVerify): observe the real overlay surface (public/overlay/lifeos-app.html and the /api/v1/taloa/overlay-host/health route), attempt at least one real act (a click or equivalent), verify the result, and write a real receipt to products/receipts/SENTRY_OVERLAY_LAYER_B.json with per-step findings, each carrying a concrete proposed_solution per SO-002. Every finding MUST carry a real proposed_solution -- a generic one-size-fits-all string like the current file\'s does not count. Do NOT flip SENTRY_PRODUCT_REGISTRY.json\'s Layer B status to IMPLEMENTED in this step -- that requires an actual live run producing a real receipt with a real session, which a codegen pass authoring the script cannot itself perform or claim.',
+    spec: 'SO-002 Layer B. Layer A already exists (TALOA-SENTRY-LAYER-A-001). Real session-driving required, not just an export (confirmed 2026-08-20: the existing scaffold satisfied the old shallow file_contains check while never actually walking a browser).',
+    file_contains: ['universal-overlay', 'proposed_solution', 'layer-b', 'createDriveSession', 'makeExtensionObserve', 'makeExtensionAct', 'makeExtensionVerify'],
+    behavior_assertions: [
+      { type: 'file_contains', path: 'scripts/sentry-overlay-layer-b.mjs', must_include: ['createDriveSession', 'makeExtensionObserve', 'makeExtensionAct', 'makeExtensionVerify', 'SENTRY_OVERLAY_LAYER_B'], assertion_id: 'self:layer-b-real-session-driven' },
+    ],
   }),
 ]);
 
