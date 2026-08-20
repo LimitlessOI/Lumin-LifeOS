@@ -227,6 +227,30 @@ async function internalRailwayRedeployService(serviceId, environmentId) {
 }
 
 /**
+ * Same serviceInstanceDeploy mutation internalRailwayBuildFromLatest uses,
+ * but for an arbitrary service/environment instead of hardcoding Abbott's
+ * own RAILWAY_SERVICE_ID/RAILWAY_ENVIRONMENT_ID -- needed 2026-08-20 to
+ * rebuild Costello from its latest commit (8 commits ahead of its crashed
+ * deployment) rather than only being able to restart the same stale image
+ * serviceInstanceRedeploy above is limited to.
+ */
+async function internalRailwayDeployServiceLatest(serviceId, environmentId, commitSha = null) {
+  if (!serviceId || !environmentId) throw new Error('serviceId and environmentId required');
+  const sha = commitSha ? String(commitSha).trim() : null;
+  return railwayGql(
+    `mutation DeployServiceLatest($serviceId: String!, $environmentId: String!, $commitSha: String, $latestCommit: Boolean) {
+      serviceInstanceDeploy(
+        serviceId: $serviceId
+        environmentId: $environmentId
+        commitSha: $commitSha
+        latestCommit: $latestCommit
+      )
+    }`,
+    { serviceId, environmentId, commitSha: sha, latestCommit: sha ? null : true },
+  );
+}
+
+/**
  * Point Costello's DATABASE_URL / APP_URL / PUBLIC_BASE_URL at its own real
  * dedicated database + its own real current Railway domain, WITHOUT the
  * caller ever needing to see or pass the raw connection string — built
@@ -879,6 +903,25 @@ export function createRailwayManagedEnvRoutes({ requireKey, managedEnvService })
       res.json({ ok: true, serviceId, environmentId, data });
     } catch (error) {
       console.error('[RAILWAY-REDEPLOY-SERVICE] Error:', error.message);
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  /**
+   * POST /deploy-service-latest
+   * Body: { serviceId, environmentId, commit_sha? }
+   * Rebuilds an arbitrary service from its latest GitHub commit (or a named
+   * commit_sha) -- unlike /redeploy-service, which only restarts the same
+   * already-built image, this pulls in commits pushed since the last deploy.
+   */
+  router.post("/deploy-service-latest", requireKey, async (req, res) => {
+    try {
+      const { serviceId, environmentId, commit_sha = null } = req.body || {};
+      const data = await internalRailwayDeployServiceLatest(serviceId, environmentId, commit_sha);
+      console.log(`[TSOS-MACHINE] KNOW: STATE=RECEIPT VERB=DEPLOY_SERVICE_LATEST | serviceId=${serviceId} environmentId=${environmentId} commit_sha=${commit_sha || 'latest'}`);
+      res.json({ ok: true, serviceId, environmentId, commit_sha: commit_sha || 'latest', data });
+    } catch (error) {
+      console.error('[RAILWAY-DEPLOY-SERVICE-LATEST] Error:', error.message);
       res.status(500).json({ ok: false, error: error.message });
     }
   });
