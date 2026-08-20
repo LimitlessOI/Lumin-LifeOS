@@ -5136,7 +5136,7 @@
       "blocker_resolution": null
     },
     {
-      "status": "pending",
+      "status": "done",
       "founder_gated": false,
       "attempts": 0,
       "action_type": "write_file_exact",
@@ -5189,14 +5189,14 @@
           "content_sha256": "dfbd05ab35c83c19b49f2991c3a7b3a9824153b4972490cc6c2faaa31748f069"
         }
       },
-      "shipped_at": "2026-08-20T07:33:38.857Z",
-      "commit_sha": null,
+      "shipped_at": "2026-08-20T07:33:47.328Z",
+      "commit_sha": "80a610d33a755dc2478a6d3100961aceb094a408",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
-      "last_error": "hidden_dependency",
-      "started_at": "2026-08-20T07:13:42.797Z",
-      "duration_ms": 15297,
+      "last_attempt_at": "2026-08-20T07:33:36.837Z",
+      "last_error": null,
+      "started_at": "2026-08-20T07:33:36.837Z",
+      "duration_ms": 10492,
       "heal_unblocked": false,
       "failure_signature": null,
       "tokens_used": 0,
@@ -5207,7 +5207,7 @@
       "reopened_at": "2026-08-20T07:10:29.101Z",
       "reopen_reason": "reachability_audit_2026-08-20c: re-closed done via a trailing-newline-only diff -- the function body is still a literal \"No-op for now\" stub, zero real callers before or after this ship. The only completion check this step had was a same-file string-literal check that was true from the original authoring and could never fail. Fixed at the source: added a real reachability assertion (services/taloa/body-adapter-service.js must reference assertObservationIsNotAuthority) plus an explicit wiring instruction. Reopening so the next attempt is held to the real standard.",
       "heal_reason": "demote_missing_exact_to_author",
-      "revive_count": 1,
+      "revive_count": 0,
       "revived_at": "2026-08-20T07:29:02.415Z",
       "last_attempt": null,
       "demote_reason": null,
