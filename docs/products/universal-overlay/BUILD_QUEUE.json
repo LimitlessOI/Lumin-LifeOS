@@ -5157,7 +5157,7 @@
       "escalation_note": null
     },
     {
-      "status": "pending",
+      "status": "done",
       "founder_gated": false,
       "attempts": 0,
       "action_type": "write_file_exact",
@@ -5210,14 +5210,14 @@
           "content_sha256": "4adb3eb48a462eeb0af2fd0077fb137e69e123fd1c6d4427a17622dcab7e3aeb"
         }
       },
-      "shipped_at": "2026-08-20T08:56:37.030Z",
-      "commit_sha": null,
+      "shipped_at": "2026-08-20T08:56:51.015Z",
+      "commit_sha": "a6527d7f0dcf53fcec01866443795a94d7e50299",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-20T08:42:47.496Z",
+      "last_attempt_at": "2026-08-20T08:56:28.750Z",
       "last_error": null,
-      "started_at": "2026-08-20T08:42:42.494Z",
-      "duration_ms": 11279,
+      "started_at": "2026-08-20T08:56:28.750Z",
+      "duration_ms": 22265,
       "heal_unblocked": false,
       "failure_signature": null,
       "tokens_used": 0,
@@ -9444,6 +9444,37 @@
       ],
       "blueprint_step_id": "TALOA-S64-ANDROID-BODY-LIVE-WIRE-001",
       "same_signature_count": 0
+    },
+    {
+      "status": "pending",
+      "founder_gated": false,
+      "attempts": 0,
+      "action_type": "author_then_write",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "mission_id": "PRODUCT-universal-overlay",
+      "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md §64",
+      "depends_on": [
+        "TALOA-S64-PROMPT-INJECT-001"
+      ],
+      "id": "TALOA-S64-PROMPT-INJECT-WIRE-001",
+      "target_file": "services/taloa/body-adapter-service.js",
+      "sandbox_boundary": "services/taloa/**",
+      "task": "Real reachability companion to TALOA-S64-PROMPT-INJECT-001, same pattern as TALOA-S64-MACOS-BODY-WIRE-001: THIS step's target_file is the actual real caller, so its own codegen pass can satisfy the check. Import assertObservationIsNotAuthority from ./prompt-injection-authority-gate.js and call it inside observe(), after the observation is produced and before it is returned, passing the current task's authorization envelope. Additive only -- do not rewrite observe()'s existing flow beyond this.",
+      "spec": "Closes the real gap TALOA-S64-PROMPT-INJECT-001 could not close itself: assertObservationIsNotAuthority existed but had zero callers anywhere (confirmed by direct grep, 2026-08-20).",
+      "file_contains": [
+        "assertObservationIsNotAuthority"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "file_contains",
+          "path": "services/taloa/body-adapter-service.js",
+          "must_include": [
+            "assertObservationIsNotAuthority"
+          ],
+          "assertion_id": "reachability:prompt-inject-gate-wired"
+        }
+      ],
+      "blueprint_step_id": "TALOA-S64-PROMPT-INJECT-WIRE-001"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
