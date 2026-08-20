@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-20T00:19:54.091Z",
+  "generated_at": "2026-08-20T05:25:07.078Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13709,
+  "file_count": 13714,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -93557,6 +93557,13 @@
       ]
     },
     {
+      "path": "scripts/verify-taloa-heart-and-soul-wired.mjs",
+      "synopsis": "Real end-to-end proof that the 8 core Taloa components (§14a)",
+      "bytes": 6762,
+      "mtime": "2026-08-20T05:21:28.723Z",
+      "indexed_at": "2026-08-20T05:25:07.078Z"
+    },
+    {
       "path": "scripts/verify-taloa-overlay-a2z.mjs",
       "synopsis": "TALOA-A2Z-008 -- zero-deception acceptance harness for the",
       "bytes": 10823,
@@ -103312,10 +103319,10 @@
     },
     {
       "path": "services/taloa/body-adapter-service.js",
-      "synopsis": "Adapts content and interactions to various display planes and contexts for fluid UI.",
-      "bytes": 2572,
-      "mtime": "2026-08-12T19:57:56.004Z",
-      "indexed_at": "2026-08-12T19:57:56.004Z",
+      "synopsis": "BodyAdapter role per blueprint §14a — translates typed commands",
+      "bytes": 3476,
+      "mtime": "2026-08-20T05:21:28.707Z",
+      "indexed_at": "2026-08-20T05:25:07.078Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
@@ -103332,10 +103339,10 @@
     },
     {
       "path": "services/taloa/capsule-runtime-service.js",
-      "synopsis": "Exports createCapsuleRuntimeService — services/taloa/capsule-runtime-service.js.",
-      "bytes": 2071,
-      "mtime": "2026-08-12T21:38:58.588Z",
-      "indexed_at": "2026-08-12T21:38:58.588Z",
+      "synopsis": "CapsuleRuntime role per blueprint §14a — capsule lookup,",
+      "bytes": 2880,
+      "mtime": "2026-08-20T05:21:28.714Z",
+      "indexed_at": "2026-08-20T05:25:07.078Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
@@ -103356,6 +103363,26 @@
       "bytes": 2667,
       "mtime": "2026-08-16T05:33:07.611Z",
       "indexed_at": "2026-08-16T05:33:07.611Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/taloa/fluid-ui-composer.js",
+      "synopsis": "Deterministic FluidUIComposer — maps a validated ViewIntent to",
+      "bytes": 4735,
+      "mtime": "2026-08-20T05:21:28.719Z",
+      "indexed_at": "2026-08-20T05:25:07.078Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/taloa/fluid-ui-types.js",
+      "synopsis": "Real, enforced type definitions for the Fluid UI system per",
+      "bytes": 3130,
+      "mtime": "2026-08-20T05:21:28.718Z",
+      "indexed_at": "2026-08-20T05:25:07.078Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
@@ -103392,10 +103419,10 @@
     },
     {
       "path": "services/taloa/overlay-host-service.js",
-      "synopsis": "Manages the universal overlay display and interactions for the Digital Imprint system.",
-      "bytes": 1636,
-      "mtime": "2026-08-12T19:47:00.532Z",
-      "indexed_at": "2026-08-12T19:47:00.532Z",
+      "synopsis": "OverlayHost role per blueprint §14a — local Display Plane",
+      "bytes": 1377,
+      "mtime": "2026-08-20T05:21:28.705Z",
+      "indexed_at": "2026-08-20T05:25:07.078Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
@@ -103442,10 +103469,10 @@
     },
     {
       "path": "services/taloa/perception-fusion-service.js",
-      "synopsis": "Exports createPerceptionFusionService — services/taloa/perception-fusion-service.js.",
-      "bytes": 1912,
-      "mtime": "2026-08-12T19:58:41.095Z",
-      "indexed_at": "2026-08-12T19:58:41.095Z",
+      "synopsis": "PerceptionFusion role per blueprint §14a — normalizes and",
+      "bytes": 2897,
+      "mtime": "2026-08-20T05:21:28.709Z",
+      "indexed_at": "2026-08-20T05:25:07.078Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
@@ -103462,20 +103489,40 @@
     },
     {
       "path": "services/taloa/receipt-ledger-service.js",
-      "synopsis": "Exports createReceiptLedgerService — services/taloa/receipt-ledger-service.js.",
-      "bytes": 2267,
-      "mtime": "2026-08-12T19:47:00.532Z",
-      "indexed_at": "2026-08-12T19:47:00.532Z",
+      "synopsis": "ReceiptLedger role per blueprint §14a — append-only, immutable-",
+      "bytes": 1659,
+      "mtime": "2026-08-20T05:21:28.717Z",
+      "indexed_at": "2026-08-20T05:25:07.078Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
     },
     {
       "path": "services/taloa/strategy-router-service.js",
-      "synopsis": "Determines the appropriate strategy for task execution based on a 5-gate deterministic algorithm.",
-      "bytes": 2935,
-      "mtime": "2026-08-12T21:38:40.272Z",
-      "indexed_at": "2026-08-12T21:38:40.272Z",
+      "synopsis": "StrategyRouter role per blueprint §14a/§13 — selects an",
+      "bytes": 3865,
+      "mtime": "2026-08-20T05:21:28.713Z",
+      "indexed_at": "2026-08-20T05:25:07.078Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/taloa/taloa-runtime-store.js",
+      "synopsis": "Real, minimal shared runtime store for the Taloa overlay service",
+      "bytes": 2206,
+      "mtime": "2026-08-20T05:21:28.721Z",
+      "indexed_at": "2026-08-20T05:25:07.078Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/taloa/taloa-runtime.js",
+      "synopsis": "Real composition root wiring all 8 \"heart and soul\" Taloa",
+      "bytes": 3144,
+      "mtime": "2026-08-20T05:21:28.722Z",
+      "indexed_at": "2026-08-20T05:25:07.078Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
@@ -103493,10 +103540,10 @@
     },
     {
       "path": "services/taloa/task-orchestrator-service.js",
-      "synopsis": "Manages the lifecycle and state of tasks and steps across the Digital Imprint system, generalizing browser session schemas.",
-      "bytes": 2599,
-      "mtime": "2026-08-12T19:59:24.155Z",
-      "indexed_at": "2026-08-12T19:59:24.155Z",
+      "synopsis": "TaskOrchestrator role per blueprint §14a — the one authoritative",
+      "bytes": 3698,
+      "mtime": "2026-08-20T05:21:28.711Z",
+      "indexed_at": "2026-08-20T05:25:07.078Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
@@ -103513,10 +103560,10 @@
     },
     {
       "path": "services/taloa/verification-service.js",
-      "synopsis": "Exports createVerificationService — services/taloa/verification-service.js.",
-      "bytes": 2339,
-      "mtime": "2026-08-12T21:39:15.837Z",
-      "indexed_at": "2026-08-12T21:39:15.837Z",
+      "synopsis": "VerificationService role per blueprint §14a — independent",
+      "bytes": 3324,
+      "mtime": "2026-08-20T05:21:28.716Z",
+      "indexed_at": "2026-08-20T05:25:07.078Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
