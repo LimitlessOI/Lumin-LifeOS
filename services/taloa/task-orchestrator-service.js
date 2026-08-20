@@ -16,6 +16,8 @@
  * @ssot docs/products/universal-overlay/PRODUCT_HOME.md
  */
 
+import { createTemplateReplayService } from './template-replay-service.js';
+
 let taskCounter = 0;
 function nextTaskId() {
   taskCounter += 1;
@@ -26,6 +28,9 @@ export function createTaskOrchestratorService({ store, logger, strategyRouter, b
   for (const [name, dep] of Object.entries({ store, logger, strategyRouter, bodyAdapter, verificationService, receiptLedger })) {
     if (!dep) throw new Error(`createTaskOrchestratorService: Missing required dependency: ${name}`);
   }
+
+  // Initialize template replay service
+  const templateReplayService = createTemplateReplayService();
 
   return {
     async createTask(taskDetails) {
@@ -48,6 +53,21 @@ export function createTaskOrchestratorService({ store, logger, strategyRouter, b
     async dispatchTask(taskId, action, { expected = null, agentId = 'taloa' } = {}) {
       const task = store.getTask(taskId);
       if (!task) return { ok: false, stage: 'lookup', reason: `unknown task_id: ${taskId}` };
+
+      // Check for template replay
+      const replay = templateReplayService.getReplayForTask(taskId, action);
+      if (replay) {
+        logger.info('Using template replay for task', { taskId, action, replay });
+        store.updateTask(taskId, { status: replay.ok ? 'verified' : 'failed' });
+        await receiptLedger.recordReceipt({
+          task_id: taskId,
+          type: 'dispatch_complete',
+          method: 'template_replay',
+          action_result: replay.actionResult,
+          verification: { ok: replay.ok, reason: 'template_replay_hit' },
+        });
+        return { ok: replay.ok, stage: 'complete', method: 'template_replay', actionResult: replay.actionResult, verification: { ok: replay.ok, reason: 'template_replay_hit' } };
+      }
 
       store.updateTask(taskId, { status: 'executing' });
 
