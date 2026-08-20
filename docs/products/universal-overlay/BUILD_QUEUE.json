@@ -4872,7 +4872,7 @@
       "last_error": "hidden_dependency",
       "heal_unblocked": false,
       "heal_reason": "demote_missing_exact_to_author",
-      "same_signature_count": 0,
+      "same_signature_count": 1,
       "reopened_at": "2026-08-20T06:30:52.527Z",
       "reopen_reason": "reachability_audit_2026-08-20: marked done via governed_ship_queue but has ZERO real callers anywhere in the live codebase (confirmed by direct grep across routes/, services/, startup/, and native Swift sources) -- exported/compiled but never invoked. Reopened per CLAUDE.md \"Acceptance Must Prove Reachability, Not Just Existence.\" Founder directive: universal-overlay blueprint is top priority, build it for real, do not stop.",
       "started_at": "2026-08-20T07:06:27.458Z",
@@ -4893,7 +4893,9 @@
         "content_source_path": "docs/products/universal-overlay/twins/steps/TALOA-S64-ANDROID-BODY-WIRE-001.exact"
       },
       "duration_ms": 17748,
-      "tokens_used": 0
+      "tokens_used": 0,
+      "failure_signature": "hidden_dependency",
+      "escalation_class": "same_signature_repeat"
     },
     {
       "status": "done",
@@ -5143,7 +5145,7 @@
       "status": "pending",
       "founder_gated": false,
       "attempts": 0,
-      "action_type": "author_then_write",
+      "action_type": "write_file_exact",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
       "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md §64",
@@ -5172,11 +5174,11 @@
         }
       ],
       "exactness": {
-        "sealed": false,
-        "sealed_at": "2026-08-13T08:19:33.589Z",
-        "shipped_at": "2026-08-13T08:19:33.589Z",
+        "sealed": true,
+        "sealed_at": "2026-08-20T07:06:33.465Z",
+        "shipped_at": "2026-08-20T07:06:33.465Z",
         "commit_sha": null,
-        "content_sha256": "079795bb3edac7b164f0401cea9846fbdf070a1127f5e0b203837da2b5932589",
+        "content_sha256": "dfbd05ab35c83c19b49f2991c3a7b3a9824153b4972490cc6c2faaa31748f069",
         "target_file": "services/taloa/prompt-injection-authority-gate.js",
         "reverse": {
           "mode": "delete_file",
@@ -5190,10 +5192,10 @@
         "rebuild": {
           "action_type": "write_file_exact",
           "content_source_path": "docs/products/universal-overlay/twins/steps/TALOA-S64-PROMPT-INJECT-001.exact",
-          "content_sha256": "079795bb3edac7b164f0401cea9846fbdf070a1127f5e0b203837da2b5932589"
+          "content_sha256": "dfbd05ab35c83c19b49f2991c3a7b3a9824153b4972490cc6c2faaa31748f069"
         }
       },
-      "shipped_at": "2026-08-13T08:20:30.559Z",
+      "shipped_at": "2026-08-20T07:06:33.465Z",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
@@ -5220,7 +5222,10 @@
       "pre_existing": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "exact_inputs": {
+        "content_source_path": "docs/products/universal-overlay/twins/steps/TALOA-S64-PROMPT-INJECT-001.exact"
+      }
     },
     {
       "status": "done",
