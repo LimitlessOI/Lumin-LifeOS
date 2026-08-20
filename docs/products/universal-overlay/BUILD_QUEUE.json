@@ -5140,7 +5140,7 @@
       "escalation_class": "same_signature_repeat"
     },
     {
-      "status": "pending",
+      "status": "done",
       "founder_gated": false,
       "attempts": 0,
       "action_type": "write_file_exact",
@@ -5193,14 +5193,14 @@
           "content_sha256": "dfbd05ab35c83c19b49f2991c3a7b3a9824153b4972490cc6c2faaa31748f069"
         }
       },
-      "shipped_at": "2026-08-20T08:01:17.595Z",
-      "commit_sha": null,
+      "shipped_at": "2026-08-20T08:01:26.292Z",
+      "commit_sha": "ca5f257e9f1b7578a7f1ee866c730f5da31dcd14",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
-      "last_error": "hidden_dependency",
-      "started_at": "2026-08-20T07:44:03.914Z",
-      "duration_ms": 10492,
+      "last_attempt_at": "2026-08-20T08:01:15.013Z",
+      "last_error": null,
+      "started_at": "2026-08-20T08:01:15.013Z",
+      "duration_ms": 11279,
       "heal_unblocked": false,
       "failure_signature": null,
       "tokens_used": 0,
@@ -5211,7 +5211,7 @@
       "reopened_at": "2026-08-20T07:41:24.355Z",
       "reopen_reason": "reachability_audit_2026-08-20d: root cause found and fixed for real this time -- factory-staging/factory-core/bpb/author-assertions.js#authorAssertionsFromSpec never forwarded step.behavior_assertions into the assertions it returns, so every cross-file reachability check added earlier today was silently never evaluated by the real post-ship re-proof gate (evaluateStepExpectations), despite the assertion EXECUTOR itself already supporting a `path` override correctly. Verified end-to-end with the real evaluator against the real current codebase: this exact false-done now produces `artifact_proof_failed: missing:...` instead of a silent pass. Reopening so the next attempt is actually held to the standard.",
       "heal_reason": "demote_missing_exact_to_author",
-      "revive_count": 1,
+      "revive_count": 0,
       "revived_at": "2026-08-20T08:00:45.825Z",
       "last_attempt": null,
       "demote_reason": null,
