@@ -81,10 +81,12 @@ export function createBodyAdapterService({ store, logger, composeViewIntent }) {
       };
 
       // CRITICAL: TALOA-S64-PROMPT-INJECT-001 companion: assert observation is not authority
+      // Real caller of the authority gate — closes the gap where the gate
+      // existed but had zero callers (confirmed 2026-08-20).
       if (scope?.authorization_envelope) {
         assertObservationIsNotAuthority(scope.authorization_envelope);
       }
-      
+
       return observation;
     },
   };
