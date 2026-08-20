@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-20T17:32:51.959Z",
+  "generated_at": "2026-08-20T18:13:44.998Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13716,
+  "file_count": 13717,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21741,9 +21741,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 4168824,
-      "mtime": "2026-08-20T05:25:24.038Z",
-      "indexed_at": "2026-08-20T05:26:36.861Z"
+      "bytes": 4169522,
+      "mtime": "2026-08-20T17:32:53.800Z",
+      "indexed_at": "2026-08-20T18:13:44.998Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -46959,9 +46959,9 @@
     {
       "path": "docs/products/universal-overlay/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Universal Overlay",
-      "bytes": 136551,
-      "mtime": "2026-08-20T10:03:03.073Z",
-      "indexed_at": "2026-08-20T10:03:08.923Z"
+      "bytes": 138378,
+      "mtime": "2026-08-20T18:13:38.596Z",
+      "indexed_at": "2026-08-20T18:13:44.998Z"
     },
     {
       "path": "docs/products/universal-overlay/SEND_PACKET_FLUID_UI_AND_TWO_FACTORIES_2026-08-11.md",
@@ -71352,6 +71352,14 @@
       "synopsis_index_only": true
     },
     {
+      "path": "products/receipts/SENTRY_OVERLAY_LAYER_B.json",
+      "synopsis": "Product receipt — SENTRY OVERLAY LAYER B.",
+      "bytes": 923,
+      "mtime": "2026-08-20T18:12:17.068Z",
+      "indexed_at": "2026-08-20T18:13:44.998Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "products/receipts/SENTRY_PASS_demo-write-widget_FACTORY-DEMO-SAMPLE-0001-demo-write-widget-1785538668035.json",
       "synopsis": "Exports greet — products/receipts/SENTRY_PASS_demo-write-widget_FACTORY-DEMO-SAMPLE-0001-demo-write-widget-1785538668035.json.",
       "bytes": 1687,
@@ -81552,10 +81560,10 @@
     },
     {
       "path": "scripts/sentry-overlay-layer-b.mjs",
-      "synopsis": "SO-002 Layer B human-sim gate for universal-overlay.",
-      "bytes": 1929,
-      "mtime": "2026-08-13T08:37:03.253Z",
-      "indexed_at": "2026-08-13T08:37:03.253Z",
+      "synopsis": "SO-002 Layer B human-sim gate for universal-overlay -- a real",
+      "bytes": 8430,
+      "mtime": "2026-08-20T18:11:22.309Z",
+      "indexed_at": "2026-08-20T18:13:44.998Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
