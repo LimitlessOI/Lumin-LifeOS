@@ -5139,7 +5139,7 @@
       "status": "pending",
       "founder_gated": false,
       "attempts": 0,
-      "action_type": "author_then_write",
+      "action_type": "write_file_exact",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
       "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md §64",
@@ -5168,9 +5168,9 @@
         }
       ],
       "exactness": {
-        "sealed": false,
-        "sealed_at": "2026-08-20T07:06:33.465Z",
-        "shipped_at": "2026-08-20T07:06:33.465Z",
+        "sealed": true,
+        "sealed_at": "2026-08-20T07:33:38.857Z",
+        "shipped_at": "2026-08-20T07:33:38.857Z",
         "commit_sha": null,
         "content_sha256": "dfbd05ab35c83c19b49f2991c3a7b3a9824153b4972490cc6c2faaa31748f069",
         "target_file": "services/taloa/prompt-injection-authority-gate.js",
@@ -5189,7 +5189,7 @@
           "content_sha256": "dfbd05ab35c83c19b49f2991c3a7b3a9824153b4972490cc6c2faaa31748f069"
         }
       },
-      "shipped_at": "2026-08-20T07:06:46.515Z",
+      "shipped_at": "2026-08-20T07:33:38.857Z",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
@@ -5216,7 +5216,10 @@
       "pre_existing": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "exact_inputs": {
+        "content_source_path": "docs/products/universal-overlay/twins/steps/TALOA-S64-PROMPT-INJECT-001.exact"
+      }
     },
     {
       "status": "done",
