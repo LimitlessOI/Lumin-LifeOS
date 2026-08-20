@@ -1,48 +1,66 @@
 /**
- * SYNOPSIS: Exports createCapsuleRuntimeService — services/taloa/capsule-runtime-service.js.
+ * SYNOPSIS: CapsuleRuntime role per blueprint §14a — capsule lookup,
+ * activation state, template retrieval/versioning. Real implementation:
+ * actually registers/retrieves capsules from the shared store and validates
+ * real required fields, rather than always returning "success"/"valid"
+ * regardless of input.
  * @ssot docs/products/universal-overlay/PRODUCT_HOME.md
  */
 
-export function createCapsuleRuntimeService({ pool, logger, capsuleStore, strategyRouter }) {
-  if (!pool) {
-    throw new Error('createCapsuleRuntimeService: Missing required dependency: pool');
+const REQUIRED_CAPSULE_FIELDS = Object.freeze(['id', 'goal', 'steps']);
+
+export function createCapsuleRuntimeService({ store, logger }) {
+  if (!store) {
+    throw new Error('createCapsuleRuntimeService: Missing required dependency: store');
   }
   if (!logger) {
     throw new Error('createCapsuleRuntimeService: Missing required dependency: logger');
   }
-  if (!capsuleStore) {
-    throw new Error('createCapsuleRuntimeService: Missing required dependency: capsuleStore');
-  }
-  if (!strategyRouter) {
-    throw new Error('createCapsuleRuntimeService: Missing required dependency: strategyRouter');
-  }
 
   return {
     /**
-     * Executes an Operational Capsule with compiled replay-first logic, ensuring correct namespacing.
-     * @param {object} capsuleData - The data for the capsule to execute.
-     * @returns {Promise<object>} A promise that resolves to a serializable result object.
+     * Real validation before execution — a capsule missing required fields
+     * is rejected, not silently "executed successfully."
      */
-    async executeCapsule(capsuleData) {
-      logger.info('Executing capsule', { capsuleData });
-      // Placeholder for actual capsule execution logic.
-      // This would involve fetching compiled logic from capsuleStore,
-      // applying replay-first principles, and using strategyRouter.
-      // For now, return a success message.
-      return { status: 'success', message: 'Capsule executed successfully', capsuleData };
+    async validateCapsule(capsuleData) {
+      if (!capsuleData || typeof capsuleData !== 'object') {
+        return { status: 'invalid', message: 'capsuleData must be an object' };
+      }
+      const missing = REQUIRED_CAPSULE_FIELDS.filter((f) => capsuleData[f] === undefined);
+      if (missing.length > 0) {
+        return { status: 'invalid', message: `missing required fields: ${missing.join(', ')}` };
+      }
+      if (!Array.isArray(capsuleData.steps) || capsuleData.steps.length === 0) {
+        return { status: 'invalid', message: 'steps must be a non-empty array' };
+      }
+      return { status: 'valid', message: 'capsule data is valid', capsuleData };
     },
 
     /**
-     * Validates an Operational Capsule.
-     * @param {object} capsuleData - The data for the capsule to validate.
-     * @returns {Promise<object>} A promise that resolves to a serializable validation result object.
+     * Real execution: validates first (fail-closed, no execution on an
+     * invalid capsule), registers it in the store, and walks its real steps
+     * rather than returning a canned success message.
      */
-    async validateCapsule(capsuleData) {
-      logger.info('Validating capsule', { capsuleData });
-      // Placeholder for actual capsule validation logic.
-      // This would involve checking schema, dependencies, and execution feasibility.
-      // For now, return a validation success.
-      return { status: 'valid', message: 'Capsule data is valid', capsuleData };
+    async executeCapsule(capsuleData) {
+      const validation = await this.validateCapsule(capsuleData);
+      if (validation.status !== 'valid') {
+        logger.warn('Refusing to execute invalid capsule', { reason: validation.message });
+        return { status: 'rejected', message: validation.message };
+      }
+      const registered = store.registerCapsule(capsuleData);
+      const executedSteps = capsuleData.steps.map((step, i) => ({
+        index: i,
+        step,
+        status: 'planned', // real execution requires a real Body adapter for each step's action — this records the plan honestly, doesn't fake completion
+      }));
+      logger.info('Capsule registered and planned', { capsuleId: registered.id, stepCount: executedSteps.length });
+      return { status: 'planned', message: `${executedSteps.length} step(s) planned; execution requires a capable Body per step`, capsuleId: registered.id, steps: executedSteps };
+    },
+
+    getCapsule(capsuleId) {
+      return store.getCapsule(capsuleId);
     },
   };
 }
+
+export default createCapsuleRuntimeService;

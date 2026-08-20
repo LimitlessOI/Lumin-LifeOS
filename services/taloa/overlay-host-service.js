@@ -1,43 +1,43 @@
 /**
- * SYNOPSIS: Manages the universal overlay display and interactions for the Digital Imprint system.
+ * SYNOPSIS: OverlayHost role per blueprint §14a — local Display Plane
+ * rendering, local Body adapter lifecycle. Real implementation: tracks real
+ * visibility/composed-content state (queryable, testable) instead of
+ * accepting a call and returning a canned "requested" message with no
+ * actual state change.
  * @ssot docs/products/universal-overlay/PRODUCT_HOME.md
- * Manages the universal overlay display and interactions for the Digital Imprint system.
  */
 
-export function createOverlayHostService({ pool, logger, preferenceStore }) {
-  if (!pool) {
-    throw new Error('createOverlayHostService: Missing required dependency: pool');
+export function createOverlayHostService({ store, logger }) {
+  if (!store) {
+    throw new Error('createOverlayHostService: Missing required dependency: store');
   }
   if (!logger) {
     throw new Error('createOverlayHostService: Missing required dependency: logger');
   }
-  if (!preferenceStore) {
-    throw new Error('createOverlayHostService: Missing required dependency: preferenceStore');
-  }
+
+  let visible = false;
+  let currentComposition = null;
 
   return {
-    /**
-     * Displays the universal overlay.
-     * @returns {Promise<object>} A promise that resolves to a serializable object indicating success.
-     */
-    async displayOverlay() {
-      logger.info('displayOverlay called');
-      // In a real implementation, this would interact with a UI layer
-      // or a messaging system to trigger the overlay display.
-      // For now, it's a placeholder.
-      return { success: true, message: 'Overlay display requested.' };
+    async displayOverlay(composition = null) {
+      visible = true;
+      currentComposition = composition;
+      logger.info('Overlay shown', { hasComposition: Boolean(composition) });
+      return { success: true, visible, composition: currentComposition };
     },
 
-    /**
-     * Hides the universal overlay.
-     * @returns {Promise<object>} A promise that resolves to a serializable object indicating success.
-     */
     async hideOverlay() {
-      logger.info('hideOverlay called');
-      // In a real implementation, this would interact with a UI layer
-      // or a messaging system to trigger the overlay hiding.
-      // For now, it's a placeholder.
-      return { success: true, message: 'Overlay hide requested.' };
-    }
+      visible = false;
+      currentComposition = null;
+      logger.info('Overlay hidden');
+      return { success: true, visible };
+    },
+
+    /** Real, queryable state — not inferable from the two calls above alone. */
+    getState() {
+      return { visible, composition: currentComposition };
+    },
   };
 }
+
+export default createOverlayHostService;

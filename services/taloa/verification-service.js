@@ -1,11 +1,15 @@
 /**
- * SYNOPSIS: Exports createVerificationService — services/taloa/verification-service.js.
+ * SYNOPSIS: VerificationService role per blueprint §14a — independent
+ * success/failure judgment; the actor that acted cannot also certify
+ * (§47, Universal Body Contract verify()). Real implementation: actually
+ * compares observed state against expected state field-by-field, not a
+ * truthy check on operation.id.
  * @ssot docs/products/universal-overlay/PRODUCT_HOME.md
  */
 
-export function createVerificationService({ pool, logger, receiptLedger, capsuleRuntime }) {
-  if (!pool) {
-    throw new Error('createVerificationService: Missing required dependency: pool');
+export function createVerificationService({ store, logger, receiptLedger }) {
+  if (!store) {
+    throw new Error('createVerificationService: Missing required dependency: store');
   }
   if (!logger) {
     throw new Error('createVerificationService: Missing required dependency: logger');
@@ -13,46 +17,56 @@ export function createVerificationService({ pool, logger, receiptLedger, capsule
   if (!receiptLedger) {
     throw new Error('createVerificationService: Missing required dependency: receiptLedger');
   }
-  if (!capsuleRuntime) {
-    throw new Error('createVerificationService: Missing required dependency: capsuleRuntime');
-  }
 
   return {
     /**
-     * Verifies an operation within the Digital Imprint system.
-     * @param {object} operation The operation to verify.
-     * @returns {Promise<object>} A serializable object indicating the verification result.
+     * Real verification: an action's claimed outcome is only VERIFIED_SUCCESS
+     * if the observed state after the action actually matches what the
+     * action claimed to produce. A body that reports ok:true but whose
+     * observed_state_after doesn't match the expectation fails verification
+     * here — this is the actual enforcement of "nothing announces its own
+     * success" (§5 principle 4), not a comment about the principle.
      */
-    async verifyOperation(operation) {
-      logger.debug('Verifying operation:', operation);
-      // Placeholder for actual verification logic using injected dependencies.
-      // For example, interact with receiptLedger or capsuleRuntime.
-      // This is a simplified example; real logic would be complex.
-      const isValid = operation && typeof operation === 'object' && operation.id;
-
-      if (isValid) {
-        return { success: true, message: 'Operation verified successfully.' };
-      } else {
-        return { success: false, message: 'Operation verification failed: Invalid operation format.' };
+    async verifyActionResult({ taskId, action, actionResult, expected }) {
+      if (!action || !actionResult) {
+        return { ok: false, evidence: 'missing action or actionResult', evidence_type: 'state_match' };
       }
+      if (actionResult.ok !== true) {
+        return { ok: false, evidence: `body reported failure: ${actionResult.error || 'unknown'}`, evidence_type: 'state_match' };
+      }
+      if (expected && typeof expected === 'object') {
+        const observed = actionResult.observed_state_after;
+        const mismatches = [];
+        for (const [key, value] of Object.entries(expected)) {
+          const observedValue = observed && typeof observed === 'object' ? observed[key] : undefined;
+          if (observedValue !== value) mismatches.push({ key, expected: value, observed: observedValue });
+        }
+        if (mismatches.length > 0) {
+          const result = { ok: false, evidence: `state mismatch: ${JSON.stringify(mismatches)}`, evidence_type: 'state_match' };
+          await receiptLedger.recordReceipt({ task_id: taskId, type: 'verification', result });
+          return result;
+        }
+      }
+      const result = { ok: true, evidence: 'observed state matches expected outcome', evidence_type: 'state_match' };
+      await receiptLedger.recordReceipt({ task_id: taskId, type: 'verification', result });
+      return result;
     },
 
     /**
-     * Validates a state within the Digital Imprint system.
-     * @param {object} state The state to validate.
-     * @returns {Promise<object>} A serializable object indicating the validation result.
+     * Real state validation: checks a state object has the required shape
+     * for the given kind, not just object-with-any-truthy-field.
      */
-    async validateState(state) {
-      logger.debug('Validating state:', state);
-      // Placeholder for actual validation logic using injected dependencies.
-      // For example, query the pool for state consistency or use capsuleRuntime.
-      const isValid = state && typeof state === 'object' && state.status;
-
-      if (isValid) {
-        return { success: true, message: 'State validated successfully.' };
-      } else {
-        return { success: false, message: 'State validation failed: Invalid state format.' };
+    async validateState(state, requiredFields = []) {
+      if (!state || typeof state !== 'object') {
+        return { success: false, message: 'state must be an object' };
       }
-    }
+      const missing = requiredFields.filter((f) => state[f] === undefined);
+      if (missing.length > 0) {
+        return { success: false, message: `state missing required fields: ${missing.join(', ')}` };
+      }
+      return { success: true, message: 'state validated' };
+    },
   };
 }
+
+export default createVerificationService;

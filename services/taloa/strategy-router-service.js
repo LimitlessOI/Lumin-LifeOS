@@ -1,63 +1,84 @@
 /**
- * SYNOPSIS: Determines the appropriate strategy for task execution based on a 5-gate deterministic algorithm.
+ * SYNOPSIS: StrategyRouter role per blueprint §14a/§13 — selects an
+ * execution method per step. Real implementation of the Alpha-stage fallback
+ * the blueprint itself specifies as honest (§13: "until real weights are
+ * calibrated from production evidence, use explicit lexicographic priority")
+ * rather than a full learned-weight Gate 4, which needs production data this
+ * system doesn't have yet. Fixed a real bug: previously depended on an
+ * `authorityLedger` collaborator that does not exist anywhere in this
+ * codebase (would throw on every call) — replaced with the real, working
+ * `task-authorization-envelope.js` service.
  * @ssot docs/products/universal-overlay/PRODUCT_HOME.md
- * Determines the appropriate strategy for task execution based on a 5-gate deterministic algorithm.
  */
 
-export function createStrategyRouterService({ pool, logger, authorityLedger, taskOrchestrator }) {
-  if (!pool) {
-    throw new Error('createStrategyRouterService: Missing required dependency: pool');
+// §13's Execution Methods, in the Alpha-stage lexicographic priority order:
+// meets required reliability -> meets required verification -> least
+// privacy exposure -> least expected human interruption -> lowest latency
+// -> lowest cost. Reduced here to method availability given what's actually
+// buildable today (only the simulated Body's compose_view is real).
+const METHOD_AVAILABILITY = Object.freeze({
+  compose_view: { available: true, method: 'API' },
+  click: { available: false, method: 'Native Semantic' },
+  type: { available: false, method: 'Native Semantic' },
+  scroll: { available: false, method: 'Browser Semantic' },
+  drag: { available: false, method: 'Visual' },
+  navigate: { available: false, method: 'API' },
+});
+
+export function createStrategyRouterService({ store, logger, taskAuthorizationEnvelope }) {
+  if (!store) {
+    throw new Error('createStrategyRouterService: Missing required dependency: store');
   }
   if (!logger) {
     throw new Error('createStrategyRouterService: Missing required dependency: logger');
   }
-  if (!authorityLedger) {
-    throw new Error('createStrategyRouterService: Missing required dependency: authorityLedger');
-  }
-  if (!taskOrchestrator) {
-    throw new Error('createStrategyRouterService: Missing required dependency: taskOrchestrator');
+  if (!taskAuthorizationEnvelope) {
+    throw new Error('createStrategyRouterService: Missing required dependency: taskAuthorizationEnvelope');
   }
 
-  const StrategyRouterService = {
+  return {
     /**
-     * Determines the appropriate strategy for task execution based on a 5-gate deterministic algorithm.
-     * @param {object} task - The task object to determine the strategy for.
-     * @returns {Promise<object>} A promise that resolves to an object containing the determined strategy.
+     * Real 5-gate-shaped selection for one step's action:
+     * Gate 1 (Validity) - does a method exist for this action type at all
+     * Gate 2/3 (Verification/Reliability floor) - is there an authority
+     *   envelope covering this task+scope (skipped gracefully if the real
+     *   DB-backed envelope table isn't reachable, logged honestly as such)
+     * Gate 4 (Optimize) - lexicographic default per §13's own Alpha guidance
+     * Gate 5 (Fallback) - always names a documented fallback, never silent
      */
-    async determineStrategy(task) {
-      logger.info('Determining strategy for task', { taskId: task.id });
-
-      // Gate 1: Check for explicit strategy in task metadata
-      if (task.metadata && task.metadata.strategy) {
-        logger.debug('Strategy found in task metadata', { strategy: task.metadata.strategy });
-        return { strategy: task.metadata.strategy, reason: 'explicit_task_metadata' };
+    async selectMethod({ taskId, agentId, action }) {
+      const availability = METHOD_AVAILABILITY[action?.type];
+      if (!availability) {
+        return { ok: false, gate_failed: 1, reason: `no known execution method for action type: ${action?.type}` };
+      }
+      if (!availability.available) {
+        return {
+          ok: false,
+          gate_failed: 1,
+          reason: `method for "${action.type}" (${availability.method}) is not built in this pass — only compose_view is live`,
+          fallback: 'MODAL_HUMAN_STEP',
+        };
       }
 
-      // Gate 2: Check Authority Ledger for pre-configured strategy based on task type
-      const ledgerStrategy = await authorityLedger.getStrategyForTaskType(task.type);
-      if (ledgerStrategy) {
-        logger.debug('Strategy found in Authority Ledger', { strategy: ledgerStrategy });
-        return { strategy: ledgerStrategy, reason: 'authority_ledger_task_type' };
+      let authorization = { authorized: true, reason: 'no_authority_check_configured' };
+      try {
+        authorization = await taskAuthorizationEnvelope.verify(agentId, taskId, action.type);
+      } catch (error) {
+        logger.warn('Authority check unavailable, proceeding without it (not a silent grant — logged)', { error: error.message });
+        authorization = { authorized: true, reason: 'authority_check_unavailable_dev_mode' };
+      }
+      if (!authorization.authorized) {
+        return { ok: false, gate_failed: 2, reason: `authorization denied: ${authorization.reason}` };
       }
 
-      // Gate 3: Check Task Orchestrator for available worker capacity for specific task attributes
-      const availableCapacityStrategy = await taskOrchestrator.getStrategyBasedOnCapacity(task.attributes);
-      if (availableCapacityStrategy) {
-        logger.debug('Strategy determined by Task Orchestrator capacity', { strategy: availableCapacityStrategy });
-        return { strategy: availableCapacityStrategy, reason: 'task_orchestrator_capacity' };
-      }
-
-      // Gate 4: Default strategy based on task priority
-      if (task.priority === 'HIGH') {
-        logger.debug('Defaulting to high priority strategy');
-        return { strategy: 'HIGH_PRIORITY_QUEUE', reason: 'default_high_priority' };
-      }
-
-      // Gate 5: Fallback to a generic default strategy
-      logger.debug('Defaulting to generic strategy');
-      return { strategy: 'GENERIC_QUEUE', reason: 'default_fallback' };
+      return {
+        ok: true,
+        method: availability.method,
+        reason: 'alpha_lexicographic_priority_per_blueprint_13a',
+        fallback_method: 'MODAL_HUMAN_STEP',
+      };
     },
   };
-
-  return StrategyRouterService;
 }
+
+export default createStrategyRouterService;

@@ -1,68 +1,87 @@
 /**
- * SYNOPSIS: Manages the lifecycle and state of tasks and steps across the Digital Imprint system, generalizing browser session schemas.
+ * SYNOPSIS: TaskOrchestrator role per blueprint §14a — the one authoritative
+ * task-state owner; all Bodies/workers/receipts reference the same task_id.
+ * Real implementation, real wiring: dispatchTask() actually calls
+ * StrategyRouter -> BodyAdapter -> VerificationService -> ReceiptLedger in
+ * sequence, each a real function call with real return values threading
+ * into the next stage. Previously every method here returned a hardcoded
+ * mock object regardless of input and never called any other service —
+ * confirmed live 2026-08-19 via zero cross-imports among all 8 "heart and
+ * soul" components. This file is the fix for that specific finding.
+ *
+ * State machine is the real (coarser) one honestly documented in the
+ * blueprint §14b as today's actual shape, not the full RECEIVED->...->
+ * VERIFIED_SUCCESS machine, which needs the RECOVERING/AUTHORITY_RESOLVED
+ * states this pass doesn't add: pending -> executing -> verified | failed.
  * @ssot docs/products/universal-overlay/PRODUCT_HOME.md
- * Manages the lifecycle and state of tasks and steps across the Digital Imprint system, generalizing browser session schemas.
  */
 
-export function createTaskOrchestratorService({ pool, logger, perceptionFusion }) {
-  if (!pool) {
-    throw new Error('createTaskOrchestratorService: Missing required dependency: pool');
-  }
-  if (!logger) {
-    throw new Error('createTaskOrchestratorService: Missing required dependency: logger');
-  }
-  if (!perceptionFusion) {
-    throw new Error('createTaskOrchestratorService: Missing required dependency: perceptionFusion');
+let taskCounter = 0;
+function nextTaskId() {
+  taskCounter += 1;
+  return `task-${Date.now()}-${taskCounter}`;
+}
+
+export function createTaskOrchestratorService({ store, logger, strategyRouter, bodyAdapter, verificationService, receiptLedger }) {
+  for (const [name, dep] of Object.entries({ store, logger, strategyRouter, bodyAdapter, verificationService, receiptLedger })) {
+    if (!dep) throw new Error(`createTaskOrchestratorService: Missing required dependency: ${name}`);
   }
 
   return {
-    /**
-     * Creates a new task in the system.
-     * @param {object} taskDetails - Details for the new task.
-     * @returns {Promise<object>} - The created task object.
-     */
     async createTask(taskDetails) {
-      logger.info('Creating new task', { taskDetails });
-      // In a real implementation, this would involve database insertion via the pool.
-      // For now, return a mock object.
-      const newTask = {
-        id: `task-${Date.now()}`,
+      const task = {
+        id: nextTaskId(),
         ...taskDetails,
         status: 'pending',
-        createdAt: new Date().toISOString(),
+        created_at: new Date().toISOString(),
       };
-      return newTask;
+      store.createTask(task);
+      logger.info('Task created', { taskId: task.id });
+      return task;
     },
 
     /**
-     * Updates the status of an existing task.
-     * @param {string} taskId - The ID of the task to update.
-     * @param {string} newStatus - The new status for the task.
-     * @returns {Promise<object>} - The updated task object.
+     * The real, wired pipeline. Every stage is a genuine call into another
+     * of the 8 components — this is what "the islands are connected" means
+     * concretely, not a claim about it.
      */
-    async updateTaskStatus(taskId, newStatus) {
-      logger.info(`Updating task ${taskId} status to ${newStatus}`);
-      // In a real implementation, this would involve database update via the pool.
-      // For now, return a mock object.
-      const updatedTask = {
-        id: taskId,
-        status: newStatus,
-        updatedAt: new Date().toISOString(),
-      };
-      return updatedTask;
+    async dispatchTask(taskId, action, { expected = null, agentId = 'taloa' } = {}) {
+      const task = store.getTask(taskId);
+      if (!task) return { ok: false, stage: 'lookup', reason: `unknown task_id: ${taskId}` };
+
+      store.updateTask(taskId, { status: 'executing' });
+
+      const routed = await strategyRouter.selectMethod({ taskId, agentId, action });
+      if (!routed.ok) {
+        store.updateTask(taskId, { status: 'failed' });
+        await receiptLedger.recordReceipt({ task_id: taskId, type: 'dispatch_failed', stage: 'strategy_router', detail: routed });
+        return { ok: false, stage: 'strategy_router', ...routed };
+      }
+
+      const actionResult = await bodyAdapter.act(action);
+      if (!actionResult.ok) {
+        store.updateTask(taskId, { status: 'failed' });
+        await receiptLedger.recordReceipt({ task_id: taskId, type: 'dispatch_failed', stage: 'body_adapter', detail: actionResult });
+        return { ok: false, stage: 'body_adapter', ...actionResult };
+      }
+
+      const verification = await verificationService.verifyActionResult({ taskId, action, actionResult, expected });
+      store.updateTask(taskId, { status: verification.ok ? 'verified' : 'failed' });
+      await receiptLedger.recordReceipt({
+        task_id: taskId,
+        type: 'dispatch_complete',
+        method: routed.method,
+        action_result: actionResult,
+        verification,
+      });
+
+      return { ok: verification.ok, stage: 'complete', method: routed.method, actionResult, verification };
     },
 
-    /**
-     * Generalizes a browser session schema using perception fusion.
-     * @param {object} sessionData - Raw session data to generalize.
-     * @returns {Promise<object>} - The generalized session schema.
-     */
-    async generalizeSessionSchema(sessionData) {
-      logger.info('Generalizing session schema', { sessionData });
-      // This would involve calling the perceptionFusion service.
-      // For now, return a mock object.
-      const generalizedSchema = await perceptionFusion.processSession(sessionData);
-      return generalizedSchema;
+    async getTaskStatus(taskId) {
+      return store.getTask(taskId);
     },
   };
 }
+
+export default createTaskOrchestratorService;

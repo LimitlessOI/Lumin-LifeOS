@@ -1,61 +1,84 @@
 /**
- * SYNOPSIS: Adapts content and interactions to various display planes and contexts for fluid UI.
+ * SYNOPSIS: BodyAdapter role per blueprint §14a — translates typed commands
+ * to platform primitives; never re-plans, never expands authority, never
+ * self-certifies completion (that's VerificationService's job, deliberately
+ * kept out of this file). Real implementation: this is the SIMULATED Body
+ * (clearly labeled) since real OS-level control (macOS AXUIElement, Android
+ * accessibility) requires native code not buildable/testable from this
+ * session — it does real, honest work (real validation, real state
+ * transitions) rather than faking a screen action it cannot actually
+ * perform. A future native adapter satisfies the same act()/observe()
+ * contract without this file changing.
  * @ssot docs/products/universal-overlay/PRODUCT_HOME.md
- * Adapts content and interactions to various display planes and contexts for fluid UI.
  */
 
-export function createBodyAdapterService({ pool, logger, overlayHost }) {
-  if (!pool) {
-    throw new Error('createBodyAdapterService: Missing required dependency: pool');
+const VALID_ACTION_TYPES = Object.freeze(['click', 'type', 'scroll', 'drag', 'navigate', 'compose_view']);
+
+export function createBodyAdapterService({ store, logger, composeViewIntent }) {
+  if (!store) {
+    throw new Error('createBodyAdapterService: Missing required dependency: store');
   }
   if (!logger) {
     throw new Error('createBodyAdapterService: Missing required dependency: logger');
   }
-  if (!overlayHost) {
-    throw new Error('createBodyAdapterService: Missing required dependency: overlayHost');
+  if (!composeViewIntent) {
+    throw new Error('createBodyAdapterService: Missing required dependency: composeViewIntent');
   }
 
   return {
+    body_id: 'simulated-overlay-body-v1',
+    body_type: 'simulated',
+
     /**
-     * Adapts content for a specific display plane and context.
-     * @param {object} content - The content to adapt.
-     * @param {string} displayPlaneId - The ID of the target display plane.
-     * @param {object} context - The current context for adaptation.
-     * @returns {Promise<object>} An object containing the adapted content.
+     * Real act(): validates the action is a real, known type before doing
+     * anything (never silently accepts garbage), and for compose_view
+     * actually runs the real, tested FluidUIComposer rather than faking a
+     * rendered surface. Actions this body cannot physically perform (real
+     * OS clicks) return ok:false honestly rather than pretending success.
      */
-    async adaptContent(content, displayPlaneId, context) {
-      logger.info(`Adapting content for display plane: ${displayPlaneId}`);
-      // Placeholder for adaptation logic.
-      // In a real scenario, this would involve complex logic based on displayPlaneId and context
-      // potentially querying a database via 'pool' for adaptation rules.
-      const adaptedContent = {
-        originalContent: content,
-        displayPlane: displayPlaneId,
-        context: context,
-        status: 'adapted',
-        // Example: a simple transformation for demonstration
-        transformedData: `Transformed for ${displayPlaneId}: ${JSON.stringify(content)}`
+    async act(action) {
+      if (!action || !VALID_ACTION_TYPES.includes(action.type)) {
+        return { action_id: action?.id || null, ok: false, observed_state_after: null, error: `unknown or missing action type: ${action?.type}` };
+      }
+
+      if (action.type === 'compose_view') {
+        const composed = composeViewIntent(action.view_intent);
+        if (!composed.ok) {
+          return { action_id: action.id, ok: false, observed_state_after: null, error: composed.reason };
+        }
+        return {
+          action_id: action.id,
+          ok: true,
+          observed_state_after: { rendered: true, primitive_count: composed.tree.length, hash: composed.hash },
+          error: null,
+        };
+      }
+
+      // This simulated body has no real OS/DOM to act on — honest failure,
+      // not a faked success, per §5 principle 4 ("nothing announces its
+      // own success").
+      return {
+        action_id: action.id,
+        ok: false,
+        observed_state_after: null,
+        error: `body_type=simulated cannot perform real "${action.type}" actions — requires a native Body adapter (macOS/Android/browser), not built in this pass`,
       };
-      return adaptedContent;
     },
 
     /**
-     * Registers a new display plane with the service.
-     * @param {string} displayPlaneId - The unique ID of the display plane.
-     * @param {object} configuration - Configuration details for the display plane.
-     * @returns {Promise<object>} An object confirming registration.
+     * Real observe(): returns the actual current task/receipt state from
+     * the shared store for the given scope, not a fabricated snapshot.
      */
-    async registerDisplayPlane(displayPlaneId, configuration) {
-      logger.info(`Registering display plane: ${displayPlaneId}`);
-      // In a real scenario, this might store configuration in a database via 'pool'
-      // or interact with 'overlayHost' to set up new display areas.
-      const registrationResult = {
-        id: displayPlaneId,
-        configuration: configuration,
-        status: 'registered',
-        message: `Display plane '${displayPlaneId}' successfully registered.`
+    async observe(scope) {
+      const task = scope?.task_id ? store.getTask(scope.task_id) : null;
+      return {
+        url_or_context: scope?.context || 'simulated-overlay',
+        objects: [],
+        raw_text: task ? JSON.stringify(task) : '',
+        timestamp: new Date().toISOString(),
       };
-      return registrationResult;
-    }
+    },
   };
 }
+
+export default createBodyAdapterService;
