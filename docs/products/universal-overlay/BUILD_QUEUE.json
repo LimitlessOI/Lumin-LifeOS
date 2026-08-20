@@ -9580,7 +9580,7 @@
       "status": "blocked",
       "founder_gated": false,
       "attempts": 1,
-      "action_type": "author_then_write",
+      "action_type": "write_file_exact",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
       "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md §64",
@@ -9612,7 +9612,7 @@
       "last_attempt_at": "2026-08-20T09:36:55.270Z",
       "last_error": "STEP_STATUS_FORBIDDEN",
       "started_at": "2026-08-20T09:36:55.174Z",
-      "same_signature_count": 1,
+      "same_signature_count": 2,
       "revive_count": 4,
       "revived_at": "2026-08-20T09:36:55.115Z",
       "last_attempt": null,
@@ -9629,11 +9629,11 @@
       "failure_signature": "STEP_STATUS_FORBIDDEN",
       "escalation_class": "same_signature_repeat",
       "exactness": {
-        "sealed": false,
-        "sealed_at": "2026-08-20T09:16:54.467Z",
-        "shipped_at": "2026-08-20T09:16:54.467Z",
+        "sealed": true,
+        "sealed_at": "2026-08-20T09:37:06.216Z",
+        "shipped_at": "2026-08-20T09:37:06.216Z",
         "commit_sha": null,
-        "content_sha256": "4059b759cb71181c02d831d38910e8f610cebe6c77c26fd4873c3bc00b45763d",
+        "content_sha256": "a09a989c7902f37b9028009208dfef91817085fa8367da7dbfc67ba0a2ab1a18",
         "target_file": "services/taloa/task-orchestrator-service.js",
         "reverse": {
           "mode": "delete_file",
@@ -9647,13 +9647,16 @@
         "rebuild": {
           "action_type": "write_file_exact",
           "content_source_path": "docs/products/universal-overlay/twins/steps/TALOA-S64-TEMPLATE-REPLAY-WIRE-001.exact",
-          "content_sha256": "4059b759cb71181c02d831d38910e8f610cebe6c77c26fd4873c3bc00b45763d"
+          "content_sha256": "a09a989c7902f37b9028009208dfef91817085fa8367da7dbfc67ba0a2ab1a18"
         }
       },
-      "shipped_at": "2026-08-20T09:16:54.467Z",
+      "shipped_at": "2026-08-20T09:37:06.216Z",
       "duration_ms": 19951,
       "tokens_used": 0,
-      "heal_reason": "demote_missing_exact_to_author"
+      "heal_reason": "demote_missing_exact_to_author",
+      "exact_inputs": {
+        "content_source_path": "docs/products/universal-overlay/twins/steps/TALOA-S64-TEMPLATE-REPLAY-WIRE-001.exact"
+      }
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
