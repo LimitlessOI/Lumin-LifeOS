@@ -18,6 +18,7 @@ import { createReceiptLedgerService } from './receipt-ledger-service.js';
 import { createTaskOrchestratorService } from './task-orchestrator-service.js';
 import { composeViewIntent } from './fluid-ui-composer.js';
 import { createTaskAuthorizationEnvelope } from './task-authorization-envelope.js';
+import { createTemplateReplayService } from './template-replay-service.js';
 
 let singleton = null;
 
@@ -43,12 +44,17 @@ export function createTaloaRuntime({ pool = null, logger = console } = {}) {
     : { verify: async () => { throw new Error('no pool configured — StrategyRouter will use its documented dev-mode fallback'); } };
 
   const strategyRouter = createStrategyRouterService({ store, logger, taskAuthorizationEnvelope });
-  const taskOrchestrator = createTaskOrchestratorService({ store, logger, strategyRouter, bodyAdapter, verificationService, receiptLedger });
+  // template-replay-service.js is honest when pool lacks persistTemplate/loadTemplate
+  // helpers (a real pg.Pool does not define these) -- isTemplateValid/replayTemplate
+  // return { valid: false }/{ replayed: false } rather than throwing, so wiring it in
+  // with the bare pool is safe today and picks up real replay once those helpers exist.
+  const templateReplayService = createTemplateReplayService({ pool, logger });
+  const taskOrchestrator = createTaskOrchestratorService({ store, logger, strategyRouter, bodyAdapter, verificationService, receiptLedger, templateReplayService });
 
   return {
     store, receiptLedger, verificationService, bodyAdapter, overlayHost,
     perceptionFusion, capsuleRuntime, strategyRouter, taskOrchestrator,
-    taskAuthorizationEnvelope, composeViewIntent,
+    taskAuthorizationEnvelope, composeViewIntent, templateReplayService,
   };
 }
 

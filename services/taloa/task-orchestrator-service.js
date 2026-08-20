@@ -16,21 +16,16 @@
  * @ssot docs/products/universal-overlay/PRODUCT_HOME.md
  */
 
-import { createTemplateReplayService } from './template-replay-service.js';
-
 let taskCounter = 0;
 function nextTaskId() {
   taskCounter += 1;
   return `task-${Date.now()}-${taskCounter}`;
 }
 
-export function createTaskOrchestratorService({ store, logger, strategyRouter, bodyAdapter, verificationService, receiptLedger }) {
+export function createTaskOrchestratorService({ store, logger, strategyRouter, bodyAdapter, verificationService, receiptLedger, templateReplayService = null }) {
   for (const [name, dep] of Object.entries({ store, logger, strategyRouter, bodyAdapter, verificationService, receiptLedger })) {
     if (!dep) throw new Error(`createTaskOrchestratorService: Missing required dependency: ${name}`);
   }
-
-  // Initialize template replay service
-  const templateReplayService = createTemplateReplayService();
 
   return {
     async createTask(taskDetails) {
@@ -54,19 +49,31 @@ export function createTaskOrchestratorService({ store, logger, strategyRouter, b
       const task = store.getTask(taskId);
       if (!task) return { ok: false, stage: 'lookup', reason: `unknown task_id: ${taskId}` };
 
-      // Check for template replay
-      const replay = templateReplayService.getReplayForTask(taskId, action);
-      if (replay) {
-        logger.info('Using template replay for task', { taskId, action, replay });
-        store.updateTask(taskId, { status: replay.ok ? 'verified' : 'failed' });
-        await receiptLedger.recordReceipt({
-          task_id: taskId,
-          type: 'dispatch_complete',
-          method: 'template_replay',
-          action_result: replay.actionResult,
-          verification: { ok: replay.ok, reason: 'template_replay_hit' },
-        });
-        return { ok: replay.ok, stage: 'complete', method: 'template_replay', actionResult: replay.actionResult, verification: { ok: replay.ok, reason: 'template_replay_hit' } };
+      // Template replay: taskId doubles as templateId (stable per dispatch site,
+      // not per attempt), action is the environment descriptor. Optional
+      // dependency and best-effort -- a replay-store problem must never break
+      // ordinary dispatch, so any failure here falls through to the real path.
+      if (templateReplayService) {
+        try {
+          const valid = await templateReplayService.isTemplateValid({ templateId: taskId, environment: action });
+          if (valid.valid) {
+            const replay = await templateReplayService.replayTemplate({ templateId: taskId, environment: action });
+            if (replay.replayed) {
+              logger.info('Using template replay for task', { taskId, action, replay });
+              store.updateTask(taskId, { status: 'verified' });
+              await receiptLedger.recordReceipt({
+                task_id: taskId,
+                type: 'dispatch_complete',
+                method: 'template_replay',
+                action_result: replay.template,
+                verification: { ok: true, reason: 'template_replay_hit' },
+              });
+              return { ok: true, stage: 'complete', method: 'template_replay', actionResult: replay.template, verification: { ok: true, reason: 'template_replay_hit' } };
+            }
+          }
+        } catch (err) {
+          logger.warn('Template replay check failed, falling through to normal dispatch', { taskId, error: err.message });
+        }
       }
 
       store.updateTask(taskId, { status: 'executing' });
