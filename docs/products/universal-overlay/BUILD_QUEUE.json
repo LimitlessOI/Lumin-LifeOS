@@ -4806,7 +4806,7 @@
       "heal_unblocked": false
     },
     {
-      "status": "done",
+      "status": "pending",
       "founder_gated": false,
       "attempts": 0,
       "action_type": "write_file_exact",
@@ -4865,7 +4865,7 @@
       },
       "shipped_at": "2026-08-20T07:22:04.198Z",
       "shipped_via": "governed_ship_queue",
-      "commit_sha": "175c92d091e6077a1a588b877091e90be08d870d",
+      "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "last_attempt_at": "2026-08-20T07:21:48.451Z",
@@ -4873,8 +4873,8 @@
       "heal_unblocked": false,
       "heal_reason": "demote_missing_exact_to_author",
       "same_signature_count": 1,
-      "reopened_at": "2026-08-20T06:30:52.527Z",
-      "reopen_reason": "reachability_audit_2026-08-20: marked done via governed_ship_queue but has ZERO real callers anywhere in the live codebase (confirmed by direct grep across routes/, services/, startup/, and native Swift sources) -- exported/compiled but never invoked. Reopened per CLAUDE.md \"Acceptance Must Prove Reachability, Not Just Existence.\" Founder directive: universal-overlay blueprint is top priority, build it for real, do not stop.",
+      "reopened_at": "2026-08-20T07:41:24.353Z",
+      "reopen_reason": "reachability_audit_2026-08-20d: root cause found and fixed for real this time -- factory-staging/factory-core/bpb/author-assertions.js#authorAssertionsFromSpec never forwarded step.behavior_assertions into the assertions it returns, so every cross-file reachability check added earlier today was silently never evaluated by the real post-ship re-proof gate (evaluateStepExpectations), despite the assertion EXECUTOR itself already supporting a `path` override correctly. Verified end-to-end with the real evaluator against the real current codebase: this exact false-done now produces `artifact_proof_failed: missing:...` instead of a silent pass. Reopening so the next attempt is actually held to the standard.",
       "started_at": "2026-08-20T07:21:48.451Z",
       "revive_count": 0,
       "revived_at": "2026-08-20T07:21:28.131Z",
@@ -4898,7 +4898,7 @@
       }
     },
     {
-      "status": "done",
+      "status": "pending",
       "founder_gated": false,
       "attempts": 0,
       "action_type": "author_then_write",
@@ -4940,7 +4940,7 @@
         }
       },
       "shipped_at": "2026-08-20T07:27:57.138Z",
-      "commit_sha": "6e8f58555bc1fd14fe82961ea09a60d2c819b3db",
+      "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "last_attempt_at": "2026-08-20T07:27:45.808Z",
@@ -4951,8 +4951,8 @@
       "shipped_via": "governed_ship_queue",
       "heal_unblocked": false,
       "heal_reason": "demote_missing_exact_to_author",
-      "reopened_at": "2026-08-20T07:08:28.181Z",
-      "reopen_reason": "reachability_audit_2026-08-20b: re-closed done a second time via a trivial, non-substantive diff (`import Vision` + a comment) that does not add any real call site -- confirmed zero callers anywhere in the native Swift sources both before and after this ship. Root cause: this step never had a reachability behavior_assertion, so nothing could force real wiring. Fixed at the source: added a reachability assertion (native/macos-overlay/ScreenControlCommands.swift must reference SemanticPerception) plus a new companion TALOA-S64-MACOS-BODY-WIRE-001 step mirroring the existing Android wire pattern. Reopening so the next attempt is held to the real standard.",
+      "reopened_at": "2026-08-20T07:41:24.355Z",
+      "reopen_reason": "reachability_audit_2026-08-20d: root cause found and fixed for real this time -- factory-staging/factory-core/bpb/author-assertions.js#authorAssertionsFromSpec never forwarded step.behavior_assertions into the assertions it returns, so every cross-file reachability check added earlier today was silently never evaluated by the real post-ship re-proof gate (evaluateStepExpectations), despite the assertion EXECUTOR itself already supporting a `path` override correctly. Verified end-to-end with the real evaluator against the real current codebase: this exact false-done now produces `artifact_proof_failed: missing:...` instead of a silent pass. Reopening so the next attempt is actually held to the standard.",
       "revive_count": 0,
       "revived_at": "2026-08-20T07:27:45.795Z",
       "last_attempt": null,
@@ -5140,7 +5140,7 @@
       }
     },
     {
-      "status": "done",
+      "status": "pending",
       "founder_gated": false,
       "attempts": 0,
       "action_type": "write_file_exact",
@@ -5194,7 +5194,7 @@
         }
       },
       "shipped_at": "2026-08-20T07:33:47.328Z",
-      "commit_sha": "80a610d33a755dc2478a6d3100961aceb094a408",
+      "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "last_attempt_at": "2026-08-20T07:33:36.837Z",
@@ -5208,8 +5208,8 @@
       "blocker_class": null,
       "park_until": null,
       "demoted": false,
-      "reopened_at": "2026-08-20T07:10:29.101Z",
-      "reopen_reason": "reachability_audit_2026-08-20c: re-closed done via a trailing-newline-only diff -- the function body is still a literal \"No-op for now\" stub, zero real callers before or after this ship. The only completion check this step had was a same-file string-literal check that was true from the original authoring and could never fail. Fixed at the source: added a real reachability assertion (services/taloa/body-adapter-service.js must reference assertObservationIsNotAuthority) plus an explicit wiring instruction. Reopening so the next attempt is held to the real standard.",
+      "reopened_at": "2026-08-20T07:41:24.355Z",
+      "reopen_reason": "reachability_audit_2026-08-20d: root cause found and fixed for real this time -- factory-staging/factory-core/bpb/author-assertions.js#authorAssertionsFromSpec never forwarded step.behavior_assertions into the assertions it returns, so every cross-file reachability check added earlier today was silently never evaluated by the real post-ship re-proof gate (evaluateStepExpectations), despite the assertion EXECUTOR itself already supporting a `path` override correctly. Verified end-to-end with the real evaluator against the real current codebase: this exact false-done now produces `artifact_proof_failed: missing:...` instead of a silent pass. Reopening so the next attempt is actually held to the standard.",
       "heal_reason": "demote_missing_exact_to_author",
       "revive_count": 0,
       "revived_at": "2026-08-20T07:29:02.415Z",

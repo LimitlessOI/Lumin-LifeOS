@@ -31,7 +31,7 @@ final class MacOsBodyAdapter {
     private let screenControl: ScreenControlProtocol // Explicit dependency
     private let log = OSLog(subsystem: "com.lumin.taloa", category: "MacOsBodyAdapter")
 
-    init(perception: SemanticPerception = SemanticPerception(), screenControl: ScreenControlProtocol = ScreenControl.shared) { // Inject dependency
+    init(perception: SemanticPerception = SemanticPerception(), screenControl: ScreenControlProtocol = ScreenControlBridge.shared) {
         self.perception = perception
         self.screenControl = screenControl
     }
@@ -93,7 +93,7 @@ final class MacOsBodyAdapter {
             
             // Mouse location verification (if expected relates to mouse position)
             if goal.contains("mouse_location") {
-                observe(scope: "mouse") { mouseObservation in
+                self.observe(scope: "mouse") { mouseObservation in
                     if case .mouseLocation(let point) = mouseObservation {
                         let expectedParts = expected.split(separator: ",").map { Double($0.trimmingCharacters(in: .whitespaces)) }
                         if expectedParts.count == 2, let expX = expectedParts[0], let expY = expectedParts[1] {
@@ -116,7 +116,7 @@ final class MacOsBodyAdapter {
             
             // Screenshot content verification (if expected relates to visual content)
             if goal.contains("screenshot_content") {
-                observe(scope: "screenshot") { screenshotObservation in
+                self.observe(scope: "screenshot") { screenshotObservation in
                     if case .screenshot(let imageData) = screenshotObservation {
                         // In a real scenario, this would involve image analysis (e.g., OCR, image comparison)
                         // For this exercise, we'll simulate a basic check or assume an external vision system would handle 'expected' against 'imageData'.
@@ -155,27 +155,26 @@ protocol ScreenControlProtocol {
     func takeScreenshot() -> Data?
 }
 
-// Extend the existing ScreenControl to conform to the protocol
-extension ScreenControl: ScreenControlProtocol {
-    static var shared: ScreenControlProtocol = ScreenControl() // Provide a shared instance for default injection
-    
-    // Implement or wrap existing methods
+// ScreenControl is a case-less enum (a static namespace) -- it has no
+// initializer and can never hold a value, so it cannot itself conform to a
+// protocol with instance requirements. This forwarding struct is the
+// smallest real fix: it is the one concrete value the protocol needs.
+struct ScreenControlBridge: ScreenControlProtocol {
+    static var shared: ScreenControlProtocol = ScreenControlBridge()
+
     func currentMouseLocation() -> CGPoint? {
         return ScreenControl.currentMouseLocation()
     }
-    
+
     func moveMouseAndClick(to point: CGPoint) {
         ScreenControl.moveMouseAndClick(to: point)
     }
-    
+
     func typeText(_ text: String) {
         ScreenControl.typeText(text)
     }
-    
+
     func takeScreenshot() -> Data? {
-        // Implement macOS screenshot functionality here
-        guard let screen = NSScreen.main else { return nil }
-        let rect = screen.frame
         guard let cgImage = CGDisplayCreateImage(CGMainDisplayID()) else { return nil }
         let bitmapRep = NSBitmapImageRep(cgImage: cgImage)
         return bitmapRep.representation(using: .png, properties: [:])

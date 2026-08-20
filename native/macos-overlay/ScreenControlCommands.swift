@@ -14,6 +14,25 @@
 // @ssot docs/products/lifeos/PRODUCT_HOME.md
 import Cocoa
 
+/// Converts a BodyObservation into the JSON-safe dict the /tmp/taloa-cmd-result
+/// channel expects -- Data (screenshot) is base64-encoded, everything else maps
+/// directly to primitives.
+func semanticFrameJSON(_ observation: BodyObservation) -> [String: Any] {
+    switch observation {
+    case .screenshot(let data):
+        return ["kind": "screenshot", "base64": data.base64EncodedString()]
+    case .semanticTree(let tree):
+        return ["kind": "semantic_tree", "source": tree.source.rawValue, "elements": tree.elements.map {
+            ["id": $0.id, "type": $0.type, "label": $0.label, "value": $0.value,
+             "frame": [$0.frame.origin.x, $0.frame.origin.y, $0.frame.width, $0.frame.height]]
+        }]
+    case .mouseLocation(let point):
+        return ["kind": "mouse_location", "x": point.x, "y": point.y]
+    case .text(let text):
+        return ["kind": "text", "text": text]
+    }
+}
+
 extension ScreenControl {
     private static var cmdPath: String { "/tmp/taloa-cmd" }
     private static var cmdResultPath: String { "/tmp/taloa-cmd-result" }
@@ -335,36 +354,48 @@ extension ScreenControl {
             writeResult(["ok": true, "op": op, "request_id": requestId, "typed_characters": text.count])
 
         // MARK: - Semantic Body commands
-        case "observe":
-            let result = bodyAdapter.observe()
-            writeResult(["ok": result.ok, "op": op, "request_id": requestId, "semantic_frame": result.semanticFrame])
-
-        case "capture_semantic":
-            let result = bodyAdapter.capture()
-            writeResult(["ok": result.ok, "op": op, "request_id": requestId, "semantic_frame": result.semanticFrame])
+        // Real MacOsBodyAdapter contract is observe/act/verify (matches the
+        // Android Body adapter's contract) -- these cases call it as it
+        // actually exists, not the observe/capture/click/type/point method
+        // names this file originally guessed at, which do not exist on
+        // MacOsBodyAdapter and did not compile.
+        case "observe", "capture_semantic":
+            bodyAdapter.observe(scope: "frontmost") { observation in
+                writeResult(["ok": true, "op": op, "request_id": requestId,
+                             "semantic_frame": semanticFrameJSON(observation)])
+            }
 
         case "click_semantic":
             guard let x = number(cmd["x"]), let y = number(cmd["y"]) else {
                 writeResult(["ok": false, "op": op, "request_id": requestId, "error": "x_and_y_required"])
                 return
             }
-            let target = CGPoint(x: x, y: y)
-            let result = bodyAdapter.click(at: target)
-            writeResult(["ok": result.ok, "op": op, "request_id": requestId, "action_outcome": result.actionOutcome])
+            bodyAdapter.act(.tap(x: x, y: y))
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+                bodyAdapter.verify(goal: "mouse_location", expected: "\(x),\(y)") { result in
+                    writeResult(["ok": result.ok, "op": op, "request_id": requestId, "reason": result.reason])
+                }
+            }
 
         case "type_semantic":
             let text = cmd["text"] as? String ?? ""
-            let result = bodyAdapter.type(text: text)
-            writeResult(["ok": result.ok, "op": op, "request_id": requestId, "action_outcome": result.actionOutcome])
+            bodyAdapter.act(.typeText(text))
+            writeResult(["ok": true, "op": op, "request_id": requestId, "typed_characters": text.count])
 
         case "point_semantic":
+            // Visual pointer only -- MacOsBodyAdapter's BodyAction vocabulary
+            // (tap/typeText/requestScreenshot/requestSemanticTree) has no
+            // "move without clicking" primitive; that's the Display Plane's
+            // job (TaloaShow), same as the plain "point" op above, not a
+            // physical Body action.
             guard let x = number(cmd["x"]), let y = number(cmd["y"]) else {
                 writeResult(["ok": false, "op": op, "request_id": requestId, "error": "x_and_y_required"])
                 return
             }
-            let target = CGPoint(x: x, y: y)
-            let result = bodyAdapter.point(at: target)
-            writeResult(["ok": result.ok, "op": op, "request_id": requestId, "action_outcome": result.actionOutcome])
+            let ok = TaloaShow.point(at: CGPoint(x: x, y: y),
+                                     label: cmd["label"] as? String ?? "",
+                                     seconds: number(cmd["seconds"]) ?? 3.0)
+            writeResult(["ok": ok, "op": op, "request_id": requestId, "x": x, "y": y])
 
 
         default:

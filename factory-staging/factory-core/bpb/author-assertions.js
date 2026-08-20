@@ -127,6 +127,27 @@ export function authorAssertionsFromSpec(step) {
     });
   }
 
+  // Cross-file reachability assertions the blueprint pre-declared on the step
+  // itself (step.behavior_assertions, each carrying its OWN `path` pointing at
+  // a CALLER file, not target). Root-caused live 2026-08-20: this function
+  // rebuilds every assertion above from `target` only, so a step whose real
+  // completion depends on some OTHER file actually referencing it (the
+  // Android/macOS Body -WIRE- steps, the prompt-injection gate, template
+  // replay) had its reachability requirement silently dropped on every
+  // post-ship re-proof -- three steps closed themselves DONE via trivial or
+  // wrong-API diffs with zero real callers, because nothing was ever checking
+  // the caller file. The assertion EXECUTOR already reads `assertion.path`
+  // correctly (factory-staging/factory-core/sentry/behavior-assertions.js);
+  // this was the only missing link. Pass-through, not regenerated -- the
+  // blueprint author already gave these the exact shape the executor expects.
+  const preDeclared = Array.isArray(step?.behavior_assertions) ? step.behavior_assertions : [];
+  for (const a of preDeclared) {
+    if (!a || typeof a !== 'object') continue;
+    const declaredPath = typeof a.path === 'string' ? a.path : (typeof a.target === 'string' ? a.target : null);
+    if (!declaredPath || declaredPath === target) continue; // same-target checks are already covered above
+    assertions.push({ ...a, target: declaredPath });
+  }
+
   if (assertions.length === 0) {
     // Fail-closed ONLY where SENTRY would require proof. A non-server-code target
     // (e.g. a doc/asset) that declares nothing verifiable is legitimately proof-free.
