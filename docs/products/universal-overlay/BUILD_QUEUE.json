@@ -5068,9 +5068,9 @@
       "shipped_via": "governed_ship_queue"
     },
     {
-      "status": "skipped",
+      "status": "pending",
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "action_type": "write_file_exact",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
@@ -5079,8 +5079,8 @@
       "id": "TALOA-S64-TEMPLATE-REPLAY-001",
       "target_file": "services/taloa/template-replay-service.js",
       "sandbox_boundary": "services/taloa/**",
-      "task": "JSDoc @ssot docs/products/universal-overlay/PRODUCT_HOME.md. Overlay print §64 item 7: template persistence + replay. Export createTemplateReplayService({ pool, logger }). Replay when environment_signature still matches. Do not invent a table. CRITICAL: do NOT invent capsule_store or any SQL table. Persist only via injected pool helpers / existing stores named in the blueprint. tables must stay empty unless already on HEAD.",
-      "spec": "Blueprint §30–32. Reuse capsule_store. No invented SQL tables (capsule_store forbidden). Injected pool/logger only.",
+      "task": "JSDoc @ssot docs/products/universal-overlay/PRODUCT_HOME.md. Overlay print §64 item 7: template persistence + replay. Export createTemplateReplayService({ pool, logger }). Replay when environment_signature still matches. Do not invent a table. WIRING (required, not optional): import createTemplateReplayService into services/taloa/task-orchestrator-service.js and call it at the start of dispatchTask() -- if a matching template replay exists, use it instead of falling through to strategyRouter/bodyAdapter. Additive only, do not rewrite dispatchTask's existing flow for the no-replay case.",
+      "spec": "Blueprint §30–32. Reuse capsule_store. Real caller required in task-orchestrator-service.js, not just an export (confirmed 2026-08-20: this step was marked done twice with zero real callers and a no-op-shaped diff before this assertion was added).",
       "expected_exports": [
         "createTemplateReplayService"
       ],
@@ -5093,27 +5093,27 @@
       "built_sha": null,
       "proof": null,
       "last_attempt_at": "2026-08-20T08:12:05.363Z",
-      "last_error": "artifact_missing_after_ship: artifact_proof_failed: missing:environment_signature",
+      "last_error": null,
       "started_at": "2026-08-20T08:11:51.105Z",
       "blocker_class": null,
       "park_until": null,
       "heal_unblocked": false,
       "heal_reason": "demote_missing_exact_to_author",
-      "demoted": true,
-      "demote_reason": "revive_exhausted:artifact_missing_after_ship: artifact_proof_failed: missing:environment_signature",
-      "demoted_at": "2026-08-20T08:23:30.867Z",
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
       "skip_reason": null,
       "escalation_required": false,
-      "revive_count": 6,
-      "same_signature_count": 1,
+      "revive_count": 0,
+      "same_signature_count": 0,
       "behavior_assertions": [
         {
-          "type": "exports_smoke",
-          "path": "services/taloa/template-replay-service.js",
-          "exports": [
+          "type": "file_contains",
+          "path": "services/taloa/task-orchestrator-service.js",
+          "must_include": [
             "createTemplateReplayService"
           ],
-          "assertion_id": "expected_exports:services/taloa/template-replay-service.js"
+          "assertion_id": "reachability:template-replay-wired"
         }
       ],
       "exactness": {
@@ -5143,8 +5143,8 @@
       "tokens_used": 0,
       "duration_ms": 12000,
       "shipped_via": "governed_ship_queue",
-      "reopened_at": "2026-08-20T06:30:52.529Z",
-      "reopen_reason": "reachability_audit_2026-08-20: marked done via governed_ship_queue but has ZERO real callers anywhere in the live codebase (confirmed by direct grep across routes/, services/, startup/, and native Swift sources) -- exported/compiled but never invoked. Reopened per CLAUDE.md \"Acceptance Must Prove Reachability, Not Just Existence.\" Founder directive: universal-overlay blueprint is top priority, build it for real, do not stop.",
+      "reopened_at": "2026-08-20T08:29:08.073Z",
+      "reopen_reason": "reachability_audit_2026-08-20g: same stale-assertion propagation bug as the other 3 steps -- this one burned its entire revive budget (6 attempts) fighting an unrelated real error (artifact_missing_after_ship: missing:environment_signature) and got permanently demoted to skipped before ever being held to the real cross-file reachability standard even once. Re-synced behavior_assertions from the sealed config and cleared the terminal demotion so it gets a real shot.",
       "revived_at": "2026-08-20T08:11:04.650Z",
       "last_attempt": null,
       "no_op": null,
