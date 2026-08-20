@@ -5136,9 +5136,9 @@
       "blocker_resolution": null
     },
     {
-      "status": "blocked",
+      "status": "pending",
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "action_type": "author_then_write",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
@@ -5193,7 +5193,7 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-20T07:13:42.863Z",
+      "last_attempt_at": null,
       "last_error": "hidden_dependency",
       "started_at": "2026-08-20T07:13:42.797Z",
       "duration_ms": 15297,
@@ -5207,8 +5207,8 @@
       "reopened_at": "2026-08-20T07:10:29.101Z",
       "reopen_reason": "reachability_audit_2026-08-20c: re-closed done via a trailing-newline-only diff -- the function body is still a literal \"No-op for now\" stub, zero real callers before or after this ship. The only completion check this step had was a same-file string-literal check that was true from the original authoring and could never fail. Fixed at the source: added a real reachability assertion (services/taloa/body-adapter-service.js must reference assertObservationIsNotAuthority) plus an explicit wiring instruction. Reopening so the next attempt is held to the real standard.",
       "heal_reason": "demote_missing_exact_to_author",
-      "revive_count": 0,
-      "revived_at": "2026-08-20T07:05:42.119Z",
+      "revive_count": 1,
+      "revived_at": "2026-08-20T07:29:02.415Z",
       "last_attempt": null,
       "demote_reason": null,
       "demoted_at": null,
@@ -9304,10 +9304,10 @@
       "shipped_via": "governed_ship_queue"
     },
     {
-      "status": "blocked",
+      "status": "pending",
       "founder_gated": false,
-      "attempts": 1,
-      "action_type": "author_then_write",
+      "attempts": 0,
+      "action_type": "write_file_exact",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
       "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md §64",
@@ -9339,9 +9339,49 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-20T07:28:46.443Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing:SemanticPerception; behavior_assertion_failed; behavior_proof",
-      "started_at": "2026-08-20T07:28:26.184Z"
+      "started_at": "2026-08-20T07:28:26.184Z",
+      "same_signature_count": 0,
+      "revive_count": 1,
+      "revived_at": "2026-08-20T07:29:02.415Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "exact_inputs": {
+        "content_source_path": "docs/products/universal-overlay/twins/steps/TALOA-S64-MACOS-BODY-WIRE-001.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-08-20T07:29:33.327Z",
+        "shipped_at": "2026-08-20T07:29:33.327Z",
+        "commit_sha": null,
+        "content_sha256": "2f947953cfa13f7cdc34e618f770ea8b070322bde56d1acca4f1ed05cda6cfdf",
+        "target_file": "native/macos-overlay/ScreenControlCommands.swift",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "native/macos-overlay/ScreenControlCommands.swift",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "grounding": {
+          "status": "PASS"
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/universal-overlay/twins/steps/TALOA-S64-MACOS-BODY-WIRE-001.exact",
+          "content_sha256": "2f947953cfa13f7cdc34e618f770ea8b070322bde56d1acca4f1ed05cda6cfdf"
+        }
+      },
+      "shipped_at": "2026-08-20T07:29:33.327Z"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
