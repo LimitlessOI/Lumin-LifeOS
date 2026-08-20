@@ -5293,7 +5293,7 @@
       }
     },
     {
-      "status": "pending",
+      "status": "done",
       "founder_gated": false,
       "attempts": 0,
       "action_type": "write_file_exact",
@@ -5315,12 +5315,12 @@
         "verify"
       ],
       "blueprint_step_id": "TALOA-S64-MACOS-BODY-001",
-      "commit_sha": null,
+      "commit_sha": "e5d6fdf37b7fe5e8fa06712318f1de19f097bebb",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
-      "last_error": "hidden_dependency",
-      "started_at": "2026-08-20T06:59:02.150Z",
+      "last_attempt_at": "2026-08-20T07:28:03.290Z",
+      "last_error": null,
+      "started_at": "2026-08-20T07:28:03.290Z",
       "heal_unblocked": false,
       "heal_reason": "demote_missing_exact_to_author",
       "blocker_class": null,
@@ -5330,7 +5330,7 @@
       "demoted_at": null,
       "skip_reason": null,
       "escalation_required": false,
-      "revive_count": 1,
+      "revive_count": 0,
       "same_signature_count": 0,
       "exactness": {
         "sealed": true,
@@ -5354,9 +5354,9 @@
           "content_sha256": "d43d8a48c68aa0c3ecd4a2be545727702c465c0829683c61bab1d078aa703ede"
         }
       },
-      "shipped_at": "2026-08-20T07:28:11.775Z",
+      "shipped_at": "2026-08-20T07:28:18.622Z",
       "tokens_used": 0,
-      "duration_ms": 11303,
+      "duration_ms": 15333,
       "shipped_via": "governed_ship_queue",
       "failure_signature": null,
       "reopened_at": "2026-08-20T06:30:52.529Z",
@@ -9302,6 +9302,40 @@
       "duration_ms": 55822,
       "tokens_used": 0,
       "shipped_via": "governed_ship_queue"
+    },
+    {
+      "status": "pending",
+      "founder_gated": false,
+      "attempts": 0,
+      "action_type": "author_then_write",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "mission_id": "PRODUCT-universal-overlay",
+      "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md §64",
+      "depends_on": [
+        "TALOA-S64-MACOS-BODY-001",
+        "TALOA-S64-MACOS-PERCEPTION-001"
+      ],
+      "id": "TALOA-S64-MACOS-BODY-WIRE-001",
+      "target_file": "native/macos-overlay/ScreenControlCommands.swift",
+      "sandbox_boundary": "native/macos-overlay/**",
+      "task": "Overlay print §64 item 5 (wire, companion to TALOA-S64-MACOS-BODY-001 -- mirrors TALOA-S64-ANDROID-BODY-WIRE-001's existing pattern for the Android Body). Real command dispatch file for the /tmp/taloa-cmd channel. Instantiate MacOsBodyAdapter (which itself uses SemanticPerception) and route the existing observe/capture/click/type/point commands through its observe/act/verify contract instead of leaving the adapter unreachable. Additive only -- do not rewrite the existing command dispatch switch, add a real call site alongside it. factory-2 compiles.",
+      "spec": "Closes the same reachability gap the Android Body had before its own -WIRE- step: MacOsBodyAdapter and SemanticPerception compiled but had zero call sites anywhere in the native app (confirmed by direct grep, 2026-08-20).",
+      "file_contains": [
+        "MacOsBodyAdapter",
+        "SemanticPerception"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "file_contains",
+          "path": "native/macos-overlay/ScreenControlCommands.swift",
+          "must_include": [
+            "MacOsBodyAdapter",
+            "SemanticPerception"
+          ],
+          "assertion_id": "reachability:macos-body-wire-real-call-site"
+        }
+      ],
+      "blueprint_step_id": "TALOA-S64-MACOS-BODY-WIRE-001"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
