@@ -9577,9 +9577,9 @@
       "heal_unblocked": false
     },
     {
-      "status": "blocked",
+      "status": "done",
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "action_type": "write_file_exact",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
@@ -9606,15 +9606,15 @@
         }
       ],
       "blueprint_step_id": "TALOA-S64-TEMPLATE-REPLAY-WIRE-001",
-      "commit_sha": null,
+      "commit_sha": "cacc25770057f6e37963829d62c982a549c022df",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-20T09:36:55.270Z",
-      "last_error": "STEP_STATUS_FORBIDDEN",
-      "started_at": "2026-08-20T09:36:55.174Z",
+      "last_attempt_at": "2026-08-20T09:36:59.779Z",
+      "last_error": null,
+      "started_at": "2026-08-20T09:36:59.779Z",
       "same_signature_count": 2,
-      "revive_count": 4,
-      "revived_at": "2026-08-20T09:36:55.115Z",
+      "revive_count": 0,
+      "revived_at": "2026-08-20T09:36:59.743Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -9650,13 +9650,15 @@
           "content_sha256": "a09a989c7902f37b9028009208dfef91817085fa8367da7dbfc67ba0a2ab1a18"
         }
       },
-      "shipped_at": "2026-08-20T09:37:06.216Z",
-      "duration_ms": 19951,
+      "shipped_at": "2026-08-20T09:37:19.685Z",
+      "duration_ms": 19907,
       "tokens_used": 0,
       "heal_reason": "demote_missing_exact_to_author",
       "exact_inputs": {
         "content_source_path": "docs/products/universal-overlay/twins/steps/TALOA-S64-TEMPLATE-REPLAY-WIRE-001.exact"
-      }
+      },
+      "shipped_via": "governed_ship_queue",
+      "heal_unblocked": false
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
