@@ -5053,7 +5053,7 @@
       "status": "blocked",
       "founder_gated": false,
       "attempts": 1,
-      "action_type": "author_then_write",
+      "action_type": "write_file_exact",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
       "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md §64",
@@ -5087,7 +5087,7 @@
       "skip_reason": null,
       "escalation_required": false,
       "revive_count": 3,
-      "same_signature_count": 0,
+      "same_signature_count": 1,
       "behavior_assertions": [
         {
           "type": "exports_smoke",
@@ -5099,9 +5099,9 @@
         }
       ],
       "exactness": {
-        "sealed": false,
-        "sealed_at": "2026-08-20T07:02:43.299Z",
-        "shipped_at": "2026-08-20T07:02:43.299Z",
+        "sealed": true,
+        "sealed_at": "2026-08-20T07:38:25.679Z",
+        "shipped_at": "2026-08-20T07:38:25.679Z",
         "commit_sha": null,
         "content_sha256": "9d313427884d2fd6599ce511275726c1940c5838d80b3fad32d77084bef43642",
         "target_file": "services/taloa/template-replay-service.js",
@@ -5120,8 +5120,8 @@
           "content_sha256": "9d313427884d2fd6599ce511275726c1940c5838d80b3fad32d77084bef43642"
         }
       },
-      "shipped_at": "2026-08-13T08:16:12.850Z",
-      "failure_signature": null,
+      "shipped_at": "2026-08-20T07:38:25.679Z",
+      "failure_signature": "STEP_STATUS_FORBIDDEN",
       "tokens_used": 0,
       "duration_ms": 12000,
       "shipped_via": "governed_ship_queue",
@@ -5133,7 +5133,11 @@
       "pre_existing": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "escalation_class": "same_signature_repeat",
+      "exact_inputs": {
+        "content_source_path": "docs/products/universal-overlay/twins/steps/TALOA-S64-TEMPLATE-REPLAY-001.exact"
+      }
     },
     {
       "status": "done",
