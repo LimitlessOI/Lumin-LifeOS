@@ -4903,10 +4903,10 @@
       "escalation_class": "same_signature_repeat"
     },
     {
-      "status": "blocked",
+      "status": "pending",
       "founder_gated": false,
-      "attempts": 1,
-      "action_type": "author_then_write",
+      "attempts": 0,
+      "action_type": "write_file_exact",
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "mission_id": "PRODUCT-universal-overlay",
       "source": "TALOA_UNIVERSAL_OVERLAY_FLUID_UI_BLUEPRINT_CLAUDE_DRAFT.md §64",
@@ -4923,11 +4923,11 @@
       "blueprint_step_id": "TALOA-S64-MACOS-PERCEPTION-001",
       "same_signature_count": 0,
       "exactness": {
-        "sealed": false,
-        "sealed_at": "2026-08-20T07:43:20.853Z",
-        "shipped_at": "2026-08-20T07:43:20.853Z",
+        "sealed": true,
+        "sealed_at": "2026-08-20T08:23:36.557Z",
+        "shipped_at": "2026-08-20T08:23:36.557Z",
         "commit_sha": null,
-        "content_sha256": "02e817eb2ebe3bcce3623a5a280979eadb0c0ea8f8523b6dc8bb88bc60472ba8",
+        "content_sha256": "fda9e617832b04b97fc1af9bc12b4508cfb5475229a69fa69dc7babe0f37c2d2",
         "target_file": "native/macos-overlay/SemanticPerception.swift",
         "reverse": {
           "mode": "delete_file",
@@ -4941,14 +4941,14 @@
         "rebuild": {
           "action_type": "write_file_exact",
           "content_source_path": "docs/products/universal-overlay/twins/steps/TALOA-S64-MACOS-PERCEPTION-001.exact",
-          "content_sha256": "02e817eb2ebe3bcce3623a5a280979eadb0c0ea8f8523b6dc8bb88bc60472ba8"
+          "content_sha256": "fda9e617832b04b97fc1af9bc12b4508cfb5475229a69fa69dc7babe0f37c2d2"
         }
       },
-      "shipped_at": "2026-08-20T07:43:26.166Z",
+      "shipped_at": "2026-08-20T08:23:36.557Z",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-08-20T08:08:29.516Z",
+      "last_attempt_at": null,
       "last_error": "hidden_dependency",
       "started_at": "2026-08-20T08:08:29.448Z",
       "duration_ms": 10930,
@@ -4958,8 +4958,8 @@
       "heal_reason": "demote_missing_exact_to_author",
       "reopened_at": "2026-08-20T08:05:03.797Z",
       "reopen_reason": "reachability_audit_2026-08-20e: the post-ship evaluator fix (authorAssertionsFromSpec) was correct, but these LIVE queue step instances were enrolled 2026-08-13, before today's sealed-config assertion additions -- reopening status alone never refreshed the stale behavior_assertions already frozen on the live step object, so the OLD (self-referential, trivially-true) assertion kept being used instead of the new cross-file one. Re-synced behavior_assertions (and task/spec) from the current sealed config/overlay-print-sequence.js definition, confirmed via direct grep this step still has zero real external callers.",
-      "revive_count": 0,
-      "revived_at": "2026-08-20T07:27:45.795Z",
+      "revive_count": 1,
+      "revived_at": "2026-08-20T08:23:30.867Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -4980,7 +4980,10 @@
           ],
           "assertion_id": "reachability:macos-perception-wired"
         }
-      ]
+      ],
+      "exact_inputs": {
+        "content_source_path": "docs/products/universal-overlay/twins/steps/TALOA-S64-MACOS-PERCEPTION-001.exact"
+      }
     },
     {
       "status": "done",
@@ -5065,7 +5068,7 @@
       "shipped_via": "governed_ship_queue"
     },
     {
-      "status": "blocked",
+      "status": "skipped",
       "founder_gated": false,
       "attempts": 1,
       "action_type": "write_file_exact",
@@ -5096,9 +5099,9 @@
       "park_until": null,
       "heal_unblocked": false,
       "heal_reason": "demote_missing_exact_to_author",
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:artifact_missing_after_ship: artifact_proof_failed: missing:environment_signature",
+      "demoted_at": "2026-08-20T08:23:30.867Z",
       "skip_reason": null,
       "escalation_required": false,
       "revive_count": 6,
