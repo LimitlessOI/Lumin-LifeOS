@@ -1,0 +1,32 @@
+name: Point B Control Plane Guard
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'builderos-reboot/POINT_B_TARGET.json'
+      - 'builderos-reboot/BP_PRIORITY.json'
+      - 'scripts/verify-point-b-control-plane.mjs'
+      - '.github/workflows/point-b-control-plane-guard.yml'
+  schedule:
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: point-b-control-plane-guard
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Verify active Point B is represented consistently
+        run: node scripts/verify-point-b-control-plane.mjs
