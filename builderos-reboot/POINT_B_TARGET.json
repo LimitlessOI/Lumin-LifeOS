@@ -1,6 +1,6 @@
 {
   "schema": "point_b_target_v1",
-  "updated_at": "2026-08-17",
+  "updated_at": "2026-08-21",
   "operator_lock": "Adam 2026-08-17 — Current Point B is Taloa Overlay A-to-Z. Costello must continue slice by slice without stopping until real authenticated end-to-end interaction is proven or a genuine founder decision / hard capability blocker is surfaced.",
   "completed_milestones": [
     {
@@ -17,8 +17,8 @@
     "point_a": "Overlay has partial foundation, click/control code, and Watch Supervisor logic, but no proven continuous real authenticated browser/ChatGPT control loop and no verified Costello slice-by-slice continuation toward that outcome.",
     "point_b": "Taloa attaches to a real authenticated browser session, observes current state, selects and executes the correct bounded action through multiple interaction trees, verifies the result, updates receipts/context, continues a multi-turn ChatGPT conversation without ordinary founder clicks, exposes live runtime truth, and keeps BuilderOS advancing lawful blueprint slices until acceptance passes.",
     "founder_success_test": "Founder can direct Taloa to operate the real ChatGPT/Browser session; Taloa carries a bounded multi-turn conversation with Chief Architect/Conductor, handles current lawful controls, verifies each result, and continues without founder performing ordinary clicks or typing. Runtime status shows what Costello is building and the final acceptance receipt proves the exact environment and actions.",
-    "acceptance_command": "node scripts/verify-universaloverlay.mjs",
-    "machine_alpha_command": "node scripts/verify-universaloverlay.mjs",
+    "acceptance_command": "node scripts/verify-taloa-overlay-a2z.mjs",
+    "machine_alpha_command": "node scripts/verify-taloa-overlay-a2z.mjs",
     "mission_folder": "builderos-reboot/MISSIONS/TALOA-OVERLAY-P1-0001"
   },
   "pipeline_after_lifeos": {
