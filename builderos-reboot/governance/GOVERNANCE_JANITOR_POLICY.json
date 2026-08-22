@@ -1,0 +1,64 @@
+{
+  "schema": "governance_janitor_policy_v1",
+  "name": "Dumb-AI Confusion Auditor / Governance Janitor",
+  "purpose": "Continuously reduce ambiguity in active governance without consuming Conductor implementation attention.",
+  "authority": "advisory_and_bounded_maintenance",
+  "protected_files": [
+    "docs/constitution/NORTH_STAR_SSOT.md",
+    "docs/SSOT_COMPANION.md",
+    "docs/AGENT_RULES.compact.md",
+    "builderos-reboot/POINT_B_TARGET.json",
+    "builderos-reboot/governance/CANONICAL_NAMING_REGISTRY.json"
+  ],
+  "history_roots": [
+    "docs/history/",
+    "docs/conversation_dumps/",
+    "docs/projects/BRAINSTORM_SESSIONS/"
+  ],
+  "scan_roots": [
+    "docs/constitution/",
+    "docs/products/",
+    "builderos-reboot/",
+    "config/",
+    "prompts/"
+  ],
+  "confusion_signals": [
+    "legacy canonical name in active governance",
+    "multiple files claiming supreme/canonical/current authority for the same concern",
+    "dated snapshot sitting in active governance path",
+    "explicitly superseded/deprecated/obsolete document outside history",
+    "proposal/draft worded as current authority",
+    "current blueprint without history/provenance pointer",
+    "cross-BuilderOS identity leakage",
+    "governance rule claiming enforcement with no named verifier/gate/receipt",
+    "active document referring to a missing path or retired runtime",
+    "duplicate governance text with conflicting status or terminology"
+  ],
+  "auto_archive_requires_all": [
+    "file is not protected",
+    "file explicitly self-identifies as superseded, deprecated, obsolete, historical, snapshot, or not current doctrine",
+    "no active non-history file references the candidate path",
+    "candidate is documentation/governance, not executable code/config/runtime state",
+    "archive destination preserves original relative path",
+    "archive metadata records reason, prior path, evidence, timestamp, and replacement authority when known"
+  ],
+  "never_auto_archive": [
+    "ambiguous status",
+    "file with active references",
+    "code, scripts, routes, services, migrations, config, secrets, runtime receipts",
+    "anything where AI opinion is the only evidence",
+    "anything whose removal changes runtime behavior"
+  ],
+  "ai": {
+    "enabled_when_key_available": true,
+    "preferred_free_providers": ["groq", "gemini", "mistral", "cerebras", "github_models"],
+    "role": "second-pass confusion classifier and explanation writer only",
+    "may_authorize_archive": false,
+    "fallback": "deterministic_only"
+  },
+  "outputs": {
+    "report": "builderos-reboot/governance/GOVERNANCE_CONFUSION_REPORT.json",
+    "archive_root": "docs/history/governance-janitor/",
+    "archive_manifest": "docs/history/governance-janitor/ARCHIVE_MANIFEST.jsonl"
+  }
+}
