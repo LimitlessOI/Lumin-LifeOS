@@ -1,7 +1,7 @@
 # Founder AI Operating Protocol
 
 **Ratified:** 2026-08-17
-**Authority:** Founder conversation, 2026-08-17; execution priority updated by founder 2026-08-22
+**Authority:** Founder conversation, 2026-08-17; clarified by founder 2026-08-22
 **Scope:** All AI agents operating on BuilderOS/LifeOS/Taloa work
 **Authority class:** Operating protocol subordinate to `docs/constitution/NORTH_STAR_SSOT.md`. This file is not a second Constitution and cannot override the North Star.
 
@@ -12,7 +12,7 @@ When the founder and the acting AI reach explicit agreement that a rule belongs 
 
 **Hard rule:** prose-only governance is not complete. Every load-bearing law or operational rule must have a fail-closed verifier, gate, typed receipt, or explicitly recorded enforcement gap that blocks claims of full enforcement until closed.
 
-### 2. Blueprint Completeness Law
+### 2. Blueprint Completeness and History Law
 A blueprint is complete only when:
 
 1. its current-state section matches measured reality;
@@ -21,6 +21,17 @@ A blueprint is complete only when:
 4. its acceptance proves Point B functions in the canonical deployed reality.
 
 "All construction slices executed" is never equivalent to blueprint completion.
+
+**History is part of the blueprint contract.** Every current canonical blueprint must contain or machine-link to:
+
+- the archive location of superseded blueprint versions;
+- the decision/provenance record explaining why the current version superseded them;
+- the material founder decisions, audits, receipts, or conversation evidence that changed direction;
+- an explicit statement that archived versions are history/provenance only and are not executable authority.
+
+Superseded material must be moved out of the active authority/discovery path when it can reasonably mislead an AI, but it must not be erased. The current blueprint or its canonical pointer must tell a fresh agent exactly where that history lives and why it matters.
+
+A blueprint with missing history linkage is incomplete even if its current implementation plan is technically executable.
 
 ### 3. Decision-Tree Law
 **The BP authors the whole decision tree. Factories only traverse it. They never author the next move.**
@@ -55,33 +66,36 @@ Whenever a second independent AI/model is brought into a decision, some level of
 
 The full protocol is not required for low-stakes obvious reversible work. High-impact decisions must use the governed 1+1=3 process once its executable protocol is installed. Until that executable gate exists, this section is constitutional intent with an explicit enforcement gap and may not be represented as fully implemented.
 
-### 9. Current engine priority — Abbott only
+### 9. BuilderOS system independence and current execution priority
 Governance exists to improve outcomes, not to become the outcome.
 
-**Founder direction, 2026-08-22:** get one BuilderOS engine working well. **ABBOTT is the sole active BuilderOS execution engine. COSTELLO is parked.**
+**ABBOTT and COSTELLO are separate, independent BuilderOS systems.** They have separate repositories, runtime identity, state, Point B authority, recovery behavior, and proof chains. Neither is a lane, branch, descendant runtime, or replica of the other merely because they share lessons or blueprint ancestry.
 
-Until the founder changes this direction:
+Costello was intentionally built as a separate system from a later blueprint informed by lessons learned from Abbott. Cross-system learning is allowed and desired; cross-system authority leakage is not.
 
-- New product execution, self-repair, scheduler work, and governance hardening target **Abbott**.
-- Do not spend execution effort repairing or advancing Costello as an independent engine.
-- Costello may be inspected as a **parts car / lessons source**. Proven improvements may be ported into Abbott after verifying they fit Abbott's current architecture and Point B.
-- Do not maintain duplicate Abbott/Costello runtime paths merely for symmetry.
-- A rule, verifier, scheduler, recovery loop, or blueprint pointer that makes an AI reasonably believe both engines are active is a governance defect and must be corrected, retired, or clearly marked historical.
-- Current execution target remains machine-readable in `builderos-reboot/POINT_B_TARGET.json`; that file decides what Abbott is building now.
+**Founder direction, 2026-08-22:** concentrate current improvement effort on getting one engine working well: **Abbott**. This is a work-priority decision, not a merger or retirement of Costello.
+
+Until the founder changes the priority:
+
+- New repair, self-healing, scheduler, and governance-hardening work should target Abbott first.
+- Costello remains an independent system and repository, but is not the current repair focus.
+- Costello may be inspected for proven ideas, architecture, verification patterns, or lessons that Abbott can adopt.
+- Any imported Costello lesson must be re-validated against Abbott's own architecture, blueprint, runtime, and Point B before becoming Abbott authority.
+- Do not make Abbott's runtime depend on Costello, or Costello's runtime depend on Abbott, merely to share lessons.
+- Do not describe either system's Point B, receipts, health, or completion state as evidence for the other.
 
 ## BuilderOS identities
 
-- **ABBOTT** — canonical active BuilderOS engine.
-- **COSTELLO** — parked experimental descendant/reference implementation. Not an active execution lane unless the founder explicitly reactivates it.
+- **ABBOTT** — original independent BuilderOS system; current improvement focus.
+- **COSTELLO** — separate independent BuilderOS system built from a later blueprint informed by Abbott lessons; currently not the repair focus.
 
-Abbott may use multiple factory lanes only when the canonical BP exposes independent pre-authored slices. Lane availability never authorizes invented parallel work.
+Each system may have its own factory lanes when its own canonical blueprint exposes independent pre-authored slices. Lane availability never authorizes invented parallel work or cross-system state sharing.
 
-Suggested active machine lane identities:
+Suggested machine lane identities:
 
 - `ABBOTT-A1`, `ABBOTT-A2`, `ABBOTT-A3`
-
-Costello lane identities, old Point B targets, schedulers, and recovery paths are historical/reference material while Costello is parked.
+- `COSTELLO-C1`, `COSTELLO-C2`, `COSTELLO-C3`
 
 ## Enforcement status
 
-This operating-protocol file is subordinate to the North Star. `scripts/verify-founder-ai-operating-protocol.mjs` and `.github/workflows/founder-ai-operating-protocol.yml` fail closed if required operating invariants or the context capsule disappear. Additional runtime enforcement for BP decision-tree exhaustion and full 1+1=3 execution authorization remains a named implementation requirement and must not be claimed complete until its dedicated gates exist.
+This operating-protocol file is subordinate to the North Star. `scripts/verify-founder-ai-operating-protocol.mjs` and `.github/workflows/founder-ai-operating-protocol.yml` fail closed if required operating invariants or the context capsule disappear. Blueprint-history linkage is additionally enforced by `scripts/verify-blueprint-history-links.mjs`. Additional runtime enforcement for BP decision-tree exhaustion and full 1+1=3 execution authorization remains a named implementation requirement and must not be claimed complete until its dedicated gates exist.
