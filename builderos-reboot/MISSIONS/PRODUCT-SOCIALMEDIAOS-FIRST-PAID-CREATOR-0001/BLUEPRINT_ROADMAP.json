@@ -1,0 +1,81 @@
+{
+  "schema": "blueprint_roadmap_v1",
+  "mission_id": "PRODUCT-SOCIALMEDIAOS-FIRST-PAID-CREATOR-0001",
+  "roadmap_id": "PRODUCT-SOCIALMEDIAOS-FIRST-PAID-CREATOR-0001-ROADMAP",
+  "status": "ARC_HANDOFF",
+  "updated_at": "2026-08-22",
+  "intent_source": "FOUNDER_PACKET.md + existing BLUEPRINT.json",
+  "boundary_note": "Product mission on BP_PRIORITY queue — not meta proof lap",
+  "full_map_note": "A→Z for this product scope; P4/P5 BUILDER_READY when blueprint complete",
+  "phases": [
+    {
+      "phase_id": "ACCEPT",
+      "name": "Phase ACCEPT",
+      "status": "BUILDER_READY",
+      "intent": "Blueprint steps tagged ACCEPT",
+      "builder_outcome": "Builder executes frozen byte contracts",
+      "alpha_signal": "Phase ACCEPT artifacts exist"
+    },
+    {
+      "phase_id": "DIRECT",
+      "name": "Phase DIRECT",
+      "status": "BUILDER_READY",
+      "intent": "Blueprint steps tagged DIRECT",
+      "builder_outcome": "Builder executes frozen byte contracts",
+      "alpha_signal": "Phase DIRECT artifacts exist"
+    },
+    {
+      "phase_id": "GENERATE",
+      "name": "Phase GENERATE",
+      "status": "BUILDER_READY",
+      "intent": "Blueprint steps tagged GENERATE",
+      "builder_outcome": "Builder executes frozen byte contracts",
+      "alpha_signal": "Phase GENERATE artifacts exist"
+    },
+    {
+      "phase_id": "INTAKE",
+      "name": "Phase INTAKE",
+      "status": "BUILDER_READY",
+      "intent": "Blueprint steps tagged INTAKE",
+      "builder_outcome": "Builder executes frozen byte contracts",
+      "alpha_signal": "Phase INTAKE artifacts exist"
+    },
+    {
+      "phase_id": "ISOLATION",
+      "name": "Phase ISOLATION",
+      "status": "BUILDER_READY",
+      "intent": "Blueprint steps tagged ISOLATION",
+      "builder_outcome": "Builder executes frozen byte contracts",
+      "alpha_signal": "Phase ISOLATION artifacts exist"
+    },
+    {
+      "phase_id": "REASON",
+      "name": "Phase REASON",
+      "status": "BUILDER_READY",
+      "intent": "Blueprint steps tagged REASON",
+      "builder_outcome": "Builder executes frozen byte contracts",
+      "alpha_signal": "Phase REASON artifacts exist"
+    },
+    {
+      "phase_id": "TRUTH",
+      "name": "Phase TRUTH",
+      "status": "BUILDER_READY",
+      "intent": "Blueprint steps tagged TRUTH",
+      "builder_outcome": "Builder executes frozen byte contracts",
+      "alpha_signal": "Phase TRUTH artifacts exist"
+    },
+    {
+      "phase_id": "P4",
+      "name": "Builder Execution",
+      "status": "FUTURE",
+      "intent": "System Builder executes ARC-emitted write_file_exact steps"
+    },
+    {
+      "phase_id": "P5",
+      "name": "Alpha Acceptance",
+      "status": "FUTURE",
+      "intent": "Acceptance command + founder usability verdict"
+    }
+  ],
+  "primary_metric": "founder_usability_pass"
+}
