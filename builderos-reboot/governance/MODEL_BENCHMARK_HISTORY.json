@@ -1,0 +1,14 @@
+{
+  "schema": "model_benchmark_history_v1",
+  "created_at": "2026-08-22",
+  "append_only_intent": true,
+  "purpose": "Preserve how model capability and cost change over time under the same BuilderOS governance so the system can distinguish model improvement from governance improvement.",
+  "rules": [
+    "Never overwrite an old model/version result with a newer version.",
+    "Every benchmark receipt records provider, exact model/version, task class, capability class, governance version, blueprint version, context packet version, outcome, cost, quota source, and SENTRY result.",
+    "Free, subscription-interactive, and paid/API runs are distinct economic modes even when the underlying model family is similar.",
+    "Compare new models against historical tasks when practical to measure capability depreciation and governance leverage.",
+    "Public benchmark/reputation data remains a prior; LifeOS controlled receipts determine internal routing authority."
+  ],
+  "entries": []
+}
