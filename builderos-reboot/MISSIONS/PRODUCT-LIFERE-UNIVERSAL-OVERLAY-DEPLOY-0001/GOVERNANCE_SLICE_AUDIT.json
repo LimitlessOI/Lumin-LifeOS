@@ -1,0 +1,113 @@
+{
+  "schema": "governance_slice_audit_v1",
+  "mission_id": "PRODUCT-LIFERE-UNIVERSAL-OVERLAY-DEPLOY-0001",
+  "audited_at": "2026-08-22",
+  "overall": "BLOCKED_GOVERNANCE_NOT_HARD",
+  "rule": "Do not execute a production mutation merely because the blueprint names a gate. Required controls must be executable and reachable on the actual call path.",
+  "findings": [
+    {
+      "slice": "LREUO-001",
+      "status": "PARTIAL",
+      "holding": ["read-only measurement intent", "existing acceptance/Layer-B receipts", "Layer-B refuses fixture-only fake pass"],
+      "not_holding": ["universal claim-state separation", "mandatory freshness binding across all LifeRE claims"],
+      "missing": ["single current-state receipt generator that classifies PASS/FAIL/UNKNOWN/fixture/live and binds evidence to revision"]
+    },
+    {
+      "slice": "LREUO-002",
+      "status": "BLOCKED",
+      "holding": ["Architect jurisdiction is now explicit", "blueprint-invention detector exists"],
+      "not_holding": ["current mission engine cannot execute action_type=architecture_resolution", "architecture-complete gate is not universally bound to mission execution"],
+      "missing": ["governed Architect decision-artifact executor producing a sealed manufacturing specification before Builder mutation"]
+    },
+    {
+      "slice": "LREUO-003",
+      "status": "BLOCKED",
+      "holding": ["sandbox boundary", "post-write SENTRY contract/behavior verification", "BPB intake"],
+      "not_holding": ["typed current execution authorization", "blueprint-content hash binding", "authorized-slice binding", "prebuild SENTRY predicate"],
+      "missing": ["mandatory Task Authorization Envelope/EXECUTION_AUTHORIZED verification on this exact factory mutation path"]
+    },
+    {
+      "slice": "LREUO-004",
+      "status": "BLOCKED",
+      "holding": ["founder-not-router doctrine", "Layer-B truthfully identifies live-tab dependency"],
+      "not_holding": ["architecture_resolution executable path", "external/overlay security contract universally intercepted"],
+      "missing": ["governed Architect proof-harness specification with typed irreducible bootstrap boundary"]
+    },
+    {
+      "slice": "LREUO-005",
+      "status": "BLOCKED",
+      "holding": ["real Layer-B HTTP session path", "fixture-only proof cannot pass"],
+      "not_holding": ["current authorization/hash gates", "universal scoped external-AI/extension capability gateway"],
+      "missing": ["machine-controlled browser/extension harness plus current execution authorization"]
+    },
+    {
+      "slice": "LREUO-006",
+      "status": "BLOCKED",
+      "holding": ["Task Authorization Envelope exists in Taloa runtime", "Layer-B live evidence mechanism"],
+      "not_holding": ["proof that LifeRE-through-Overlay cannot bypass Task Authorization Envelope", "universal reversibility gate", "pre-authorized test-action receipt"],
+      "missing": ["bounded reversible action contract and independent post-action verification bound to runtime truth"]
+    },
+    {
+      "slice": "LREUO-007",
+      "status": "BLOCKED",
+      "holding": ["Layer-B required-before-done mechanism", "production health/preflight mechanisms exist"],
+      "not_holding": ["exact-revision READY_TO_DEPLOY receipt", "mission-specific security pass", "governance evidence completeness"],
+      "missing": ["production readiness receipt aggregating exact-revision live evidence without treating baseline-tolerated governance debt as clean"]
+    },
+    {
+      "slice": "LREUO-008",
+      "status": "BLOCKED",
+      "holding": ["deployment service exists"],
+      "not_holding": ["exact accepted-hash deploy authorization", "rollback-ready proof", "typed current READY_TO_DEPLOY consumption"],
+      "missing": ["deploy gate consuming a current readiness receipt and refusing any revision mismatch"]
+    },
+    {
+      "slice": "LREUO-009",
+      "status": "BLOCKED",
+      "holding": ["Layer-B can be rerun against production", "Wisdom/learning doctrine exists"],
+      "not_holding": ["Layer-B receipt does not bind to deployed commit hash", "lessons-captured is not an executable completion gate"],
+      "missing": ["postdeploy receipt binding exact deployed hash + causal-learning completeness"]
+    }
+  ],
+  "cross_cutting_root_causes": [
+    {
+      "id": "GOV-ROOT-001",
+      "cause": "Governance vocabulary outran runtime wiring: blueprints/docs named controls that the live mission dispatcher did not understand or enforce.",
+      "evidence": ["factory-staging/factory-core/builder/run-mission.js", "factory-staging/factory-core/builder/run-step.js"]
+    },
+    {
+      "id": "GOV-ROOT-002",
+      "cause": "Escalation law and recovery implementation diverged: Council escalation can be environment-opt-in and fall back to a local dry/list operation while doctrine calls escalation hard/fail-closed.",
+      "evidence": ["builderos-reboot/scripts/loop-escalation-lib.mjs", "builderos-reboot/scripts/recovery-protocol-lib.mjs"]
+    },
+    {
+      "id": "GOV-ROOT-003",
+      "cause": "Enforcement-truth ratchet distinguishes new regressions from known debt but labels a run CLEAN even with large baseline-tolerated dormant-enforcement debt, which can be misread as globally clean.",
+      "evidence": ["scripts/verify-enforcement-truth.mjs", "products/receipts/GOVERNANCE_ENFORCEMENT_TRUTH_RECEIPT.json"]
+    },
+    {
+      "id": "GOV-ROOT-004",
+      "cause": "Conductor consensus enforcement remains advisory unless environment strictness is enabled; advisory evidence cannot satisfy a hard production gate.",
+      "evidence": ["factory-staging/factory-core/builder/run-step.js"]
+    },
+    {
+      "id": "GOV-ROOT-005",
+      "cause": "Current production blueprint contains non-builder officer work, but the mission runner is primarily a file-manufacturing dispatcher; officer decision artifacts need their own governed executable path.",
+      "evidence": ["builderos-reboot/MISSIONS/PRODUCT-LIFERE-UNIVERSAL-OVERLAY-DEPLOY-0001/BLUEPRINT.json", "factory-staging/factory-core/builder/run-mission.js"]
+    }
+  ],
+  "repairs_installed_during_audit": [
+    "Blueprint BP2 removes ad-hoc retry policy and delegates failure authority to LOOP_ESCALATION_CONTRACT.json.",
+    "Production mission gate registry distinguishes WIRED_HARD, WIRED_PARTIAL, SPEC_ONLY, and UNKNOWN.",
+    "Production mission governance verifier fails if required blueprint gates are not WIRED_HARD.",
+    "Mission dispatcher now refuses non-dry execution while blueprint_status=governance_audit_required_before_execution."
+  ],
+  "next_repairs_in_order": [
+    "Make escalation Council execution mandatory/fail-closed and prove 1+1=3 artifacts are consumed before retry.",
+    "Create governed Architect decision-artifact execution path for architecture_resolution slices.",
+    "Bind current execution authorization + blueprint hash + authorized slice to every mutating production step.",
+    "Create exact-revision current-state/readiness/deploy/postdeploy receipts.",
+    "Bind reversibility/scoped action authorization to LifeRE-through-Overlay action path.",
+    "Only then change blueprint_status to handoff_ready and execute production closure."
+  ]
+}
