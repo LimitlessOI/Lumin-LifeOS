@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-22T01:38:21.091Z",
+  "generated_at": "2026-08-22T01:53:22.554Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 13729,
   "files": [
@@ -31719,9 +31719,9 @@
     {
       "path": "builderos-reboot/POINT_B_TARGET.json",
       "synopsis": "BuilderOS artifact — POINT B TARGET.",
-      "bytes": 3416,
-      "mtime": "2026-08-21T23:52:45.880Z",
-      "indexed_at": "2026-08-22T00:01:35.265Z",
+      "bytes": 6175,
+      "mtime": "2026-08-22T01:50:07.061Z",
+      "indexed_at": "2026-08-22T01:53:22.554Z",
       "synopsis_index_only": true
     },
     {
@@ -44755,9 +44755,9 @@
     {
       "path": "docs/products/builderos/GAP_FILL_LEDGER.json",
       "synopsis": "Documentation — GAP FILL LEDGER.",
-      "bytes": 118346,
-      "mtime": "2026-08-14T00:16:03.347Z",
-      "indexed_at": "2026-08-14T00:16:54.857Z",
+      "bytes": 119503,
+      "mtime": "2026-08-22T01:38:21.607Z",
+      "indexed_at": "2026-08-22T01:53:22.554Z",
       "synopsis_index_only": true
     },
     {

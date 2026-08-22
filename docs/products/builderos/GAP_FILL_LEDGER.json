@@ -871,6 +871,14 @@
       "added_real_lines": 23,
       "justification": "Founder actively blocked mid-reshoot of\n~2000 physical cards, waiting live in-session. Root cause diagnosed\nwith real evidence, not assumed (traced the exact missing Multer\nerror-handler gap and the exact resize call discarding per-card\nresolution before crop). The new Multer error handler is a narrow,\nstandard Express error-middleware pattern (map known err.code values\nto a specific message) with no auth/schema/money surface -- same\nclass and size as the two prior disclosed GAP-FILL fixes this same\nsession (mtg-card-vision.js prompt, mtg-card-photo-store.js crop\npadding), both already verified live against production with real\nbefore/after photo evidence before this commit. Factory queuing would\nadd delay disproportionate to this fix's scope and risk.\n\nCo-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>",
       "commit_message_excerpt": "GAP-FILL: MTG upload reliability, resolution, and page layout fixes"
+    },
+    {
+      "at": "2026-08-22T01:38:21.603Z",
+      "file": "services/autonomous-recovery-council.js",
+      "is_new_file": false,
+      "added_real_lines": 16,
+      "justification": "the +16 lines in services/autonomous-recovery-council.js\nare pure orchestration/glue, not new logic -- they add a timestamp-gated call\nto runGovernanceAuditCycle, a function that already exists, is already\nimported, and is already called earlier in this exact same tick() function\n(the auditArgs call two lines above). The change is \"call this existing,\nalready-governed function on a second, independent cadence\" -- no new\nbusiness logic, no new service, nothing the factory would author\ndifferently. The factory builds services/routes; this is the scheduler\nloop deciding when to call one, the same category as the existing\nreconcileStalls/sendStallSms calls already hand-wired in this same tick().\n\nCo-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>",
+      "commit_message_excerpt": "GAP-FILL: stand up SocialMediaOS on Abbott, fix why SENTRY's own audit loop went silent for 8 days, fix a file-placement gate bug found while committing this"
     }
   ]
 }

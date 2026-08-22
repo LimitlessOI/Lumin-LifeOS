@@ -1,7 +1,7 @@
 {
   "schema": "point_b_target_v1",
-  "updated_at": "2026-08-21",
-  "operator_lock": "Adam 2026-08-17 — Current Point B is Taloa Overlay A-to-Z. Costello must continue slice by slice without stopping until real authenticated end-to-end interaction is proven or a genuine founder decision / hard capability blocker is surfaced.",
+  "updated_at": "2026-08-22",
+  "operator_lock": "Adam 2026-08-21 — \"put abbott to have him finish the socialmediaOS\" + \"monitor it all night to make sure that it doesn't quit... keep working it until it is complete finished. then... go into the new LifeOS blueprint.\" Current Point B is SocialMediaOS First Paid Creator. Taloa Overlay A-to-Z is parked, not abandoned (see parked_targets) — it was mid-repair-artifact-commit-catchup, not new work, when reprioritized. Abbott must continue slice by slice without stopping until PRODUCT_READY_FOR_PAID_CREATOR/FIRST_PAID_CREATOR_PROVEN is reached or a genuine founder decision / hard capability blocker is surfaced. Next after this: docs/products/lifeos/blueprint-versions/LIFEOS_BLUEPRINT_VERSION_B.md (confirmed current canonical, already assigned to Abbott in that file's own CURRENT.json pointer).",
   "completed_milestones": [
     {
       "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
@@ -11,19 +11,36 @@
       "note": "12/12 machine alpha PASS. Founder reviews async."
     }
   ],
+  "parked_targets": [
+    {
+      "mission_id": "TALOA-OVERLAY-P1-0001",
+      "label": "Taloa Overlay A-to-Z",
+      "state": "PARKED_FOR_SOCIALMEDIAOS_PRIORITY",
+      "note": "2026-08-22: parked, not abandoned — founder redirected Abbott to finish SocialMediaOS first. Real, valuable local file backlog was mid-catchup-commit (repair_artifact_commit finally succeeding after a GITHUB_TOKEN fix) when reprioritized; that catch-up is safe to let finish on its own since it is persisting already-done local state, not new work. Resume as Point B target once SocialMediaOS reaches PRODUCT_READY_FOR_PAID_CREATOR/FIRST_PAID_CREATOR_PROVEN, or sooner on founder direction.",
+      "mission_folder": "builderos-reboot/MISSIONS/TALOA-OVERLAY-P1-0001",
+      "acceptance_command": "node scripts/verify-taloa-overlay-a2z.mjs"
+    }
+  ],
   "target": {
-    "mission_id": "TALOA-OVERLAY-P1-0001",
-    "label": "Taloa Overlay A-to-Z",
-    "point_a": "Overlay has partial foundation, click/control code, and Watch Supervisor logic, but no proven continuous real authenticated browser/ChatGPT control loop and no verified Costello slice-by-slice continuation toward that outcome.",
-    "point_b": "Taloa attaches to a real authenticated browser session, observes current state, selects and executes the correct bounded action through multiple interaction trees, verifies the result, updates receipts/context, continues a multi-turn ChatGPT conversation without ordinary founder clicks, exposes live runtime truth, and keeps BuilderOS advancing lawful blueprint slices until acceptance passes.",
-    "founder_success_test": "Founder can direct Taloa to operate the real ChatGPT/Browser session; Taloa carries a bounded multi-turn conversation with Chief Architect/Conductor, handles current lawful controls, verifies each result, and continues without founder performing ordinary clicks or typing. Runtime status shows what Costello is building and the final acceptance receipt proves the exact environment and actions.",
-    "acceptance_command": "node scripts/verify-taloa-overlay-a2z.mjs",
-    "machine_alpha_command": "node scripts/verify-taloa-overlay-a2z.mjs",
-    "mission_folder": "builderos-reboot/MISSIONS/TALOA-OVERLAY-P1-0001"
+    "mission_id": "PRODUCT-SOCIALMEDIAOS-FIRST-PAID-CREATOR-0001",
+    "label": "SocialMediaOS First Paid Creator",
+    "point_a": "SocialMediaOS/MarketingOS already has a substantial creator loop, $49 content-pack wedge, pricing doctrine, approval/export, Creative Engine modes and market-ready work, but verifier/runtime drift exists, the shipped loop is not yet coherently bound to the producer-director + Creative Brief reasoning model, and Abbott continuation across separate slice invocations is not proven.",
+    "point_b": "A real creator can enter the canonical SocialMediaOS/MarketingOS path, complete the governed creator loop with a coherent pre-render Creative Brief and producer-director source-quality guidance, generate platform-native content through the existing product/Creative Engine foundation, approve/export under owner-scoped entitlement rules, and reach the canonical $49 paid path. Abbott must persist each authored slice in one_slice_per_run mode and be redispatched to the next slice without founder intervention. Final acceptance distinguishes FIRST_PAID_CREATOR_PROVEN from PRODUCT_READY_FOR_PAID_CREATOR and typed blockers without fabricating a human purchase.",
+    "founder_success_test": "Abbott executes SMOS-REV-001 through SMOS-REV-007 one slice per factory run with separate persisted receipts; SocialMediaOS then passes current live creator-loop verification, emits Creative Brief + producer-director guidance, preserves payment/session ownership, and produces a zero-deception final receipt stating FIRST_PAID_CREATOR_PROVEN or PRODUCT_READY_FOR_PAID_CREATOR.",
+    "acceptance_command": "node scripts/verify-socialmediaos-first-paid-creator.mjs",
+    "machine_alpha_command": "node scripts/verify-socialmediaos-first-paid-creator.mjs",
+    "mission_folder": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-FIRST-PAID-CREATOR-0001"
+  },
+  "pipeline_after_socialmediaos": {
+    "next": "LIFEOS_BLUEPRINT_VERSION_B",
+    "label": "LifeOS Blueprint Version B",
+    "blueprint_path": "docs/products/lifeos/blueprint-versions/LIFEOS_BLUEPRINT_VERSION_B.md",
+    "pointer": "docs/products/lifeos/blueprint-versions/CURRENT.json",
+    "note": "2026-08-22, founder: once SocialMediaOS reaches PRODUCT_READY_FOR_PAID_CREATOR/FIRST_PAID_CREATOR_PROVEN, move to the current canonical LifeOS blueprint (authored ~2026-08-16, pointer confirms CURRENT_CANONICAL_PRODUCT_BLUEPRINT and already assigns Abbott to 'own LifeOS blueprint continuation from Version B forward'). That pointer explicitly notes Version B is not yet an executable factory mission -- turning it into one (founder packet + BLUEPRINT.json with real slices) is real work for that point, not assumed done."
   },
   "pipeline_after_lifeos": {
     "next": "REVENUE-WORKFLOW-AFTER-TALOA",
-    "label": "First Taloa Revenue Workflow",
+    "label": "First Taloa Revenue Workflow (resumes when Taloa Overlay is unparked)",
     "note": "After Overlay end-to-end control proof, package the first revenue-use workflow under founder direction."
   },
   "doctrine": {
