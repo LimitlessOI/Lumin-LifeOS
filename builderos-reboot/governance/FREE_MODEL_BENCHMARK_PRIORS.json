@@ -1,0 +1,105 @@
+{
+  "schema": "free_model_benchmark_priors_v1",
+  "updated_at": "2026-08-22",
+  "status": "PROVISIONAL_EXTERNAL_PRIORS_NOT_LIFEOS_PROOF",
+  "purpose": "Start routing experiments from current public evidence rather than zero; replace priors with LifeOS receipts by task class as evidence accumulates.",
+  "scoring_rule": {
+    "external_expectation": "research prior only",
+    "lifeos_proven": "UNPROVEN until internal controlled receipts exist",
+    "routing_authority": "lifeos_proven overrides external_expectation when sample quality is sufficient"
+  },
+  "models": [
+    {
+      "lane": "gemini_2_5_pro_free",
+      "provider": "google",
+      "model": "gemini-2.5-pro",
+      "free_status": "FREE_TIER_AVAILABLE_PER_OFFICIAL_PRICING",
+      "external_expectation": 9,
+      "lifeos_proven": "UNPROVEN",
+      "provisional_strengths": ["complex reasoning", "coding", "large-context blueprint review", "architecture audit", "cross-file consistency review"],
+      "provisional_weaknesses": ["scarcer free allowance than bulk-worker lanes", "higher latency than fast inference lanes"],
+      "provisional_roles": ["blueprint_challenger", "governance_auditor", "architecture_reviewer", "large_context_root_cause"],
+      "context_tokens": 1000000,
+      "paid_continuation": {"input_per_million_usd": 1.25, "output_per_million_usd": 10.0, "condition": "prompts <=200k; verify current pricing before spend"},
+      "sources": ["https://ai.google.dev/gemini-api/docs/pricing", "https://artificialanalysis.ai/models/gemini-2-5-pro"]
+    },
+    {
+      "lane": "groq_gpt_oss_120b_free",
+      "provider": "groq",
+      "model": "openai/gpt-oss-120b",
+      "free_status": "FREE_PLAN_RATE_LIMITS_PUBLISHED",
+      "external_expectation": 8,
+      "lifeos_proven": "UNPROVEN",
+      "provisional_strengths": ["reasoning", "coding", "tool use", "very fast inference", "independent recovery analysis"],
+      "provisional_weaknesses": ["131k context smaller than Gemini 2.5 Pro", "free daily/token limits can constrain long failure packets"],
+      "provisional_roles": ["builder", "debugger", "recovery_peer", "adversarial_reviewer"],
+      "context_tokens": 131072,
+      "free_limits_observed": {"rpm": 30, "rpd": 1000, "tpm": 8000, "tpd": 200000},
+      "paid_continuation": {"input_per_million_usd": 0.15, "output_per_million_usd": 0.60, "verify_current_pricing_before_spend": true},
+      "sources": ["https://console.groq.com/docs/rate-limits", "https://console.groq.com/docs/model/openai/gpt-oss-120b", "https://artificialanalysis.ai/models/gpt-oss-120b"]
+    },
+    {
+      "lane": "groq_qwen_free",
+      "provider": "groq",
+      "model": "qwen/qwen3.6-27b",
+      "free_status": "FREE_PLAN_RATE_LIMITS_PUBLISHED",
+      "external_expectation": 7,
+      "lifeos_proven": "UNPROVEN",
+      "provisional_strengths": ["independent model-family perspective", "fast bounded coding/reasoning experiments"],
+      "provisional_weaknesses": ["less externally characterized here than GPT-OSS-120B", "must be benchmarked internally before specialization"],
+      "provisional_roles": ["second_opinion", "builder_rotation", "failure_hypothesis_generation"],
+      "sources": ["https://console.groq.com/docs/rate-limits"]
+    },
+    {
+      "lane": "mistral_free",
+      "provider": "mistral",
+      "model": "ACCOUNT_EXPOSED_FREE_MODEL",
+      "free_status": "FREE_API_MODE_WITH_INCLUDED_MONTHLY_USAGE",
+      "external_expectation": 7,
+      "lifeos_proven": "UNPROVEN",
+      "provisional_strengths": ["independent model-family perspective", "coding options", "cost-efficient paid continuation"],
+      "provisional_weaknesses": ["exact free model and limits are account-specific", "must probe account before assigning fixed rung"],
+      "provisional_roles": ["builder_rotation", "code_reviewer", "recovery_peer"],
+      "paid_reference": {"mistral_small_4_input_per_million_usd": 0.15, "mistral_small_4_output_per_million_usd": 0.60, "codestral_input_per_million_usd": 0.30, "codestral_output_per_million_usd": 0.90},
+      "sources": ["https://docs.mistral.ai/admin/billing-usage/usage-limits", "https://docs.mistral.ai/inference/pricing", "https://artificialanalysis.ai/models/comparisons/mistral-small-4-vs-gpt-5-codex"]
+    },
+    {
+      "lane": "cerebras_free",
+      "provider": "cerebras",
+      "model": "ACCOUNT_EXPOSED_FREE_MODEL",
+      "free_status": "VERIFY_ACCOUNT",
+      "external_expectation": 6,
+      "lifeos_proven": "UNPROVEN",
+      "provisional_strengths": ["very-high-throughput independent lane potential"],
+      "provisional_weaknesses": ["exact model/allowance not yet verified for this account"],
+      "provisional_roles": ["bulk_review_rotation", "second_opinion", "fast_failure_triage"]
+    },
+    {
+      "lane": "openrouter_free",
+      "provider": "openrouter",
+      "model": "FREE_MODEL_DYNAMIC",
+      "free_status": "VERIFY_CURRENT_FREE_CATALOG",
+      "external_expectation": 6,
+      "lifeos_proven": "UNPROVEN",
+      "provisional_strengths": ["access to diverse model families", "useful for 1+1=3 diversity"],
+      "provisional_weaknesses": ["free catalog changes", "model identity must be pinned in receipts"],
+      "provisional_roles": ["diversity_peer", "experimental_rotation"]
+    }
+  ],
+  "internal_benchmark_dimensions": [
+    "first_pass_success",
+    "eventual_success",
+    "sentry_rejection_rate",
+    "governance_violation_rate",
+    "same_failure_repeat_rate",
+    "unsupported_assumption_rate",
+    "debug_recovery_rate",
+    "architecture_reasoning_score",
+    "useful_dissent_rate",
+    "long_context_accuracy",
+    "latency",
+    "free_quota_efficiency",
+    "paid_cost_per_success_when_applicable"
+  ],
+  "rotation_policy": "Do not permanently specialize a model from public reputation alone. Rotate bounded tasks across roles until LifeOS receipts justify specialization."
+}
