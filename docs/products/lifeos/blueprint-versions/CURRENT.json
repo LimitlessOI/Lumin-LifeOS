@@ -9,6 +9,14 @@
   "supersedes": [
     "docs/products/lifeos/blueprint-versions/LIFEOS_BLUEPRINT_VERSION_A.md"
   ],
+  "history": {
+    "archive_root": "docs/history/lifeos/blueprints",
+    "decision_provenance": [
+      "docs/projects/BRAINSTORM_SESSIONS/tsos-platform/2026-08-14_lifeos-builderos-blueprint-revision/109_BLUEPRINT_CLAIM_PROVENANCE_MAP.md"
+    ],
+    "archived_versions_are_executable": false,
+    "purpose": "Preserve why the current blueprint exists, what it superseded, and the evidence and decisions that changed direction without allowing historical versions to compete with current authority."
+  },
   "archive_policy": {
     "active_directory_may_contain_only_current_or_future_review_candidate_blueprints": true,
     "superseded_blueprints_are_history_only": true,
@@ -17,8 +25,8 @@
   },
   "assignment": {
     "abbott": "Own LifeOS blueprint continuation from Version B forward.",
-    "costello": "Remain on Taloa Overlay; do not consume LifeOS Version B unless explicitly reassigned."
+    "costello": "Independent BuilderOS system. Do not consume or execute this Abbott-assigned LifeOS blueprint unless explicitly assigned by founder direction."
   },
   "truth_rule": "This pointer establishes blueprint authority only. It does not claim Version B is an executable factory mission or that any LifeOS implementation has started.",
-  "updated_at": "2026-08-18T01:19:00-07:00"
+  "updated_at": "2026-08-22T15:34:00-06:00"
 }
