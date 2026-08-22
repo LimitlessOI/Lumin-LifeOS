@@ -1,7 +1,7 @@
 {
   "schema": "prediction_receipt_v1",
   "mission_id": "PRODUCT-SOCIALMEDIAOS-FIRST-PAID-CREATOR-0001",
-  "created_at": "2026-08-22T01:31:25.520Z",
+  "created_at": "2026-08-22T01:49:49.315Z",
   "owner": "CFO",
   "pre_build": {
     "estimated_duration_minutes": 21,
