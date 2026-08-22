@@ -1,0 +1,77 @@
+{
+  "schema": "model_capability_priors_v1",
+  "as_of": "2026-08-22",
+  "status": "PROVISIONAL_UNSUBSTANTIATED_UNTIL_LIFEOS_RECEIPTS",
+  "rule": "External research is a prior only. Internal measured outcomes supersede these rankings by task class.",
+  "free_first": true,
+  "models": [
+    {
+      "lane": "gemini",
+      "free_candidate": "best free Gemini model actually exposed to current API key",
+      "provisional_strengths": ["large_context", "complex_reasoning", "coding", "blueprint_audit", "architecture_review"],
+      "recommended_experiment_roles": ["blueprint_reviewer", "governance_auditor", "long_context_analyst", "recovery_collaborator"],
+      "paid_continuity_benchmark": "same Gemini family paid tier first; use Flash/Flash-Lite for lower-cost work and Pro only where measured value requires it",
+      "known_public_price_examples_usd_per_million_tokens": {
+        "gemini_2_5_flash_input": 0.30,
+        "gemini_2_5_flash_output": 2.50,
+        "gemini_2_5_flash_lite_input": 0.10,
+        "gemini_2_5_flash_lite_output": 0.40,
+        "gemini_2_5_pro_input_up_to_200k": 1.25,
+        "gemini_2_5_pro_output_up_to_200k": 10.00
+      }
+    },
+    {
+      "lane": "groq",
+      "free_candidate": "GPT-OSS-120B or strongest currently free Groq-hosted reasoning model exposed to key",
+      "provisional_strengths": ["fast_reasoning", "coding", "agentic_tool_use", "independent_recovery_opinion"],
+      "recommended_experiment_roles": ["builder", "debugger", "root_cause_investigator", "recovery_collaborator"],
+      "paid_continuity_benchmark": "same GPT-OSS-120B on Groq before moving model families when quota, not capability, is the blocker",
+      "known_public_price_examples_usd_per_million_tokens": {
+        "gpt_oss_120b_input": 0.15,
+        "gpt_oss_120b_output": 0.60
+      }
+    },
+    {
+      "lane": "mistral",
+      "free_candidate": "strongest free Mistral model exposed to key",
+      "provisional_strengths": ["independent_model_family", "coding_candidate", "general_reasoning"],
+      "recommended_experiment_roles": ["builder", "debugger", "adversarial_reviewer"],
+      "paid_continuity_benchmark": "Ministral 3B/8B/14B for cheap bounded work; Codestral for coding when its measured advantage justifies the premium",
+      "known_public_price_examples_usd_per_million_tokens": {
+        "ministral_3b_input": 0.10,
+        "ministral_3b_output": 0.10,
+        "ministral_8b_input": 0.15,
+        "ministral_8b_output": 0.15,
+        "ministral_14b_input": 0.20,
+        "ministral_14b_output": 0.20,
+        "codestral_input": 0.30,
+        "codestral_output": 0.90
+      }
+    },
+    {
+      "lane": "cerebras",
+      "free_candidate": "strongest free Cerebras-hosted model exposed to key",
+      "provisional_strengths": ["very_fast_inference_candidate", "independent_recovery_opinion"],
+      "recommended_experiment_roles": ["builder", "debugger", "adversarial_reviewer", "recovery_collaborator"],
+      "paid_continuity_benchmark": "UNRESOLVED: probe account model catalog and current official price before enabling paid fallback",
+      "known_public_price_examples_usd_per_million_tokens": null
+    },
+    {
+      "lane": "openrouter",
+      "free_candidate": "current :free models exposed to account",
+      "provisional_strengths": ["model_diversity", "overflow_free_capacity"],
+      "recommended_experiment_roles": ["adversarial_reviewer", "recovery_collaborator"],
+      "paid_continuity_benchmark": "UNRESOLVED: choose exact low-cost paid model only after task-class evidence; do not treat OpenRouter itself as a capability tier",
+      "known_public_price_examples_usd_per_million_tokens": null
+    },
+    {
+      "lane": "grok_xai",
+      "free_candidate": "only if current account has genuine promotional/free inference credits",
+      "provisional_strengths": ["reasoning_candidate", "coding_candidate"],
+      "recommended_experiment_roles": ["root_cause_investigator", "adversarial_reviewer", "recovery_collaborator"],
+      "paid_continuity_benchmark": "UNRESOLVED until actual free-credit source and current model exposed to key are proven",
+      "known_public_price_examples_usd_per_million_tokens": null
+    }
+  ],
+  "paid_boundary": "No paid fallback becomes routable merely because it appears here. INTELLIGENCE_ROUTING_CONTRACT.json and PAID_ESCALATION_RECEIPT remain mandatory."
+}
