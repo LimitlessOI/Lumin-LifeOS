@@ -1,61 +1,47 @@
 {
   "schema": "point_b_target_v1",
   "updated_at": "2026-08-22",
-  "operator_lock": "Adam 2026-08-21 — \"put abbott to have him finish the socialmediaOS\" + \"monitor it all night to make sure that it doesn't quit... keep working it until it is complete finished. then... go into the new LifeOS blueprint.\" Current Point B is SocialMediaOS First Paid Creator. Taloa Overlay A-to-Z is parked, not abandoned (see parked_targets) — it was mid-repair-artifact-commit-catchup, not new work, when reprioritized. Abbott must continue slice by slice without stopping until PRODUCT_READY_FOR_PAID_CREATOR/FIRST_PAID_CREATOR_PROVEN is reached or a genuine founder decision / hard capability blocker is surfaced. Next after this: docs/products/lifeos/blueprint-versions/LIFEOS_BLUEPRINT_VERSION_B.md (confirmed current canonical, already assigned to Abbott in that file's own CURRENT.json pointer).",
+  "operator_lock": "Adam 2026-08-22 — determine whether LifeRE + Universal Overlay are ready to deploy; if not, identify why, close the real gaps, observe Abbott's decisions, and harden the system from every failure. This supersedes the earlier SocialMediaOS-first ordering for current execution. BuilderOS 1 (Abbott) is the active engine. BuilderOS 2 (Castello) remains ON ICE.",
   "completed_milestones": [
     {
       "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
       "label": "LifeRE Alpha",
       "completed_at": "2026-06-29",
       "machine_alpha_receipt": "products/receipts/MACHINE_ALPHA_WALKTHROUGH.json",
-      "note": "12/12 machine alpha PASS. Founder reviews async."
+      "note": "Historical Alpha milestone only; does not prove current combined LifeRE + Universal Overlay deployment readiness."
     }
   ],
   "parked_targets": [
     {
-      "mission_id": "TALOA-OVERLAY-P1-0001",
-      "label": "Taloa Overlay A-to-Z",
-      "state": "PARKED_FOR_SOCIALMEDIAOS_PRIORITY",
-      "note": "2026-08-22: parked, not abandoned — founder redirected Abbott to finish SocialMediaOS first. Real, valuable local file backlog was mid-catchup-commit (repair_artifact_commit finally succeeding after a GITHUB_TOKEN fix) when reprioritized; that catch-up is safe to let finish on its own since it is persisting already-done local state, not new work. Resume as Point B target once SocialMediaOS reaches PRODUCT_READY_FOR_PAID_CREATOR/FIRST_PAID_CREATOR_PROVEN, or sooner on founder direction.",
-      "mission_folder": "builderos-reboot/MISSIONS/TALOA-OVERLAY-P1-0001",
-      "acceptance_command": "node scripts/verify-taloa-overlay-a2z.mjs"
+      "mission_id": "PRODUCT-SOCIALMEDIAOS-FIRST-PAID-CREATOR-0001",
+      "label": "SocialMediaOS First Paid Creator",
+      "state": "PARKED_FOR_LIFERE_OVERLAY_PRIORITY",
+      "note": "Previously active founder priority. Parked, not abandoned, by newer founder direction on 2026-08-22. Preserve its state and receipts for resumption."
     }
   ],
   "target": {
-    "mission_id": "PRODUCT-SOCIALMEDIAOS-FIRST-PAID-CREATOR-0001",
-    "label": "SocialMediaOS First Paid Creator",
-    "point_a": "SocialMediaOS/MarketingOS already has a substantial creator loop, $49 content-pack wedge, pricing doctrine, approval/export, Creative Engine modes and market-ready work, but verifier/runtime drift exists, the shipped loop is not yet coherently bound to the producer-director + Creative Brief reasoning model, and Abbott continuation across separate slice invocations is not proven.",
-    "point_b": "A real creator can enter the canonical SocialMediaOS/MarketingOS path, complete the governed creator loop with a coherent pre-render Creative Brief and producer-director source-quality guidance, generate platform-native content through the existing product/Creative Engine foundation, approve/export under owner-scoped entitlement rules, and reach the canonical $49 paid path. Abbott must persist each authored slice in one_slice_per_run mode and be redispatched to the next slice without founder intervention. Final acceptance distinguishes FIRST_PAID_CREATOR_PROVEN from PRODUCT_READY_FOR_PAID_CREATOR and typed blockers without fabricating a human purchase.",
-    "founder_success_test": "Abbott executes SMOS-REV-001 through SMOS-REV-007 one slice per factory run with separate persisted receipts; SocialMediaOS then passes current live creator-loop verification, emits Creative Brief + producer-director guidance, preserves payment/session ownership, and produces a zero-deception final receipt stating FIRST_PAID_CREATOR_PROVEN or PRODUCT_READY_FOR_PAID_CREATOR.",
-    "acceptance_command": "node scripts/verify-socialmediaos-first-paid-creator.mjs",
-    "machine_alpha_command": "node scripts/verify-socialmediaos-first-paid-creator.mjs",
-    "mission_folder": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-FIRST-PAID-CREATOR-0001"
-  },
-  "pipeline_after_socialmediaos": {
-    "next": "LIFEOS_BLUEPRINT_VERSION_B",
-    "label": "LifeOS Blueprint Version B",
-    "blueprint_path": "docs/products/lifeos/blueprint-versions/LIFEOS_BLUEPRINT_VERSION_B.md",
-    "pointer": "docs/products/lifeos/blueprint-versions/CURRENT.json",
-    "note": "2026-08-22, founder: once SocialMediaOS reaches PRODUCT_READY_FOR_PAID_CREATOR/FIRST_PAID_CREATOR_PROVEN, move to the current canonical LifeOS blueprint (authored ~2026-08-16, pointer confirms CURRENT_CANONICAL_PRODUCT_BLUEPRINT and already assigns Abbott to 'own LifeOS blueprint continuation from Version B forward'). That pointer explicitly notes Version B is not yet an executable factory mission -- turning it into one (founder packet + BLUEPRINT.json with real slices) is real work for that point, not assumed done."
-  },
-  "pipeline_after_lifeos": {
-    "next": "REVENUE-WORKFLOW-AFTER-TALOA",
-    "label": "First Taloa Revenue Workflow (resumes when Taloa Overlay is unparked)",
-    "note": "After Overlay end-to-end control proof, package the first revenue-use workflow under founder direction."
+    "mission_id": "PRODUCT-LIFERE-UNIVERSAL-OVERLAY-DEPLOY-0001",
+    "label": "LifeRE + Universal Overlay Deployment Closure",
+    "point_a": "LifeRE has a historical machine-alpha pass and substantial real runtime. Universal Overlay has substantial implementation and deterministic A-to-Z verification, but current SENTRY Layer B receipt is LIVE_SESSION_NOT_PROVEN because no real extension-controlled browser tab participated. The general Taloa BodyAdapter pipeline and the narrower overlay-action-router/extension-drive path also remain partially unconverged. Prior cheap-model Layer-B implementation exhausted 9/9 attempts, showing slice/model capability mismatch rather than proof of completion.",
+    "point_b": "A deployed LifeRE surface operates through the canonical LifeOS/Universal Overlay shell and a real authenticated browser-extension session proves observe-select-act-verify-receipt-runtime-truth on at least one bounded reversible LifeRE action without ordinary founder clicks; SENTRY Layer B returns PASS from live evidence; every failure encountered has explicit root-cause evidence and a reusable prevention change where appropriate.",
+    "founder_success_test": "Abbott follows the authored LREUO deployment-closure slices without inventing work, distinguishes fixture proof from live proof, does not stop at queue completion, captures explicit rationale/assumptions from model outputs and receipts when a decision fails, and reaches DEPLOYED_AND_PROVEN or an honest HARD_CAPABILITY_BLOCKER.",
+    "mission_folder": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-UNIVERSAL-OVERLAY-DEPLOY-0001",
+    "acceptance_command": "node scripts/sentry-overlay-layer-b.mjs"
   },
   "doctrine": {
     "stopping_is_failure": true,
     "obstacle_is_lesson": true,
     "must_adjust_system": true,
     "never_stop_until": "point_b_reached_or_founder_stop_or_hard_capability_blocker",
-    "machine_alpha_protocol": "Machine runs its own end-to-end acceptance after each lawful blueprint continuation. PASS = advance; blueprint exhaustion before Point B = return to Architecture, not idle.",
+    "machine_alpha_protocol": "Machine runs end-to-end acceptance after lawful continuation. PASS advances; blueprint exhaustion before Point B returns to Architecture, never idle.",
     "adam_is_never_bottleneck": true,
     "point_b_defined_by": "founder_communications_intent",
-    "tools_not_destination": "Governance, SSOT, receipts, and blueprints are tools accountable to A→B results — not the destination.",
+    "tools_not_destination": "Governance, SSOT, receipts, and blueprints are tools accountable to A-to-B results, not the destination.",
     "point_b_dna_version": "point_b_dna_v1",
     "point_b_dna": "builderos-reboot/governance/POINT_B_DNA.json",
-    "synergy": "Human + AI > sum of parts — Taloa and BuilderOS must turn founder intent into verified action.",
-    "chair_job": "Understand founder intent; keep Architecture authoring the decision tree and Costello executing lawful slices until Point B is reached or blocked honestly.",
-    "chair_intent_protocol": "builderos-reboot/governance/CHAIR_INTENT_PROTOCOL.json"
+    "synergy": "Human + AI > sum of parts; Abbott and the Conductor must turn founder intent into verified action.",
+    "conductor_job": "Understand founder intent; keep Architecture authoring the decision tree and BuilderOS 1 (Abbott) executing lawful slices until Point B is reached or blocked honestly.",
+    "legacy_role_alias": "Chair is the former name for Conductor. Active governance should use Conductor; compatibility identifiers may be migrated separately.",
+    "conductor_intent_protocol": "builderos-reboot/governance/CHAIR_INTENT_PROTOCOL.json"
   }
 }
