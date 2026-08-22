@@ -5,18 +5,20 @@
 
 ## Mandatory load order — do not drift
 
-Before implementation, recovery, retry, escalation, model routing, naming, external-AI access, or priority decisions, read:
+Before implementation, recovery, retry, escalation, model routing, naming, external-AI access, office assignment, or priority decisions, read:
 
 1. `docs/constitution/NORTH_STAR_SSOT.md`
-2. `builderos-reboot/POINT_B_TARGET.json`
-3. `builderos-reboot/LOOP_ESCALATION_CONTRACT.json`
-4. `builderos-reboot/governance/INTELLIGENCE_ROUTING_CONTRACT.json`
-5. `builderos-reboot/governance/MODEL_CAPABILITY_CLASSES.json`
-6. `builderos-reboot/governance/OVERLAY_EXTERNAL_AI_ACCESS_CONTRACT.json`
-7. `docs/constitution/INTELLIGENCE_ECONOMY_AND_THREE_CREATIONS.md`
-8. current mission Founder Packet + Blueprint + latest receipts
+2. `docs/CHATGPT_CONTEXT_CAPSULE.md`
+3. `config/officer-staff.js`
+4. `builderos-reboot/POINT_B_TARGET.json`
+5. `builderos-reboot/LOOP_ESCALATION_CONTRACT.json`
+6. `builderos-reboot/governance/INTELLIGENCE_ROUTING_CONTRACT.json`
+7. `builderos-reboot/governance/MODEL_CAPABILITY_CLASSES.json`
+8. `builderos-reboot/governance/OVERLAY_EXTERNAL_AI_ACCESS_CONTRACT.json`
+9. `docs/constitution/INTELLIGENCE_ECONOMY_AND_THREE_CREATIONS.md`
+10. current mission Founder Packet + Blueprint + latest receipts
 
-If an authoritative artifact disagrees with this capsule, authority wins and this capsule must be refreshed in the same work session.
+If an authoritative artifact disagrees with this capsule, authority wins and **this capsule must be refreshed in the same work session**. Never silently reconcile conflicting governance from memory.
 
 ## Identities and current priority
 
@@ -27,6 +29,56 @@ If an authoritative artifact disagrees with this capsule, authority wins and thi
 - Current mission: `PRODUCT-LIFERE-UNIVERSAL-OVERLAY-DEPLOY-0001` on Abbott.
 - Goal: close and prove LifeRE + Universal Overlay deployment readiness; do not confuse old LifeRE blueprint-completeness with production-app completion.
 - Current decisive Overlay evidence: SENTRY Layer B remains `LIVE_SESSION_NOT_PROVEN` until a genuine browser/extension session proves the control path.
+
+## Canonical offices and jurisdiction — do not blur these roles
+
+Current implemented officer staffing authority is `config/officer-staff.js`. The current offices represented there are:
+
+### Conductor
+Supervisor/coordinator. Reserved judgment includes sequencing, decomposition, work assignment, and priority. Conductor does not become the default coder and does not absorb another office's jurisdiction merely because it can reason about the problem.
+
+### Architect
+Owns architecture fidelity, interface design, and assembly-order correctness. Missing architecture routes upward to Architect/appropriate authority; Builder/Factory may not invent it.
+
+### SENTRY
+Independent verification office. Owns judgments such as whether work is actually done and whether the experienced result is adequate from the client/user perspective. SENTRY evidence is not Builder self-certification.
+
+### Wisdom
+Owns long-horizon consequence, principle conflicts, precedent/learning, and what the system is likely to regret. Wisdom closes learning back toward future decisions/blueprints; it is not a substitute Builder.
+
+### Efficiency Officer
+Owns spend authorization, capacity allocation across factories, and ROI/resource judgments. It uses token/quota/provider-health/model-performance evidence but does not gain product or architecture authority from cost authority.
+
+## Execution bodies are not extra officers
+
+- **Builder / Factory** is the manufacturing/execution body. It builds authorized blueprint slices and may choose only explicitly delegated equivalent mechanics. It does not author product meaning, architecture, acceptance, or authority.
+- **Queue / scheduler** is mechanical execution projection/orchestration. It does not create authority or close blueprint scope.
+- **Council / 1+1=3 participants** provide independent reasoning, challenge, alternatives, and consensus under the governing protocol. Agreement does not itself create authority.
+- **Founder** retains founder-reserved authority; internal uncertainty, difficulty, or model disagreement must not automatically be exported to the Founder.
+
+## Assistants and subordinate positions
+
+Offices may have assistants/sub-roles such as **Fixer, researcher, scanner, debugger, evidence collector, model router, clerk, janitor, or verifier helper** when useful. These are subordinate capabilities, not new constitutional offices unless explicitly promoted through governance.
+
+Hard boundary:
+
+> **Assistants gather, compute, draft, diagnose, and propose inside delegated scope. The owning officer retains the office's reserved judgment and authority.**
+
+A sub-role may never acquire broader authority merely because it is more capable, uses a stronger model, or successfully solved prior problems. `Fixer` means a repair capability under an owning office/recovery path; it is not permission to invent architecture, waive SENTRY, change Point B, bypass escalation, spend money, or rewrite governance.
+
+Prefer deterministic assistants first where an exact answer is possible. Current staffing ladder in `config/officer-staff.js` begins deterministic/cached, then free-model capacity, with stronger/paid intelligence reserved according to governance. This staffing implementation must be reconciled with the newer free-first routing contract wherever older tier floors imply paid use before the free pool is lawfully exhausted.
+
+## Governance precedence and anti-confusion rule
+
+- Constitution / North Star wins constitutional conflicts.
+- Current canonical blueprint/Point B controls what is being built.
+- Machine contracts control their governed runtime behaviors when consistent with higher authority.
+- Receipts/runtime evidence control claims about what actually happened.
+- Product homes and current blueprints describe current product law/state within their jurisdiction.
+- Historical/superseded artifacts explain provenance but are not executable authority.
+- Assistants, models, Council members, prompts, summaries, and chat do not create authority by assertion.
+
+When two active-looking artifacts disagree, **do not choose the convenient one**. Mark the conflict, determine authority/freshness, preserve why the losing artifact became stale, and repair/archive it through the governed process.
 
 ## Three Creations — binding operating model
 
@@ -66,8 +118,8 @@ Exact model/version assignment is learned from evidence. Today's frontier model 
 
 **Permanent principle:** Intelligence is a depreciating resource; governance is an accumulating asset.
 
-Machine authority: `builderos-reboot/governance/MODEL_CAPABILITY_CLASSES.json`.
-Benchmark history: `builderos-reboot/governance/MODEL_BENCHMARK_HISTORY.json`.
+Machine authority: `builderos-reboot/governance/MODEL_CAPABILITY_CLASSES.json`.  
+Benchmark history: `builderos-reboot/governance/MODEL_BENCHMARK_HISTORY.json`.  
 External starting priors: `builderos-reboot/governance/FREE_MODEL_BENCHMARK_PRIORS.json`.
 
 ## External/high-intelligence access through Universal Overlay
@@ -102,6 +154,8 @@ Determine why the hard gate did not govern the actual retry path. Know why befor
 
 - Abbott/Castello independence clarified; Castello on ice.
 - Conductor canonical naming established; naming drift machinery created.
+- Canonical officer map added to this capsule: Conductor, Architect, SENTRY, Wisdom, Efficiency Officer; Builder/Factory and Queue explicitly separated as execution machinery.
+- Assistant/sub-role boundary clarified: helpers such as Fixer may operate under an office but do not inherit office authority.
 - Dumb-AI Governance Janitor is read-only reporting; intelligent review decides changes.
 - Blueprint history/provenance linkage made a completeness requirement.
 - Three Creations doctrine ratified.
@@ -114,11 +168,12 @@ Determine why the hard gate did not govern the actual retry path. Know why befor
 
 ## Self-refresh rule
 
-Before ending substantive Conductor work, and immediately after any material founder direction, mission, governance, blocker, identity, routing, external-AI access, or proven lesson changes:
+Before ending substantive Conductor work, and immediately after any material founder direction, mission, governance, blocker, identity, **office/jurisdiction**, routing, external-AI access, or proven lesson changes:
 
 - update this capsule;
 - remove stale priorities instead of accumulating contradictory eras;
 - point to history rather than copying it;
-- ensure the next context is told to load this capsule and the machine contracts above.
+- ensure the next context is told to load this capsule and the machine contracts above;
+- re-check `config/officer-staff.js` when office names, staffing, or jurisdiction changes.
 
 A stale capsule is a continuity defect and must not be relied upon.
