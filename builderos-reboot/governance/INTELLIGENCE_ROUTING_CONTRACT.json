@@ -1,0 +1,72 @@
+{
+  "schema": "intelligence_routing_contract_v1",
+  "ratified_at": "2026-08-22",
+  "authority": "founder_direction_2026-08-22",
+  "enforcement": "HARD_FAIL_CLOSED",
+  "doctrine": "docs/constitution/INTELLIGENCE_ECONOMY_AND_THREE_CREATIONS.md",
+  "three_creations": {
+    "1": "intention_dream",
+    "2": "blueprint_decision_tree",
+    "3": "construction_and_proof"
+  },
+  "problem_trigger": {
+    "material_failure_requires_1_plus_1_equals_3": true,
+    "minimum_independent_perspectives_when_available": 2,
+    "independent_before_synthesis": true,
+    "shared_failure_history_required": true,
+    "hidden_alternative_search_required": true,
+    "strategy_change_on_same_signature_repeat": true,
+    "controlling_attempt_contract": "builderos-reboot/LOOP_ESCALATION_CONTRACT.json"
+  },
+  "economy": {
+    "free_before_paid": true,
+    "price_is_not_capability": true,
+    "paid_requires_receipt": true,
+    "paid_receipt_type": "PAID_ESCALATION_RECEIPT",
+    "paid_allowed_only_when": [
+      "all_applicable_free_candidates_are_quota_exhausted_unavailable_or_proven_incapable_for_failure_class",
+      "available_free_pool_completed_required_1_plus_1_equals_3",
+      "failure_history_is_preserved",
+      "selected_paid_model_is_lowest_cost_known_reasonably_capable_option",
+      "expected_value_justifies_spend"
+    ]
+  },
+  "learning": {
+    "external_expectation_is_provisional": true,
+    "lifeos_proven_score_is_authoritative_after_evidence": true,
+    "rotate_models_across_roles_until_evidence": true,
+    "roles": [
+      "builder",
+      "debugger",
+      "blueprint_reviewer",
+      "governance_auditor",
+      "adversarial_reviewer",
+      "root_cause_investigator",
+      "acceptance_reviewer",
+      "long_context_analyst",
+      "recovery_collaborator"
+    ],
+    "required_metrics": [
+      "first_pass_success",
+      "eventual_success",
+      "sentry_rejection_rate",
+      "governance_violations",
+      "repeat_failure_rate",
+      "unsupported_assumptions",
+      "debug_recovery_success",
+      "architecture_reasoning_success",
+      "useful_dissent",
+      "context_handling",
+      "latency",
+      "free_quota_consumption",
+      "cost_usd"
+    ]
+  },
+  "prevention_test": "Before blaming model capability, determine whether blueprint decomposition, evidence packet, verifier, deterministic template, or governance gate could have made the mistake impossible.",
+  "load_before_routing": [
+    "docs/CHATGPT_CONTEXT_CAPSULE.md",
+    "builderos-reboot/POINT_B_TARGET.json",
+    "builderos-reboot/LOOP_ESCALATION_CONTRACT.json",
+    "builderos-reboot/governance/INTELLIGENCE_ROUTING_CONTRACT.json"
+  ]
+}
