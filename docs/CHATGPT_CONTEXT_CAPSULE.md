@@ -1,88 +1,103 @@
-# ChatGPT Context Capsule
+# Conductor / ChatGPT Context Capsule
 
-**Updated:** 2026-08-17
-**Purpose:** Compact operating context to load into a fresh founder/ChatGPT thread. This is an index/continuity aid; canonical BPs, receipts, Constitution, and product homes remain authoritative.
+**Updated:** 2026-08-22  
+**Purpose:** Mandatory compact continuity packet. It is an index; Constitution, machine contracts, canonical blueprint/Point B, and receipts remain higher authority.
 
-## Current names
+## Mandatory load order — do not drift
 
-- Current product identity: **Taloa**. `Lumin` is historical lineage/compatibility terminology unless a governed migration has not yet changed a live identifier.
-- Original BuilderOS: **ABBOTT**.
-- New/clean BuilderOS: **COSTELLO**.
-- Abbott lanes: `ABBOTT-A1/A2/A3`.
-- Costello lanes: `COSTELLO-C1/C2/C3`.
+Before implementation, recovery, retry, escalation, model routing, naming, or priority decisions, read:
 
-## Immediate business priority
+1. `docs/constitution/NORTH_STAR_SSOT.md`
+2. `builderos-reboot/POINT_B_TARGET.json`
+3. `builderos-reboot/LOOP_ESCALATION_CONTRACT.json`
+4. `builderos-reboot/governance/INTELLIGENCE_ROUTING_CONTRACT.json`
+5. `docs/constitution/INTELLIGENCE_ECONOMY_AND_THREE_CREATIONS.md`
+6. current mission Founder Packet + Blueprint + latest receipts
 
-1. Get **Costello** functioning independently of the founder's Mac.
-2. Prove Costello can claim an already-authored BP slice, build it, pass independent acceptance, persist the result remotely, and advance lawfully.
-3. Reconcile the **Taloa Overlay** BP to measured current reality and a revenue-producing Point B.
-4. Use Costello's available lanes on independent pre-authored Overlay slices.
-5. Get Overlay functionally accepted and into a real revenue path as soon as lawfully possible, targeted today.
-6. After Costello is proven, use what it teaches to repair/simplify **Abbott**. Two healthy three-lane systems can provide up to six lawful concurrent lanes when dependencies permit.
-7. After the Watch Supervisor ability is implemented/proven, founder + ChatGPT will set explicit income targets and revenue strategy; founder intends to focus on fundraising and selling therapists on the importance/power of LifeOS while supervised build execution continues.
+If an authoritative artifact disagrees with this capsule, authority wins and this capsule must be refreshed in the same work session.
 
-## Taloa Watch Supervisor — implementation in progress
+## Identities and current priority
 
-Founder authorized Taloa Overlay to become the intelligent supervision/heartbeat layer for a dedicated ChatGPT **BuilderOS Watch** thread rather than using a blind clicker.
+- **BuilderOS 1 = Abbott** — original BuilderOS; current active implementation/recovery focus.
+- **BuilderOS 2 = Castello** — separate second BuilderOS; currently **ON ICE**.
+- Abbott and Castello do not share runtime truth, receipts, Point B, or proof.
+- **Conductor** is the canonical supervisory role. `Chair` is legacy terminology/code compatibility only.
+- Current mission: `PRODUCT-LIFERE-UNIVERSAL-OVERLAY-DEPLOY-0001` on Abbott.
+- Goal: close and prove LifeRE + Universal Overlay deployment readiness; do not confuse old LifeRE blueprint-completeness with production-app completion.
+- Current decisive Overlay evidence: SENTRY Layer B remains `LIVE_SESSION_NOT_PROVEN` until a genuine browser/extension session proves the control path.
 
-Current implementation artifacts:
-- `scripts/taloa-chatgpt-watch-supervisor.mjs`
-- `tests/taloa-chatgpt-watch-supervisor.test.js`
-- `docs/products/lifeos/conversations/2026-08-17-taloa-watch-supervisor.md`
+## Three Creations — binding operating model
 
-Intended loop:
-- attach to an already-authenticated Chromium session via CDP; do not store ChatGPT credentials;
-- observe the dedicated Watch thread;
-- while ChatGPT is working, do nothing;
-- approve only a recognized GitHub `Allow once` prompt when the page also contains evidence tying it to `LimitlessOI/Lumin-LifeOS`;
-- refuse unrecognized approvals and stop on account/usage/security blockers;
-- after a completed turn, inject a bounded continuation prompt that reloads this capsule and focuses work on Costello -> lawful BP proof -> Overlay -> revenue Point B;
-- log every classification/action as JSONL receipts;
-- material reality changes must update this capsule and relevant project history.
+1. **Creation I — Intention / Dream:** founder + high intelligence establish what should exist, why, desired experience, possibilities and future consequences.
+2. **Creation II — Blueprint:** convert intention into the complete executable decision tree: Point A, Point B, architecture, branches, failure/recovery paths, acceptance, history/provenance, and enough decomposition for lower-cost intelligence to build reliably.
+3. **Creation III — Construction + Proof:** factories traverse the blueprint using bounded lower-cost/free intelligence, verification, SENTRY, receipts and governed recovery. Factories do not invent architecture to compensate for a weak blueprint.
 
-This ability is **not yet claimed functionally proven**. Code/tests have been authored in GitHub, but a real authenticated ChatGPT browser-session acceptance run is still required.
+Repeated worker failure must test whether Creation II failed to decompose/specify the work before concluding the model is too weak.
 
-## Non-negotiable BuilderOS laws
+## Problem => 1+1=3
 
-- BP is the decision authority; queues distribute only pre-authored work.
-- **The BP authors the whole decision tree. Factories only traverse it. They never author the next move.**
-- Blueprint completion requires current state = reality, preserved evolution/history, remaining slices spanning every known gap to Point B, and functional Point-B acceptance.
-- Factories do not invent missions, slices, architecture, repairs, or substitute Point B.
-- If the authored path is exhausted while acceptance fails, fail closed and route evidence to Architect; do not improvise.
-- Architect owns blueprint reconciliation. Material decisions are intended to use independent Conductor challenge/synthesis under the developing 1+1=3 protocol.
-- Models may be imaginative about possibilities, never about current facts. Unknown remains UNKNOWN until evidence resolves it.
-- Every agreed load-bearing law must be written into authoritative governance in the same working session and backed by an executable gate/receipt/verifier; prose-only rules are incomplete. If executable enforcement cannot be installed immediately, record the enforcement gap explicitly and never represent the law as fully enforced.
+A material problem triggers collaborative intelligence, not just another retry.
 
-## Conversation protocol
+- Use at least two independent model perspectives when available.
+- Independent analysis precedes synthesis.
+- Preserve and share exact failure history after independent passes.
+- Search for hidden alternatives and encourage genuine dissent.
+- Same-signature repetition requires strategy change.
+- `builderos-reboot/LOOP_ESCALATION_CONTRACT.json` controls attempt thresholds and consensus requirements.
+- Do not invent an ad-hoc retry ladder.
 
-- SO-004 applies: preserve every substantive founder conversation in both the owning product/topic conversation space and `docs/conversation_dumps/`.
-- Preserve the actual load-bearing founder language and the responding AI decision/action, not only a reference or lossy summary.
-- Clip relevant exchanges into each specific product space when a conversation spans projects; the project folder must contain the relevant substance itself.
-- **Idea Vault routing rule:** whenever a new idea emerges and there is no current project/product folder that already owns it, capture the idea in the Idea Vault immediately rather than leaving it floating only in conversation. If an owning project folder already exists, route the idea into that project history/backlog instead of duplicating it in Idea Vault.
-- **Idea provenance rule:** every idea record must preserve where it originated: date/time when available, source conversation/capture, owning project if one existed, the founder language that generated it, surrounding context/problem being discussed, and the first substantive expansion/response. The origin record is immutable lineage; later summaries may refine the idea but must not erase how it began.
-- **Idea conversation-linkage rule:** when the same idea, a clear descendant, or a material variation appears in a later conversation, append that conversation to the idea's lineage/history rather than creating a disconnected duplicate. The idea record should accumulate an ordered list of related conversations and what changed in each one so someone can ask "show me everything we have discussed about this idea" and recover the evolution.
-- **Idea detail rule:** retain enough original substance that an agent can reopen one idea later and reconstruct what was being thought, why it mattered, assumptions, alternatives, concerns, and promising directions without needing the original chat window.
-- Keep this capsule refreshed when priorities, names, rules, blockers, or next actions materially change.
-- Conversation capture is part of system history and founder-imprint learning; it is not optional session cleanup.
+## Free-first intelligence economy
 
-## Brainstorming protocol
+- Development routing is **free before paid**.
+- Free does not mean weak; capability is learned from evidence.
+- Rotate free models across builder, debugger, blueprint reviewer, governance auditor, adversarial reviewer, root-cause investigator, acceptance reviewer, long-context analyst and recovery collaborator roles.
+- Keep `external_expectation` (research prior, provisional) separate from `lifeos_proven` (internal receipt evidence).
+- Paid/high intelligence is preferentially reserved for Creation I, Creation II, unusually hard/high-impact cognition, or cases where applicable free capacity is genuinely exhausted/proven incapable.
+- Governed paid calls require `PAID_ESCALATION_RECEIPT`; no receipt => no paid call.
 
-- Brainstorming begins with a timebox. Default initial timebox when founder does not specify: **20 minutes**.
-- Extend deliberately only when expected value remains high.
-- Do not let governance exploration displace today's revenue-critical execution.
+## Lower-model prevention test
 
-## 1+1=3 direction (design work recorded; full executable gate still pending)
+Whenever stronger intelligence fixes a lower-model mistake, ask:
 
-- Second independent AI/model invoked => some level of synergy protocol, never mere rubber-stamping.
-- High-impact path aims to include unbounded/impossible-room ideation, reality grounding, SOL/Solomon institutional wisdom, current external/competitor research, independent solutions, hidden-alternative search even under early consensus, consequence/future analysis, synthesis, reality validation, and history write-back.
-- A full session should produce a materially new candidate absent from the independent drafts or document why exhaustive search found no superior synthesis.
-- SOL/Solomon preserves lessons, process, rejected ideas, reusable ideas, and dormant opportunities/unlock conditions.
-- Do not expand this protocol further until Costello/Overlay revenue-critical work is moving unless a current blocker requires it.
+**Could a better blueprint, clearer evidence packet, narrower slice, deterministic template, stronger verifier, or harder governance gate have made this mistake impossible?**
 
-## Current known Costello lesson
+If yes, fix the system rather than merely routing to a smarter model. The objective is to learn the minimum intelligence required for each task class under strong governance.
 
-The founder-alpha mission demonstrated a blueprint defect: all authored implementation slices could be marked complete while canonical functional acceptance still failed. A BP must therefore include the lawful diagnostic/repair/verification path needed to reach functioning Point B; slice exhaustion is not completion.
+## Critical governance failure under investigation
 
-## Deployment invariant
+Universal Overlay previously reached 9/9 failed Layer-B implementation attempts even though `builderos-reboot/LOOP_ESCALATION_CONTRACT.json` is HARD/fail-closed.
 
-BuilderOS execution must be independent remote infrastructure. The founder's Mac must not be a scheduler, worker, persistence layer, watchdog, or uptime dependency. Turning the Mac off must not stop Abbott or Costello.
+Determine why:
+
+1. Was the contract loaded on the actual factory/recovery path?
+2. Was failure/signature state persisted?
+3. Did the Layer-B loop bypass `loop-escalation-lib.mjs` or model escalation service?
+4. Was failure classification wrong?
+5. Did another retry budget bypass the gate?
+6. Did unavailable providers/research fail open?
+7. Was escalation emitted but not consumed?
+8. What general executable gate prevents recurrence?
+
+Know why before fixing. Preserve the evidence.
+
+## Governance work 2026-08-22
+
+- Abbott/Castello independence clarified; Castello on ice.
+- Conductor canonical naming established; naming drift machinery created.
+- Dumb-AI Governance Janitor is read-only reporting; intelligent review decides changes.
+- Blueprint history/provenance linkage made a completeness requirement.
+- Three Creations doctrine ratified.
+- Material problem => 1+1=3 ratified.
+- Free-first routing + paid escalation receipt ratified.
+- Hard verifier: `scripts/verify-intelligence-routing-governance.mjs`.
+
+## Self-refresh rule
+
+Before ending substantive Conductor work, and immediately after any material founder direction, mission, governance, blocker, identity, routing, or proven lesson changes:
+
+- update this capsule;
+- remove stale priorities instead of accumulating contradictory eras;
+- point to history rather than copying it;
+- ensure the next context is told to load this capsule and the machine contracts above.
+
+A stale capsule is a continuity defect and must not be relied upon.
