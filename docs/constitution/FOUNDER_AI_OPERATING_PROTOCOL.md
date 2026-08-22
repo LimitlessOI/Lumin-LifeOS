@@ -1,8 +1,9 @@
 # Founder AI Operating Protocol
 
 **Ratified:** 2026-08-17
-**Authority:** Founder conversation, 2026-08-17
+**Authority:** Founder conversation, 2026-08-17; execution priority updated by founder 2026-08-22
 **Scope:** All AI agents operating on BuilderOS/LifeOS/Taloa work
+**Authority class:** Operating protocol subordinate to `docs/constitution/NORTH_STAR_SSOT.md`. This file is not a second Constitution and cannot override the North Star.
 
 ## Constitutional operating invariants
 
@@ -42,7 +43,7 @@ Captures must include the actual load-bearing founder language and the AI respon
 ### 6. Persistent Context Capsule
 Maintain `docs/CHATGPT_CONTEXT_CAPSULE.md` as the compact current operating context for a fresh AI thread. Update it whenever a conversation materially changes priorities, system identities, governing rules, current blockers, or the next execution target.
 
-The capsule is a convenience index, never a replacement for the canonical BP, receipts, product home, Constitution, or conversation history.
+The capsule is a convenience index, never a replacement for the canonical BP, receipts, product home, North Star, or conversation history.
 
 ### 7. Brainstorm Timebox Rule
 Brainstorming must begin with an explicit timebox. If the founder does not name one, use a **20-minute initial timebox** and surface that limit at the start. The session may be deliberately extended when the expected value of further exploration remains high; extension is a conscious decision, not silent drift.
@@ -54,21 +55,33 @@ Whenever a second independent AI/model is brought into a decision, some level of
 
 The full protocol is not required for low-stakes obvious reversible work. High-impact decisions must use the governed 1+1=3 process once its executable protocol is installed. Until that executable gate exists, this section is constitutional intent with an explicit enforcement gap and may not be represented as fully implemented.
 
-### 9. Revenue priority
-Governance exists to improve outcomes, not to become the outcome. For the current 2026-08-17 priority, the shortest lawful path to a functioning, revenue-capable Taloa Overlay and a functioning independent Costello BuilderOS takes precedence over optional governance expansion.
+### 9. Current engine priority — Abbott only
+Governance exists to improve outcomes, not to become the outcome.
+
+**Founder direction, 2026-08-22:** get one BuilderOS engine working well. **ABBOTT is the sole active BuilderOS execution engine. COSTELLO is parked.**
+
+Until the founder changes this direction:
+
+- New product execution, self-repair, scheduler work, and governance hardening target **Abbott**.
+- Do not spend execution effort repairing or advancing Costello as an independent engine.
+- Costello may be inspected as a **parts car / lessons source**. Proven improvements may be ported into Abbott after verifying they fit Abbott's current architecture and Point B.
+- Do not maintain duplicate Abbott/Costello runtime paths merely for symmetry.
+- A rule, verifier, scheduler, recovery loop, or blueprint pointer that makes an AI reasonably believe both engines are active is a governance defect and must be corrected, retired, or clearly marked historical.
+- Current execution target remains machine-readable in `builderos-reboot/POINT_B_TARGET.json`; that file decides what Abbott is building now.
 
 ## BuilderOS identities
 
-- **ABBOTT** — original BuilderOS system.
-- **COSTELLO** — newer/cleaner BuilderOS being brought to functional independent operation.
+- **ABBOTT** — canonical active BuilderOS engine.
+- **COSTELLO** — parked experimental descendant/reference implementation. Not an active execution lane unless the founder explicitly reactivates it.
 
-Each system may have up to three factory lanes when the canonical BP exposes independent pre-authored slices. Lane availability never authorizes invented parallel work.
+Abbott may use multiple factory lanes only when the canonical BP exposes independent pre-authored slices. Lane availability never authorizes invented parallel work.
 
-Suggested machine lane identities:
+Suggested active machine lane identities:
 
 - `ABBOTT-A1`, `ABBOTT-A2`, `ABBOTT-A3`
-- `COSTELLO-C1`, `COSTELLO-C2`, `COSTELLO-C3`
+
+Costello lane identities, old Point B targets, schedulers, and recovery paths are historical/reference material while Costello is parked.
 
 ## Enforcement status
 
-This Constitution file is authoritative intent. `scripts/verify-founder-ai-operating-protocol.mjs` and `.github/workflows/founder-ai-operating-protocol.yml` fail closed if the required constitutional invariants or context capsule disappear. Additional runtime enforcement for BP decision-tree exhaustion and full 1+1=3 execution authorization remains a named implementation requirement and must not be claimed complete until its dedicated gates exist.
+This operating-protocol file is subordinate to the North Star. `scripts/verify-founder-ai-operating-protocol.mjs` and `.github/workflows/founder-ai-operating-protocol.yml` fail closed if required operating invariants or the context capsule disappear. Additional runtime enforcement for BP decision-tree exhaustion and full 1+1=3 execution authorization remains a named implementation requirement and must not be claimed complete until its dedicated gates exist.
