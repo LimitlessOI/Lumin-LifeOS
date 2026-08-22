@@ -1,5 +1,5 @@
 /**
- * SYNOPSIS: Exports loadBlueprintFromRepo — builderos-reboot/MISSIONS/FACTORY-REBOOT-0006/CONTENT/run-mission.js.
+ * SYNOPSIS: Governed mission dispatcher — loads the current blueprint and refuses production execution until governance is explicitly cleared.
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -38,6 +38,25 @@ export function loadBlueprintFromRepo(missionId) {
   return JSON.parse(fs.readFileSync(blueprintPath, 'utf8'));
 }
 
+function productionGovernanceBlock(blueprint, dryRun) {
+  const status = String(blueprint?.blueprint_status || '').trim();
+  if (status !== 'governance_audit_required_before_execution') return null;
+  // Dry-run remains available so architecture/governance can inspect topology without mutation.
+  if (dryRun) return null;
+  return {
+    httpStatus: 422,
+    body: {
+      ok: false,
+      status: 'BLOCKED_GOVERNANCE_NOT_HARD',
+      gap_type: 'governance_enforcement_gap',
+      blueprint_id: blueprint.blueprint_id,
+      summary: 'Production blueprint explicitly requires governance audit before execution; mutation is fail-closed.',
+      required_verifier: 'node scripts/verify-production-mission-governance.mjs',
+      registry: 'builderos-reboot/governance/PRODUCTION_MISSION_GATE_REGISTRY.json',
+    },
+  };
+}
+
 export function dispatchExecuteMission(body) {
   const mission_id = body?.mission_id;
   const dry_run = Boolean(body?.dry_run);
@@ -53,6 +72,9 @@ export function dispatchExecuteMission(body) {
   if (blueprint.error) {
     return { httpStatus: 404, body: blueprint };
   }
+
+  const governanceBlock = productionGovernanceBlock(blueprint, dry_run);
+  if (governanceBlock) return governanceBlock;
 
   const steps = sortStepsByDependencies(blueprint.steps || []);
   const results = [];
