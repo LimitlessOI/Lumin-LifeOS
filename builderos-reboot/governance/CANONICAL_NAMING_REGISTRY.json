@@ -1,0 +1,52 @@
+{
+  "schema": "canonical_naming_registry_v1",
+  "purpose": "Machine-readable naming authority for active Abbott governance/runtime surfaces. Historical archives preserve original wording; active authority uses canonical names.",
+  "rules": [
+    {
+      "id": "role-conductor",
+      "canonical": "Conductor",
+      "legacy_aliases": ["Chair"],
+      "transition_display": "Conductor (formerly Chair)",
+      "active_policy": "replace_or_flag",
+      "history_policy": "preserve_original",
+      "code_identifier_policy": "flag_only_unless_explicitly_migrated",
+      "notes": "North Star §2.11b/§2.11c establishes Conductor as the current supervisory role. Legacy code identifiers containing chair may remain temporarily for compatibility but must not be presented as current governance terminology."
+    },
+    {
+      "id": "builderos-one-abbott",
+      "canonical": "BuilderOS 1 (Abbott)",
+      "legacy_aliases": ["Abbott", "BuilderOS 1"],
+      "transition_display": "BuilderOS 1 (Abbott)",
+      "active_policy": "normalize_contextually",
+      "history_policy": "preserve_original",
+      "code_identifier_policy": "flag_only",
+      "notes": "Abbott is the nickname for the original BuilderOS after the second independent BuilderOS was created. Abbott remains an independent system from BuilderOS 2 / Costello."
+    },
+    {
+      "id": "builderos-two-costello",
+      "canonical": "BuilderOS 2 (Costello)",
+      "legacy_aliases": ["Costello", "BuilderOS 2"],
+      "transition_display": "BuilderOS 2 (Costello)",
+      "active_policy": "normalize_contextually",
+      "history_policy": "preserve_original",
+      "code_identifier_policy": "flag_only",
+      "notes": "Costello is the nickname for the second independent BuilderOS, built from a later blueprint informed by lessons from BuilderOS 1 / Abbott."
+    }
+  ],
+  "history_roots": [
+    "docs/history/",
+    "docs/conversation_dumps/",
+    "docs/projects/BRAINSTORM_SESSIONS/"
+  ],
+  "active_roots": [
+    "builderos-reboot/",
+    "docs/constitution/",
+    "docs/products/",
+    "config/",
+    "routes/",
+    "services/",
+    "scripts/",
+    "prompts/"
+  ],
+  "generated_artifact": "builderos-reboot/governance/NAMING_DRIFT_REPORT.json"
+}
