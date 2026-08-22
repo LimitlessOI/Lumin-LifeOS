@@ -1,6 +1,6 @@
 {
   "schema": "canonical_naming_registry_v1",
-  "purpose": "Machine-readable naming authority for active Abbott governance/runtime surfaces. Historical archives preserve original wording; active authority uses canonical names.",
+  "purpose": "Machine-readable naming authority for active BuilderOS governance/runtime surfaces. Historical archives preserve original wording; active authority uses canonical names.",
   "rules": [
     {
       "id": "role-conductor",
@@ -20,17 +20,19 @@
       "active_policy": "normalize_contextually",
       "history_policy": "preserve_original",
       "code_identifier_policy": "flag_only",
-      "notes": "Abbott is the nickname for the original BuilderOS after the second independent BuilderOS was created. Abbott remains an independent system from BuilderOS 2 / Costello."
+      "operating_state": "ACTIVE_CURRENT_FOCUS",
+      "notes": "BuilderOS 1 is the original BuilderOS. Abbott is its nickname. It remains independent from BuilderOS 2 / Castello."
     },
     {
-      "id": "builderos-two-costello",
-      "canonical": "BuilderOS 2 (Costello)",
-      "legacy_aliases": ["Costello", "BuilderOS 2"],
-      "transition_display": "BuilderOS 2 (Costello)",
+      "id": "builderos-two-castello",
+      "canonical": "BuilderOS 2 (Castello)",
+      "legacy_aliases": ["Castello", "BuilderOS 2", "Costello"],
+      "transition_display": "BuilderOS 2 (Castello)",
       "active_policy": "normalize_contextually",
       "history_policy": "preserve_original",
       "code_identifier_policy": "flag_only",
-      "notes": "Costello is the nickname for the second independent BuilderOS, built from a later blueprint informed by lessons from BuilderOS 1 / Abbott."
+      "operating_state": "ON_ICE",
+      "notes": "BuilderOS 2 is the second independent BuilderOS. Castello is its nickname. It is currently on ice and is not the present implementation focus. Historical or code references using Costello are legacy naming drift and should be migrated or flagged without changing archived evidence."
     }
   ],
   "history_roots": [
