@@ -1,0 +1,38 @@
+{
+  "schema": "overlay_external_ai_access_contract_v1",
+  "ratified_at": "2026-08-22",
+  "authority": "founder_direction_2026-08-22",
+  "enforcement_target": "HARD_FAIL_CLOSED",
+  "purpose": "Use interactive/free/subscription higher intelligence during development without making external models permanent holders of broad repository authority.",
+  "architecture": "external_ai -> universal_overlay -> governance_gateway -> scoped_capability -> repository_or_tool",
+  "principles": {
+    "model_thinks": true,
+    "blueprint_authorizes": true,
+    "overlay_transports": true,
+    "governance_permits": true,
+    "factory_acts": true,
+    "sentry_proves": true
+  },
+  "default_external_ai_permissions": ["READ_SCOPED_CONTEXT", "PROPOSE_PATCH", "PROPOSE_DECISION", "RETURN_AUDIT"],
+  "default_denied": ["DIRECT_MAIN_WRITE", "MASTER_GITHUB_CREDENTIAL", "UNSCOPED_REPO_WRITE", "SECRET_EXPORT", "CUSTOMER_DATA_EXPORT", "BYPASS_BLUEPRINT", "BYPASS_SENTRY"],
+  "development_exception": {
+    "allowed": true,
+    "requirements": ["explicit_scope", "logged_session", "branch_or_pr_preferred", "no_customer_secrets", "revocable_access", "receipt_of_actions"],
+    "note": "Development convenience is not production security authority."
+  },
+  "commercial_boundary": {
+    "consumer_or_interactive_account_automation_is_not_assumed_production_safe": true,
+    "require_provider_terms_review": true,
+    "require_data_retention_review": true,
+    "require_prompt_injection_threat_model": true,
+    "require_short_lived_or_scoped_credentials": true,
+    "require_auditable_revocation": true
+  },
+  "council_packet": {
+    "required_fields": ["mission_id", "blueprint_slice", "problem", "exact_failure", "failure_history", "relevant_evidence", "governance_controls", "explicit_questions"],
+    "independent_first_pass": true,
+    "cross_model_answers_hidden_until_independent_pass_complete": true,
+    "synthesis_after_independence": true,
+    "model_identity_and_version_receipted": true
+  }
+}
