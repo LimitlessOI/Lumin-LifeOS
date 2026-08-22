@@ -1,74 +1,26 @@
 {
   "schema": "builderos_blueprint_v1",
   "mission_id": "PRODUCT-LIFERE-UNIVERSAL-OVERLAY-DEPLOY-0001",
-  "blueprint_id": "LIFERE-UNIVERSAL-OVERLAY-DEPLOY-CLOSURE-BP1",
+  "blueprint_id": "LIFERE-UNIVERSAL-OVERLAY-DEPLOY-CLOSURE-BP2",
   "builderos": "ABBOTT",
   "authority": "BPB",
-  "blueprint_status": "handoff_ready",
+  "blueprint_status": "governance_audit_required_before_execution",
   "point_b": "A deployed LifeRE surface operates through the canonical LifeOS/Universal Overlay shell and a real authenticated browser-extension session proves observe-select-act-verify-receipt-runtime-truth on at least one bounded reversible LifeRE action without ordinary founder clicks; SENTRY Layer B returns PASS from live evidence.",
   "continuation_invariant": "Point B false plus exhausted authored slices is BLUEPRINT_EXHAUSTED_RETURN_TO_ARCHITECTURE, never idle-success.",
-  "history": {
-    "current_lifere": "docs/products/lifere/PRODUCT_HOME.md",
-    "lifere_prior_blueprint": "docs/LIFERE_MASTER_BLUEPRINT.md",
-    "current_overlay": "docs/products/universal-overlay/PRODUCT_HOME.md",
-    "overlay_prior_mission": "builderos-reboot/MISSIONS/TALOA-OVERLAY-P1-0001/",
-    "failed_live_proof": "products/receipts/SENTRY_OVERLAY_LAYER_B.json",
-    "archive_policy": "Prior/superseded material is provenance only, never executable authority."
-  },
+  "history": {"current_lifere":"docs/products/lifere/PRODUCT_HOME.md","lifere_prior_blueprint":"docs/LIFERE_MASTER_BLUEPRINT.md","current_overlay":"docs/products/universal-overlay/PRODUCT_HOME.md","overlay_prior_mission":"builderos-reboot/MISSIONS/TALOA-OVERLAY-P1-0001/","failed_live_proof":"products/receipts/SENTRY_OVERLAY_LAYER_B.json","archive_policy":"Prior/superseded material is provenance only, never executable authority."},
+  "governance_contracts": ["docs/constitution/NORTH_STAR_SSOT.md","docs/CHATGPT_CONTEXT_CAPSULE.md","config/officer-staff.js","builderos-reboot/LOOP_ESCALATION_CONTRACT.json","builderos-reboot/governance/INTELLIGENCE_ROUTING_CONTRACT.json","builderos-reboot/governance/MODEL_CAPABILITY_CLASSES.json","docs/constitution/INTELLIGENCE_ECONOMY_AND_THREE_CREATIONS.md"],
+  "cross_cutting_gates": {"no_raw_retry_policy_in_blueprint":true,"retry_authority":"builderos-reboot/LOOP_ESCALATION_CONTRACT.json","problem_triggers_1_plus_1_equals_3":true,"free_first_routing":true,"paid_requires_paid_escalation_receipt":true,"builder_may_not_invent_architecture":true,"sentry_independent_from_builder":true,"failure_learning_happens_before_retry":true,"every_mutating_slice_requires_current_authorization_and_fresh_acceptance_predicates":true,"every_failure_must_record":["failure_signature","failure_class","model_provider_and_version_when_applicable","decision_or_action_taken","evidence_available","evidence_missed","explicit_assumptions_or_rationale_when_available","why_existing_governance_did_not_catch_it","systemic_prevention_candidate"]},
   "steps": [
-    {
-      "step_id": "LREUO-001",
-      "title": "Re-measure deployed LifeRE and Overlay reality",
-      "action_type": "verify_then_report",
-      "task": "Run/read the canonical LifeRE acceptance, real-app E2E, Universal Overlay A-to-Z acceptance, production health, and Layer-B receipt paths. Produce a single current-state receipt separating PASS, FAIL, UNKNOWN, fixture-only, and live-proven evidence. Do not repair in this slice.",
-      "on_failure": "CONTINUE_WITH_TYPED_FINDINGS"
-    },
-    {
-      "step_id": "LREUO-002",
-      "title": "Converge real Body execution path",
-      "action_type": "author_then_write",
-      "task": "Close the product-home convergence finding by making the general BodyAdapter real-action path delegate to the already-existing overlay-action-router / extension-drive-bridge path where appropriate. Do not create a third control pipeline. Preserve fail-closed behavior when no authenticated browser session exists.",
-      "dependencies": ["LREUO-001"],
-      "on_failure": "BLOCKED_RETURN_TO_BPB"
-    },
-    {
-      "step_id": "LREUO-003",
-      "title": "Remove founder-presence dependency from Layer B technical proof",
-      "action_type": "author_then_write",
-      "task": "Provide a governed browser/extension test harness or equivalent machine-controlled real browser path that can establish the live session needed by SENTRY Layer B without requiring ordinary founder clicking. If browser-extension installation/authentication is a true capability boundary that cannot be automated in the deployed environment, emit HARD_CAPABILITY_BLOCKER with the exact one-time human bootstrap required; do not pretend it is solved.",
-      "dependencies": ["LREUO-002"],
-      "on_failure": "BLOCKED_RETURN_TO_BPB"
-    },
-    {
-      "step_id": "LREUO-004",
-      "title": "Prove LifeRE action through Universal Overlay",
-      "action_type": "verify_live",
-      "task": "Using a real authenticated session, open the canonical LifeRE surface and perform one bounded reversible action through Universal Overlay. Capture observation evidence, selected target and rationale, action receipt, post-action independent verification, and runtime truth. Fixture-only evidence cannot pass.",
-      "dependencies": ["LREUO-003"],
-      "on_failure": "ROOT_CAUSE_AND_RETURN"
-    },
-    {
-      "step_id": "LREUO-005",
-      "title": "Run SENTRY Layer B and deployment closure",
-      "action_type": "verify_live",
-      "task": "Run the real SENTRY Layer B proof and LifeRE acceptance against deployed reality. PASS only if both are live-proven and production health is not degraded by the change. Emit READY_TO_DEPLOY, DEPLOYED_AND_PROVEN, or a typed blocker; never infer readiness from queue completion.",
-      "dependencies": ["LREUO-004"],
-      "on_failure": "ROOT_CAUSE_AND_RETURN"
-    },
-    {
-      "step_id": "LREUO-006",
-      "title": "Learning-loop hardening",
-      "action_type": "governance_hardening",
-      "task": "For every failed or corrected decision in LREUO-001..005, preserve the responsible model/provider/attempt evidence when available and record: decision made, evidence available, evidence missed, assumption made, why existing governance/gates did not catch it earlier, and the smallest reusable verifier/gate/role/blueprint change that prevents recurrence. Never invent hidden chain-of-thought; ask for or use explicit rationale/receipts/logs only.",
-      "dependencies": ["LREUO-005"],
-      "on_failure": "REPORT_GOVERNANCE_GAP"
-    }
+    {"step_id":"LREUO-001","title":"Re-measure deployed LifeRE and Overlay reality","owner":"SENTRY","action_type":"verify_then_report","mutation_allowed":false,"task":"Run/read canonical LifeRE acceptance, real-app E2E, Universal Overlay A-to-Z acceptance, production health, and Layer-B receipt paths. Produce one current-state receipt separating PASS, FAIL, UNKNOWN, fixture-only, stale, and live-proven evidence. Do not repair in this slice.","required_gates":["EVIDENCE_FRESHNESS","CLAIM_STATE_SEPARATION","NO_MUTATION"],"acceptance":"A current-state receipt exists and every material deployment claim is classified by evidence maturity; no repair or code mutation occurred.","on_failure":"LEARN_THEN_ESCALATE_UNDER_LOOP_CONTRACT"},
+    {"step_id":"LREUO-002","title":"Architect and authorize Body-path convergence","owner":"ARCHITECT","action_type":"architecture_resolution","mutation_allowed":false,"task":"Using LREUO-001 evidence and current product homes, define the exact convergence boundary between general BodyAdapter real-action path and existing overlay-action-router / extension-drive-bridge path. Name authoritative files/interfaces, allowed delegation direction, fail-closed behavior, forbidden third-pipeline outcome, and exact behavioral acceptance predicates. Builder must not decide 'where appropriate'.","dependencies":["LREUO-001"],"required_gates":["ARCHITECTURE_COMPLETE","NO_INVENTION","CONDUCTOR_INTENT_FIDELITY"],"acceptance":"A sealed architecture/manufacturing specification exists that lets multiple competent implementers produce materially equivalent convergence without consequential architecture decisions.","on_failure":"LEARN_THEN_ESCALATE_UNDER_LOOP_CONTRACT"},
+    {"step_id":"LREUO-003","title":"Implement authorized Body-path convergence","owner":"BUILDER_FACTORY","action_type":"author_then_write","mutation_allowed":true,"task":"Implement only architecture sealed by LREUO-002. Do not add a third control pipeline, broaden scope, change product semantics, or alter acceptance. Preserve fail-closed behavior when no authenticated browser session exists.","dependencies":["LREUO-002"],"required_gates":["CURRENT_EXECUTION_AUTHORIZATION","BLUEPRINT_HASH_MATCH","SCOPE_MATCH","SENTRY_PREBUILD"],"acceptance":"Implementation matches sealed architecture and deterministic/behavioral tests pass without unauthorized decisions.","on_failure":"LEARN_THEN_ESCALATE_UNDER_LOOP_CONTRACT"},
+    {"step_id":"LREUO-004","title":"Architect founder-independent Layer-B proof path","owner":"ARCHITECT","action_type":"architecture_resolution","mutation_allowed":false,"task":"Define exact governed browser/extension test path that can establish a real authenticated Layer-B session without ordinary founder clicking. Separate automatable runtime behavior from irreducible one-time human bootstrap. If a true capability boundary exists, specify typed HARD_CAPABILITY_BLOCKER and minimum one-time bootstrap; do not convert bootstrap into recurring founder operation.","dependencies":["LREUO-003"],"required_gates":["FOUNDER_NOT_ROUTER","NO_FAKE_LIVE_PROOF","SECURITY_BOUNDARY_DEFINED","ARCHITECTURE_COMPLETE"],"acceptance":"A deterministic proof architecture exists with exact environment requirements, authentication boundary, expected receipts, timeout/failure behavior, and no hidden ordinary-founder dependency.","on_failure":"LEARN_THEN_ESCALATE_UNDER_LOOP_CONTRACT"},
+    {"step_id":"LREUO-005","title":"Implement and prove machine-controlled Layer-B session harness","owner":"BUILDER_FACTORY","action_type":"author_then_write_and_verify","mutation_allowed":true,"task":"Implement only LREUO-004 sealed proof architecture. Produce a real browser/extension session or emit exact typed capability blocker. Fixture success may support debugging but cannot satisfy live proof.","dependencies":["LREUO-004"],"required_gates":["CURRENT_EXECUTION_AUTHORIZATION","BLUEPRINT_HASH_MATCH","SECURITY_SCOPE","SENTRY_INDEPENDENT_VERIFY"],"acceptance":"A real session can be machine-established and observed by independent SENTRY, or a truthful HARD_CAPABILITY_BLOCKER proves the irreducible boundary.","on_failure":"LEARN_THEN_ESCALATE_UNDER_LOOP_CONTRACT"},
+    {"step_id":"LREUO-006","title":"Prove bounded reversible LifeRE action through Universal Overlay","owner":"SENTRY","action_type":"verify_live","mutation_allowed":"ONLY_PREAUTHORIZED_REVERSIBLE_TEST_ACTION","task":"Using a real authenticated session, open canonical LifeRE and exercise one pre-authorized bounded reversible action through Universal Overlay. Capture observation evidence, selected target and explicit rationale, authorization, action receipt, rollback/reversal plan, post-action independent verification, and runtime truth. Builder self-report and fixture-only evidence cannot pass.","dependencies":["LREUO-005"],"required_gates":["REVERSIBILITY","SCOPED_ACTION_AUTHORIZATION","SENTRY_INDEPENDENCE","LIVE_EVIDENCE","RUNTIME_TRUTH"],"acceptance":"Real action succeeds, is independently verified, leaves complete receipt chain, and can be safely reversed or is reversed as part of test.","on_failure":"LEARN_THEN_ESCALATE_UNDER_LOOP_CONTRACT"},
+    {"step_id":"LREUO-007","title":"Production readiness decision","owner":"SENTRY","action_type":"predeploy_acceptance","mutation_allowed":false,"task":"Run real SENTRY Layer B, LifeRE acceptance, production health, security boundary checks, regression tests, and governance evidence review against current release candidate. Do not deploy in this slice. Emit READY_TO_DEPLOY or typed blocker only from current evidence.","dependencies":["LREUO-006"],"required_gates":["LIVE_LAYER_B_PASS","LIFERE_ACCEPTANCE_PASS","PRODUCTION_HEALTH","SECURITY_PASS","GOVERNANCE_EVIDENCE_COMPLETE","NO_QUEUE_COMPLETION_SUBSTITUTION"],"acceptance":"Independent SENTRY issues READY_TO_DEPLOY with current evidence and no unresolved blocker.","on_failure":"LEARN_THEN_ESCALATE_UNDER_LOOP_CONTRACT"},
+    {"step_id":"LREUO-008","title":"Deploy authorized release candidate","owner":"CONDUCTOR","action_type":"deploy_authorized_release","mutation_allowed":true,"task":"After LREUO-007 READY_TO_DEPLOY, authorize and invoke canonical deployment mechanism for exact accepted release candidate/hash. Do not modify product code during deployment. Record deployment target, revision/hash, time, and health transition.","dependencies":["LREUO-007"],"required_gates":["READY_TO_DEPLOY_CURRENT","EXACT_HASH_MATCH","CANONICAL_DEPLOY_PATH","ROLLBACK_READY"],"acceptance":"Exact accepted revision is deployed through canonical path with rollback available and deployment evidence recorded.","on_failure":"LEARN_THEN_ESCALATE_UNDER_LOOP_CONTRACT"},
+    {"step_id":"LREUO-009","title":"Post-deploy independent proof and learning closure","owner":"SENTRY_AND_WISDOM","action_type":"postdeploy_verify_and_learn","mutation_allowed":false,"task":"Independently re-run decisive Layer B / LifeRE production proof against deployed revision, confirm production health, and consolidate all per-failure learning records into reusable governance/blueprint/verifier improvements. Deployment success alone cannot satisfy Point B.","dependencies":["LREUO-008"],"required_gates":["POSTDEPLOY_LIVE_PASS","EXACT_DEPLOYED_HASH","LESSONS_CAPTURED","NO_FAKE_GREEN"],"acceptance":"Point B is live-proven on deployed revision and every material failure/correction has preserved causal lesson and systemic prevention disposition.","on_failure":"LEARN_THEN_ESCALATE_UNDER_LOOP_CONTRACT"}
   ],
-  "model_failure_policy": {
-    "same_slice_identical_retry_limit": 2,
-    "after_limit": "DECOMPOSE_OR_ESCALATE",
-    "preferred_low_cost_models": ["groq_llama", "gemini_flash", "mistral_free", "cerebras_llama", "github_llama"],
-    "rationale_capture": "Capture explicit model output, stated assumptions, tool evidence and receipts. Never request or claim access to private chain-of-thought."
-  },
-  "completion_rule": "Not complete until live SENTRY Layer B and the bounded LifeRE-through-Overlay action both PASS in deployed reality."
+  "failure_policy": {"authority":"builderos-reboot/LOOP_ESCALATION_CONTRACT.json","local_override_forbidden":true,"problem_requires_1_plus_1_equals_3":true,"web_research_and_model_escalation_follow_controlling_contract":true,"free_first_selection_follows":"builderos-reboot/governance/INTELLIGENCE_ROUTING_CONTRACT.json","no_paid_call_without":"PAID_ESCALATION_RECEIPT","rationale_capture":"Capture explicit model output, stated assumptions, tool evidence and receipts. Never request or claim access to private chain-of-thought."},
+  "completion_rule":"Not complete until exact deployed revision passes live SENTRY Layer B and bounded LifeRE-through-Overlay action in production/current deployed reality, with governance learning captured and no unresolved production blocker."
 }
