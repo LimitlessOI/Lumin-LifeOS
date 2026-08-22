@@ -1,0 +1,89 @@
+{
+  "schema": "blueprint_roadmap_v1",
+  "mission_id": "TALOA-OVERLAY-P1-0001",
+  "roadmap_id": "TALOA-OVERLAY-P1-0001-ROADMAP",
+  "status": "ARC_HANDOFF",
+  "updated_at": "2026-08-22",
+  "intent_source": "FOUNDER_PACKET.md + existing BLUEPRINT.json",
+  "boundary_note": "Product mission on BP_PRIORITY queue — not meta proof lap",
+  "full_map_note": "A→Z for this product scope; P4/P5 BUILDER_READY when blueprint complete",
+  "phases": [
+    {
+      "phase_id": "ACCEPT",
+      "name": "Phase ACCEPT",
+      "status": "BUILDER_READY",
+      "intent": "Blueprint steps tagged ACCEPT",
+      "builder_outcome": "Builder executes frozen byte contracts",
+      "alpha_signal": "Phase ACCEPT artifacts exist"
+    },
+    {
+      "phase_id": "ACT",
+      "name": "Phase ACT",
+      "status": "BUILDER_READY",
+      "intent": "Blueprint steps tagged ACT",
+      "builder_outcome": "Builder executes frozen byte contracts",
+      "alpha_signal": "Phase ACT artifacts exist"
+    },
+    {
+      "phase_id": "CHATGPT",
+      "name": "Phase CHATGPT",
+      "status": "BUILDER_READY",
+      "intent": "Blueprint steps tagged CHATGPT",
+      "builder_outcome": "Builder executes frozen byte contracts",
+      "alpha_signal": "Phase CHATGPT artifacts exist"
+    },
+    {
+      "phase_id": "OBSERVE",
+      "name": "Phase OBSERVE",
+      "status": "BUILDER_READY",
+      "intent": "Blueprint steps tagged OBSERVE",
+      "builder_outcome": "Builder executes frozen byte contracts",
+      "alpha_signal": "Phase OBSERVE artifacts exist"
+    },
+    {
+      "phase_id": "SELECT",
+      "name": "Phase SELECT",
+      "status": "BUILDER_READY",
+      "intent": "Blueprint steps tagged SELECT",
+      "builder_outcome": "Builder executes frozen byte contracts",
+      "alpha_signal": "Phase SELECT artifacts exist"
+    },
+    {
+      "phase_id": "SUPERVISE",
+      "name": "Phase SUPERVISE",
+      "status": "BUILDER_READY",
+      "intent": "Blueprint steps tagged SUPERVISE",
+      "builder_outcome": "Builder executes frozen byte contracts",
+      "alpha_signal": "Phase SUPERVISE artifacts exist"
+    },
+    {
+      "phase_id": "TRUTH",
+      "name": "Phase TRUTH",
+      "status": "BUILDER_READY",
+      "intent": "Blueprint steps tagged TRUTH",
+      "builder_outcome": "Builder executes frozen byte contracts",
+      "alpha_signal": "Phase TRUTH artifacts exist"
+    },
+    {
+      "phase_id": "VERIFY",
+      "name": "Phase VERIFY",
+      "status": "BUILDER_READY",
+      "intent": "Blueprint steps tagged VERIFY",
+      "builder_outcome": "Builder executes frozen byte contracts",
+      "alpha_signal": "Phase VERIFY artifacts exist"
+    },
+    {
+      "phase_id": "P4",
+      "name": "Builder Execution",
+      "status": "FUTURE",
+      "intent": "System Builder executes ARC-emitted write_file_exact steps"
+    },
+    {
+      "phase_id": "P5",
+      "name": "Alpha Acceptance",
+      "status": "FUTURE",
+      "intent": "Acceptance command + founder usability verdict"
+    }
+  ],
+  "primary_metric": "founder_usability_pass"
+}
