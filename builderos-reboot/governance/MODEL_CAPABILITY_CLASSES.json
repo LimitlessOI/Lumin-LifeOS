@@ -1,0 +1,51 @@
+{
+  "schema": "model_capability_classes_v1",
+  "ratified_at": "2026-08-22",
+  "authority": "founder_direction_2026-08-22",
+  "principle": "Intelligence is a depreciating resource; governance is an accumulating asset.",
+  "routing_objective": "For every task, use the lowest-cost intelligence that has demonstrated sufficient reliability under current governance.",
+  "classes": [
+    {
+      "id": "MECHANICAL",
+      "definition": "Deterministic or nearly deterministic edits, transformations, extraction, formatting, bounded template work.",
+      "preferred_cost": 0,
+      "requires_frontier": false
+    },
+    {
+      "id": "IMPLEMENTER",
+      "definition": "Execute well-specified blueprint slices with bounded code generation and tests.",
+      "preferred_cost": 0,
+      "requires_frontier": false
+    },
+    {
+      "id": "DEBUGGER",
+      "definition": "Diagnose concrete failures from evidence, logs, tests, and receipts; propose bounded repairs.",
+      "preferred_cost": 0,
+      "requires_frontier": false
+    },
+    {
+      "id": "AUDITOR",
+      "definition": "Independently review governance, blueprint completeness, implementation claims, evidence quality, and hidden contradictions.",
+      "preferred_cost": 0,
+      "requires_frontier": false
+    },
+    {
+      "id": "ARCHITECT",
+      "definition": "Convert founder intention into complete executable decision trees and anticipate failure branches, dependencies, and acceptance.",
+      "preferred_cost": 0,
+      "requires_frontier": "when free evidence proves lower classes insufficient"
+    },
+    {
+      "id": "FRONTIER_REASONING",
+      "definition": "Unusually difficult future thinking, impossible-room exploration, second/third-order consequence analysis, novel synthesis, and high-impact challenge.",
+      "preferred_cost": "free_if_available_else_paid_with_receipt",
+      "requires_frontier": true
+    }
+  ],
+  "assignment_rule": "Models are assigned to capability classes from measured LifeOS evidence, not brand, price, or historical prestige.",
+  "promotion_rule": "A model may enter a higher capability class when controlled receipts show sufficient reliability for that class.",
+  "demotion_rule": "A model must be demoted for a class when current-version evidence falls below threshold or repeated governance/reliability failures occur.",
+  "version_rule": "Model versions are immutable benchmark identities. Never overwrite a prior version's history when a new version appears.",
+  "depreciation_rule": "Re-evaluate class assignments whenever materially better/cheaper/free models become available. A previously frontier capability may become IMPLEMENTER or MECHANICAL economics without changing governance.",
+  "governance_asset_rule": "Blueprints, failure history, verifiers, SENTRY tests, hard gates, receipts, and measured model evidence accumulate and must be preserved even as models are replaced."
+}
