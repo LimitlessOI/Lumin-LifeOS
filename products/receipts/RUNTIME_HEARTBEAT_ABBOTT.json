@@ -2,9 +2,9 @@
   "system": "abbott",
   "alive": true,
   "model_keys_present": true,
-  "git_sha": "3234e84def6df0c95143d51c55a68d5b377710b5",
-  "started_at": "2026-08-22T22:52:04.201Z",
-  "at": "2026-08-22T22:52:04.201Z",
+  "git_sha": "988079f70a3d990368152982908c1b91e07a430b",
+  "started_at": "2026-08-22T23:09:35.729Z",
+  "at": "2026-08-22T23:09:35.729Z",
   "railway_service_id": "c3b803d7-9ee7-436e-833c-7b986ab545b7",
   "railway_environment_id": "a2cdebc3-d417-480b-a1d6-23fc07c47c3c"
 }
