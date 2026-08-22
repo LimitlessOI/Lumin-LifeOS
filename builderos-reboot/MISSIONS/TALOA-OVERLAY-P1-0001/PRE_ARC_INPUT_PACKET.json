@@ -1,7 +1,7 @@
 {
   "schema": "pre_arc_input_packet_v2",
   "mission_id": "TALOA-OVERLAY-P1-0001",
-  "assembled_at": "2026-08-22T01:44:38.173Z",
+  "assembled_at": "2026-08-22T01:45:46.865Z",
   "assembled_by": "foundation/pre-arc-enrichment.js",
   "doctrine": "FOUNDER_PACKET_V2 full minimum contents",
   "manifest": [
