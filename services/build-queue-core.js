@@ -104,6 +104,12 @@ export function assertNoSecondLiveQueueOnDisk(root = ROOT) {
 export function assertBuildQueueMayBeWritten(filePath, { creating = false } = {}) {
   assertLiveBuildQueuePath(filePath);
   if (!creating) return;
+  // Only forbid *minting* a live-queue-shaped path (docs/products/**/BUILD_QUEUE.json
+  // or docs/projects/**/BUILD_QUEUE.json) that isn't the canonical one. The canonical
+  // file's own first-ever creation must be allowed, and paths outside the live-queue
+  // location pattern entirely (e.g. an isolated tmp dir a test writes to) are not a
+  // second manufacturing queue and were never what this guard is meant to catch.
+  if (isCanonicalLiveQueuePath(filePath) || !isLiveQueueLocation(filePath)) return;
   const rel = normalizeQueueRel(filePath);
   throw new Error(
     `${NEW_QUEUE_FORBIDDEN}: refused to mint '${rel}'. There is one manufacturing queue at ${LIVE_BUILD_QUEUE_REL} — enroll BP slices into it; do not create another BUILD_QUEUE.json. This is supposed to break.`,

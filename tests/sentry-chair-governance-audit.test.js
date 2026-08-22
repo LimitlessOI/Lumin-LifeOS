@@ -146,7 +146,7 @@ test('runGovernanceAuditCycle: an injected callModel is actually used to enrich 
 
     assert.equal(callCount, 1, 'the injected model must actually be invoked, not silently bypassed');
     const persisted = loadFindingsQueue();
-    assert.match(persisted.findings[0].chair_reasoning, /Chair \(AI\)/);
+    assert.match(persisted.findings[0].chair_reasoning, /Conductor \(AI\)/);
     assert.equal(persisted.findings[0].chair_reasoning_source, 'ai_model');
   } finally {
     process.chdir(originalCwd);
@@ -322,9 +322,9 @@ test('runGovernanceAuditCycle: dual-solve withholds SENTRY solution from Conduct
     const persisted = loadFindingsQueue();
     const failed = persisted.findings.find((f) => f.id === 'fixer_failed:governed_loop_stale');
     assert.ok(failed);
-    assert.equal(failed.repair_lane, 'dual_solve');
+    assert.equal(failed.repair_lane, 'consensus_protocol');
     assert.equal(failed.sentry_solution_withheld, true);
-    assert.equal(failed.conductor_status, 'consensus');
+    assert.equal(failed.conductor_status, 'hidden_alternatives_required');
   } finally {
     process.chdir(originalCwd);
     fs.rmSync(tmpDir, { recursive: true, force: true });

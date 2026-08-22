@@ -15,5 +15,9 @@
     "route_requires_explicit_founder_approval",
     "route_exposes_work_item_inventory",
     "route_uses_supervised_mode_not_legacy_autonomous_loop"
-  ]
+  ],
+  "bp_sync": {
+    "updated": ["builderos-reboot/BP_PRIORITY.json"],
+    "skipped": []
+  }
 }

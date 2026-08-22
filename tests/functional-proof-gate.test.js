@@ -20,7 +20,7 @@ import {
 function makeQueue(steps) {
   return normalizeQueue({ schema: 'product_build_queue_v1', product_id: 'test', steps });
 }
-const passBuild = async () => ({ ok: true, commit_sha: 'abc123' });
+const passBuild = async () => ({ ok: true, commit_sha: 'abc123', tokens_used: 0 });
 const passVerify = async () => ({ ok: true });
 const passDeploy = async () => ({ ok: true });
 

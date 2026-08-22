@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-20T22:16:37.313Z",
+  "generated_at": "2026-08-22T00:12:56.420Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13717,
+  "file_count": 13721,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -96,6 +96,13 @@
       "indexed_at": "2026-07-28T22:54:46.666Z"
     },
     {
+      "path": ".github/workflows/point-b-control-plane-guard.yml",
+      "synopsis": "yml — .github/workflows/point-b-control-plane-guard.yml.",
+      "bytes": 765,
+      "mtime": "2026-08-21T23:52:45.880Z",
+      "indexed_at": "2026-08-22T00:01:35.265Z"
+    },
+    {
       "path": ".github/workflows/pr-diff-summary.yml",
       "synopsis": "yml — .github/workflows/pr-diff-summary.yml.",
       "bytes": 448,
@@ -182,9 +189,9 @@
     {
       "path": ".github/workflows/taloa-supervised-overlay.yml",
       "synopsis": "yml — .github/workflows/taloa-supervised-overlay.yml.",
-      "bytes": 3091,
-      "mtime": "2026-08-19T00:46:34.011Z",
-      "indexed_at": "2026-08-19T15:35:16.166Z"
+      "bytes": 3303,
+      "mtime": "2026-08-22T00:12:52.899Z",
+      "indexed_at": "2026-08-22T00:12:56.420Z"
     },
     {
       "path": ".gitlab-ci.yml",
@@ -21370,9 +21377,9 @@
     {
       "path": "builderos-reboot/BP_PRIORITY.json",
       "synopsis": "BuilderOS artifact — BP PRIORITY.",
-      "bytes": 52472,
-      "mtime": "2026-08-18T20:33:17.350Z",
-      "indexed_at": "2026-08-18T20:33:58.335Z",
+      "bytes": 54879,
+      "mtime": "2026-08-22T00:09:43.094Z",
+      "indexed_at": "2026-08-22T00:12:08.865Z",
       "synopsis_index_only": true
     },
     {
@@ -21741,9 +21748,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 4169817,
-      "mtime": "2026-08-20T18:13:46.742Z",
-      "indexed_at": "2026-08-20T20:43:35.518Z"
+      "bytes": 4170915,
+      "mtime": "2026-08-22T00:12:10.447Z",
+      "indexed_at": "2026-08-22T00:12:38.510Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -31650,6 +31657,14 @@
       "synopsis_index_only": true
     },
     {
+      "path": "builderos-reboot/PARTS_CAR_COVERAGE_RECEIPT.json",
+      "synopsis": "BuilderOS artifact — PARTS CAR COVERAGE RECEIPT.",
+      "bytes": 549,
+      "mtime": "2026-08-22T00:11:35.660Z",
+      "indexed_at": "2026-08-22T00:12:08.865Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "builderos-reboot/PARTS_CAR_MANIFEST.json",
       "synopsis": "BuilderOS artifact — PARTS CAR MANIFEST.",
       "bytes": 4158,
@@ -31660,9 +31675,9 @@
     {
       "path": "builderos-reboot/POINT_B_TARGET.json",
       "synopsis": "BuilderOS artifact — POINT B TARGET.",
-      "bytes": 3413,
-      "mtime": "2026-08-18T18:41:07.194Z",
-      "indexed_at": "2026-08-18T20:20:55.620Z",
+      "bytes": 3416,
+      "mtime": "2026-08-21T23:52:45.880Z",
+      "indexed_at": "2026-08-22T00:01:35.265Z",
       "synopsis_index_only": true
     },
     {
@@ -32381,6 +32396,13 @@
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "builderos-reboot/scripts/verify-parts-car-coverage.mjs",
+      "synopsis": "Verifies builderos-reboot/PARTS_CAR_MANIFEST.json's keep/adapt/reject",
+      "bytes": 2561,
+      "mtime": "2026-08-22T00:11:30.817Z",
+      "indexed_at": "2026-08-22T00:12:08.865Z"
     },
     {
       "path": "builderos-reboot/scripts/verify-tier1-telemetry.mjs",
@@ -44704,9 +44726,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 642389,
-      "mtime": "2026-08-20T22:16:29.552Z",
-      "indexed_at": "2026-08-20T22:16:37.313Z"
+      "bytes": 648303,
+      "mtime": "2026-08-22T00:12:33.472Z",
+      "indexed_at": "2026-08-22T00:12:56.420Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -46103,9 +46125,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 880676,
-      "mtime": "2026-08-19T16:21:10.687Z",
-      "indexed_at": "2026-08-19T16:22:36.481Z"
+      "bytes": 881896,
+      "mtime": "2026-08-22T00:01:30.977Z",
+      "indexed_at": "2026-08-22T00:12:08.865Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -71514,9 +71536,9 @@
     {
       "path": "products/receipts/TALOA_SUPERVISED_OVERLAY_CI.json",
       "synopsis": "Product receipt — TALOA SUPERVISED OVERLAY CI.",
-      "bytes": 654,
-      "mtime": "2026-08-19T00:46:34.014Z",
-      "indexed_at": "2026-08-19T15:35:16.166Z",
+      "bytes": 746,
+      "mtime": "2026-08-22T00:08:19.803Z",
+      "indexed_at": "2026-08-22T00:12:08.865Z",
       "synopsis_index_only": true
     },
     {
@@ -83534,6 +83556,13 @@
       ]
     },
     {
+      "path": "scripts/verify-point-b-control-plane.mjs",
+      "synopsis": "Script — Verify Point B Control Plane.",
+      "bytes": 3518,
+      "mtime": "2026-08-21T23:52:45.881Z",
+      "indexed_at": "2026-08-22T00:01:35.265Z"
+    },
+    {
       "path": "scripts/verify-point-b-dna.mjs",
       "synopsis": "Verify Point B DNA locked — constitution, runtime, preflight (HARD).",
       "bytes": 3183,
@@ -94576,9 +94605,9 @@
     {
       "path": "services/build-queue-core.js",
       "synopsis": "Shared BUILD_QUEUE.json primitives plus the one-queue lock:",
-      "bytes": 14477,
-      "mtime": "2026-08-13T06:29:28.523Z",
-      "indexed_at": "2026-08-13T06:48:47.620Z",
+      "bytes": 14988,
+      "mtime": "2026-08-21T23:59:04.081Z",
+      "indexed_at": "2026-08-22T00:12:08.865Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -95258,9 +95287,9 @@
     {
       "path": "services/chair-intent-signals.js",
       "synopsis": "Chair intent signal helpers — shared by orchestrator and context classifier.",
-      "bytes": 12669,
-      "mtime": "2026-08-13T00:45:13.299Z",
-      "indexed_at": "2026-08-13T00:45:13.299Z",
+      "bytes": 12949,
+      "mtime": "2026-08-21T23:54:25.309Z",
+      "indexed_at": "2026-08-22T00:12:08.865Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -106107,9 +106136,9 @@
     {
       "path": "tests/chair-native-facts-search-fallback.test.js",
       "synopsis": "Regression — unavailable web search must not echo the question as a fake verified block.",
-      "bytes": 953,
-      "mtime": "2026-07-03T21:46:43.874Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 1515,
+      "mtime": "2026-08-22T00:00:34.763Z",
+      "indexed_at": "2026-08-22T00:12:08.865Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -106765,9 +106794,9 @@
     {
       "path": "tests/functional-proof-gate.test.js",
       "synopsis": "Functional-proof completion gate + self-diagnosis carry-forward.",
-      "bytes": 5073,
-      "mtime": "2026-07-07T21:41:40.948Z",
-      "indexed_at": "2026-07-28T22:54:46.666Z",
+      "bytes": 5089,
+      "mtime": "2026-08-21T23:57:58.792Z",
+      "indexed_at": "2026-08-22T00:12:08.865Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -107174,9 +107203,9 @@
     {
       "path": "tests/mtg-card-pricing.test.js",
       "synopsis": "Covers the MTG cataloger's money decisions -- which printing's",
-      "bytes": 15580,
-      "mtime": "2026-08-12T20:59:26.551Z",
-      "indexed_at": "2026-08-12T20:59:26.551Z",
+      "bytes": 15629,
+      "mtime": "2026-08-21T23:59:32.426Z",
+      "indexed_at": "2026-08-22T00:12:08.865Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -107593,9 +107622,9 @@
     {
       "path": "tests/sentry-chair-governance-audit.test.js",
       "synopsis": "js — tests/sentry-chair-governance-audit.test.js.",
-      "bytes": 18125,
-      "mtime": "2026-08-13T05:59:55.759Z",
-      "indexed_at": "2026-08-13T06:44:07.157Z"
+      "bytes": 18156,
+      "mtime": "2026-08-21T23:56:48.105Z",
+      "indexed_at": "2026-08-22T00:12:08.865Z"
     },
     {
       "path": "tests/sentry-file-contains.test.js",
@@ -107634,9 +107663,9 @@
     {
       "path": "tests/sentry-repair-handoff.test.js",
       "synopsis": "js — tests/sentry-repair-handoff.test.js.",
-      "bytes": 6090,
-      "mtime": "2026-08-13T05:59:55.760Z",
-      "indexed_at": "2026-08-13T06:44:07.157Z"
+      "bytes": 6258,
+      "mtime": "2026-08-21T23:55:25.947Z",
+      "indexed_at": "2026-08-22T00:12:08.865Z"
     },
     {
       "path": "tests/sentry-system-audit.test.js",

@@ -92,6 +92,8 @@ test('dual-solve dissent enters the consensus protocol — not a vote, not a pan
 test('two of three accepting is majority and is refused', () => {
   const sealed = sealConsensusRound({
     synthesized: 'Combine: fix the YAML fence and the flaky assertion in tests/foo.test.js.',
+    hidden_alternatives_checked: true,
+    exhaustive_search_no_superior: true,
     sentry_accepts: true,
     conductor_accepts: true,
     other_accepts: [false],
@@ -111,6 +113,8 @@ test('unanimous synthesis of both positions can seal', () => {
     {
       consensusRound: {
         synthesized: 'Keep the workflow; fix the flaky assertion in tests/foo.test.js and the YAML fence.',
+        hidden_alternatives_checked: true,
+        exhaustive_search_no_superior: true,
         sentry_accepts: true,
         conductor_accepts: true,
       },

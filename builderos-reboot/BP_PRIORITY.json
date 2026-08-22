@@ -62,6 +62,13 @@
       "operator_lock": "Internal factory improvement mission — not an active product queue item.",
       "receipt_path": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-CONVERGENCE-0001/OBJECTIVE_VERDICT.json",
       "note": "Mission 2 — BuilderOS Convergence: P0 false-seal stop-gate, P1 readiness audit, P2 Collaboration Spine, P3 blueprint-authority gate, P4 runtime/scheduler convergence, P5 SMOS revenue readiness, P7 wisdom/reality scorecard and handoff. Revenue loop prepared but awaiting founder credentials."
+    },
+    {
+      "mission_id": "TALOA-SUPERVISED-OVERLAY-CI-0001",
+      "status": "INTERNAL_PROOF_ONLY",
+      "operator_lock": "Recurring push-triggered CI proof (.github/workflows/taloa-supervised-overlay.yml) — not an active product queue item.",
+      "receipt_path": "products/receipts/TALOA_SUPERVISED_OVERLAY_CI.json",
+      "note": "2026-08-21: registering a real, already-passing CI-generated receipt (PASS, 11/11 proofs, tested_sha fae0067f) that was never entered into this registry — found live via the BP_PRIORITY guardrail's orphan-PASS check hard-blocking every commit repo-wide. Registered to satisfy §2.18 orphan-PASS guard, same pattern as PRODUCT-SITE-BUILDER-PREALPHA-LAYER-A above. Also fixed the workflow itself to stamp bp_sync.updated on future runs so this does not silently regress."
     }
   ],
   "items": [
@@ -302,12 +309,12 @@
       "blueprint_status": "complete",
       "acceptance_command": "npm run lifeos:founder-chat:alpha:battery",
       "receipt_path": "products/receipts/FOUNDER_CHAT_ALPHA_BATTERY.json",
-      "verdict": "TECHNICAL_PASS",
-      "note": "Settled definitively 2026-08-08, per this entry's own prior note asking for a fresh run rather than trusting either stale result: ran npm run lifeos:founder-chat:alpha:battery live. Result: real FAIL -- Q1_counsel_no_clarify (a direct prioritization question, 'should I prioritize follow-ups or prospecting today?') timed out on the battery's first attempt (15s budget); retried directly against the live endpoint and it answered in 7.7s, but the answer itself asked a clarifying question back instead of giving direct counsel -- a real, reproducible violation of this test's own forbidClarify requirement, independent of the timeout. H0_founder_login_health and Q_identity_twin both passed with real, substantive responses. Downgrading from the stale 2026-07-10 TECHNICAL_PASS to the accurate current state.",
+      "verdict": "NOT_COMPLETE",
+      "note": "Settled definitively 2026-08-08, per this entry's own prior note asking for a fresh run rather than trusting either stale result: ran npm run lifeos:founder-chat:alpha:battery live. Result: real FAIL -- Q1_counsel_no_clarify (a direct prioritization question, 'should I prioritize follow-ups or prospecting today?') timed out on the battery's first attempt (15s budget); retried directly against the live endpoint and it answered in 7.7s, but the answer itself asked a clarifying question back instead of giving direct counsel -- a real, reproducible violation of this test's own forbidClarify requirement, independent of the timeout. H0_founder_login_health and Q_identity_twin both passed with real, substantive responses. 2026-08-21: the 2026-08-08 note already described this downgrade but the machine-readable verdict field was never actually changed -- found live via the BP_PRIORITY guardrail hard-blocking every commit repo-wide on the resulting BP_RECEIPT_VERDICT/BP_OBJECTIVE_VERDICT mismatch. verdict/receipt_verdict now actually match the real receipt (ok:false) and OBJECTIVE_VERDICT.json (NOT_COMPLETE) this entry has pointed to the whole time.",
       "build_method": "GAP-FILL",
       "founder_usability_pass": false,
       "production_base": "http://127.0.0.1:3366",
-      "receipt_verdict": "PASS",
+      "receipt_verdict": "FAIL",
       "git_sha": "9a8f15c15a5e8cdbeecdadad563150babba4c445",
       "objective_verdict": "builderos-reboot/MISSIONS/FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001/OBJECTIVE_VERDICT.json",
       "artifact_sync": {
@@ -385,11 +392,11 @@
       "verdict": "TECHNICAL_PASS",
       "build_method": "system-build",
       "founder_usability_pass": false,
-      "note": "Register, login, JWT, tier guard.",
+      "note": "Register, login, JWT, tier guard. 2026-08-21: BP technical_pass_at/git_sha had drifted from the real receipt's completed_at/git_sha (likely stamped by a later unrelated re-sync) -- found live via the BP_PRIORITY guardrail's fingerprint check hard-blocking every commit repo-wide. Receipt itself is a genuine PASS (13/13 tests); corrected the two fields to match it exactly, nothing else changed.",
       "founder_packet": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/FOUNDER_PACKET.md",
       "receipt_verdict": "PASS",
-      "technical_pass_at": "2026-08-17T22:03:34.148Z",
-      "git_sha": "9a8f15c15a5e8cdbeecdadad563150babba4c445",
+      "technical_pass_at": "2026-08-02T16:33:28.768Z",
+      "git_sha": "e4f33689e3f6bb58e0619cfb70a808187088b522",
       "production_base": "http://127.0.0.1:3718",
       "objective_verdict": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/OBJECTIVE_VERDICT.json",
       "artifact_sync": {
@@ -882,11 +889,11 @@
       "blueprint_status": "complete",
       "acceptance_command": "node scripts/verify-gate0-closure.mjs",
       "receipt_path": "products/receipts/TALOA_GATE_0_CLOSURE_ACCEPTANCE.json",
-      "verdict": "TECHNICAL_PASS",
-      "note": "Gate 0 closure acceptance — reachability-checked, not just exports_smoke.",
+      "verdict": "NOT_COMPLETE",
+      "note": "Gate 0 closure acceptance — reachability-checked, not just exports_smoke. 2026-08-21: this entry claimed TECHNICAL_PASS but its own receipt_path (TALOA_GATE_0_CLOSURE_ACCEPTANCE.json) shows tests_passed:[] and all 9 tests_failed, and OBJECTIVE_VERDICT.json already said NOT_COMPLETE -- found live via the BP_PRIORITY guardrail hard-blocking every commit repo-wide on the resulting mismatch. verdict/receipt_verdict now actually match the real receipt this entry has pointed to the whole time.",
       "build_method": "system-build",
       "founder_usability_pass": false,
-      "receipt_verdict": "PASS",
+      "receipt_verdict": "FAIL",
       "git_sha": "9a8f15c15a5e8cdbeecdadad563150babba4c445",
       "production_base": "",
       "technical_pass_at": "2026-08-17T06:34:16.399Z",
@@ -907,12 +914,12 @@
       "blueprint_status": "complete",
       "acceptance_command": "node builderos-reboot/scripts/verify-parts-car-coverage.mjs",
       "receipt_path": "builderos-reboot/PARTS_CAR_COVERAGE_RECEIPT.json",
-      "verdict": "TECHNICAL_PASS",
-      "note": "Prove every approved old-BuilderOS part is imported, governed-adapted, or deliberately retained at the production-spine boundary.",
+      "verdict": "NOT_COMPLETE",
+      "note": "Prove every approved old-BuilderOS part is imported, governed-adapted, or deliberately retained at the production-spine boundary. 2026-08-21: claimed TECHNICAL_PASS but none of founder_packet, blueprint_path, receipt_path, objective_verdict, or the acceptance_command script exist on disk, and `git log --all` shows zero history for any of them -- this mission's supporting work was never actually produced. Found live via the BP_PRIORITY guardrail hard-blocking every commit repo-wide. Downgrading to the honest state (no evidence of completion) rather than fabricating the missing artifacts.",
       "build_method": "system-build",
       "founder_usability_pass": false,
       "objective_verdict": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-PARTS-CAR-CLOSURE-0001/OBJECTIVE_VERDICT.json",
-      "receipt_verdict": "PASS",
+      "receipt_verdict": "FAIL",
       "technical_pass_at": "2026-08-17T06:05:11.282Z",
       "git_sha": "9a8f15c15a5e8cdbeecdadad563150babba4c445",
       "production_base": "",
@@ -923,6 +930,6 @@
       }
     }
   ],
-  "_last_updated": "2026-08-16",
+  "_last_updated": "2026-08-21",
   "_note": "SSM and LSC added 2026-06-29 — execute SSM first (LSC-006 depends on SSM-007 output)"
 }

@@ -176,8 +176,10 @@ export function isWorkflowContentIntent(text = '') {
   // General workflow-related verbs
   if (/\b(prepare|schedule|coordinate|automate|streamline|optimize|document)\b.*\b(workflow|process|task)\b/i.test(t)) return true;
 
-  // Exclude common build/repair/counsel terms if they appear without a strong content context
-  if (isBuildRequest(t) && !/\b(write|draft|compose|generate|content)\b/i.test(t)) return false;
+  // Exclude common build/repair/counsel terms if they appear without a strong content context.
+  // Uses the raw verb signal (not isBuildRequest) to avoid isBuildRequest<->isWorkflowContentIntent
+  // mutual recursion, which previously stack-overflowed on any text neither function short-circuited on.
+  if (hasBuildVerbSignal(t) && !/\b(write|draft|compose|generate|content)\b/i.test(t)) return false;
   if (isFounderRepairOrderIntent(t)) return false;
   if (isCounselOnlyBypass(t)) return false;
   if (isBuildStatusQuestion(t)) return false;
@@ -213,6 +215,10 @@ export function isBuildRequest(text) {
     && /\b(response|reply|bubble|assistant|message|color|background|down there|here)\b/i.test(t)) {
     return true;
   }
+  return hasBuildVerbSignal(t);
+}
+
+function hasBuildVerbSignal(t) {
   return /\b(fix|update|add|remove|delete|create|make|build|improve|edit|modify|resize|increase|decrease|enable|disable|install|configure|rename|move|replace|set|reset|adjust|implement|wire|connect|upgrade|rewrite|refactor)\b/i.test(t)
     || isProductBuildChangeVerb(t)
     || isFounderShipOrUsabilityIntent(t)

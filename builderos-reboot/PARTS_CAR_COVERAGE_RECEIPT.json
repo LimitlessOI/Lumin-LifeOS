@@ -1,0 +1,13 @@
+{
+  "schema": "parts_car_coverage_v1",
+  "mission_id": "FACTORY-BUILDEROS-PARTS-CAR-CLOSURE-0001",
+  "generated_at": "2026-08-22T00:11:35.659Z",
+  "verdict": "FAIL",
+  "missing_kept_or_adapted": [],
+  "rejected_but_still_present": [
+    "scripts/governed-overnight-backlog-run.mjs",
+    "services/builderos-governed-loop-executor.js",
+    "routes/auto-builder-routes.js"
+  ],
+  "note": "Real gap: kept/adapted paths must all exist, and reject paths must all be absent. See missing_kept_or_adapted / rejected_but_still_present for the exact list."
+}
