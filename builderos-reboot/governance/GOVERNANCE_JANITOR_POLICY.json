@@ -1,8 +1,16 @@
 {
   "schema": "governance_janitor_policy_v1",
   "name": "Dumb-AI Confusion Auditor / Governance Janitor",
-  "purpose": "Continuously reduce ambiguity in active governance without consuming Conductor implementation attention.",
-  "authority": "advisory_and_bounded_maintenance",
+  "purpose": "Continuously identify ambiguity in active governance without consuming Conductor implementation attention or changing authoritative files.",
+  "authority": "read_only_advisory",
+  "mutation_policy": {
+    "janitor_may_modify_files": false,
+    "janitor_may_move_files": false,
+    "janitor_may_delete_files": false,
+    "janitor_may_rewrite_governance": false,
+    "janitor_may_only_write_its_report": true,
+    "human_or_higher_intelligence_review_required_for_changes": true
+  },
   "protected_files": [
     "docs/constitution/NORTH_STAR_SSOT.md",
     "docs/SSOT_COMPANION.md",
@@ -32,33 +40,35 @@
     "cross-BuilderOS identity leakage",
     "governance rule claiming enforcement with no named verifier/gate/receipt",
     "active document referring to a missing path or retired runtime",
-    "duplicate governance text with conflicting status or terminology"
+    "duplicate governance text with conflicting status or terminology",
+    "anything a low-context or weak AI could reasonably interpret two different ways"
   ],
-  "auto_archive_requires_all": [
-    "file is not protected",
-    "file explicitly self-identifies as superseded, deprecated, obsolete, historical, snapshot, or not current doctrine",
-    "no active non-history file references the candidate path",
-    "candidate is documentation/governance, not executable code/config/runtime state",
-    "archive destination preserves original relative path",
-    "archive metadata records reason, prior path, evidence, timestamp, and replacement authority when known"
+  "explicit_legacy_relocation_candidate_requires_all": [
+    "file explicitly self-identifies as legacy, history, archived, superseded, deprecated, obsolete, snapshot, or not current doctrine",
+    "file is currently outside an approved history root",
+    "file is documentation/governance rather than executable code/config/runtime state"
   ],
-  "never_auto_archive": [
+  "legacy_candidate_action": "REPORT_MOVE_TO_ARCHIVE_RECOMMENDED",
+  "all_other_findings_action": "REPORT_FOR_INTELLIGENT_REVIEW",
+  "never_change_automatically": [
     "ambiguous status",
     "file with active references",
     "code, scripts, routes, services, migrations, config, secrets, runtime receipts",
     "anything where AI opinion is the only evidence",
-    "anything whose removal changes runtime behavior"
+    "anything whose movement or rewrite could change runtime behavior",
+    "anything merely suspected to be stale"
   ],
   "ai": {
     "enabled_when_key_available": true,
     "preferred_free_providers": ["groq", "gemini", "mistral", "cerebras", "github_models"],
-    "role": "second-pass confusion classifier and explanation writer only",
+    "role": "second-pass confusion detector and explanation writer only",
     "may_authorize_archive": false,
+    "may_modify_source": false,
+    "may_move_source": false,
     "fallback": "deterministic_only"
   },
   "outputs": {
     "report": "builderos-reboot/governance/GOVERNANCE_CONFUSION_REPORT.json",
-    "archive_root": "docs/history/governance-janitor/",
-    "archive_manifest": "docs/history/governance-janitor/ARCHIVE_MANIFEST.jsonl"
+    "suggested_archive_root": "docs/history/governance-janitor/"
   }
 }
