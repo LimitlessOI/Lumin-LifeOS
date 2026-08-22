@@ -1,9 +1,11 @@
 /**
  * SYNOPSIS: Autonomous recovery orchestrator.
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 import { runGovernanceAuditCycle } from '../scripts/sentry-chair-governance-audit.mjs';
 import { gatherSystemWorkingSignals } from './sentry-system-audit.js';
 import { reconcileStalls } from './sentry-stall-recovery.js';
+import { SENTRY_CADENCE } from '../config/sentry-observation-cadence.js';
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -147,6 +149,7 @@ export function startAutonomousRecoveryCouncilScheduler({
   let inFlight = false;
   let incidentStartedAt = null;
   const alarmedStages = new Set();
+  let lastFullAuditAt = 0;
 
   const alarmStage = (ageSinceIncident) => {
     if (ageSinceIncident >= 10 * 60 * 1000) return 'still_stopped_10m';
@@ -206,6 +209,33 @@ export function startAutonomousRecoveryCouncilScheduler({
       });
       if (!result.ok) {
         logger?.error?.({ disposition: result.disposition, rounds: result.rounds?.length }, '[SENTRY-RECOVERY] recovery not yet complete; terminal stop forbidden');
+      }
+
+      // Fix the fixer (2026-08-22): runAutonomousRecoveryCouncil's round loop
+      // returns RECOVERED and stops after round 1 (deep_look/checkSystemStillWorking)
+      // finds nothing wrong, which is almost always the case since Abbott is
+      // rarely "catastrophically stopped." Round 2/3 (auditKind:'full',
+      // observationTier:'full_audit' -- the ONLY path that reaches
+      // runSentrySystemAudit, i.e. checkCiHealth/product-backlog/workflow-health)
+      // therefore essentially never ran, despite SENTRY_CADENCE documenting a
+      // real 35-minute cadence for it. Found live: the findings queue's most
+      // recent entry of ANY kind was 8 days old, and 5 real ci_health findings
+      // from a month ago sat open, approved, and never repaired. Run it here,
+      // independently, on its own real cadence, instead of depending on round 1
+      // finding a problem it was never designed to detect.
+      const fullAuditDueMs = SENTRY_CADENCE.full_audit.intervalMs;
+      if (Date.now() - lastFullAuditAt >= fullAuditDueMs) {
+        try {
+          const fullResult = await runGovernanceAuditCycle({
+            logger,
+            pool,
+            observationTier: 'full_audit',
+          });
+          lastFullAuditAt = Date.now();
+          logger?.info?.({ fullResult }, '[SENTRY-RECOVERY] independent full_audit cycle ran');
+        } catch (error) {
+          logger?.error?.({ error: error.message }, '[SENTRY-RECOVERY] full_audit cycle failed; next due cycle remains armed');
+        }
       }
     } catch (error) {
       logger?.error?.({ error: error.message }, '[SENTRY-RECOVERY] recovery scheduler tick failed; next tick remains armed');

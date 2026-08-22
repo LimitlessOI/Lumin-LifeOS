@@ -1,0 +1,230 @@
+{
+  "mission_id": "PRODUCT-SOCIALMEDIAOS-FIRST-PAID-CREATOR-0001",
+  "blueprint_id": "SMOS-FIRST-PAID-CREATOR-BP1",
+  "authority": "ARCHITECT",
+  "blueprint_status": "handoff_ready",
+  "execution_mode": "one_slice_per_run",
+  "point_b_source": "builderos-reboot/POINT_B_TARGET.json",
+  "scope": "Close the gap between the already-shipped SocialMediaOS/MarketingOS creator loop and the founder's producer-director + Creative Engine vision while proving Abbott can finish one slice, exit that factory invocation, and be redispatched to the next authored slice without founder intervention.",
+  "acceptance_command": "node scripts/verify-socialmediaos-first-paid-creator.mjs",
+  "allowed_action_types": [
+    "author_then_write"
+  ],
+  "decision_tree_law": "The blueprint authors the work. Abbott traverses it one slice per factory invocation. Abbott may not invent additional slices, change Point B, or substitute another runtime/repository/provider when blocked.",
+  "completion_law": "Completion requires all authored slices satisfied, separate persisted slice receipts demonstrating redispatch, current SocialMediaOS live-loop verification, producer/director reasoning artifacts, ownership-safe canonical payment/entitlement path, and a final zero-deception acceptance receipt. Human purchase timing may be PRODUCT_READY rather than falsely claimed FIRST_PAID_CREATOR_PROVEN.",
+  "preserved_foundation": {
+    "status": "IMPLEMENTED_PARTIAL_MARKET_READY",
+    "note": "Reuse the existing MarketingOS/SocialMediaOS coaching, content, approval/export, checkout/entitlement and Creative Engine machinery. Do not rebuild merely to create work."
+  },
+  "steps": [
+    {
+      "step_id": "SMOS-REV-001",
+      "phase_id": "TRUTH",
+      "title": "Replace stale SocialMediaOS verifier with current Abbott-only truth verifier",
+      "target_file": "scripts/verify-socialmediaos.mjs",
+      "sandbox_boundary": "scripts/verify-socialmediaos.mjs",
+      "action_type": "author_then_write",
+      "task": "The current scripts/verify-socialmediaos.mjs is a stale auto-generated stub (checks db/migrations/20260626_socialmediaos.sql, services/socialmediaos-service.js, routes/socialmediaos-routes.js -- none of which reflect the real current architecture). Replace it so it verifies the REAL current SocialMediaOS files exist and parse: services/socialmediaos-coaching-service.js, services/socialmediaos-content-generator.js, services/socialmediaos-creative-brief.js, services/socialmediaos-producer-director.js. It must identify SocialMediaOS correctly, refuse any repository/runtime fallback outside Abbott (LimitlessOI/Lumin-LifeOS), delegate the canonical live Phase-1 verification to scripts/verify-marketing-phase1-live.mjs when required live env is available, and emit typed NOT_PROVEN/BLOCKED instead of checking another repository. It must never reference LimitlessOI/Lumin-LifeOS-BuilderOS-B or costello-builderos as a fallback identity.",
+      "spec": "Current-product verifier; zero cross-system fallback; honest local-vs-live evidence distinction.",
+      "dependencies": [],
+      "expected_exports": [],
+      "assertion_spec": {
+        "file_contains": [
+          "SocialMediaOS",
+          "LimitlessOI/Lumin-LifeOS",
+          "verify-marketing-phase1-live.mjs",
+          "ABBOTT"
+        ]
+      },
+      "on_block": "BLOCKED_RETURN_TO_ARC"
+    },
+    {
+      "step_id": "SMOS-REV-002",
+      "phase_id": "ISOLATION",
+      "title": "Make founder SocialMediaOS A-to-Z runner fail closed to Abbott runtime",
+      "target_file": "scripts/run-founder-socialmediaos-chat-a2z.mjs",
+      "sandbox_boundary": "scripts/run-founder-socialmediaos-chat-a2z.mjs",
+      "action_type": "author_then_write",
+      "task": "The existing scripts/run-founder-socialmediaos-chat-a2z.mjs already defaults PUBLIC_BASE_URL to Abbott's own real production URL (lumin-web-production-e3a9.up.railway.app) -- that default is correct here, unlike the equivalent Costello script where it was a wrong cross-system fallback. Preserve the existing founder-chat SocialMediaOS A-to-Z behavior, but add an explicit guard that refuses to run against a known Costello endpoint (costello-builderos, costello-builderos-costello.up.railway.app) even if PUBLIC_BASE_URL is misconfigured to point there, keep auth behavior honest, and persist a typed receipt when runtime URL or auth is missing. Do not claim live A-to-Z proof from a structural/local run.",
+      "spec": "Same A-to-Z intent, Abbott-only endpoint identity and fail-closed behavior.",
+      "dependencies": [
+        "SMOS-REV-001"
+      ],
+      "expected_exports": [],
+      "assertion_spec": {
+        "file_contains": [
+          "PUBLIC_BASE_URL",
+          "NON_ABBOTT_RUNTIME_REFUSED",
+          "SOCIALMEDIAOS_FOUNDER_CHAT_A2Z"
+        ]
+      },
+      "on_block": "BLOCKED_RETURN_TO_ARC"
+    },
+    {
+      "step_id": "SMOS-REV-003",
+      "phase_id": "REASON",
+      "title": "Creative Brief reasoning gate for the one Creative Engine",
+      "target_file": "services/socialmediaos-creative-brief.js",
+      "sandbox_boundary": "services/socialmediaos-creative-brief.js",
+      "action_type": "author_then_write",
+      "task": "Create a deterministic SocialMediaOS Creative Brief service that converts current session metadata/answers into a structured pre-render decision contract: mission, customer, current_decision_stage, desired_next_stage, primary_objection, evidence, trust_strategy, next_voluntary_action, success_metric, attention_contract, platform_intent, and confidence/unknowns. Add a coherence validator that rejects placeholder/contradictory briefs (for example a trust strategy unrelated to the stated objection) with typed reasons. Preserve user sovereignty and never invent testimonials, credentials, prices, results, or audience facts.",
+      "spec": "Hard-gate the reasoning before rendering; Creative Engine decision intelligence, not another renderer.",
+      "dependencies": [
+        "SMOS-REV-002"
+      ],
+      "expected_exports": [
+        "createSocialmediaosCreativeBrief",
+        "validateSocialmediaosCreativeBrief"
+      ],
+      "assertion_spec": {
+        "file_contains": [
+          "createSocialmediaosCreativeBrief",
+          "validateSocialmediaosCreativeBrief",
+          "next_voluntary_action",
+          "primary_objection",
+          "success_metric",
+          "attention_contract"
+        ]
+      },
+      "on_block": "BLOCKED_RETURN_TO_ARC"
+    },
+    {
+      "step_id": "SMOS-REV-004",
+      "phase_id": "DIRECT",
+      "title": "Producer-director source-quality and true-cost plan",
+      "target_file": "services/socialmediaos-producer-director.js",
+      "sandbox_boundary": "services/socialmediaos-producer-director.js",
+      "action_type": "author_then_write",
+      "task": "Create the SocialMediaOS producer/director service described by founder intent. Given a Creative Brief plus available source/media metadata, return a bounded production plan with shot list, framing, lighting, audio, delivery direction, b-roll suggestions, platform-specific capture notes, source-quality checks, explicit redo criteria, and transparent production options/cost categories: app_guided_diy, ai_assisted, external_production. Never fabricate exact vendor prices; label unknown cost inputs and explain tradeoffs. The plan should help the human become a better creator, not just request more AI generation.",
+      "spec": "Producer/director guidance + bounded redo loop + true-cost representation; no black-box agency theater.",
+      "dependencies": [
+        "SMOS-REV-003"
+      ],
+      "expected_exports": [
+        "createProducerDirectorPlan",
+        "evaluateSourceQuality"
+      ],
+      "assertion_spec": {
+        "file_contains": [
+          "createProducerDirectorPlan",
+          "evaluateSourceQuality",
+          "app_guided_diy",
+          "ai_assisted",
+          "external_production",
+          "redo"
+        ]
+      },
+      "on_block": "BLOCKED_RETURN_TO_ARC"
+    },
+    {
+      "step_id": "SMOS-REV-005",
+      "phase_id": "INTAKE",
+      "title": "Capture Creative Brief inputs in the existing coaching session",
+      "target_file": "services/socialmediaos-coaching-service.js",
+      "sandbox_boundary": "services/socialmediaos-coaching-service.js",
+      "action_type": "author_then_write",
+      "task": "Extend the existing SocialMediaOS coaching service without breaking its five-question flow. startCoachingSession must accept optional customer, currentDecisionStage, desiredNextStage, primaryObjection, evidence, trustStrategy, nextVoluntaryAction and successMetric inputs and persist them in session metadata. If omitted, preserve current behavior and let later brief derivation mark unknowns rather than inventing facts. Keep learning-profile support and owner scoping intact.",
+      "spec": "Add explicit reasoning inputs to the existing customer session; backward-compatible and ownership-safe.",
+      "dependencies": [
+        "SMOS-REV-004"
+      ],
+      "expected_exports": [
+        "createSocialmediaosCoachingService"
+      ],
+      "assertion_spec": {
+        "file_contains": [
+          "currentDecisionStage",
+          "desiredNextStage",
+          "primaryObjection",
+          "nextVoluntaryAction",
+          "successMetric",
+          "learning_profile"
+        ]
+      },
+      "on_block": "BLOCKED_RETURN_TO_ARC"
+    },
+    {
+      "step_id": "SMOS-REV-006",
+      "phase_id": "GENERATE",
+      "title": "Bind existing content generation to Creative Brief and producer-director intelligence",
+      "target_file": "services/socialmediaos-content-generator.js",
+      "sandbox_boundary": "services/socialmediaos-content-generator.js",
+      "action_type": "author_then_write",
+      "task": "Refactor the existing SocialMediaOS content generator to use services/socialmediaos-creative-brief.js and services/socialmediaos-producer-director.js before generating a pack. Preserve deterministic fallback and current output compatibility, but include `creative_brief` and `producer_director` metadata in the returned/persisted pack. Generation prompts must be grounded in the brief, must optimize the next voluntary action rather than vanity output, and must produce platform-native guidance instead of blindly pasting one format across platforms. If the brief coherence gate fails, return a typed blocker rather than rendering garbage. Do not create a second Creative Engine or bypass existing approval/payment rules.",
+      "spec": "Existing generator becomes a renderer downstream of decision intelligence; backwards-compatible pack fields retained.",
+      "dependencies": [
+        "SMOS-REV-003",
+        "SMOS-REV-004",
+        "SMOS-REV-005"
+      ],
+      "expected_exports": [
+        "createSocialmediaosContentGenerator"
+      ],
+      "assertion_spec": {
+        "file_contains": [
+          "createSocialmediaosCreativeBrief",
+          "validateSocialmediaosCreativeBrief",
+          "createProducerDirectorPlan",
+          "creative_brief",
+          "producer_director",
+          "next_voluntary_action"
+        ]
+      },
+      "on_block": "BLOCKED_RETURN_TO_ARC"
+    },
+    {
+      "step_id": "SMOS-REV-007",
+      "phase_id": "ACCEPT",
+      "title": "Zero-deception first paid creator + Abbott continuity acceptance",
+      "target_file": "scripts/verify-socialmediaos-first-paid-creator.mjs",
+      "sandbox_boundary": "scripts/verify-socialmediaos-first-paid-creator.mjs",
+      "action_type": "author_then_write",
+      "task": "Create the canonical acceptance harness for this mission. It must: (1) syntax/import check the new Creative Brief and producer-director services and the modified coaching/generator modules; (2) verify `scripts/verify-socialmediaos.mjs` contains no Costello/costello-builderos fallback and can run local truth checks; (3) run or delegate `scripts/verify-marketing-phase1-live.mjs` when PUBLIC_BASE_URL plus command key are available, otherwise report LIVE_RUNTIME_NOT_PROVEN without fabricating PASS; (4) inspect mission slice receipts SMOS-REV-001 through SMOS-REV-007 and prove `execution_mode=one_slice_per_run`, ordered completion, and distinct completion timestamps/commits sufficient to show separate redispatch boundaries; (5) source-check that canonical MarketingOS checkout/entitlement path still exists and standalone deprecated checkout is not reintroduced; (6) if an authorized real payment receipt/session id is provided through env, verify it through the existing entitlement path and emit FIRST_PAID_CREATOR_PROVEN, otherwise emit PRODUCT_READY_FOR_PAID_CREATOR when all machine-controlled requirements pass; (7) write `products/receipts/SOCIALMEDIAOS_FIRST_PAID_CREATOR.json`. Never initiate an unrequested real charge as part of acceptance.",
+      "spec": "Final acceptance distinguishes technical/product readiness from a human's real paid purchase and proves true slice-to-slice factory redispatch.",
+      "dependencies": [
+        "SMOS-REV-001",
+        "SMOS-REV-002",
+        "SMOS-REV-003",
+        "SMOS-REV-004",
+        "SMOS-REV-005",
+        "SMOS-REV-006"
+      ],
+      "expected_exports": [],
+      "assertion_spec": {
+        "file_contains": [
+          "SOCIALMEDIAOS_FIRST_PAID_CREATOR.json",
+          "PRODUCT_READY_FOR_PAID_CREATOR",
+          "FIRST_PAID_CREATOR_PROVEN",
+          "one_slice_per_run",
+          "LIVE_RUNTIME_NOT_PROVEN"
+        ]
+      },
+      "on_block": "BLOCKED_RETURN_TO_ARC"
+    }
+  ],
+  "lane_policy": {
+    "factory": "ABBOTT",
+    "lanes": [
+      "ABBOTT-C1"
+    ],
+    "rule": "This mission intentionally uses one lane and one new slice per run. Parallel slice execution would defeat the continuity test."
+  },
+  "exhaustion_policy": {
+    "when": "all authored steps terminal AND Point B false",
+    "state": "BLUEPRINT_EXHAUSTED",
+    "action": "return_to_architecture_immediately",
+    "idle_allowed": false,
+    "factory_may_invent_next_slice": false
+  },
+  "future_blueprint_seeds": [
+    "SMOS recurring Pro/Studio/Studio Plus billing + trial + credit meter",
+    "cross-client learning / Creative Intelligence Brain",
+    "personalized video follow-up from CRM/lead events",
+    "format-native IG/TikTok/LinkedIn/YouTube publishing + outcome optimization",
+    "B-roll compounding + retention calibration",
+    "referral partner / creator ambassador / recruiting engine",
+    "trend radar + competitor spike response",
+    "media provider Observatory + replacement-readiness oracle",
+    "MarketingOS physical/local asset production with transparent landed cost"
+  ]
+}

@@ -81,6 +81,21 @@ function loadProductRegistry(repoRoot) {
           law_path: prod.law_path ? normalize(prod.law_path) : null,
         });
       }
+      // 2026-08-22 fix: sub-products registered only as prod.modules[] (e.g.
+      // SocialMediaOS under marketingos, canonical_home nested two segments
+      // deep) were never indexed here, so any NEW file legitimately using a
+      // module's real @ssot path failed file-placement's unexpected_ssot
+      // check even though 8+ existing files already use this exact pattern.
+      for (const mod of prod.modules || []) {
+        if (mod.module_id && mod.canonical_home) {
+          products.set(mod.module_id, {
+            product_id: mod.module_id,
+            canonical_home: normalize(mod.canonical_home),
+            file_manifest: mod.file_manifest ? normalize(mod.file_manifest) : null,
+            law_path: prod.law_path ? normalize(prod.law_path) : null,
+          });
+        }
+      }
     }
     return { products, ok: true };
   } catch (err) {
@@ -101,7 +116,10 @@ function loadSharedDependencies(repoRoot, productId) {
 }
 
 function extractProductIdFromHome(ssotNorm) {
-  const m = ssotNorm.match(/^docs\/products\/([^/]+)\/PRODUCT_HOME\.md$/);
+  // Matches both top-level (docs/products/X/PRODUCT_HOME.md) and nested
+  // module (docs/products/X/Y/PRODUCT_HOME.md) canonical homes, capturing
+  // the last segment before PRODUCT_HOME.md either way.
+  const m = ssotNorm.match(/^docs\/products\/(?:[^/]+\/)*([^/]+)\/PRODUCT_HOME\.md$/);
   return m ? m[1] : null;
 }
 

@@ -1,0 +1,48 @@
+# SYNOPSIS: yml — .github/workflows/bp-priority-guardrails.yml.
+name: BP Priority Guardrails
+
+# Why this exists (2026-08-22): verify-bp-priority-guardrails.mjs only ran as a
+# LOCAL pre-commit hook. That hook never fires for the governed factory's own
+# primary shipping path -- services/deployment-service.js's commitToGitHub,
+# which writes straight to the GitHub Contents API and has no BP_PRIORITY /
+# receipt-alignment check anywhere in it. Found live: three BP_PRIORITY.json
+# items claimed TECHNICAL_PASS while their own receipts said FAIL/NOT_COMPLETE
+# (one mission's supporting artifacts never existed in git history at all),
+# undetected until a manual audit. This closes that gap the same way
+# point-b-control-plane-guard.yml already closes it for POINT_B_TARGET.json --
+# server-side, on every push AND on a schedule, so drift from ANY commit path
+# (local git, API, hand-edit) surfaces within minutes instead of being found
+# by accident weeks later.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'builderos-reboot/BP_PRIORITY.json'
+      - 'builderos-reboot/MISSIONS/**/OBJECTIVE_VERDICT.json'
+      - 'products/receipts/**'
+      - 'scripts/verify-bp-priority-guardrails.mjs'
+      - 'services/bp-priority-sync.js'
+      - '.github/workflows/bp-priority-guardrails.yml'
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: bp-priority-guardrails
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Verify BP_PRIORITY receipt/objective alignment (repo-wide, not just staged)
+        run: node scripts/verify-bp-priority-guardrails.mjs

@@ -1,6 +1,6 @@
 {
   "schema": "socialmediaos_blockers_v1",
-  "at": "2026-07-31T06:21:12.563Z",
+  "at": "2026-08-22T01:32:54.638Z",
   "ok": false,
   "note": "Named blockers — system must not fake PASS or stop silently",
   "runnable_verify_ok": true,

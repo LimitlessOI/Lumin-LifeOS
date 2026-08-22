@@ -46,6 +46,20 @@ function readJsonSafe(file) {
  * GitHub Actions check the CI health watchdog uses — SENTRY and the watchdog
  * are two consumers of the same underlying signal, not two competing ways of
  * checking it.
+ *
+ * id is intentionally STABLE (not SHA-suffixed) — 2026-08-22 fix. It used to
+ * be `ci_health:${workflowFile}:${run.sha}`, which meant every new failing
+ * commit minted a brand-new finding id. mergeFindingsIntoQueue only re-enters
+ * an EXISTING open finding into repair-handoff review when its exact id
+ * reappears in the current tick's raw findings (see openStillTrue in
+ * sentry-chair-governance-audit.mjs) — with a SHA in the id, a finding from
+ * commit A could never be re-matched once commit B landed, so it sat
+ * `queue_status: open`, `chair_status: approved`, `repair_lane: null`
+ * forever: reviewed once, then permanently orphaned. Found live: 5 real
+ * ci_health findings from 2026-07-23/24, still open a month later, none ever
+ * handed to Conductor. A stable id means the SAME finding keeps recurring
+ * every tick for as long as CI stays red, so it stays in the live
+ * review/repair loop instead of being silently abandoned on the next commit.
  */
 export async function checkCiHealth({ token, repo, workflowFile = 'smoke-test.yml' } = {}) {
   if (!token || !repo) return [];
@@ -64,12 +78,13 @@ export async function checkCiHealth({ token, repo, workflowFile = 'smoke-test.ym
   }
   if (!run || run.status !== 'completed' || run.conclusion !== 'failure') return [];
   return [{
-    id: `ci_health:${workflowFile}:${run.sha}`,
+    id: `ci_health:${workflowFile}`,
     check: 'ci_health',
     severity: 'P0',
     summary: `main's ${workflowFile} is FAILING at ${run.sha.slice(0, 7)}.`,
     proposed_solution: `Read the failing run log (gh run view --log-failed) at ${run.htmlUrl}, identify the exact failing assertion, and fix it directly on main — do not let further commits ship on top of red CI.`,
     detected_at: new Date().toISOString(),
+    last_seen_sha: run.sha,
   }];
 }
 

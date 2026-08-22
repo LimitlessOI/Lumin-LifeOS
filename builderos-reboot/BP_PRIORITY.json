@@ -928,8 +928,26 @@
         "mode": "technical_acceptance",
         "status": "CURRENT"
       }
+    },
+    {
+      "rank": 34,
+      "mission_id": "PRODUCT-SOCIALMEDIAOS-FIRST-PAID-CREATOR-0001",
+      "product_id": "socialmediaos",
+      "product_home": "docs/products/marketingos/socialmediaos/",
+      "product_ssot": "docs/products/marketingos/socialmediaos/PRODUCT_HOME.md",
+      "founder_packet": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-FIRST-PAID-CREATOR-0001/FOUNDER_PACKET.md",
+      "blueprint_path": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-FIRST-PAID-CREATOR-0001/BLUEPRINT.json",
+      "blueprint_status": "handoff_ready",
+      "acceptance_command": "node scripts/verify-socialmediaos-first-paid-creator.mjs",
+      "receipt_path": "products/receipts/SOCIALMEDIAOS_FIRST_PAID_CREATOR.json",
+      "verdict": "NOT_COMPLETE",
+      "note": "2026-08-22: same master-blueprint mission originally authored for Costello (PRODUCT-SOCIALMEDIAOS-FIRST-PAID-CREATOR-0001), redirected to execute on Abbott because Costello's GitHub Actions are billing-blocked and its manual override bridge was sitting idle -- Costello had a real target and zero live execution. Founder-approved path: rewrite the blueprint for Abbott (option chosen over fixing Costello's billing or working Abbott's separate, smaller PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001). Blueprint's own runtime-identity assertions were adapted from Costello to Abbott (see FOUNDER_PACKET.md provenance note); the 7 slices (SMOS-REV-001..007) are otherwise the same real product work -- Creative Brief service, producer-director service, coaching/generator wiring, and the zero-deception acceptance harness. Costello's own copy of this mission is parked; see costello-builderos-b/builderos-reboot/POINT_B_TARGET.json.",
+      "build_method": "system-build",
+      "founder_usability_pass": false,
+      "objective_verdict": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-FIRST-PAID-CREATOR-0001/OBJECTIVE_VERDICT.json",
+      "production_base": "https://lumin-web-production-e3a9.up.railway.app"
     }
   ],
-  "_last_updated": "2026-08-21",
+  "_last_updated": "2026-08-22",
   "_note": "SSM and LSC added 2026-06-29 — execute SSM first (LSC-006 depends on SSM-007 output)"
 }

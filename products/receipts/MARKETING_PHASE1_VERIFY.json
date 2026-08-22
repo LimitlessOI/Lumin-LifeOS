@@ -6,7 +6,7 @@
       "ok": true,
       "details": {
         "status": 201,
-        "owner_id": "5c6e3ec3-7164-4f9e-ae5f-be8fa928b4f0"
+        "owner_id": "f2dff0b2-91bf-4421-a988-3a6d184de677"
       }
     },
     {
@@ -18,7 +18,7 @@
       "ok": true,
       "details": {
         "status": 201,
-        "id": "250aa27c-1fe0-469d-8f6a-7b43702637f6"
+        "id": "99b39cf8-266a-452b-b194-34305c0176d3"
       }
     },
     {
@@ -42,7 +42,7 @@
       "ok": true,
       "details": {
         "status": 200,
-        "id": "ce9e15bc-3d24-415d-a253-4f4780d66578"
+        "id": "0298d5bf-d0be-478b-81e5-200249bec887"
       }
     },
     {
@@ -58,7 +58,7 @@
       "ok": true,
       "details": {
         "status": 200,
-        "contentDisposition": "attachment; filename=\"marketing-content-session-250aa27c-1fe0-469d-8f6a-7b43702637f6.txt\""
+        "contentDisposition": "attachment; filename=\"marketing-content-session-99b39cf8-266a-452b-b194-34305c0176d3.txt\""
       }
     },
     {
@@ -77,6 +77,6 @@
       "next_unblocking_action": "Add verified STORAGE_PROVIDER=r2 + STORAGE_ENDPOINT/BUCKET/ACCESS_KEY_ID/SECRET_ACCESS_KEY/PUBLIC_URL to Railway, then test audio upload end-to-end"
     }
   ],
-  "at": "2026-07-31T06:21:12.563Z",
+  "at": "2026-08-22T01:32:54.638Z",
   "note": "ok=true means all runnable §6 text-mode tests passed; infra blockers remain named in blockers[]"
 }

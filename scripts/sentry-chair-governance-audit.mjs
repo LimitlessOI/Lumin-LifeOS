@@ -319,7 +319,23 @@ export async function runGovernanceAuditCycle({
   const refreshed = reviewOpen
     ? refreshOpenFindings(withArchitectStatus, queue, { now })
     : { queue };
-  saveFindingsQueue(refreshed.queue);
+
+  // Close stale ci_health findings once main is actually green again. Nothing
+  // in this pipeline ever closed a finding before 2026-08-22 -- open findings
+  // whose check condition stopped reproducing just sat open forever. Scoped
+  // to ci_health only (the check whose SHA-keyed-id bug was found and fixed
+  // the same day) rather than a general auto-close for every check type,
+  // which needs its own separate, careful pass.
+  const nowStamp = new Date(now).toISOString();
+  const closedThisRun = [];
+  const finalFindings = refreshed.queue.findings.map((f) => {
+    if (f.check !== 'ci_health' || f.queue_status !== 'open' || !String(f.id).startsWith('ci_health:')) return f;
+    if (rawIds.has(f.id)) return f;
+    closedThisRun.push(f.id);
+    return { ...f, queue_status: 'closed', closed_at: nowStamp, closed_reason: 'condition_no_longer_reproduces' };
+  });
+  const finalQueue = { ...refreshed.queue, findings: finalFindings };
+  saveFindingsQueue(finalQueue);
 
   const newEscalations = newlyAdded.filter((f) => f.chair_status === 'escalate_to_founder');
   const newApproved = newlyAdded.filter((f) => f.chair_status === 'approved');
@@ -351,6 +367,7 @@ export async function runGovernanceAuditCycle({
     observation_tier: observationTier || null,
     ai_budget: budget,
     skipped_review: budget.callAi ? undefined : (novel.length ? undefined : 'no_work'),
+    closed: closedThisRun.length,
   };
 }
 

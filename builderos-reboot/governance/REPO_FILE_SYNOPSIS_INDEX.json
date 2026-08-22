@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-08-22T00:12:56.420Z",
+  "generated_at": "2026-08-22T01:38:21.091Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 13721,
+  "file_count": 13729,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -38,6 +38,13 @@
       "bytes": 3848,
       "mtime": "2026-07-03T21:46:43.709Z",
       "indexed_at": "2026-07-28T22:54:46.666Z"
+    },
+    {
+      "path": ".github/workflows/bp-priority-guardrails.yml",
+      "synopsis": "yml — .github/workflows/bp-priority-guardrails.yml.",
+      "bytes": 1802,
+      "mtime": "2026-08-22T01:22:36.033Z",
+      "indexed_at": "2026-08-22T01:35:20.145Z"
     },
     {
       "path": ".github/workflows/build-lifeos-android.yml",
@@ -21377,9 +21384,9 @@
     {
       "path": "builderos-reboot/BP_PRIORITY.json",
       "synopsis": "BuilderOS artifact — BP PRIORITY.",
-      "bytes": 54879,
-      "mtime": "2026-08-22T00:09:43.094Z",
-      "indexed_at": "2026-08-22T00:12:08.865Z",
+      "bytes": 56858,
+      "mtime": "2026-08-22T01:30:35.828Z",
+      "indexed_at": "2026-08-22T01:35:20.145Z",
       "synopsis_index_only": true
     },
     {
@@ -21748,9 +21755,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 4170915,
-      "mtime": "2026-08-22T00:12:10.447Z",
-      "indexed_at": "2026-08-22T00:12:38.510Z"
+      "bytes": 4173598,
+      "mtime": "2026-08-22T01:37:56.901Z",
+      "indexed_at": "2026-08-22T01:38:21.091Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -22817,6 +22824,13 @@
       "bytes": 977,
       "mtime": "2026-07-31T06:22:52.363Z",
       "indexed_at": "2026-07-31T06:26:08.755Z"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-PARTS-CAR-CLOSURE-0001/FOUNDER_PACKET.md",
+      "synopsis": "FACTORY-BUILDEROS-PARTS-CAR-CLOSURE-0001",
+      "bytes": 1814,
+      "mtime": "2026-08-22T01:35:34.871Z",
+      "indexed_at": "2026-08-22T01:37:36.913Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-COGNITIVE-ARCHITECTURE-0001/BLUEPRINT.json",
@@ -30347,6 +30361,36 @@
       "bytes": 1477,
       "mtime": "2026-08-05T19:41:53.578Z",
       "indexed_at": "2026-08-05T19:41:53.578Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-FIRST-PAID-CREATOR-0001/ARCHITECTURE_REVIEW.md",
+      "synopsis": "Architecture review for PRODUCT-SOCIALMEDIAOS-FIRST-PAID-CREATOR-0001 (Abbott execution)",
+      "bytes": 10219,
+      "mtime": "2026-08-22T01:21:27.030Z",
+      "indexed_at": "2026-08-22T01:35:20.145Z"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-FIRST-PAID-CREATOR-0001/BLUEPRINT.json",
+      "synopsis": "BuilderOS artifact — BLUEPRINT.",
+      "bytes": 14550,
+      "mtime": "2026-08-22T01:19:55.931Z",
+      "indexed_at": "2026-08-22T01:35:20.145Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-FIRST-PAID-CREATOR-0001/FOUNDER_PACKET.md",
+      "synopsis": "SocialMediaOS MASTER BLUEPRINT (Abbott execution) — complete product vision with versioned construction windows",
+      "bytes": 18899,
+      "mtime": "2026-08-22T01:31:25.492Z",
+      "indexed_at": "2026-08-22T01:35:20.145Z"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-FIRST-PAID-CREATOR-0001/OBJECTIVE_VERDICT.json",
+      "synopsis": "BuilderOS artifact — OBJECTIVE VERDICT.",
+      "bytes": 957,
+      "mtime": "2026-08-22T01:32:54.667Z",
+      "indexed_at": "2026-08-22T01:35:20.145Z",
       "synopsis_index_only": true
     },
     {
@@ -44726,9 +44770,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 648303,
-      "mtime": "2026-08-22T00:12:33.472Z",
-      "indexed_at": "2026-08-22T00:12:56.420Z"
+      "bytes": 653133,
+      "mtime": "2026-08-22T01:37:31.762Z",
+      "indexed_at": "2026-08-22T01:37:56.817Z"
     },
     {
       "path": "docs/products/builderos/SCHEDULER_AUDIT.md",
@@ -46327,9 +46371,9 @@
     {
       "path": "docs/products/marketingos/socialmediaos/PRODUCT_HOME.md",
       "synopsis": "SocialMediaOS Module Home",
-      "bytes": 25263,
-      "mtime": "2026-07-30T22:26:21.793Z",
-      "indexed_at": "2026-07-30T22:31:11.508Z"
+      "bytes": 27054,
+      "mtime": "2026-08-22T01:34:08.247Z",
+      "indexed_at": "2026-08-22T01:35:20.145Z"
     },
     {
       "path": "docs/products/memory-intelligence/CREATIVE_BRIEF.md",
@@ -71486,6 +71530,14 @@
       "synopsis_index_only": true
     },
     {
+      "path": "products/receipts/SOCIALMEDIAOS_FIRST_PAID_CREATOR.json",
+      "synopsis": "Product receipt — SOCIALMEDIAOS FIRST PAID CREATOR.",
+      "bytes": 861,
+      "mtime": "2026-08-22T01:32:54.667Z",
+      "indexed_at": "2026-08-22T01:35:20.145Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "products/receipts/SOCIALMEDIAOS_FOUNDER_CHAT_A2Z.json",
       "synopsis": "Product receipt — SOCIALMEDIAOS FOUNDER CHAT A2Z.",
       "bytes": 1087,
@@ -71536,9 +71588,9 @@
     {
       "path": "products/receipts/TALOA_SUPERVISED_OVERLAY_CI.json",
       "synopsis": "Product receipt — TALOA SUPERVISED OVERLAY CI.",
-      "bytes": 746,
-      "mtime": "2026-08-22T00:08:19.803Z",
-      "indexed_at": "2026-08-22T00:12:08.865Z",
+      "bytes": 758,
+      "mtime": "2026-08-22T00:16:20.295Z",
+      "indexed_at": "2026-08-22T01:34:38.481Z",
       "synopsis_index_only": true
     },
     {
@@ -79220,9 +79272,9 @@
     {
       "path": "scripts/lib/file-placement-gate.mjs",
       "synopsis": "File-placement authority gate — blocks new protected source files",
-      "bytes": 9338,
-      "mtime": "2026-08-13T05:25:30.116Z",
-      "indexed_at": "2026-08-13T05:25:30.116Z",
+      "bytes": 10360,
+      "mtime": "2026-08-22T01:36:53.522Z",
+      "indexed_at": "2026-08-22T01:37:56.817Z",
       "ssot": [
         "tag pointing to a registered product home or approved",
         "docs/products/builderos/PRODUCT_HOME.md"
@@ -81553,9 +81605,9 @@
     {
       "path": "scripts/sentry-chair-governance-audit.mjs",
       "synopsis": "Orchestrates SENTRY (finds + proposes) -> Chair (reviews, real AI",
-      "bytes": 19496,
-      "mtime": "2026-08-13T05:59:55.710Z",
-      "indexed_at": "2026-08-13T06:44:07.157Z",
+      "bytes": 20470,
+      "mtime": "2026-08-22T01:27:34.564Z",
+      "indexed_at": "2026-08-22T01:35:20.145Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -93553,6 +93605,16 @@
       ]
     },
     {
+      "path": "scripts/verify-socialmediaos-first-paid-creator.mjs",
+      "synopsis": "Canonical acceptance harness for PRODUCT-SOCIALMEDIAOS-FIRST-PAID-CREATOR-0001.",
+      "bytes": 7563,
+      "mtime": "2026-08-22T01:33:41.362Z",
+      "indexed_at": "2026-08-22T01:35:20.145Z",
+      "ssot": [
+        "docs/products/marketingos/socialmediaos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "scripts/verify-socialmediaos.mjs",
       "synopsis": "Acceptance test for unknown product (auto-generated by executor).",
       "bytes": 2491,
@@ -94354,9 +94416,12 @@
     {
       "path": "services/autonomous-recovery-council.js",
       "synopsis": "Autonomous recovery orchestrator.",
-      "bytes": 8658,
-      "mtime": "2026-08-19T21:57:01.010Z",
-      "indexed_at": "2026-08-19T23:25:05.574Z"
+      "bytes": 10339,
+      "mtime": "2026-08-22T01:33:35.868Z",
+      "indexed_at": "2026-08-22T01:35:20.145Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/autonomous-telemetry-instrumentation.js",
@@ -102539,9 +102604,9 @@
     {
       "path": "services/sentry-system-audit.js",
       "synopsis": "SENTRY periodic system audit — the \"SENTRY finds, proposes a",
-      "bytes": 19207,
-      "mtime": "2026-08-12T22:46:49.115Z",
-      "indexed_at": "2026-08-12T22:46:49.115Z",
+      "bytes": 20196,
+      "mtime": "2026-08-22T01:26:58.036Z",
+      "indexed_at": "2026-08-22T01:35:20.145Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

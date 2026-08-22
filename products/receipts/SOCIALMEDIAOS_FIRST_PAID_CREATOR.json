@@ -1,0 +1,23 @@
+{
+  "mission_id": "PRODUCT-SOCIALMEDIAOS-FIRST-PAID-CREATOR-0001",
+  "run_at": "2026-08-22T01:32:39.235Z",
+  "base": "https://lumin-web-production-e3a9.up.railway.app",
+  "tests_passed": [
+    "syntax:services/socialmediaos-coaching-service.js",
+    "syntax:services/socialmediaos-content-generator.js",
+    "verifier_no_costello_fallback",
+    "live_phase1_verified",
+    "one_slice_per_run_redispatch_proven",
+    "checkout_path_exists:services/smos-pack-checkout.js"
+  ],
+  "tests_failed": [
+    "exists:services/socialmediaos-creative-brief.js",
+    "exists:services/socialmediaos-producer-director.js"
+  ],
+  "skipped": false,
+  "final_state": "NOT_PROVEN",
+  "completed_at": "2026-08-22T01:32:54.666Z",
+  "git_sha": "715b1db43449adc79a9d6554b674d44184399315",
+  "production_base": "https://lumin-web-production-e3a9.up.railway.app",
+  "verdict": "FAIL"
+}
