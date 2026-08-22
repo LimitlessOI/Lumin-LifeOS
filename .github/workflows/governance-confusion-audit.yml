@@ -1,0 +1,28 @@
+name: Governance Confusion Audit
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  dumb-ai-confusion-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Run read-only governance janitor
+        run: node scripts/governance-janitor.mjs
+      - name: Upload confusion report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: governance-confusion-report
+          path: data/governance-confusion-report.json
+          if-no-files-found: error
