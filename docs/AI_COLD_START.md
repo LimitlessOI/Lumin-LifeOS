@@ -1,28 +1,33 @@
-<!-- SYNOPSIS: AI Cold Start Documentation -->
+<!-- SYNOPSIS: Emergency cold-start pointer for the single active BuilderOS engine. Generated packet should replace this when cold-start:gen next runs. -->
 
-# AI Cold Start Documentation
+# AI Cold Start — Abbott
 
-This document outlines the process and considerations for initiating an AI project from a cold start.
+> **CURRENT OPERATING POINTER — 2026-08-22**
+> Abbott is the sole active BuilderOS engine. Costello is parked/reference-only.
+> This file had drifted into generic AI-project boilerplate and was unsafe as an agent entry point. `scripts/generate-cold-start.mjs` remains the canonical generator and may replace this pointer with the full generated packet.
 
-## Overview
+## Read order
 
-To successfully start an AI project, it is important to follow key steps and gather necessary resources. This guide aims to provide a structured approach to kickstart the development process.
+1. `docs/AGENT_RULES.compact.md` — compact enforcement packet.
+2. `docs/constitution/NORTH_STAR_SSOT.md` — supreme law when the compact packet is insufficient or a load-bearing interpretation is required.
+3. `docs/constitution/FOUNDER_AI_OPERATING_PROTOCOL.md` — current operating direction; subordinate to North Star.
+4. `prompts/00-HIST-LEGACY-BOUNDARY.md` — distinguish active systems from salvage/history.
+5. `builderos-reboot/POINT_B_TARGET.json` — what Abbott is building now.
+6. The target mission's `FOUNDER_PACKET.md`, `BLUEPRINT.json`, acceptance command, and receipts.
+7. `docs/products/builderos/PRODUCT_HOME.md` and owning product `PRODUCT_HOME.md` only as needed for context and product governance.
+8. Runtime evidence and receipts decide what is actually working. Prose never upgrades a failed or unproven runtime to PASS.
 
-## Steps
+## Dumb-AI rules
 
-1. **Define the Objective**: Clearly outline the problem to be solved and the goals of the AI project.
-2. **Data Collection**: Gather relevant data required for model training and validation.
-3. **Select Tools and Frameworks**: Choose appropriate tools and libraries that align with project needs.
-4. **Build a Prototype**: Develop a basic version of the AI model to test feasibility.
-5. **Evaluate and Iterate**: Continuously test the model and make improvements based on feedback.
-6. **Deploy and Monitor**: Implement the model in a production environment and monitor its performance.
+- **One engine:** Abbott. Do not repair, schedule, or advance Costello unless the founder explicitly reactivates it.
+- Costello is a **parts car / lessons source** only. Port a Costello idea into Abbott only after verifying it against Abbott's current architecture and target.
+- Do not infer authority from filenames containing `constitution`, `framework`, `protocol`, `master`, `current`, or `SSOT`. Follow the authority chain above.
+- Dated governance snapshots, red-team reports, recommendations, conversation dumps, and legacy-history files are evidence/history, not current authority unless a current authoritative file explicitly incorporates them.
+- If two active-looking files disagree about Point B, engine identity, PASS/FAIL state, or execution authority, **HALT the conflicting action and resolve against the North Star + current Point B + receipts/runtime evidence.** Do not average the documents.
+- Do not create a second implementation merely because an older path exists. Prefer the current Abbott path; archive/retire stale duplicates once callers and enforcement references are checked.
 
-## Institutional Memory
+## Current objective
 
-This section captures key lessons learned from past projects to inform future efforts:
+Make Abbott reliable enough to build continuously from authored blueprints, detect its own failures, repair the fixer when possible, and report typed blockers instead of silently stopping or fabricating success.
 
-- **Lesson 1**: Clearly defined objectives help align team efforts and prevent scope creep.
-- **Lesson 2**: Early data quality assessment can save time and resources during model development.
-- **Lesson 3**: Leveraging existing tools and frameworks accelerates the development process.
-- **Lesson 4**: Iterative prototyping and testing lead to more robust and reliable models.
-- **Lesson 5**: Continuous monitoring post-deployment is crucial for maintaining model performance.
+Costello can teach Abbott. Costello is not the project.
