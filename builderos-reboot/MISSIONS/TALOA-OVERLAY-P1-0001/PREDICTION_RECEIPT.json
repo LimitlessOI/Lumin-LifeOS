@@ -1,7 +1,7 @@
 {
   "schema": "prediction_receipt_v1",
   "mission_id": "TALOA-OVERLAY-P1-0001",
-  "created_at": "2026-08-22T01:44:38.170Z",
+  "created_at": "2026-08-22T01:45:46.859Z",
   "owner": "CFO",
   "pre_build": {
     "estimated_duration_minutes": 24,
