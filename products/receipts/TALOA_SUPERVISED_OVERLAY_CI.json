@@ -1,8 +1,8 @@
 {
   "schema": "taloa_supervised_overlay_ci_v1",
   "verdict": "PASS",
-  "tested_sha": "fae0067f250e75a8fd71d518cc2042bde6bc9ba8",
-  "run_id": "32188906296",
+  "tested_sha": "eae8f5c6bc523322512dd9049fe9ba5e10dc6d2c",
+  "run_id": "32539656659",
   "proofs": [
     "observe_real_shape",
     "type_executes_through_dom_adapter",
@@ -17,7 +17,9 @@
     "route_uses_supervised_mode_not_legacy_autonomous_loop"
   ],
   "bp_sync": {
-    "updated": ["builderos-reboot/BP_PRIORITY.json"],
+    "updated": [
+      "builderos-reboot/BP_PRIORITY.json"
+    ],
     "skipped": []
   }
 }
