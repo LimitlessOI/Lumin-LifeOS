@@ -5,14 +5,16 @@
 
 ## Mandatory load order — do not drift
 
-Before implementation, recovery, retry, escalation, model routing, naming, or priority decisions, read:
+Before implementation, recovery, retry, escalation, model routing, naming, external-AI access, or priority decisions, read:
 
 1. `docs/constitution/NORTH_STAR_SSOT.md`
 2. `builderos-reboot/POINT_B_TARGET.json`
 3. `builderos-reboot/LOOP_ESCALATION_CONTRACT.json`
 4. `builderos-reboot/governance/INTELLIGENCE_ROUTING_CONTRACT.json`
-5. `docs/constitution/INTELLIGENCE_ECONOMY_AND_THREE_CREATIONS.md`
-6. current mission Founder Packet + Blueprint + latest receipts
+5. `builderos-reboot/governance/MODEL_CAPABILITY_CLASSES.json`
+6. `builderos-reboot/governance/OVERLAY_EXTERNAL_AI_ACCESS_CONTRACT.json`
+7. `docs/constitution/INTELLIGENCE_ECONOMY_AND_THREE_CREATIONS.md`
+8. current mission Founder Packet + Blueprint + latest receipts
 
 If an authoritative artifact disagrees with this capsule, authority wins and this capsule must be refreshed in the same work session.
 
@@ -50,10 +52,37 @@ A material problem triggers collaborative intelligence, not just another retry.
 
 - Development routing is **free before paid**.
 - Free does not mean weak; capability is learned from evidence.
-- Rotate free models across builder, debugger, blueprint reviewer, governance auditor, adversarial reviewer, root-cause investigator, acceptance reviewer, long-context analyst and recovery collaborator roles.
+- Rotate free models across roles and capability classes until LifeOS receipts justify specialization.
 - Keep `external_expectation` (research prior, provisional) separate from `lifeos_proven` (internal receipt evidence).
-- Paid/high intelligence is preferentially reserved for Creation I, Creation II, unusually hard/high-impact cognition, or cases where applicable free capacity is genuinely exhausted/proven incapable.
 - Governed paid calls require `PAID_ESCALATION_RECEIPT`; no receipt => no paid call.
+
+### Capability classes — model names are replaceable
+
+Routing governance targets capabilities, not brands:
+
+`MECHANICAL -> IMPLEMENTER -> DEBUGGER -> AUDITOR -> ARCHITECT -> FRONTIER_REASONING`
+
+Exact model/version assignment is learned from evidence. Today's frontier model may become tomorrow's cheap/free implementer. Preserve benchmark history rather than rewriting it.
+
+**Permanent principle:** Intelligence is a depreciating resource; governance is an accumulating asset.
+
+Machine authority: `builderos-reboot/governance/MODEL_CAPABILITY_CLASSES.json`.
+Benchmark history: `builderos-reboot/governance/MODEL_BENCHMARK_HISTORY.json`.
+External starting priors: `builderos-reboot/governance/FREE_MODEL_BENCHMARK_PRIORS.json`.
+
+## External/high-intelligence access through Universal Overlay
+
+During development, interactive/free/subscription higher intelligence may participate through Universal Overlay, but the intended security architecture is:
+
+`external AI -> Universal Overlay -> governance gateway -> scoped capability -> repository/tool`
+
+External models think and propose. Blueprint authorizes. Overlay transports. Governance permits. Factory acts. SENTRY proves.
+
+Default external permissions are scoped read/propose/audit capabilities. Direct main writes, master GitHub credentials, secret/customer-data export, blueprint bypass, and SENTRY bypass are denied by default. Development exceptions must be explicit, logged, revocable, scoped, and preferably branch/PR based.
+
+Council failure packets must preserve exact problem, blueprint slice, failure history, evidence, governance controls, explicit questions, model identity/version, and independent-first-pass answers before synthesis.
+
+Machine authority: `builderos-reboot/governance/OVERLAY_EXTERNAL_AI_ACCESS_CONTRACT.json`.
 
 ## Lower-model prevention test
 
@@ -67,18 +96,7 @@ If yes, fix the system rather than merely routing to a smarter model. The object
 
 Universal Overlay previously reached 9/9 failed Layer-B implementation attempts even though `builderos-reboot/LOOP_ESCALATION_CONTRACT.json` is HARD/fail-closed.
 
-Determine why:
-
-1. Was the contract loaded on the actual factory/recovery path?
-2. Was failure/signature state persisted?
-3. Did the Layer-B loop bypass `loop-escalation-lib.mjs` or model escalation service?
-4. Was failure classification wrong?
-5. Did another retry budget bypass the gate?
-6. Did unavailable providers/research fail open?
-7. Was escalation emitted but not consumed?
-8. What general executable gate prevents recurrence?
-
-Know why before fixing. Preserve the evidence.
+Determine why the hard gate did not govern the actual retry path. Know why before fixing, preserve evidence, then install the smallest general enforcement change that makes recurrence impossible.
 
 ## Governance work 2026-08-22
 
@@ -89,11 +107,14 @@ Know why before fixing. Preserve the evidence.
 - Three Creations doctrine ratified.
 - Material problem => 1+1=3 ratified.
 - Free-first routing + paid escalation receipt ratified.
-- Hard verifier: `scripts/verify-intelligence-routing-governance.mjs`.
+- Capability-class routing + intelligence depreciation/governance accumulation doctrine installed.
+- Longitudinal append-only model benchmark history installed.
+- Universal Overlay external-AI scoped-capability security contract installed.
+- Hard verifier: `scripts/verify-intelligence-routing-governance.mjs`; additional dispatch-surface enforcement remains to be proven before claiming universal hard-gating.
 
 ## Self-refresh rule
 
-Before ending substantive Conductor work, and immediately after any material founder direction, mission, governance, blocker, identity, routing, or proven lesson changes:
+Before ending substantive Conductor work, and immediately after any material founder direction, mission, governance, blocker, identity, routing, external-AI access, or proven lesson changes:
 
 - update this capsule;
 - remove stale priorities instead of accumulating contradictory eras;
